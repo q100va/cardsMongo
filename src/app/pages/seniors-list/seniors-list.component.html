@@ -1,0 +1,113 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: May 7, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App html code for SeniorListComponent.
+===========================================
+-->
+<br />
+<br />
+<div fxLayout="column">
+  <mat-card>
+    <mat-card-title>Поздравляемые</mat-card-title>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-toast position="center"></p-toast>
+    <br /><br />
+    <mat-card-content *ngIf="senior">
+      <mat-table [dataSource]="senior" class="mat-elevation-z4">
+
+        <ng-container matColumnDef="region">
+          <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.region }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nursingHome">
+          <mat-header-cell *matHeaderCellDef> Интернат </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.nursingHome }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <mat-header-cell *matHeaderCellDef> Фамилия </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.lastName }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+          <mat-header-cell *matHeaderCellDef> Имя </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.firstName }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="patronymic">
+          <mat-header-cell *matHeaderCellDef> Отчество </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.patronymic }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="isRestricted">
+          <mat-header-cell *matHeaderCellDef> Не поздравлять </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.isRestricted }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="DOB">
+          <mat-header-cell *matHeaderCellDef> Дата рождения</mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.dateBirthday<10 ? '0' +senior.dateBirthday: senior.dateBirthday
+              }}.{{senior.monthBirthday < 10 ? '0' +senior.monthBirthday : senior.monthBirthday}}.{{senior.yearBirthday}}
+              </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="gender">
+          <mat-header-cell *matHeaderCellDef> Пол </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.gender }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="comment1">
+          <mat-header-cell *matHeaderCellDef> Комментарий1 </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.comment1 }} </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="comment2">
+          <mat-header-cell *matHeaderCellDef> Комментарий2 </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.comment2 }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="linkPhoto">
+          <mat-header-cell *matHeaderCellDef> Фото </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.linkPhoto }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nameDay">
+          <mat-header-cell *matHeaderCellDef> Именины </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.nameDay }} </mat-cell>
+        </ng-container>
+
+
+
+
+        <!-- Edit Column -->
+        <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+          <mat-cell *matCellDef="let senior">
+            <mat-icon routerLink="/seniors/update/{{ senior._id }}" color="accent" class="icon-cursor">edit</mat-icon>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Delete Column -->
+        <ng-container matColumnDef="delete">
+          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+          <mat-cell *matCellDef="let senior">
+            <button mat-icon-button (click)="deleteSenior(senior._id)">
+              <mat-icon color="primary">delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+    </mat-card-content>
+    <mat-card-subtitle>
+      <button mat-stroked-button color="primary" routerLink="/seniors/create/new">Add New Senior</button>
+    </mat-card-subtitle>
+  </mat-card>
+</div>

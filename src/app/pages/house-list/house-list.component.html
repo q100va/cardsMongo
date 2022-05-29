@@ -1,0 +1,93 @@
+<!--
+============================================
+ html code for Component
+===========================================
+-->
+<br />
+<br />
+<div fxLayout="column">
+  <mat-card>
+    <mat-card-title>Список интернатов</mat-card-title>
+    <br /><br />
+    <p-toast position="center"></p-toast>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <mat-card-content *ngIf="house">
+      <mat-table [dataSource]="house" class="mat-elevation-z4">
+
+        <ng-container matColumnDef="isActive">
+          <mat-header-cell *matHeaderCellDef> Участие </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.isActive}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nursingHome">
+          <mat-header-cell *matHeaderCellDef> Краткое название </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.nursingHome }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="isRestricted">
+          <mat-header-cell *matHeaderCellDef> БОА </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.isRestricted }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="region">
+          <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.region}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <mat-header-cell *matHeaderCellDef> Почтовый адрес</mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.address}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dateStart">
+          <mat-header-cell *matHeaderCellDef> Список обновлен</mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.dateStartClone }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nameContact">
+          <mat-header-cell *matHeaderCellDef>Контактное лицо</mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.nameContact}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="contact">
+          <mat-header-cell *matHeaderCellDef>Контакт</mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.contact}} </mat-cell>
+        </ng-container>
+
+
+        <!-- Edit Column -->
+        <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+          <mat-cell *matCellDef="let house">
+            <mat-icon
+              class="icon-cursor"
+              routerLink="/houses/update/{{ house._id }}"
+              color="accent"
+              >edit</mat-icon
+            ></mat-cell
+          >
+        </ng-container>
+
+        <!-- Delete Column -->
+        <ng-container matColumnDef="delete">
+          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+          <mat-cell *matCellDef="let house">
+            <button mat-icon-button (click)="deleteHouse(house._id)">
+              <mat-icon color="primary">delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+    </mat-card-content>
+    <!-- Add button to create new house in the mat-card-subtitle below -->
+
+    <mat-card-subtitle>
+      <button mat-stroked-button color="primary" routerLink="/houses/create/new">
+        Новый интернат
+      </button>
+    </mat-card-subtitle>
+  </mat-card>
+</div>

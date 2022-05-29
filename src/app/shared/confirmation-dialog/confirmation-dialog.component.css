@@ -1,0 +1,19 @@
+/**
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: April 24, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App style for ConfirmationDialogComponent
+;===========================================
+*/
+
+div {
+  text-align: center;
+}
+button.submit {
+  background-color: #fbc02d;
+  color: whitesmoke;
+  margin-top: 20px;
+
+}

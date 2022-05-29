@@ -1,0 +1,52 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: April 23, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App - Signin
+===========================================
+-->
+<div class="main">
+  <div fxLayout="column" class="signin-div">
+    <mat-card fxFlex class="mat-elevation-z8 signin-container">
+      <mat-card-content>
+        <h1>Вход</h1>
+        <div class="msg-error" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
+          <form [formGroup]="form" (ngSubmit)="onSubmit(); form.reset()" #loginForm="ngForm">
+            <mat-card-content>
+              <mat-form-field fxFlex appearance="fill">
+                <mat-label for="txtUserName" id="lbluserName">Имя пользователя</mat-label>
+                <input type="text" matInput [formControl]="form.controls['userName']" id="txtUserName"
+                  name="txtUserName" />
+                <mat-error class="error"
+                  *ngIf="form.controls.userName.hasError('required') && form.controls.userName.touched">You must enter a
+                  username.</mat-error>
+              </mat-form-field>
+            </mat-card-content>
+            <mat-card-content>
+              <mat-form-field fxFlex appearance="fill">
+                <mat-label for="pswdPassword" id="lblpassword">Пароль</mat-label>
+                <input type="password" matInput [formControl]="form.controls['password']" id="pswdPassword"
+                  name="pswdPassword" />
+                <mat-error class="error"
+                  *ngIf="form.controls.password.hasError('required') && form.controls.password.touched">You must enter a
+                  password.</mat-error>
+              </mat-form-field>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <button type="submit" [disabled]="!form.valid" fxFlex mat-raised-button>Submit</button>
+            </mat-card-actions>
+
+          </form>
+        </mat-card>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

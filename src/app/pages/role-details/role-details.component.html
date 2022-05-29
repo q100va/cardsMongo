@@ -1,0 +1,36 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop Sprint 3
+; Author: Professor Krasso
+; Date: May 7, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App html code for role details.
+===========================================
+-->
+<div fxLayout="column" class="update-div">
+  <mat-card fxFlex class="mat-elevation-z8 update-container">
+    <mat-card-title>Role Details: {{ text }}</mat-card-title>
+    <br />
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
+        <form [formGroup]="form" (ngSubmit)="saveRole()" #roleForm>
+          <mat-card-content>
+            <mat-form-field appearance="fill">
+              <input matInput [formControl]="form.controls['text']" placeholder="Name" />
+              <mat-error class="error" *ngIf="form.controls.text.hasError('required') && form.controls.text.touched"
+                >This field is required!</mat-error
+              >
+            </mat-form-field>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button class="cancel" (click)="cancel()" mat-raised-button>Cancel</button>
+            <button class="submit" [disabled]="!form.valid" mat-raised-button>Submit</button>
+          </mat-card-actions>
+        </form>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>

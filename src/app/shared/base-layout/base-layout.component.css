@@ -1,0 +1,87 @@
+/**
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: April 23, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App style for BaseLayoutComponent
+;===========================================
+*/
+
+.logo {
+    margin-left: 15px;
+    font-size: 24px;
+    font-weight: lighter;
+    cursor: pointer;
+  }
+
+.nav-logo {
+  margin-right: 10px;
+}
+  
+  .navbar-container {
+    padding: 5px;
+  }
+  
+  .navbar-link {
+    font-size: 24px;
+    font-weight: lighter;
+  }
+
+  .toolbar {
+    border-bottom: 9px solid #FBC02D;
+    position: fixed;
+    top: 0;
+    height: 80px;
+    z-index:1;
+  }
+
+  .top-line {
+    border: 4px solid green;
+    width: 100vw;
+    margin: 0%;
+  }
+  
+  .main-content {
+    padding-left: 30px;
+    position: relative;
+    min-height: 100vh;
+    z-index:0;
+
+  }
+  
+  .footer {
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    color: #F2F2F2;
+    background-color: #66BB6A;
+    height: 50px;
+    z-index:1;
+  }
+  
+  .footer-content {
+    font-size: 16px;
+    font-weight: lighter;
+    padding-left: 100px;
+    letter-spacing: 3px;
+    color: #F2F2F2;
+    background-color: #66BB6A;
+    
+  }
+  
+  .bu-link {
+    text-decoration: none;
+    color:#F2F2F2
+  }
+  
+  .bu-link:hover {
+    text-decoration: underline;
+    color: #FBC02D; 
+  }
+
+  #content-wrap {
+    padding-bottom: 50px;    /* Footer height */
+    padding-top: 80px; /* Toolbar height */
+  } 
+  

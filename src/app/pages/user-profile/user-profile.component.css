@@ -1,0 +1,80 @@
+/**
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: May 5, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App style for UserProfileComponent
+;===========================================
+*/
+
+
+  
+  .mat-card-actions {
+    text-align: center;
+  }
+  
+  .msg-error {
+    color: red;
+    padding-top: 10px !important;
+  }
+  
+  button.submit {
+    background-color: #fbc02d;
+    color: whitesmoke;
+    width: 20%;    
+    margin-left: 10%;
+  }
+
+  button.cancel {
+    border-color: #EF5350;
+    color: #EF5350;
+    width: 20%;    
+  }
+
+  button.edit {
+    background-color: #fbc02d;
+    color: whitesmoke;
+    width: 20%;    
+    margin-left: 10%;
+  }
+
+  button.exit {
+    border-color: #EF5350;
+    color: #EF5350;
+    width: 20%;    
+  }
+  
+  .mat-form-field {
+ width: 90%;
+    
+}
+.profile-container {
+    text-align: center;
+  }
+  
+  mat-label {
+    color: grey;
+  }
+  
+  mat-tab-body {
+    padding-top: 10px;
+  }
+  
+  .profile-div {
+    margin: 60px auto;
+    width: 40%;
+  }
+
+  .mat-list-base, .mat-list-item, .mat-list-item-ripple {
+    margin-bottom: 20px !important;
+  }
+
+  h3 {
+    padding-bottom: 20px;
+  }
+  
+   
+
+
+ 

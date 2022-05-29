@@ -1,0 +1,57 @@
+<!-- <!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: April 23, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App html code for InvoiceDialogComponent.
+===========================================
+-->
+
+<div fxLayout="column">
+
+    <mat-card class="mat-elevation-z0" style="width:95%">
+        <mat-card-title>Order Summary</mat-card-title>
+        <br />
+        <mat-card-subtitle>Order Date: {{orderDate}}</mat-card-subtitle>
+        <mat-card-subtitle>Order Created By: {{username}} </mat-card-subtitle>
+
+    </mat-card>
+    <mat-card class="mat-elevation-z0" style="width:95%">
+        <mat-card-content>
+            <table mat-table [dataSource]="printLineItems" class="mat-elevation-z8">
+                <!-- Service Column -->
+                <ng-container matColumnDef="item">
+                    <th mat-header-cell *matHeaderCellDef> Item </th>
+                    <td mat-cell *matCellDef="let lineItem"> {{lineItem.name}} </td>
+                    <td mat-footer-cell *matFooterCellDef> Total </td>
+                </ng-container>
+
+                <!-- Cost Column -->
+                <ng-container matColumnDef="cost">
+                    <th mat-header-cell *matHeaderCellDef> Cost </th>
+                    <td mat-cell *matCellDef="let lineItem"> {{lineItem.price | currency}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{total | currency}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </table>
+<!--             <div fxFlex>Parts: {{parts | currency}}</div>
+            <div fxFlex>Labor @ 50/hr: {{labor | currency}}</div> -->
+
+        </mat-card-content>
+    </mat-card>
+
+
+    <mat-card class="mat-elevation-z0" style="width:95%">
+        <mat-card-content>
+            <div mat-dialog-actions align="end" class="action">
+                <button mat mat-raised-button matDialogClose="cancel" class="cancel">Cancel</button>
+                <button mat mat-raised-button matDialogClose="confirm" class="submit">Confirm Order</button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</div> -->

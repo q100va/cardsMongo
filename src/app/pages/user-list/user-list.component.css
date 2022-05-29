@@ -1,0 +1,27 @@
+/**
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: April 23, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App style for UserListComponent.
+;===========================================
+*/
+
+mat-card-title {
+  text-align: center;
+}
+
+mat-card-subtitle {
+  margin: auto;
+  text-align: center;
+}
+
+.icon-cursor {
+  cursor: pointer;
+}
+
+div {
+  width: 80%;
+  margin: auto;
+}

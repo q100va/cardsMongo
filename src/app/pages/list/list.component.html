@@ -1,0 +1,37 @@
+<mat-card class="mat-elevation-z0">
+    <mat-card-title> Формирование списка ДР июня 2022 </mat-card-title>
+
+    <br />
+
+    <mat-card-actions>
+
+        <button class="submit" (click)="deleteList()" mat-raised-button>Очистить список</button>
+
+        <button class="submit" (click)="populateSeniors()" mat-raised-button>Создать коллекцию</button>
+        <button class="submit" (click)="generate()" mat-raised-button>Сформировать</button>
+        <button class="submit" (click)="showList($event)" mat-raised-button>Показать список</button>
+    </mat-card-actions>
+
+    <mat-card-content *ngIf="isShowList">
+        <p>Общее количество - {{listLength}}</p>
+        <p>oldWomen - {{oldWomen}}</p>
+        <p>oldMen - {{oldMen}}</p>
+        <p>yang - {{yang}}</p>
+        <p>special - {{special}}</p>
+        <p>oldest - {{oldest}}</p>
+        <p>Общее количество с запасом - {{listLength+oldest}}</p>
+    
+
+        <mat-list *ngFor="let list of lists">
+            <mat-list-item> {{list.period}}</mat-list-item>
+            <mat-list *ngFor="let person of list.celebrators">
+                <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+                    {{person.fullDayBirthday}} {{person.comment1}}
+                    {{person.specialComment}} {{person.linkPhoto}} {{person.category}} 
+                    {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}}</mat-list-item>
+            </mat-list>
+        </mat-list>
+
+
+    </mat-card-content>
+</mat-card>

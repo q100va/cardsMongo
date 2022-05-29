@@ -1,0 +1,63 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: May 5, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App - User Profile
+===========================================
+-->
+
+<div fxLayout="column" class="profile-div">
+    <mat-card fxFlex class="mat-elevation-z8 profile-container">
+        <mat-card-content *ngIf="order">
+            <div fxLayout="column" fxLayoutGap="10px">
+            <mat-card-subtitle>Дата: {{order.orderDate}}</mat-card-subtitle>
+            <mat-card-subtitle>Праздник: {{order.holiday}} </mat-card-subtitle>
+            <mat-card-subtitle>Координатор: {{order.userName}} </mat-card-subtitle>
+            <mat-card-subtitle>Количество: {{order.amount}}</mat-card-subtitle>
+            <mat-card-subtitle>Поздравляющий: {{fullName}} </mat-card-subtitle>
+            <mat-card-subtitle>Контактная информация: {{contact}} </mat-card-subtitle>
+            <mat-card-subtitle>{{needAccepting}} </mat-card-subtitle>
+            <mat-card-subtitle>{{noRestricted}} </mat-card-subtitle>
+            <mat-card-subtitle>{{order.comment}} </mat-card-subtitle>
+
+            <mat-card-title>Ваша заявка сохранена. Скопируйте, пожалуйста, список адресов и отправьте поздравляющему.
+            </mat-card-title>
+
+
+            <mat-card fxFlex class="mat-elevation-z8 list-container">
+
+
+                <mat-card-content *ngFor="let lineItem of order.lineItems">
+
+                    <p style="font-weight: bold; ">{{lineItem.address}}</p>
+                    <p style="font-style: italic;">{{lineItem.infoComment}}</p>
+                    <p style="color: red;">{{lineItem.adminComment}}</p>
+
+                    <div *ngFor="let celebrator of lineItem.celebrators">
+
+                        {{celebrator.lastName}}
+                        {{celebrator.firstName}}
+                        {{celebrator.patronymic}}
+                        {{celebrator.fullDayBirthday}}
+                        {{celebrator.comment1}}
+                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                        </span>
+                    </div>
+                    <br />
+                </mat-card-content>
+
+            </mat-card>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button class="cancel" (click)="close()" mat-raised-button>
+                Закрыть
+            </button>
+
+        </mat-card-actions>
+    </mat-card>
+
+
+</div>

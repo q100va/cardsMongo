@@ -1,0 +1,149 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: May 5, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App - User Profile
+===========================================
+-->
+
+<div fxLayout="column" class="profile-div">
+  <mat-card fxFlex class="mat-elevation-z8 profile-container">
+    <mat-card-content>
+      <!-- User Profile: view/edit -->
+      <mat-tab-group>
+        <mat-tab label="User Profile">
+          <mat-card fxFlex class="mat-elevation-z8 update-container">
+            <mat-card-content>
+              <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
+                <form [formGroup]="form" (ngSubmit)="saveUser()" #userProfileForm>
+                  <mat-card-content>
+
+                    <!--userName-->
+                    <mat-form-field *ngIf="!edit">
+                      <mat-label>User name</mat-label>
+                      <input matInput [formControl]="form.controls['userName']" value="{{ userName }}"
+                        readonly="true" />
+                    </mat-form-field>
+
+                    <!--firstName-->
+                    <mat-form-field appearance="{{ isFilled }}">
+                      <mat-label>First name</mat-label>
+                      <input matInput [formControl]="form.controls['firstName']" value="form.controls['firstName']"
+                        readonly="{{ readonly }}" />
+                      <mat-error class="error" *ngIf="
+                          form.controls.firstName.hasError('required') &&
+                          form.controls.firstName.touched && edit
+                        ">This field is required!</mat-error>
+                    </mat-form-field>
+
+                    <!--lastName-->
+                    <mat-form-field appearance="{{ isFilled }}">
+                      <mat-label>Last name</mat-label>
+                      <input matInput [formControl]="form.controls['lastName']" value="form.controls['lastName']"
+                        readonly="{{ readonly }}" />
+                      <mat-error class="error" *ngIf="
+                          form.controls.lastName.hasError('required') &&
+                          form.controls.lastName.touched && edit
+                        ">This field is required!</mat-error>
+                    </mat-form-field>
+
+                    <!--phone-->
+                    <mat-form-field appearance="{{ isFilled }}">
+                      <mat-label>Phone number</mat-label>
+                      <input matInput [formControl]="form.controls['phoneNumber']" value="form.controls['phoneNumber']"
+                        readonly="{{ readonly }}" />
+                    </mat-form-field>
+
+                    <!--address-->
+                    <mat-form-field appearance="{{ isFilled }}">
+                      <mat-label>Address</mat-label>
+                      <input matInput [formControl]="form.controls['address']" value="form.controls['address']"
+                        readonly="{{ readonly }}" />
+                    </mat-form-field>
+
+                    <!--email-->
+                    <mat-form-field appearance="{{ isFilled }}">
+                      <mat-label>Email</mat-label>
+                      <input matInput [formControl]="form.controls['email']" value="form.controls['email']"
+                        readonly="{{ readonly }}" />
+                      <mat-error class="error" *ngIf="
+                          form.controls.email.hasError('email') &&
+                          form.controls.email.touched && edit
+                        ">Input valid email!</mat-error>
+                    </mat-form-field>
+
+                    <!--role-->
+                    <mat-form-field *ngIf="!edit">
+                      <mat-label>Role</mat-label>
+                      <input matInput [formControl]="form.controls['role']" value="{{ selectedRole }}"
+                        readonly="true" />
+                    </mat-form-field>
+                  </mat-card-content>
+
+                  <!-- User Profile buttons -->
+                  <mat-card-actions>
+                    <button *ngIf="edit" class="cancel" (click)="cancelProfile()" mat-raised-button>
+                      Cancel
+                    </button>
+                    <button *ngIf="edit" class="submit" [disabled]="!form.valid" mat-raised-button>
+                      Submit
+                    </button>
+                    <button *ngIf="!edit" class="exit" (click)="exit()" mat-raised-button>
+                      Exit
+                    </button>
+                    <button *ngIf="!edit" class="edit" [disabled]="!form.valid" (click)="editProfile()"
+                      mat-raised-button>
+                      Edit Profile
+                    </button>
+                  </mat-card-actions>
+                </form>
+              </mat-card>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
+        
+        <!-- Change password -->
+        <mat-tab label="Change Password">
+          <mat-card fxFlex class="mat-elevation-z8 main-container">
+            <h3>Use a strong password.</h3>
+            <mat-card-content>
+              <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="20px">
+                <form [formGroup]="passwordForm" (ngSubmit)="resetPassword()" #resetPasswordForm>
+                  <mat-card-content>
+                    <mat-form-field fxFlex appearance="fill">
+                      <mat-label for="pswPassword" id="lblpassword">New password</mat-label>
+                      <input type="password" matInput [formControl]="passwordForm.controls['password']" id="pswPassword"
+                        name="pswPassword" />
+                      <mat-error class="error" *ngIf="
+                        passwordForm.controls.password.hasError('required') &&
+                        passwordForm.controls.password.touched
+                        ">This field is required!</mat-error>
+                      <mat-error class="error" *ngIf="
+                        passwordForm.controls.password.hasError('pattern') &&
+                        passwordForm.controls.password.touched
+                        ">Password must be at least 8 characters, contain one letter, and
+                        one number!</mat-error>
+                    </mat-form-field>
+                  </mat-card-content>
+
+                  <!-- Change password buttons -->
+                  <mat-card-actions>
+                    <button class="cancel" (click)="exit()" mat-raised-button>
+                      Exit
+                    </button>
+                    <button class="submit" [disabled]="!passwordForm.valid" mat-raised-button>
+                      Submit
+                    </button>
+                  </mat-card-actions>
+                </form>
+              </mat-card>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

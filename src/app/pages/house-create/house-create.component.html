@@ -1,0 +1,82 @@
+<!--
+============================================
+html code
+===========================================
+-->
+<div fxLayout="column" class = "main">
+  <mat-card class="mat-elevation-z0">
+    <mat-card-title> Карточка интерната </mat-card-title>
+
+    <br />
+
+    <form [formGroup]="form" (ngSubmit)="create()" #houseForm>
+      <mat-card-content>
+        <div fxLayout="column" fxLayoutGap="10px">
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['nursingHome']"
+              placeholder="Краткое название интерната*"  />
+            <mat-error class="error"
+              *ngIf="form.controls.nursingHome.hasError('required') && form.controls.nursingHome.touched">Обязательное
+              поле!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['region']" placeholder=" Регион*"
+               />
+            <mat-error class="error" *ngIf="form.controls.region.hasError('required') && form.controls.region.touched">
+              Обязательное поле!</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['address']" placeholder=" Почтовый адрес*"
+               />
+            <mat-error class="error"
+              *ngIf="form.controls.address.hasError('required') && form.controls.address.touched">Обязательное поле!
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['adminComment']"
+              placeholder="Комментарий администрации"  />
+
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['infoComment']"
+              placeholder=" Дополнительный комментарий"  />
+
+          </mat-form-field>
+      
+            <mat-slide-toggle [formControl]="form.controls['isRestricted']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>
+            <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
+
+            <mat-form-field style="width: 30%;">
+              <mat-label> Дата обновления</mat-label>
+              <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateStart']" >
+              <mat-hint>MM/DD/YYYY</mat-hint>
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input type="text" matInput [formControl]="form.controls['nameContact']"
+                placeholder="ФИО контактного лица"  />
+  
+            </mat-form-field>
+            <mat-form-field>
+              <input type="text" matInput [formControl]="form.controls['contact']"
+                placeholder="Email контактного лица"  />
+  
+            </mat-form-field>
+
+         
+
+        </div>
+
+
+      </mat-card-content>
+
+      <br />
+      <mat-card-actions>
+        <button class = "cancel" mat-raised-button (click)="cancel()" >Cancel</button>
+        <button class = "submit"  type="submit" mat-raised-button [disabled]="!form.valid">Submit</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

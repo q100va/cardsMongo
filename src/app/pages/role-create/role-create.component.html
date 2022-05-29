@@ -1,0 +1,32 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop Sprint3
+; Author: Professor Krasso
+; Date: May 7, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App html code to create role.
+===========================================
+-->
+<div fxLayout="column" style="padding-top: 30px;">
+  <mat-card class="mat-elevation-z0" style="width: 400px; margin: auto;">
+    <mat-card-title> Add a New Role </mat-card-title>
+
+    <br />
+
+    <form [formGroup]="form" (ngSubmit)="createRole()" #roleForm>
+      <mat-card-content>
+        <div fxLayout="column" fxLayoutGap="10px">
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['text']" placeholder="New Role Name" />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+
+      <br />
+      <mat-card-actions>
+        <button mat-raised-button (click)="cancel()" color="primary">Cancel</button>
+        <button type="submit" mat-raised-button color="accent" [disabled]="!form.valid">Submit</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,60 @@
+.main-welcome {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+}
+
+mat-card-title {
+  text-align: center;
+  font-weight: lighter;
+  font-size: 20px;
+}
+
+mat-card-subtitle {
+  text-align: left;
+  font-size: 14px;
+  color: black;
+  font-weight: 400;
+}
+
+.wrapper {
+  width: 80%;
+  display: grid;
+  grid-template-rows: repeat(3, 200px);
+  gap: 20px;
+  grid-auto-flow: column;
+  grid-template-columns: 300px 300px;
+}
+
+.product-card {
+  width: 280px;
+}
+
+mat-button-toggle {
+  width: 310px;
+  gap: 20px;
+  display: block;
+}
+
+.mat-button-toggle-checked {
+  background-color: #c62828;
+}
+
+mat-card-content {
+  width: 260px;
+  text-align: left;
+}
+
+p {
+  word-break: break-all;
+  white-space: normal;
+}
+
+.services-container {
+  width: auto;
+  margin: 5% auto;
+}
+
+.fees-input {
+  width: 100%;
+}

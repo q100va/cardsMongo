@@ -1,0 +1,90 @@
+<!--
+============================================
+ code to update user
+===========================================
+-->
+<div fxLayout="column" class="update-div">
+  <mat-card fxFlex class="mat-elevation-z8 update-container">
+    <mat-card-title>User Details: {{userName}}</mat-card-title>
+    <br />
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
+        <form [formGroup]="form" (ngSubmit)="saveUser()" #userForm>
+          <mat-card-content>
+
+            <!--firstName-->
+            <mat-form-field appearance="fill">
+              <input matInput [formControl]="form.controls['firstName']" placeholder="First name" />
+              <mat-error class="error" *ngIf="
+                form.controls.firstName.hasError('required') &&
+                form.controls.firstName.touched
+              ">This field is required!</mat-error>
+            </mat-form-field>
+            <!--lastName-->
+            <mat-form-field appearance="fill">
+              <input matInput [formControl]="form.controls['lastName']" placeholder="Last name" />
+              <mat-error class="error" *ngIf="
+                form.controls.lastName.hasError('required') &&
+                form.controls.lastName.touched
+              ">This field is required!</mat-error>
+            </mat-form-field>
+            <!--phone-->
+            <mat-form-field appearance="fill">
+              <input matInput [formControl]="form.controls['phoneNumber']" placeholder="Phone number" />
+            </mat-form-field>
+            <!--address-->
+            <mat-form-field  appearance="fill">
+              <input matInput [formControl]="form.controls['address']" placeholder="Address" />
+            </mat-form-field>
+            <!--email-->
+            <mat-form-field appearance="fill">
+              <input matInput [formControl]="form.controls['email']" placeholder="Email" />
+              <mat-error class="error" *ngIf="
+                  form.controls.email.hasError('email') &&
+                  form.controls.email.touched
+                ">Input valid email!</mat-error>
+            </mat-form-field>
+            <!--role-->
+
+            <mat-form-field appearance="fill" #roleForm>
+              <mat-label>Role</mat-label>
+              <!--               <select
+                matNativeControl                
+                [formControl]="form.controls['role']"
+              >
+                <option value="standard">standard</option>
+                <option value="admin">admin</option>
+              </select>
+ -->
+              <mat-select [formControl]="form.controls['role']" [(value)]="selectedRole">
+                <!--  <mat-option></mat-option> -->
+                <mat-option *ngFor="let role of roles" [value]="role.text">
+                  {{ role.text }}
+                </mat-option>
+              </mat-select>
+              <mat-error class="error" *ngIf="
+                  form.controls['role'].hasError('required') &&
+                  form.controls['role'].touched
+                ">
+                This field is required!
+              </mat-error>
+
+            </mat-form-field>
+            <!-- <p>You selected: {{selectedRole}}</p> -->
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button class="cancel" (click)="cancel()" mat-raised-button>
+              Cancel
+            </button>
+            <button class="submit" [disabled]="!form.valid" mat-raised-button>
+              Submit
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>

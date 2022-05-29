@@ -1,0 +1,163 @@
+<!--
+============================================
+ html code for ClientListComponent.
+===========================================
+-->
+<br />
+<br />
+<div fxLayout="column">
+    <mat-card>
+        <mat-card-title>Client Configuration</mat-card-title>
+        <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+        <p-toast position="center"></p-toast>
+        <br /><br />
+        <mat-card-content *ngIf="client">
+            <mat-table [dataSource]="client" class="mat-elevation-z4">
+                <!-- Name Column -->
+                <ng-container matColumnDef="firstName">
+                    <mat-header-cell *matHeaderCellDef> Имя </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.firstName }} </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="patronymic">
+                    <mat-header-cell *matHeaderCellDef> Отчество </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.patronymic }} </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="lastName">
+                    <mat-header-cell *matHeaderCellDef> Фамилия </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.lastName }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="gender">
+                    <mat-header-cell *matHeaderCellDef> Пол </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.gender }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="email">
+                    <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.email }} </mat-cell>
+                </ng-container>
+
+                <!-- Address Column -->
+                <ng-container matColumnDef="phoneNumber">
+                    <mat-header-cell *matHeaderCellDef> Номер телефона</mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.phoneNumber }} </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="whatsApp">
+                    <mat-header-cell *matHeaderCellDef> WhatsApp </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.whatsApp }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="telegram">
+                    <mat-header-cell *matHeaderCellDef> Телеграм </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.telegram }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="vKontakte">
+                    <mat-header-cell *matHeaderCellDef> Вконтакте</mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.vKontakte }} </mat-cell>
+                </ng-container>
+
+                <!-- Address Column -->
+                <ng-container matColumnDef="instagram">
+                    <mat-header-cell *matHeaderCellDef> Instagram </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.instagram }} </mat-cell>
+                </ng-container>
+                <!-- Name Column -->
+                <ng-container matColumnDef="facebook">
+                    <mat-header-cell *matHeaderCellDef> Facebook </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.facebook }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="country">
+                    <mat-header-cell *matHeaderCellDef> Страна </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.country }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="region">
+                    <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.region }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="city">
+                    <mat-header-cell *matHeaderCellDef> Город </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.city }} </mat-cell>
+                </ng-container>
+
+                <!-- Address Column -->
+                <ng-container matColumnDef="nameDay">
+                    <mat-header-cell *matHeaderCellDef> Поздравляет с именинами </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.nameDay }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="comments">
+                    <mat-header-cell *matHeaderCellDef> Комментарии </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.comments }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="institute">
+                    <mat-header-cell *matHeaderCellDef> Организация </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.institute }} </mat-cell>
+                </ng-container>
+
+                <!-- Phone Column -->
+                <ng-container matColumnDef="correspondent">
+                    <mat-header-cell *matHeaderCellDef> Переписывается </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.correspondent }} </mat-cell>
+                </ng-container>
+
+                <!-- Address Column -->
+                <ng-container matColumnDef="coordinator">
+                    <mat-header-cell *matHeaderCellDef> Координатор </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.coordinator }} </mat-cell>
+                </ng-container>
+                <!-- Address Column -->
+                <ng-container matColumnDef="isRestricted">
+                    <mat-header-cell *matHeaderCellDef> Заблокирован </mat-header-cell>
+                    <mat-cell *matCellDef="let client"> {{ client.isRestricted }} </mat-cell>
+                </ng-container>
+
+
+
+                <!-- Edit Column -->
+                <ng-container matColumnDef="edit">
+                    <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+                    <mat-cell *matCellDef="let client">
+                        <mat-icon routerLink="/clients/update/{{ client._id }}" color="accent" class="icon-cursor">edit
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Delete Column -->
+                <ng-container matColumnDef="delete">
+                    <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+                    <mat-cell *matCellDef="let client">
+                        <button mat-icon-button (click)="deleteClient(client._id)">
+                            <mat-icon color="primary">delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+        </mat-card-content>
+        <mat-card-subtitle>
+            <button mat-stroked-button color="primary" routerLink="/clients/create/new">Add New Client</button>
+        </mat-card-subtitle>
+    </mat-card>
+</div>

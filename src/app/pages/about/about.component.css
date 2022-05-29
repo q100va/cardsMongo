@@ -1,0 +1,58 @@
+.mat-card-title {
+    text-align: center;
+}
+
+.about-img {
+    width: 70%;
+    margin: auto;
+}
+
+.about-bob {
+    text-align: center;
+    margin: auto;
+
+}
+
+.left {
+    background-color: white;
+    width: 50%;
+    
+    padding: 20px;
+}
+
+.right {
+    background-color: #EC8145;
+    color: white;
+    padding: 60px 30px;
+    width: 50%;      
+}
+
+.text {
+    font-size: 18px;
+    line-height:30px;
+    letter-spacing: normal;
+    padding-bottom: 50px;
+}
+
+.main {
+padding-top: 70px;
+}
+
+.image-container {
+    width:100%;
+    text-align: center;
+
+}
+
+.contact {
+    font-size: 35px;
+    color: white;
+    padding-right: 30px;
+  }
+
+  .icons {
+ 
+      text-align: center;
+      
+      margin: auto;
+  }

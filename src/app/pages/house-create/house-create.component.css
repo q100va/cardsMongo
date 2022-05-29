@@ -1,0 +1,49 @@
+/**
+============================================
+style
+;===========================================
+*/
+
+.main {
+    margin: 60px auto;
+    width: 60%;
+    
+  }
+
+  .mat-card {
+    padding: 35px;
+  }
+  
+  .mat-card-actions {
+    text-align: center;
+  }
+  
+  .title {
+    padding: 10px;
+    color: primary;
+    text-align: left;
+  }
+  
+  .msg-error {
+    color: red;
+    padding-top: 10px !important;
+  }
+  
+  button.submit {
+    background-color: #fbc02d;
+    color: whitesmoke;
+    width: 20%;
+    margin-left: 10%;
+  }
+  
+  button.cancel {
+    border-color: #ef5350;
+    color: #ef5350;
+    width: 20%;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+    
+  }
+  

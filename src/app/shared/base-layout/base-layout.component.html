@@ -1,0 +1,97 @@
+<!--
+============================================
+; Title: WEB450 Bob's Computer Repair SHop
+; Author: Professor Krasso
+; Date: April 23, 2022
+; Modified By: House Gryffindor
+; Description: Bob's Computer Repair Shop App html code for BaseLayoutComponent.
+===========================================
+-->
+<div fxLayout="column">
+  <!-- navigation -->
+
+  <mat-toolbar class="toolbar mat-primary">
+    <mat-toolbar-row class="mat-elevation-z4">
+      <div fxLayout="row" fxFlex style="border-bottom: 3px">
+        <div class="logo" fxLayoutAlign="start center" fxFlex="10" routerLink="/">
+          <img class="nav-logo" src="../../../assets/LOGO.png" height="50px" />
+          <h1>&nbsp;Проект "Внуки по переписке: Поздравить открыткой"</h1>
+        </div>
+        <div fxLayoutAlign="end center" fxFlex="85">
+          <button class="navbar-link" routerLink="/orders/create/new" mat-button>Новая заявка</button>
+          <button class="navbar-link" routerLink="/orders/find/{{userName}}" mat-button>Мои заявки</button>
+        </div>
+        <div *ngIf="isLoggedIn" fxLayoutAlign="end center" fxFlex="5">
+          <button mat-icon-button [matMenuTriggerFor]="profileMenu" aria-label="User Profile Menu">
+            <mat-icon>perm_identity</mat-icon>
+          </button>
+          <mat-menu #profileMenu>
+            <p style="padding: 10px">Вы вошли как {{ name }}</p>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="redirectToProfile()">
+              <mat-icon color="primary">settings</mat-icon>
+              <span>Профайл</span>
+            </button>
+            <!-- admin-locked -->
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToOrders()">
+              <mat-icon color="primary">book</mat-icon>
+              <span>Заявки</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToLists()">
+              <mat-icon color="primary">list</mat-icon>
+              <span>Списки</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToClients()">
+              <mat-icon color="primary">mail</mat-icon>
+              <span>Поздравляющие</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToSeniors()">
+              <mat-icon color="primary">group</mat-icon>
+              <span>Поздравляемые</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item routerLink="/user">
+              <mat-icon color="primary">person</mat-icon>
+              <span>Пользователи</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item routerLink="/houses">
+              <mat-icon color="primary">house</mat-icon>
+              <span>Интернаты</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item routerLink="/roles">
+              <mat-icon color="primary">build</mat-icon>
+              <span>Роли</span>
+            </button>
+            <!-- to here -->
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="signOut()">
+              <mat-icon color="primary">logout</mat-icon>
+              <span>Выйти</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <hr class="top-line" />
+
+  <!-- main content -->
+  <div fxFlex>
+    <main class="main-content" fxFlex="100%;">
+      <div id="content-wrap">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+
+  <!-- footer -->
+  <div fxFlex>
+    <footer class="footer">
+      <mat-toolbar class="footer-content">
+        <p>
+          &copy; {{ year | date: "yyyy" }} - OksanaKustova -
+          <a href="https://starikam.org/" class="bu-link" target="_blank">БФ помощи пожилым людям и инвалидам "Старость в радость"</a>
+        </p>
+      </mat-toolbar>
+    </footer>
+  </div>
+</div>

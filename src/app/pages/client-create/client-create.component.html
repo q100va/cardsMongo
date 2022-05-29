@@ -1,0 +1,113 @@
+<!--
+============================================
+ html code to create a new client.
+===========================================
+-->
+
+<div fxLayout="column" style="padding-top: 30px" class="main">
+    <mat-card class="mat-elevation-z0" style="width: 800px; margin: auto;">
+        <mat-card-title> Create Client </mat-card-title>
+
+        <br />
+        <!-- Client Create Form -->
+        <form [formGroup]="form" (ngSubmit)="create()" #clientCreateForm>
+            <mat-card-content>
+                <div fxLayout="column" fxLayoutGap="10px">
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['firstName']" placeholder="Имя*" />
+                        <mat-error class="error"
+                            *ngIf="form.controls.firstName.hasError('required') && form.controls.firstName.touched">This
+                            field is required!</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['patronymic']"
+                            placeholder="Отчество" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['lastName']" placeholder="Фамилия" />
+                    </mat-form-field>
+
+                    <label>
+                        <input type="radio" value="Male" [formControl]="form.controls['gender']">
+                        <span>м</span>
+                    </label>
+                    <label>
+                        <input type="radio" value="Female" [formControl]="form.controls['gender']">
+                        <span>ж</span>
+                    </label>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['email']" placeholder="Email" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['phoneNumber']"
+                            placeholder="Номер телефона" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['whatsApp']" placeholder="WhatsApp" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['telegram']" placeholder="Телеграм" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['vKontakte']"
+                            placeholder="Вконтакте" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['instagram']"
+                            placeholder="Instagram" />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['facebook']" placeholder="Facebook" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['country']" placeholder="Страна" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['region']" placeholder="Регион" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['comments']" placeholder="Город" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['institute']" placeholder="Организация" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['correspondent']"
+                            placeholder="Переписывается" />
+                    </mat-form-field>
+
+                    <mat-form-field>
+                        <input type="text" matInput [formControl]="form.controls['coordinator']"
+                            placeholder="Координатор" />
+                    </mat-form-field>
+
+                    <mat-slide-toggle [formControl]="form.controls['nameDay']">Поздравляет с именинами
+                    </mat-slide-toggle>
+                    <mat-slide-toggle [formControl]="form.controls['isRestricted']">Заблокирован</mat-slide-toggle>
+
+
+                </div>
+            </mat-card-content>
+
+            <br />
+            <mat-card-actions align="end">
+                <button mat-raised-button (click)="cancel()" color="primary">Cancel</button>
+                <button type="submit" mat-raised-button color="accent" [disabled]="!form.valid">Submit</button>
+            </mat-card-actions>
+        </form>
+    </mat-card>
+</div>

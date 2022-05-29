@@ -1,0 +1,80 @@
+<!--
+============================================
+ html code for UserListComponent.
+===========================================
+-->
+<br />
+<br />
+<div fxLayout="column">
+  <mat-card>
+    <mat-card-title>User Configuration</mat-card-title>
+ <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-toast position="center"></p-toast>
+    <br /><br /> 
+    <mat-card-content *ngIf="user">
+      <mat-table [dataSource]="user" class="mat-elevation-z4">
+        <!-- Name Column -->
+        <ng-container matColumnDef="userName">
+          <mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{ user.userName }} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="firstName">
+          <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{ user.firstName }} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="lastName">
+          <mat-header-cell *matHeaderCellDef> Last Name </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{ user.lastName }} </mat-cell>
+        </ng-container>
+
+        <!-- Phone Column -->
+        <ng-container matColumnDef="phoneNumber">
+          <mat-header-cell *matHeaderCellDef> Phone # </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{ user.phoneNumber }} </mat-cell>
+        </ng-container>
+
+        <!-- Address Column -->
+        <ng-container matColumnDef="address">
+          <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{ user.address }} </mat-cell>
+        </ng-container>
+
+        <!-- Phone Column -->
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{ user.email }} </mat-cell>
+        </ng-container>
+
+        <!-- Edit Column -->
+        <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+          <mat-cell *matCellDef="let user">
+            <mat-icon routerLink="/users/update/{{ user._id }}" color="accent" class="icon-cursor"
+              >edit</mat-icon
+            ></mat-cell
+          >
+        </ng-container>
+
+        <!-- Delete Column -->
+        <ng-container matColumnDef="delete">
+          <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+          <mat-cell *matCellDef="let user">
+            <button mat-icon-button (click)="deleteUser(user._id)">
+              <mat-icon color="primary">delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </mat-table>
+    </mat-card-content>
+    <mat-card-subtitle>
+      <button mat-stroked-button color="primary" routerLink="/users/create/new">Add New User</button>
+    </mat-card-subtitle>
+  </mat-card>
+</div>

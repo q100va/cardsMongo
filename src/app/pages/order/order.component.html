@@ -1,0 +1,165 @@
+<!--
+============================================
+ html code to create  orders.
+===========================================
+-->
+<div fxLayout="row" class="main" style="width : 100%;">
+
+    <mat-card class="mat-elevation-z0" style="width : 100%;">
+        <div class="wrapper">
+            <div class="left" style="padding-left: 30px; padding-right: 30px;">
+
+                <mat-card-title> Новая заявка </mat-card-title>
+                <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+                <form [formGroup]="form" #orderForm>
+                    <mat-card-content>
+
+                        <div fxLayout="column" fxLayoutGap="10px">
+                            <mat-card-actions>
+                                <button mat-raised-button (click)="exit()" color="primary">Выйти</button>
+                                <button (click)="generateOrder()" mat-raised-button color="accent"
+                                    [disabled]="!form.valid">Сформировать</button>
+                            </mat-card-actions>
+
+                            <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
+                            <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
+                            <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
+
+                            <mat-slide-toggle [formControl]="form.controls['isAccepted']">Не требует
+                                подтверждения</mat-slide-toggle>
+                            <mat-slide-toggle [formControl]="form.controls['isRestricted']">Без БОА - не работает</mat-slide-toggle>
+
+
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['email']"
+                                    placeholder="Email" />
+
+                            </mat-form-field>
+                            <mat-error class="error"
+                                *ngIf="form.controls.email.hasError('email') && form.controls.email.touched">Введите
+                                валидный
+                                email!</mat-error>
+
+                            <mat-form-field appearance="fill">
+                                <mat-label>Другой контакт</mat-label>
+                                <mat-select [formControl]="form.controls['contactType']">
+                                    <mat-option></mat-option>
+                                    <mat-option *ngFor="let type of types" [value]="type">
+                                        {{ type }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-hint>обязательно указать, если не указан email</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['contact']"
+                                    placeholder="Аккаунт/номер" />
+                                <mat-hint>обязательно указать, если не указан email</mat-hint>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['amount']"
+                                    placeholder="Количество адресов*" />
+                            </mat-form-field>
+                            <mat-error class="error"
+                                *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
+                                Обязательное
+                                поле!</mat-error>
+                            <mat-error class="error"
+                                *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched">Only
+                                numbers are allowed!</mat-error>
+
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['clientFirstName']"
+                                    placeholder="Имя" />
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['clientPatronymic']"
+                                    placeholder="Отчество" />
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['clientLastName']"
+                                    placeholder="Фамилия" />
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['institute']"
+                                    placeholder="Представляет коллектив" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill">
+                                <input type="text" matInput [formControl]="form.controls['comment']"
+                                    placeholder="Комментарий" />
+                            </mat-form-field>
+
+                        </div>
+
+                    </mat-card-content>
+
+                </form>
+            </div>
+            <div class="right" style="padding-left: 30px; padding-right: 30px;">
+                <mat-card-title> Список поздравляемых </mat-card-title>
+
+                <mat-card-actions>
+                    <button mat-raised-button (click)="clear()" color="primary"
+                        [disabled]="!form.valid">Очистить</button>
+                    <button (click)="createOrder()" mat-raised-button color="accent"
+                        [disabled]="!canSave">Сохранить</button>
+                </mat-card-actions>
+                <p style="color: red; font-weight: bold; ">{{emptyMessage}}</p>
+                <br /><br />
+
+                <mat-card-content *ngFor="let lineItem of lineItems">
+
+                    <p style="font-weight: bold; ">{{lineItem.address}}</p>
+                    <p style="font-style: italic;">{{lineItem.infoComment}}</p>
+                    <p style="color: red;">{{lineItem.adminComment}}</p>
+
+                    <div *ngFor="let celebrator of lineItem.celebrators">
+
+                        {{celebrator.lastName}}
+                        {{celebrator.firstName}}
+                        {{celebrator.patronymic}}
+                        {{celebrator.fullDayBirthday}}
+                        {{celebrator.comment1}}
+                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                        </span>
+                    </div>
+                    <br />
+                </mat-card-content>
+
+
+
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+
+
+
+<!-- <h3>Angular Material Select with Search</h3>
+<form [formGroup]="bookForm" (ngSubmit)="onFormSubmit()" class="book-form">
+  <mat-form-field class="select-book">
+    <input type="text" placeholder="Email" matInput formControlName="book" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let book of $filteredBooks | async" [value]="book">
+        {{book.name}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input type="text" matInput [formControl]="bookForm.controls['lastName']" placeholder="Другой контакт"
+       />
+  </mat-form-field>
+  <mat-form-field>
+    <input type="text" matInput [formControl]="bookForm.controls['lastName']" placeholder="Другой контакт"
+       />
+  </mat-form-field>
+
+  <br/>
+  <br/>
+  <button mat-raised-button>Submit</button>
+  <button mat-raised-button type="button" (click)="resetForm()">Reset</button>
+</form>  -->

@@ -1,0 +1,69 @@
+/**
+============================================
+style
+;===========================================
+*/
+
+.main {
+    margin: 10px auto;
+    width: 100%;
+    
+  }
+
+  .mat-card {
+    padding: 35px;
+  }
+  
+  .mat-card-actions {
+    text-align: center;
+  }
+  
+  .title {
+    padding: 10px;
+    color: primary;
+    text-align: left;
+  }
+  
+  .msg-error {
+    color: red;
+    padding-top: 10px !important;
+  }
+  
+  button.submit {
+    background-color: #fbc02d;
+    color: whitesmoke;
+    width: 20%;
+    margin-left: 10%;
+  }
+  
+  button.cancel {
+    border-color: #ef5350;
+    color: #ef5350;
+    width: 20%;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+    
+  }
+  .wrapper {
+    display: grid;
+    grid-template-columns:  1fr 1fr;
+    gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+  }
+  .left {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    min-height: 100%;
+  
+  }
+  .right {
+    grid-column: 2 / 2;
+    grid-row: 1;
+    min-height: 100%;
+  }
+  
+  .bottom {
+    margin-bottom: 30px;
+  }

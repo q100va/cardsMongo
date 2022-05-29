@@ -1,0 +1,90 @@
+<!--
+============================================
+html code to update
+===========================================
+-->
+<div fxLayout="column" class="update-div">
+  <mat-card fxFlex class="mat-elevation-z8 update-container">
+    <mat-card-title>Карточка интерната</mat-card-title>
+    <br />
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
+        <form [formGroup]="form" (ngSubmit)="saveHouse()" #house>
+          <mat-card-content>
+            <div fxLayout="column" fxLayoutGap="10px">
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['nursingHome']"
+                  placeholder="Краткое название интерната*"  />
+                <mat-error class="error"
+                  *ngIf="form.controls.nursingHome.hasError('required') && form.controls.nursingHome.touched">Обязательное
+                  поле!</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['region']" placeholder=" Регион*"
+                   />
+                <mat-error class="error" *ngIf="form.controls.region.hasError('required') && form.controls.region.touched">
+                  Обязательное поле!</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['address']" placeholder=" Почтовый адрес*"
+                   />
+                <mat-error class="error"
+                  *ngIf="form.controls.address.hasError('required') && form.controls.address.touched">Обязательное поле!
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['adminComment']"
+                  placeholder="Комментарий администрации"  />
+    
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['infoComment']"
+                  placeholder=" Дополнительный комментарий"  />
+    
+              </mat-form-field>
+          
+                <mat-slide-toggle [formControl]="form.controls['isRestricted']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>
+                <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
+    
+                <mat-form-field style="width: 30%;">
+                  <mat-label>Выберите дату последнего обновления списка</mat-label>
+                  <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateStart']" >
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+    
+                <mat-form-field>
+                  <input type="text" matInput [formControl]="form.controls['nameContact']"
+                    placeholder="ФИО контактного лица"  />
+      
+                </mat-form-field>
+                <mat-form-field>
+                  <input type="text" matInput [formControl]="form.controls['contact']"
+                    placeholder="Email контактного лица"  />
+      
+                </mat-form-field>
+             
+              </div>
+  
+
+<!--             <mat-form-field appearance="fill">
+              <input matInput [formControl]="form.controls['text']" (keydown.enter)="saveHouse()" />
+              <mat-error class="error" *ngIf="form.controls.text.hasError('required') && form.controls.text.touched"
+                >You must enter.</mat-error
+              >
+            </mat-form-field> -->
+          </mat-card-content>
+     
+
+          <mat-card-actions>
+            <button class="cancel" (click)="cancel()" mat-raised-button>Cancel</button>
+            <button class="submit" [disabled]="!form.valid" mat-raised-button>Submit</button>
+          </mat-card-actions>
+        </form>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>

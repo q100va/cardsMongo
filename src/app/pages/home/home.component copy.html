@@ -1,0 +1,63 @@
+<div fxLayout="column" fxFlex="100%" class="main-welcome">
+  <p-toast></p-toast>
+
+  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="7%" style="width: 90%">
+    <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px" style="max-width: fit-content">
+      <!-- Buttons -->
+      <button mat-raised-button *ngFor="let service of service; let i = index" color="secondary" (click)="addToInvoice(service.name, service.price)">
+        {{ service.name }} {{ service.price | currency }}
+      </button>
+    </div>
+
+    <!-- Right side -->
+    <div fxFlex="60%" fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="30px">
+      <div fxLayoutAlign="start">
+        <!-- <button mat-raised-button type="button" (click)="addServiceDialog()">Add Service</button> -->
+      </div>
+
+      <div>
+        <!-- Data table-->
+        <mat-card fxFlex style="margin-left: 20px">
+          <mat-card-content>
+            <table #table mat-table [dataSource]="service" style="width: 100%">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let service">{{ service.name }}</td>
+              </ng-container>
+              <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef>Cost</th>
+                <td mat-cell *matCellDef="let service">{{ service.price | currency }}</td>
+              </ng-container>
+              <ng-container matColumnDef="functions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let service; let i = index">
+                  <button mat-icon-button>
+                    <mat-icon (click)="deleteFromInvoice(i, service.title, service.price, service.parts, service.hours)">delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </mat-card-content>
+        </mat-card>
+        <!-- End of data table -->
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div fxLayoutAlign="space-between">
+        <!-- Total and order button-->
+        <div>
+          <!-- Total -->
+          <!-- <h1>Total: {{ total | currency }}</h1> -->
+        </div>
+
+        <!-- Order Button -->
+
+        <!-- <button mat-raised-button (click)="placeOrder()" [disabled]="invoice.getTotal() === 0">Place Order</button> -->
+      </div>
+    </div>
+  </div>
+</div>
