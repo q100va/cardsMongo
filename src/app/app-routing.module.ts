@@ -89,17 +89,17 @@ const routes: Routes = [
       },
       {
         path: "users",
-        component: HouseListComponent,
+        component: UserListComponent,
         canActivate: [AuthGuard],
       },
       {
         path: "users/create/new",
-        component: HouseCreateComponent,
+        component: UserCreateComponent,
         canActivate: [AuthGuard],
       },
       {
         path: "users/update/:id",
-        component: HouseDetailsComponent,
+        component: UserDetailsComponent,
         canActivate: [AuthGuard],
       },
       {
