@@ -109,6 +109,32 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * API to delete
+ */
+ router.delete("/", async (req, res) => {
+  try {
+
+    console.log("delete3");
+    Senior.deleteMany({}, function (err, seniors) {
+      if (err) {
+        console.log(err);
+        const deleteHouseMongoErrorResponse = new BaseResponse("500", "MongoDB Server Error", err);
+        res.status(500).send(deleteHouseMongoErrorResponse.toObject());
+      } else {
+        console.log(seniors);
+        res.json(seniors);
+
+      }
+
+    });
+  } catch (e) {
+    console.log(e);
+    const deleteHouseCatchErrorResponse = new BaseResponse("500", "MongoDB server error", e);
+    res.status(500).send(deleteHouseCatchErrorResponse.toObject());
+  }
+});
+
 // Delete senior API
 router.delete("/:id", async (req, res) => {
   try {

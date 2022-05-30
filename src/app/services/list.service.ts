@@ -271,8 +271,8 @@ export class ListService {
   /*  return res; 
   }*/
 
-  createSeniorsCollection(seniors: [Senior]): Array<any> {
-    let correctedSeniors = this.correctSeniorsList(seniors);
+  createSeniorsCollection(correctedSeniors: [Senior]): Array<any> {
+    
     let result = [];
     for (let newSenior of correctedSeniors) {
       //console.log("Populating");
@@ -350,4 +350,7 @@ export class ListService {
     //console.log("finished");
     return seniors;
   }
+
+
+
 }

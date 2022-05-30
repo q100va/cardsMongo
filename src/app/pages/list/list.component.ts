@@ -17,6 +17,8 @@ export class ListComponent implements OnInit {
   yang: number = 0;
   special: number = 0;
   oldest: number = 0;
+  correctedSeniors: Array<any> =[];
+
 
   constructor(private listService: ListService) {}
 
@@ -107,6 +109,15 @@ this.listService.deleteList().subscribe(
       }
     );
   } */
+
+
+
+  prepareSeniorsList(){
+    let correctedSeniors =  this.listService.correctSeniorsList(seniors);
+
+  }
+
+
 
   populateSeniors() {
     let result = this.listService.createSeniorsCollection(seniors);

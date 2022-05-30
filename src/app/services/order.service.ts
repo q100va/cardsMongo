@@ -99,20 +99,22 @@ export class OrderService {
         console.log(person);
         console.log(lineItems);
         let index = -1;
-        if (lineItems) {
-          index = lineItems.findIndex((item) => {
-            item.nursingHome == person.nursingHome;
-          });
+        console.log(lineItems.length);
+        if (lineItems.length > 0) {
+          index = lineItems.findIndex((item) => 
+            item.nursingHome == person.nursingHome
+          );
+
         }
         console.log(index);
         if (index > -1) {
           lineItems[index].celebrators.push(person);
         } else {
           let foundHouse = nursingHomes.find(
-            (item: { nursingHome: any }) =>
+            (item) =>
               item.nursingHome == person.nursingHome
           );
-
+console.log(person.nursingHome);
           lineItems.push({
             region: foundHouse.region,
             nursingHome: foundHouse.nursingHome,
