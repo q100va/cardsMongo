@@ -62,7 +62,6 @@ export class SeniorsDetailsComponent implements OnInit {
         this.form.controls.nameDay.setValue(this.senior.nameDay);
         this.form.controls.dateNameDay.setValue(this.senior.dateNameDay);
         this.form.controls.monthNameDay.setValue(this.senior.monthNameDay);
-
       }
     );
 
@@ -116,6 +115,7 @@ export class SeniorsDetailsComponent implements OnInit {
       nameDay: this.form.controls.nameDay.value,
       dateNameDay: this.form.controls.dateNameDay.value,
       monthNameDay: this.form.controls.monthNameDay.value,
+
     };
     this.seniorsService.updateSenior(this.seniorId, updatedSenior).subscribe(
       (res) => {

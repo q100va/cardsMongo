@@ -14,7 +14,7 @@ const lineItemSchema = new Schema({
   address: { type: String, required: true },
   infoComment: { type: String },
   adminComment: { type: String },
-  isRestricted: {type: Boolean, default: false},
+  noAddress: {type: Boolean, default: false},
   celebrators: [celebrator],
 });
 

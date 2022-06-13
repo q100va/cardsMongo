@@ -9,10 +9,11 @@ const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const House = require("../models/house");
 
+
 // Create  API
 router.post("/", async (req, res) => {
   let status = 200;
-  
+
   try {
     console.log("1");
     console.log(req.body);
@@ -23,13 +24,15 @@ router.post("/", async (req, res) => {
       address: req.body.address,
       infoComment: req.body.infoComment,
       adminComment: req.body.adminComment,
-      isRestricted: req.body.isRestricted,
+      noAddress: req.body.noAddress,
       isActive: req.body.isActive,
-      dateStart: req.body.dateStart,
-      dateStartClone: req.body.dateStartClone,
+      dateLastUpdate: req.body.dateLastUpdate,
+      dateLastUpdateClone: req.body.dateLastUpdateClone,
       nameContact: req.body.nameContact,
       contact: req.body.contact,
-      isDisabled: req.body.isDisabled
+      isDisabled: req.body.isDisabled,
+      isReleased: req.body.isReleased,
+      website: req.body.website,
     };
     House.create(newHouse, function (err, house) {
       // If statement for an error with Mongo
@@ -142,13 +145,15 @@ router.put("/:id", async (req, res) => {
             address: req.body.address,
             infoComment: req.body.infoComment,
             adminComment: req.body.adminComment,
-            isRestricted: req.body.isRestricted,
+            noAddress: req.body.noAddress,
             isActive: req.body.isActive,
-            dateStart: req.body.dateStart,
-            dateStartClone: req.body.dateStartClone,
+            dateLastUpdate: req.body.dateLastUpdate,
+            dateLastUpdateClone: req.body.dateLastUpdateClone,
             nameContact: req.body.nameContact,
             contact: req.body.contact,
-            isDisabled: req.body.isDisabled
+            isDisabled: req.body.isDisabled,
+            isReleased: req.body.isReleased,
+            website: req.body.website,
           });
 
           house.save(function (err, updatedHouse) {
@@ -171,6 +176,8 @@ router.put("/:id", async (req, res) => {
     res.status(500).send(updateHouseCatchErrorResponse.toObject());
   }
 });
+
+
 
 /**
  * API to delete
@@ -205,6 +212,63 @@ router.delete("/:id", async (req, res) => {
     console.log(e);
     const deleteHouseCatchErrorResponse = new BaseResponse("500", "MongoDB server error", err);
     res.status(500).send(deleteHouseCatchErrorResponse.toObject());
+  }
+});
+
+/**
+ * API to delete many
+ */
+ router.delete("/", async (req, res) => {
+  try {
+
+    House.deleteMany({}, function (err, result) {
+      if (err) {
+        console.log(err);
+        const deleteHouseMongoErrorResponse = new BaseResponse("500", "MongoDB Server Error", err);
+        res.status(500).send(deleteHouseMongoErrorResponse.toObject());
+      } else {
+        console.log(result);
+        res.json(result);
+
+      }
+
+    });
+  } catch (e) {
+    console.log(e);
+    const deleteHouseCatchErrorResponse = new BaseResponse("500", "MongoDB server error", e);
+    res.status(500).send(deleteHouseCatchErrorResponse.toObject());
+  }
+});
+
+// Create many houses  API
+router.post("/add-many/", async (req, res) => {
+
+  try {
+   let houses = req.body.houses;
+    for (let house of houses) {
+      house.isActive = true;
+      house.dateLastUpdate = '';
+      house.dateLastUpdateClone = '';
+      house.nameContact = '';
+      house.contact = '';
+      house.noAddress = false;
+      house.isReleased = false;
+      house.isDisabled = false;
+      house.website = '';
+      if(!house.infoComment) house.infoComment = '';
+      if(!house.adminComment) house.adminComment = '';
+    }
+
+    const result = await House.insertMany(houses, { ordered: false });
+
+    const createHouseResponse = new BaseResponse(200, "Query Successful", result);
+    return res.status(200).send(createHouseResponse.toObject());
+
+  } catch (error) {
+    // Server error goes here
+    console.log(error);
+    const createHouseCatchErrorResponse = new BaseResponse(500, "Internal server error", error.message);
+    res.status(500).send(createHouseCatchErrorResponse.toObject());
   }
 });
 

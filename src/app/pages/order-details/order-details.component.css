@@ -9,7 +9,7 @@
 */
 
 .mat-card-actions {
-  text-align: center;
+  text-align: right;
 }
 
 .msg-error {
@@ -27,7 +27,7 @@ button.submit {
 button.cancel {
   border-color: #ef5350;
   color: #ef5350;
-  width: 20%;
+  
 }
 
 button.edit {
@@ -45,6 +45,7 @@ button.exit {
 
 .profile-container {
   text-align: left;
+  padding-right: 80px;
 }
 
 .profile-div {
@@ -60,6 +61,6 @@ button.exit {
 
 
 .list-container {
-    width: 90%;
-    margin: 10px auto;
+    width: 100%;
+    margin: 10px 0px 10px 0px;
 }

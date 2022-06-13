@@ -80,6 +80,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ListComponent } from './pages/list/list.component';
 import { OrderDetailsComponent } from './pages/order-details/order-details.component';
 import { OrderListComponent } from './pages/order-list/order-list.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 @NgModule({
   declarations: [
@@ -115,6 +121,7 @@ import { OrderListComponent } from './pages/order-list/order-list.component';
     ListComponent,
     OrderDetailsComponent,
     OrderListComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -152,7 +159,15 @@ import { OrderListComponent } from './pages/order-list/order-list.component';
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    MatBadgeModule,
+    MatTooltipModule,
+    MatPaginatorModule
+  ],
+  entryComponents: [
+    ConfirmationDialogComponent,
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent],

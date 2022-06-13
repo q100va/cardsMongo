@@ -8,9 +8,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const celebratorSchema = new Schema({
-
-  position: { type: Number },
   nursingHome: { type: String },
+  region: { type: String },
   lastName: { type: String },
   firstName: { type: String },
   patronymic: { type: String },
@@ -18,6 +17,7 @@ const celebratorSchema = new Schema({
   monthBirthday: { type: Number },
   yearBirthday: { type: Number },
   comment1: { type: String },
+  comment2: { type: String },
   specialComment: { type: String },
   linkPhoto: { type: String },
   nameDay: { type: String },
@@ -26,10 +26,12 @@ const celebratorSchema = new Schema({
   plusAmount: { type: Number },
   oldest: { type: Boolean, default: false },
   category: { type: String },
-  noAddress: { type: Boolean, default: false },
+  noAddress: { type: Boolean },
+  isReleased: { type: Boolean },
   fullDayBirthday: { type: String },
   gender: { type: String },
   celebrator_id: { type: String },
+  holyday:  { type: String },
 
 });
 

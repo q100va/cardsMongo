@@ -6,7 +6,7 @@ style
 
 .main {
     margin: 10px auto;
-    width: 100%;
+    width: 95%;
     
   }
 
@@ -67,3 +67,44 @@ style
   .bottom {
     margin-bottom: 30px;
   }
+
+  td {
+    padding-right: 8px;
+  }
+
+  .example-full-width {
+    width: 100%;
+  }
+
+  .example-half-width {
+    width: 70%;
+  }
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .example-headers-align {
+    margin-right: 8px;
+  }  
+
+  .example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+  }
+  
+  .example-radio-button {
+    margin: 5px;
+  }
+
+  .mat-form-field + .mat-form-field,
+.mat-raised-button {
+  margin-left: 8px;
+}

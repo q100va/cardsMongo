@@ -9,9 +9,9 @@ const express = require("express");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
+const House = require("../models/house");
 
 // Find all seniors
-
 router.get("/", async (req, res) => {
   try {
     Senior.find({})
@@ -62,12 +62,15 @@ router.get("/:id", async (req, res) => {
     res.status(500).send(readSeniorCatchErrorResponse.toObject());
   }
 });
+
+
 //Create Senior API
 
 router.post("/", async (req, res) => {
   console.log("step1");
   try {
     console.log("step2");
+    let house = await House.findOne({ nursingHome: req.body.nursingHome, });
     const newSenior = {
       region: req.body.region,
       nursingHome: req.body.nursingHome,
@@ -85,8 +88,12 @@ router.post("/", async (req, res) => {
       nameDay: req.body.nameDay,
       dateNameDay: req.body.dateNameDay,
       monthNameDay: req.body.monthNameDay,
-      isDisabled: req.body.isDisabled,
-      noAddress: req.body.noAddress,
+      isDisabled: false,
+      noAddress: house.noAddress,
+      isReleased: house.isReleased,
+      dateEnter: house.dateLastUpdate,
+      dateExit: '',
+
     };
     Senior.create(newSenior, function (err, senior) {
       console.log("step4");
@@ -110,9 +117,9 @@ router.post("/", async (req, res) => {
 });
 
 /**
- * API to delete
+ * API to delete all
  */
- router.delete("/", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
 
     console.log("delete3");
@@ -177,6 +184,152 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+
+// Update senior API
+
+router.put("/update/:id", async (req, res) => {
+  try {
+    let senior = await Senior.findOne({ _id: req.params.id });
+    let house = await House.findOne({ nursingHome: req.body.nursingHome, });
+    senior.set({
+      region: req.body.region,
+      nursingHome: req.body.nursingHome,
+      lastName: req.body.lastName,
+      firstName: req.body.firstName,
+      patronymic: req.body.patronymic,
+      isRestricted: req.body.isRestricted,
+      dateBirthday: req.body.dateBirthday,
+      monthBirthday: req.body.monthBirthday,
+      yearBirthday: req.body.yearBirthday,
+      gender: req.body.gender,
+      comment1: req.body.comment1,
+      comment2: req.body.comment2,
+      linkPhoto: req.body.linkPhoto,
+      nameDay: req.body.nameDay,
+      dateNameDay: req.body.dateNameDay,
+      monthNameDay: req.body.monthNameDay,
+      noAddress: house.noAddress,
+      isReleased: house.isReleased,
+      //dateEnter: req.body.dateEnter,
+      //dateExit: req.body.dateExit, 
+    });
+    senior.save(function (err, updatedSenior) {
+      if (err) {
+        const saveSeniorInvalidIdResponse = new BaseResponse(500, "Internal Server Error", err);
+        res.status(500).send(saveSeniorInvalidIdResponse.toObject());
+      } else {
+        const updateSeniorResponse = new BaseResponse(200, "Query Successful", updatedSenior);
+        res.json(updateSeniorResponse.toObject());
+      }
+    });
+  }
+  catch (e) {
+    const updateSeniorCatchErrorResponse = new BaseResponse(500, "Internal Server Error", updatedSenior);
+    res.json(updateSeniorCatchErrorResponse.toObject());
+  }
+});
+
+
+// Create many seniors  API
+router.post("/add-many/",  async (req, res) => {
+ 
+
+  try {
+     console.log("start API");
+    let seniors = req.body.seniors;
+    for (let senior of seniors) {
+      let house = await House.findOne({ nursingHome: senior.nursingHome });
+      senior.isRestricted = senior.isRestricted == "false" ? false : true;
+      senior.dateBirthday = +senior.dateBirthday;
+      senior.monthBirthday = +senior.monthBirthday;
+      senior.yearBirthday = +senior.yearBirthday;
+      senior.dateNameDay = senior.dateNameDay ? (+senior.dateNameDay) : 0;
+      senior.monthNameDay = senior.monthNameDay ? (+senior.monthNameDay) : 0;
+      senior.isDisabled = false;
+      senior.noAddress = house.noAddress;
+      senior.isReleased = house.isReleased;
+      senior.dateEnter = house.dateLastUpdate;
+      senior.dateExit = '';
+      //console.log(senior.dateExit);
+      if (!senior.lastName) senior.lastName = '';
+      if (!senior.patronymic) senior.patronymic = '';
+      if (!senior.comment1) senior.comment1 = '';
+      if (!senior.comment2) senior.comment2 = '';
+      if (!senior.linkPhoto) senior.linkPhoto = '';
+      if (!senior.nameDay) senior.nameDay = '';
+      if (senior.gender == 'ж') senior.gender = 'Female';
+      if (senior.gender == 'м') senior.gender = 'Male';
+    }
+    /* let result = [];
+    for (let i = 0; i < seniors.lenth-20; i=i+20){
+      let someSeniors = seniors.slice([i], [i+20]);
+       result.push(await addSomeSeniors(someSeniors));
+    }    */
+    const result = await Senior.insertMany(seniors, { ordered: false });
+    
+    //console.log(result);
+    const createSeniorResponse = new BaseResponse(200, "Query Successful", result);
+    return res.status(200).send(createSeniorResponse.toObject());
+
+  } catch (error) {
+    // Server error goes here
+    console.log(error);
+    const createSeniorCatchErrorResponse = new BaseResponse(500, "Internal server error", error.message);
+    res.status(500).send(createSeniorCatchErrorResponse.toObject());
+  }
+});
+
+async function addSomeSeniors(seniors) {
+  const result = await Senior.insertMany(seniors, { ordered: false });
+  return result;
+}
+
+
+// Correct  senior API
+
+/* router.put("/correct/:id", async (req, res) => {
+  try {
+    Senior.findOne({ _id: req.params.id }, function (err, senior) {
+      if (err) {
+        const updateSeniorMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
+        res.status(500).send(updateSeniorMongodbErrorResponse.toObject());
+      } else {
+        senior.set({
+          region: senior.region,
+          nursingHome: senior.nursingHome,
+          lastName: senior.lastName,
+          firstName: senior.firstName,
+          patronymic: senior.patronymic,
+          isRestricted: Boolean(senior.isRestricted),
+          dateBirthday: +senior.dateBirthday,
+          monthBirthday: +senior.monthBirthday,
+          yearBirthday: +senior.yearBirthday,
+          gender: senior.gender,
+          comment1: senior.comment1,
+          comment2: senior.comment2,
+          linkPhoto: senior.linkPhoto,
+         // noAddress: Boolean(senior.noAddress),
+          isDisabled: Boolean(senior.isDisabled),
+          //isReleased: Boolean(senior.isReleased),
+        });
+        senior.save(function (err, updatedSenior) {
+          if (err) {
+            const saveSeniorInvalidIdResponse = new BaseResponse(500, "Internal Server Error", err);
+            res.status(500).send(saveSeniorInvalidIdResponse.toObject());
+          } else {
+            const updateSeniorResponse = new BaseResponse(200, "Query Successful", updatedSenior);
+            res.json(updateSeniorResponse.toObject());
+          }
+        });
+      }
+    });
+  } catch (e) {
+    const updateSeniorCatchErrorResponse = new BaseResponse(500, "Internal Server Error", updatedSenior);
+    res.json(updateSeniorCatchErrorResponse.toObject());
+  }
+});
+ */
+
 /* API to delete from DB senior
 router.delete("/:id", async (req, res) => {
   try {
@@ -201,151 +354,6 @@ router.delete("/:id", async (req, res) => {
     });
   }
 }); */
-
-// Update senior API
-
-router.put("/update/:id", async (req, res) => {
-  try {
-    Senior.findOne({ _id: req.params.id }, function (err, senior) {
-      if (err) {
-        const updateSeniorMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
-        res.status(500).send(updateSeniorMongodbErrorResponse.toObject());
-      } else {
-        senior.set({
-          region: req.body.region,
-          nursingHome: req.body.nursingHome,
-          lastName: req.body.lastName,
-          firstName: req.body.firstName,
-          patronymic: req.body.patronymic,
-          isRestricted: req.body.isRestricted,
-          dateBirthday: req.body.dateBirthday,
-          monthBirthday: req.body.monthBirthday,
-          yearBirthday: req.body.yearBirthday,
-          gender: req.body.gender,
-          comment1: req.body.comment1,
-          comment2: req.body.comment2,
-          linkPhoto: req.body.linkPhoto,
-          nameDay: req.body.nameDay,
-          dateNameDay: req.body.dateNameDay,
-          monthNameDay: req.body.monthNameDay,
-          noAddress: req.body.noAddress,
-        });
-        senior.save(function (err, updatedSenior) {
-          if (err) {
-            const saveSeniorInvalidIdResponse = new BaseResponse(500, "Internal Server Error", err);
-            res.status(500).send(saveSeniorInvalidIdResponse.toObject());
-          } else {
-            const updateSeniorResponse = new BaseResponse(200, "Query Successful", updatedSenior);
-            res.json(updateSeniorResponse.toObject());
-          }
-        });
-      }
-    });
-  } catch (e) {
-    const updateSeniorCatchErrorResponse = new BaseResponse(500, "Internal Server Error", updatedSenior);
-    res.json(updateSeniorCatchErrorResponse.toObject());
-  }
-});
-
-// Correct  senior API
-
-router.put("/correct/:id", async (req, res) => {
-  try {
-    Senior.findOne({ _id: req.params.id}, function (err, senior) {
-      if (err) {
-        const updateSeniorMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
-        res.status(500).send(updateSeniorMongodbErrorResponse.toObject());
-      } else {
-          senior.set({
-            region: senior.region,
-            nursingHome: senior.nursingHome,
-            lastName: senior.lastName,
-            firstName: senior.firstName,
-            patronymic: senior.patronymic,
-            isRestricted: Boolean(senior.isRestricted),
-            dateBirthday: +senior.dateBirthday ,
-            monthBirthday:  +senior.monthBirthday,
-            yearBirthday:  +senior.yearBirthday,
-            gender: senior.gender,
-            comment1: senior.comment1,
-            comment2: senior.comment2,
-            linkPhoto: senior.linkPhoto,
-            noAddress: Boolean(senior.noAddress),
-            isDisabled: Boolean(senior.isDisabled),
-          });
-          senior.save(function (err, updatedSenior) {
-            if (err) {
-              const saveSeniorInvalidIdResponse = new BaseResponse(500, "Internal Server Error", err);
-              res.status(500).send(saveSeniorInvalidIdResponse.toObject());
-            } else {
-              const updateSeniorResponse = new BaseResponse(200, "Query Successful", updatedSenior);
-              res.json(updateSeniorResponse.toObject());
-            }
-          });
-        }
-      });
-    } catch (e) {
-    const updateSeniorCatchErrorResponse = new BaseResponse(500, "Internal Server Error", updatedSenior);
-    res.json(updateSeniorCatchErrorResponse.toObject());
-  }
-});
-
-// Update all senior API
-
-/* router.put("/correct/all", async (req, res) => {
-  try {
-    Senior.find({}, function (err, seniors) {
-      if (err) {
-        const updateSeniorMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
-        res.status(500).send(updateSeniorMongodbErrorResponse.toObject());
-      } else {
-        console.log(seniors);
-
-
-
-        for (let senior of seniors) {
-          console.log(senior);
-          senior.set({
-            region: senior.region,
-            nursingHome: senior.nursingHome,
-            lastName: senior.lastName,
-            firstName: senior.firstName,
-            patronymic: senior.patronymic,
-            isRestricted: Boolean(senior.isRestricted),
-            dateBirthday: +senior.dateBirthday ,
-            monthBirthday:  +senior.monthBirthday,
-            yearBirthday:  +senior.yearBirthday,
-            gender: senior.gender,
-            comment1: senior.comment1,
-            comment2: senior.comment2,
-            linkPhoto: senior.linkPhoto,
-            nameDay: senior.nameDay,
-           dateNameDay: +senior.dateNameDay,
-            monthNameDay: +senior.monthNameDay,
-            noAddress: Boolean(senior.noAddress),
-            isDisabled: Boolean(senior.isDisabled),
-          });
-          senior.save(function (err, updatedSenior) {
-            if (err) {
-              const saveSeniorInvalidIdResponse = new BaseResponse(500, "Internal Server Error", err);
-              res.status(500).send(saveSeniorInvalidIdResponse.toObject());
-            } else {
-              const updateSeniorResponse = new BaseResponse(200, "Query Successful", updatedSenior);
-              res.json(updateSeniorResponse.toObject());
-            }
-          });
-        }
-
-
-
-      }
-    });
-  } catch (e) {
-    const updateSeniorCatchErrorResponse = new BaseResponse(500, "Internal Server Error", updatedSenior);
-    res.json(updateSeniorCatchErrorResponse.toObject());
-  }
-});
- */
 
 
 

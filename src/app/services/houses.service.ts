@@ -34,12 +34,14 @@ export class HousesService {
       address: newHouse.address,
       infoComment: newHouse.infoComment,
       adminComment: newHouse.adminComment,
-      isRestricted: newHouse.isRestricted,
+      noAddress: newHouse.noAddress,
+      isReleased: newHouse.isReleased,
       isActive: newHouse.isActive,
-      dateStart: newHouse.dateStart,
-      dateStartClone: newHouse.dateStartClone,
+      dateLastUpdate: newHouse.dateLastUpdate,
+      dateLastUpdateClone: newHouse.dateLastUpdateClone,
       nameContact: newHouse.nameContact,
       contact: newHouse.contact,
+      website: newHouse.website,
     });
   }
 
@@ -51,12 +53,20 @@ export class HousesService {
       address: updatedHouse.address,
       infoComment: updatedHouse.infoComment,
       adminComment: updatedHouse.adminComment,
-      isRestricted: updatedHouse.isRestricted,
+      noAddress: updatedHouse.noAddress,
+      isReleased: updatedHouse.isReleased,
       isActive: updatedHouse.isActive,
-      dateStart: updatedHouse.dateStart,
-      dateStartClone: updatedHouse.dateStartClone,
+      dateLastUpdate: updatedHouse.dateLastUpdate,
+      dateLastUpdateClone: updatedHouse.dateLastUpdateClone,
       nameContact: updatedHouse.nameContact,
       contact: updatedHouse.contact,
+      website: updatedHouse.website,
     });
   }
+
+  addManyHouses(houses: Array<House>): Observable<any> {
+  return this.http.post("/api/houses/add-many/", {houses: houses});
+}
+
+
 }

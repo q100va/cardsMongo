@@ -46,7 +46,7 @@ export class OrderDetailsComponent implements OnInit {
       (res) => {
         console.log(res["data"]);
         this.order = res["data"];
-        this.needAccepting = this.needAccepting
+        this.needAccepting = !this.order.isAccepted
           ? "Требует подтверждения"
           : "Не требует подтверждения";
         this.noRestricted = this.noRestricted ? "Без БОА" : "";

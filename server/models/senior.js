@@ -29,6 +29,10 @@ let seniorSchema = new Schema(
     monthNameDay: { type: Number },
     isDisabled: { type: Boolean, default: false },
     noAddress: { type: Boolean, default: false },
+    isReleased: { type: Boolean, default: false },
+    dateEnter: { type: Date },
+    dateExit: { type: Date},
+
   },
   { collection: "seniors" }
 );

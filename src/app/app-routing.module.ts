@@ -61,46 +61,35 @@ const routes: Routes = [
         component: UserListComponent,
         canActivate: [AuthGuard],
       },
-
-      {
-        path: "about",
-        component: AboutComponent,
-      },
-
-      {
-        path: "contact",
-        component: ContactComponent,
-      },
-
       {
         path: "houses",
         component: HouseListComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "houses/create/new",
         component: HouseCreateComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "houses/update/:id",
         component: HouseDetailsComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "users",
         component: UserListComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "users/create/new",
         component: UserCreateComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "users/update/:id",
         component: UserDetailsComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "orders/create/new",
@@ -120,17 +109,17 @@ const routes: Routes = [
       {
         path: "clients",
         component: ClientListComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "clients/update/:id",
         component: ClientDetailsComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "clients/create/new",
         component: ClientCreateComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "users/user/profile",
@@ -140,49 +129,39 @@ const routes: Routes = [
       {
         path: "seniors",
         component: SeniorsListComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "seniors/create/new",
         component: SeniorsCreateComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "seniors/update/:id",
         component: SeniorsDetailsComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "roles",
         component: RoleListComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "lists",
         component: ListComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "roles/create/new",
         component: RoleCreateComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
       {
         path: "roles/update/:id",
         component: RoleDetailsComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, RoleGuard],
       },
-      //dialogs
-      /*       {
-        path: "order-summary",
-        component: InvoiceDialogComponent,
-        canActivate: [AuthGuard],
-      }, */
-      {
-        path: "confirmation",
-        component: ConfirmationDialogComponent,
-        canActivate: [AuthGuard],
-      },
+
     ],
   },
   {

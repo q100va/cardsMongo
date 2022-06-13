@@ -24,9 +24,14 @@
           <mat-cell *matCellDef="let house"> {{ house.nursingHome }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="isRestricted">
+        <ng-container matColumnDef="noAddress">
           <mat-header-cell *matHeaderCellDef> БОА </mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.isRestricted }} </mat-cell>
+          <mat-cell *matCellDef="let house"> {{ house.noAddress }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="isReleased">
+          <mat-header-cell *matHeaderCellDef> Специнтернат </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.isReleased }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="region">
@@ -39,9 +44,9 @@
           <mat-cell *matCellDef="let house"> {{ house.address}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="dateStart">
+        <ng-container matColumnDef="dateLastUpdate">
           <mat-header-cell *matHeaderCellDef> Список обновлен</mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.dateStartClone }} </mat-cell>
+          <mat-cell *matCellDef="let house"> {{ house.dateLastUpdateClone }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="nameContact">

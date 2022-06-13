@@ -36,12 +36,14 @@ export class HouseCreateComponent implements OnInit {
       address: [null, Validators.compose([Validators.required])],
       infoComment: [null],
       adminComment: [null],
-      isRestricted: [false],
+      noAddress: [false],
+      isReleased: [false],
       isActive: [true],
-      dateStart: [null],
-      dateStartClone:[null],
+      dateLastUpdate: [null],
+      dateLastUpdateClone:[null],
       nameContact: [null],
       contact: [null],
+      website:[null]
     });
   }
 
@@ -53,17 +55,18 @@ export class HouseCreateComponent implements OnInit {
     newHouse.address = this.form.controls.address.value;
     newHouse.infoComment = this.form.controls.infoComment.value;
     newHouse.adminComment = this.form.controls.adminComment.value;
-    newHouse.isRestricted = this.form.controls.isRestricted.value;
+    newHouse.noAddress = this.form.controls.noAddress.value;
+    newHouse.isReleased = this.form.controls.isReleased.value;
     newHouse.isActive = this.form.controls.isActive.value;
-    newHouse.dateStart = new Date(this.form.controls.dateStart.value);
-    newHouse.dateStartClone = String(newHouse.dateStart.getDate()).padStart(2, '0') +
+    newHouse.dateLastUpdate = new Date(this.form.controls.dateLastUpdate.value);
+    newHouse.dateLastUpdateClone = String(newHouse.dateLastUpdate.getDate()).padStart(2, '0') +
     '.' +
-    String(newHouse.dateStart.getMonth() + 1).padStart(2, '0') +
+    String(newHouse.dateLastUpdate.getMonth() + 1).padStart(2, '0') +
     '.' +
-    newHouse.dateStart.getFullYear();
+    newHouse.dateLastUpdate.getFullYear();
     newHouse.nameContact  = this.form.controls.nameContact.value;
     newHouse.contact  = this.form.controls.contact.value;
- 
+    newHouse.website  = this.form.controls.website.value;
 
     this.HousesService.createHouse(newHouse).subscribe(
       (res) => {

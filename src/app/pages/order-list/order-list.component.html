@@ -13,61 +13,76 @@
         <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
         <mat-card-subtitle>
-            <button mat-stroked-button color="primary" routerLink="/orders/create/new">
+<!--             <button mat-stroked-button color="primary" routerLink="/dataSource/create/new">
                 Новая заявка
+            </button> -->
+            <button *ngIf = "isShowAll" mat-raised-button color="accent" (click)="changeShow()">
+                Скрыть подтвержденные
+            </button>
+            <button *ngIf = "!isShowAll" mat-raised-button color="primary" (click)="changeShow()">
+                Показать все
             </button>
         </mat-card-subtitle>
         <br />
 <br />
-        <mat-card-content *ngIf="orders">
+        <mat-card-content>
 
-            <mat-table [dataSource]="orders" class="mat-elevation-z4">
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z4"  matSort matSortActive="orderDate" matSortDisableClear matSortDirection="desc">
 
                 <ng-container matColumnDef="orderDate">
-                    <mat-header-cell *matHeaderCellDef> Дата </mat-header-cell>
-                    <mat-cell *matCellDef="let orders"> {{ orders.orderDate}} </mat-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Дата </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.orderDate}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="amount">
+                <ng-container matColumnDef="amount" >
                     <mat-header-cell *matHeaderCellDef> Кол-во адресов </mat-header-cell>
-                    <mat-cell *matCellDef="let orders"> {{ orders.amount }} </mat-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.amount }} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="holiday">
-                    <mat-header-cell *matHeaderCellDef> Праздник </mat-header-cell>
-                    <mat-cell *matCellDef="let orders"> {{ orders.holiday }} </mat-cell>
-                </ng-container>
 
                 <ng-container matColumnDef="fullName">
                     <mat-header-cell *matHeaderCellDef> Поздравляющий </mat-header-cell>
-                    <mat-cell *matCellDef="let orders"> {{(orders.clientFirstName
-                        ? orders.clientFirstName
-                        : "") + " " + (orders.clientPatronymic
-                        ? orders.clientPatronymic
-                        : "") + " " + (orders.clientLastName
-                        ? orders.clientLastName
-                        : "") + " " + (orders.institute
-                        ? orders.institute
+                    <mat-cell *matCellDef="let dataSource"> {{(dataSource.clientFirstName
+                        ? dataSource.clientFirstName
+                        : "") + " " + (dataSource.clientPatronymic
+                        ? dataSource.clientPatronymic
+                        : "") + " " + (dataSource.clientLastName
+                        ? dataSource.clientLastName
+                        : "") + " " + (dataSource.institute
+                        ? dataSource.institute
                         : "") }} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="contact">
+                <ng-container matColumnDef="contact" >
                     <mat-header-cell *matHeaderCellDef> Контактная информация </mat-header-cell>
-                    <mat-cell *matCellDef="let orders"> {{ orders.email ? orders.email : orders.contactType + " " +
-                        orders.contact}}</mat-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.email ? dataSource.email : dataSource.contactType + " " +
+                        dataSource.contact}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="isAccepted">
                     <mat-header-cell *matHeaderCellDef> Подтвержден </mat-header-cell>
-                    <mat-cell *matCellDef="let orders"> {{ orders.isAccepted ?  "да"  : "нет"}} </mat-cell>
+                             <mat-cell *matCellDef="let dataSource"> {{ dataSource.isAccepted ?  "    да"  : "    нет"}} </mat-cell>
                 </ng-container>
+
+                                <!-- Confirm Column -->
+                                <ng-container matColumnDef="confirm">
+                                    <mat-header-cell *matHeaderCellDef> Подтвердить </mat-header-cell>
+                                    <mat-cell *matCellDef="let dataSource">
+                                        <button mat-icon-button disabled *ngIf="dataSource.isAccepted">
+                                            <mat-icon > check_circle</mat-icon>
+                                         </button>
+                                         <button color="warn" mat-icon-button *ngIf="!dataSource.isAccepted" (click)="confirmOrder(dataSource._id, isShowAll )" >
+                                            <mat-icon > check_circle</mat-icon>
+                                         </button>
+                                    </mat-cell>
+                                </ng-container>
 
 
                 <!-- Edit Column -->
                 <ng-container matColumnDef="edit">
                     <mat-header-cell *matHeaderCellDef> Открыть </mat-header-cell>
-                    <mat-cell *matCellDef="let orders">
-                        <mat-icon class="icon-cursor" routerLink="/orders/order/{{ orders._id }}" color="accent">
+                    <mat-cell *matCellDef="let dataSource">
+                        <mat-icon class="icon-cursor" routerLink="/orders/order/{{ dataSource._id }}" color="primary">
                             pageview
                         </mat-icon>
                     </mat-cell>
@@ -75,17 +90,30 @@
 
                 <!-- Delete Column -->
                 <ng-container matColumnDef="delete">
-                    <mat-header-cell *matHeaderCellDef> Удалить (не работает) </mat-header-cell>
-                    <mat-cell *matCellDef="let orders">
-                        <button mat-icon-button (click)="deleteOrder(orders._id)">
-                            <mat-icon color="primary">delete</mat-icon>
+                    <mat-header-cell *matHeaderCellDef> Удалить</mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource">
+                        <button mat-icon-button (click)="deleteOrder(dataSource._id, isShowAll)">
+                            <mat-icon class = "orange">delete</mat-icon>
                         </button>
                     </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="holiday">
+                    <mat-header-cell *matHeaderCellDef> Праздник </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.holiday }} </mat-cell>
+                </ng-container>
+
+
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
             </mat-table>
+
+<!--             <mat-paginator [pageSizeOptions]="[10, 15, 20]"
+            showFirstLastButtons 
+            >
+</mat-paginator> -->
+
+<mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
         </mat-card-content>
 
     </mat-card>

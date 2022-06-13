@@ -54,10 +54,12 @@ export class HouseDetailsComponent implements OnInit {
         this.form.controls.adminComment.setValue(this.house.adminComment);
         this.form.controls.infoComment.setValue(this.house.infoComment);
         this.form.controls.isActive.setValue(this.house.isActive);
-        this.form.controls.isRestricted.setValue(this.house.isRestricted);
-        this.form.controls.dateStart.setValue(this.house.dateStart);
+        this.form.controls.noAddress.setValue(this.house.noAddress);
+        this.form.controls.isReleased.setValue(this.house.isReleased);
+        this.form.controls.dateLastUpdate.setValue(this.house.dateLastUpdate);
         this.form.controls.nameContact.setValue(this.house.nameContact);
         this.form.controls.contact.setValue(this.house.contact);
+        this.form.controls.website.setValue(this.house.website);
       }
     );
   }
@@ -69,17 +71,19 @@ export class HouseDetailsComponent implements OnInit {
       address: [null, Validators.compose([Validators.required])],
       infoComment: [null],
       adminComment: [null],
-      isRestricted: [false],
+      noAddress: [false],
+      isReleased: [false],
       isActive: [true],
-      dateStart: [null],
-      dateStartClone: [null],
+      dateLastUpdate: [null],
+      dateLastUpdateClone: [null],
       nameContact: [null],
       contact: [null],
+      website: [null],
     });
   }
 
   saveHouse(): void {
-    const dateUpdate = new Date(this.form.controls.dateStart.value);
+    const dateUpdate = new Date(this.form.controls.dateLastUpdate.value);
 
     const updatedHouse: House = {
       nursingHome: this.form.controls.nursingHome.value,
@@ -87,10 +91,11 @@ export class HouseDetailsComponent implements OnInit {
       address: this.form.controls.address.value,
       infoComment: this.form.controls.infoComment.value,
       adminComment: this.form.controls.adminComment.value,
-      isRestricted: this.form.controls.isRestricted.value,
+      noAddress: this.form.controls.noAddress.value,
+      isReleased: this.form.controls.isReleased.value,
       isActive: this.form.controls.isActive.value,
-      dateStart: dateUpdate,
-      dateStartClone:
+      dateLastUpdate: dateUpdate,
+      dateLastUpdateClone:
         String(dateUpdate.getDate()).padStart(2, "0") +
         "." +
         String(dateUpdate.getMonth() + 1).padStart(
@@ -101,6 +106,7 @@ export class HouseDetailsComponent implements OnInit {
         dateUpdate.getFullYear(),
       nameContact: this.form.controls.nameContact.value,
       contact: this.form.controls.contact.value,
+      website: this.form.controls.website.value,
     };
 
     this.housesService
@@ -110,7 +116,7 @@ export class HouseDetailsComponent implements OnInit {
         //alert("Security house is updated.");
         this.resultDialog.open(ConfirmationDialogComponent, {
           data: {
-            message: "Security house has been updated successfully.",
+            message: "Информация успешно обновлена.",
           },
           disableClose: true,
           width: "fit-content",
@@ -123,7 +129,7 @@ export class HouseDetailsComponent implements OnInit {
     //alert("Security house updating is canceled.");
     this.resultDialog.open(ConfirmationDialogComponent, {
       data: {
-        message: "Security house updating has been canceled.",
+        message: "Вы отменили обновление.",
       },
       disableClose: true,
       width: "fit-content",

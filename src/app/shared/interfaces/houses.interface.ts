@@ -12,10 +12,12 @@ export interface House {
   address: string;
   infoComment?: string;
   adminComment?: string;
-  isRestricted: boolean;
+  noAddress: boolean;
+  isReleased: boolean;
   isActive: boolean;
-  dateStart?: Date;
-  dateStartClone?: string;
+  dateLastUpdate?: Date;
+  dateLastUpdateClone?: string;
   nameContact?: string;
   contact?: string;
+  website?:string;
 }

@@ -1,7 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ListService } from "src/app/services/list.service";
+import { HousesService } from "src/app/services/houses.service";
 import { List } from "src/app/shared/interfaces/list.interface";
 import { seniors } from "server/models/seniors_list.js";
+import { houses } from "server/models/houses_list.js";
+import { SeniorsService } from "src/app/services/seniors.service";
 
 @Component({
   selector: "app-list",
@@ -17,76 +20,59 @@ export class ListComponent implements OnInit {
   yang: number = 0;
   special: number = 0;
   oldest: number = 0;
-  correctedSeniors: Array<any> =[];
+  correctedSeniors: Array<any> = [];
 
-
-  constructor(private listService: ListService) {}
+  constructor(
+    private listService: ListService,
+    private housesService: HousesService,
+    private seniorsService: SeniorsService
+  ) {}
 
   ngOnInit(): void {}
 
-   generate() {
-    let res = this.listService.monthLists();
-    console.log(res);
-/*     if (!res) {
-      alert("Что-то не так с обновлением id");
-    } else {
-      (await this.listService.findAllLists()).subscribe(
-        (res) => {
-          this.lists = res["data"];
-          console.log(this.lists);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    } */
+  generate() {
+    this.listService.createList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
   }
 
   deleteList() {
     console.log("delete");
-this.listService.deleteList().subscribe(
-  (res) => {
-    console.log(res);
-  },
-  (err) => {
-    console.log(err);
+    this.listService.deleteList().subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
-);
-}
 
-  async showList(event: any) {
-    (await this.listService.findAllLists()).subscribe(
+  showList(event: any) {
+    this.listService.findAllLists().subscribe(
       (res) => {
         this.lists = res["data"];
-        this.listLength = 0;
-        this.oldWomen = 0;
-        this.oldMen = 0;
-        this.yang = 0;
-        this.special = 0;
-        this.oldest = 0;
-        for (let list of this.lists) {
-          this.listLength = this.listLength + list.celebrators.length;
-          this.oldWomen =
-            this.oldWomen +
-            list.celebrators.filter((item) => item.category == "oldWomen")
-              .length;
-          /*           console.log(list.celebrators.filter((item) => 
-            item.category == "oldWomen"
-          )); */
-          this.oldMen =
-            this.oldMen +
-            list.celebrators.filter((item) => item.category == "oldMen").length;
-          this.yang =
-            this.yang +
-            list.celebrators.filter((item) => item.category == "yang").length;
-          this.special =
-            this.special +
-            list.celebrators.filter((item) => item.category == "special")
-              .length;
-          this.oldest =
-            this.oldest +
-            list.celebrators.filter((item) => item.oldest == true).length;
-        }
+        this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
       },
       (err) => {
         console.log(err);
@@ -99,33 +85,56 @@ this.listService.deleteList().subscribe(
     //console.log(this.lists);
   }
 
-  /*   populateSeniors() {
-    this.listService.createSenior().subscribe(
-      (res) => {
-        this.lists = res["data"];
+  populateSeniors() {
+    
+/*     let stop = false;
+    console.log("start-populateSeniors - 1");
+    for (let i = 0; i < (seniors.length ); i = i + 1000) {
+      console.log("start-populateSeniors- 2");
+      if (!stop) {
+        let someSeniors = seniors.slice(i, i + 1000);
+        console.log(someSeniors);
+        let result = await this.seniorsService.createSeniorsCollection(someSeniors);
+        console.log("result");
+        console.log(result);
+        //if ((seniors.lenth - i) < 1000) alert(result);
+
+ */
+        this.seniorsService.createSeniorsCollection(seniors).subscribe(
+          async (res) => {
+            let result = await res["data"];
+            console.log(result);
+
+            alert(`Добавлено ${result.length} записей из ${seniors.length}.` );
+          },
+          (err) => {
+            console.log(err);
+            alert(
+              "Произошла ошибка, обратитесь к администратору! " + err.message
+            );
+            //stop = true;
+          }
+        ); 
+      }
+
+
+  /* 
+  prepareSeniorsList() {
+    let correctedSeniors = this.listService.correctSeniorsList(seniors);
+  }
+ */
+
+  addHouses() {
+    this.housesService.addManyHouses(houses).subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result.length);
       },
       (err) => {
         console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
       }
     );
-  } */
-
-
-
-  prepareSeniorsList(){
-    let correctedSeniors =  this.listService.correctSeniorsList(seniors);
-
-  }
-
-
-
-  populateSeniors() {
-    let result = this.listService.createSeniorsCollection(seniors);
-    console.log(result);
-    for (let item of result) {
-      if (item != "200") {
-        alert(`Что-то пошло не так ${item}`);
-      }
-    }
   }
 }

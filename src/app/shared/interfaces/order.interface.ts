@@ -4,6 +4,7 @@
 ;===========================================
 */
 
+import { Celebrator } from "./celebrator.interface";
 import { LineItem } from "./line-item.interface";
 
 export interface Order {
@@ -18,9 +19,17 @@ export interface Order {
   contact: string;
   institute: string;
   amount: number;
-  isRestricted: boolean;
   isAccepted: boolean;
   comment: string;
-  lineItems: Array<LineItem>;
   orderDate: string;
+  filter: {
+    addressFilter: string,
+    genderFilter: string,
+    region: string,
+    year1: number,
+    year2:  number,
+    date1:  number,
+    date2: number,
+  }
+
 }

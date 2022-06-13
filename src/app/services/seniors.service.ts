@@ -36,6 +36,8 @@ export class SeniorsService {
       firstName: updatedSenior.firstName,
       patronymic: updatedSenior.patronymic,
       isRestricted: updatedSenior.isRestricted,
+      noAddress: updatedSenior.noAddress,
+      isReleased: updatedSenior.isReleased,
       dateBirthday: updatedSenior.dateBirthday,
       monthBirthday: updatedSenior.monthBirthday,
       yearBirthday: updatedSenior.yearBirthday,
@@ -45,7 +47,9 @@ export class SeniorsService {
       linkPhoto: updatedSenior.linkPhoto,
       nameDay: updatedSenior.nameDay,
       dateNameDay: updatedSenior.dateNameDay,
-      monthNameDay: updatedSenior.monthNameDay
+      monthNameDay: updatedSenior.monthNameDay,
+      //dateEnter: updatedSenior.dateEnter,
+      //dateExit: updatedSenior.dateExit,
     });
     return result;
   }
@@ -69,8 +73,21 @@ export class SeniorsService {
       nameDay: newSenior.nameDay,
       dateNameDay: newSenior.dateNameDay,
       monthNameDay: newSenior.monthNameDay,
-      noAddress: newSenior.noAddress,
-
     });
+  }
+
+  /*   async createSeniorsCollection(seniors: Array<Senior>): Promise<any> {
+
+    console.log("start");
+
+    let result = this.http.post("/api/seniors/add-many/", {seniors: seniors});
+    console.log("result");
+    console.log(result);
+    return  result;
+  } */
+
+  createSeniorsCollection(seniors: Array<Senior>): Observable<any> {
+    console.log("start createSeniorsCollection");
+    return this.http.post("/api/seniors/add-many/", { seniors: seniors });
   }
 }

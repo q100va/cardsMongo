@@ -27,7 +27,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения июня 2022";
+  holiday: string = "Дни рождения июля 2022";
   lineItems: Array<LineItem>;
   types: Array<string> = [
     "phoneNumber",
@@ -39,10 +39,15 @@ export class OrderComponent implements OnInit {
   ];
   orderDate: string = new Date().toLocaleDateString();
   counter: Array<number> = [];
-  emptyMessage: string = "";
+  successMessage: string = "";
+  errorMessage: string = "";
   canSave: Boolean = false;
   ready: Boolean = false;
   order_id: any;
+  spinner: Boolean = false;
+  addressFilter: string = "any";
+  genderFilter: string = "any";
+  regions: Array<string> = [];
 
   constructor(
     private router: Router,
@@ -57,6 +62,14 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.orderService.getRegions().subscribe(
+      async (res) => {
+        this.regions = res["data"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
     this.form = this.fb.group({
       clientFirstName: [null],
       clientPatronymic: [null],
@@ -65,21 +78,208 @@ export class OrderComponent implements OnInit {
       contactType: [null],
       contact: [null],
       institute: [null],
-      amount: [
-        null,
-        Validators.compose([
-          Validators.required,
-          Validators.pattern("^[0-9]+$"),
-        ]),
-      ],
-      isRestricted: [false],
+      amount: [null, Validators.compose([Validators.required])],
       isAccepted: [false],
       comment: [null],
+      year1: [null],
+      year2: [null],
+      date1: [null],
+      date2: [null],
+      region: [null],
     });
   }
 
-  generateOrder() {
-    this.emptyMessage = "";
+  exit() {
+    this.confirmationService.confirm({
+      message: "Вы уверены, что хотите выйти без сохранения заявки?",
+      accept: () => {
+        this.successMessage = "";
+        this.errorMessage = "";
+        this.lineItems = [];
+        this.canSave = false;
+        this.router.navigate(["/orders/find/" + this.userName]);
+        this.resultDialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: "Заявка не была сохранена",
+          },
+          disableClose: true,
+          width: "fit-content",
+        });
+      },
+    });
+  }
+
+  clear(): void {
+    this.successMessage = "";
+    this.errorMessage = "";
+    this.lineItems = [];
+    this.canSave = false;
+    this.form.reset();
+    this.addressFilter = "any";
+    this.genderFilter = "any";
+  }
+
+  createOrder() {
+    this.successMessage = "";
+    this.errorMessage = "";
+    this.lineItems = [];
+    this.canSave = false;
+
+    if (!this.form.controls.email.value && !this.form.controls.contact.value) {
+      this.resultDialog.open(ConfirmationDialogComponent, {
+        data: {
+          message: "Обязательно укажите email или другой возможный контакт!",
+        },
+        disableClose: true,
+        width: "fit-content",
+      });
+    } else {
+      if (
+        !this.form.controls.contactType.value &&
+        this.form.controls.contact.value
+      ) {
+        this.resultDialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: "Обязательно выберите тип другого возможного контакта!",
+          },
+          disableClose: true,
+          width: "fit-content",
+        });
+      } else {
+        if (
+          this.form.controls.contactType.value &&
+          !this.form.controls.contact.value
+        ) {
+          this.resultDialog.open(ConfirmationDialogComponent, {
+            data: {
+              message:
+                "Укажите другой контакт или выберите 'пусто' в поле 'Другой контакт'!",
+            },
+            disableClose: true,
+            width: "fit-content",
+          });
+        } else {
+          console.log(this.form.controls.year2.value);
+          console.log(this.form.controls.year1.value);
+          if (
+            this.form.controls.year2.value != null &&
+            this.form.controls.year1.value != null &&
+            this.form.controls.year2.value < this.form.controls.year1.value
+          ) {
+            this.resultDialog.open(ConfirmationDialogComponent, {
+              data: {
+                message:
+                  "Неверно указан период для года рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
+              },
+              disableClose: true,
+              width: "fit-content",
+            });
+            console.log("ERROR");
+          } else {
+            if (
+              this.form.controls.date1.value != null &&
+              this.form.controls.date2.value != null &&
+              this.form.controls.date2.value < this.form.controls.date1.value
+            ) {
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message:
+                    "Неверно указан период для даты рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
+                },
+                disableClose: true,
+                width: "fit-content",
+              });
+            } else {
+              this.spinner = true;
+
+              let newOrder: Order = {
+                userName: this.userName,
+                holiday: this.holiday,
+                clientFirstName: this.form.controls.clientFirstName.value,
+                clientPatronymic: this.form.controls.clientPatronymic.value,
+                clientLastName: this.form.controls.clientLastName.value,
+                email: this.form.controls.email.value,
+                contactType: this.form.controls.contactType.value,
+                contact: this.form.controls.contact.value,
+                institute: this.form.controls.institute.value,
+                amount: this.form.controls.amount.value,
+                isAccepted: this.form.controls.isAccepted.value,
+                comment: this.form.controls.comment.value,
+                orderDate: this.orderDate,
+                filter: {
+                  addressFilter: this.addressFilter,
+                  genderFilter: this.genderFilter,
+                  year1: this.form.controls.year1.value,
+                  year2: this.form.controls.year2.value,
+                  date1: this.form.controls.date1.value,
+                  date2: this.form.controls.date2.value,
+                  region: this.form.controls.region.value,
+                },
+              };
+
+              console.log("newOrder");
+              console.log(newOrder);
+
+              this.orderService.createOrder(newOrder).subscribe(
+                async (res) => {
+                  this.spinner = false;
+                  let result = res["data"];
+                  if (typeof result == "string") {
+                    this.errorMessage = res["data"];
+                    console.log(res);
+                  } else {
+                    //alert(res.msg);
+                    console.log(res);
+                    this.lineItems = result;
+                    this.canSave = true;
+                    this.successMessage =
+                      "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+                  }
+                },
+                (err) => {
+                  this.spinner = false;
+                  this.errorMessage = err.error.msg + " " + err.message;
+                  console.log(err);
+                }
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*   checkOrder(lineItems, lists) {
+    let isDoubles: boolean = false;
+    for (let lineItem of lineItems) {
+      for (let celebrator of lineItem.celebrators) {
+        for (let list of lists) {
+          console.log(list);
+          let index = list.celebrators.findIndex(
+            (item) => item.celebrator_id == celebrator.celebrator_id
+          );
+          console.log(index);
+          console.log(list.celebrators[index]);
+          if(index>-1) {
+          if (
+            (list.celebrators[index].plusAmount > 2 &&
+              !list.celebrators[index].oldest) ||
+            (list.celebrators[index].plusAmount > 3 &&
+              list.celebrators[index].oldest)
+          ) {
+            isDoubles = true;
+          } else {
+          }
+        }
+        }
+      }
+    }
+    return isDoubles;
+  } */
+
+/* generateOrder() {
+    this.successMessage = "";
     this.lineItems = [];
     this.canSave = false;
 
@@ -135,19 +335,15 @@ export class OrderComponent implements OnInit {
                         nursingHomes
                       );
                       if (!result) {
-                        this.emptyMessage =
+                        this.successMessage =
                           "Список не может быть сформирован из-за недостатка адресов. Обратитесь к администратору.";
-                        console.log(this.emptyMessage);
+                        console.log(this.successMessage);
                       } else {
                         this.lineItems = result;
                         this.canSave = true;
-                        this.emptyMessage =
+                        this.successMessage =
                           "Это предварительный список! Не отправляйте его поздравляющему!";
-                        /* for (let i = 0; i < result.length; i++) {
-                          this.counter.push(i + 1);
-                        }
-                        console.log(this.counter); */
-                      }
+                                         }
                     },
                     (err) => {
                       console.log(err);
@@ -166,151 +362,4 @@ export class OrderComponent implements OnInit {
       }}
     }
   }
-
-  exit() {
-    this.confirmationService.confirm({
-      message: "Вы уверены, что хотите выйти без сохранения заявки?",
-      accept: () => {
-        this.emptyMessage = "";
-        this.lineItems = [];
-        this.canSave = false;
-        this.router.navigate(["/orders/find/" + this.userName]);
-        this.resultDialog.open(ConfirmationDialogComponent, {
-          data: {
-            message: "Заявка не была сохранена",
-          },
-          disableClose: true,
-          width: "fit-content",
-        });
-      },
-    });
-  }
-
-  clear(): void {
-    this.emptyMessage = "";
-    this.lineItems = [];
-    this.canSave = false;
-    this.form.reset();
-  }
-
-  createOrder(): void {
-    let newOrder: Order = {
-      userName: this.userName,
-      holiday: this.holiday,
-      clientFirstName: this.form.controls.clientFirstName.value,
-      clientPatronymic: this.form.controls.clientPatronymic.value,
-      clientLastName: this.form.controls.clientLastName.value,
-      email: this.form.controls.email.value,
-      contactType: this.form.controls.contactType.value,
-      contact: this.form.controls.contact.value,
-      institute: this.form.controls.institute.value,
-      amount: this.form.controls.amount.value,
-      isRestricted: this.form.controls.isRestricted.value,
-      isAccepted: this.form.controls.isAccepted.value,
-      comment: this.form.controls.comment.value,
-      lineItems: this.lineItems,
-      orderDate: this.orderDate,
-    };
-    console.log(newOrder);
-
-    this.orderService.getLists().subscribe(
-      (res) => {
-        let lists = res["data"];
-        let result = this.checkOrder(newOrder.lineItems, lists);
-        if (result) {
-          this.resultDialog.open(ConfirmationDialogComponent, {
-            data: {
-              message:
-                "По некоторым из выбранных адресов получилось задвоение. Сформируйте новый список.",
-            },
-            disableClose: true,
-            width: "fit-content",
-          });
-        } else {
-          this.orderService.createOrder(newOrder).subscribe(
-            (res) => {
-              console.log(res);
-              this.order_id = res['data']['_id']
-              for (let lineItem of res['data']['lineItems']) {
-                for (let celebrator of lineItem.celebrators) {
-              this.orderService.updateList(celebrator.celebrator_id).subscribe(
-                (res) => {
-                  console.log(res); 
-                },
-                (err) => {
-                  console.log(err);
-                  this.resultDialog.open(ConfirmationDialogComponent, {
-                    data: {
-                      message: err.error.msg,
-                    },
-                    disableClose: true,
-                    width: "fit-content",
-                  });
-                }
-              );
-                }}
-
-                this.orderService.ifCloseList().subscribe(
-                  (res) => {
-
-                    if(res['data']) {this.orderService.changeActiveList();} 
-                    
-                    this.router.navigate(["/orders/order/"+ this.order_id]);
-     
-                  },
-                  (err) => {
-                    console.log(err);
-                  }
-                );
-                
-                
-
-                
-   
-            },
-            (err) => {
-              console.log(err);
-              this.resultDialog.open(ConfirmationDialogComponent, {
-                data: {
-                  message: err.error.msg,
-                },
-                disableClose: true,
-                width: "fit-content",
-              });
-            }
-          );
-        }
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
-  }
-  checkOrder(lineItems, lists) {
-    let isDoubles: boolean = false;
-    for (let lineItem of lineItems) {
-      for (let celebrator of lineItem.celebrators) {
-        for (let list of lists) {
-          console.log(list);
-          let index = list.celebrators.findIndex(
-            (item) => item.celebrator_id == celebrator.celebrator_id
-          );
-          console.log(index);
-          console.log(list.celebrators[index]);
-          if(index>-1) {
-          if (
-            (list.celebrators[index].plusAmount > 2 &&
-              !list.celebrators[index].oldest) ||
-            (list.celebrators[index].plusAmount > 3 &&
-              list.celebrators[index].oldest)
-          ) {
-            isDoubles = true;
-          } else {
-          }
-        }
-        }
-      }
-    }
-    return isDoubles;
-  }
-}
+   */

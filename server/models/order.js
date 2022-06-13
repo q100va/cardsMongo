@@ -7,6 +7,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const lineItemDocument = require("../schemas/line-item");
+const celebrator = require("../schemas/celebrator");
 
 const orderSchema = new Schema(
   {
@@ -20,11 +21,22 @@ const orderSchema = new Schema(
     contact: { type: String },
     institute: { type: String },
     amount: { type: Number },
-    isRestricted: { type: Boolean, default: false },
     isAccepted: { type: Boolean, default: false },
     comment: { type: String },
     lineItems: [lineItemDocument],
+    temporaryLineItems: [celebrator],
     orderDate: { type: String, default: new Date().toLocaleDateString() },
+    filter: {
+      addressFilter: { type: String },
+      genderFilter: { type: String },
+      region: { type: String },
+      year1: { type: Number },
+      year2:  { type: Number },
+      date1:  { type: Number },
+      date2:  { type: Number },
+    },
+    isCompleted: { type: Boolean, default: false },
+    isDisabled: { type: Boolean, default: false },
   }
   // { collection: "orders" }
 );

@@ -13,7 +13,7 @@ export interface LineItem {
   address: string;
   infoComment?: string;
   adminComment?: string;
-  isRestricted: boolean;
+  noAddress: boolean;
   celebrators: Array<Celebrator>;
   
 }

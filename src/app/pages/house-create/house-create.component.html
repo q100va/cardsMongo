@@ -42,13 +42,15 @@ html code
               placeholder=" Дополнительный комментарий"  />
 
           </mat-form-field>
-      
-            <mat-slide-toggle [formControl]="form.controls['isRestricted']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>
-            <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
+              <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
+              <br />
+            <mat-slide-toggle [formControl]="form.controls['noAddress']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>
+            <mat-slide-toggle [formControl]="form.controls['isReleased']" >В учреждении проживают в том числе и бывшие заключенные</mat-slide-toggle>
+    
 
             <mat-form-field style="width: 30%;">
               <mat-label> Дата обновления</mat-label>
-              <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateStart']" >
+              <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateLastUpdate']" >
               <mat-hint>MM/DD/YYYY</mat-hint>
               <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
               <mat-datepicker #picker1></mat-datepicker>
@@ -61,9 +63,13 @@ html code
             </mat-form-field>
             <mat-form-field>
               <input type="text" matInput [formControl]="form.controls['contact']"
-                placeholder="Email контактного лица"  />
-  
+                placeholder="Email контактного лица"  />  
             </mat-form-field>
+
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['website']"
+              placeholder="Website"  />
+          </mat-form-field>
 
          
 

@@ -10,7 +10,14 @@
 
 <div fxLayout="column" class="profile-div">
     <mat-card fxFlex class="mat-elevation-z8 profile-container">
-        <mat-card-content *ngIf="order">
+
+        <mat-card-actions>
+            <button class="cancel" (click)="close()" mat-raised-button>
+                Закрыть
+            </button>
+
+        </mat-card-actions>
+        <mat-card-content *ngIf="order" style = "margin-left: 60px;">
             <div fxLayout="column" fxLayoutGap="10px">
             <mat-card-subtitle>Дата: {{order.orderDate}}</mat-card-subtitle>
             <mat-card-subtitle>Праздник: {{order.holiday}} </mat-card-subtitle>
@@ -19,10 +26,9 @@
             <mat-card-subtitle>Поздравляющий: {{fullName}} </mat-card-subtitle>
             <mat-card-subtitle>Контактная информация: {{contact}} </mat-card-subtitle>
             <mat-card-subtitle>{{needAccepting}} </mat-card-subtitle>
-            <mat-card-subtitle>{{noRestricted}} </mat-card-subtitle>
-            <mat-card-subtitle>{{order.comment}} </mat-card-subtitle>
+            <mat-card-subtitle>Комментарий: {{order.comment}} </mat-card-subtitle>
 
-            <mat-card-title>Ваша заявка сохранена. Скопируйте, пожалуйста, список адресов и отправьте поздравляющему.
+            <mat-card-title>Список поздравляемых
             </mat-card-title>
 
 
@@ -31,9 +37,9 @@
 
                 <mat-card-content *ngFor="let lineItem of order.lineItems">
 
-                    <p style="font-weight: bold; ">{{lineItem.address}}</p>
-                    <p style="font-style: italic;">{{lineItem.infoComment}}</p>
-                    <p style="color: red;">{{lineItem.adminComment}}</p>
+                    <p style="font-weight: bold; margin: 0; ">{{lineItem.address}}</p>
+                    <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
+                    <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
 
                     <div *ngFor="let celebrator of lineItem.celebrators">
 
@@ -51,12 +57,7 @@
             </mat-card>
             </div>
         </mat-card-content>
-        <mat-card-actions>
-            <button class="cancel" (click)="close()" mat-raised-button>
-                Закрыть
-            </button>
-
-        </mat-card-actions>
+       
     </mat-card>
 
 

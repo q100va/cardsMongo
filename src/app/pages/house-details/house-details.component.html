@@ -11,7 +11,7 @@ html code to update
 
     <mat-card-content>
       <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
-        <form [formGroup]="form" (ngSubmit)="saveHouse()" #house>
+        <form [formGroup]="form" #house>
           <mat-card-content>
             <div fxLayout="column" fxLayoutGap="10px">
               <mat-form-field>
@@ -44,13 +44,15 @@ html code to update
                   placeholder=" Дополнительный комментарий"  />
     
               </mat-form-field>
-          
-                <mat-slide-toggle [formControl]="form.controls['isRestricted']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>
                 <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
+                <br />
+                <mat-slide-toggle [formControl]="form.controls['noAddress']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>
+                <mat-slide-toggle [formControl]="form.controls['isReleased']" >В учреждении проживают в том числе и бывшие заключенные</mat-slide-toggle>
+
     
                 <mat-form-field style="width: 30%;">
                   <mat-label>Выберите дату последнего обновления списка</mat-label>
-                  <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateStart']" >
+                  <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateLastUpdate']" >
                   <mat-hint>MM/DD/YYYY</mat-hint>
                   <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                   <mat-datepicker #picker1></mat-datepicker>
@@ -63,8 +65,12 @@ html code to update
                 </mat-form-field>
                 <mat-form-field>
                   <input type="text" matInput [formControl]="form.controls['contact']"
-                    placeholder="Email контактного лица"  />
-      
+                    placeholder="Email контактного лица"  />      
+                </mat-form-field>
+
+                <mat-form-field>
+                  <input type="text" matInput [formControl]="form.controls['website']"
+                    placeholder="Website"  />      
                 </mat-form-field>
              
               </div>
@@ -81,7 +87,7 @@ html code to update
 
           <mat-card-actions>
             <button class="cancel" (click)="cancel()" mat-raised-button>Cancel</button>
-            <button class="submit" [disabled]="!form.valid" mat-raised-button>Submit</button>
+            <button class="submit" (click)="saveHouse()" [disabled]="!form.valid" mat-raised-button>Submit</button>
           </mat-card-actions>
         </form>
       </mat-card>

@@ -7,6 +7,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Order } from "../shared/interfaces/order.interface";
+
 import { LineItem } from "../shared/interfaces/line-item.interface";
 
 @Injectable({
@@ -23,17 +24,27 @@ export class OrderService {
     return this.http.get("/api/orders/find/" + userName);
   }
 
+  findNotConfirmedOrdersByUserId(userName): Observable<any> {
+    return this.http.get("/api/orders/findNotConfirmed/" + userName);
+  }
+
   findOrderById(_id: string): Observable<any> {
     console.log('findOrderById');
     return this.http.get("/api/orders/" + _id);
   }
 
-  deleteOrder(_id: string): Observable<any> {
-    return this.http.delete("/api/orders/" + _id);
+  deleteOrder(_id: string, isShowAll: boolean, userName: string): Observable<any> {
+    return this.http.patch("/api/orders/delete/" + _id, {isShowAll: isShowAll, userName: userName});
   }
 
   updateOrder(_id: string, updatedOrder: Order): Observable<any> {
     const result = this.http.put("/api/orders/" + _id, {});
+    console.log(result);
+    return result;
+  }
+
+  confirmOrder(_id: string, isShowAll: boolean, userName: string): Observable<any> {
+    const result = this.http.patch("/api/orders/confirm/" + _id, {isShowAll: isShowAll, userName: userName});
     console.log(result);
     return result;
   }
@@ -55,9 +66,9 @@ export class OrderService {
 
 
 
-  createOrder(newOrder: Order): Observable<any> {
-    console.log(newOrder);
-    return this.http.post("/api/orders", {
+   createOrder(newOrder: Order): Observable<any> {
+    
+    return  this.http.post("/api/orders/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
@@ -68,13 +79,17 @@ export class OrderService {
       contactType: newOrder.contactType,
       contact: newOrder.contact,
       institute: newOrder.institute,
-      isRestricted: newOrder.isRestricted,
       isAccepted: newOrder.isAccepted,
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
-      lineItems: newOrder.lineItems,
+      filter: newOrder.filter,
     });
   }
+
+  getRegions(): Observable<any>  {
+    return this.http.get("/api/orders/get/regions/");
+  }
+  
 
   //////////////////////////////////////////////////////
 
@@ -86,7 +101,11 @@ export class OrderService {
     return this.http.get("/api/lists/");
   }
 
-  getProportion(amount: number): Observable<any> {
+  findNursingHome(nursingHome: string): Observable<any> {
+    return this.http.get("/api/houses/name" + nursingHome)["data"];
+  }
+
+/*   getProportion(amount: number): Observable<any> {
     return this.http.get("/api/orders/proportion/" + amount);
   }
 
@@ -121,7 +140,7 @@ console.log(person.nursingHome);
             address: foundHouse.address,
             infoComment: foundHouse.infoComment,
             adminComment: foundHouse.adminComment,
-            isRestricted: foundHouse.isRestricted,
+            noAddress: foundHouse.noAddress,
             celebrators: [person],
           });
         }
@@ -287,13 +306,11 @@ console.log(person.nursingHome);
     }
     console.log(celebrators);
     return celebrators;
-  }
+  } */
 
-  findNursingHome(nursingHome: string): Observable<any> {
-    return this.http.get("/api/houses/name" + nursingHome)["data"];
-  }
 
-  checkDoubles(array1: any[], array2: any[]) {
+
+/*   checkDoubles(array1: any[], array2: any[]) {
     for (let person of array1) {
       let index = array2.findIndex((item) => {
         item.nursingHome +
@@ -317,7 +334,7 @@ console.log(person.nursingHome);
       }
     }
     return array2;
-  }
+  } */
 
 
   /*   findCelebrator(condition: string, gender: string) {

@@ -22,3 +22,21 @@ mat-card-title {
     margin: auto;
   }
   
+  .orange {
+    color: #FBC02D;
+  }
+
+.mat-column-orderDate,
+.mat-column-isAccepted,
+.mat-column-date
+ {
+  min-width: 70px;
+}
+
+.mat-column-contact {
+  min-width: 250px;
+}
+
+table {
+  width: 100%;
+}

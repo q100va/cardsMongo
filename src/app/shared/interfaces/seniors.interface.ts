@@ -29,4 +29,7 @@ export interface Senior {
   monthNameDay?: number;
   noAddress?: boolean | any;
   isDisabled?: boolean | any;
+  isReleased?: boolean | any;
+  dateEnter?: Date | string,
+  dateExit?: Date | string, 
 }
