@@ -39,8 +39,13 @@ async function findAllMonthCelebrators(month) {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
+  let activeRegions = await List.find({});
+  let filledRegions = [];
+  for (region of activeRegions) {
+    filledRegions.push(region.region);
+  }
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, isRestricted: false, });
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, isRestricted: false, region: {$nin: filledRegions}});
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -248,6 +253,7 @@ router.delete("/", async (req, res) => {
 //Find all lists API
 router.get("/", async (req, res) => {
   try {
+   // List.find({region: "БРЯНСКАЯ"}, function (err, lists) {
     List.find({}, function (err, lists) {
       if (err) {
         console.log(err);

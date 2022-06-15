@@ -293,16 +293,16 @@ async function deletePluses(deletedOrder) {
         celebrator = await List.findOne({ _id: person.celebrator_id });
         period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
         activePeriod = await Period.findOne({ isActive: true });
-        if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2 ) {
-          period.scoredPluses = period.scoredPluses -1;
+        if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
+          period.scoredPluses = period.scoredPluses - 1;
           if (period.scoredPluses < 3) {
             await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 }, secondTime: false, maxPlus: 3 }, { upsert: false });
           } else {
-          await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
+            await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
           }
-          
+
           const controlDate = period.secondTime ? 14 : 10;//
-          inTwoWeeks.setDate(today.getDate() + controlDate);               
+          inTwoWeeks.setDate(today.getDate() + controlDate);
           console.log("inTwoWeeks");
           console.log(inTwoWeeks);
           console.log("period.isActive == false");
@@ -544,11 +544,14 @@ async function createOrder(newOrder) {
     }
   } else {
     proportion = await Proportion.findOne({ amount: newOrder.amount });
-    if (!proportion)
+    if (!proportion) {
       return {
         result: `Обратитесь к администратору. Заявка не сформирована. Для количества ${newOrder.amount} не найдена пропорция`,
         success: false
-      }
+      };
+    } else {
+      if (!newOrder.filter.region && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+    }
   }
 
   const emptyOrder = {
@@ -736,6 +739,10 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     order_id: order_id,
     //temporaryLineItems: [],
   }
+  if (proportion.oneRegion) {
+    data.regions = {};
+    data.restrictedRegions = [];
+  }
 
   for (let category of categories) {
 
@@ -775,6 +782,10 @@ async function fillOrder(proportion, period, order_id, filter) {
     filter: filter,
     order_id: order_id,
     //temporaryLineItems: [],
+  }
+  if (proportion.oneRegion) {
+    data.regions = {};
+    data.restrictedRegions = [];
   }
 
   for (let category of categories) {
@@ -855,11 +866,18 @@ async function collectSeniors(data) {
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
         data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
-        //console.log("data.houses");
-        //console.log(data.houses);
+        if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
+        console.log("data.regions");
+        console.log(data.regions);
         if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
           data.restrictedHouses.push(result["nursingHome"]);
         }
+        if (data.proportion.oneRegion) {
+          if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
+            data.restrictedRegions.push(result["region"]);
+          }
+        }
+
       } else {
         break outer1;
       }
@@ -880,12 +898,12 @@ async function searchSenior(
     orderFilter */
 ) {
 
-  data.restrictedHouses,
-    data.restrictedPearson,
-    data.date1,
-    data.date2,
-    data.maxPlus,
-    data.filter
+  /*  data.restrictedHouses,
+      data.restrictedPearson,
+      data.date1,
+      data.date2,
+      data.maxPlus,
+      data.filter */
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
@@ -893,6 +911,7 @@ async function searchSenior(
     //plusAmount: { $lt: maxPlus },
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
   };
+  if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
     { standardFilter.isReleased = false }
