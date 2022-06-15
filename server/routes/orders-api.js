@@ -610,6 +610,11 @@ async function createOrder(newOrder) {
     if (newOrder.filter.year1 || newOrder.filter.year2) {
       if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
       if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
+      if(newOrder.filter.year1 > 1957 && newOrder.filter.addressFilter != 'onlySpecial') {
+        proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
+        proportion.oldWomen = 0;
+        proportion.oldMen = 0;
+      }      
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
     if (newOrder.filter.date1 || newOrder.filter.date2) {
