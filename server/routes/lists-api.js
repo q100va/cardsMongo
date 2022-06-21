@@ -253,7 +253,7 @@ router.delete("/", async (req, res) => {
 //Find all lists API
 router.get("/", async (req, res) => {
   try {
-   // List.find({region: "БРЯНСКАЯ"}, function (err, lists) {
+    //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     List.find({}, function (err, lists) {
       if (err) {
         console.log(err);

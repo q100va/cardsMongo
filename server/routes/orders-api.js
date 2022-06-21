@@ -542,6 +542,7 @@ async function createOrder(newOrder) {
       "yang": yangAmount,
       "oneHouse": Math.round(newOrder.amount * 0.3)
     }
+    if(newOrder.filter.nursingHome) delete proportion.oneHouse;
   } else {
     proportion = await Proportion.findOne({ amount: newOrder.amount });
     if (!proportion) {
@@ -550,7 +551,8 @@ async function createOrder(newOrder) {
         success: false
       };
     } else {
-      if (!newOrder.filter.region && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+      if(newOrder.filter.nursingHome) delete proportion.oneHouse;
+      if (!newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
     }
   }
 
@@ -589,6 +591,9 @@ async function createOrder(newOrder) {
       proportion.special = 0;
       // console.log("proportion");
       //console.log(proportion);
+      if (!newOrder.filter.year1 && !newOrder.filter.year2) {
+        newOrder.filter.year2 = 1972;
+      }
     }
 
     if (newOrder.filter.addressFilter == 'noSpecial') {
@@ -603,8 +608,16 @@ async function createOrder(newOrder) {
       proportion.yang = 0;
       proportion.special = 0;
     }
+/*     if (newOrder.filter.nursingHome) {
+      proportion.anyCategory = proportion.amount;
+      proportion.oldWomen = 0;
+      proportion.oldMen = 0;
+      proportion.yang = 0;
+      proportion.special = 0;
+    } */
 
     if (newOrder.filter.region) filter.region = newOrder.filter.region;
+    if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
     if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
     if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
     if (newOrder.filter.year1 || newOrder.filter.year2) {
@@ -689,7 +702,8 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     fixed = false;
   }
 
-  if (proportion.amount < 31) {
+
+  if (proportion.amount < 31 && !filter.nursingHome && !filter.region) {
     if (fixed == 'date1') {
       if (date1 < period.date1) {
         day1 = period.date1;

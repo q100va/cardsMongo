@@ -164,6 +164,15 @@
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h4>Интернат (работает не всегда)</h4>
+                                                            <mat-form-field appearance="fill">
+                                                                <input matInput type="text"
+                                                                [formControl]="form.controls['nursingHome']" placeholder="НОГИНСК"/>                                                                
+                                                            </mat-form-field>
+                                                        </td>
+                                                    </tr>
                                                 </table>
                                         </tr>
                                     </table>
@@ -300,6 +309,8 @@
                     <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
 
                     <div *ngFor="let celebrator of lineItem.celebrators">
+                      <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+
                         {{celebrator.lastName}}
                         {{celebrator.firstName}}
                         {{celebrator.patronymic}}

@@ -30,6 +30,7 @@ const orderSchema = new Schema(
       addressFilter: { type: String },
       genderFilter: { type: String },
       region: { type: String },
+      nursingHome: { type: String },
       year1: { type: Number },
       year2:  { type: Number },
       date1:  { type: Number },

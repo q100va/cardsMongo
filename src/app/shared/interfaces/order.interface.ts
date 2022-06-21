@@ -26,6 +26,7 @@ export interface Order {
     addressFilter: string,
     genderFilter: string,
     region: string,
+    nursingHome: string,
     year1: number,
     year2:  number,
     date1:  number,

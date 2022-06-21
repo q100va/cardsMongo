@@ -70,6 +70,7 @@ export class OrderComponent implements OnInit {
         console.log(err);
       }
     );
+
     this.form = this.fb.group({
       clientFirstName: [null],
       clientPatronymic: [null],
@@ -86,6 +87,7 @@ export class OrderComponent implements OnInit {
       date1: [null],
       date2: [null],
       region: [null],
+      nursingHome: [null],
     });
   }
 
@@ -214,6 +216,7 @@ export class OrderComponent implements OnInit {
                   date1: this.form.controls.date1.value,
                   date2: this.form.controls.date2.value,
                   region: this.form.controls.region.value,
+                  nursingHome: this.form.controls.nursingHome.value,
                 },
               };
 
