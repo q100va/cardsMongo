@@ -205,7 +205,7 @@ export class OrderComponent implements OnInit {
                 contact: this.form.controls.contact.value,
                 institute: this.form.controls.institute.value,
                 amount: this.form.controls.amount.value,
-                isAccepted: this.form.controls.isAccepted.value,
+                isAccepted: this.form.controls.isAccepted.value ? true : false,
                 comment: this.form.controls.comment.value,
                 orderDate: this.orderDate,
                 filter: {

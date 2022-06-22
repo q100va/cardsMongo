@@ -188,6 +188,9 @@ router.get("/find/:userName", async (req, res) => {
 
 router.get("/findNotConfirmed/:userName", async (req, res) => {
   try {
+    /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
+        console.log("req.params.userName");
+        console.log(req.params.userName); */
     Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false }, function (err, orders) {
       if (err) {
         console.log(err);
@@ -203,6 +206,7 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
           "Query successful",
           orders
         );
+        console.log("findNotConfirmed");
         console.log(orders);
         res.json(readUserResponse.toObject());
       }
@@ -554,7 +558,7 @@ async function createOrderForNameDay(order) {
     await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
   }
   await Order.updateOne({ _id: createdOrder._id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
-let newOrder = await Order.findOne({ _id: createdOrder._id });
+  let newOrder = await Order.findOne({ _id: createdOrder._id });
   // await Order.updateOne({ _id: order_id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
   //throw new Error('test1'); //delete
   //console.log("updatedOrder");
@@ -563,7 +567,7 @@ let newOrder = await Order.findOne({ _id: createdOrder._id });
   return {
     result: newOrder.lineItems,
     success: true,
-    order_id: newOrder._id 
+    order_id: newOrder._id
 
   }
 }
