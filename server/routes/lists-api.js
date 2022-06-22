@@ -7,16 +7,18 @@
 
 const express = require("express");
 const List = require("../models/list");
+const NameDay = require("../models/name-day");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
 const Period = require("../models/period");
+
 //const User = require("../models/user");
 
 
 
 
-// Create list API 
+// Create birthday list API 
 router.post("/:month", async (req, res) => {
   try {
     console.log("0- inside Create list API");
@@ -45,7 +47,7 @@ async function findAllMonthCelebrators(month) {
     filledRegions.push(region.region);
   }
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, isRestricted: false, region: {$nin: filledRegions}});
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, isRestricted: false, region: { $nin: filledRegions } });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -91,7 +93,7 @@ async function findAllMonthCelebrators(month) {
       nursingHome: celebrator.nursingHome,
       lastName: celebrator.lastName,
       firstName: celebrator.firstName,
-      patronymic: celebrator.patronymic,      
+      patronymic: celebrator.patronymic,
       dateBirthday: celebrator.dateBirthday,
       monthBirthday: celebrator.monthBirthday,
       yearBirthday: celebrator.yearBirthday,
@@ -223,6 +225,110 @@ async function checkDoubles(array) {
 
 /////////////////////////////////////////
 
+// Create name day list API 
+router.post("/name-day/:month", async (req, res) => {
+  try {
+    console.log("0- inside Create list API");
+    let result = await findAllMonthNameDays(req.params.month);
+    console.log("4-inside Create list API " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+async function findAllMonthNameDays(month) {
+
+  //throw new Error("Something bad happened");
+  let result = [];
+  console.log("1- inside findAllMonthNameDays newList");
+  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, isRestricted: false });
+  //console.log(list);
+
+  if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
+  console.log("2- seniors" + list.length);
+  let updatedCelebrators = [];
+  for (let celebrator of list) {
+
+
+
+
+    let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+      ? celebrator.dateBirthday
+      : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+        ? celebrator.monthBirthday
+        : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+    let cloneSpecialComment
+    if (celebrator.yearBirthday) {
+      cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
+    }
+
+    let cloneCelebrator = {
+      region: celebrator.region,
+      nursingHome: celebrator.nursingHome,
+      lastName: celebrator.lastName,
+      firstName: celebrator.firstName,
+      patronymic: celebrator.patronymic,
+      dateBirthday: celebrator.dateBirthday,
+      monthBirthday: celebrator.monthBirthday,
+      yearBirthday: celebrator.yearBirthday,
+      gender: celebrator.gender,
+      comment1: celebrator.comment1,
+      comment2: celebrator.comment2,
+      linkPhoto: celebrator.linkPhoto,
+      nameDay: celebrator.nameDay,
+      dateNameDay: celebrator.dateNameDay,
+      monthNameDay: celebrator.monthNameDay,
+      noAddress: celebrator.noAddress,
+      isReleased: celebrator.isReleased,
+      plusAmount: 0,
+      specialComment: cloneSpecialComment,
+      fullDayBirthday: cloneFullDayBirthday,
+      /* oldest: cloneOldest,
+      category: cloneCategory, */
+      holyday: 'Именины июля 2022',
+      fullData: celebrator.nursingHome +
+        celebrator.lastName +
+        celebrator.firstName +
+        celebrator.patronymic +
+        celebrator.dateBirthday +
+        celebrator.monthBirthday +
+        celebrator.yearBirthday,
+    };
+    //console.log("special - " + celebrator["specialComment"]);
+    //console.log("fullday - " + celebrator.fullDayBirthday);
+    //console.log(celebrator);
+    updatedCelebrators.push(cloneCelebrator);
+  }
+
+  //console.log(list);
+  //console.log("celebrator");
+  //console.log("I am here");
+  let newList = await checkDoubles(updatedCelebrators);
+  // newList = newList1.slice();
+
+  console.log("2.5 - " + newList.length);
+
+  const options = { ordered: false };
+  let finalList = await NameDay.insertMany(newList, options);
+
+  //console.log(finalList);
+
+  console.log(`3- ${finalList.length} documents were inserted`);
+
+  result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length < finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
+  //console.log("3 - final" + finalList); 
+  return result;
+}
+
+
+/////////////////////////////////////////
+
 
 /**
  * API to delete all
@@ -250,7 +356,7 @@ router.delete("/", async (req, res) => {
   }
 });
 
-//Find all lists API
+//Find all birthday lists API
 router.get("/", async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
@@ -272,8 +378,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+//Find all name day lists API
+router.get("/name-day", async (req, res) => {
+  try {
+    //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
+    NameDay.find({}, function (err, nameDays) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(nameDays);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
 // Find by ID
-router.get("/:listId", async (req, res) => {
+/* router.get("/:listId", async (req, res) => {
   try {
     List.findOne({ _id: req.params.listId }, function (err, person) {
       if (err) {
@@ -288,7 +416,7 @@ router.get("/:listId", async (req, res) => {
     const findListByIdCatchErrorResponse = new BaseResponse("500", "Internal Server Error", e);
     res.status(500).send(findListByIdCatchErrorResponse.toObject());
   }
-});
+}); */
 
 
 module.exports = router;

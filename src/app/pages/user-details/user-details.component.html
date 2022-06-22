@@ -30,12 +30,17 @@
                 form.controls.lastName.touched
               ">This field is required!</mat-error>
             </mat-form-field>
+            <!--password-->
+            <mat-form-field appearance="fill">
+              <input type = 'password' matInput [formControl]="form.controls['password']" placeholder="Password" />
+            </mat-form-field>
+            
             <!--phone-->
             <mat-form-field appearance="fill">
               <input matInput [formControl]="form.controls['phoneNumber']" placeholder="Phone number" />
             </mat-form-field>
             <!--address-->
-            <mat-form-field  appearance="fill">
+            <mat-form-field appearance="fill">
               <input matInput [formControl]="form.controls['address']" placeholder="Address" />
             </mat-form-field>
             <!--email-->

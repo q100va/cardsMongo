@@ -85,6 +85,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { NameDayComponent } from './pages/name-day/name-day.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 @NgModule({
@@ -121,6 +123,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ListComponent,
     OrderDetailsComponent,
     OrderListComponent,
+    NameDayComponent,
 
   ],
   imports: [
@@ -164,7 +167,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatExpansionModule,
     MatBadgeModule,
     MatTooltipModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCheckboxModule
   ],
   entryComponents: [
     ConfirmationDialogComponent,

@@ -108,6 +108,9 @@ router.get("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
+
+    console.log(req.body.password);
+    let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
     User.findOne({ _id: req.params.id }, function (err, user) {
       if (err) {
         console.log(err);
@@ -123,6 +126,7 @@ router.put("/:id", async (req, res) => {
           address: req.body.address,
           email: req.body.email,
           role: req.body.role,
+          password: hashedPassword,
         });
         
 
@@ -141,7 +145,7 @@ router.put("/:id", async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    const updateUserCatchErrorResponse = BaseResponse(500, "Internal server error", e.message);
+    const updateUserCatchErrorResponse = new BaseResponse(500, "Internal server error", e);
     res.status(500).send(updateUserCatchErrorResponse.toObject());
   }
 });

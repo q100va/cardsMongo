@@ -14,6 +14,7 @@ const Period = require("../models/period");
 const Month = require("../models/month");
 const House = require("../models/house");
 const Region = require("../models/region");
+const NameDay = require("../models/name-day");
 //const { getLocaleDayPeriods } = require("@angular/common");
 
 /**
@@ -280,51 +281,61 @@ router.patch("/delete/:id", async (req, res) => {
 });
 
 async function deletePluses(deletedOrder) {
-  //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
-  const month = await Month.findOne({ isActive: true });
-  const today = new Date();
-  const inTwoWeeks = new Date();
-  let period, activePeriod, celebrator;
+  if (deletedOrder.holiday == "Дни рождения июля 2022") {
 
-  for (let lineItem of deletedOrder.lineItems) {
-    for (let person of lineItem.celebrators) {
-      if (person.monthBirthday == month.number) {
-        await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
-        celebrator = await List.findOne({ _id: person.celebrator_id });
-        period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
-        activePeriod = await Period.findOne({ isActive: true });
-        if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
-          period.scoredPluses = period.scoredPluses - 1;
-          if (period.scoredPluses < 3) {
-            await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 }, secondTime: false, maxPlus: 3 }, { upsert: false });
-          } else {
-            await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
-          }
 
-          const controlDate = period.secondTime ? 14 : 10;//
-          inTwoWeeks.setDate(today.getDate() + controlDate);
-          console.log("inTwoWeeks");
-          console.log(inTwoWeeks);
-          console.log("period.isActive == false");
-          console.log(period.isActive);
-          console.log("period.date1 < activePeriod.date1");
-          console.log("period.date1");
-          console.log(period.date1);
-          console.log("activePeriod.date1");
-          console.log(activePeriod.date1);
-          console.log("period.scoredPluses < 3");
-          console.log(period.scoredPluses);
-          const periodDate2 = new Date(month.year, month.number, period.date2);
-          console.log(month.year);
-          console.log(month.number);
-          console.log(period.date2);
-          console.log("periodDate2 > inTwoWeeks");
-          console.log(periodDate2);
-          if (period.isActive == false && period.date1 < activePeriod.date1 && period.scoredPluses < 3 && periodDate2 > inTwoWeeks) {
-            await Period.updateOne({ _id: activePeriod._id }, { isActive: false }, { upsert: false });
-            await Period.updateOne({ _id: period._id }, { isActive: true }, { upsert: false });
+    //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
+    const month = await Month.findOne({ isActive: true });
+    const today = new Date();
+    const inTwoWeeks = new Date();
+    let period, activePeriod, celebrator;
+
+    for (let lineItem of deletedOrder.lineItems) {
+      for (let person of lineItem.celebrators) {
+        if (person.monthBirthday == month.number) {
+          await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+          celebrator = await List.findOne({ _id: person.celebrator_id });
+          period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
+          activePeriod = await Period.findOne({ isActive: true });
+          if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
+            period.scoredPluses = period.scoredPluses - 1;
+            if (period.scoredPluses < 3) {
+              await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 }, secondTime: false, maxPlus: 3 }, { upsert: false });
+            } else {
+              await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
+            }
+
+            const controlDate = period.secondTime ? 14 : 10;//
+            inTwoWeeks.setDate(today.getDate() + controlDate);
+            console.log("inTwoWeeks");
+            console.log(inTwoWeeks);
+            console.log("period.isActive == false");
+            console.log(period.isActive);
+            console.log("period.date1 < activePeriod.date1");
+            console.log("period.date1");
+            console.log(period.date1);
+            console.log("activePeriod.date1");
+            console.log(activePeriod.date1);
+            console.log("period.scoredPluses < 3");
+            console.log(period.scoredPluses);
+            const periodDate2 = new Date(month.year, month.number, period.date2);
+            console.log(month.year);
+            console.log(month.number);
+            console.log(period.date2);
+            console.log("periodDate2 > inTwoWeeks");
+            console.log(periodDate2);
+            if (period.isActive == false && period.date1 < activePeriod.date1 && period.scoredPluses < 3 && periodDate2 > inTwoWeeks) {
+              await Period.updateOne({ _id: activePeriod._id }, { isActive: false }, { upsert: false });
+              await Period.updateOne({ _id: period._id }, { isActive: true }, { upsert: false });
+            }
           }
         }
+      }
+    }
+  } else {
+    for (let lineItem of deletedOrder.lineItems) {
+      for (let person of lineItem.celebrators) {
+        await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
       }
     }
   }
@@ -421,6 +432,141 @@ router.get("/get/regions/", async (req, res) => {
   }
 });
 
+
+/////////////////////////////////////////////////
+
+//create name day order
+
+router.post("/name-day", async (req, res) => {
+  let finalResult;
+  try {
+    console.log("req.body.temporaryLineItems");
+    console.log(req.body.temporaryLineItems);
+    let newOrder = {
+      userName: req.body.userName,
+      holiday: req.body.holiday,
+      amount: req.body.amount,
+      clientFirstName: req.body.clientFirstName,
+      clientPatronymic: req.body.clientPatronymic,
+      clientLastName: req.body.clientLastName,
+      email: req.body.email,
+      contactType: req.body.contactType,
+      contact: req.body.contact,
+      institute: req.body.institute,
+      isAccepted: req.body.isAccepted,
+      comment: req.body.comment,
+      orderDate: req.body.orderDate,
+      temporaryLineItems: req.body.temporaryLineItems,
+      lineItems: [],
+      isCompleted: false,
+    };
+    console.log("newOrder.temporaryLineItems");
+    console.log(newOrder.temporaryLineItems);
+    finalResult = await createOrderForNameDay(newOrder);
+    let text = !finalResult.success ? finalResult.result : "Query Successful";
+
+    const newListResponse = new BaseResponse(200, text, finalResult.result);
+    res.json(newListResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    let text = 'Обратитесь к администратору. Заявка не сформирована.';
+    if (!finalResult) {
+      let answer = await deleteErrorPlus(false, req.body.userName);
+      console.log("answer");
+      console.log(answer);
+      if (!answer) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+
+    } else {
+      if (finalResult && finalResult.success) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+      if (finalResult && !finalResult.success) {
+        text = finalResult.result;
+      }
+    }
+    const newListCatchErrorResponse = new BaseResponse(
+      500,
+      text,
+      e
+    );
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+//fill lineItems
+async function createOrderForNameDay(order) {
+  console.log(order);
+
+  let lineItems = [];
+  let nursingHomes = await House.find({});
+
+  order.temporaryLineItems.sort(
+    (prev, next) =>
+      prev.dateNameDay - next.dateNameDay
+  );
+  console.log("order.temporaryLineItems");
+  //console.log(order.temporaryLineItems);
+
+  for (let person of order.temporaryLineItems) {
+    console.log("person");
+    console.log(person);
+    //console.log(lineItems);
+    let index = -1;
+    //console.log(lineItems.length);
+    if (lineItems.length > 0) {
+      index = lineItems.findIndex(
+        (item) => item.nursingHome == person.nursingHome
+      );
+    }
+    // console.log(index);
+    if (index > -1) {
+      lineItems[index].celebrators.push(person);
+    } else {
+      let foundHouse = nursingHomes.find(
+        (item) => item.nursingHome == person.nursingHome
+      );
+      //console.log(foundHouse);
+      //console.log(person.nursingHome);
+      if (!foundHouse) {
+        return {
+          result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`,
+          success: false
+        };
+      }
+      lineItems.push({
+        region: foundHouse.region,
+        nursingHome: foundHouse.nursingHome,
+        address: foundHouse.address,
+        infoComment: foundHouse.infoComment,
+        adminComment: foundHouse.adminComment,
+        noAddress: foundHouse.noAddress,
+        celebrators: [person],
+      });
+    }
+  }
+
+
+  let createdOrder = await Order.create(order);
+  for (let element of createdOrder.temporaryLineItems) {
+    await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+  }
+  await Order.updateOne({ _id: createdOrder._id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+let newOrder = await Order.findOne({ _id: createdOrder._id });
+  // await Order.updateOne({ _id: order_id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+  //throw new Error('test1'); //delete
+  //console.log("updatedOrder");
+  //console.log(updatedOrder);
+  // console.log(lineItems);
+  return {
+    result: newOrder.lineItems,
+    success: true,
+    order_id: newOrder._id 
+
+  }
+}
 ////////////////////////////////////////////////////
 
 router.post("/:amount", async (req, res) => {
@@ -542,7 +688,7 @@ async function createOrder(newOrder) {
       "yang": yangAmount,
       "oneHouse": Math.round(newOrder.amount * 0.3)
     }
-    if(newOrder.filter.nursingHome) delete proportion.oneHouse;
+    if (newOrder.filter.nursingHome) delete proportion.oneHouse;
   } else {
     proportion = await Proportion.findOne({ amount: newOrder.amount });
     if (!proportion) {
@@ -551,7 +697,7 @@ async function createOrder(newOrder) {
         success: false
       };
     } else {
-      if(newOrder.filter.nursingHome) delete proportion.oneHouse;
+      if (newOrder.filter.nursingHome) delete proportion.oneHouse;
       if (!newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
     }
   }
@@ -608,13 +754,13 @@ async function createOrder(newOrder) {
       proportion.yang = 0;
       proportion.special = 0;
     }
-/*     if (newOrder.filter.nursingHome) {
-      proportion.anyCategory = proportion.amount;
-      proportion.oldWomen = 0;
-      proportion.oldMen = 0;
-      proportion.yang = 0;
-      proportion.special = 0;
-    } */
+    /*     if (newOrder.filter.nursingHome) {
+          proportion.anyCategory = proportion.amount;
+          proportion.oldWomen = 0;
+          proportion.oldMen = 0;
+          proportion.yang = 0;
+          proportion.special = 0;
+        } */
 
     if (newOrder.filter.region) filter.region = newOrder.filter.region;
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
@@ -623,11 +769,11 @@ async function createOrder(newOrder) {
     if (newOrder.filter.year1 || newOrder.filter.year2) {
       if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
       if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
-      if(newOrder.filter.year1 > 1957 && newOrder.filter.addressFilter != 'onlySpecial') {
+      if (newOrder.filter.year1 > 1957 && newOrder.filter.addressFilter != 'onlySpecial') {
         proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
         proportion.oldWomen = 0;
         proportion.oldMen = 0;
-      }      
+      }
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
     if (newOrder.filter.date1 || newOrder.filter.date2) {

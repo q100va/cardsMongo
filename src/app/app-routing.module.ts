@@ -44,6 +44,7 @@ import { OrderComponent } from "./pages/order/order.component";
 import { ListComponent } from "./pages/list/list.component";
 import { OrderDetailsComponent } from "./pages/order-details/order-details.component";
 import { OrderListComponent } from "./pages/order-list/order-list.component";
+import { NameDayComponent } from "./pages/name-day/name-day.component";
 
 const routes: Routes = [
   {
@@ -159,6 +160,11 @@ const routes: Routes = [
       {
         path: "roles/update/:id",
         component: RoleDetailsComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "orders/name-day",
+        component: NameDayComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
 

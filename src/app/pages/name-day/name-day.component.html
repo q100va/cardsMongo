@@ -1,0 +1,263 @@
+<!--
+============================================
+ html code to create nameday orders.
+===========================================
+-->
+<div fxLayout="row" class="main" style="width : 95%;">
+
+    <mat-card class="mat-elevation-z0" style="width : 100%;">
+        <div class="wrapper">
+            <div class="left" style="padding-left: 30px; padding-right: 8px;">
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-card-title> Новая заявка </mat-card-title>
+                        </td>
+                        <td>
+                            <mat-card-actions style="text-align: right; padding-right: px;">
+                                <button mat-raised-button (click)="clear()" color="accent">Очистить</button>
+<!--                                 <button (click)="createOrder()" mat-raised-button color="primary"
+                                    [disabled]="!form.valid">Сформировать</button> -->
+                            </mat-card-actions>
+                        </td>
+                    </tr>
+                </table>
+
+                <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+                <form [formGroup]="form" #orderForm>
+                    <mat-card-content>
+
+                        <div fxLayout="column" fxLayoutGap="10px">
+                            <table class="example-full-width" cellspacing="0">
+                                <tr>
+                                    <td>
+
+                                        <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
+                                        <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
+                                        <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
+                                    </td>
+                                    <td>
+                                        <mat-slide-toggle [formControl]="form.controls['isAccepted']">Не требует
+                                            подтверждения</mat-slide-toggle>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="example-full-width" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Email</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['email']" />
+                                        </mat-form-field>
+                                    </td>
+
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Количество адресов*</mat-label>
+                                            <input type="number" matInput [formControl]="form.controls['amount']" />
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.email.hasError('email') && form.controls.email.touched">
+                                            Введите
+                                            валидный
+                                            email!</mat-error>
+                                    </td>
+                                    <td>
+
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
+                                            Обязательное
+                                            поле!</mat-error>
+                                        <!--                                         <mat-error class="error"
+                                            *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched">
+                                            Только числа!</mat-error> -->
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Другой контакт</mat-label>
+                                            <mat-select [formControl]="form.controls['contactType']">
+                                                <mat-option></mat-option>
+                                                <mat-option *ngFor="let type of types" [value]="type">
+                                                    {{ type }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-hint>обязательно указать, если не указан email</mat-hint>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Аккаунт/номер</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['contact']" />
+                                            <mat-hint>обязательно указать, если не указан email</mat-hint>
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Имя</mat-label>
+                                            <input type="text" matInput
+                                                [formControl]="form.controls['clientFirstName']" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Отчество</mat-label>
+                                            <input type="text" matInput
+                                                [formControl]="form.controls['clientPatronymic']" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Фамилия</mat-label>
+                                            <input type="text" matInput
+                                                [formControl]="form.controls['clientLastName']" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Представляет коллектив</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['institute']" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            <mat-form-field appearance="fill" style="padding-right: 8px;">
+                                <mat-label>Комментарий</mat-label>
+                                <input type="text" matInput [formControl]="form.controls['comment']" />
+                            </mat-form-field>
+                        </div>
+
+                    </mat-card-content>
+
+                </form>
+            </div>
+            <div class="right" style="padding-left: 30px; padding-right: 30px;">
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-card-title>Список поздравляемых </mat-card-title>
+                        </td>
+                        <td>
+                            <mat-card-actions style="text-align: right; padding-right: px;">
+                                <button (click)="createOrder()" mat-raised-button color="primary"
+                                [disabled]="!form.valid" *ngIf = "!hide">Сохранить</button>
+                            </mat-card-actions>
+                        </td>
+                    </tr>
+                </table>
+     
+                <p style="color: rgb(101, 80, 219); font-weight: bold;" *ngIf="notSaved">Выберите адреса для поздравления и нажмите "Сохранить". Старайтесь, чтобы все поздравляемые получили одинаковое количество поздравлений.</p>
+
+                <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
+                <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
+
+                <br /><br />
+                <dir style="width: 100%;">
+                    <dir>
+                        <mat-spinner mode="indeterminate" *ngIf="spinner" style="margin:40px auto ;"></mat-spinner>
+                    </dir>
+                </dir>
+
+                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 list" *ngIf="notSaved">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="check">
+                      <th mat-header-cell *matHeaderCellDef>
+
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                                      (change)="$event ? selection.toggle(row) : null"
+                                      [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="plusAmount">
+                      <th mat-header-cell *matHeaderCellDef> Кол-во поздравлений </th>
+                      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.plusAmount}} </td>
+                    </ng-container>
+                  
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef> ФИО </th>
+                      <td mat-cell *matCellDef="let element"> {{element.lastName}} {{element.firstName}} {{element.patronymic}}</td>
+                    </ng-container>
+                  
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="nameDay">
+                      <th mat-header-cell *matHeaderCellDef> Именины </th>
+                      <td mat-cell *matCellDef="let element"> {{element.nameDay}} </td>
+                    </ng-container>
+                  
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="DOB">
+                      <th mat-header-cell *matHeaderCellDef> Дата/год рождения </th>
+                      <td mat-cell *matCellDef="let element"> {{element.specialComment}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="house">
+                        <th mat-header-cell *matHeaderCellDef> Интернат </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nursingHome}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="region">
+                        <th mat-header-cell *matHeaderCellDef> Регион </th>
+                        <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                      </ng-container>
+
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                          (click)="selection.toggle(row)">
+                      </tr>
+                  
+
+                  </table>
+
+
+                <div *ngIf="!notSaved">
+
+                <mat-card-content *ngFor="let lineItem of lineItems">
+
+                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                    <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
+                    <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
+
+                    <div *ngFor="let celebrator of lineItem.celebrators">
+                      <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+
+                        {{celebrator.lastName}}
+                        {{celebrator.firstName}}
+                        {{celebrator.patronymic}}
+                        {{celebrator.fullDayBirthday}}
+                        {{celebrator.comment1}}
+                        ({{celebrator.specialComment}})
+                   
+                    </div>
+                    <br />
+                </mat-card-content>
+            </div>
+
+
+
+            </div>
+        </div>
+    </mat-card>
+</div>

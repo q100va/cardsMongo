@@ -30,8 +30,22 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  generate() {
-    this.listService.createList().subscribe(
+  generateBirthday() {
+    this.listService.createBirthdayList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
+  generateNameDay() {
+    this.listService.createNameDayList().subscribe(
       async (res) => {
         let result = await res["data"];
         console.log(result);
@@ -56,8 +70,8 @@ export class ListComponent implements OnInit {
     );
   }
 
-  showList(event: any) {
-    this.listService.findAllLists().subscribe(
+  showBirthdayList(event: any) {
+    this.listService.findAllBirthdayLists().subscribe(
       (res) => {
         this.lists = res["data"];
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
@@ -85,21 +99,27 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
-  populateSeniors() {
-    
-/*     let stop = false;
-    console.log("start-populateSeniors - 1");
-    for (let i = 0; i < (seniors.length ); i = i + 1000) {
-      console.log("start-populateSeniors- 2");
-      if (!stop) {
-        let someSeniors = seniors.slice(i, i + 1000);
-        console.log(someSeniors);
-        let result = await this.seniorsService.createSeniorsCollection(someSeniors);
-        console.log("result");
-        console.log(result);
-        //if ((seniors.lenth - i) < 1000) alert(result);
+  showNameDayList(event: any) {
+    this.listService.findAllNameDayLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        this.lists.sort((prev, next) => prev.dateNameDay - next.dateNameDay);
+        this.listLength = this.lists.length;
+        
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
- */
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
+  populateSeniors() {
+
         this.seniorsService.createSeniorsCollection(seniors).subscribe(
           async (res) => {
             let result = await res["data"];

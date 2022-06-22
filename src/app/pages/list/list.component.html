@@ -5,12 +5,17 @@
 
     <mat-card-actions>
 
-        <button class="submit" (click)="deleteList()" mat-raised-button color = 'warn'>Очистить список</button>
-<!--         <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
+  <!--       <button class="submit" (click)="deleteList()" mat-raised-button color = 'warn'>Очистить список ДР</button>
+        <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
+
         <button class="submit" (click)="populateSeniors()" mat-raised-button>Добавить жителей</button>
         <button class="submit" (click)="addHouses()" mat-raised-button>Добавить интернаты</button>
-        <button class="submit" (click)="generate()" mat-raised-button>Сформировать список</button>
-        <button class="submit" (click)="showList($event)" mat-raised-button>Показать список</button>
+        <br /><br /><br />
+        <button class="submit" (click)="generateBirthday()" mat-raised-button>Сформировать список ДР</button>  
+        <button class="submit" (click)="showBirthdayList($event)" mat-raised-button>Показать список ДР</button>
+        <br /><br /><br />
+        <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
+        <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
     </mat-card-actions>
 
     <mat-card-content *ngIf="isShowList">

@@ -50,6 +50,7 @@ export class UserService {
       address: updatedUser.address,
       email: updatedUser.email,
       role: updatedUser.role,
+      password: updatedUser.password,
     });
     console.log(result);
     return result;

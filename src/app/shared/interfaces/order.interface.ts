@@ -22,7 +22,7 @@ export interface Order {
   isAccepted: boolean;
   comment: string;
   orderDate: string;
-  filter: {
+  filter?: {
     addressFilter: string,
     genderFilter: string,
     region: string,
@@ -31,6 +31,8 @@ export interface Order {
     year2:  number,
     date1:  number,
     date2: number,
-  }
+  },
+  temporaryLineItems?: Array<any>
+  
 
 }
