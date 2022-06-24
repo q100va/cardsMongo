@@ -254,10 +254,7 @@ async function findAllMonthNameDays(month) {
   console.log("2- seniors" + list.length);
   let updatedCelebrators = [];
   for (let celebrator of list) {
-
-
-
-
+    
     let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
       ? celebrator.dateBirthday
       : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
