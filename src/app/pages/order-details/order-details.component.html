@@ -46,8 +46,10 @@
                         {{celebrator.lastName}}
                         {{celebrator.firstName}}
                         {{celebrator.patronymic}}
-                        {{celebrator.fullDayBirthday}}
+                        {{order.holiday != 'Именины июля 2022' ? celebrator.fullDayBirthday : ''}}
                         {{celebrator.comment1}}
+                        {{celebrator.specialComment}}
+                        {{celebrator.linkPhoto}}
                         <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
                         </span>
                     </div>

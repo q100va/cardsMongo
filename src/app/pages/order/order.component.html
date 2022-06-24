@@ -94,6 +94,10 @@
                                                     </mat-radio-button>
                                                 </mat-radio-group>
 
+                                                <br />
+
+                                                <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">Только с фото</mat-slide-toggle>
+
                                             </td>
                                             <td>
 
@@ -316,6 +320,7 @@
                         {{celebrator.patronymic}}
                         {{celebrator.fullDayBirthday}}
                         {{celebrator.comment1}}
+                        {{celebrator.linkPhoto}}
                         <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
                         </span>
                     </div>

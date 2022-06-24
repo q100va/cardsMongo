@@ -31,6 +31,7 @@ export interface Order {
     year2:  number,
     date1:  number,
     date2: number,
+    onlyWithPicture: boolean;
   },
   temporaryLineItems?: Array<any>
   

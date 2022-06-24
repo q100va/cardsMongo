@@ -701,8 +701,9 @@ async function createOrder(newOrder) {
         success: false
       };
     } else {
-      if (newOrder.filter.nursingHome) delete proportion.oneHouse;
-      if (!newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture) delete proportion.oneHouse;
+      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+
     }
   }
 
@@ -736,6 +737,14 @@ async function createOrder(newOrder) {
   let isOutDate = false;
 
   if (newOrder.filter) {
+    if(newOrder.filter.onlyWithPicture) filter.linkPhoto = {$ne:""};
+    if((newOrder.filter.onlyWithPicture || newOrder.filter.oneHouse || newOrder.filter.oneRegion) && newOrder.filter.addressFilter == 'any') {
+      proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
+      proportion.oldWomen = 0;
+      proportion.oldMen = 0;
+      proportion.yang = 0;
+      proportion.special = 0;
+    }
     if (newOrder.filter.addressFilter == 'forKids') {
       proportion.oldWomen = proportion.oldWomen + proportion.special;
       proportion.special = 0;
@@ -746,7 +755,7 @@ async function createOrder(newOrder) {
       }
     }
 
-    if (newOrder.filter.addressFilter == 'noSpecial') {
+    if (newOrder.filter.addressFilter == 'noSpecial' ) {
       proportion.yang = proportion.yang + proportion.special;
       proportion.special = 0;
     }
@@ -837,7 +846,7 @@ async function createOrder(newOrder) {
 // create a list of seniors for the order with special dates
 
 async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2) {
-  const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly"];
+  const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
   let day1, day2, fixed;
 
   if (!date1) {
@@ -852,8 +861,10 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     fixed = false;
   }
 
-
-  if (proportion.amount < 31 && !filter.nursingHome && !filter.region) {
+console.log("filter");
+console.log(filter);
+  if (proportion.amount < 31 && !filter.nursingHome && !filter.region && !filter.linkPhoto) {
+    console.log("if");
     if (fixed == 'date1') {
       if (date1 < period.date1) {
         day1 = period.date1;
@@ -889,12 +900,16 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
       }
     }
 
-  } else {
+  } else {    
     day1 = date1;
     day2 = date2;
+    console.log("else");
+
   }
 
   filter.dateBirthday = { $lte: day2, $gte: day1 };
+  console.log("filter.dateBirthday");
+console.log(filter.dateBirthday);
 
   let data = {
     houses: {},
@@ -938,7 +953,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
 // create a list of seniors for the order
 
 async function fillOrder(proportion, period, order_id, filter) {
-  const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly"];
+  const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
 
   let data = {
     houses: {},
@@ -1013,7 +1028,8 @@ async function collectSeniors(data) {
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
     yang: ["yang", "oldWomen", "oldMen", "oldest"],
     special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
-    specialOnly: ["special"]
+    specialOnly: ["special"],
+    allCategory: ["oldMen", "oldWomen", "yang", "oldest", "special"]
   };
   //console.log("data.category");
   //console.log(data.category);

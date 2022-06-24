@@ -35,11 +35,12 @@ const orderSchema = new Schema(
       year2:  { type: Number },
       date1:  { type: Number },
       date2:  { type: Number },
+      onlyWithPicture: { type: Boolean, default: false },
     },
     isCompleted: { type: Boolean, default: false },
     isDisabled: { type: Boolean, default: false },
-  }
-  // { collection: "orders" }
+  },
+   { collection: "orders" }
 );
 
 module.exports = mongoose.model("Order", orderSchema);

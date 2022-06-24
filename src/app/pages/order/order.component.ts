@@ -88,6 +88,7 @@ export class OrderComponent implements OnInit {
       date2: [null],
       region: [null],
       nursingHome: [null],
+      onlyWithPicture: [false]
     });
   }
 
@@ -217,6 +218,7 @@ export class OrderComponent implements OnInit {
                   date2: this.form.controls.date2.value,
                   region: this.form.controls.region.value,
                   nursingHome: this.form.controls.nursingHome.value,
+                  onlyWithPicture: this.form.controls.onlyWithPicture.value,
                 },
               };
 
