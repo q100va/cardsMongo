@@ -165,7 +165,7 @@ const routes: Routes = [
       {
         path: "orders/name-day",
         component: NameDayComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard],
       },
 
     ],
