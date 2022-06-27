@@ -99,6 +99,27 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
+  showLessPlus(event: any) {
+    this.listService.findAllBirthdayLists().subscribe(
+      (res) => {
+        this.lists = res["data"].filter(item => item.plusAmount <3);
+
+        this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listLength = this.lists.length;
+      
+
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  } 
+
   showNameDayList(event: any) {
     this.listService.findAllNameDayLists().subscribe(
       (res) => {

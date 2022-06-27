@@ -692,7 +692,7 @@ async function createOrder(newOrder) {
       "yang": yangAmount,
       "oneHouse": Math.round(newOrder.amount * 0.3)
     }
-    if (newOrder.filter.nursingHome) delete proportion.oneHouse;
+    if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
     proportion = await Proportion.findOne({ amount: newOrder.amount });
     if (!proportion) {
@@ -701,7 +701,16 @@ async function createOrder(newOrder) {
         success: false
       };
     } else {
-      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture) delete proportion.oneHouse;
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
+
+        console.log("newOrder.filter.region");
+  console.log(newOrder.filter.region);
+
+  console.log("proportion.oneHouse");
+  console.log(proportion.oneHouse);
+
+
+
       if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
 
     }
@@ -737,8 +746,8 @@ async function createOrder(newOrder) {
   let isOutDate = false;
 
   if (newOrder.filter) {
-    if(newOrder.filter.onlyWithPicture) filter.linkPhoto = {$ne:""};
-    if((newOrder.filter.onlyWithPicture || newOrder.filter.oneHouse || newOrder.filter.oneRegion) && newOrder.filter.addressFilter == 'any') {
+    if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: "" };
+    if ((newOrder.filter.onlyWithPicture || newOrder.filter.oneHouse || newOrder.filter.oneRegion) && newOrder.filter.addressFilter == 'any') {
       proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
       proportion.oldWomen = 0;
       proportion.oldMen = 0;
@@ -755,7 +764,7 @@ async function createOrder(newOrder) {
       }
     }
 
-    if (newOrder.filter.addressFilter == 'noSpecial' ) {
+    if (newOrder.filter.addressFilter == 'noSpecial') {
       proportion.yang = proportion.yang + proportion.special;
       proportion.special = 0;
     }
@@ -861,8 +870,8 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     fixed = false;
   }
 
-console.log("filter");
-console.log(filter);
+  console.log("filter");
+  console.log(filter);
   if (proportion.amount < 31 && !filter.nursingHome && !filter.region && !filter.linkPhoto) {
     console.log("if");
     if (fixed == 'date1') {
@@ -900,7 +909,7 @@ console.log(filter);
       }
     }
 
-  } else {    
+  } else {
     day1 = date1;
     day2 = date2;
     console.log("else");
@@ -909,7 +918,7 @@ console.log(filter);
 
   filter.dateBirthday = { $lte: day2, $gte: day1 };
   console.log("filter.dateBirthday");
-console.log(filter.dateBirthday);
+  console.log(filter.dateBirthday);
 
   let data = {
     houses: {},
@@ -1050,12 +1059,17 @@ async function collectSeniors(data) {
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
-        data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
+        console.log("data.proportion.oneHouse");
+        console.log(data.proportion.oneHouse);
+        if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
         if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
         console.log("data.regions");
         console.log(data.regions);
-        if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
-          data.restrictedHouses.push(result["nursingHome"]);
+
+        if (data.proportion.oneHouse) {
+          if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
+            data.restrictedHouses.push(result["nursingHome"]);
+          }
         }
         if (data.proportion.oneRegion) {
           if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
