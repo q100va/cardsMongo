@@ -106,7 +106,17 @@ export class ListComponent implements OnInit {
 
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
-      
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
 
       },
       (err) => {
