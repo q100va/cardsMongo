@@ -1,0 +1,208 @@
+<!-- <input type="file" (change)="onFileChange($event)" multiple="false" /> -->
+
+<mat-card class="mat-elevation-z0">
+    <mat-card-title> Формирование заявок по списку </mat-card-title>
+
+    <br />
+
+    <mat-card-actions>
+
+        <!--       <button class="submit" (click)="deleteList()" mat-raised-button color = 'warn'>Очистить список ДР</button>
+        <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
+
+        <button class="submit" (click)="start(index)" mat-raised-button [disabled]="!isFirst">Начать</button>
+
+        <br /> <br />
+        <button class="submit" (click)="start(index)" mat-raised-button [disabled]="!isNext">Следующая</button>
+
+    </mat-card-actions>
+
+    <mat-card-content *ngIf="isShowOrder">
+
+        <mat-card-subtitle>Дата: {{order.orderDate}}</mat-card-subtitle>
+        <mat-card-subtitle>Праздник: {{order.holiday}} </mat-card-subtitle>
+        <mat-card-subtitle>Координатор: {{order.userName}} </mat-card-subtitle>
+        <mat-card-subtitle>Количество: {{order.amount}}</mat-card-subtitle>
+        <mat-card-subtitle>Поздравляющий: {{fullName}} </mat-card-subtitle>
+        <mat-card-subtitle>Контактная информация: {{contact}} </mat-card-subtitle>
+        <mat-card-subtitle>{{needAccepting}} </mat-card-subtitle>
+        <mat-card-subtitle>Комментарий: {{order.comment}} </mat-card-subtitle>
+
+        <div
+            style="font-family: Georgia, 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
+            <p>Добрый день, {{order.clientFirstName}}!</p>
+            <p style="font-size: 0.7em; color: rgb(163, 192, 199)">
+                {{order.contact}}
+            </p>
+
+            <p style="font-weight: 600; color: rgb(255, 0, 0)">
+                Пожалуйста, подтвердите получение этого письма, ответив на него!
+            </p>
+
+            <p>
+                Я сотрудник БФ "Старость в радость" Кустова Оксана (координатор по
+                поздравлениям с праздниками и днями рождения). Мы получили вашу заявку и
+                очень рады вашему участию!
+            </p>
+
+            <p>
+                Высылаю вам адреса для поздравления жителей домов престарелых (сначала
+                идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются
+                люди, которых к престарелым совсем не относятся. Это инвалиды, которые
+                проживают в домах престарелых. Иногда сразу после детдомов.
+            </p>
+
+            <h3 style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold;">Дни рождения июля</h3>
+
+            <p style="font-style: italic">
+                Если какие-то адреса вам не подходят, обязательно возвращайте -
+                заменю.<br />
+                Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
+                чтобы я могла их передать другому поздравляющему.
+            </p>
+
+            <mat-card-content *ngFor="let lineItem of lineItems"
+                style="font-family: Georgia, 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
+
+                <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
+                <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                    {{lineItem.adminComment}}</p>
+
+                <div *ngFor="let celebrator of lineItem.celebrators">
+                    <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+
+                    {{celebrator.lastName}}
+                    {{celebrator.firstName}}
+                    {{celebrator.patronymic}}
+                    {{celebrator.fullDayBirthday}}
+                    {{celebrator.comment1}}
+                    {{celebrator.linkPhoto}}
+                    <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                    </span>
+                </div>
+                <br />
+            </mat-card-content>
+
+            <h3
+                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                Отправляйте письма правильно!</h3>
+            <ul>
+                <li>
+                    Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
+                    (НЕ заказными).
+                </li>
+                <li>
+                    Каждому адресату отправляйте отдельную открытку в отдельном конверте
+                    или отдельную почтовую открытку без конверта.
+                </li>
+                <li>
+                    Учтите, что по России письма идут 7-14 дней, из заграницы - примерно
+                    месяц.
+                </li>
+            </ul>
+
+            <h3
+                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                Как писать поздравления?</h3>
+            <ul>
+                <li>
+                    Используйте обращение на "Вы" и по имени-отчеству (если отчество
+                    указано).
+                </li>
+                <li>
+                    Пишите поздравления от себя лично (не от организации, не от школы, не
+                    от фонда).
+                </li>
+                <li>
+                    Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
+                </li>
+                <li>По возможности укажите ваш обратный адрес.</li>
+            </ul>
+
+            <h3
+                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                Что писать не надо.</h3>
+            <ul>
+                <li>
+                    Не желайте семейного уюта, любви близких, финансового благополучия и
+                    т.п.
+                </li>
+                <li>
+                    Не давайте свой обратный адрес если написано, что поздравления нужно
+                    отправлять без указания обратного адреса.
+                </li>
+            </ul>
+
+            <h3
+                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                Получили ответ?</h3>
+            <ul>
+                <li>
+                    Если получили ответ от жителя интерната, обязательно сообщите об этом
+                    нам.
+                </li>
+                <li>
+                    Не вступайте в переписку с ответившим до того, как это будет
+                    согласовано с координатором.
+                </li>
+                <li>Если ваша открытка вернулась, также сообщите нам.</li>
+            </ul>
+
+            <h3
+                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                Чего делать нельзя.</h3>
+            <ul>
+                <li>
+                    Запрещены любые публикации (в соцсетях, на сайтах учебных заведений,
+                    на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч.
+                    фото конвертов или открыток, на которых указаны адрес и/или ФИО
+                    подопечного).
+                </li>
+                <li>
+                    Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить
+                    праздник других людей.
+                </li>
+                <li>
+                    Не отправляйте посылки, бандероли, заказные/ценные письма, письма
+                    первого класса и прочие регистрируемые отправления, так как возможны
+                    проблемы с получением подобной корреспонденции и ваше отправление
+                    может вернуться.
+                </li>
+            </ul>
+            <div>
+                <a href="https://docs.google.com/document/d/1INxsoOViRIznD4r06Py1A7D0KkjD3ZdYJdIWU5XvUNQ/edit">Ссылка на
+                    подробную инструкцию.</a>
+            </div>
+            <p>
+                Нашим бабушкам и дедушкам нужна неотложная помощь — продукты и дрова на зиму — помочь на сайте
+                <a href="https://starikam.org/">starikam.org</a>
+            </p>
+            <hr />
+            <p>
+                Огромное вам спасибо за радость для наших подопечных! Будут вопросы —
+                обращайтесь!
+            </p>
+            <p>
+                --<br />
+                С уважением,<br />
+                Оксана Кустова<br />
+                Координатор программы "Поздравление открытками"<br />
+                БФ «Старость в радость»
+            </p>
+            <p>
+                <a href="mailto: o.kustova@starikam.org">o.kustova@starikam.org</a> на связи c 16-00
+                до 6-00 (МСК)<br />
+                <a href="https://starikam.org/">www.starikam.org</a> |
+                <a href="https://t.me/cardsforgrandma">@cardsforgrandma</a>
+            </p>
+        </div>
+
+        <mat-card-actions>
+            <br /> <br />
+            <button class="submit" (click)="start(index)" mat-raised-button [disabled]="!isNext">Следующая</button>
+
+        </mat-card-actions>
+
+    </mat-card-content>
+</mat-card>

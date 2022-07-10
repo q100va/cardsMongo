@@ -1,0 +1,112 @@
+<mat-card class="mat-elevation-z0">
+    <mat-card-title> Обновление списков </mat-card-title>
+
+    <br />
+
+    <mat-card-actions>
+        <input type="file" class="form-control" (change)="addFile($event)" placeholder="Upload file"
+            accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+    </mat-card-actions>
+
+    <mat-card-content *ngIf="isShowList">
+        <h3>Интернат: {{arrayOfLists[index].region}} {{arrayOfLists[index].nursingHome}}</h3>
+        <table style="width: 100%;" cellspacing="0">
+            <tr>
+                <td>
+                    <h4>Выбывшие</h4>
+
+                    <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromAbsents">
+                        <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.absents"
+                            [value]="person.key">
+                            {{person.lastName}} {{person.firstName}} {{person.patronymic}} {{person.fullDayBirthday}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+
+                </td>
+                <td>
+                    <h4>Поступившие</h4>
+                    <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromArrived">
+                        <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.arrived"
+                            [value]="person.key">
+                            {{person.lastName}} {{person.firstName}} {{person.patronymic}} {{person.fullDayBirthday}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button mat-icon-button (click)="moveToChanged(movedFromAbsents, movedFromArrived)">
+                       Переместить
+                    </button> </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>Сомнительные старый список</h4>
+
+                    <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromOldDoubtful">
+                        <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.doubtful"
+                            [value]="person.old.key">
+                            {{person.old.lastName}} {{person.old.firstName}} {{person.old.patronymic}} {{person.old.fullDayBirthday}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+
+                </td>
+                <td>
+                    <h4>Сомнительные новый список</h4>
+                    <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromNewDoubtful">
+                        <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.arrived"
+                            [value]="person.new.key">
+                            {{person.new.lastName}} {{person.new.firstName}} {{person.new.patronymic}} {{person.new.fullDayBirthday}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+
+                </td>
+            </tr>
+            <tr>
+                <td><button mat-icon-button (click)="moveToChangedFromDoubtful(movedFromOldDoubtful, movedFromNewDoubtful)">
+                       Переместить в измененные
+                    </button> </td>
+                    <td><button mat-icon-button (click)="moveToAbsentsArrived(movedFromOldDoubtful, movedFromNewDoubtful)">
+                        Переместить в выбывшие/прибывшие
+                     </button> </td>
+            </tr>
+            <tr>
+                <td>
+                    <mat-list *ngFor="let person of resultOfCompare.absents">
+                        <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+                            {{person.fullDayBirthday}} {{person.comment1}}
+                            {{person.specialComment}} {{person.linkPhoto}} {{person.category}}
+                            {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}}
+                        </mat-list-item>
+
+                    </mat-list>
+
+                </td>
+                <td>
+                    <mat-list *ngFor="let person of resultOfCompare.absents">
+                        <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+                            {{person.fullDayBirthday}} {{person.comment1}}
+                            {{person.specialComment}} {{person.linkPhoto}} {{person.category}}
+                            {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}}
+                        </mat-list-item>
+
+                    </mat-list>
+
+                </td>
+            </tr>
+
+
+
+            <mat-list *ngFor="let person of lists">
+                <!--  <mat-list-item> {{list.period}}</mat-list-item> 
+            <mat-list *ngFor="let person of list.celebrators">-->
+                <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+                    {{person.fullDayBirthday}} {{person.comment1}}
+                    {{person.specialComment}} {{person.linkPhoto}} {{person.category}}
+                    {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}}</mat-list-item>
+                <!--             </mat-list> -->
+            </mat-list>
+        </table>
+
+    </mat-card-content>
+</mat-card>

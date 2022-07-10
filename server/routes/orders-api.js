@@ -600,7 +600,7 @@ router.post("/:amount", async (req, res) => {
     finalResult = await createOrder(newOrder);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
-    const newListResponse = new BaseResponse(200, text, finalResult.result);
+    const newListResponse = new BaseResponse(200, text, finalResult);
     res.json(newListResponse.toObject());
   } catch (e) {
     console.log(e);
@@ -1124,7 +1124,7 @@ async function searchSenior(
 
 
   let celebrator;
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
+  let maxPlusAmount =standardFilter.oldest ? 4 : data.maxPlus; //CHANGE!!!
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 
@@ -1211,9 +1211,12 @@ async function checkActivePeriod(period, month) {
   let controlDate = period.secondTime ? 14 : 10;//
   inTwoWeeks.setDate(today.getDate() + controlDate);
 
-  //console.log("inTwoWeeks");
-  //console.log(inTwoWeeks);
-  let periodDate2 = new Date(month.year, month.number, period.date2);
+  console.log("inTwoWeeks");
+  console.log(inTwoWeeks);
+  let periodDate2 = new Date(month.year, month.number-1, period.date2);
+
+  console.log("periodDate2");
+  console.log(periodDate2);
 
   if (inTwoWeeks > periodDate2) {
     await Period.updateOne({ _id: period._id }, { $set: { isActive: false } }, { upsert: false });
@@ -1224,8 +1227,15 @@ async function checkActivePeriod(period, month) {
       let check = false;
 
       for (let i = 0; i < (27 - inTwoWeeks.getDate()); i = i + 5) {
+        console.log("inTwoWeeks.getDate() + i");
+        console.log(inTwoWeeks.getDate() + i);
+
         let foundPeriod = await Period.updateOne({ date1: { $gte: inTwoWeeks.getDate() + i, $lte: inTwoWeeks.getDate() + i + 4 }, scoredPluses: scoredPluses }, { $set: { isActive: true, maxPlus: maxPlus, secondTime: secondTime } }, { upsert: false });
-        if (foundPeriod.modifiedCount == 1) {
+        
+        console.log("foundPeriod");
+        console.log(foundPeriod);
+
+        if (foundPeriod.nModified == 1) {
           check = true;
           break;
         }

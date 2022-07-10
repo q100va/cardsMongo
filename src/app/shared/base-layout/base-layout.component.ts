@@ -70,4 +70,8 @@ export class BaseLayoutComponent implements OnInit {
   redirectToOrders(): void {
     this.router.navigate(["/orders/create/new"]);
   }
+
+  redirectToInstaOrders(): void {
+    this.router.navigate(["/orders/insta"]);
+  }
 }

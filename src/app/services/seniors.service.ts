@@ -90,4 +90,8 @@ export class SeniorsService {
     console.log("start createSeniorsCollection");
     return this.http.post("/api/seniors/add-many/", { seniors: seniors });
   }
+
+  compareLists(arrayOfNewSeniors, house): Observable<any> {
+    return this.http.post("/api/seniors/compare-lists/", { seniors: arrayOfNewSeniors, house: house });
+  }
 }

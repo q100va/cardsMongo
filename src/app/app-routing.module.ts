@@ -45,6 +45,7 @@ import { ListComponent } from "./pages/list/list.component";
 import { OrderDetailsComponent } from "./pages/order-details/order-details.component";
 import { OrderListComponent } from "./pages/order-list/order-list.component";
 import { NameDayComponent } from "./pages/name-day/name-day.component";
+import { InstaOrdersComponent } from "./pages/insta-orders/insta-orders.component";
 
 const routes: Routes = [
   {
@@ -155,6 +156,11 @@ const routes: Routes = [
       {
         path: "roles/create/new",
         component: RoleCreateComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "orders/insta",
+        component: InstaOrdersComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
       {

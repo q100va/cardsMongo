@@ -231,11 +231,9 @@ router.put("/update/:id", async (req, res) => {
 
 
 // Create many seniors  API
-router.post("/add-many/",  async (req, res) => {
- 
-
+router.post("/add-many/", async (req, res) => {
   try {
-     console.log("start API");
+    console.log("start API");
     let seniors = req.body.seniors;
     for (let senior of seniors) {
       let house = await House.findOne({ nursingHome: senior.nursingHome });
@@ -260,13 +258,9 @@ router.post("/add-many/",  async (req, res) => {
       if (senior.gender == 'ж') senior.gender = 'Female';
       if (senior.gender == 'м') senior.gender = 'Male';
     }
-    /* let result = [];
-    for (let i = 0; i < seniors.lenth-20; i=i+20){
-      let someSeniors = seniors.slice([i], [i+20]);
-       result.push(await addSomeSeniors(someSeniors));
-    }    */
+
     const result = await Senior.insertMany(seniors, { ordered: false });
-    
+
     //console.log(result);
     const createSeniorResponse = new BaseResponse(200, "Query Successful", result);
     return res.status(200).send(createSeniorResponse.toObject());
@@ -279,10 +273,139 @@ router.post("/add-many/",  async (req, res) => {
   }
 });
 
-async function addSomeSeniors(seniors) {
+// Compare seniors lists API
+
+router.post("/compare-lists/", async (req, res) => {
+  try {
+    console.log("start compare-lists API");
+    let newList = req.body.seniors;
+    let house = await House.findOne({ nursingHome: req.body.house });
+    let oldList = await Senior.find({ nursingHome: req.body.house });
+
+    for (let senior of newList) {
+      senior.isRestricted = senior.isRestricted == "false" ? false : true;
+      senior.dateBirthday = +senior.dateBirthday;
+      senior.monthBirthday = +senior.monthBirthday;
+      senior.yearBirthday = +senior.yearBirthday;
+      senior.dateNameDay = senior.dateNameDay ? (+senior.dateNameDay) : 0;
+      senior.monthNameDay = senior.monthNameDay ? (+senior.monthNameDay) : 0;
+      senior.isDisabled = false;
+      senior.noAddress = house.noAddress;
+      senior.isReleased = house.isReleased;
+      //senior.dateEnter = house.dateLastUpdate;
+      senior.dateExit = '';
+      //console.log(senior.dateExit);
+      if (!senior.lastName) senior.lastName = '';
+      if (!senior.patronymic) senior.patronymic = '';
+      if (!senior.comment1) senior.comment1 = '';
+      if (!senior.comment2) senior.comment2 = '';
+      if (!senior.linkPhoto) senior.linkPhoto = '';
+      if (!senior.nameDay) senior.nameDay = '';
+      if (senior.gender == 'ж') senior.gender = 'Female';
+      if (senior.gender == 'м') senior.gender = 'Male';
+    }
+
+    let arrived = [];
+    let absents = [];
+    let changed = [];
+    let doubtful = [];
+    let key = 0;
+
+    for (let newSenior of newList) {
+      let index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday + newSenior.yearBirthday));
+
+      if (index == -1) {
+        newSenior.key = key;
+        key++;
+        arrived.push(newSenior);
+      } else {
+        if (
+          newSenior.isRestricted != oldList[index].isRestricted ||
+          newSenior.dateNameDay != oldList[index].dateNameDay ||
+          newSenior.monthNameDay != oldList[index].monthNameDay ||
+          newSenior.isDisabled != oldList[index].isDisabled ||
+          newSenior.noAddress != oldList[index].noAddress ||
+          newSenior.isReleased != oldList[index].isReleased ||
+          //senior.dateEnter = house.dateLastUpdate;
+          newSenior.dateExit != oldList[index].dateExit ||
+          newSenior.comment1 != oldList[index].comment1 ||
+          newSenior.comment2 != oldList[index].comment2 ||
+          newSenior.linkPhoto != oldList[index].linkPhoto ||
+          newSenior.nameDay != oldList[index].nameDay ||
+          newSenior.gender != oldList[index].gender
+        ) {
+          let difference = {
+            new: newSenior,
+            old: oldList[index]
+          }
+          changed.pushed(difference);
+        }
+      }
+
+    }
+    key = 0;
+    for (let oldSenior of oldList) {
+      if (newList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday)) == -1) {
+        oldSenior.key = key;
+        key++;
+        absents.push(oldSenior);
+      }
+    }
+    let flag = false;
+    for (let oldSenior of absents) {
+
+      let index = arrived.findIndex(item => item.lastName == oldSenior.lastName);
+      if (index != -1) {
+        flag = true;
+      } else {
+        index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
+        if (index != -1) {
+          flag = true;
+        } else {
+          index = arrived.findIndex(item => item.lastName + item.patronymic == oldSenior.lastName + oldSenior.patronymic);
+          if (index != -1) {
+            flag = true;
+          }
+        }
+      }
+      if (flag) {
+        let strange = {
+          new: arrived[index],
+          old: oldSenior
+        }
+        doubtful.push(strange);
+        arrived.splice(index, 1);
+        absents.splice(oldSenior.key);
+      }
+    }
+
+    const result = {
+      arrived: arrived,
+      absents: changed,
+      changed: absents,
+      doubtful: doubtful
+    }
+
+    //const result = await Senior.insertMany(seniors, { ordered: false });
+
+    //console.log(result);
+    const createSeniorResponse = new BaseResponse(200, "Query Successful", result);
+    return res.status(200).send(createSeniorResponse.toObject());
+
+  } catch (error) {
+    // Server error goes here
+    console.log(error);
+    const createSeniorCatchErrorResponse = new BaseResponse(500, "Internal server error", error.message);
+    res.status(500).send(createSeniorCatchErrorResponse.toObject());
+  }
+});
+
+
+
+/* async function addSomeSeniors(seniors) {
   const result = await Senior.insertMany(seniors, { ordered: false });
   return result;
-}
+} */
 
 
 // Correct  senior API

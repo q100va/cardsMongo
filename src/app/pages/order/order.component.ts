@@ -228,9 +228,9 @@ export class OrderComponent implements OnInit {
               this.orderService.createOrder(newOrder).subscribe(
                 async (res) => {
                   this.spinner = false;
-                  let result = res["data"];
+                  let result = res["data"]["result"];
                   if (typeof result == "string") {
-                    this.errorMessage = res["data"];
+                    this.errorMessage = result;
                     console.log(res);
                   } else {
                     //alert(res.msg);

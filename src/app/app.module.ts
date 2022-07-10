@@ -87,6 +87,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NameDayComponent } from './pages/name-day/name-day.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { AddListsComponent } from './pages/add-lists/add-lists.component';
+import { InstaOrdersComponent } from './pages/insta-orders/insta-orders.component';
 
 
 @NgModule({
@@ -124,6 +126,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     OrderDetailsComponent,
     OrderListComponent,
     NameDayComponent,
+    AddListsComponent,
+    InstaOrdersComponent,
 
   ],
   imports: [
