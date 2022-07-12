@@ -288,7 +288,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины июля 2022',
+      holyday: 'Именины августа 2022',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
