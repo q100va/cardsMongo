@@ -39,7 +39,7 @@ const listSchema = new Schema(
     holyday: { type: String },    
 
   },
-  { collection: "lists_july" }
+  { collection: "lists_august" }
 );
 
 module.exports = mongoose.model("List", listSchema);

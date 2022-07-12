@@ -39,7 +39,7 @@ const nameDaySchema = new Schema(
     holyday: { type: String },    
 
   },
-  { collection: "nameDays_july" }
+  { collection: "nameDays_august" }
 );
 
 module.exports = mongoose.model("NameDay", nameDaySchema);

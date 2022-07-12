@@ -111,7 +111,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР июля 2022',
+      holyday: 'ДР августа 2022',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +

@@ -46,6 +46,10 @@
               <mat-icon color="primary">folder_open</mat-icon>
               <span>Группа заявок</span>
             </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToAllOrders()">
+              <mat-icon color="primary">receipt</mat-icon>
+              <span>Все заявки</span>
+            </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToClients()">
               <mat-icon color="primary">mail</mat-icon>
               <span>Поздравляющие</span>
