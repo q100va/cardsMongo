@@ -32,6 +32,10 @@ const celebratorSchema = new Schema({
   gender: { type: String },
   celebrator_id: { type: String },
   holyday:  { type: String },
+  absentComment: {type: String},
+ address:  {type: String},
+  infoComment:  {type: String},
+  adminComment:  {type: String}, 
 
 });
 

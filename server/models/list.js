@@ -36,7 +36,8 @@ const listSchema = new Schema(
     gender: { type: String },
     celebrator_id: { type: String },
     fullData: { type: String },
-    holyday: { type: String },    
+    holyday: { type: String }, 
+    absent: { type: Boolean, default: false },   
 
   },
   { collection: "lists_august" }

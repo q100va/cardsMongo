@@ -1,0 +1,113 @@
+<!--
+============================================
+ html code for Component
+===========================================
+-->
+<br />
+<br />
+<div fxLayout="column">
+    <mat-card>
+        <mat-card-title>Список заявок с выбывшими поздравляемыми</mat-card-title>
+        <br /><br />
+        <p-toast position="center"></p-toast>
+        <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+        <br />
+        <br />
+        <mat-card-content>
+
+            <mat-table [dataSource]="dataSource" class="mat-elevation-z4" matSort matSortActive="orderDate"
+                matSortDisableClear matSortDirection="desc">
+                <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef> Координатор </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.userName }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="orderDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Дата </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.orderDate}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                    <mat-header-cell *matHeaderCellDef> Кол-во адресов </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.amount }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fullName">
+                    <mat-header-cell *matHeaderCellDef> Поздравляющий </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{(dataSource.clientFirstName
+                        ? dataSource.clientFirstName
+                        : "") + " " + (dataSource.clientPatronymic
+                        ? dataSource.clientPatronymic
+                        : "") + " " + (dataSource.clientLastName
+                        ? dataSource.clientLastName
+                        : "") + " " + (dataSource.institute
+                        ? dataSource.institute
+                        : "") }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contact">
+                    <mat-header-cell *matHeaderCellDef> Контактная информация </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.email ? dataSource.email :
+                        dataSource.contactType + " " +
+                        dataSource.contact}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="isAccepted">
+                    <mat-header-cell *matHeaderCellDef> Подтвержден </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.isAccepted ? " да" : " нет"}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="holiday">
+                    <mat-header-cell *matHeaderCellDef> Праздник </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.holiday }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="absents">
+                    <mat-header-cell *matHeaderCellDef> Выбыл(а) </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource">
+                        <div *ngFor="let celebrator of dataSource.absents">
+                            <p style="font-weight: bold; margin: 0; ">{{celebrator.address}}</p>
+                            <p style="font-style: italic; margin: 0;">{{celebrator.infoComment}}</p>
+                            <p style="color: red; font-weight: bold; margin: 0;">{{celebrator.adminComment}}</p>
+                            <p>{{celebrator.lastName}}
+                                {{celebrator.firstName}}
+                                {{celebrator.patronymic}}
+                                {{dataSource.holiday != 'Именины августа 2022' ? celebrator.fullDayBirthday : ''}}
+                                {{dataSource.holiday == 'Именины августа 2022' ? '(' + celebrator.specialComment + ')' : ''}}
+                                {{dataSource.holiday == 'Именины августа 2022' ? celebrator.nameDay : ''}}
+                                {{celebrator.comment1}}
+                                {{celebrator.linkPhoto}}
+                                <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ dataSource.holiday != 'Именины августа 2022' ? celebrator.specialComment : ''}}
+                                </span>
+                                <span style="font-weight: bold; color: rgb(255, 0, 0); "> {{ celebrator.absentComment}}
+                                </span>
+                            </p>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                
+                <!-- Edit Column -->
+                <ng-container matColumnDef="edit">
+                    <mat-header-cell *matHeaderCellDef> Открыть </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource">
+                        <mat-icon class="icon-cursor" routerLink="/orders/order/{{ dataSource._id }}" color="primary">
+                            pageview
+                        </mat-icon>
+                    </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+            </mat-table>
+
+            <!--             <mat-paginator [pageSizeOptions]="[10, 15, 20]"
+            showFirstLastButtons 
+            >
+</mat-paginator> -->
+
+            <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+        </mat-card-content>
+
+    </mat-card>
+</div>

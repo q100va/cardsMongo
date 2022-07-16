@@ -47,7 +47,7 @@ async function findAllMonthCelebrators(month) {
     filledRegions.push(region.region);
   }
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, isRestricted: false, region: { $nin: filledRegions } });
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit : null, isRestricted: false, region: { $nin: filledRegions } });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -247,7 +247,7 @@ async function findAllMonthNameDays(month) {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthNameDays newList");
-  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, isRestricted: false });
+  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, dateExit : null, isRestricted: false });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";

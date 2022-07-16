@@ -34,13 +34,14 @@
               <span>Профайл</span>
             </button>
             <!-- admin-locked -->
-            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToOrders()">
-              <mat-icon color="primary">book</mat-icon>
-              <span>Заявки</span>
-            </button>
+
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToUpdateLists()">
+              <mat-icon color="primary">backup</mat-icon>
+              <span>Обновление</span>
             </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToInstaOrders()">
               <mat-icon color="primary">folder_open</mat-icon>
@@ -50,6 +51,10 @@
               <mat-icon color="primary">receipt</mat-icon>
               <span>Все заявки</span>
             </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToAllAbsents()">
+              <mat-icon color="primary">warning</mat-icon>
+              <span>Все выбывшие</span>
+            </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToClients()">
               <mat-icon color="primary">mail</mat-icon>
               <span>Поздравляющие</span>
@@ -58,13 +63,13 @@
               <mat-icon color="primary">group</mat-icon>
               <span>Поздравляемые</span>
             </button>
-            <button *ngIf="isAdmin" mat-menu-item routerLink="/user">
-              <mat-icon color="primary">person</mat-icon>
-              <span>Пользователи</span>
-            </button>
             <button *ngIf="isAdmin" mat-menu-item routerLink="/houses">
               <mat-icon color="primary">house</mat-icon>
               <span>Интернаты</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item routerLink="/user">
+              <mat-icon color="primary">person</mat-icon>
+              <span>Пользователи</span>
             </button>
             <button *ngIf="isAdmin" mat-menu-item routerLink="/roles">
               <mat-icon color="primary">build</mat-icon>

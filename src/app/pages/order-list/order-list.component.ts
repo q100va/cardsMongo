@@ -58,14 +58,14 @@ export class OrderListComponent implements AfterViewInit {
       (res) => {
         this.orders = res["data"];
         this.orders.reverse();
-        console.log(this.orders);
+        //console.log(this.orders);
         this.dataSource = new MatTableDataSource(this.orders);
-        console.log("this.dataSource");
-        console.log(this.dataSource);
-        console.log(this.paginator);
+        //console.log("this.dataSource");
+        //console.log(this.dataSource);
+        //console.log(this.paginator);
         this.dataSource.paginator = this.paginator;
-        console.log("this.dataSource.paginator");
-        console.log(this.dataSource.paginator);
+        //console.log("this.dataSource.paginator");
+        //console.log(this.dataSource.paginator);
       },
       (err) => {
         alert(err);

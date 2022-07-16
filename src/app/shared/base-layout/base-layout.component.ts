@@ -78,4 +78,12 @@ export class BaseLayoutComponent implements OnInit {
   redirectToAllOrders(): void {
     this.router.navigate(["/orders/all"]);
   }
+
+  redirectToUpdateLists(): void {
+    this.router.navigate(["/seniors/update-lists"]);
+  }
+
+  redirectToAllAbsents(): void {
+    this.router.navigate(["/orders/absents/all"]);
+  }
 }

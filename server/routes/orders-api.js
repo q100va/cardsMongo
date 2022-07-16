@@ -68,7 +68,7 @@ router.post("/create/period/", async (req, res) => {
 
 
 /**
- * API to find order (OK)
+ * API to find all orders (OK)
  */
 
 router.get("/", async (req, res) => {
@@ -167,7 +167,7 @@ router.get("/find/:userName", async (req, res) => {
           "Query successful",
           orders
         );
-        console.log(orders);
+        //console.log(orders);
         res.json(readUserResponse.toObject());
       }
     });
@@ -206,8 +206,8 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
           "Query successful",
           orders
         );
-        console.log("findNotConfirmed");
-        console.log(orders);
+        // console.log("findNotConfirmed");
+        //console.log(orders);
         res.json(readUserResponse.toObject());
       }
     });
@@ -703,11 +703,11 @@ async function createOrder(newOrder) {
     } else {
       if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
 
-        console.log("newOrder.filter.region");
-  console.log(newOrder.filter.region);
+      console.log("newOrder.filter.region");
+      console.log(newOrder.filter.region);
 
-  console.log("proportion.oneHouse");
-  console.log(proportion.oneHouse);
+      console.log("proportion.oneHouse");
+      console.log(proportion.oneHouse);
 
 
 
@@ -1109,6 +1109,7 @@ async function searchSenior(
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
+    absent: { $ne: true }
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
@@ -1213,7 +1214,7 @@ async function checkActivePeriod(period, month) {
 
   console.log("inTwoWeeks");
   console.log(inTwoWeeks);
-  let periodDate2 = new Date(month.year, month.number-1, period.date2);
+  let periodDate2 = new Date(month.year, month.number - 1, period.date2);
 
   console.log("periodDate2");
   console.log(periodDate2);
@@ -1231,7 +1232,7 @@ async function checkActivePeriod(period, month) {
         console.log(inTwoWeeks.getDate() + i);
 
         let foundPeriod = await Period.updateOne({ date1: { $gte: inTwoWeeks.getDate() + i, $lte: inTwoWeeks.getDate() + i + 4 }, scoredPluses: scoredPluses }, { $set: { isActive: true, maxPlus: maxPlus, secondTime: secondTime } }, { upsert: false });
-        
+
         console.log("foundPeriod");
         console.log(foundPeriod);
 
@@ -1288,6 +1289,7 @@ async function checkActiveList(period, month, isOutDate, minDate, maxDate) {
         let seniorToGreet = await List.findOne({
           "plusAmount": { $lt: checkingPeriod.maxPlus },
           "dateBirthday": { $gte: checkingPeriod.date1, $lte: checkingPeriod.date2 },
+          "absents": { $ne: null }
         });
         if (!seniorToGreet) {
           await Period.updateOne({ _id: checkingPeriod._id }, { $set: { maxPlus: 4, scoredPluses: checkingPeriod.maxPlus, secondTime: true } }, { upsert: false });
@@ -1300,6 +1302,7 @@ async function checkActiveList(period, month, isOutDate, minDate, maxDate) {
     let seniorToGreet = await List.findOne({
       "plusAmount": { $lt: period.maxPlus },
       "dateBirthday": { $gte: period.date1, $lte: period.date2 },
+      "absent": { $ne: true }
     });
     console.log("seniorToGreet2");
     console.log(seniorToGreet);
@@ -1412,140 +1415,61 @@ router.delete("/", async (req, res) => {
   }
 });
 
+// API to find all orders with absents
+
+router.get("/absents/all", async (req, res) => {
+  try {
+    let orders = await Order.find({ isDisabled: false, "lineItems.celebrators.absentComment": "ВЫБЫЛ(А), НЕ ПОЗДРАВЛЯТЬ!" });
+
+    let result = upgradeOrders(orders);
+    console.log("result");
+    console.log(result);
+    const readOrdersResponse = new BaseResponse(
+      200,
+      "Query successful",
+      result
+    );
+    res.json(readOrdersResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const readOrdersCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      e
+    );
+    res.status(500).send(readOrdersCatchErrorResponse.toObject());
+  }
+});
+
+function upgradeOrders(orders) {
+  console.log("orders");
+  console.log(orders);
+
+  for (let order of orders) {
+    order.absents = [];
+    for (let line of order.lineItems) {
+      let absentSeniors = line.celebrators.filter(item => item.absentComment == "ВЫБЫЛ(А), НЕ ПОЗДРАВЛЯТЬ!");
+      console.log("absentSeniors");
+      console.log(absentSeniors);
+      for (let senior of absentSeniors) {
+        senior.address = line.address;
+        senior.infoComment = line.infoComment;
+        senior.adminComment = line.adminComment;
+        order.absents.push(senior);
+      }
+          console.log("order.absents");
+    console.log(order.absents);
+    }
+    //order.absents.concat(absentSeniors);
+  }
+
+console.log("orders");
+console.log(orders);
+return orders;
+}
+
 
 
 module.exports = router;
 
-/* // Change period
-router.patch("/change/:key", async (req, res) => {
-  try {
-    List.findOne({ key: req.params.key }, function (err, list) {
-      if (err) {
-        const findListByIdMongodbErrorResponse = new BaseResponse(
-          "500",
-          "Internal Server Error",
-          err
-        );
-        res.status(500).send(findListByIdMongodbErrorResponse.toObject());
-      } else {
-        list.set({
-          active: req.body.active,
-        });
-
-        list.save(function (err, updatedList) {
-          if (err) {
-            console.log(err);
-            const saveListInvalidIdResponse = new BaseResponse(
-              500,
-              "Internal server error",
-              err
-            );
-            res.status(500).send(saveListInvalidIdResponse.toObject);
-          } else {
-            console.log(updatedList);
-            const updateListResponse = new BaseResponse(
-              200,
-              "Query successful",
-              updatedList.key
-            );
-            res.json(updateListResponse.toObject());
-          }
-        });
-      }
-    });
-  } catch (e) {
-    const findListByIdCatchErrorResponse = new BaseResponse(
-      "500",
-      "Internal Server Error",
-      e.message
-    );
-    res.status(500).send(findListByIdCatchErrorResponse.toObject());
-  }
-}); */
-
-
-/**
- * find proportion (OK)
- */
-
-/* async function getProportion(neededAmount) {
-  try {
-    Proportion.findOne({ amount: neededAmount }, async function (err, proportion) {
-      //console.log(neededAmount);
-      if (err) {
-        console.log(err);
-        return err;
-      } else {
-        if (!proportion) {
-          const response = `no proportion`;
-          console.log(response);
-          return response;
-        } else {
-          return proportion;
-        }
-      }
-    });
-  } catch (e) {
-    console.log(e);
-    return e;
-    ;
-  }
-}
-
-//find active period
-
-async function getActivePeriod() {
-
-    let period = Period.findOne({ active: true })
-}
- */
-
-/* router.get("/lists/", async (req, res) => {
-  try {
-    List.find({}, function (err, lists) {
-
-      if (err) {
-        console.log(err);
-        const readListMongodbErrorResponse = new BaseResponse(500, "Internal server error", err);
-        res.status(500).send(readListMongodbErrorResponse.toObject());
-      } else {
-        if (!lists) {
-          const response = `Invalid list`;
-          console.log(response);
-          res.send(response);
-        } else {
-          const readListResponse = new BaseResponse(200, "Query successful", lists);
-          console.log(lists);
-          res.json(readListResponse.toObject());
-        }
-      }
-    });
-  } catch (e) {
-    console.log(e);
-    const readListCatchErrorResponse = new BaseResponse(500, "Internal server error", e);
-    res.status(500).send(readListCatchErrorResponse.toObject());
-  }
-}); */
-
-
-/* // get list of houses
-async function getListNursingHomes() {
-  try {
-    House.findOne({ isDisabled: false }, async function (err, houses) {
-
-      if (err) {
-        console.log(err);
-        return err;
-      } else {
-        return houses;
-      }
-    }
-    );
-  } catch (e) {
-    console.log(e);
-    return e;
-    ;
-  }
-} */
-
-//generate list of seniors with addresses

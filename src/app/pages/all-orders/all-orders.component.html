@@ -28,6 +28,11 @@
         <mat-card-content>
 
             <mat-table [dataSource]="dataSource" class="mat-elevation-z4"  matSort matSortActive="orderDate" matSortDisableClear matSortDirection="desc">
+                
+                <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef> Координатор </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.userName }} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="orderDate">
                     <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Дата </mat-header-cell>

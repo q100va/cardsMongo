@@ -90,6 +90,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AddListsComponent } from './pages/add-lists/add-lists.component';
 import { InstaOrdersComponent } from './pages/insta-orders/insta-orders.component';
 import { AllOrdersComponent } from './pages/all-orders/all-orders.component';
+import { AllAbsentsComponent } from './pages/all-absents/all-absents.component';
 
 
 @NgModule({
@@ -130,6 +131,7 @@ import { AllOrdersComponent } from './pages/all-orders/all-orders.component';
     AddListsComponent,
     InstaOrdersComponent,
     AllOrdersComponent,
+    AllAbsentsComponent,
 
   ],
   imports: [

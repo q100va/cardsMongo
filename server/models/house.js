@@ -25,7 +25,7 @@ let housesSchema = new Schema(
     contact: { type: String },
     isDisabled: { type: Boolean, default: false },
     website: { type: String },
-  },
+    datesOfUpdates: [Date]},
   { collection: "houses" }
 );
 

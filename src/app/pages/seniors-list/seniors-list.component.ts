@@ -22,25 +22,32 @@ import { SeniorsService } from "src/app/services/seniors.service";
   styleUrls: ["./seniors-list.component.css"],
 })
 export class SeniorsListComponent implements OnInit {
-  senior: Senior;
+  seniors: Senior[];
+  length: number;
   name: string;
   _id: string;
-  displayedColumns = ["region", "nursingHome", "lastName", "patronymic", "isRestricted", "DOB", "gender", "comment1", "comment2", "linkPhoto", "nameDay", "edit", "delete"];
+  nursingHome: string;
+  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "nameDay", "edit", "delete", "isRestricted"];
   constructor(
     private seniorsService: SeniorsService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {
-    this.seniorsService.findAllSeniors().subscribe(
+
+  }
+
+  ngOnInit(): void {}
+
+  formList(nursingHome){
+    this.seniorsService.findSeniorsFromOneHome(nursingHome).subscribe(
       (res) => {
-        this.senior = res["data"];
+        this.seniors = res["data"];
+        this.length = this.seniors.length;
       },
       (err) => {},
       () => {}
     );
   }
-
-  ngOnInit(): void {}
 
   deleteSenior(_id: string) {
     console.log(_id);
@@ -52,9 +59,10 @@ export class SeniorsListComponent implements OnInit {
           this.seniorsService.deleteSenior(_id).subscribe(
             (res) => {
               //this.user = res.data;
-              this.seniorsService.findAllSeniors().subscribe(
+              this.seniorsService.findSeniorsFromOneHome(this.nursingHome).subscribe(
                 (res) => {
-                  this.senior = res["data"];
+                  this.seniors = res["data"];
+                  this.length = this.seniors.length;
                 },
                 (err) => {},
                 () => {}

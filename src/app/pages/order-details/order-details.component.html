@@ -12,9 +12,10 @@
     <mat-card fxFlex class="mat-elevation-z8 profile-container">
 
         <mat-card-actions>
-            <button class="cancel" (click)="close()" mat-raised-button>
+<!--             <button class="cancel" (click)="close()" mat-raised-button>
                 Закрыть
-            </button>
+            </button> -->
+            <a href="javascript:history.back()">Закрыть</a>
 
         </mat-card-actions>
         <mat-card-content *ngIf="order" style = "margin-left: 60px;">
@@ -52,6 +53,8 @@
                         {{celebrator.comment1}}
                         {{celebrator.linkPhoto}}
                         <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины августа 2022' ? celebrator.specialComment : ''}}
+                        </span>
+                        <span style="font-weight: bold; color: rgb(255, 0, 0); " *ngIf="celebrator.absentComment"> {{ celebrator.absentComment}}
                         </span>
                     </div>
                     <br />

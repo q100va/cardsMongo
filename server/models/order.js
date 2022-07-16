@@ -39,6 +39,7 @@ const orderSchema = new Schema(
     },
     isCompleted: { type: Boolean, default: false },
     isDisabled: { type: Boolean, default: false },
+    absents: [celebrator]
   },
    { collection: "orders" }
 );

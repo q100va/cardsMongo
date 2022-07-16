@@ -109,7 +109,7 @@ router.get("/", async (req, res) => {
             message: "Server error: " + err.message,
           });
         } else {
-          console.log(houses);
+          //console.log(houses);
           const findAllResponse = new BaseResponse(200, "Query successful", houses);
           res.json(findAllResponse.toObject());
         }

@@ -9,6 +9,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Senior } from "../shared/interfaces/seniors.interface";
+import { House } from "../shared/interfaces/houses.interface";
 
 @Injectable({
   providedIn: "root",
@@ -18,6 +19,10 @@ export class SeniorsService {
 
   findAllSeniors(): Observable<any> {
     return this.http.get("/api/seniors");
+  }
+
+  findSeniorsFromOneHome(nursingHome): Observable<any> {
+    return this.http.get("/api/seniors/one-home/" + nursingHome);
   }
 
   findSeniorById(_id: string): Observable<any> {
@@ -91,7 +96,23 @@ export class SeniorsService {
     return this.http.post("/api/seniors/add-many/", { seniors: seniors });
   }
 
-  compareLists(arrayOfNewSeniors, house): Observable<any> {
-    return this.http.post("/api/seniors/compare-lists/", { seniors: arrayOfNewSeniors, house: house });
+  compareListsBackend(arrayOfNewSeniors:  Array<Senior> , house: House): Observable<any> {
+
+    console.log("start compareListsBackend");
+    return this.http.put("/api/seniors/compare-lists/", {    
+      seniors: arrayOfNewSeniors,
+      house: house,
+    });
+  }
+
+  applyChanges(resultOfCompare, date, house): Observable<any> {
+    console.log("start applyChanges");
+    return this.http.put("/api/seniors/update-lists/", {
+      absents: resultOfCompare.absents,
+      arrived: resultOfCompare.arrived,
+      changed: resultOfCompare.accepted,
+      date: date,
+      house: house,
+    });
   }
 }

@@ -41,6 +41,7 @@ export class AllOrdersComponent implements AfterViewInit {
   }
   @ViewChild("paginator") paginator: MatPaginator;
   displayedColumns = [
+    "userName",
     "orderDate",
     "amount",
     "fullName",

@@ -47,6 +47,8 @@ import { OrderListComponent } from "./pages/order-list/order-list.component";
 import { NameDayComponent } from "./pages/name-day/name-day.component";
 import { InstaOrdersComponent } from "./pages/insta-orders/insta-orders.component";
 import { AllOrdersComponent } from "./pages/all-orders/all-orders.component";
+import { AddListsComponent } from "./pages/add-lists/add-lists.component";
+import { AllAbsentsComponent } from "./pages/all-absents/all-absents.component";
 
 const routes: Routes = [
   {
@@ -155,6 +157,11 @@ const routes: Routes = [
         canActivate: [AuthGuard, RoleGuard],
       },
       {
+        path: "seniors/update-lists",
+        component: AddListsComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
         path: "roles/create/new",
         component: RoleCreateComponent,
         canActivate: [AuthGuard, RoleGuard],
@@ -163,9 +170,15 @@ const routes: Routes = [
         path: "orders/insta",
         component: InstaOrdersComponent,
         canActivate: [AuthGuard, RoleGuard],
-      },      {
+      },
+      {
         path: "orders/all",
         component: AllOrdersComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "orders/absents/all",
+        component: AllAbsentsComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
       {
