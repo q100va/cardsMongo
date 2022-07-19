@@ -19,7 +19,7 @@ export class AddListsComponent implements OnInit {
   movedFromAbsents: number;
   movedFromDoubtful: number;
 
-    accepted_lastName: string ="";
+/*     accepted_lastName: string ="";
     accepted_firstName: string ="";
     accepted_patronymic: string ="";
     accepted_dateBirthday: number = 0;
@@ -36,7 +36,26 @@ export class AddListsComponent implements OnInit {
     accepted_linkPhoto: string ="";
     accepted_nameDay: string ="";
     accepted_dateNameDay: number = 0;
-    accepted_monthNameDay: number = 0;
+    accepted_monthNameDay: number = 0; */
+
+    accepted_lastName: string;
+    accepted_firstName: string;
+    accepted_patronymic: string;
+    accepted_dateBirthday: number;
+    accepted_monthBirthday: number;
+    accepted_yearBirthday: number;
+    accepted_isDisabled:  boolean;
+    accepted_isRestricted:  boolean;
+    accepted_noAddress:  boolean;
+    accepted_isReleased:  boolean;
+    accepted_dateExit: Date;
+    accepted_gender: string;
+    accepted_comment1: string;
+    accepted_comment2: string;
+    accepted_linkPhoto: string;
+    accepted_nameDay: string;
+    accepted_dateNameDay: number;
+    accepted_monthNameDay: number;
 
   allAccepted = [];
 
@@ -134,41 +153,77 @@ export class AddListsComponent implements OnInit {
 
   moveToChanged(movedFromAbsentsKey, movedFromArrivedKey) {
     let difference = {
-      key: this.resultOfCompare.changed.length,
-      old: this.resultOfCompare.absents[movedFromAbsentsKey],
-      new: this.resultOfCompare.arrived[movedFromArrivedKey],
+      key: movedFromAbsentsKey,
+      old: this.resultOfCompare.absents.find(item => item.key == movedFromAbsentsKey),
+      new: this.resultOfCompare.arrived.find(item => item.key == movedFromArrivedKey),
     };
     this.resultOfCompare.changed.push(difference);
-    this.resultOfCompare.absents.splice(movedFromAbsentsKey, 1);
-    this.resultOfCompare.arrived.splice(movedFromArrivedKey, 1);
+    this.resultOfCompare.absents.splice( this.resultOfCompare.absents.findIndex(item => item.key == movedFromAbsentsKey), 1);
+    this.resultOfCompare.arrived.splice(this.resultOfCompare.arrived.findIndex(item => item.key == movedFromArrivedKey), 1);
   }
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
-    this.resultOfCompare.doubtful[movedFromDoubtful].key =
-      this.resultOfCompare.changed.length;
     this.resultOfCompare.changed.push(
-      this.resultOfCompare.doubtful[movedFromDoubtful]
+      this.resultOfCompare.doubtful.find(item => item.key == movedFromDoubtful)
     );
-    this.resultOfCompare.doubtful.splice(movedFromDoubtful, 1);
+    this.resultOfCompare.doubtful.splice(this.resultOfCompare.doubtful.findIndex(item => item.key == movedFromDoubtful), 1);
   }
 
   moveToAbsentsArrived(movedFromDoubtful) {
-    this.resultOfCompare.doubtful[movedFromDoubtful].old.key =
-      this.resultOfCompare.absents.length;
-    this.resultOfCompare.doubtful[movedFromDoubtful].new.key =
-      this.resultOfCompare.arrived.length;
-    this.resultOfCompare.absents.push(
-      this.resultOfCompare.doubtful[movedFromDoubtful].old
-    );
-    this.resultOfCompare.arrived.push(
-      this.resultOfCompare.doubtful[movedFromDoubtful].new
-    );
-    this.resultOfCompare.doubtful.splice(movedFromDoubtful, 1);
+    console.log(movedFromDoubtful);
+    console.log("movedFromDoubtful");
+    const absent = this.resultOfCompare.doubtful.find(item => item.key == movedFromDoubtful);
+    this.resultOfCompare.absents.push(absent.old);
+    const arrived = this.resultOfCompare.doubtful.find(item => item.key == movedFromDoubtful)
+    this.resultOfCompare.arrived.push(arrived.new);
+    this.resultOfCompare.doubtful.splice(this.resultOfCompare.doubtful.findIndex(item => item.key == movedFromDoubtful), 1);
   }
 
-  acceptChanges(accepted, key) {
-    this.allAccepted.push(accepted);
-    this.resultOfCompare.changed.splice(key, 1);
+  acceptChanges(accepted, key, person) {
+    const cloneAccepted = {
+      id: accepted.id ? accepted.id : person.id,
+      region : person.region,
+      nursingHome: person.nursingHome,
+      lastName: accepted.lastName ? accepted.lastName : person.lastName,
+      firstName: accepted.firstName ? accepted.firstName : person.firstName,
+      patronymic: accepted.patronymic ? accepted.patronymic : person.patronymic,
+      dateBirthday: accepted.dateBirthday ? accepted.dateBirthday : person.dateBirthday,
+      monthBirthday: accepted.monthBirthday ? accepted.monthBirthday : person.monthBirthday,
+      yearBirthday: accepted.yearBirthday ? accepted.yearBirthday : person.yearBirthday,
+      isDisabled: accepted.isDisabled ? accepted.isDisabled : person.isDisabled,
+      isRestricted: accepted.isRestricted ? accepted.isRestricted : person.isRestricted,
+      noAddress: accepted.noAddress ? accepted.noAddress : person.noAddress,
+      isReleased: accepted.isReleased ? accepted.isReleased : person.isReleased,
+      dateExit: accepted.dateExit ? accepted.dateExit : person.dateExit,
+      gender: accepted.gender ? accepted.gender : person.gender,
+      comment1: accepted.comment1 ? accepted.comment1 : person.comment1,
+      comment2: accepted.comment2 ? accepted.comment2 : person.comment2,
+      linkPhoto: accepted.linkPhoto ? accepted.linkPhoto : person.linkPhoto,
+      nameDay: accepted.nameDay ? accepted.nameDay : person.nameDay,
+      dateNameDay: accepted.dateNameDay ? accepted.dateNameDay : person.dateNameDay,
+      monthNameDay: accepted.monthNameDay ? accepted.monthNameDay : person.monthNameDay,
+    }
+        this.allAccepted.push(cloneAccepted);
+    this.resultOfCompare.changed.splice(this.resultOfCompare.changed.findIndex(item => item.key == key), 1);
+
+    this.accepted_lastName = undefined;
+    this.accepted_firstName= undefined;
+    this.accepted_patronymic= undefined;
+    this.accepted_dateBirthday= undefined;
+    this.accepted_monthBirthday= undefined;
+    this.accepted_yearBirthday= undefined;
+    this.accepted_isDisabled= undefined;
+    this.accepted_isRestricted= undefined;
+    this.accepted_noAddress= undefined;
+    this.accepted_isReleased= undefined;
+    this.accepted_dateExit= undefined;
+    this.accepted_gender= undefined;
+    this.accepted_comment1= undefined;
+    this.accepted_comment2= undefined;
+    this.accepted_linkPhoto= undefined;
+    this.accepted_nameDay= undefined;
+    this.accepted_dateNameDay= undefined;
+    this.accepted_monthNameDay= undefined;
   }
 
   acceptAllChanges() {

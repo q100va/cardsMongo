@@ -285,7 +285,7 @@ router.patch("/delete/:id", async (req, res) => {
 });
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения июля 2022") {
+  if (deletedOrder.holiday == "Дни рождения августа 2022") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -337,11 +337,12 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    for (let lineItem of deletedOrder.lineItems) {
+    if (deletedOrder.holiday == "Именины августа 2022")
+{    for (let lineItem of deletedOrder.lineItems) {
       for (let person of lineItem.celebrators) {
         await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
       }
-    }
+    }}
   }
 }
 
@@ -1035,8 +1036,8 @@ async function collectSeniors(data) {
   const searchOrders = {
     oldWomen: ["oldWomen", "oldMen", "oldest"],
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
-    yang: ["yang", "oldWomen", "oldMen", "oldest"],
-    special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
+    yang: ["yang", "oldMen", "oldWomen", "oldest"],
+    special: ["special", "yang", "oldWomen", "oldMen",  "oldest"],
     specialOnly: ["special"],
     allCategory: ["oldMen", "oldWomen", "yang", "oldest", "special"]
   };

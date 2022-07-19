@@ -5,6 +5,7 @@ import { List } from "src/app/shared/interfaces/list.interface";
 import { seniors } from "server/models/seniors_list.js";
 import { houses } from "server/models/houses_list.js";
 import { SeniorsService } from "src/app/services/seniors.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-list",
@@ -25,7 +26,8 @@ export class ListComponent implements OnInit {
   constructor(
     private listService: ListService,
     private housesService: HousesService,
-    private seniorsService: SeniorsService
+    private seniorsService: SeniorsService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {}
@@ -102,7 +104,7 @@ export class ListComponent implements OnInit {
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <2);
+        this.lists = res["data"].filter(item => item.plusAmount <3);
 
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
@@ -187,5 +189,20 @@ export class ListComponent implements OnInit {
         alert("Произошла ошибка, обратитесь к администратору! " + err.message);
       }
     );
+  }
+
+  deleteDoubleList() {
+    this.listService.deleteDoubleList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+    
   }
 }

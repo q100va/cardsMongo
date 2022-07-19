@@ -15,7 +15,26 @@ const Period = require("../models/period");
 
 //const User = require("../models/user");
 
+// Delete double birthday list API 
 
+router.delete("/double", async (req, res) => {
+  try {
+
+    let fullList = await List.find({});
+    for (let item of fullList) {
+      let found = await List.find({fullData: item.fullData, plusAmount: 0, _id: {$ne: item._id}});
+      console.log("found");
+      console.log(found);
+    }
+    const deleteListResponse = new BaseResponse(200, "Query Successful", true);
+    res.json(deleteListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const deleteHouseCatchErrorResponse = new BaseResponse("500", "MongoDB server error", e);
+    res.status(500).send(deleteHouseCatchErrorResponse.toObject());
+  }
+});
 
 
 // Create birthday list API 
@@ -41,14 +60,22 @@ async function findAllMonthCelebrators(month) {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
-  let activeRegions = await List.find({});
-  let filledRegions = [];
+  let activeList = await List.find({});
+/*   let filledRegions = [];
   for (region of activeRegions) {
     filledRegions.push(region.region);
-  }
+  } */
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit : null, isRestricted: false, region: { $nin: filledRegions } });
-  //console.log(list);
+/*   let filledIds = [];
+  for (item of activeList) {
+    filledIds.push(item._id);
+  }
+  console.log("filledIds");
+  console.log(filledIds); */
+
+
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit : null, isRestricted: false });
+  console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
   console.log("2- seniors" + list.length);
@@ -135,7 +162,7 @@ async function findAllMonthCelebrators(month) {
   console.log("2.5 - " + newList.length);
 
   const options = { ordered: false };
-  let finalList = await List.insertMany(newList, options);
+  //let finalList = await List.insertMany(newList, options);
 
   //console.log(finalList);
 

@@ -47,6 +47,12 @@ export class ListService {
     
   }
 
+  deleteDoubleList() {
+    console.log("deleteDoubleList");
+    return this.http.delete("/api/lists/double");
+    
+  }
+
 
 
   

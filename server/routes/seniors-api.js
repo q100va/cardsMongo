@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
 // Find all seniors from one home
 router.get("/one-home/:nursingHome", async (req, res) => {
   try {
-    Senior.find({nursingHome: req.params.nursingHome})
+    Senior.find({ nursingHome: req.params.nursingHome })
       .where("isDisabled")
       .equals(false)
       .exec(function (err, seniors) {
@@ -47,6 +47,11 @@ router.get("/one-home/:nursingHome", async (req, res) => {
           const readSeniorsMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
           res.status(500).send(readSeniorsMongodbErrorResponse.toObject());
         } else {
+          seniors.sort(
+            (prev, next) => {
+              if (prev.lastName < next.lastName) return -1;
+              if (prev.lastName > next.lastName) return 1;
+            });
           const readSeniorsResponse = new BaseResponse(200, "Query Successful", seniors);
           res.json(readSeniorsResponse.toObject());
         }
@@ -348,15 +353,14 @@ router.put("/compare-lists/", async (req, res) => {
     let absents = [];
     let changed = [];
     let doubtful = [];
-    let keyNew = 0;
-    let keyChanged = 0;
+    let key = 0;
     for (let newSenior of newList) {
       let index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday + newSenior.yearBirthday));
-      console.log("index");
-      console.log(index);
+      // console.log("index");
+      // console.log(index);
       if (index == -1) {
-        newSenior.key = keyNew;
-        keyNew++;
+        newSenior.key = key;
+        key++;
         arrived.push(newSenior);
       } else {
         if (
@@ -375,54 +379,91 @@ router.put("/compare-lists/", async (req, res) => {
           newSenior.gender != oldList[index].gender
         ) {
           let difference = {
-            key: keyChanged,
+            key: key,
             new: newSenior,
             old: oldList[index]
           }
-          keyChanged++;
+          key++;
           changed.push(difference);
         }
       }
 
     }
-    let keyOld = 0;
+
     for (let oldSenior of oldList) {
       if (newList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday)) == -1) {
-        oldSenior.key = keyOld;
-        keyOld++;
+        oldSenior.key = key;
+        key++;
         absents.push(oldSenior);
       }
     }
-    let flag = false;
-    let keyDoubtful = 0;
-    for (let oldSenior of absents) {
+    console.log("absents");
+    console.log(absents.length);
+    console.log("arrived");
+    console.log(arrived.length);
+    console.log("changed");
+    console.log(changed.length);
+    console.log("doubtful");
+    console.log(doubtful.length);
 
-      let index = arrived.findIndex(item => item.lastName == oldSenior.lastName);
+    let indexes = [];
+    for (let oldSenior of absents) {
+      let flag = false;
+      let index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
       if (index != -1) {
         flag = true;
       } else {
-        index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
+        index = arrived.findIndex(item => item.lastName + item.patronymic == oldSenior.lastName + oldSenior.patronymic);
         if (index != -1) {
           flag = true;
         } else {
-          index = arrived.findIndex(item => item.lastName + item.patronymic == oldSenior.lastName + oldSenior.patronymic);
+          index = arrived.findIndex(item => item.lastName + item.firstName + item.patronymic == oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic);
           if (index != -1) {
             flag = true;
           }
         }
       }
+      // console.log("index");
+      //console.log(index);
+
       if (flag) {
         let strange = {
-          key: keyDoubtful,
+          key: key,
           new: arrived[index],
           old: oldSenior
         }
-        keyDoubtful++;
+
         doubtful.push(strange);
         arrived.splice(index, 1);
-        absents.splice(oldSenior.key);
+        console.log("oldSenior.key");
+        console.log(oldSenior.key);
+        //console.log("index");
+        // absents.forEach(item => )
+
+        indexes.push(oldSenior.key);
+        key++;
       }
     }
+    console.log("indexes");
+    console.log(indexes);
+
+    for (let i of indexes) {
+      let deleted = absents.splice(absents.findIndex(item => item.key == i), 1);
+      console.log("indexD");
+      console.log(i);
+      //console.log("deleted");
+      //console.log(deleted);
+    }
+
+
+    console.log("absents");
+    console.log(absents.length);
+    console.log("arrived");
+    console.log(arrived.length);
+    console.log("changed");
+    console.log(changed.length);
+    console.log("doubtful");
+    console.log(doubtful.length);
 
     const result = {
       arrived: arrived,
@@ -476,11 +517,49 @@ router.put("/update-lists/", async (req, res) => {
       let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
-      if (senior.monthBirthday == month || senior.monthNameDay == month) {
+      if (senior.monthBirthday == month) {
         let foundSenior = await List.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         console.log("foundSenior");
         console.log(foundSenior);
-        let resList = await List.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
+        if (foundSenior) {
+          let resList = await List.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
+          console.log("resList");
+          console.log(resList);
+          let ordersToChange = await Order.find({ "lineItems.celebrators.celebrator_id": foundSenior._id, isDisabled: false });
+          console.log("ordersToChange");
+          console.log(ordersToChange);
+          if (ordersToChange.length > 0) {
+            for (let orderToChange of ordersToChange) {
+              console.log("orderToChange");
+              console.log(orderToChange);
+              for (let line of orderToChange.lineItems) {
+                console.log("foundSenior._id.toString()");
+                console.log(foundSenior._id.toString());
+                console.log("line.celebrators[0].celebrator_id");
+                console.log(line.celebrators[0].celebrator_id);
+                let index = line.celebrators.findIndex(item => item.celebrator_id == foundSenior._id.toString());
+                console.log("index");
+                console.log(index);
+                if (index != -1) {
+                  console.log("line.celebrators");
+                  console.log(line.celebrators);
+                  line.celebrators[index].absentComment = "ВЫБЫЛ(А), НЕ ПОЗДРАВЛЯТЬ!";
+                }
+
+              }
+              let resReplacement = await Order.replaceOne({ _id: orderToChange._id }, orderToChange);
+              console.log("resReplacement");
+              console.log(resReplacement);
+            }
+
+          }
+        }
+      }
+      if (senior.monthNameDay == month) {
+        let foundSenior = await NameDay.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
+        console.log("foundSenior");
+        console.log(foundSenior);
+        let resList = await NameDay.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
         console.log("resList");
         console.log(resList);
         let orderToChange = await Order.findOne({ "lineItems.celebrators.celebrator_id": foundSenior._id, isDisabled: false });
@@ -493,7 +572,7 @@ router.put("/update-lists/", async (req, res) => {
             console.log(foundSenior._id.toString());
             console.log("line.celebrators[0].celebrator_id");
             console.log(line.celebrators[0].celebrator_id);
-            let index = line.celebrators.findIndex(item =>  item.celebrator_id == foundSenior._id.toString());
+            let index = line.celebrators.findIndex(item => item.celebrator_id == foundSenior._id.toString());
             console.log("index");
             console.log(index);
             console.log("line.celebrators");
@@ -517,7 +596,82 @@ router.put("/update-lists/", async (req, res) => {
     console.log("resArrived");
     console.log(resArrived);
 
+    for (let celebrator of arrived) {
+      if (celebrator.monthBirthday == month) {
+        let cloneSpecialComment = await specialComment(
+          2022 - celebrator["yearBirthday"]
+        );
+
+
+        let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+          ? celebrator.dateBirthday
+          : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+            ? celebrator.monthBirthday
+            : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+
+        let cloneCategory = '';
+        let cloneOldest = false;
+
+        if (celebrator["noAddress"]) {
+          cloneCategory = "special";
+        } else {
+          if (celebrator.yearBirthday < 1941) {
+            cloneOldest = true;
+          }
+          if (celebrator.yearBirthday < 1958 && celebrator.gender == "Female") {
+            cloneCategory = "oldWomen";
+          } else {
+            if (celebrator.yearBirthday < 1958 && celebrator.gender == "Male") {
+              cloneCategory = "oldMen";
+            } else {
+              if (celebrator.yearBirthday > 1957 || !celebrator.yearBirthday) {
+                cloneCategory = "yang";
+              }
+            }
+          }
+        }
+
+        let cloneCelebrator = {
+          region: celebrator.region,
+          nursingHome: celebrator.nursingHome,
+          lastName: celebrator.lastName,
+          firstName: celebrator.firstName,
+          patronymic: celebrator.patronymic,
+          dateBirthday: celebrator.dateBirthday,
+          monthBirthday: celebrator.monthBirthday,
+          yearBirthday: celebrator.yearBirthday,
+          gender: celebrator.gender,
+          comment1: celebrator.comment1,
+          comment2: celebrator.comment2,
+          linkPhoto: celebrator.linkPhoto,
+          nameDay: celebrator.nameDay,
+          dateNameDay: celebrator.dateNameDay,
+          monthNameDay: celebrator.monthNameDay,
+          noAddress: celebrator.noAddress,
+          isReleased: celebrator.isReleased,
+          plusAmount: 0,
+          specialComment: cloneSpecialComment,
+          fullDayBirthday: cloneFullDayBirthday,
+          oldest: cloneOldest,
+          category: cloneCategory,
+          holyday: 'ДР августа 2022',
+          fullData: celebrator.nursingHome +
+            celebrator.lastName +
+            celebrator.firstName +
+            celebrator.patronymic +
+            celebrator.dateBirthday +
+            celebrator.monthBirthday +
+            celebrator.yearBirthday,
+        };
+
+        let finalList = await List.create(cloneCelebrator);
+
+      }
+    }
+
     for (let senior of changed) {
+      console.log("senior");
+      console.log(senior);
 
       let resChanged = await Senior.updateOne({ _id: senior.id }, {
         $set: {
@@ -573,6 +727,47 @@ router.put("/update-lists/", async (req, res) => {
     res.status(500).send(createSeniorCatchErrorResponse.toObject());
   }
 });
+
+// Add comments
+async function specialComment(age) {
+  let special = '';
+  let specialComments = {
+    91: "год",
+    92: "года",
+    93: "года",
+    94: "года",
+    96: "лет",
+    97: "лет",
+    98: "лет",
+    99: "лет",
+    101: "год",
+    102: "года",
+    103: "года",
+    104: "года",
+    106: "лет",
+    107: "лет",
+    108: "лет",
+    109: "лет",
+    111: "лет",
+    112: "лет",
+    113: "лет",
+    114: "лет",
+    116: "лет",
+    117: "лет",
+  };
+  if (age > 103 || age < 18) console.log(`Strange age: ${age}`);
+  if (age % 5 === 0) {
+    special = `Юбилей ${age} лет!`;
+  } else {
+    if (age > 90) {
+      special = `${age} ${specialComments[age]}!`;
+    } else {
+      special = "";
+    }
+  }
+  //console.log(special);
+  return special;
+}
 
 
 

@@ -32,6 +32,7 @@ let seniorSchema = new Schema(
     isReleased: { type: Boolean, default: false },
     dateEnter: { type: Date },
     dateExit: { type: Date},
+    key: { type: Number},
 
   },
   { collection: "seniors" }
