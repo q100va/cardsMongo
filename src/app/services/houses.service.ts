@@ -68,5 +68,13 @@ export class HousesService {
   return this.http.post("/api/houses/add-many/", {houses: houses});
 }
 
+findHousesEmail(startDate: Date, endDate: Date): Observable<any> {
+  console.log("startDate");
+  console.log(startDate);
+  console.log("endDate");
+  console.log(endDate);
+  return this.http.post("/api/houses/email", {startDate:startDate, endDate : endDate});
+}
+
 
 }

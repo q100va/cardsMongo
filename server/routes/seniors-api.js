@@ -13,7 +13,7 @@ const House = require("../models/house");
 const Month = require("../models/month");
 const List = require("../models/list");
 const Order = require("../models/order");
-
+const NameDay = require("../models/name-day");
 // Find all seniors
 router.get("/", async (req, res) => {
   try {
@@ -420,6 +420,11 @@ router.put("/compare-lists/", async (req, res) => {
           index = arrived.findIndex(item => item.lastName + item.firstName + item.patronymic == oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic);
           if (index != -1) {
             flag = true;
+          } else {
+            index = arrived.findIndex(item => item.firstName + item.patronymic == oldSenior.firstName + oldSenior.patronymic);
+          if (index != -1) {
+            flag = true;
+          }
           }
         }
       }

@@ -96,6 +96,28 @@ router.get("/name/:name", async (req, res) => {
   }
 });
 
+// Find all houses needed to be updated
+router.post("/email", async (req, res) => {
+  try {
+    let startDate = req.body.startDate;
+    let endDate = req.body.endDate;
+    console.log("startDate");
+    console.log(startDate);
+    console.log("endDate");
+    console.log(endDate);
+    const houses = await House.find({dateLastUpdate: {$gte : startDate, $lte: endDate }}); 
+    console.log("houses");
+    console.log(houses);
+          const findAllResponse = new BaseResponse(200, "Query successful", houses);
+          res.json(findAllResponse.toObject());  
+     
+  } catch (e) {
+    console.log(e);
+    const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(findAllCatchErrorResponse.toObject());
+  }
+});
+
 // Find all 
 router.get("/", async (req, res) => {
   try {

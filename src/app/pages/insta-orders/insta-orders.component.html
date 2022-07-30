@@ -6,6 +6,9 @@
     <br />
 
     <mat-card-actions>
+        <input type="file" (change)="addFile($event)">
+        <!-- accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" -->
+
 
         <!--       <button class="submit" (click)="deleteList()" mat-raised-button color = 'warn'>Очистить список ДР</button>
         <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
@@ -28,8 +31,8 @@
         <mat-card-subtitle>{{needAccepting}} </mat-card-subtitle>
         <mat-card-subtitle>Комментарий: {{order.comment}} </mat-card-subtitle>
 
-        <div
-            style="font-family: Georgia, 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
+        <div *ngIf="!order.isAccepted"
+            style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
             <p>Добрый день, {{order.clientFirstName}}!</p>
             <p style="font-size: 0.7em; color: rgb(163, 192, 199)">
                 {{order.contact}}
@@ -52,7 +55,7 @@
                 проживают в домах престарелых. Иногда сразу после детдомов.
             </p>
 
-            <h3 style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold;">Дни рождения августа</h3>
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">Дни рождения августа</h3>
 
             <p style="font-style: italic">
                 Если какие-то адреса вам не подходят, обязательно возвращайте -
@@ -62,7 +65,7 @@
             </p>
 
             <mat-card-content *ngFor="let lineItem of lineItems"
-                style="font-family: Georgia, 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
+                style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
 
                 <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
                 <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
@@ -85,7 +88,7 @@
             </mat-card-content>
 
             <h3
-                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Отправляйте письма правильно!</h3>
             <ul>
                 <li>
@@ -103,7 +106,7 @@
             </ul>
 
             <h3
-                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Как писать поздравления?</h3>
             <ul>
                 <li>
@@ -121,7 +124,7 @@
             </ul>
 
             <h3
-                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Что писать не надо.</h3>
             <ul>
                 <li>
@@ -135,7 +138,7 @@
             </ul>
 
             <h3
-                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Получили ответ?</h3>
             <ul>
                 <li>
@@ -150,7 +153,7 @@
             </ul>
 
             <h3
-                style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Чего делать нельзя.</h3>
             <ul>
                 <li>
@@ -197,6 +200,59 @@
                 <a href="https://t.me/cardsforgrandma">@cardsforgrandma</a>
             </p>
         </div>
+
+        <div *ngIf="order.isAccepted"
+            style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
+            <p>Добрый день, {{order.clientFirstName}}!</p>
+
+            <h3 style="font-family:'Times New Roman', Times, serif; font-weight: bold;">Дни рождения августа</h3>
+
+            <mat-card-content *ngFor="let lineItem of lineItems"
+                style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
+
+                <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
+                <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                    {{lineItem.adminComment}}</p>
+
+                <div *ngFor="let celebrator of lineItem.celebrators">
+                    <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+
+                    {{celebrator.lastName}}
+                    {{celebrator.firstName}}
+                    {{celebrator.patronymic}}
+                    {{celebrator.fullDayBirthday}}
+                    {{celebrator.comment1}}
+                    {{celebrator.linkPhoto}}
+                    <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                    </span>
+                </div>
+                <br />
+            </mat-card-content>
+           
+            <p>
+                Нашим бабушкам и дедушкам нужна неотложная помощь — продукты и дрова на зиму — помочь на сайте
+                <a href="https://starikam.org/">starikam.org</a>
+            </p>
+            <hr />
+            <p>
+                Искренне вас благодарим!
+            </p>
+            <p>
+                --<br />
+                С уважением,<br />
+                Оксана Кустова<br />
+                Координатор программы "Поздравление открытками"<br />
+                БФ «Старость в радость»
+            </p>
+            <p>
+                <a href="mailto: o.kustova@starikam.org">o.kustova@starikam.org</a> на связи c 16-00
+                до 6-00 (МСК)<br />
+                <a href="https://starikam.org/">www.starikam.org</a> |
+                <a href="https://t.me/cardsforgrandma">@cardsforgrandma</a>
+            </p>
+        </div>
+
 
         <mat-card-actions>
             <br /> <br />

@@ -2,6 +2,10 @@ import { Component, OnInit } from "@angular/core";
 
 import readXlsxFile from "read-excel-file";
 import { SeniorsService } from "src/app/services/seniors.service";
+import { HousesService } from "src/app/services/houses.service";
+import { MatTableDataSource } from "@angular/material/table";
+import { SelectionModel } from "@angular/cdk/collections";
+import { House } from "src/app/shared/interfaces/houses.interface";
 
 @Component({
   selector: "app-add-lists",
@@ -12,14 +16,20 @@ export class AddListsComponent implements OnInit {
   file: File;
   dateOfList: Date;
   arrayOfLists: Array<Array<any>> = [];
-  index: number = 0;  
+  index: number = 0;
   resultOfCompare: any;
   isShowList: boolean = false;
   movedFromArrived: number;
   movedFromAbsents: number;
   movedFromDoubtful: number;
+  startDate: Date;
+  endDate: Date;
+  arrayOfEmails: Array<string>;
+  isShowEmail: boolean = false;
+  arrayOfHouses: Array<House>;
 
-/*     accepted_lastName: string ="";
+
+  /*     accepted_lastName: string ="";
     accepted_firstName: string ="";
     accepted_patronymic: string ="";
     accepted_dateBirthday: number = 0;
@@ -38,33 +48,45 @@ export class AddListsComponent implements OnInit {
     accepted_dateNameDay: number = 0;
     accepted_monthNameDay: number = 0; */
 
-    accepted_lastName: string;
-    accepted_firstName: string;
-    accepted_patronymic: string;
-    accepted_dateBirthday: number;
-    accepted_monthBirthday: number;
-    accepted_yearBirthday: number;
-    accepted_isDisabled:  boolean;
-    accepted_isRestricted:  boolean;
-    accepted_noAddress:  boolean;
-    accepted_isReleased:  boolean;
-    accepted_dateExit: Date;
-    accepted_gender: string;
-    accepted_comment1: string;
-    accepted_comment2: string;
-    accepted_linkPhoto: string;
-    accepted_nameDay: string;
-    accepted_dateNameDay: number;
-    accepted_monthNameDay: number;
+  accepted_lastName: string;
+  accepted_firstName: string;
+  accepted_patronymic: string;
+  accepted_dateBirthday: number;
+  accepted_monthBirthday: number;
+  accepted_yearBirthday: number;
+  accepted_isDisabled: boolean;
+  accepted_isRestricted: boolean;
+  accepted_noAddress: boolean;
+  accepted_isReleased: boolean;
+  accepted_dateExit: Date;
+  accepted_gender: string;
+  accepted_comment1: string;
+  accepted_comment2: string;
+  accepted_linkPhoto: string;
+  accepted_nameDay: string;
+  accepted_dateNameDay: number;
+  accepted_monthNameDay: number;
 
   allAccepted = [];
 
   isStart = false;
 
-  constructor(private seniorsService: SeniorsService ) {}
+  constructor(private seniorsService: SeniorsService, private houseService: HousesService) {}
+
+  displayedColumns = [
+    "check",
+    "region",
+    "nursingHome",
+    "dateLastUpdateClone",
+    "nameContact",
+    "contact",
+
+  ];
+  dataSource: MatTableDataSource<House>;
+  selection = new SelectionModel<House>(true, []);
+
 
   ngOnInit(): void {}
-
 
   /*   createLists(result) {
 
@@ -121,19 +143,14 @@ export class AddListsComponent implements OnInit {
     console.log(this.arrayOfLists[this.index]);
     this.isStart = true;
 
-   //this.compareLists(this.arrayOfLists[this.index], this.arrayOfLists[this.index][0].nursingHome);
-
+    //this.compareLists(this.arrayOfLists[this.index], this.arrayOfLists[this.index][0].nursingHome);
   }
 
-
- 
   compareLists(arrayOfLists, nursingHome) {
-
     //alert("WORKS");
-    
-  this.seniorsService.compareListsBackend
-      (arrayOfLists, nursingHome
-      )
+
+    this.seniorsService
+      .compareListsBackend(arrayOfLists, nursingHome)
       .subscribe(
         async (res) => {
           this.resultOfCompare = await res["data"];
@@ -148,50 +165,88 @@ export class AddListsComponent implements OnInit {
           );
           //stop = true;
         }
-      ); 
-  }  
+      );
+  }
 
   moveToChanged(movedFromAbsentsKey, movedFromArrivedKey) {
     let difference = {
       key: movedFromAbsentsKey,
-      old: this.resultOfCompare.absents.find(item => item.key == movedFromAbsentsKey),
-      new: this.resultOfCompare.arrived.find(item => item.key == movedFromArrivedKey),
+      old: this.resultOfCompare.absents.find(
+        (item) => item.key == movedFromAbsentsKey
+      ),
+      new: this.resultOfCompare.arrived.find(
+        (item) => item.key == movedFromArrivedKey
+      ),
     };
     this.resultOfCompare.changed.push(difference);
-    this.resultOfCompare.absents.splice( this.resultOfCompare.absents.findIndex(item => item.key == movedFromAbsentsKey), 1);
-    this.resultOfCompare.arrived.splice(this.resultOfCompare.arrived.findIndex(item => item.key == movedFromArrivedKey), 1);
+    this.resultOfCompare.absents.splice(
+      this.resultOfCompare.absents.findIndex(
+        (item) => item.key == movedFromAbsentsKey
+      ),
+      1
+    );
+    this.resultOfCompare.arrived.splice(
+      this.resultOfCompare.arrived.findIndex(
+        (item) => item.key == movedFromArrivedKey
+      ),
+      1
+    );
   }
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
     this.resultOfCompare.changed.push(
-      this.resultOfCompare.doubtful.find(item => item.key == movedFromDoubtful)
+      this.resultOfCompare.doubtful.find(
+        (item) => item.key == movedFromDoubtful
+      )
     );
-    this.resultOfCompare.doubtful.splice(this.resultOfCompare.doubtful.findIndex(item => item.key == movedFromDoubtful), 1);
+    this.resultOfCompare.doubtful.splice(
+      this.resultOfCompare.doubtful.findIndex(
+        (item) => item.key == movedFromDoubtful
+      ),
+      1
+    );
   }
 
   moveToAbsentsArrived(movedFromDoubtful) {
     console.log(movedFromDoubtful);
     console.log("movedFromDoubtful");
-    const absent = this.resultOfCompare.doubtful.find(item => item.key == movedFromDoubtful);
+    const absent = this.resultOfCompare.doubtful.find(
+      (item) => item.key == movedFromDoubtful
+    );
     this.resultOfCompare.absents.push(absent.old);
-    const arrived = this.resultOfCompare.doubtful.find(item => item.key == movedFromDoubtful)
+    const arrived = this.resultOfCompare.doubtful.find(
+      (item) => item.key == movedFromDoubtful
+    );
     this.resultOfCompare.arrived.push(arrived.new);
-    this.resultOfCompare.doubtful.splice(this.resultOfCompare.doubtful.findIndex(item => item.key == movedFromDoubtful), 1);
+    this.resultOfCompare.doubtful.splice(
+      this.resultOfCompare.doubtful.findIndex(
+        (item) => item.key == movedFromDoubtful
+      ),
+      1
+    );
   }
 
   acceptChanges(accepted, key, person) {
     const cloneAccepted = {
       id: accepted.id ? accepted.id : person.id,
-      region : person.region,
+      region: person.region,
       nursingHome: person.nursingHome,
       lastName: accepted.lastName ? accepted.lastName : person.lastName,
       firstName: accepted.firstName ? accepted.firstName : person.firstName,
       patronymic: accepted.patronymic ? accepted.patronymic : person.patronymic,
-      dateBirthday: accepted.dateBirthday ? accepted.dateBirthday : person.dateBirthday,
-      monthBirthday: accepted.monthBirthday ? accepted.monthBirthday : person.monthBirthday,
-      yearBirthday: accepted.yearBirthday ? accepted.yearBirthday : person.yearBirthday,
+      dateBirthday: accepted.dateBirthday
+        ? accepted.dateBirthday
+        : person.dateBirthday,
+      monthBirthday: accepted.monthBirthday
+        ? accepted.monthBirthday
+        : person.monthBirthday,
+      yearBirthday: accepted.yearBirthday
+        ? accepted.yearBirthday
+        : person.yearBirthday,
       isDisabled: accepted.isDisabled ? accepted.isDisabled : person.isDisabled,
-      isRestricted: accepted.isRestricted ? accepted.isRestricted : person.isRestricted,
+      isRestricted: accepted.isRestricted
+        ? accepted.isRestricted
+        : person.isRestricted,
       noAddress: accepted.noAddress ? accepted.noAddress : person.noAddress,
       isReleased: accepted.isReleased ? accepted.isReleased : person.isReleased,
       dateExit: accepted.dateExit ? accepted.dateExit : person.dateExit,
@@ -200,30 +255,37 @@ export class AddListsComponent implements OnInit {
       comment2: accepted.comment2 ? accepted.comment2 : person.comment2,
       linkPhoto: accepted.linkPhoto ? accepted.linkPhoto : person.linkPhoto,
       nameDay: accepted.nameDay ? accepted.nameDay : person.nameDay,
-      dateNameDay: accepted.dateNameDay ? accepted.dateNameDay : person.dateNameDay,
-      monthNameDay: accepted.monthNameDay ? accepted.monthNameDay : person.monthNameDay,
-    }
-        this.allAccepted.push(cloneAccepted);
-    this.resultOfCompare.changed.splice(this.resultOfCompare.changed.findIndex(item => item.key == key), 1);
+      dateNameDay: accepted.dateNameDay
+        ? accepted.dateNameDay
+        : person.dateNameDay,
+      monthNameDay: accepted.monthNameDay
+        ? accepted.monthNameDay
+        : person.monthNameDay,
+    };
+    this.allAccepted.push(cloneAccepted);
+    this.resultOfCompare.changed.splice(
+      this.resultOfCompare.changed.findIndex((item) => item.key == key),
+      1
+    );
 
     this.accepted_lastName = undefined;
-    this.accepted_firstName= undefined;
-    this.accepted_patronymic= undefined;
-    this.accepted_dateBirthday= undefined;
-    this.accepted_monthBirthday= undefined;
-    this.accepted_yearBirthday= undefined;
-    this.accepted_isDisabled= undefined;
-    this.accepted_isRestricted= undefined;
-    this.accepted_noAddress= undefined;
-    this.accepted_isReleased= undefined;
-    this.accepted_dateExit= undefined;
-    this.accepted_gender= undefined;
-    this.accepted_comment1= undefined;
-    this.accepted_comment2= undefined;
-    this.accepted_linkPhoto= undefined;
-    this.accepted_nameDay= undefined;
-    this.accepted_dateNameDay= undefined;
-    this.accepted_monthNameDay= undefined;
+    this.accepted_firstName = undefined;
+    this.accepted_patronymic = undefined;
+    this.accepted_dateBirthday = undefined;
+    this.accepted_monthBirthday = undefined;
+    this.accepted_yearBirthday = undefined;
+    this.accepted_isDisabled = undefined;
+    this.accepted_isRestricted = undefined;
+    this.accepted_noAddress = undefined;
+    this.accepted_isReleased = undefined;
+    this.accepted_dateExit = undefined;
+    this.accepted_gender = undefined;
+    this.accepted_comment1 = undefined;
+    this.accepted_comment2 = undefined;
+    this.accepted_linkPhoto = undefined;
+    this.accepted_nameDay = undefined;
+    this.accepted_dateNameDay = undefined;
+    this.accepted_monthNameDay = undefined;
   }
 
   acceptAllChanges() {
@@ -241,10 +303,13 @@ export class AddListsComponent implements OnInit {
           this.index++;
           if (this.index == this.arrayOfLists.length) {
             alert("it was the last list");
-            this.isShowList = false;            
+            this.isShowList = false;
           } else {
             this.dateOfList = null;
-            this.compareLists(this.arrayOfLists[this.index],  this.arrayOfLists[this.index][0].nursingHome);
+            this.compareLists(
+              this.arrayOfLists[this.index],
+              this.arrayOfLists[this.index][0].nursingHome
+            );
           }
         },
         (err) => {
@@ -255,5 +320,36 @@ export class AddListsComponent implements OnInit {
           //stop = true;
         }
       );
+  }
+
+  showEmail(startDate: Date, endDate: Date) {
+    this.arrayOfEmails = [];
+    console.log("startDate");
+    console.log(startDate);
+    console.log("endDate");
+    console.log(endDate);
+    this.houseService.findHousesEmail(startDate, endDate).subscribe(
+      async (res) => {
+        this.arrayOfHouses = res['data'];
+        console.log("this.arrayOfHouses");
+        console.log(this.arrayOfHouses);
+        this.dataSource = new MatTableDataSource(this.arrayOfHouses);
+        this.isShowEmail = true;
+
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+        //stop = true;
+      }
+    );
+  }
+
+  copyEmail() {
+ this.arrayOfEmails = [];
+
+    for (let value of this.selection["_selection"]) {
+      this.arrayOfEmails.push(value.contact);
+    }
   }
 }

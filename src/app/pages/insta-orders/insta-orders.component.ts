@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-
+import readXlsxFile from "read-excel-file";
 import { orders } from "server/models/orders-list.js";
 import { OrderService } from "src/app/services/order.service";
 import { LineItem } from "src/app/shared/interfaces/line-item.interface";
@@ -21,13 +21,42 @@ export class InstaOrdersComponent implements OnInit {
   orderDate: string = new Date().toLocaleDateString();
   isNext: Boolean = false;
   isFirst: Boolean = true;
+  file: File;
 
   constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {}
 
+  async addFile(event) {
+    console.log("START");
+    this.file = event.target.files[0];
+    //let result = [];
+
+    let rows = await readXlsxFile(this.file);
+
+    console.log("rows");
+    console.log(rows);
+
+    let columnsNumber = rows[0].length;
+    let rowsNumber = rows.length;
+
+    for (let j = 1; j < rowsNumber; j++) {
+      let item = {};
+      for (let i = 0; i < columnsNumber; i++) {
+        let propertyName = rows[0][i];
+        item[propertyName.toString()] = rows[j][i];
+        orders[j - 1] = item;
+      }
+    }
+
+    console.log(orders);
+
+   if (orders.length == 0) alert("list is empty");
+  }
+
+
   start(index: number) {
-    if (orders.length == 0) alert("list is empty");
+ 
 
     let newOrder: Order = {
       userName: orders[index].userName,
@@ -40,7 +69,7 @@ export class InstaOrdersComponent implements OnInit {
       contact: orders[index].contact,
       institute: orders[index].institute ? orders[index].institute : null,
       amount: +orders[index].amount,
-      isAccepted: orders[index].isAccepted ? true : false,
+      isAccepted: orders[index].isAccepted == 'true' ? true : false,
       comment: orders[index].comment ? orders[index].comment : null,
       orderDate: this.orderDate,
       filter: {

@@ -1114,8 +1114,10 @@ async function searchSenior(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
-  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
-    { standardFilter.isReleased = false }
+ if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
+    {
+       standardFilter.isReleased = false 
+    } 
   }
 
   //console.log("maxPlus");
@@ -1126,7 +1128,9 @@ async function searchSenior(
 
 
   let celebrator;
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus; //CHANGE!!!
+  //CHANGE!!!
+  //let maxPlusAmount = 2;  
+  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;  
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 

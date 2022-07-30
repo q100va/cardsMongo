@@ -22,7 +22,7 @@ router.delete("/double", async (req, res) => {
 
     let fullList = await List.find({});
     for (let item of fullList) {
-      let found = await List.find({fullData: item.fullData, plusAmount: 0, _id: {$ne: item._id}});
+      let found = await List.find({ fullData: item.fullData, plusAmount: 0, _id: { $ne: item._id } });
       console.log("found");
       console.log(found);
     }
@@ -61,20 +61,20 @@ async function findAllMonthCelebrators(month) {
   let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
   let activeList = await List.find({});
-/*   let filledRegions = [];
-  for (region of activeRegions) {
-    filledRegions.push(region.region);
-  } */
+  /*   let filledRegions = [];
+    for (region of activeRegions) {
+      filledRegions.push(region.region);
+    } */
 
-/*   let filledIds = [];
-  for (item of activeList) {
-    filledIds.push(item._id);
-  }
-  console.log("filledIds");
-  console.log(filledIds); */
+  /*   let filledIds = [];
+    for (item of activeList) {
+      filledIds.push(item._id);
+    }
+    console.log("filledIds");
+    console.log(filledIds); */
 
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit : null, isRestricted: false });
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false });
   console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -274,14 +274,14 @@ async function findAllMonthNameDays(month) {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthNameDays newList");
-  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, dateExit : null, isRestricted: false });
+  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, dateExit: null, isRestricted: false });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
   console.log("2- seniors" + list.length);
   let updatedCelebrators = [];
   for (let celebrator of list) {
-    
+
     let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
       ? celebrator.dateBirthday
       : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
@@ -384,7 +384,7 @@ router.delete("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
-    List.find({}, function (err, lists) {
+    List.find({ absent: false }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -405,8 +405,8 @@ router.get("/", async (req, res) => {
 //Find all name day lists API
 router.get("/name-day", async (req, res) => {
   try {
-    //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
-    NameDay.find({}, function (err, nameDays) {
+
+    NameDay.find({ absent: { $ne: true } }, function (err, nameDays) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
