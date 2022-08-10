@@ -1172,8 +1172,8 @@ async function searchSenior(
   let celebrator;
   //CHANGE!!!
   //let maxPlusAmount = 2;  
-  let maxPlusAmount = 3;  
-  //let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;  
+  //let maxPlusAmount = 3;  
+  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;  
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 
