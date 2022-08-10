@@ -20,6 +20,10 @@ export class OrderService {
     return this.http.get("/api/orders");
   }
 
+  findAllOrdersNotAccepted(): Observable<any> {
+    return this.http.get("/api/orders/all/findAllOrdersNotAccepted/");
+  }
+
   findAllOrdersByUserId(userName): Observable<any> {
     return this.http.get("/api/orders/find/" + userName);
   }

@@ -93,7 +93,7 @@ export class AllOrdersComponent implements AfterViewInit {
         () => {}
       );
     } else {
-      this.orderService.findNotConfirmedOrdersByUserId(this.userName).subscribe(
+      this.orderService.findAllOrdersNotAccepted().subscribe(
         (res) => {
           this.orders = res["data"];
           this.orders.reverse();

@@ -60,7 +60,7 @@ async function findAllMonthCelebrators(month) {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
-  let activeList = await List.find({});
+  //let activeList = await List.find({});
   /*   let filledRegions = [];
     for (region of activeRegions) {
       filledRegions.push(region.region);
@@ -74,7 +74,7 @@ async function findAllMonthCelebrators(month) {
     console.log(filledIds); */
 
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false });
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, });
   console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -138,7 +138,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР августа 2022',
+      holyday: 'ДР сентября 2022',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -162,7 +162,7 @@ async function findAllMonthCelebrators(month) {
   console.log("2.5 - " + newList.length);
 
   const options = { ordered: false };
-  //let finalList = await List.insertMany(newList, options);
+  let finalList = await List.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -315,7 +315,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины августа 2022',
+      holyday: 'Именины сентября 2022',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -384,7 +384,7 @@ router.delete("/", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
-    List.find({ absent: false }, function (err, lists) {
+    List.find({ absent: {$ne: true} }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);

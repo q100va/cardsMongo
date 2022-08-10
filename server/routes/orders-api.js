@@ -223,6 +223,47 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
 });
 
 /**
+ * API to find not confirmed orders (OK)
+ */
+
+ router.get("/all/findAllOrdersNotAccepted/", async (req, res) => {
+  try {
+    /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
+        console.log("req.params.userName");
+        console.log(req.params.userName); */
+    Order.find({ isAccepted: false, isDisabled: false }, function (err, orders) {
+      if (err) {
+        console.log(err);
+        const readUserMongodbErrorResponse = new BaseResponse(
+          500,
+          "Internal server error",
+          err
+        );
+        res.status(500).send(readUserMongodbErrorResponse.toObject());
+      } else {
+        const readUserResponse = new BaseResponse(
+          200,
+          "Query successful",
+          orders
+        );
+        // console.log("findNotConfirmed");
+        //console.log(orders);
+        res.json(readUserResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const readUserCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      err
+    );
+    res.status(500).send(readUserCatchErrorResponse.toObject());
+  }
+});
+
+
+/**
  * API to confirm order
  */
 router.patch("/confirm/:id", async (req, res) => {
@@ -285,7 +326,7 @@ router.patch("/delete/:id", async (req, res) => {
 });
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения августа 2022") {
+  if (deletedOrder.holiday == "Дни рождения сентября 2022") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -337,7 +378,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины августа 2022")
+    if (deletedOrder.holiday == "Именины сентября 2022")
 {    for (let lineItem of deletedOrder.lineItems) {
       for (let person of lineItem.celebrators) {
         await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1107,6 +1148,7 @@ async function searchSenior(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
+
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -1116,7 +1158,7 @@ async function searchSenior(
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
     {
-       standardFilter.isReleased = false 
+       standardFilter.isReleased = false ;
     } 
   }
 
@@ -1130,7 +1172,8 @@ async function searchSenior(
   let celebrator;
   //CHANGE!!!
   //let maxPlusAmount = 2;  
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;  
+  let maxPlusAmount = 3;  
+  //let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;  
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 

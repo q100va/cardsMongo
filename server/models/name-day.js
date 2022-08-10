@@ -36,10 +36,11 @@ const nameDaySchema = new Schema(
     gender: { type: String },
     celebrator_id: { type: String },
     fullData: { type: String },
-    holyday: { type: String },    
+    holyday: { type: String },   
+    absent:  { type: Boolean, default: false },
 
   },
-  { collection: "nameDays_august" }
+  { collection: "nameDays_september" }
 );
 
 module.exports = mongoose.model("NameDay", nameDaySchema);
