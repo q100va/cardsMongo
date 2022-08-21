@@ -743,8 +743,8 @@ async function createOrder(newOrder) {
         success: false
       };
     } else {
-      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
-
+     // if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
       console.log("newOrder.filter.region");
       console.log(newOrder.filter.region);
 
