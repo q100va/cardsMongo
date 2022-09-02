@@ -734,7 +734,7 @@ async function createOrder(newOrder) {
       "yang": yangAmount,
       "oneHouse": Math.round(newOrder.amount * 0.3)
     }
-    if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
+    if (newOrder.filter.nursingHome ) proportion.oneHouse = undefined;
   } else {
     proportion = await Proportion.findOne({ amount: newOrder.amount });
     if (!proportion) {
@@ -743,8 +743,8 @@ async function createOrder(newOrder) {
         success: false
       };
     } else {
-     // if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
-      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
+      //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
       console.log("newOrder.filter.region");
       console.log(newOrder.filter.region);
 
