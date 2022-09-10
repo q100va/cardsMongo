@@ -40,7 +40,7 @@ const listSchema = new Schema(
     absent: { type: Boolean, default: false },   
 
   },
-  { collection: "lists_september" }
+  { collection: "lists_october" }
 );
 
 module.exports = mongoose.model("List", listSchema);

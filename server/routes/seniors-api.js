@@ -659,7 +659,7 @@ router.put("/update-lists/", async (req, res) => {
           fullDayBirthday: cloneFullDayBirthday,
           oldest: cloneOldest,
           category: cloneCategory,
-          holyday: 'ДР сентября 2022',
+          holyday: 'ДР октября 2022',
           fullData: celebrator.nursingHome +
             celebrator.lastName +
             celebrator.firstName +
