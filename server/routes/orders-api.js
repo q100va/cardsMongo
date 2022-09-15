@@ -15,6 +15,7 @@ const Month = require("../models/month");
 const House = require("../models/house");
 const Region = require("../models/region");
 const NameDay = require("../models/name-day");
+const TeacherDay = require("../models/teacher-day");
 //const { getLocaleDayPeriods } = require("@angular/common");
 
 /**
@@ -383,7 +384,14 @@ async function deletePluses(deletedOrder) {
       for (let person of lineItem.celebrators) {
         await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
       }
-    }}
+    }} else {
+      if (deletedOrder.holiday == "День учителя и дошкольного работника 2022")
+  {    for (let lineItem of deletedOrder.lineItems) {
+        for (let person of lineItem.celebrators) {
+          await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+        }
+      }}
+    }
   }
 }
 
@@ -598,6 +606,143 @@ async function createOrderForNameDay(order) {
   let createdOrder = await Order.create(order);
   for (let element of createdOrder.temporaryLineItems) {
     await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+  }
+  await Order.updateOne({ _id: createdOrder._id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+  let newOrder = await Order.findOne({ _id: createdOrder._id });
+  // await Order.updateOne({ _id: order_id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+  //throw new Error('test1'); //delete
+  //console.log("updatedOrder");
+  //console.log(updatedOrder);
+  // console.log(lineItems);
+  return {
+    result: newOrder.lineItems,
+    success: true,
+    order_id: newOrder._id
+
+  }
+}
+////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////
+
+//create teacher day order
+
+router.post("/teacher-day", async (req, res) => {
+  let finalResult;
+  try {
+    console.log("req.body.temporaryLineItems");
+    console.log(req.body.temporaryLineItems);
+    let newOrder = {
+      userName: req.body.userName,
+      holiday: req.body.holiday,
+      amount: req.body.amount,
+      clientFirstName: req.body.clientFirstName,
+      clientPatronymic: req.body.clientPatronymic,
+      clientLastName: req.body.clientLastName,
+      email: req.body.email,
+      contactType: req.body.contactType,
+      contact: req.body.contact,
+      institute: req.body.institute,
+      isAccepted: req.body.isAccepted,
+      comment: req.body.comment,
+      orderDate: req.body.orderDate,
+      temporaryLineItems: req.body.temporaryLineItems,
+      lineItems: [],
+      isCompleted: false,
+    };
+    console.log("newOrder.temporaryLineItems");
+    console.log(newOrder.temporaryLineItems);
+    finalResult = await createOrderForTeacherDay(newOrder);
+    let text = !finalResult.success ? finalResult.result : "Query Successful";
+
+    const newListResponse = new BaseResponse(200, text, finalResult.result);
+    res.json(newListResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    let text = 'Обратитесь к администратору. Заявка не сформирована.';
+    if (!finalResult) {
+      let answer = await deleteErrorPlus(false, req.body.userName);
+      console.log("answer");
+      console.log(answer);
+      if (!answer) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+
+    } else {
+      if (finalResult && finalResult.success) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+      if (finalResult && !finalResult.success) {
+        text = finalResult.result;
+      }
+    }
+    const newListCatchErrorResponse = new BaseResponse(
+      500,
+      text,
+      e
+    );
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+//fill lineItems
+async function createOrderForTeacherDay(order) {
+  console.log(order);
+
+  let lineItems = [];
+  let nursingHomes = await House.find({});
+
+  order.temporaryLineItems.sort(
+    (prev, next) =>
+      prev.monthHoliday - next.monthHoliday
+  );
+  console.log("order.temporaryLineItems");
+  //console.log(order.temporaryLineItems);
+
+  for (let person of order.temporaryLineItems) {
+    console.log("person");
+    console.log(person);
+    //console.log(lineItems);
+    let index = -1;
+    //console.log(lineItems.length);
+    if (lineItems.length > 0) {
+      index = lineItems.findIndex(
+        (item) => item.nursingHome == person.nursingHome
+      );
+    }
+    // console.log(index);
+    if (index > -1) {
+      lineItems[index].celebrators.push(person);
+    } else {
+      let foundHouse = nursingHomes.find(
+        (item) => item.nursingHome == person.nursingHome
+      );
+      //console.log(foundHouse);
+      //console.log(person.nursingHome);
+      if (!foundHouse) {
+        return {
+          result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`,
+          success: false
+        };
+      }
+      lineItems.push({
+        region: foundHouse.region,
+        nursingHome: foundHouse.nursingHome,
+        address: foundHouse.address,
+        infoComment: foundHouse.infoComment,
+        adminComment: foundHouse.adminComment,
+        noAddress: foundHouse.noAddress,
+        celebrators: [person],
+      });
+    }
+  }
+
+
+  let createdOrder = await Order.create(order);
+  for (let element of createdOrder.temporaryLineItems) {
+    await TeacherDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+    console.log("pluses");
   }
   await Order.updateOne({ _id: createdOrder._id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
   let newOrder = await Order.findOne({ _id: createdOrder._id });

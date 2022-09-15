@@ -91,6 +91,7 @@ import { AddListsComponent } from './pages/add-lists/add-lists.component';
 import { InstaOrdersComponent } from './pages/insta-orders/insta-orders.component';
 import { AllOrdersComponent } from './pages/all-orders/all-orders.component';
 import { AllAbsentsComponent } from './pages/all-absents/all-absents.component';
+import { TeacherDayComponent } from "./pages/teacher-day/teacher-day.component";
 
 
 @NgModule({
@@ -132,6 +133,7 @@ import { AllAbsentsComponent } from './pages/all-absents/all-absents.component';
     InstaOrdersComponent,
     AllOrdersComponent,
     AllAbsentsComponent,
+    TeacherDayComponent
 
   ],
   imports: [

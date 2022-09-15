@@ -49,6 +49,7 @@ import { InstaOrdersComponent } from "./pages/insta-orders/insta-orders.componen
 import { AllOrdersComponent } from "./pages/all-orders/all-orders.component";
 import { AddListsComponent } from "./pages/add-lists/add-lists.component";
 import { AllAbsentsComponent } from "./pages/all-absents/all-absents.component";
+import { TeacherDayComponent } from "./pages/teacher-day/teacher-day.component";
 
 const routes: Routes = [
   {
@@ -191,6 +192,12 @@ const routes: Routes = [
         component: NameDayComponent,
         canActivate: [AuthGuard],
       },
+      {
+        path: "orders/teacher-day",
+        component: TeacherDayComponent,
+        canActivate: [AuthGuard],
+      },
+
 
     ],
   },

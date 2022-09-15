@@ -28,7 +28,10 @@ export class ListService {
 
   findAllNameDayLists(): Observable<any> {
     return this.http.get("/api/lists/name-day");
+}
 
+findAllTeacherDayLists(): Observable<any> {
+  return this.http.get("/api/lists/teacher-day");
 }
 
   createBirthdayList(): Observable<any> { 
@@ -38,6 +41,11 @@ export class ListService {
 
   createNameDayList(): Observable<any> { 
     return  this.http.post("/api/lists/name-day/" + this.month, {
+    });
+  }
+
+  createTeacherDayList(): Observable<any> { 
+    return  this.http.post("/api/lists/teacher-day/create" , {
     });
   }
 

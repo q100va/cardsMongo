@@ -36,6 +36,8 @@ const celebratorSchema = new Schema({
  address:  {type: String},
   infoComment:  {type: String},
   adminComment:  {type: String}, 
+  dateHoliday: { type: Number },
+    monthHoliday: { type: Number },
 
 });
 

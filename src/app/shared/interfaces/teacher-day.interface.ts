@@ -1,5 +1,5 @@
 
-export interface List {
+export interface TeacherDay {
   _id?: string;
   nursingHome: string;
   region:string;
@@ -14,19 +14,14 @@ export interface List {
   comment2?: string;
   specialComment?: string;
   linkPhoto?: string;
-  nameDay?: string;
-  dateNameDay?: number;
-  monthNameDay?: number;
-  category: string;
-  oldest: boolean;
+  dateHoliday?: number;
+  monthHoliday?: number;
+
   noAddress: boolean;
   isReleased:boolean;  
   gender:string;   
   plusAmount: number;
   celebrator_id?: string; 
-  holyday: string; 
-  fullData: string;
-  dateHoliday?: number;
-  monthHoliday?: number;
-
+  holiday: string; 
+  fullData: string; 
 }

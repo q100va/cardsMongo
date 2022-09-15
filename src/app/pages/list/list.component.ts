@@ -60,6 +60,20 @@ export class ListComponent implements OnInit {
     );
   }
 
+  generateTeacherDay() {
+    this.listService.createTeacherDayList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
   deleteList() {
     console.log("delete");
     this.listService.deleteList().subscribe(
@@ -137,6 +151,25 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         this.lists.sort((prev, next) => prev.dateNameDay - next.dateNameDay);
+        this.listLength = this.lists.length;
+        
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
+  showTeacherDayList(event: any) {
+    this.listService.findAllTeacherDayLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        this.lists.sort(( next, prev) =>  next.dateHoliday - prev.dateHoliday);
         this.listLength = this.lists.length;
         
       },
