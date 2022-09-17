@@ -277,6 +277,7 @@ router.post("/add-many/", async (req, res) => {
       senior.noAddress = house.noAddress;
       senior.isReleased = house.isReleased;
       senior.dateEnter = house.dateLastUpdate;
+      //senior.dateEnter = Date(9/12/2022);
       senior.dateExit = '';
       //console.log(senior.dateExit);
       if (!senior.lastName) senior.lastName = '';

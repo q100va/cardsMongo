@@ -105,7 +105,7 @@ router.post("/email", async (req, res) => {
     console.log(startDate);
     console.log("endDate");
     console.log(endDate);
-    const houses = await House.find({dateLastUpdate: {$gte : startDate, $lte: endDate }}); 
+    const houses = await House.find({dateLastUpdate: {$gte : startDate, $lte: endDate }, isActive: true} ); 
     console.log("houses");
     console.log(houses);
           const findAllResponse = new BaseResponse(200, "Query successful", houses);

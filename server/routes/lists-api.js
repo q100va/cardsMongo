@@ -74,8 +74,8 @@ async function findAllMonthCelebrators(month) {
     console.log("filledIds");
     console.log(filledIds); */
 
-
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, });
+    let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false });
+  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ВИНЗИЛИ" });
   console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
