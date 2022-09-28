@@ -27,7 +27,7 @@ export class OrderListComponent implements AfterViewInit {
   allOrders: Order[];
   notConfirmedOrders: Order[];
   userName: string;
-  isShowAll: boolean = true;
+  isShowAll: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -54,7 +54,7 @@ export class OrderListComponent implements AfterViewInit {
   dataSource: MatTableDataSource<Order>;
 
   ngAfterViewInit() {
-    this.orderService.findAllOrdersByUserId(this.userName).subscribe(
+    this.orderService.findNotConfirmedOrdersByUserId(this.userName).subscribe(
       (res) => {
         this.orders = res["data"];
         this.orders.reverse();
