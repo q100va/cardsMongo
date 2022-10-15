@@ -276,8 +276,8 @@ router.post("/add-many/", async (req, res) => {
       senior.isDisabled = false;
       senior.noAddress = house.noAddress;
       senior.isReleased = house.isReleased;
-      senior.dateEnter = house.dateLastUpdate;
-      //senior.dateEnter = Date(9/12/2022);
+      //senior.dateEnter = house.dateLastUpdate;
+      senior.dateEnter = Date(10/11/2022);
       senior.dateExit = '';
       //console.log(senior.dateExit);
       if (!senior.lastName) senior.lastName = '';
@@ -290,9 +290,10 @@ router.post("/add-many/", async (req, res) => {
       if (senior.gender == 'м') senior.gender = 'Male';
     }
 
+ console.log(seniors);
     const result = await Senior.insertMany(seniors, { ordered: false });
-
-    //console.log(result);
+    //const result = await Senior.insertOne(seniors[0]);
+    console.log(result);
     const createSeniorResponse = new BaseResponse(200, "Query Successful", result);
     return res.status(200).send(createSeniorResponse.toObject());
 
