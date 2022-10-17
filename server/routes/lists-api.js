@@ -20,13 +20,22 @@ const TeacherDay = require("../models/teacher-day");
 
 router.delete("/double", async (req, res) => {
   try {
+    let lists = await List.find();
+    
+    for (let i = 0; i < 1745; i++) {
+      //console.log(lists[i]);
+      let double = lists.find(item => item.fullData == lists[i].fullData && item._id != lists[i]._id);
+      console.log(double);
+      if(double) await List.deleteOne({_id: double._id});
+    }
 
-    let fullList = await List.find({});
+/*     let fullList = await List.find({});
     for (let item of fullList) {
       let found = await List.find({ fullData: item.fullData, plusAmount: 0, _id: { $ne: item._id } });
       console.log("found");
       console.log(found);
-    }
+    } */
+
     const deleteListResponse = new BaseResponse(200, "Query Successful", true);
     res.json(deleteListResponse.toObject());
 
@@ -37,6 +46,30 @@ router.delete("/double", async (req, res) => {
   }
 });
 
+/**
+ * API to delete double
+ */
+/* 
+ router.delete("/", async (req, res) => {
+  try {
+
+    console.log("delete3");
+    let lists = await List.find();
+    for (let i = 0; i < 2; i++) {
+      let double = lists.find(item => item.fullData == lists[i].fullData && item._id != lists[i]._id);
+      console.log(double);
+      lists.deleteOne({_id: double._id});
+    }
+    console.log("finish");
+    const newListResponse = new BaseResponse(200, "Query Successful");
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const deleteHouseCatchErrorResponse = new BaseResponse("500", "MongoDB server error", e);
+    res.status(500).send(deleteHouseCatchErrorResponse.toObject());
+  }
+}); */
 
 // Create birthday list API 
 router.post("/:month", async (req, res) => {
@@ -74,8 +107,8 @@ async function findAllMonthCelebrators(month) {
     console.log("filledIds");
     console.log(filledIds); */
 
-    let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false });
-  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ВИНЗИЛИ" });
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false });
+  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "КРИВЕЦ", lastName: "Коршаков" });
   console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -477,6 +510,11 @@ router.delete("/", async (req, res) => {
     res.status(500).send(deleteHouseCatchErrorResponse.toObject());
   }
 });
+
+/////////////////////////////////////////
+
+
+
 
 //Find all birthday lists API
 router.get("/", async (req, res) => {
