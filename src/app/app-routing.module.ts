@@ -99,26 +99,6 @@ const routes: Routes = [
         canActivate: [AuthGuard, RoleGuard],
       },
       {
-        path: "orders/create/new",
-        component: OrderComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: "orders/new-year",
-        component: NewYearComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: "orders/order/:id",
-        component: OrderDetailsComponent,
-        canActivate: [AuthGuard],
-      },
-      {
-        path: "orders/find/:userName",
-        component: OrderListComponent,
-        canActivate: [AuthGuard],
-      },
-      {
         path: "clients",
         component: ClientListComponent,
         canActivate: [AuthGuard, RoleGuard],
@@ -172,6 +152,26 @@ const routes: Routes = [
         path: "roles/create/new",
         component: RoleCreateComponent,
         canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "orders/birthday",
+        component: OrderComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/new-year",
+        component: NewYearComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/order/:id",
+        component: OrderDetailsComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/find/:userName",
+        component: OrderListComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: "orders/insta",

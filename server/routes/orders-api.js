@@ -772,7 +772,7 @@ async function createOrderForTeacherDay(order) {
 }
 ////////////////////////////////////////////////////
 
-router.post("/:amount", async (req, res) => {
+router.post("/birthday/:amount", async (req, res) => {
   let finalResult;
   try {
     let newOrder = {
@@ -1339,7 +1339,7 @@ async function searchSenior(
     console.log("filter");
     console.log(filter);
     celebrator = await List.findOne(filter);
-    console.log("celebrator");
+    console.log("celebrator List");
     console.log(celebrator);
     if (celebrator) {
       //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
@@ -1903,7 +1903,7 @@ async function createOrderNewYear(newOrder) {
   }
 
   const nursingHomes = await House.find({});
-  let resultLineItems = await generateLineItems(nursingHomes, order_id);
+  let resultLineItems = await generateLineItemsNewYear(nursingHomes, order_id);
   console.log("resultLineItems");
   console.log(resultLineItems);
   console.log(typeof resultLineItems);
@@ -1996,7 +1996,7 @@ async function collectSeniorsNewYear(data) {
     let barrier = data.proportion[data.category] - data.counter;
 
     outer1: for (let i = 0; i < barrier; i++) {
-      let result = await searchSenior(
+      let result = await searchSeniorNewYear(
         kind,
         data
 
@@ -2035,7 +2035,7 @@ async function collectSeniorsNewYear(data) {
 }
 
 // get senior
-async function searchSenior(
+async function searchSeniorNewYear(
   kind,
   data
   /*   restrictedHouses,
@@ -2089,7 +2089,7 @@ async function searchSenior(
     console.log("filter");
     console.log(filter);
     celebrator = await NewYear.findOne(filter);
-    console.log("celebrator");
+    console.log("celebrator NewYear");
     console.log(celebrator);
     if (celebrator) {
       //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
@@ -2105,7 +2105,7 @@ async function searchSenior(
 }
 
 //fill lineItems
-async function generateLineItems(nursingHomes, order_id) {
+async function generateLineItemsNewYear(nursingHomes, order_id) {
   //console.log(nursingHomes);
 
   let lineItems = [];

@@ -72,7 +72,7 @@ export class OrderService {
 
    createOrder(newOrder: Order): Observable<any> {
     
-    return  this.http.post("/api/orders/" + newOrder.amount, {
+    return  this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
