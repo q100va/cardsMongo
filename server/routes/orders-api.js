@@ -10,6 +10,7 @@ const router = express.Router();
 const Order = require("../models/order");
 const Proportion = require("../models/proportion");
 const List = require("../models/list");
+const NewYear = require("../models/new-year");
 const Period = require("../models/period");
 const Month = require("../models/month");
 const House = require("../models/house");
@@ -227,7 +228,7 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
  * API to find not confirmed orders (OK)
  */
 
- router.get("/all/findAllOrdersNotAccepted/", async (req, res) => {
+router.get("/all/findAllOrdersNotAccepted/", async (req, res) => {
   try {
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
         console.log("req.params.userName");
@@ -379,18 +380,29 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины ноября 2022")
-{    for (let lineItem of deletedOrder.lineItems) {
-      for (let person of lineItem.celebrators) {
-        await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
-      }
-    }} else {
-      if (deletedOrder.holiday == "День учителя и дошкольного работника 2022")
-  {    for (let lineItem of deletedOrder.lineItems) {
+    if (deletedOrder.holiday == "Именины ноября 2022") {
+      for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
-          await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+          await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
         }
-      }}
+      }
+    } else {
+      if (deletedOrder.holiday == "День учителя и дошкольного работника 2022") {
+        for (let lineItem of deletedOrder.lineItems) {
+          for (let person of lineItem.celebrators) {
+            await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+          }
+        }
+      }
+      else {
+        if (deletedOrder.holiday == "Новый год 2023") {
+          for (let lineItem of deletedOrder.lineItems) {
+            for (let person of lineItem.celebrators) {
+              await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -879,7 +891,7 @@ async function createOrder(newOrder) {
       "yang": yangAmount,
       "oneHouse": Math.round(newOrder.amount * 0.3)
     }
-    if (newOrder.filter.nursingHome ) proportion.oneHouse = undefined;
+    if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
     proportion = await Proportion.findOne({ amount: newOrder.amount });
     if (!proportion) {
@@ -1223,7 +1235,7 @@ async function collectSeniors(data) {
     oldWomen: ["oldWomen", "oldMen", "oldest"],
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
     yang: ["yang", "oldMen", "oldWomen", "oldest"],
-    special: ["special", "yang", "oldWomen", "oldMen",  "oldest"],
+    special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
     specialOnly: ["special"],
     allCategory: ["oldMen", "oldWomen", "yang", "oldest", "special"]
   };
@@ -1301,10 +1313,10 @@ async function searchSenior(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
- if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
+  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
     {
-       standardFilter.isReleased = false ;
-    } 
+      standardFilter.isReleased = false;
+    }
   }
 
   //console.log("maxPlus");
@@ -1318,7 +1330,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 2;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;  
+  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 
@@ -1651,16 +1663,498 @@ function upgradeOrders(orders) {
         senior.adminComment = line.adminComment;
         order.absents.push(senior);
       }
-          console.log("order.absents");
-    console.log(order.absents);
+      console.log("order.absents");
+      console.log(order.absents);
     }
     //order.absents.concat(absentSeniors);
   }
 
-console.log("orders");
-console.log(orders);
-return orders;
+  console.log("orders");
+  console.log(orders);
+  return orders;
 }
+
+
+
+////////////////////////////////////////////////////
+
+router.post("/new-year/:amount", async (req, res) => {
+  let finalResult;
+  try {
+    let newOrder = {
+      userName: req.body.userName,
+      holiday: req.body.holiday,
+      amount: req.body.amount,
+      clientFirstName: req.body.clientFirstName,
+      clientPatronymic: req.body.clientPatronymic,
+      clientLastName: req.body.clientLastName,
+      email: req.body.email,
+      contactType: req.body.contactType,
+      contact: req.body.contact,
+      institute: req.body.institute,
+      isAccepted: req.body.isAccepted,
+      comment: req.body.comment,
+      orderDate: req.body.orderDate,
+      temporaryLineItems: [],
+      lineItems: [],
+      filter: req.body.filter,
+      //filter: { noSpecial: true },
+      isCompleted: false
+    };
+
+    finalResult = await createOrderNewYear(newOrder);
+    let text = !finalResult.success ? finalResult.result : "Query Successful";
+
+    const newListResponse = new BaseResponse(200, text, finalResult);
+    res.json(newListResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    let text = 'Обратитесь к администратору. Заявка не сформирована.';
+    if (!finalResult) {
+      let answer = await deleteErrorPlusNewYear(false, req.body.userName);
+      console.log("answer");
+      console.log(answer);
+      if (!answer) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+
+    } else {
+      if (finalResult && finalResult.success) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+      if (finalResult && !finalResult.success) {
+        text = finalResult.result;
+      }
+    }
+    const newListCatchErrorResponse = new BaseResponse(
+      500,
+      text,
+      e
+    );
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+//delete pluses because of error 
+
+async function deleteErrorPlusNewYear(order_id, ...userName) {
+  try {
+    let filter = order_id ? { _id: order_id } : { userName: userName[0], isCompleted: false };
+    //console.log("userName[0]");
+    //console.log(userName[0]);
+
+    let order = await Order.findOne(filter);  //, { projection: { _id: 0, temporaryLineItems: 1 } }
+    if (order) {
+      if (order.temporaryLineItems && order.temporaryLineItems.length > 0) {
+        let seniors_ids = [];
+        for (let person of order.temporaryLineItems) {
+          seniors_ids.push(person.celebrator_id);
+        }
+        await NewYear.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
+      }
+      await Order.deleteOne({ _id: order._id });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    sendMessageToAdmin('something wrong with "deleteErrorPlus"', e);
+  }
+}
+
+
+// Create order
+async function createOrderNewYear(newOrder) {
+
+
+  let proportion = {};
+
+  if (newOrder.amount > 50) {
+    let oldWomenAmount = Math.round(newOrder.amount * 0.3);
+    let oldMenAmount = Math.round(newOrder.amount * 0.2);
+    let specialAmount = Math.round(newOrder.amount * 0.2);
+    let yangAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialAmount;
+
+    proportion = {
+      "amount": newOrder.amount,
+      "oldWomen": oldWomenAmount,
+      "oldMen": oldMenAmount,
+      "special": specialAmount,
+      "yang": yangAmount,
+      "oneHouse": Math.round(newOrder.amount * 0.3)
+    }
+    if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
+  } else {
+    proportion = await Proportion.findOne({ amount: newOrder.amount });
+    if (!proportion) {
+      return {
+        result: `Обратитесь к администратору. Заявка не сформирована. Для количества ${newOrder.amount} не найдена пропорция`,
+        success: false
+      };
+    } else {
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
+      //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
+      console.log("newOrder.filter.region");
+      console.log(newOrder.filter.region);
+
+      console.log("proportion.oneHouse");
+      console.log(proportion.oneHouse);
+
+      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+
+    }
+  }
+
+  const emptyOrder = {
+    userName: newOrder.userName,
+    holiday: newOrder.holiday,
+    amount: newOrder.amount,
+    clientFirstName: newOrder.clientFirstName,
+    clientPatronymic: newOrder.clientPatronymic,
+    clientLastName: newOrder.clientLastName,
+    email: newOrder.email,
+    contactType: newOrder.contactType,
+    contact: newOrder.contact,
+    institute: newOrder.institute,
+    //isRestricted: newOrder.isRestricted,
+    isAccepted: newOrder.isAccepted,
+    comment: newOrder.comment,
+    orderDate: newOrder.orderDate,
+    lineItems: [],
+    filter: newOrder.filter,
+
+  };
+  let order = await Order.create(emptyOrder);
+  let order_id = order._id.toString();
+
+  //console.log("order");
+  //console.log(order);
+
+  let seniorsData;
+  let filter = {};
+  let isOutDate = false;
+
+  if (newOrder.filter) {
+    if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: "" };
+    if ((newOrder.filter.onlyWithPicture || newOrder.filter.oneHouse || newOrder.filter.oneRegion) && newOrder.filter.addressFilter == 'any') {
+      proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
+      proportion.oldWomen = 0;
+      proportion.oldMen = 0;
+      proportion.yang = 0;
+      proportion.special = 0;
+    }
+    if (newOrder.filter.addressFilter == 'forKids') {
+      proportion.oldWomen = proportion.oldWomen + proportion.special;
+      proportion.special = 0;
+      // console.log("proportion");
+      //console.log(proportion);
+      if (!newOrder.filter.year1 && !newOrder.filter.year2) {
+        newOrder.filter.year2 = 1972;
+      }
+    }
+
+    if (newOrder.filter.addressFilter == 'noSpecial') {
+      proportion.yang = proportion.yang + proportion.special;
+      proportion.special = 0;
+    }
+
+    if (newOrder.filter.addressFilter == 'onlySpecial') {
+      proportion.specialOnly = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
+      proportion.oldWomen = 0;
+      proportion.oldMen = 0;
+      proportion.yang = 0;
+      proportion.special = 0;
+    }
+    /*     if (newOrder.filter.nursingHome) {
+          proportion.anyCategory = proportion.amount;
+          proportion.oldWomen = 0;
+          proportion.oldMen = 0;
+          proportion.yang = 0;
+          proportion.special = 0;
+        } */
+
+    if (newOrder.filter.region) filter.region = newOrder.filter.region;
+    if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
+    if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
+    if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
+    if (newOrder.filter.year1 || newOrder.filter.year2) {
+      if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
+      if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
+      if (newOrder.filter.year1 > 1957 && newOrder.filter.addressFilter != 'onlySpecial') {
+        proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
+        proportion.oldWomen = 0;
+        proportion.oldMen = 0;
+      }
+      if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
+    }
+    seniorsData = await fillOrderNewYear(proportion, order_id, filter);
+
+  }
+
+  if (seniorsData.celebratorsAmount < newOrder.amount) {
+
+    await deleteErrorPlusNewYear(order_id);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+      success: false
+
+    }
+  }
+
+  const nursingHomes = await House.find({});
+  let resultLineItems = await generateLineItems(nursingHomes, order_id);
+  console.log("resultLineItems");
+  console.log(resultLineItems);
+  console.log(typeof resultLineItems);
+
+  if (typeof resultLineItems == "string") {
+
+    console.log("resultLineItems222");
+    await deleteErrorPlusNewYear(order_id);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
+      success: false
+    };
+  }
+
+  return {
+    result: resultLineItems,
+    success: true,
+    order_id: order_id
+  }
+}
+
+// create a list of seniors for the order
+
+async function fillOrderNewYear(proportion, order_id, filter) {
+  const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
+
+  let data = {
+    houses: {},
+    restrictedHouses: [],
+    restrictedPearson: [],
+    celebratorsAmount: 0,
+    /*     date1: period.date1,
+        date2: period.date2,
+        maxPlus: period.maxPlus, */
+    filter: filter,
+    order_id: order_id,
+    //temporaryLineItems: [],
+  }
+  if (proportion.oneRegion) {
+    data.regions = {};
+    data.restrictedRegions = [];
+  }
+
+  for (let category of categories) {
+
+    data.category = category;
+    data.proportion = proportion;
+    data.counter = 0;
+    //console.log(category);
+    //console.log(proportion[category]);
+
+    if (proportion[category]) {
+
+      data.maxPlus = 1;
+
+      data = await collectSeniorsNewYear(data);
+
+      if (data.counter < proportion[category]) {
+        data.maxPlus = 2;
+        data = await collectSeniorsNewYear(data);
+      }
+
+      if (data.counter < proportion[category]) {
+        return data;
+      }
+    }
+  }
+  //console.log(data.restrictedHouses);
+  //console.log(data.restrictedPearson);
+  return data;
+}
+
+
+//set restrictions for searching
+
+async function collectSeniorsNewYear(data) {
+
+  const searchOrders = {
+    oldWomen: ["oldWomen", "oldMen", "oldest"],
+    oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
+    yang: ["yang", "oldMen", "oldWomen", "oldest"],
+    special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
+    specialOnly: ["special"],
+    allCategory: ["oldMen", "oldWomen", "yang", "oldest", "special"]
+  };
+  //console.log("data.category");
+  //console.log(data.category);
+
+  for (let kind of searchOrders[data.category]) {
+    let barrier = data.proportion[data.category] - data.counter;
+
+    outer1: for (let i = 0; i < barrier; i++) {
+      let result = await searchSenior(
+        kind,
+        data
+
+      );
+      if (result) {
+        //console.log(result);
+        await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
+        await NewYear.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        data.celebratorsAmount++;
+        data.restrictedPearson.push(result.celebrator_id);
+        data.counter++;
+        console.log("data.proportion.oneHouse");
+        console.log(data.proportion.oneHouse);
+        if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
+        if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
+        console.log("data.regions");
+        console.log(data.regions);
+
+        if (data.proportion.oneHouse) {
+          if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
+            data.restrictedHouses.push(result["nursingHome"]);
+          }
+        }
+        if (data.proportion.oneRegion) {
+          if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
+            data.restrictedRegions.push(result["region"]);
+          }
+        }
+
+      } else {
+        break outer1;
+      }
+    }
+  }
+  return data;
+}
+
+// get senior
+async function searchSenior(
+  kind,
+  data
+  /*   restrictedHouses,
+    restrictedPearson,
+    date1,
+    date2,
+    maxPlus,
+    orderFilter */
+) {
+
+  /*  data.restrictedHouses,
+      data.restrictedPearson,
+      data.date1,
+      data.date2,
+      data.maxPlus,
+      data.filter */
+
+  let standardFilter = {
+    nursingHome: { $nin: data.restrictedHouses },
+
+    _id: { $nin: data.restrictedPearson },
+    //plusAmount: { $lt: maxPlus },
+    //dateBirthday: { $gte: data.date1, $lte: data.date2 },
+    absent: { $ne: true }
+  };
+  if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
+  if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
+  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
+    {
+      standardFilter.isReleased = false;
+    }
+  }
+
+  //console.log("maxPlus");
+  //console.log(maxPlus);
+
+  let filter = Object.assign(standardFilter, data.filter);
+  //console.log("filter");
+
+
+  let celebrator;
+  //CHANGE!!!
+  //let maxPlusAmount = 2;  
+  //let maxPlusAmount = 3;  
+  let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
+  //console.log("maxPlusAmount");
+  //console.log(maxPlusAmount);
+
+  for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
+    filter.plusAmount = { $lt: plusAmount };
+    console.log("filter");
+    console.log(filter);
+    celebrator = await NewYear.findOne(filter);
+    console.log("celebrator");
+    console.log(celebrator);
+    if (celebrator) {
+      //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
+      //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      celebrator.celebrator_id = celebrator._id.toString();
+      return celebrator;
+    }
+  }
+
+  if (!celebrator) {
+    return false;
+  }
+}
+
+//fill lineItems
+async function generateLineItems(nursingHomes, order_id) {
+  //console.log(nursingHomes);
+
+  let lineItems = [];
+  let order = await Order.findOne({ _id: order_id })
+ 
+  console.log("order.temporaryLineItems");
+  //console.log(order.temporaryLineItems);
+
+  for (let person of order.temporaryLineItems) {
+    console.log("person");
+    console.log(person);
+    //console.log(lineItems);
+    let index = -1;
+    //console.log(lineItems.length);
+    if (lineItems.length > 0) {
+      index = lineItems.findIndex(
+        (item) => item.nursingHome == person.nursingHome
+      );
+    }
+    // console.log(index);
+    if (index > -1) {
+      lineItems[index].celebrators.push(person);
+    } else {
+      let foundHouse = nursingHomes.find(
+        (item) => item.nursingHome == person.nursingHome
+      );
+      //console.log(foundHouse);
+      //console.log(person.nursingHome);
+      if (!foundHouse) { return person.nursingHome; }
+      lineItems.push({
+        region: foundHouse.region,
+        nursingHome: foundHouse.nursingHome,
+        address: foundHouse.address,
+        infoComment: foundHouse.infoComment,
+        adminComment: foundHouse.adminComment,
+        noAddress: foundHouse.noAddress,
+        celebrators: [person],
+      });
+    }
+  }
+  await Order.updateOne({ _id: order_id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+  //throw new Error('test1'); //delete
+  //console.log("updatedOrder");
+  //console.log(updatedOrder);
+  // console.log(lineItems);
+  return lineItems;
+}
+
+function sendMessageToAdmin(text, e) { console.log(text + e); }
 
 
 

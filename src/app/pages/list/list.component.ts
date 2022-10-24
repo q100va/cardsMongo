@@ -74,6 +74,20 @@ export class ListComponent implements OnInit {
     );
   }
 
+  generateNewYearList() {
+    this.listService.createNewYearList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
   deleteList() {
     console.log("delete");
     this.listService.deleteList().subscribe(
@@ -115,10 +129,70 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
+  showNewYearList(event: any) {
+    this.listService.findAllNewYearLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
         this.lists = res["data"].filter(item => item.plusAmount <3);
+
+        this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  } 
+
+  showLessPlusNewYearList(event: any) {
+    this.listService.findAllNewYearLists().subscribe(
+      (res) => {
+        this.lists = res["data"].filter(item => item.plusAmount <1);
 
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;

@@ -7,12 +7,14 @@
 
 const express = require("express");
 const List = require("../models/list");
+const NewYear = require("../models/new-year");
 const NameDay = require("../models/name-day");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
 const Period = require("../models/period");
 const TeacherDay = require("../models/teacher-day");
+const house = require("../models/house");
 
 //const User = require("../models/user");
 
@@ -484,6 +486,153 @@ async function findTeachers() {
 
 /////////////////////////////////////////
 
+// Create NY list API 
+router.post("/new-year/create", async (req, res) => {
+  try {
+    console.log("0- inside Create list API");
+    let result = await findAllNYCelebrators();
+    console.log("4-inside Create list API " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+async function findAllNYCelebrators() {
+
+  //throw new Error("Something bad happened");
+  let result = [];
+  console.log("1- inside findAllMonthCelebrators newList");
+  //let activeList = await List.find({});
+  /*   let filledRegions = [];
+    for (region of activeRegions) {
+      filledRegions.push(region.region);
+    } */
+
+  /*   let filledIds = [];
+    for (item of activeList) {
+      filledIds.push(item._id);
+    }
+    console.log("filledIds");
+    console.log(filledIds); */
+    let updatedNursingHome = await house.find({isActive: true, dateLastUpdate: {$gt: new Date("2022-08-31"), $lt: new Date("2022-10-22")}});
+    //console.log(updatedNursingHome);
+    let namesOfUpdatedNursingHome = [];
+    for (let home of updatedNursingHome) {
+      namesOfUpdatedNursingHome.push(home.nursingHome);
+    }
+
+    let list = await Senior.find({isDisabled: false, dateExit: null, isRestricted: false, nursingHome: {$in: namesOfUpdatedNursingHome} });
+    //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "КРИВЕЦ", lastName: "Коршаков" });
+    console.log(list);
+  
+    if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
+    console.log("2- seniors" + list.length);
+    let updatedCelebrators = [];
+    for (let celebrator of list) {
+  
+/*       let cloneSpecialComment = await specialComment(
+        2022 - celebrator["yearBirthday"]
+      ); */
+  
+  
+      let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+        ? celebrator.dateBirthday
+        : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+          ? celebrator.monthBirthday
+          : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+  
+      let cloneCategory = '';
+      let cloneOldest = false;
+  
+      if (celebrator["noAddress"]) {
+        cloneCategory = "special";
+      } else {
+        if (celebrator.yearBirthday < 1941) {
+          cloneOldest = true;
+        }
+        if (celebrator.yearBirthday < 1958 && celebrator.gender == "Female") {
+          cloneCategory = "oldWomen";
+        } else {
+          if (celebrator.yearBirthday < 1958 && celebrator.gender == "Male") {
+            cloneCategory = "oldMen";
+          } else {
+            if (celebrator.yearBirthday > 1957 || !celebrator.yearBirthday) {
+              cloneCategory = "yang";
+            }
+          }
+        }
+      }
+  
+      let cloneCelebrator = {
+        region: celebrator.region,
+        nursingHome: celebrator.nursingHome,
+        lastName: celebrator.lastName,
+        firstName: celebrator.firstName,
+        patronymic: celebrator.patronymic,
+        dateBirthday: celebrator.dateBirthday,
+        monthBirthday: celebrator.monthBirthday,
+        yearBirthday: celebrator.yearBirthday,
+        gender: celebrator.gender,
+        comment1: celebrator.comment1,
+        comment2: celebrator.comment2,
+        linkPhoto: celebrator.linkPhoto,
+        nameDay: celebrator.nameDay,
+        dateNameDay: celebrator.dateNameDay,
+        monthNameDay: celebrator.monthNameDay,
+        noAddress: celebrator.noAddress,
+        isReleased: celebrator.isReleased,
+        plusAmount: 0,
+        //specialComment: cloneSpecialComment,
+        fullDayBirthday: cloneFullDayBirthday,
+        oldest: cloneOldest,
+        category: cloneCategory,
+        holyday: 'Новый год 2023',
+        fullData: celebrator.nursingHome +
+          celebrator.lastName +
+          celebrator.firstName +
+          celebrator.patronymic +
+          celebrator.dateBirthday +
+          celebrator.monthBirthday +
+          celebrator.yearBirthday,
+      };
+      //console.log("special - " + celebrator["specialComment"]);
+      //console.log("fullday - " + celebrator.fullDayBirthday);
+      //console.log(celebrator);
+      updatedCelebrators.push(cloneCelebrator);
+    }
+  
+    //console.log(list);
+    //console.log("celebrator");
+    //console.log("I am here");
+    let newList = await checkDoubles(updatedCelebrators);
+    // newList = newList1.slice();
+  
+    console.log("2.5 - " + newList.length);
+  
+    const options = { ordered: false };
+    let finalList = await NewYear.insertMany(newList, options);
+  
+    //console.log(finalList);
+  
+    console.log(`3- ${finalList.length} documents were inserted`);
+  
+    result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length < finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
+    //console.log("3 - final" + finalList); 
+ 
+  return result;
+  //return true;
+}
+
+
+
+////////////////////////////////////////////
 
 /**
  * API to delete all
@@ -521,6 +670,28 @@ router.get("/", async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     List.find({ absent: {$ne: true} }, function (err, lists) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(lists);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+//Find all NY lists API
+router.get("/new-year", async (req, res) => {
+  try {
+    //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
+    NewYear.find({ absent: {$ne: true} }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);

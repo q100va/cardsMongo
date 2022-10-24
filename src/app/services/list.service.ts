@@ -30,6 +30,10 @@ export class ListService {
     return this.http.get("/api/lists/name-day");
 }
 
+findAllNewYearLists(): Observable<any> {
+  return this.http.get("/api/lists/new-year");
+}
+
 findAllTeacherDayLists(): Observable<any> {
   return this.http.get("/api/lists/teacher-day");
 }
@@ -46,6 +50,11 @@ findAllTeacherDayLists(): Observable<any> {
 
   createTeacherDayList(): Observable<any> { 
     return  this.http.post("/api/lists/teacher-day/create" , {
+    });
+  }
+
+  createNewYearList(): Observable<any> { 
+    return  this.http.post("/api/lists/new-year/create" , {
     });
   }
 

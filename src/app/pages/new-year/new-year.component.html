@@ -1,0 +1,338 @@
+<!--
+============================================
+ html code to create  orders.
+===========================================
+-->
+<div fxLayout="row" class="main" style="width : 95%;">
+
+    <mat-card class="mat-elevation-z0" style="width : 100%;">
+        <div class="wrapper">
+            <div class="left" style="padding-left: 30px; padding-right: 8px;">
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-card-title> Новая заявка </mat-card-title>
+
+                        </td>
+                        <td>
+                            <mat-card-actions style="text-align: right; padding-right: px;">
+                                <button mat-raised-button (click)="clear()" color="accent">Очистить</button>
+                                <button (click)="createOrder()" mat-raised-button color="primary"
+                                    [disabled]="!form.valid">Сформировать</button>
+                            </mat-card-actions>
+                        </td>
+                    </tr>
+                </table>
+
+                <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+                <form [formGroup]="form" #orderForm>
+                    <mat-card-content>
+
+                        <div fxLayout="column" fxLayoutGap="10px">
+                            <table class="example-full-width" cellspacing="0">
+                                <tr>
+                                    <td>
+
+                                        <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
+                                        <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
+                                        <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
+                                    </td>
+                                    <td>
+                                        <mat-slide-toggle [formControl]="form.controls['isAccepted']">Не требует
+                                            подтверждения</mat-slide-toggle>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <mat-accordion class="example-headers-align">
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Фильтры
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+
+                                    <table class="example-full-width" cellspacing="0">
+                                        <tr>
+                                            <td width="100%">
+
+                                                <label id="example-radio-group-label">Адреса</label>
+                                                <mat-radio-group class="example-radio-group" [(ngModel)]="addressFilter"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                    <mat-radio-button class="example-radio-button" [value]="'any'" default>
+                                                        любые
+                                                    </mat-radio-button>
+                                                    <mat-radio-button class="example-radio-button" [value]="'forKids'">
+                                                        для детей
+                                                    </mat-radio-button>
+                                                    <mat-radio-button class="example-radio-button"
+                                                        [value]="'noSpecial'">
+                                                        без БОА
+                                                    </mat-radio-button>
+                                                    <mat-radio-button class="example-radio-button"
+                                                        [value]="'onlySpecial'">
+                                                        только БОА
+                                                    </mat-radio-button>
+                                                </mat-radio-group>
+
+                                                <br />
+
+                                                <label id="example-radio-group-label">Пол</label>
+                                                <mat-radio-group class="example-radio-group" [(ngModel)]="genderFilter"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                    <mat-radio-button class="example-radio-button" [value]="'any'" default>
+                                                        любой
+                                                    </mat-radio-button>
+                                                    <mat-radio-button class="example-radio-button" [value]="'Female'">
+                                                        женщины
+                                                    </mat-radio-button>
+                                                    <mat-radio-button class="example-radio-button" [value]="'Male'">
+                                                        мужчины
+                                                    </mat-radio-button>
+                                                </mat-radio-group>
+
+                                                <br />
+
+                                                <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">Только с фото</mat-slide-toggle>
+
+                                            </td>
+                                            <td>
+
+                                               <!--  <h4 matTooltip="Можно указать только одно значение: до или после которого должны быть даты.">Даты</h4>
+
+                                                <table class="example-half-width" cellspacing="0">
+                                                    <tr>
+                                                        <td>
+
+                                                            <mat-form-field class="example-user-input"
+                                                                appearance="fill">
+                                                                <mat-label>с</mat-label>
+                                                                <input matInput type="number"
+                                                                    [formControl]="form.controls['date1']" placeholder="6" />
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td>
+
+                                                            <mat-form-field class="example-user-input"
+                                                                appearance="fill">
+                                                                <mat-label>по</mat-label>
+                                                                <input matInput type="number"
+                                                                    [formControl]="form.controls['date2']" placeholder="15"/>
+                                                            </mat-form-field>
+                                                        </td>
+                                                    </tr>
+                                                </table> -->
+
+                                                <h4 matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">Год рождения</h4> 
+<!--                                                  <p>
+                                                    <span matBadge="i" matBadgeOverlap="false" matTooltip="Info about the action">Год рождения</span>
+                                                  </p>  -->
+
+                                                <table class="example-half-width" cellspacing="0">
+                                                    <tr>
+                                                        <td>
+
+                                                            <mat-form-field class="example-user-input"
+                                                                appearance="fill">
+                                                                <mat-label>с</mat-label>
+                                                                <input matInput type="number"
+                                                                    [formControl]="form.controls['year1']" placeholder="1935" />
+                                                            </mat-form-field>
+                                                        </td>
+                                                        <td>
+
+                                                            <mat-form-field class="example-user-input"
+                                                                appearance="fill">
+                                                                <mat-label>по</mat-label>
+                                                                <input matInput type="number"
+                                                                    [formControl]="form.controls['year2']" placeholder="1965"/>
+                                                            </mat-form-field>
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h4>Регион</h4>
+                                                            <mat-form-field appearance="fill">
+                                                               
+                                                                <mat-select [formControl]="form.controls['region']">
+                                                                    <mat-option></mat-option>
+                                                                    <mat-option *ngFor="let region of regions"
+                                                                        [value]="region.name">
+                                                                        {{ region.name }}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h4>Интернат</h4>
+                                                            <mat-form-field appearance="fill">
+                                                                <input matInput type="text"
+                                                                [formControl]="form.controls['nursingHome']" placeholder="НОГИНСК"/>                                                                
+                                                            </mat-form-field>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                        </tr>
+                                    </table>
+
+                                </mat-expansion-panel>
+
+                            </mat-accordion>
+                            <table class="example-full-width" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Email</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['email']" />
+                                        </mat-form-field>
+                                    </td>
+
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Количество адресов*</mat-label>
+                                            <input type="number" matInput [formControl]="form.controls['amount']" />
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.email.hasError('email') && form.controls.email.touched">
+                                            Введите
+                                            валидный
+                                            email!</mat-error>
+                                    </td>
+                                    <td>
+
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
+                                            Обязательное
+                                            поле!</mat-error>
+                                        <!--                                         <mat-error class="error"
+                                            *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched">
+                                            Только числа!</mat-error> -->
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Другой контакт</mat-label>
+                                            <mat-select [formControl]="form.controls['contactType']">
+                                                <mat-option></mat-option>
+                                                <mat-option *ngFor="let type of types" [value]="type">
+                                                    {{ type }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-hint>обязательно указать, если не указан email</mat-hint>
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Аккаунт/номер</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['contact']" />
+                                            <mat-hint>обязательно указать, если не указан email</mat-hint>
+                                        </mat-form-field>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Имя</mat-label>
+                                            <input type="text" matInput
+                                                [formControl]="form.controls['clientFirstName']" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Отчество</mat-label>
+                                            <input type="text" matInput
+                                                [formControl]="form.controls['clientPatronymic']" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Фамилия</mat-label>
+                                            <input type="text" matInput
+                                                [formControl]="form.controls['clientLastName']" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Представляет коллектив</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['institute']" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            <mat-form-field appearance="fill" style="padding-right: 8px;">
+                                <mat-label>Комментарий</mat-label>
+                                <input type="text" matInput [formControl]="form.controls['comment']" />
+                            </mat-form-field>
+                        </div>
+
+                    </mat-card-content>
+
+                </form>
+            </div>
+            <div class="right" style="padding-left: 30px; padding-right: 30px;">
+                <mat-card-title> Список поздравляемых </mat-card-title>
+
+<!--                 <mat-card-actions>
+                    <button mat-raised-button (click)="clear()" color="primary"
+                        [disabled]="!form.valid">Очистить</button>
+                    <button (click)="createOrder()" mat-raised-button color="accent"
+                        [disabled]="!canSave">Сохранить</button>
+                </mat-card-actions> -->
+                <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
+                <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
+
+                <br /><br />
+                <dir style="width: 100%;">
+                    <dir>
+                        <mat-spinner mode="indeterminate" *ngIf="spinner" style="margin:40px auto ;"></mat-spinner>
+                    </dir>
+                </dir>
+
+                <mat-card-content *ngFor="let lineItem of lineItems">
+
+                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                    <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
+                    <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
+
+                    <div *ngFor="let celebrator of lineItem.celebrators">
+                      <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+
+                        {{celebrator.lastName}}
+                        {{celebrator.firstName}}
+                        {{celebrator.patronymic}}
+                         - {{celebrator.yearBirthday}} г.р.
+                        {{celebrator.comment1}}
+                        {{celebrator.linkPhoto}}
+   
+                    </div>
+                    <br />
+                </mat-card-content>
+
+
+
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+
+

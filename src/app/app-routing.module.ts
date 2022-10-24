@@ -50,6 +50,7 @@ import { AllOrdersComponent } from "./pages/all-orders/all-orders.component";
 import { AddListsComponent } from "./pages/add-lists/add-lists.component";
 import { AllAbsentsComponent } from "./pages/all-absents/all-absents.component";
 import { TeacherDayComponent } from "./pages/teacher-day/teacher-day.component";
+import { NewYearComponent } from "./pages/new-year/new-year.component";
 
 const routes: Routes = [
   {
@@ -100,6 +101,11 @@ const routes: Routes = [
       {
         path: "orders/create/new",
         component: OrderComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/new-year",
+        component: NewYearComponent,
         canActivate: [AuthGuard],
       },
       {

@@ -21,8 +21,12 @@
         <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
         <br /><br /><br />
-        <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
-        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button>
+<!--         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
+        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
+        <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список НГ</button>
+       <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
+        <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше 1+</button>
+
     </mat-card-actions>
 
     <mat-card-content *ngIf="isShowList">
