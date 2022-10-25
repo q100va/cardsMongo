@@ -276,8 +276,8 @@ router.post("/add-many/", async (req, res) => {
       senior.isDisabled = false;
       senior.noAddress = house.noAddress;
       senior.isReleased = house.isReleased;
-      //senior.dateEnter = house.dateLastUpdate;
-      senior.dateEnter = Date(10/11/2022);
+      senior.dateEnter = house.dateLastUpdate;
+      //senior.dateEnter = Date(10/11/2022);
       senior.dateExit = '';
       //console.log(senior.dateExit);
       if (!senior.lastName) senior.lastName = '';
@@ -661,7 +661,7 @@ router.put("/update-lists/", async (req, res) => {
           fullDayBirthday: cloneFullDayBirthday,
           oldest: cloneOldest,
           category: cloneCategory,
-          holyday: 'ДР ноября 2022',
+          holyday: 'ДР декабря 2022',
           fullData: celebrator.nursingHome +
             celebrator.lastName +
             celebrator.firstName +

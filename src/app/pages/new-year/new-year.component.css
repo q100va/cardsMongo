@@ -8,10 +8,13 @@ style
     margin: 10px auto;
     width: 95%;
     
+    
   }
 
   .mat-card {
     padding: 35px;
+    background-image: url('src\assets\pngwing.com (23).png');
+    background-repeat: no-repeat;
   }
   
   .mat-card-actions {

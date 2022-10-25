@@ -40,7 +40,7 @@ const nameDaySchema = new Schema(
     absent:  { type: Boolean, default: false },
 
   },
-  { collection: "nameDays_november" }
+  { collection: "nameDays_december" }
 );
 
 module.exports = mongoose.model("NameDay", nameDaySchema);
