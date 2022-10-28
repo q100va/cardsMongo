@@ -861,19 +861,20 @@ async function deleteErrorPlus(order_id, ...userName) {
 // Create order
 async function createOrder(newOrder) {
   let month = await Month.findOne({ isActive: true });
+  //let period = await Period.findOne({ key:0 });
   let period = await Period.findOne({ isActive: true });
   if (!period)
     return {
       result: "Обратитесь к администратору. Заявка не сформирована. Не найден активный период.",
       success: false
-    };
+    }; /* CANCEL */
 
-  let periodResult = await checkActivePeriod(period, month);
+ let periodResult = await checkActivePeriod(period, month);
   if (!periodResult) return {
     result: "Обратитесь к администратору. Заявка не сформирована. Не найден активный период.",
     success: false
   };
-  if (typeof periodResult == "string") period = await Period.findOne({ isActive: true });
+  if (typeof periodResult == "string") period = await Period.findOne({ isActive: true }); /* CANCEL */
 
   let proportion = {};
 
@@ -1042,8 +1043,8 @@ async function createOrder(newOrder) {
     };
   }
 
-  checkActiveList(period, month, isOutDate, seniorsData.date1, seniorsData.date2);
-
+ checkActiveList(period, month, isOutDate, seniorsData.date1, seniorsData.date2);
+  // CANCEL 
   return {
     result: resultLineItems,
     success: true,
@@ -1801,8 +1802,9 @@ async function createOrderNewYear(newOrder) {
       console.log("proportion.oneHouse");
       console.log(proportion.oneHouse);
 
-      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
-
+      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome /* && newOrder.amount < 21 */) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+      console.log("proportion.oneRegion");
+      console.log(proportion.oneRegion);
     }
   }
 

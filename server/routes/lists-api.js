@@ -14,7 +14,7 @@ const router = express.Router();
 const Senior = require("../models/senior");
 const Period = require("../models/period");
 const TeacherDay = require("../models/teacher-day");
-const house = require("../models/house");
+const House = require("../models/house");
 
 //const User = require("../models/user");
 
@@ -109,9 +109,17 @@ async function findAllMonthCelebrators(month) {
     console.log("filledIds");
     console.log(filledIds); */
 
- let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false });
+ let notActiveHouses = await House.find({isActive: false});
+ let notActiveHousesNames = [];
+ for (let house of notActiveHouses) {
+  notActiveHousesNames.push(house.nursingHome);
+ }
+ console.log("notActiveHousesNames");
+ console.log(notActiveHousesNames);
+
+ let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: {$nin: notActiveHousesNames}});
  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "КРАСНОЯРСК" });
-  console.log(list);
+  //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
   console.log("2- seniors" + list.length);
@@ -310,7 +318,8 @@ async function findAllMonthNameDays(month) {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthNameDays newList");
-  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, dateExit: null, isRestricted: false });
+  let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, dateExit: null, isRestricted: false});
+  //let list = await Senior.find({ "monthNameDay": month, "isDisabled": false, dateExit: null, isRestricted: false, lastName:"Чупрова", nursingHome: "АРХАНГЕЛЬСК_ДАЧНАЯ" });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -521,7 +530,7 @@ async function findAllNYCelebrators() {
     }
     console.log("filledIds");
     console.log(filledIds); */
-    let updatedNursingHome = await house.find({isActive: true, dateLastUpdate: {$gt: new Date("2022-08-31"), $lt: new Date("2022-10-22")}});
+    let updatedNursingHome = await House.find({isActive: true, dateLastUpdate: {$gt: new Date("2022-08-31"), $lt: new Date("2022-10-22")}});
     //console.log(updatedNursingHome);
     let namesOfUpdatedNursingHome = [];
     for (let home of updatedNursingHome) {
@@ -529,7 +538,7 @@ async function findAllNYCelebrators() {
     }
 
     let list = await Senior.find({isDisabled: false, dateExit: null, isRestricted: false, nursingHome: {$in: namesOfUpdatedNursingHome} });
-    //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "КРИВЕЦ", lastName: "Коршаков" });
+    //let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: "МИХАЙЛОВ", dateEnter: {$gt: new Date("2022-10-25")} });
     console.log(list);
   
     if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
