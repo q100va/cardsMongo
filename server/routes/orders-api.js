@@ -1314,7 +1314,9 @@ async function searchSenior(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
-  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
+ // console.log("DATA");
+  //console.log(data);
+  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
     standardFilter.isReleased = false;}
 /*     if (data.proportion.amount > 12 ) {
     {
@@ -1326,8 +1328,8 @@ async function searchSenior(
   //console.log(maxPlus);
 
   let filter = Object.assign(standardFilter, data.filter);
-  //console.log("filter");
-
+  //console.log("FILTER");
+  //console.log(filter);
 
   let celebrator;
   //CHANGE!!!
@@ -2067,7 +2069,7 @@ async function searchSeniorNewYear(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
-  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
+  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
     {
       standardFilter.isReleased = false;
     }
