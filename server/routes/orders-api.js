@@ -1315,10 +1315,12 @@ async function searchSenior(
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.filter.address == "onlySpecial") {
+    standardFilter.isReleased = false;}
+/*     if (data.proportion.amount > 12 ) {
     {
       standardFilter.isReleased = false;
     }
-  }
+  } */
 
   //console.log("maxPlus");
   //console.log(maxPlus);
@@ -2088,6 +2090,7 @@ async function searchSeniorNewYear(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
+    //filter.comment1 = "(1 корп. 5 этаж)"; //CANCEL
     console.log("filter");
     console.log(filter);
     celebrator = await NewYear.findOne(filter);
