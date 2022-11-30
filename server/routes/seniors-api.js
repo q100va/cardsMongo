@@ -14,6 +14,8 @@ const Month = require("../models/month");
 const List = require("../models/list");
 const Order = require("../models/order");
 const NameDay = require("../models/name-day");
+
+
 // Find all seniors
 router.get("/", async (req, res) => {
   try {
@@ -276,8 +278,8 @@ router.post("/add-many/", async (req, res) => {
       senior.isDisabled = false;
       senior.noAddress = house.noAddress;
       senior.isReleased = house.isReleased;
-      senior.dateEnter = house.dateLastUpdate;
-      //senior.dateEnter = Date(10/11/2022);
+      //senior.dateEnter = house.dateLastUpdate;
+      senior.dateEnter = Date(11/3/2022);
       senior.dateExit = '';
       //console.log(senior.dateExit);
       if (!senior.lastName) senior.lastName = '';
@@ -290,10 +292,104 @@ router.post("/add-many/", async (req, res) => {
       if (senior.gender == 'м') senior.gender = 'Male';
     }
 
- console.log(seniors);
+ //console.log(seniors);
+
+
     const result = await Senior.insertMany(seniors, { ordered: false });
-    //const result = await Senior.insertOne(seniors[0]);
-    console.log(result);
+    //console.log(result);
+    const month = await Month.findOne({ isActive: true });
+
+    const celebrators = seniors.filter(item => item.monthBirthday == month.number);
+    console.log(celebrators.length);
+
+    const house = await House.findOne({nursingHome: seniors[0].nursingHome});
+
+        if (celebrators.length > 0 && house.isActive == true) {
+      let updatedCelebrators = [];
+  for (let celebrator of celebrators) {
+
+    let cloneSpecialComment = await specialComment(
+      2022 - celebrator["yearBirthday"]
+    );
+
+
+    let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+      ? celebrator.dateBirthday
+      : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+        ? celebrator.monthBirthday
+        : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+
+    let cloneCategory = '';
+    let cloneOldest = false;
+
+    if (celebrator["noAddress"]) {
+      cloneCategory = "special";
+    } else {
+      if (celebrator.yearBirthday < 1941) {
+        cloneOldest = true;
+      }
+      if (celebrator.yearBirthday < 1958 && celebrator.gender == "Female") {
+        cloneCategory = "oldWomen";
+      } else {
+        if (celebrator.yearBirthday < 1958 && celebrator.gender == "Male") {
+          cloneCategory = "oldMen";
+        } else {
+          if (celebrator.yearBirthday > 1957 || !celebrator.yearBirthday) {
+            cloneCategory = "yang";
+          }
+        }
+      }
+    }
+
+    let cloneCelebrator = {
+      region: celebrator.region,
+      nursingHome: celebrator.nursingHome,
+      lastName: celebrator.lastName,
+      firstName: celebrator.firstName,
+      patronymic: celebrator.patronymic,
+      dateBirthday: celebrator.dateBirthday,
+      monthBirthday: celebrator.monthBirthday,
+      yearBirthday: celebrator.yearBirthday,
+      gender: celebrator.gender,
+      comment1: celebrator.comment1,
+      comment2: celebrator.comment2,
+      linkPhoto: celebrator.linkPhoto,
+      nameDay: celebrator.nameDay,
+      dateNameDay: celebrator.dateNameDay,
+      monthNameDay: celebrator.monthNameDay,
+      noAddress: celebrator.noAddress,
+      isReleased: celebrator.isReleased,
+      plusAmount: 0,
+      specialComment: cloneSpecialComment,
+      fullDayBirthday: cloneFullDayBirthday,
+      oldest: cloneOldest,
+      category: cloneCategory,
+      holyday: 'ДР января 2023',
+      fullData: celebrator.nursingHome +
+        celebrator.lastName +
+        celebrator.firstName +
+        celebrator.patronymic +
+        celebrator.dateBirthday +
+        celebrator.monthBirthday +
+        celebrator.yearBirthday,
+    };
+    updatedCelebrators.push(cloneCelebrator);
+  }
+
+  //console.log(list);
+  //console.log("celebrator");
+  //console.log("I am here");
+  let newList = await checkDoubles(updatedCelebrators);
+  // newList = newList1.slice();
+
+  console.log("2.5 - " + newList.length);
+
+  const options = { ordered: false };
+  let finalList = await List.insertMany(newList, options);
+      //await List.insertMany(celebrators, { ordered: false });
+      console.log(finalList);
+    }
+
     const createSeniorResponse = new BaseResponse(200, "Query Successful", result);
     return res.status(200).send(createSeniorResponse.toObject());
 
@@ -661,7 +757,7 @@ router.put("/update-lists/", async (req, res) => {
           fullDayBirthday: cloneFullDayBirthday,
           oldest: cloneOldest,
           category: cloneCategory,
-          holyday: 'ДР декабря 2022',
+          holyday: 'ДР января 2023',
           fullData: celebrator.nursingHome +
             celebrator.lastName +
             celebrator.firstName +
@@ -774,6 +870,81 @@ async function specialComment(age) {
   }
   //console.log(special);
   return special;
+}
+
+// Add comments
+async function specialComment(age) {
+  let special = '';
+  let specialComments = {
+    91: "год",
+    92: "года",
+    93: "года",
+    94: "года",
+    96: "лет",
+    97: "лет",
+    98: "лет",
+    99: "лет",
+    101: "год",
+    102: "года",
+    103: "года",
+    104: "года",
+    106: "лет",
+    107: "лет",
+    108: "лет",
+    109: "лет",
+    111: "лет",
+    112: "лет",
+    113: "лет",
+    114: "лет",
+    116: "лет",
+    117: "лет",
+  };
+  if (age > 103 || age < 18) console.log(`Strange age: ${age}`);
+  if (age % 5 === 0) {
+    special = `Юбилей ${age} лет!`;
+  } else {
+    if (age > 90) {
+      special = `${age} ${specialComments[age]}!`;
+    } else {
+      special = "";
+    }
+  }
+  //console.log(special);
+  return special;
+}
+
+// Delete duplicates
+async function checkDoubles(array) {
+  console.log("duplicates");
+  let tempArray = [];
+  let duplicates = [];
+  for (let person of array) {
+    tempArray.push(person.fullData);
+  }
+  //console.log(tempArray);
+  tempArray.sort();
+  //console.log(tempArray);
+  for (let i = 0; i < tempArray.length - 1; i++) {
+    if (tempArray[i + 1] == tempArray[i]) {
+      duplicates.push(tempArray[i]);
+    }
+  }
+  //console.log(duplicates);
+  if (duplicates.length > 0) {
+    console.log("There are duplicates! They were deleted from the list.");
+    console.log(duplicates);
+
+    for (let duplicate of duplicates) {
+      let index = array.findIndex(item => item.fullData == duplicate);
+      if (index > -1) {
+        array.splice(index, 1);
+      }
+    }
+  } else { console.log("There are not duplicates!"); }
+
+  //console.log(array);
+  return array;
+
 }
 
 

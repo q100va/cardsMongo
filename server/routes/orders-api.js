@@ -75,7 +75,7 @@ router.post("/create/period/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    Order.find({ isDisabled: false }, function (err, orders) {
+    Order.find({ isDisabled: false , userName: {$ne :"okskust"}, isAccepted: false}, function (err, orders) {
       if (err) {
         console.log(err);
         const readOrdersMongodbErrorResponse = new BaseResponse(
@@ -328,7 +328,7 @@ router.patch("/delete/:id", async (req, res) => {
 });
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения декабря 2022") {
+  if (deletedOrder.holiday == "Дни рождения января 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -380,7 +380,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины декабря 2022") {
+    if (deletedOrder.holiday == "Именины января 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1316,8 +1316,14 @@ async function searchSenior(
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
  // console.log("DATA");
   //console.log(data);
-  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
-    standardFilter.isReleased = false;}
+/*   if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
+    standardFilter.isReleased = false;}   */
+     if (data.proportion.amount > 12 ) {
+      standardFilter.isReleased = false;} 
+    //standardFilter.isReleased = false;
+
+
+
 /*     if (data.proportion.amount > 12 ) {
     {
       standardFilter.isReleased = false;
@@ -1787,7 +1793,7 @@ async function createOrderNewYear(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse": Math.round(newOrder.amount * 0.3)
+      "oneHouse": 5 //Math.round(newOrder.amount * 0.3)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -2069,11 +2075,14 @@ async function searchSeniorNewYear(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
-  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
-    {
-      standardFilter.isReleased = false;
-    }
-  }
+/*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
+      standardFilter.isReleased = false;    
+  } */ 
+  if (data.proportion.amount > 12 ) { 
+    standardFilter.isReleased = false;    
+} 
+  //standardFilter.isReleased = false; // CANCEL
+
 
   //console.log("maxPlus");
   //console.log(maxPlus);
@@ -2091,8 +2100,8 @@ async function searchSeniorNewYear(
   //console.log(maxPlusAmount);
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
-    filter.plusAmount = { $lt: plusAmount };
-    //filter.comment1 = "(1 корп. 5 этаж)"; //CANCEL
+  filter.plusAmount = { $lt: plusAmount };
+  //filter.comment1 = "(1 корп. 5 этаж)"; //CANCEL
     console.log("filter");
     console.log(filter);
     celebrator = await NewYear.findOne(filter);

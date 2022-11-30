@@ -133,7 +133,9 @@ export class ListComponent implements OnInit {
     this.listService.findAllNewYearLists().subscribe(
       (res) => {
         this.lists = res["data"];
-        this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        //countries.sort( (a, b) => a.localeCompare(b) )
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
@@ -161,7 +163,7 @@ export class ListComponent implements OnInit {
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <4);
+        this.lists = res["data"].filter(item => item.plusAmount <3);
 
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;

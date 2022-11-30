@@ -88,7 +88,65 @@ export class InstaOrdersComponent implements OnInit {
     console.log("newOrder");
     console.log(newOrder);
 
-    this.orderService.createOrder(newOrder).subscribe(
+    if (newOrder.holiday == "Дни рождения января 2023")
+    {this.orderService.createOrder(newOrder).subscribe(
+      //this.orderService.createOrderNewYear(newOrder).subscribe(
+      async (res) => {
+        let result = res["data"]["result"];
+        if (typeof result == "string") {
+          alert(result);
+          console.log(res);
+        } else {
+          //alert(res.msg);
+          console.log(res);
+          this.orderService.findOrderById(res["data"]["order_id"]).subscribe(
+            (res) => {
+              console.log(res["data"]);
+              this.order = res["data"];
+              this.needAccepting = !this.order.isAccepted
+                ? "Требует подтверждения"
+                : "Не требует подтверждения";
+
+              this.fullName =
+                (this.order.clientLastName ? this.order.clientLastName : "") +
+                " " +
+                (this.order.clientFirstName ? this.order.clientFirstName : "") +
+                " " +
+                (this.order.clientPatronymic
+                  ? this.order.clientPatronymic
+                  : "") +
+                (this.order.institute ? this.order.institute : "");
+              this.contact =
+                (this.order.email ? this.order.email : "") +
+                " " +
+                (this.order.contactType ? this.order.contactType : "") +
+                " " +
+                (this.order.contact ? this.order.contact : "");
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+          this.lineItems = result;
+          this.isShowOrder = true;
+          this.index++;
+          if (this.index < orders.length) {
+            this.isNext = true;
+            this.isFirst = false;
+          } else {
+            this.isNext = false;
+          }
+        }
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );}
+
+
+ if (newOrder.holiday == "Новый год 2023")
+ {this.orderService.createOrderNewYear(newOrder).subscribe(
       async (res) => {
         let result = res["data"]["result"];
         if (typeof result == "string") {
@@ -141,7 +199,11 @@ export class InstaOrdersComponent implements OnInit {
         console.log(err);
       }
     );
+}
+
   }
+
+  
 
   next() {}
 }

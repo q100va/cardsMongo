@@ -28,7 +28,7 @@ export class SeniorsCreateComponent implements OnInit {
       lastName: [null],
       firstName: [null, Validators.compose([Validators.required])],
       patronymic: [null],
-      isRestricted: [null],
+      isRestricted: [false],
       dateBirthday: [null],
       monthBirthday: [null],
       yearBirthday: [null],

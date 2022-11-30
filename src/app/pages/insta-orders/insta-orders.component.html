@@ -33,7 +33,8 @@
 
         <div *ngIf="!order.isAccepted"
             style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
-            <p>Добрый день, {{order.clientFirstName}}!</p>
+            <p *ngIf = "order.clientFirstName">Добрый день, {{order.clientFirstName}}!</p>
+            <p *ngIf = "order.clientFirstName == null">Добрый день!</p>
             <p style="font-size: 0.7em; color: rgb(163, 192, 199)">
                 {{order.contact}}
             </p>
@@ -55,13 +56,15 @@
                 проживают в домах престарелых. Иногда сразу после детдомов.
             </p>
 
-            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">Дни рождения декабря</h3>
+           <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
+           <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины января)</h3>
 
             <p style="font-style: italic">
                 Если какие-то адреса вам не подходят, обязательно возвращайте -
                 заменю.<br />
                 Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
-                чтобы я могла их передать другому поздравляющему.
+                чтобы я могла их передать другому поздравляющему.<br />
+                Обращаю ваше внимание, что по указанным адресам нужно отправить открытки только один раз: не нужно поздравлять этих людей со всеми праздниками или писать им письма! 
             </p>
 
             <mat-card-content *ngFor="let lineItem of lineItems"
@@ -78,7 +81,8 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    {{celebrator.fullDayBirthday}}
+                     <span *ngIf = "order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
+                   <span *ngIf = "celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">- {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
                     <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
@@ -120,7 +124,7 @@
                 <li>
                     Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
                 </li>
-                <li>По возможности укажите ваш обратный адрес.</li>
+                <li>По возможности укажите ваш обратный адрес (если в адресе прямо не указано обратное).</li>
             </ul>
 
             <h3
@@ -130,6 +134,9 @@
                 <li>
                     Не желайте семейного уюта, любви близких, финансового благополучия и
                     т.п.
+                </li>
+                <li>
+                    Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.
                 </li>
                 <li>
                     Не давайте свой обратный адрес если написано, что поздравления нужно
@@ -154,7 +161,7 @@
 
             <h3
                 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                Чего делать нельзя.</h3>
+                Чего просим не делать.</h3>
             <ul>
                 <li>
                     Запрещены любые публикации (в соцсетях, на сайтах учебных заведений,
@@ -178,8 +185,8 @@
                     подробную инструкцию.</a>
             </div>
             <p>
-                Нашим бабушкам и дедушкам нужна неотложная помощь — продукты и дрова на зиму — помочь на сайте
-                <a href="https://starikam.org/about/programm/neotlogka/">https://starikam.org/about/programm/neotlogka/</a>
+                Подарить новогодний подарок можно по ссылке: 
+                <a href="https://ng.starikam.org/">https://ng.starikam.org/</a>
             </p>
             <hr />
             <p>
@@ -203,10 +210,11 @@
 
         <div *ngIf="order.isAccepted"
             style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
-            <p>Приветствую вас, {{order.clientFirstName}}!</p>
+            <p>Здравствуйте, {{order.clientFirstName}}!</p>
 
-            <h3 style="font-family:'Times New Roman', Times, serif; font-weight: bold;">Дни рождения декабря</h3>
-
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины января)</h3>
+ 
             <mat-card-content *ngFor="let lineItem of lineItems"
                 style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
 
@@ -221,7 +229,8 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    {{celebrator.fullDayBirthday}}
+                     <span *ngIf = "order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
+                   <span *ngIf = "celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">- {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
                     <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
@@ -231,8 +240,8 @@
             </mat-card-content>
            
             <p>
-                Нашим бабушкам и дедушкам нужна неотложная помощь — продукты и дрова на зиму — помочь на сайте
-                <a href="https://starikam.org/about/programm/neotlogka/">https://starikam.org/about/programm/neotlogka/</a>
+                Подарить новогодний подарок можно по ссылке: 
+                <a href="https://ng.starikam.org/">https://ng.starikam.org/</a>
             </p>
             <hr />
             <p>
