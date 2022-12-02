@@ -1975,6 +1975,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 
       if (data.counter < proportion[category]) {
         data.maxPlus = 2;
+
         data = await collectSeniorsNewYear(data);
       }
 
@@ -1994,12 +1995,12 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 async function collectSeniorsNewYear(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen", "oldMen", "oldest"],
-    oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
-    yang: ["yang", "oldMen", "oldWomen", "oldest"],
-    special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
+    oldWomen: ["oldWomen", "oldMen"], //, "oldest"
+    oldMen: ["oldMen", "oldWomen", "yang"], //, "oldest"
+    yang: ["yang", "oldMen", "oldWomen"], //, "oldest"
+    special: ["special", "yang", "oldWomen", "oldMen"], //, "oldest"
     specialOnly: ["special"],
-    allCategory: ["oldMen", "oldWomen", "yang", "oldest", "special"]
+    allCategory: ["oldMen", "oldWomen", "yang", "special"] //, "oldest"
   };
   //console.log("data.category");
   //console.log(data.category);
@@ -2067,7 +2068,7 @@ async function searchSeniorNewYear(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-
+   secondTime: data.maxPlus === 2 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -2094,8 +2095,9 @@ async function searchSeniorNewYear(
   let celebrator;
   //CHANGE!!!
   //let maxPlusAmount = 2;  
-  //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
+  //let maxPlusAmount = 3;
+  let maxPlusAmount = data.maxPlus;  
+  //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 

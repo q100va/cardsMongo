@@ -539,7 +539,8 @@ async function findAllNYCelebrators() {
     }
     console.log("filledIds");
     console.log(filledIds); */
-  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ВЕРБИЛКИ", "ДУБНА", "БОР", "БЕРДСК", "УСТЬ-МОСИХА", "ГЛОДНЕВО", "ИЛЬИНСКОЕ", "КРАСНОЯРСК", "ПРОШКОВО", "КОЗЛОВО", "	ВЫШНИЙ_ВОЛОЧЕК", "БЕРЕЗНИКИ", "ВИШЕРСКИЙ", "МОСКВА_РОТЕРТА", "ПОГОРЕЛОВО", "	СО_ВЕЛИКИЕ_ЛУКИ", "	СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АЛЕКСАНДРОВКА", "БЕЛАЯ_КАЛИТВА", "АЛЕКСАНДРОВКА", "БЕЛАЯ_КАЛИТВА", "ГОРНЯЦКИЙ", "ЕЛИЗАВЕТОВКА", "ЛИТВИНОВКА", "РОМАНОВСКАЯ", "ШОЛОХОВСКИЙ", "ШЕБЕКИНО", "БЕЛАЯ_КАЛИТВА_ЖУКОВСКОГО", "СЕБЕЖ", "ШИПУНОВО_БОА"]}, dateLastUpdate: { $gt: new Date("2022-10-21"), $lt: new Date("2022-11-28") } });
+    let updatedNursingHome = await House.find({isActive: true, nursingHome:"ОТРАДНЫЙ"});
+ // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ВЕРБИЛКИ", "ДУБНА", "БОР", "БЕРДСК", "УСТЬ-МОСИХА", "ГЛОДНЕВО", "ИЛЬИНСКОЕ", "КРАСНОЯРСК", "ПРОШКОВО", "КОЗЛОВО", "	ВЫШНИЙ_ВОЛОЧЕК", "БЕРЕЗНИКИ", "ВИШЕРСКИЙ", "МОСКВА_РОТЕРТА", "ПОГОРЕЛОВО", "	СО_ВЕЛИКИЕ_ЛУКИ", "	СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АЛЕКСАНДРОВКА", "БЕЛАЯ_КАЛИТВА", "АЛЕКСАНДРОВКА", "БЕЛАЯ_КАЛИТВА", "ГОРНЯЦКИЙ", "ЕЛИЗАВЕТОВКА", "ЛИТВИНОВКА", "РОМАНОВСКАЯ", "ШОЛОХОВСКИЙ", "ШЕБЕКИНО", "БЕЛАЯ_КАЛИТВА_ЖУКОВСКОГО", "СЕБЕЖ", "ШИПУНОВО_БОА"]}, dateLastUpdate: { $gt: new Date("2022-10-21"), $lt: new Date("2022-11-28") } });
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ТЮМЕНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ЧЕЛЯБИНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
