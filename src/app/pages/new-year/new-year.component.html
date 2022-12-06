@@ -63,7 +63,8 @@
                                                 <label id="example-radio-group-label">Адреса</label>
                                                 <mat-radio-group class="example-radio-group" [(ngModel)]="addressFilter"
                                                     [ngModelOptions]="{standalone: true}">
-                                                    <mat-radio-button class="example-radio-button" [value]="'any'" default>
+                                                    <mat-radio-button class="example-radio-button" [value]="'any'"
+                                                        default>
                                                         любые
                                                     </mat-radio-button>
                                                     <mat-radio-button class="example-radio-button" [value]="'forKids'">
@@ -84,7 +85,8 @@
                                                 <label id="example-radio-group-label">Пол</label>
                                                 <mat-radio-group class="example-radio-group" [(ngModel)]="genderFilter"
                                                     [ngModelOptions]="{standalone: true}">
-                                                    <mat-radio-button class="example-radio-button" [value]="'any'" default>
+                                                    <mat-radio-button class="example-radio-button" [value]="'any'"
+                                                        default>
                                                         любой
                                                     </mat-radio-button>
                                                     <mat-radio-button class="example-radio-button" [value]="'Female'">
@@ -97,12 +99,13 @@
 
                                                 <br />
 
-                                                <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">Только с фото</mat-slide-toggle>
+                                                <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
+                                                    Только с фото</mat-slide-toggle>
 
                                             </td>
                                             <td>
 
-                                               <!--  <h4 matTooltip="Можно указать только одно значение: до или после которого должны быть даты.">Даты</h4>
+                                                <!--  <h4 matTooltip="Можно указать только одно значение: до или после которого должны быть даты.">Даты</h4>
 
                                                 <table class="example-half-width" cellspacing="0">
                                                     <tr>
@@ -127,8 +130,10 @@
                                                     </tr>
                                                 </table> -->
 
-                                                <h4 matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">Год рождения</h4> 
-<!--                                                  <p>
+                                                <h4
+                                                    matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
+                                                    Год рождения</h4>
+                                                <!--                                                  <p>
                                                     <span matBadge="i" matBadgeOverlap="false" matTooltip="Info about the action">Год рождения</span>
                                                   </p>  -->
 
@@ -140,7 +145,8 @@
                                                                 appearance="fill">
                                                                 <mat-label>с</mat-label>
                                                                 <input matInput type="number"
-                                                                    [formControl]="form.controls['year1']" placeholder="1935" />
+                                                                    [formControl]="form.controls['year1']"
+                                                                    placeholder="1935" />
                                                             </mat-form-field>
                                                         </td>
                                                         <td>
@@ -149,7 +155,8 @@
                                                                 appearance="fill">
                                                                 <mat-label>по</mat-label>
                                                                 <input matInput type="number"
-                                                                    [formControl]="form.controls['year2']" placeholder="1965"/>
+                                                                    [formControl]="form.controls['year2']"
+                                                                    placeholder="1965" />
                                                             </mat-form-field>
 
                                                         </td>
@@ -158,7 +165,7 @@
                                                         <td colspan="2">
                                                             <h4>Регион</h4>
                                                             <mat-form-field appearance="fill">
-                                                               
+
                                                                 <mat-select [formControl]="form.controls['region']">
                                                                     <mat-option></mat-option>
                                                                     <mat-option *ngFor="let region of regions"
@@ -174,7 +181,8 @@
                                                             <h4>Интернат</h4>
                                                             <mat-form-field appearance="fill">
                                                                 <input matInput type="text"
-                                                                [formControl]="form.controls['nursingHome']" placeholder="НОГИНСК"/>                                                                
+                                                                    [formControl]="form.controls['nursingHome']"
+                                                                    placeholder="НОГИНСК" />
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
@@ -291,7 +299,7 @@
             <div class="right" style="padding-left: 30px; padding-right: 30px;">
                 <mat-card-title> Список поздравляемых </mat-card-title>
 
-<!--                 <mat-card-actions>
+                <!--                 <mat-card-actions>
                     <button mat-raised-button (click)="clear()" color="primary"
                         [disabled]="!form.valid">Очистить</button>
                     <button (click)="createOrder()" mat-raised-button color="accent"
@@ -307,14 +315,13 @@
                     </dir>
                 </dir>
 
-                <mat-card-content *ngFor="let lineItem of lineItems">
+                <!--                 <mat-card-content *ngFor="let lineItem of lineItems">
 
                     <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
                     <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
                     <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
 
-                    <div *ngFor="let celebrator of lineItem.celebrators">
-                      <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+                    <div *ngFor="let celebrator of lineItem.celebrators">                      
 
                         {{celebrator.lastName}}
                         {{celebrator.firstName}}
@@ -325,6 +332,27 @@
    
                     </div>
                     <br />
+                </mat-card-content> -->
+
+                <mat-card-content *ngFor="let lineItem of lineItems">
+
+                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                    <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
+                    <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                        {{lineItem.adminComment}}</p>
+
+                    <div *ngFor="let celebrator of lineItem.celebrators">
+
+                        {{celebrator.lastName}}
+                        {{celebrator.firstName}}
+                        {{celebrator.patronymic}}
+
+                        <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span>
+                        {{celebrator.comment1}}
+                        {{celebrator.linkPhoto}}
+
+                    </div>
+                    <br />
                 </mat-card-content>
 
 
@@ -333,6 +361,3 @@
         </div>
     </mat-card>
 </div>
-
-
-

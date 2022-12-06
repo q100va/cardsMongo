@@ -1782,8 +1782,8 @@ async function createOrderNewYear(newOrder) {
   let proportion = {};
 
   if (newOrder.amount > 50) {
-    let oldWomenAmount = Math.round(newOrder.amount * 0.3);
-    let oldMenAmount = Math.round(newOrder.amount * 0.2);
+    let oldWomenAmount = Math.round(newOrder.amount * 0.2);
+    let oldMenAmount = Math.round(newOrder.amount * 0.3);
     let specialAmount = Math.round(newOrder.amount * 0.2);
     let yangAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialAmount;
 
@@ -1793,7 +1793,7 @@ async function createOrderNewYear(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse": 5 //Math.round(newOrder.amount * 0.3)
+      "oneHouse": Math.round(newOrder.amount * 0.3)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -2079,9 +2079,9 @@ async function searchSeniorNewYear(
 /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
       standardFilter.isReleased = false;    
   } */ 
-  if (data.proportion.amount > 12 ) { 
+ /*  if (data.proportion.amount > 12 ) { 
     standardFilter.isReleased = false;    
-} 
+}  */
   //standardFilter.isReleased = false; // CANCEL
 
 
