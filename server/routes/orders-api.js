@@ -2002,7 +2002,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 async function collectSeniorsNewYear(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen", "oldMen"], //, "oldest"
+    oldWomen: ["oldWomen"], //, "oldest"
     oldMen: ["oldMen", "oldWomen", "yang"], //, "oldest"
     yang: ["yang", "oldMen", "oldWomen"], //, "oldest"
     special: ["special", "yang", "oldWomen", "oldMen"], //, "oldest"
