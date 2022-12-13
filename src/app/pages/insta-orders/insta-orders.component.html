@@ -33,8 +33,10 @@
 
         <div *ngIf="!order.isAccepted"
             style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
-            <p *ngIf = "order.clientFirstName">Добрый день, {{order.clientFirstName}}!</p>
-            <p *ngIf = "order.clientFirstName == null">Добрый день!</p>
+            <p>{{order.email}}</p>
+
+            <p *ngIf="order.clientFirstName">Добрый день, {{order.clientFirstName}}!</p>
+            <p *ngIf="order.clientFirstName == null">Добрый день!</p>
             <p style="font-size: 0.7em; color: rgb(163, 192, 199)">
                 {{order.contact}}
             </p>
@@ -56,15 +58,18 @@
                 проживают в домах престарелых. Иногда сразу после детдомов.
             </p>
 
-           <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
-           <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины января)</h3>
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
+                *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
+                *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД</h3>
 
             <p style="font-style: italic">
                 Если какие-то адреса вам не подходят, обязательно возвращайте -
                 заменю.<br />
                 Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
                 чтобы я могла их передать другому поздравляющему.<br />
-                Обращаю ваше внимание, что по указанным адресам нужно отправить открытки только один раз: не нужно поздравлять этих людей со всеми праздниками или писать им письма! 
+                <span style=" font-style: italic; background-color: rgba(246, 250, 36, 0.892)">Ни в коем случае не
+                    отправляйте подарки и сувениры - только открытки! </span>
             </p>
 
             <mat-card-content *ngFor="let lineItem of lineItems"
@@ -81,8 +86,9 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                     <span *ngIf = "order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
-                   <span *ngIf = "celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">- {{celebrator.yearBirthday}} г.р.</span>
+                    <span *ngIf="order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">-
+                        {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
                     <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
@@ -91,8 +97,7 @@
                 <br />
             </mat-card-content>
 
-            <h3
-                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Отправляйте письма правильно!</h3>
             <ul>
                 <li>
@@ -109,8 +114,7 @@
                 </li>
             </ul>
 
-            <h3
-                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Как писать поздравления?</h3>
             <ul>
                 <li>
@@ -127,8 +131,7 @@
                 <li>По возможности укажите ваш обратный адрес (если в адресе прямо не указано обратное).</li>
             </ul>
 
-            <h3
-                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Что писать не надо.</h3>
             <ul>
                 <li>
@@ -136,7 +139,8 @@
                     т.п.
                 </li>
                 <li>
-                    Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.
+                    Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%,
+                    что вам начнут звонить и писать в любое время.
                 </li>
                 <li>
                     Не давайте свой обратный адрес если написано, что поздравления нужно
@@ -144,8 +148,7 @@
                 </li>
             </ul>
 
-            <h3
-                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Получили ответ?</h3>
             <ul>
                 <li>
@@ -159,8 +162,7 @@
                 <li>Если ваша открытка вернулась, также сообщите нам.</li>
             </ul>
 
-            <h3
-                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                 Чего просим не делать.</h3>
             <ul>
                 <li>
@@ -179,13 +181,17 @@
                     проблемы с получением подобной корреспонденции и ваше отправление
                     может вернуться.
                 </li>
+                <li>
+                    По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми
+                    праздниками или писать им письма!
+                </li>
             </ul>
-            <div>
+            <!--             <div>
                 <a href="https://docs.google.com/document/d/1INxsoOViRIznD4r06Py1A7D0KkjD3ZdYJdIWU5XvUNQ/edit">Ссылка на
                     подробную инструкцию.</a>
-            </div>
+            </div> -->
             <p>
-                Подарить новогодний подарок можно по ссылке: 
+                Подарить новогодний подарок можно по ссылке:
                 <a href="https://ng.starikam.org/">https://ng.starikam.org/</a>
             </p>
             <hr />
@@ -212,9 +218,12 @@
             style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em; width: 80%; margin: 1em auto">
             <p>Здравствуйте, {{order.clientFirstName}}!</p>
 
-            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
-            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;" *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины января)</h3>
- 
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
+                *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
+            <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
+                *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
+                января)</h3>
+
             <mat-card-content *ngFor="let lineItem of lineItems"
                 style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
 
@@ -229,8 +238,9 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                     <span *ngIf = "order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
-                   <span *ngIf = "celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">- {{celebrator.yearBirthday}} г.р.</span>
+                    <span *ngIf="order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">-
+                        {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
                     <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
@@ -238,14 +248,14 @@
                 </div>
                 <br />
             </mat-card-content>
-           
+
             <p>
-                Подарить новогодний подарок можно по ссылке: 
+                Подарить новогодний подарок можно по ссылке:
                 <a href="https://ng.starikam.org/">https://ng.starikam.org/</a>
             </p>
             <hr />
             <p>
-                Благодарю вас от всей души! 
+                Благодарю вас от всей души!
             </p>
             <p>
                 --<br />

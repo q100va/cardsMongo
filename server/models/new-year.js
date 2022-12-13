@@ -38,7 +38,8 @@ const listSchema = new Schema(
     fullData: { type: String },
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
-    secondTime: {type: Boolean, default: false}
+    secondTime: {type: Boolean, default: false},
+    thirdTime: {type: Boolean, default: false}
 
   },
   { collection: "newYear_2023" }

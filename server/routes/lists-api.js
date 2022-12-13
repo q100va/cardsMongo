@@ -117,8 +117,8 @@ async function findAllMonthCelebrators(month) {
   console.log("notActiveHousesNames");
   console.log(notActiveHousesNames);
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: {$nin: notActiveHousesNames}});
-  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "УФА", lastName: { $in: ["Андреев", "Салимова"] } }); //
+  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: {$nin: notActiveHousesNames}});
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "АНДРЕЕВСКИЙ",dateEnter: {$lt: new Date("2022-12-6")} }); //
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -127,7 +127,7 @@ async function findAllMonthCelebrators(month) {
   for (let celebrator of list) {
 
     let cloneSpecialComment = await specialComment(
-      2022 - celebrator["yearBirthday"]
+      2023 - celebrator["yearBirthday"]
     );
 
 
@@ -539,8 +539,8 @@ async function findAllNYCelebrators() {
     }
     console.log("filledIds");
     console.log(filledIds); */
-    let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВИШЕНКИ"});
- // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ВЕРБИЛКИ", "ДУБНА", "БОР", "БЕРДСК", "УСТЬ-МОСИХА", "ГЛОДНЕВО", "ИЛЬИНСКОЕ", "КРАСНОЯРСК", "ПРОШКОВО", "КОЗЛОВО", "	ВЫШНИЙ_ВОЛОЧЕК", "БЕРЕЗНИКИ", "ВИШЕРСКИЙ", "МОСКВА_РОТЕРТА", "ПОГОРЕЛОВО", "	СО_ВЕЛИКИЕ_ЛУКИ", "	СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АЛЕКСАНДРОВКА", "БЕЛАЯ_КАЛИТВА", "АЛЕКСАНДРОВКА", "БЕЛАЯ_КАЛИТВА", "ГОРНЯЦКИЙ", "ЕЛИЗАВЕТОВКА", "ЛИТВИНОВКА", "РОМАНОВСКАЯ", "ШОЛОХОВСКИЙ", "ШЕБЕКИНО", "БЕЛАЯ_КАЛИТВА_ЖУКОВСКОГО", "СЕБЕЖ", "ШИПУНОВО_БОА"]}, dateLastUpdate: { $gt: new Date("2022-10-21"), $lt: new Date("2022-11-28") } });
+    //let updatedNursingHome = await House.find({isActive: true, nursingHome:"#"});
+  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["СЫЗРАНЬ_КИРОВОГРАДСКАЯ"]}});
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ТЮМЕНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ЧЕЛЯБИНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
@@ -552,7 +552,9 @@ async function findAllNYCelebrators() {
     namesOfUpdatedNursingHome.push(home.nursingHome);
   }
 
-  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome } });
+  console.log(namesOfUpdatedNursingHome);
+
+  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome} }); // , dateEnter: {$lt: new Date("2022-12-9")} 
   //let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: "МИХАЙЛОВ", dateEnter: {$gt: new Date("2022-10-25")} });
   console.log(list);
 

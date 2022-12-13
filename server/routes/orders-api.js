@@ -75,7 +75,8 @@ router.post("/create/period/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    Order.find({ isDisabled: false , userName: {$ne :"okskust"}, isAccepted: false}, function (err, orders) {
+    Order.find({ isDisabled: false , userName: {$ne :"okskust"}, isAccepted: false}, function (err, orders) { 
+   /* Order.find({ isDisabled: false , userName: "royrai"}, function (err, orders) { */
       if (err) {
         console.log(err);
         const readOrdersMongodbErrorResponse = new BaseResponse(
@@ -890,7 +891,7 @@ async function createOrder(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse": Math.round(newOrder.amount * 0.3)
+      "oneHouse":Math.round(newOrder.amount * 0.3)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -1793,7 +1794,7 @@ async function createOrderNewYear(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse": Math.round(newOrder.amount * 0.3)
+      "oneHouse":  20 //Math.round(newOrder.amount * 0.3)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -1849,7 +1850,7 @@ async function createOrderNewYear(newOrder) {
 
   if (newOrder.filter) {
     if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: "" };
-    if ((newOrder.filter.onlyWithPicture || newOrder.filter.oneHouse || newOrder.filter.oneRegion) && newOrder.filter.addressFilter == 'any') {
+    if ((newOrder.filter.onlyWithPicture || newOrder.filter.nursingHome || newOrder.filter.region) && newOrder.filter.addressFilter == 'any') {
       proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
       proportion.oldWomen = 0;
       proportion.oldMen = 0;
@@ -1973,11 +1974,17 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 
       data = await collectSeniorsNewYear(data);
 
-      if (data.counter < proportion[category]) {
+       if (data.counter < proportion[category]) {
         data.maxPlus = 2;
 
         data = await collectSeniorsNewYear(data);
-      }
+      } 
+
+      if (data.counter < proportion[category]) {
+        data.maxPlus = 3;
+
+        data = await collectSeniorsNewYear(data);
+      } 
 
       if (data.counter < proportion[category]) {
         return data;
@@ -2068,7 +2075,8 @@ async function searchSeniorNewYear(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-   secondTime: data.maxPlus === 2 ? true : false,
+   secondTime: data.maxPlus > 1 ? true : false,
+   thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -2095,7 +2103,7 @@ async function searchSeniorNewYear(
   let celebrator;
   //CHANGE!!!
   //let maxPlusAmount = 2;  
-  //let maxPlusAmount = 3;
+  //let maxPlusAmount = 6; 
   let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
@@ -2103,7 +2111,8 @@ async function searchSeniorNewYear(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
   filter.plusAmount = { $lt: plusAmount };
-  //filter.comment1 = "(1 корп. 5 этаж)"; //CANCEL
+    //filter.comment1 = "(2 корп. 4 этаж)"; //CANCEL
+    //filter.comment1 = "(2 корп.)"; //CANCEL
     console.log("filter");
     console.log(filter);
     celebrator = await NewYear.findOne(filter);

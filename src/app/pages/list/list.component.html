@@ -40,14 +40,20 @@
     
 
         <mat-list *ngFor="let person of lists">
-           <!--  <mat-list-item> {{list.period}}</mat-list-item> 
-            <mat-list *ngFor="let person of list.celebrators">-->
+
                 <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
                     {{person.fullDayBirthday}} {{person.comment1}}
                     {{person.specialComment}} {{person.linkPhoto}} {{person.category}} 
                     {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span style= "color: red;"*ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
-<!--             </mat-list> -->
+
         </mat-list>
+
+<!--         <mat-list *ngFor="let person of lists">
+   
+                 <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+ {{person.nursingHome}} <span style= "color: red;"*ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
+
+         </mat-list> -->
 
 
     </mat-card-content>
