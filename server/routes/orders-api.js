@@ -2103,7 +2103,7 @@ async function searchSeniorNewYear(
   let celebrator;
   //CHANGE!!!
   //let maxPlusAmount = 2;  
-  //let maxPlusAmount = 6; 
+  //let maxPlusAmount = 3; 
   let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
@@ -2111,7 +2111,7 @@ async function searchSeniorNewYear(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
   filter.plusAmount = { $lt: plusAmount };
-    //filter.comment1 = "(2 корп. 4 этаж)"; //CANCEL
+    //filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
     //filter.comment1 = "(2 корп.)"; //CANCEL
     console.log("filter");
     console.log(filter);

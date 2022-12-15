@@ -118,7 +118,7 @@ async function findAllMonthCelebrators(month) {
   console.log(notActiveHousesNames);
 
   //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: {$nin: notActiveHousesNames}});
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "АНДРЕЕВСКИЙ",dateEnter: {$lt: new Date("2022-12-6")} }); //
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ПОБЕДИМ" ,dateEnter: {$lt: new Date("2022-12-14")}}); //
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -540,7 +540,7 @@ async function findAllNYCelebrators() {
     console.log("filledIds");
     console.log(filledIds); */
     //let updatedNursingHome = await House.find({isActive: true, nursingHome:"#"});
-  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["СЫЗРАНЬ_КИРОВОГРАДСКАЯ"]}});
+  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ПОБЕДИМ"]}});
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ТЮМЕНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ЧЕЛЯБИНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
@@ -554,7 +554,7 @@ async function findAllNYCelebrators() {
 
   console.log(namesOfUpdatedNursingHome);
 
-  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome} }); // , dateEnter: {$lt: new Date("2022-12-9")} 
+  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome} , dateEnter: {$lt: new Date("2022-12-9")}  }); //
   //let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: "МИХАЙЛОВ", dateEnter: {$gt: new Date("2022-10-25")} });
   console.log(list);
 
