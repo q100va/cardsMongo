@@ -329,7 +329,7 @@ router.patch("/delete/:id", async (req, res) => {
 });
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения января 2023") {
+  if (deletedOrder.holiday == "Дни рождения февраля 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -381,7 +381,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины января 2023") {
+    if (deletedOrder.holiday == "Именины февраля 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -992,7 +992,7 @@ async function createOrder(newOrder) {
     if (newOrder.filter.year1 || newOrder.filter.year2) {
       if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
       if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
-      if (newOrder.filter.year1 > 1957 && newOrder.filter.addressFilter != 'onlySpecial') {
+      if (newOrder.filter.year1 > 1958 && newOrder.filter.addressFilter != 'onlySpecial') {
         proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
         proportion.oldWomen = 0;
         proportion.oldMen = 0;
@@ -1794,7 +1794,7 @@ async function createOrderNewYear(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse":  20 //Math.round(newOrder.amount * 0.3)
+      "oneHouse":  Math.round(newOrder.amount * 0.2)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -1805,7 +1805,7 @@ async function createOrderNewYear(newOrder) {
         success: false
       };
     } else {
-      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined; //hata
       //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
       console.log("newOrder.filter.region");
       console.log(newOrder.filter.region);
@@ -1863,7 +1863,7 @@ async function createOrderNewYear(newOrder) {
       // console.log("proportion");
       //console.log(proportion);
       if (!newOrder.filter.year1 && !newOrder.filter.year2) {
-        newOrder.filter.year2 = 1972;
+        newOrder.filter.year2 = 1963;
       }
     }
 
@@ -1894,7 +1894,7 @@ async function createOrderNewYear(newOrder) {
     if (newOrder.filter.year1 || newOrder.filter.year2) {
       if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
       if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
-      if (newOrder.filter.year1 > 1957 && newOrder.filter.addressFilter != 'onlySpecial') {
+      if (newOrder.filter.year1 > 1958 && newOrder.filter.addressFilter != 'onlySpecial') {
         proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
         proportion.oldWomen = 0;
         proportion.oldMen = 0;
@@ -1945,7 +1945,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 
   let data = {
     houses: {},
-    restrictedHouses: [],
+    restrictedHouses: [],//"ВЫШНИЙ_ВОЛОЧЕК"
     restrictedPearson: [],
     celebratorsAmount: 0,
     /*     date1: period.date1,
@@ -2002,7 +2002,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 async function collectSeniorsNewYear(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen"], //, "oldest"
+    oldWomen: ["oldWomen", "oldest" ], //,"oldMen"
     oldMen: ["oldMen", "oldWomen", "yang"], //, "oldest"
     yang: ["yang", "oldMen", "oldWomen"], //, "oldest"
     special: ["special", "yang", "oldWomen", "oldMen"], //, "oldest"
@@ -2102,9 +2102,10 @@ async function searchSeniorNewYear(
 
   let celebrator;
   //CHANGE!!!
-  //let maxPlusAmount = 2;  
-  //let maxPlusAmount = 3; 
-  let maxPlusAmount = data.maxPlus;  
+ // let maxPlusAmount = 3;  
+ let maxPlusAmount = 3; 
+
+ //let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);

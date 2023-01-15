@@ -15,6 +15,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { CookieService } from "ngx-cookie-service";
 import { MatPaginator } from "@angular/material/paginator";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-all-orders',
@@ -35,7 +36,8 @@ export class AllOrdersComponent implements AfterViewInit {
     private confirmationService: ConfirmationService,
     private cookieService: CookieService,
     private messageService: MessageService,
-    private resultDialog: MatDialog
+    private resultDialog: MatDialog,
+    private router: Router
   ) {
     this.userName = this.cookieService.get("session_user");
   }
@@ -111,10 +113,11 @@ export class AllOrdersComponent implements AfterViewInit {
   confirmOrder(orderId: string, isShowAll: boolean) {
     this.orderService.confirmOrder(orderId, isShowAll, this.userName).subscribe(
       (res) => {
-        this.orders = res["data"];
+        this.router.navigate(["/orders/all"]);
+/*         this.orders = res["data"];
         this.orders.reverse();
         this.dataSource = new MatTableDataSource(this.orders);
-        this.dataSource.paginator = this.paginator;
+        this.dataSource.paginator = this.paginator; */
       },
       (err) => {
         alert(err);
@@ -131,10 +134,12 @@ export class AllOrdersComponent implements AfterViewInit {
       accept: () => {
           this.orderService.deleteOrder(orderId, isShowAll, this.userName).subscribe(
             (res) => {
-              this.orders = res["data"];
+              this.router.navigate(["/orders/all"]);
+
+/*               this.orders = res["data"];
               this.orders.reverse();
               this.dataSource = new MatTableDataSource(this.orders);
-              this.dataSource.paginator = this.paginator;
+              this.dataSource.paginator = this.paginator; */
             },
             (err) => {
               console.log(err);

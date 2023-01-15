@@ -59,7 +59,7 @@
             </p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
+                *ngIf="order.holiday == 'Дни рождения февраля 2023'">Дни рождения февраля</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД</h3>
 
@@ -86,7 +86,7 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="order.holiday == 'Дни рождения февраля 2023'">{{celebrator.fullDayBirthday}}</span>
                     <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
@@ -219,10 +219,10 @@
             <p>Здравствуйте, {{order.clientFirstName}}!</p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения января 2023'">Дни рождения января</h3>
+                *ngIf="order.holiday == 'Дни рождения февраля 2023'">Дни рождения февраля</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Новый год 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
-                января)</h3>
+                февраля)</h3>
 
             <mat-card-content *ngFor="let lineItem of lineItems"
                 style="font-family: 'Times New Roman', Times, serif;        font-size: 1em;        line-height: 1.5em;">
@@ -238,7 +238,7 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения января 2023'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="order.holiday == 'Дни рождения февраля 2023'">{{celebrator.fullDayBirthday}}</span>
                     <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Новый год 2023'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}

@@ -1,14 +1,41 @@
 <mat-card class="mat-elevation-z0">
-    <mat-card-title> Формирование списка ДР февраля 2023 </mat-card-title>
+    <mat-card-title> Проверка списков НГ и ДР </mat-card-title>
 
     <br />
 
     <mat-card-actions>
 
-         <button class="submit" (click)="deleteList()" mat-raised-button color = 'warn'>Очистить список ДР</button>
-     <!--   <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
+<div>
+         <button class="submit" (click)="checkDoubles(index)" mat-raised-button color = 'primary'  [disabled]="!isFirst">Проверить на дубли</button>
+        <p> {{checkingHouse}}</p>
+         <button class="submit" (click)="checkDoubles(index)" mat-raised-button color = 'primary'  [disabled]="!isNext">Следующий</button>
 
-        <button class="submit" (click)="deleteDoubleList()" mat-raised-button color = 'warn'>Очистить дубли ДР</button>
+</div>
+<br />  <br />
+<div>
+    <button class="submit" (click)="checkFullness(index2)" mat-raised-button color = 'primary'  [disabled]="!isFirst2">Проверить на полноту</button>
+   <p> {{checkingHouse2}}</p>
+    <button class="submit" (click)="checkFullness(index2)" mat-raised-button color = 'primary'  [disabled]="!isNext2">Следующий</button>
+
+</div>
+<br />  <br />
+<div>
+    <button class="submit" (click)="checkDoublesHB(index)" mat-raised-button color = 'primary'  [disabled]="!isFirst">Проверить на дубли ДР</button>
+   <p> {{checkingHouse}}</p>
+    <button class="submit" (click)="checkDoublesHB(index)" mat-raised-button color = 'primary'  [disabled]="!isNext">Следующий</button>
+
+</div>
+
+<br />  <br />
+<div>
+    <button class="submit" (click)="checkFullnessHB(index2)" mat-raised-button color = 'primary'  [disabled]="!isFirst2">Проверить на полноту ДР</button>
+   <p> {{checkingHouse2}}</p>
+    <button class="submit" (click)="checkFullnessHB(index2)" mat-raised-button color = 'primary'  [disabled]="!isNext2">Следующий</button>
+
+</div>
+
+
+     <!--    <button class="submit" (click)="deleteDoubleList()" mat-raised-button color = 'warn'>Очистить дубли ДР</button>
      
 
         <button class="submit" (click)="populateSeniors()" mat-raised-button>Добавить жителей</button>
@@ -21,15 +48,13 @@
         <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
         <br /><br /><br />
-<!--         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
-        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
         <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список НГ</button>
        <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
-        <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше 1+</button>
+        <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше 1+</button> -->
 
     </mat-card-actions>
 
-    <mat-card-content *ngIf="isShowList">
+  <!--   <mat-card-content *ngIf="isShowList">
         <p>Общее количество - {{listLength}}</p>
         <p>oldWomen - {{oldWomen}}</p>
         <p>oldMen - {{oldMen}}</p>
@@ -48,13 +73,5 @@
 
         </mat-list>
 
-<!--         <mat-list *ngFor="let person of lists">
-   
-                 <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
- {{person.nursingHome}} <span style= "color: red;"*ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
-
-         </mat-list> -->
-
-
-    </mat-card-content>
+    </mat-card-content> -->
 </mat-card>

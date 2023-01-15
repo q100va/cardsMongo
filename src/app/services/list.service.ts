@@ -18,8 +18,8 @@ import { Celebrator } from "../shared/interfaces/celebrator.interface";
 export class ListService {
   constructor(private http: HttpClient) {}
 
-  month = 1;
-  //fullDate = " января 2023 г.";
+  month = 2;
+  //fullDate = " февраля 2023 г.";
 
   findAllBirthdayLists(): Observable<any> {
       return this.http.get("/api/lists");
@@ -70,8 +70,29 @@ findAllTeacherDayLists(): Observable<any> {
     
   }
 
+  checkDoubles(house: string) {
+    console.log("checkDoubles");
+    return this.http.post("/api/lists/new-year/check-doubles", {nursingHome: house});
+    
+  }
 
+  checkFullness(house: string) {
+    console.log("checkFullness");
+    return this.http.post("/api/lists/new-year/check-fullness", {nursingHome: house});
+    
+  }
 
+  checkDoublesHB(house: string) {
+    console.log("checkDoubles");
+    return this.http.post("/api/lists/birthday/check-doubles", {nursingHome: house});
+    
+  }
+
+  checkFullnessHB(house: string) {
+    console.log("checkFullness");
+    return this.http.post("/api/lists/birthday/check-fullness", {nursingHome: house});
+    
+  }
   
 }
 

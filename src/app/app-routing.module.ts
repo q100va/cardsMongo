@@ -47,6 +47,7 @@ import { AddListsComponent } from "./pages/add-lists/add-lists.component";
 import { AllAbsentsComponent } from "./pages/all-absents/all-absents.component";
 import { TeacherDayComponent } from "./pages/teacher-day/teacher-day.component";
 import { NewYearComponent } from "./pages/new-year/new-year.component";
+import { CheckListsComponent } from "./pages/check-lists/check-lists.component";
 
 const routes: Routes = [
   {
@@ -137,6 +138,11 @@ const routes: Routes = [
       {
         path: "lists",
         component: ListComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "lists/new-year/check",
+        component: CheckListsComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
       {

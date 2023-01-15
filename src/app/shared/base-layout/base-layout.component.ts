@@ -86,4 +86,8 @@ export class BaseLayoutComponent implements OnInit {
   redirectToAllAbsents(): void {
     this.router.navigate(["/orders/absents/all"]);
   }
+
+  redirectToCheck(): void {
+    this.router.navigate(["/lists/new-year/check"]);
+  }
 }
