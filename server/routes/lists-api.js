@@ -16,6 +16,8 @@ const Period = require("../models/period");
 const TeacherDay = require("../models/teacher-day");
 const House = require("../models/house");
 const Order = require("../models/order");
+const February23 = require("../models/february-23");
+const March8 = require("../models/march-8");
 //const User = require("../models/user");
 
 // Delete double birthday list API 
@@ -109,7 +111,7 @@ async function findAllMonthCelebrators(month) {
     console.log("filledIds");
     console.log(filledIds); */
 
-  let notActiveHouses = await House.find({ isActive: false  });
+  let notActiveHouses = await House.find({ isActive: false });
   let notActiveHousesNames = [];
   for (let house of notActiveHouses) {
     notActiveHousesNames.push(house.nursingHome);
@@ -117,8 +119,8 @@ async function findAllMonthCelebrators(month) {
   console.log("notActiveHousesNames");
   console.log(notActiveHousesNames);
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: {$nin: notActiveHousesNames}});
- // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ОКТЯБРЬСКИЙ", dateEnter: { $gt: new Date("2022-12-23") } }); //
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
+  // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ОКТЯБРЬСКИЙ", dateEnter: { $gt: new Date("2022-12-23") } }); //
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -663,7 +665,165 @@ async function createCloneCelebrator(celebrator) {
 }
 
 
-////////////////////////////////////////////
+/////////////////////////////////////////
+
+// Create February23 and March8 list API 
+router.post("/february-23/create", async (req, res) => {
+  try {
+    console.log("0- inside Create list API");
+    let result = await findAllGenderCelebrators("Male");
+    console.log("4-inside Create list API " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+router.post("/march-8/create", async (req, res) => {
+  try {
+    console.log("0- inside Create list API");
+    let result = await findAllGenderCelebrators("Female");
+    console.log("4-inside Create list API " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+async function findAllGenderCelebrators(gender) {
+
+  //throw new Error("Something bad happened");
+  let result = [];
+  console.log("1- inside findAllMonthCelebrators newList");
+
+  //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: [] } });
+
+  let namesOfUpdatedNursingHome = ["ШИПУНОВО", "ПЕРВОМАЙСКИЙ", "АВДОТЬИНКА", "НИКИТИНКА", "НОВОСЕЛЬЕ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОЛЬШОЕ_КАРПОВО", "НОВОСЛОБОДСК", "ШИПУНОВО_БОА", "КЫТМАНОВО"];
+/*   for (let home of updatedNursingHome) {
+    namesOfUpdatedNursingHome.push(home.nursingHome);
+  } */
+
+  console.log(namesOfUpdatedNursingHome);
+
+  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, gender: gender });
+  //console.log(list);
+
+  if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
+  console.log("2- seniors" + list.length);
+  let updatedCelebrators = [];
+  for (let celebrator of list) {
+
+    /*       let cloneSpecialComment = await specialComment(
+            2022 - celebrator["yearBirthday"]
+          ); */
+
+    let cloneCelebrator = createCloneCelebratorGender(celebrator);
+
+    updatedCelebrators.push(cloneCelebrator);
+  }
+
+  //console.log(list);
+  //console.log("celebrator");
+  //console.log("I am here");
+  let newList = await checkDoubles(updatedCelebrators);
+  // newList = newList1.slice();
+
+  console.log("2.5 - " + newList.length);
+
+  const options = { ordered: false };
+  let finalList = gender == "Male" ? await February23.insertMany(newList, options) : await March8.insertMany(newList, options);
+
+  //console.log(finalList);
+
+  console.log(`3- ${finalList.length} documents were inserted`);
+
+  result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length - finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
+  //console.log("3 - final" + finalList); 
+
+  return result;
+  //return true;
+}
+function createCloneCelebratorGender(celebrator) {
+
+  let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+    ? celebrator.dateBirthday
+    : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+      ? celebrator.monthBirthday
+      : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+
+  let cloneCategory = '';
+  let cloneOldest = false;
+
+  if (celebrator["noAddress"]) {
+    cloneCategory = "special";
+  } else {
+    if (celebrator.yearBirthday < 1942) {
+      cloneOldest = true;
+    }
+    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
+      cloneCategory = "oldWomen";
+    } else {
+      if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+        cloneCategory = "oldMen";
+      } else {
+        if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+          cloneCategory = "yang";
+        }
+      }
+    }
+  }
+
+  let cloneCelebrator = {
+    region: celebrator.region,
+    nursingHome: celebrator.nursingHome,
+    lastName: celebrator.lastName,
+    firstName: celebrator.firstName,
+    patronymic: celebrator.patronymic,
+    dateBirthday: celebrator.dateBirthday,
+    monthBirthday: celebrator.monthBirthday,
+    yearBirthday: celebrator.yearBirthday,
+    gender: celebrator.gender,
+    comment1: celebrator.comment1,
+    comment2: celebrator.comment2,
+    linkPhoto: celebrator.linkPhoto,
+    nameDay: celebrator.nameDay,
+    dateNameDay: celebrator.dateNameDay,
+    monthNameDay: celebrator.monthNameDay,
+    noAddress: celebrator.noAddress,
+    isReleased: celebrator.isReleased,
+    plusAmount: 0,
+    //specialComment: cloneSpecialComment,
+    fullDayBirthday: cloneFullDayBirthday,
+    oldest: cloneOldest,
+    category: cloneCategory,
+    holyday: celebrator.gender == "Male" ? '23 февраля 2023' : '8 марта 2023',
+    fullData: celebrator.nursingHome +
+      celebrator.lastName +
+      celebrator.firstName +
+      celebrator.patronymic +
+      celebrator.dateBirthday +
+      celebrator.monthBirthday +
+      celebrator.yearBirthday,
+  };
+  //console.log("special - " + celebrator["specialComment"]);
+  //console.log("fullday - " + celebrator.fullDayBirthday);
+ // console.log(cloneCelebrator);
+  //console.log("cloneCelebrator");
+  return cloneCelebrator;
+
+}
+
+//////////////////////////////////////////
 
 /**
  * API to delete all
@@ -723,6 +883,48 @@ router.get("/new-year", async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     NewYear.find({ absent: { $ne: true } }, function (err, lists) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(lists);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+//Find all February23 and March8 lists API
+router.get("/february-23", async (req, res) => {
+  try {
+    February23.find({ absent: { $ne: true } }, function (err, lists) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(lists);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+//Find all March8 lists API
+router.get("/march-8", async (req, res) => {
+  try {
+    March8.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -948,27 +1150,27 @@ async function checkAllNYFullness(house) {
   console.log("fullHouse " + fullHouse.length);
   let amount = 0;
   for (let senior of seniors) {
-      let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
-        let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
-        //console.log("seniorIndex " + seniorIndex);
-        if (seniorIndex == -1) {
-          amount++;
-          let celebrator = await createCloneCelebrator(senior);
-        
-          console.log(celebrator);
-          let newCelebrator = await NewYear.create(celebrator);
-          console.log(newCelebrator.fullData);     
-        } 
-
-/*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
-    let fullData2 = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic);
-    console.log("fullData2 " + fullData2);
-    let seniorIndex = fullHouse.findIndex(item => (item.nursingHome + item.lastName + item.firstName + item.patronymic) == fullData2);
-    console.log("seniorIndex " + seniorIndex);
-    if (seniorIndex > -1) {
-      await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
+    let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+    let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
+    //console.log("seniorIndex " + seniorIndex);
+    if (seniorIndex == -1) {
       amount++;
-    } */
+      let celebrator = await createCloneCelebrator(senior);
+
+      console.log(celebrator);
+      let newCelebrator = await NewYear.create(celebrator);
+      console.log(newCelebrator.fullData);
+    }
+
+    /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+        let fullData2 = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic);
+        console.log("fullData2 " + fullData2);
+        let seniorIndex = fullHouse.findIndex(item => (item.nursingHome + item.lastName + item.firstName + item.patronymic) == fullData2);
+        console.log("seniorIndex " + seniorIndex);
+        if (seniorIndex > -1) {
+          await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
+          amount++;
+        } */
   }
 
   return amount.toString();
@@ -1057,23 +1259,23 @@ router.post("/birthday/check-fullness", async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday:1, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 1, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
   let amount = 0;
   for (let senior of seniors) {
-      let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
-        let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
-        //console.log("seniorIndex " + seniorIndex);
-        if (seniorIndex == -1) {
-          amount++;
-          let celebrator = await createCloneCelebrator(senior);
-        
-          console.log(celebrator);
-          let newCelebrator = await List.create(celebrator);
-          console.log(newCelebrator.fullData);     
-        } 
+    let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+    let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
+    //console.log("seniorIndex " + seniorIndex);
+    if (seniorIndex == -1) {
+      amount++;
+      let celebrator = await createCloneCelebrator(senior);
+
+      console.log(celebrator);
+      let newCelebrator = await List.create(celebrator);
+      console.log(newCelebrator.fullData);
+    }
 
 
   }

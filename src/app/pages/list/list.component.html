@@ -5,27 +5,40 @@
 
     <mat-card-actions>
 
-         <button class="submit" (click)="deleteList()" mat-raised-button color = 'warn'>Очистить список ДР</button>
-     <!--   <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
+        <button class="submit" (click)="deleteList()" mat-raised-button color='warn'>Очистить список ДР</button>
+        <!--   <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
 
-        <button class="submit" (click)="deleteDoubleList()" mat-raised-button color = 'warn'>Очистить дубли ДР</button>
-     
+        <button class="submit" (click)="deleteDoubleList()" mat-raised-button color='warn'>Очистить дубли ДР</button>
+
 
         <button class="submit" (click)="populateSeniors()" mat-raised-button>Добавить жителей</button>
         <button class="submit" (click)="addHouses()" mat-raised-button>Добавить интернаты</button>
         <br /><br /><br />
-        <button class="submit" (click)="generateBirthday()" mat-raised-button>Сформировать список ДР</button>  
+        <button class="submit" (click)="generateBirthday()" mat-raised-button>Сформировать список ДР</button>
         <button class="submit" (click)="showBirthdayList($event)" mat-raised-button>Показать список ДР</button>
         <button class="submit" (click)="showLessPlus($event)" mat-raised-button>Показать список меньше 2+</button>
         <br /><br /><br />
         <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
         <br /><br /><br />
-<!--         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
+        <!--         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
         <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
         <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список НГ</button>
-       <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
-        <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше 1+</button>
+        <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
+        <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше
+            1+</button>
+            <br /><br /><br />
+
+        <button class="submit" (click)="generateFebruary23List()" mat-raised-button>Сформировать список 23</button>
+        <button class="submit" (click)="showFebruary23List($event)" mat-raised-button>Показать список 23</button>
+        <button class="submit" (click)="showLessPlusFebruary23List($event)" mat-raised-button>Показать список 23 меньше
+            1+</button>
+            <br /><br /><br />
+        <button class="submit" (click)="generateMarch8List()" mat-raised-button>Сформировать список 8</button>
+        <button class="submit" (click)="showMarch8List($event)" mat-raised-button>Показать список 8</button>
+        <button class="submit" (click)="showLessPlusMarch8List($event)" mat-raised-button>Показать список 8 меньше
+            1+</button>
+            <br /><br /><br />
 
     </mat-card-actions>
 
@@ -37,18 +50,19 @@
         <p>special - {{special}}</p>
         <p>oldest - {{oldest}}</p>
         <p>Общее количество с запасом - {{listLength+oldest}}</p>
-    
+
 
         <mat-list *ngFor="let person of lists">
 
-                <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
-                    {{person.fullDayBirthday}} {{person.comment1}}
-                    {{person.specialComment}} {{person.linkPhoto}} {{person.category}} 
-                    {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span style= "color: red;"*ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
+            <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+                {{person.fullDayBirthday}} {{person.comment1}}
+                {{person.specialComment}} {{person.linkPhoto}} {{person.category}}
+                {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span
+                    style="color: red;" *ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
 
         </mat-list>
 
-<!--         <mat-list *ngFor="let person of lists">
+        <!--         <mat-list *ngFor="let person of lists">
    
                  <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
  {{person.nursingHome}} <span style= "color: red;"*ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>

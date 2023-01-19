@@ -110,6 +110,28 @@ export class OrderService {
     });
   }
 
+
+  createOrderSpring(newOrder: Order): Observable<any> {
+    
+    return  this.http.post("/api/orders/spring/" + newOrder.amount, {
+      userName: newOrder.userName,
+      holiday: newOrder.holiday,
+      amount: newOrder.amount,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      institute: newOrder.institute,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      filter: newOrder.filter,
+    });
+  }
+
+
   createOrderForNameDay(newOrder: Order): Observable<any> {
     
     return  this.http.post("/api/orders/name-day", {

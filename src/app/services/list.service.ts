@@ -34,6 +34,14 @@ findAllNewYearLists(): Observable<any> {
   return this.http.get("/api/lists/new-year");
 }
 
+findAllFebruary23Lists(): Observable<any> {
+  return this.http.get("/api/lists/february-23");
+}
+
+findAllMarch8Lists(): Observable<any> {
+  return this.http.get("/api/lists/march-8");
+}
+
 findAllTeacherDayLists(): Observable<any> {
   return this.http.get("/api/lists/teacher-day");
 }
@@ -55,6 +63,16 @@ findAllTeacherDayLists(): Observable<any> {
 
   createNewYearList(): Observable<any> { 
     return  this.http.post("/api/lists/new-year/create" , {
+    });
+  }
+
+  createFebruary23List(): Observable<any> { 
+    return  this.http.post("/api/lists/february-23/create" , {
+    });
+  }
+
+  createMarch8List(): Observable<any> { 
+    return  this.http.post("/api/lists/march-8/create" , {
     });
   }
 

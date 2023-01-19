@@ -48,6 +48,8 @@ import { AllAbsentsComponent } from "./pages/all-absents/all-absents.component";
 import { TeacherDayComponent } from "./pages/teacher-day/teacher-day.component";
 import { NewYearComponent } from "./pages/new-year/new-year.component";
 import { CheckListsComponent } from "./pages/check-lists/check-lists.component";
+import { February23Component } from "./pages/february23/february23.component";
+import { March8Component } from "./pages/march8/march8.component";
 
 const routes: Routes = [
   {
@@ -203,6 +205,16 @@ const routes: Routes = [
       {
         path: "orders/teacher-day",
         component: TeacherDayComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/february-23",
+        component: February23Component,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/march-8",
+        component: March8Component,
         canActivate: [AuthGuard],
       },
 

@@ -88,6 +88,34 @@ export class ListComponent implements OnInit {
     );
   }
 
+  generateFebruary23List() {
+    this.listService.createFebruary23List().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
+  generateMarch8List() {
+    this.listService.createMarch8List().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
   deleteList() {
     console.log("delete");
     this.listService.deleteList().subscribe(
@@ -160,10 +188,71 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
+  showFebruary23List(event: any) {
+    this.listService.findAllFebruary23Lists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        //countries.sort( (a, b) => a.localeCompare(b) )
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+  showMarch8List(event: any) {
+    this.listService.findAllMarch8Lists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        //countries.sort( (a, b) => a.localeCompare(b) )
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <2);
+        this.lists = res["data"].filter(item => item.plusAmount <3);
 
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
@@ -222,6 +311,70 @@ export class ListComponent implements OnInit {
     this.isShowList = true;
     //console.log(this.lists);
   } 
+  showLessPlusFebruary23List(event: any) {
+    this.listService.findAllFebruary23Lists().subscribe(
+      (res) => {
+       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
+      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  } 
+
+  showLessPlusMarch8List(event: any) {
+    this.listService.findAllMarch8Lists().subscribe(
+      (res) => {
+       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
+      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  } 
+
 
   showNameDayList(event: any) {
     this.listService.findAllNameDayLists().subscribe(

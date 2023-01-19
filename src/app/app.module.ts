@@ -90,7 +90,8 @@ import { AllAbsentsComponent } from './pages/all-absents/all-absents.component';
 import { TeacherDayComponent } from "./pages/teacher-day/teacher-day.component";
 import { NewYearComponent } from './pages/new-year/new-year.component';
 import { CheckListsComponent } from './pages/check-lists/check-lists.component';
-
+import { February23Component } from './pages/february23/february23.component';
+import { March8Component } from './pages/march8/march8.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +134,9 @@ import { CheckListsComponent } from './pages/check-lists/check-lists.component';
     AllAbsentsComponent,
     TeacherDayComponent,
     NewYearComponent,
-    CheckListsComponent
+    CheckListsComponent,
+    February23Component,
+    March8Component
 
   ],
   imports: [

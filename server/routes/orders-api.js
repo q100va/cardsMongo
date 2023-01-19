@@ -17,6 +17,10 @@ const House = require("../models/house");
 const Region = require("../models/region");
 const NameDay = require("../models/name-day");
 const TeacherDay = require("../models/teacher-day");
+const February23 = require("../models/february-23");
+const March8 = require("../models/march-8");
+
+
 //const { getLocaleDayPeriods } = require("@angular/common");
 
 /**
@@ -75,8 +79,8 @@ router.post("/create/period/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    Order.find({ isDisabled: false , userName: {$ne :"okskust"}, isAccepted: false}, function (err, orders) { 
-   /* Order.find({ isDisabled: false , userName: "royrai"}, function (err, orders) { */
+    Order.find({ isDisabled: false, userName: { $ne: "okskust" }, isAccepted: false }, function (err, orders) {
+      /* Order.find({ isDisabled: false , userName: "royrai"}, function (err, orders) { */
       if (err) {
         console.log(err);
         const readOrdersMongodbErrorResponse = new BaseResponse(
@@ -400,6 +404,22 @@ async function deletePluses(deletedOrder) {
           for (let lineItem of deletedOrder.lineItems) {
             for (let person of lineItem.celebrators) {
               await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+            }
+          }
+        } else {
+          if (deletedOrder.holiday == "8 марта 2023") {
+            for (let lineItem of deletedOrder.lineItems) {
+              for (let person of lineItem.celebrators) {
+                await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+              }
+            }
+          } else {
+            if (deletedOrder.holiday == "23 февраля 2023") {
+              for (let lineItem of deletedOrder.lineItems) {
+                for (let person of lineItem.celebrators) {
+                  await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                }
+              }
             }
           }
         }
@@ -870,7 +890,7 @@ async function createOrder(newOrder) {
       success: false
     }; /* CANCEL */
 
- let periodResult = await checkActivePeriod(period, month);
+  let periodResult = await checkActivePeriod(period, month);
   if (!periodResult) return {
     result: "Обратитесь к администратору. Заявка не сформирована. Не найден активный период.",
     success: false
@@ -891,7 +911,7 @@ async function createOrder(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse":Math.round(newOrder.amount * 0.3)
+      "oneHouse": Math.round(newOrder.amount * 0.3)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -1044,7 +1064,7 @@ async function createOrder(newOrder) {
     };
   }
 
- checkActiveList(period, month, isOutDate, seniorsData.date1, seniorsData.date2);
+  checkActiveList(period, month, isOutDate, seniorsData.date1, seniorsData.date2);
   // CANCEL 
   return {
     result: resultLineItems,
@@ -1315,21 +1335,22 @@ async function searchSenior(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
- // console.log("DATA");
+  // console.log("DATA");
   //console.log(data);
-/*   if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
-    standardFilter.isReleased = false;}   */
-     if (data.proportion.amount > 12 ) {
-      standardFilter.isReleased = false;} 
-    //standardFilter.isReleased = false;
+  /*   if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
+      standardFilter.isReleased = false;}   */
+  if (data.proportion.amount > 12) {
+    standardFilter.isReleased = false;
+  }
+  //standardFilter.isReleased = false;
 
 
 
-/*     if (data.proportion.amount > 12 ) {
-    {
-      standardFilter.isReleased = false;
-    }
-  } */
+  /*     if (data.proportion.amount > 12 ) {
+      {
+        standardFilter.isReleased = false;
+      }
+    } */
 
   //console.log("maxPlus");
   //console.log(maxPlus);
@@ -1794,7 +1815,7 @@ async function createOrderNewYear(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse":  Math.round(newOrder.amount * 0.2)
+      "oneHouse": Math.round(newOrder.amount * 0.2)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -1974,17 +1995,17 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 
       data = await collectSeniorsNewYear(data);
 
-       if (data.counter < proportion[category]) {
+      if (data.counter < proportion[category]) {
         data.maxPlus = 2;
 
         data = await collectSeniorsNewYear(data);
-      } 
+      }
 
       if (data.counter < proportion[category]) {
         data.maxPlus = 3;
 
         data = await collectSeniorsNewYear(data);
-      } 
+      }
 
       if (data.counter < proportion[category]) {
         return data;
@@ -2002,7 +2023,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
 async function collectSeniorsNewYear(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen", "oldest" ], //,"oldMen"
+    oldWomen: ["oldWomen", "oldest"], //,"oldMen"
     oldMen: ["oldMen", "oldWomen", "yang"], //, "oldest"
     yang: ["yang", "oldMen", "oldWomen"], //, "oldest"
     special: ["special", "yang", "oldWomen", "oldMen"], //, "oldest"
@@ -2075,8 +2096,8 @@ async function searchSeniorNewYear(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-   secondTime: data.maxPlus > 1 ? true : false,
-   thirdTime: data.maxPlus === 3 ? true : false,
+    secondTime: data.maxPlus > 1 ? true : false,
+    thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -2084,12 +2105,12 @@ async function searchSeniorNewYear(
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
-/*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
-      standardFilter.isReleased = false;    
-  } */ 
- /*  if (data.proportion.amount > 12 ) { 
-    standardFilter.isReleased = false;    
-}  */
+  /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
+        standardFilter.isReleased = false;    
+    } */
+  /*  if (data.proportion.amount > 12 ) { 
+     standardFilter.isReleased = false;    
+ }  */
   //standardFilter.isReleased = false; // CANCEL
 
 
@@ -2102,16 +2123,16 @@ async function searchSeniorNewYear(
 
   let celebrator;
   //CHANGE!!!
- // let maxPlusAmount = 3;  
- let maxPlusAmount = 3; 
+  // let maxPlusAmount = 3;  
+  let maxPlusAmount = 3;
 
- //let maxPlusAmount = data.maxPlus;  
+  //let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
-  filter.plusAmount = { $lt: plusAmount };
+    filter.plusAmount = { $lt: plusAmount };
     //filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
     //filter.comment1 = "(2 корп.)"; //CANCEL
     console.log("filter");
@@ -2138,7 +2159,523 @@ async function generateLineItemsNewYear(nursingHomes, order_id) {
 
   let lineItems = [];
   let order = await Order.findOne({ _id: order_id })
+
+  console.log("order.temporaryLineItems");
+  //console.log(order.temporaryLineItems);
+
+  for (let person of order.temporaryLineItems) {
+    console.log("person");
+    console.log(person);
+    //console.log(lineItems);
+    let index = -1;
+    //console.log(lineItems.length);
+    if (lineItems.length > 0) {
+      index = lineItems.findIndex(
+        (item) => item.nursingHome == person.nursingHome
+      );
+    }
+    // console.log(index);
+    if (index > -1) {
+      lineItems[index].celebrators.push(person);
+    } else {
+      let foundHouse = nursingHomes.find(
+        (item) => item.nursingHome == person.nursingHome
+      );
+      //console.log(foundHouse);
+      //console.log(person.nursingHome);
+      if (!foundHouse) { return person.nursingHome; }
+      lineItems.push({
+        region: foundHouse.region,
+        nursingHome: foundHouse.nursingHome,
+        address: foundHouse.address,
+        infoComment: foundHouse.infoComment,
+        adminComment: foundHouse.adminComment,
+        noAddress: foundHouse.noAddress,
+        celebrators: [person],
+      });
+    }
+  }
+  await Order.updateOne({ _id: order_id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+  //throw new Error('test1'); //delete
+  //console.log("updatedOrder");
+  //console.log(updatedOrder);
+  // console.log(lineItems);
+  return lineItems;
+}
+
+
+//////////////////////////////////////////////////
+//February23 and March8 orders
+
+router.post("/spring/:amount", async (req, res) => {
+  let finalResult;
+  try {
+    let newOrder = {
+      userName: req.body.userName,
+      holiday: req.body.holiday,
+      amount: req.body.amount,
+      clientFirstName: req.body.clientFirstName,
+      clientPatronymic: req.body.clientPatronymic,
+      clientLastName: req.body.clientLastName,
+      email: req.body.email,
+      contactType: req.body.contactType,
+      contact: req.body.contact,
+      institute: req.body.institute,
+      isAccepted: req.body.isAccepted,
+      comment: req.body.comment,
+      orderDate: req.body.orderDate,
+      temporaryLineItems: [],
+      lineItems: [],
+      filter: req.body.filter,
+      //filter: { noSpecial: true },
+      isCompleted: false
+    };
+
+    finalResult = await createOrderSpring(newOrder);
+    let text = !finalResult.success ? finalResult.result : "Query Successful";
+
+    const newListResponse = new BaseResponse(200, text, finalResult);
+    res.json(newListResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    let text = 'Обратитесь к администратору. Заявка не сформирована.';
+    if (!finalResult) {
+      let answer = await deleteErrorPlusSpring(false, req.body.userName);
+      console.log("answer");
+      console.log(answer);
+      if (!answer) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+
+    } else {
+      if (finalResult && finalResult.success) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+      if (finalResult && !finalResult.success) {
+        text = finalResult.result;
+      }
+    }
+    const newListCatchErrorResponse = new BaseResponse(
+      500,
+      text,
+      e
+    );
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+//delete pluses because of error 
+
+async function deleteErrorPlusSpring(order_id, ...userName) {
+  try {
+    let filter = order_id ? { _id: order_id } : { userName: userName[0], isCompleted: false };
+    //console.log("userName[0]");
+    //console.log(userName[0]);
+
+    let order = await Order.findOne(filter);  //, { projection: { _id: 0, temporaryLineItems: 1 } }
+    if (order) {
+      if (order.temporaryLineItems && order.temporaryLineItems.length > 0) {
+        let seniors_ids = [];
+        for (let person of order.temporaryLineItems) {
+          seniors_ids.push(person.celebrator_id);
+        }
+        if (order.holiday == "23 февраля 2023") {
+          await February23.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
+        }
+        if (order.holiday == "8 марта 2023") {
+          await March8.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
+        }
+
+      }
+      await Order.deleteOne({ _id: order._id });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    sendMessageToAdmin('something wrong with "deleteErrorPlus"', e);
+  }
+}
+
+
+// Create order
+async function createOrderSpring(newOrder) {
+
+
+  let proportion = {};
+
+  if (newOrder.amount > 50) {
+    let oldWomenAmount = Math.round(newOrder.amount * 0.2);
+    let oldMenAmount = Math.round(newOrder.amount * 0.3);
+    let specialAmount = Math.round(newOrder.amount * 0.2);
+    let yangAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialAmount;
+
+    proportion = {
+      "amount": newOrder.amount,
+      "oldWomen": oldWomenAmount,
+      "oldMen": oldMenAmount,
+      "special": specialAmount,
+      "yang": yangAmount,
+      "oneHouse": Math.round(newOrder.amount * 0.2)
+    }
+    if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
+  } else {
+    proportion = await Proportion.findOne({ amount: newOrder.amount });
+    if (!proportion) {
+      return {
+        result: `Обратитесь к администратору. Заявка не сформирована. Для количества ${newOrder.amount} не найдена пропорция`,
+        success: false
+      };
+    } else {
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined; //hata
+      //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
+      console.log("newOrder.filter.region");
+      console.log(newOrder.filter.region);
+
+      console.log("proportion.oneHouse");
+      console.log(proportion.oneHouse);
+
+      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome /* && newOrder.amount < 21 */) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+      console.log("proportion.oneRegion");
+      console.log(proportion.oneRegion);
+    }
+  }
+
+  const emptyOrder = {
+    userName: newOrder.userName,
+    holiday: newOrder.holiday,
+    amount: newOrder.amount,
+    clientFirstName: newOrder.clientFirstName,
+    clientPatronymic: newOrder.clientPatronymic,
+    clientLastName: newOrder.clientLastName,
+    email: newOrder.email,
+    contactType: newOrder.contactType,
+    contact: newOrder.contact,
+    institute: newOrder.institute,
+    //isRestricted: newOrder.isRestricted,
+    isAccepted: newOrder.isAccepted,
+    comment: newOrder.comment,
+    orderDate: newOrder.orderDate,
+    lineItems: [],
+    filter: newOrder.filter,
+
+  };
+  let order = await Order.create(emptyOrder);
+  let order_id = order._id.toString();
+
+  //console.log("order");
+  //console.log(order);
+
+  let seniorsData;
+  let filter = {};
+  let isOutDate = false;
+
+  if (newOrder.filter) {
+    if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: "" };
+    if ((newOrder.filter.onlyWithPicture || newOrder.filter.nursingHome || newOrder.filter.region) && newOrder.filter.addressFilter == 'any') {
+      proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
+      proportion.oldWomen = 0;
+      proportion.oldMen = 0;
+      proportion.yang = 0;
+      proportion.special = 0;
+    }
+    if (newOrder.filter.addressFilter == 'forKids') {
+      proportion.oldWomen = proportion.oldWomen + proportion.special;
+      proportion.special = 0;
+      // console.log("proportion");
+      //console.log(proportion);
+      if (!newOrder.filter.year1 && !newOrder.filter.year2) {
+        newOrder.filter.year2 = 1963;
+      }
+    }
+
+    if (newOrder.filter.addressFilter == 'noSpecial') {
+      proportion.yang = proportion.yang + proportion.special;
+      proportion.special = 0;
+    }
+
+    if (newOrder.filter.addressFilter == 'onlySpecial') {
+      proportion.specialOnly = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
+      proportion.oldWomen = 0;
+      proportion.oldMen = 0;
+      proportion.yang = 0;
+      proportion.special = 0;
+    }
+    /*     if (newOrder.filter.nursingHome) {
+          proportion.anyCategory = proportion.amount;
+          proportion.oldWomen = 0;
+          proportion.oldMen = 0;
+          proportion.yang = 0;
+          proportion.special = 0;
+        } */
+
+    if (newOrder.filter.region) filter.region = newOrder.filter.region;
+    if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
+    if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
+    if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
+    if (newOrder.filter.year1 || newOrder.filter.year2) {
+      if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
+      if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
+      if (newOrder.filter.year1 > 1958 && newOrder.filter.addressFilter != 'onlySpecial') {
+        proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
+        proportion.oldWomen = 0;
+        proportion.oldMen = 0;
+      }
+      if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
+    }
+    seniorsData = await fillOrderSpring(proportion, order_id, filter, order.holiday);
+
+  }
+
+  if (seniorsData.celebratorsAmount < newOrder.amount) {
+
+    await deleteErrorPlusSpring(order_id);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+      success: false
+
+    }
+  }
+
+  const nursingHomes = await House.find({});
+  let resultLineItems = await generateLineItemsSpring(nursingHomes, order_id);
+  console.log("resultLineItems");
+  console.log(resultLineItems);
+  console.log(typeof resultLineItems);
+
+  if (typeof resultLineItems == "string") {
+
+    console.log("resultLineItems222");
+    await deleteErrorPlusSpring(order_id);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
+      success: false
+    };
+  }
+
+  return {
+    result: resultLineItems,
+    success: true,
+    order_id: order_id
+  }
+}
+
+// create a list of seniors for the order
+
+async function fillOrderSpring(proportion, order_id, filter, holiday) {
+  const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
+
+  let data = {
+    houses: {},
+    restrictedHouses: [],//"ВЫШНИЙ_ВОЛОЧЕК"
+    restrictedPearson: [],
+    celebratorsAmount: 0,
+    /*     date1: period.date1,
+        date2: period.date2,
+        maxPlus: period.maxPlus, */
+    filter: filter,
+    order_id: order_id,
+    holiday: holiday,
+    //temporaryLineItems: [],
+  }
+  if (proportion.oneRegion) {
+    data.regions = {};
+    data.restrictedRegions = [];
+  }
+
+  for (let category of categories) {
+
+    data.category = category;
+    data.proportion = proportion;
+    data.counter = 0;
+    //console.log(category);
+    //console.log(proportion[category]);
+
+    if (proportion[category]) {
+
+      data.maxPlus = 1;
+
+      data = await collectSeniorsSpring(data);
+
+      /*   if (data.counter < proportion[category]) {
+         data.maxPlus = 2;
  
+         data = await collectSeniorsSpring(data);
+       } 
+ 
+       if (data.counter < proportion[category]) {
+         data.maxPlus = 3;
+ 
+         data = await collectSeniorsSpring(data);
+       }  */
+
+      if (data.counter < proportion[category]) {
+        return data;
+      }
+    }
+  }
+  //console.log(data.restrictedHouses);
+  //console.log(data.restrictedPearson);
+  return data;
+}
+
+
+//set restrictions for searching
+
+async function collectSeniorsSpring(data) {
+
+  const searchOrders = {
+    oldWomen: ["oldWomen", "oldMen"], //, "oldest"
+    oldMen: ["oldMen", "oldWomen"], //, "oldest", "yang"
+    yang: ["yang", "oldMen", "oldWomen"], //, "oldest"
+    special: ["special", "yang", "oldWomen", "oldMen"], //, "oldest"
+    specialOnly: ["special"],
+    allCategory: ["oldMen", "oldWomen", "yang", "special"] //, "oldest"
+  };
+  //console.log("data.category");
+  //console.log(data.category);
+
+  for (let kind of searchOrders[data.category]) {
+    let barrier = data.proportion[data.category] - data.counter;
+
+    outer1: for (let i = 0; i < barrier; i++) {
+      let result = await searchSeniorSpring(
+        kind,
+        data
+
+      );
+      if (result) {
+        //console.log(result);
+        await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
+
+        if (data.holiday == "23 февраля 2023") {
+          await February23.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        }
+        if (data.holiday == "8 марта 2023") {
+          await March8.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        }
+        data.celebratorsAmount++;
+        data.restrictedPearson.push(result.celebrator_id);
+        data.counter++;
+        console.log("data.proportion.oneHouse");
+        console.log(data.proportion.oneHouse);
+        if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
+        if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
+        console.log("data.regions");
+        console.log(data.regions);
+
+        if (data.proportion.oneHouse) {
+          if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
+            data.restrictedHouses.push(result["nursingHome"]);
+          }
+        }
+        if (data.proportion.oneRegion) {
+          if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
+            data.restrictedRegions.push(result["region"]);
+          }
+        }
+
+      } else {
+        break outer1;
+      }
+    }
+  }
+  return data;
+}
+
+// get senior
+async function searchSeniorSpring(
+  kind,
+  data
+  /*   restrictedHouses,
+    restrictedPearson,
+    date1,
+    date2,
+    maxPlus,
+    orderFilter */
+) {
+
+  /*  data.restrictedHouses,
+      data.restrictedPearson,
+      data.date1,
+      data.date2,
+      data.maxPlus,
+      data.filter */
+
+  let standardFilter = {
+    nursingHome: { $nin: data.restrictedHouses },
+    secondTime: data.maxPlus > 1 ? true : false,
+    thirdTime: data.maxPlus === 3 ? true : false,
+    _id: { $nin: data.restrictedPearson },
+    //plusAmount: { $lt: maxPlus },
+    //dateBirthday: { $gte: data.date1, $lte: data.date2 },
+    absent: { $ne: true }
+  };
+  if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
+  if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
+  /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
+        standardFilter.isReleased = false;    
+    } */
+  /*  if (data.proportion.amount > 12 ) { 
+     standardFilter.isReleased = false;    
+ }  */
+  //standardFilter.isReleased = false; // CANCEL
+
+
+  //console.log("maxPlus");
+  //console.log(maxPlus);
+
+  let filter = Object.assign(standardFilter, data.filter);
+  //console.log("filter");
+
+
+  let celebrator;
+  //CHANGE!!!
+  // let maxPlusAmount = 3;  
+  //let maxPlusAmount = 3; 
+
+  let maxPlusAmount = data.maxPlus;
+  //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
+  //console.log("maxPlusAmount");
+  //console.log(maxPlusAmount);
+
+  for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
+    filter.plusAmount = { $lt: plusAmount };
+    //filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
+    //filter.comment1 = "(2 корп.)"; //CANCEL
+    console.log("filter");
+    console.log(filter);
+
+    if (data.holiday == "23 февраля 2023") {
+      celebrator = await February23.findOne(filter);
+    }
+    if (data.holiday == "8 марта 2023") {
+      celebrator = await March8.findOne(filter);
+    }
+
+    console.log("celebrator");
+    console.log(celebrator);
+    if (celebrator) {
+      //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
+      //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      celebrator.celebrator_id = celebrator._id.toString();
+      return celebrator;
+    }
+  }
+
+  if (!celebrator) {
+    return false;
+  }
+}
+
+//fill lineItems
+async function generateLineItemsSpring(nursingHomes, order_id) {
+  //console.log(nursingHomes);
+
+  let lineItems = [];
+  let order = await Order.findOne({ _id: order_id })
+
   console.log("order.temporaryLineItems");
   //console.log(order.temporaryLineItems);
 
