@@ -111,6 +111,12 @@ findAllTeacherDayLists(): Observable<any> {
     return this.http.post("/api/lists/birthday/check-fullness", {nursingHome: house});
     
   }
+
+  findSpecialLists() { 
+      return this.http.get("/api/lists/holiday/special-list"); 
+  }
+
+  
   
 }
 

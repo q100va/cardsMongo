@@ -2317,7 +2317,7 @@ async function createOrderSpring(newOrder) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse": Math.round(newOrder.amount * 0.2)
+      "oneHouse": Math.round(newOrder.amount * 0.1)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {

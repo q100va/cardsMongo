@@ -15,6 +15,7 @@ import { HttpClient } from "@angular/common/http";
 export class ListComponent implements OnInit {
   lists: List[];
   isShowList: Boolean = false;
+  isShowSpecialList: Boolean = false;
   listLength: number = 0;
   oldWomen: number = 0;
   oldMen: number = 0;
@@ -468,4 +469,24 @@ export class ListComponent implements OnInit {
     );
     
   }
+
+  showSpecialList(event: any) {
+    this.listService.findSpecialLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+       // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowSpecialList = true;
+    //console.log(this.lists);
+  }
+  
 }

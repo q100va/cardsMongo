@@ -16,7 +16,7 @@
                         <td>
                             <mat-card-actions style="text-align: right; padding-right: px;">
                                 <button mat-raised-button (click)="clear()" color="accent">Очистить</button>
-<!--                                 <button (click)="createOrder()" mat-raised-button color="primary"
+                                <!--                                 <button (click)="createOrder()" mat-raised-button color="primary"
                                     [disabled]="!form.valid">Сформировать</button> -->
                             </mat-card-actions>
                         </td>
@@ -156,13 +156,15 @@
                         <td>
                             <mat-card-actions style="text-align: right; padding-right: px;">
                                 <button (click)="createOrder()" mat-raised-button color="primary"
-                                [disabled]="!form.valid" *ngIf = "!hide">Сохранить</button>
+                                    [disabled]="!form.valid" *ngIf="!hide">Сохранить</button>
                             </mat-card-actions>
                         </td>
                     </tr>
                 </table>
-     
-                <p style="color: rgb(101, 80, 219); font-weight: bold;" *ngIf="notSaved">Выберите адреса для поздравления и нажмите "Сохранить". Старайтесь, чтобы все поздравляемые получили одинаковое количество поздравлений.</p>
+
+                <p style="color: rgb(101, 80, 219); font-weight: bold;" *ngIf="notSaved">Выберите адреса для
+                    поздравления и нажмите "Сохранить". Старайтесь, чтобы все поздравляемые получили одинаковое
+                    количество поздравлений.</p>
 
                 <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
                 <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
@@ -178,83 +180,82 @@
 
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="check">
-                      <th mat-header-cell *matHeaderCellDef>
+                        <th mat-header-cell *matHeaderCellDef>
 
-                      </th>
-                      <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()"
-                                      (change)="$event ? selection.toggle(row) : null"
-                                      [checked]="selection.isSelected(row)">
-                        </mat-checkbox>
-                      </td>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </td>
                     </ng-container>
-                  
+
                     <!-- Position Column -->
                     <ng-container matColumnDef="plusAmount">
-                      <th mat-header-cell *matHeaderCellDef> Кол-во поздравлений </th>
-                      <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.plusAmount}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Кол-во поздравлений </th>
+                        <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.plusAmount}} </td>
                     </ng-container>
-                  
+
                     <!-- Name Column -->
                     <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef> ФИО </th>
-                      <td mat-cell *matCellDef="let element"> {{element.lastName}} {{element.firstName}} {{element.patronymic}}</td>
+                        <th mat-header-cell *matHeaderCellDef> ФИО </th>
+                        <td mat-cell *matCellDef="let element"> {{element.lastName}} {{element.firstName}}
+                            {{element.patronymic}}</td>
                     </ng-container>
-                  
+
                     <!-- Weight Column -->
                     <ng-container matColumnDef="nameDay">
-                      <th mat-header-cell *matHeaderCellDef> Именины </th>
-                      <td mat-cell *matCellDef="let element"> {{element.nameDay}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Именины </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nameDay}} </td>
                     </ng-container>
-                  
+
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="DOB">
-                      <th mat-header-cell *matHeaderCellDef> Дата/год рождения </th>
-                      <td mat-cell *matCellDef="let element"> {{element.specialComment}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Дата/год рождения </th>
+                        <td mat-cell *matCellDef="let element"> {{element.specialComment}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="house">
                         <th mat-header-cell *matHeaderCellDef> Интернат </th>
                         <td mat-cell *matCellDef="let element"> {{element.nursingHome}} </td>
-                      </ng-container>
+                    </ng-container>
 
-                      <ng-container matColumnDef="region">
+                    <ng-container matColumnDef="region">
                         <th mat-header-cell *matHeaderCellDef> Регион </th>
                         <td mat-cell *matCellDef="let element"> {{element.region}} </td>
-                      </ng-container>
+                    </ng-container>
 
-                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                          (click)="selection.toggle(row)">
-                      </tr>
-                  
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+                    </tr>
 
-                  </table>
+
+                </table>
 
 
                 <div *ngIf="!notSaved">
 
-                <mat-card-content *ngFor="let lineItem of lineItems">
+                    <mat-card-content *ngFor="let lineItem of lineItems">
 
-                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-                    <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
-                    <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
+                        <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                        <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
+                        <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
 
-                    <div *ngFor="let celebrator of lineItem.celebrators">
-                      <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+                            <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
 
-                        {{celebrator.lastName}}
-                        {{celebrator.firstName}}
-                        {{celebrator.patronymic}}                       
-                        ({{celebrator.specialComment}})
-                        {{celebrator.nameDay}}
-                        {{celebrator.comment1}}
-                        {{celebrator.linkPhoto}}
-                   
-                    </div>
-                    <br />
-                </mat-card-content>
-            </div>
+                            {{celebrator.lastName}}
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
+                            ({{celebrator.specialComment}})
+                            {{celebrator.nameDay}}
+                            {{celebrator.comment1}}
+                            {{celebrator.linkPhoto}}
+
+                        </div>
+                        <br />
+                    </mat-card-content>
+                </div>
 
 
 

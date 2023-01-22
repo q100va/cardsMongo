@@ -18,6 +18,8 @@ const House = require("../models/house");
 const Order = require("../models/order");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
+//const SpecialDay = require("../models/name-day copy");
+const SpecialDay = require("../models/senior");
 //const User = require("../models/user");
 
 // Delete double birthday list API 
@@ -708,10 +710,12 @@ async function findAllGenderCelebrators(gender) {
 
   //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: [] } });
 
-  let namesOfUpdatedNursingHome = ["ШИПУНОВО", "ПЕРВОМАЙСКИЙ", "АВДОТЬИНКА", "НИКИТИНКА", "НОВОСЕЛЬЕ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОЛЬШОЕ_КАРПОВО", "НОВОСЛОБОДСК", "ШИПУНОВО_БОА", "КЫТМАНОВО"];
-/*   for (let home of updatedNursingHome) {
-    namesOfUpdatedNursingHome.push(home.nursingHome);
-  } */
+  // let namesOfUpdatedNursingHome = ["ШИПУНОВО", "ПЕРВОМАЙСКИЙ", "АВДОТЬИНКА", "НИКИТИНКА", "НОВОСЕЛЬЕ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОЛЬШОЕ_КАРПОВО", "НОВОСЛОБОДСК", "ШИПУНОВО_БОА", "КЫТМАНОВО"];
+  //let namesOfUpdatedNursingHome = ["ВИШЕРСКИЙ", "ВИШЕНКИ", "ЖЕЛЕЗНОГОРСК", "ДИМИТРОВГРАД", "ПИОНЕРСКИЙ", "СЕБЕЖ", "ТАМБОВСКИЙ_ЛЕСХОЗ", "ТОЛЬЯТТИ", "ЖИГУЛЕВСК", "КАРДЫМОВО", "ПАРФИНО", "НОГИНСК", "ЭЛЕКТРОГОРСК", "ИРКУТСК_КУРОРТНАЯ", "ОКТЯБРЬСКИЙ", "НЯНДОМА", "ЦЕЛИННОЕ", "ПОБЕДИМ"];
+  let namesOfUpdatedNursingHome = ["ОСТРОВ"];
+  /*   for (let home of updatedNursingHome) {
+      namesOfUpdatedNursingHome.push(home.nursingHome);
+    } */
 
   console.log(namesOfUpdatedNursingHome);
 
@@ -817,7 +821,7 @@ function createCloneCelebratorGender(celebrator) {
   };
   //console.log("special - " + celebrator["specialComment"]);
   //console.log("fullday - " + celebrator.fullDayBirthday);
- // console.log(cloneCelebrator);
+  // console.log(cloneCelebrator);
   //console.log("cloneCelebrator");
   return cloneCelebrator;
 
@@ -900,7 +904,7 @@ router.get("/new-year", async (req, res) => {
   }
 });
 
-//Find all February23 and March8 lists API
+//Find all February23 lists API
 router.get("/february-23", async (req, res) => {
   try {
     February23.find({ absent: { $ne: true } }, function (err, lists) {
@@ -1283,6 +1287,66 @@ async function checkAllHBFullness(house) {
   return amount.toString();
 
 }
+
+//Find special lists API
+router.get("/holiday/special-list", async (req, res) => {
+  try {
+
+    //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
+    //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
+    let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Male"});
+    let lineItems = [];
+    let nursingHomes = await House.find({});
+
+    nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+
+    for (let person of nameDays) {
+      console.log("person");
+      console.log(person);
+      //console.log(lineItems);
+      let index = -1;
+      //console.log(lineItems.length);
+      if (lineItems.length > 0) {
+        index = lineItems.findIndex(
+          (item) => item.nursingHome == person.nursingHome
+        );
+      }
+      // console.log(index);
+      if (index > -1) {
+        lineItems[index].celebrators.push(person);
+      } else {
+        let foundHouse = nursingHomes.find(
+          (item) => item.nursingHome == person.nursingHome
+        );
+        //console.log(foundHouse);
+        //console.log(person.nursingHome);
+        if (!foundHouse) {
+          console.log(`Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`);
+          const findAllListsMongodbErrorResponse = new BaseResponse("500", `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`, err);
+          res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+        }
+        lineItems.push({
+          region: foundHouse.region,
+          nursingHome: foundHouse.nursingHome,
+          address: foundHouse.address,
+          infoComment: foundHouse.infoComment,
+          adminComment: foundHouse.adminComment,
+          noAddress: foundHouse.noAddress,
+          celebrators: [person],
+        });
+      }
+    }
+    //console.log(nameDays);
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", lineItems);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
 
 
 // Find by ID
