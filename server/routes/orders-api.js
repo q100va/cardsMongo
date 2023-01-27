@@ -522,6 +522,72 @@ router.get("/get/regions/", async (req, res) => {
 
 /////////////////////////////////////////////////
 
+
+//check double order
+
+router.post("/check-double/", async (req, res) => {
+  try {
+
+    let e = req.body.email ? new RegExp('^' + req.body.email + '$', 'i') : null;
+    let c = req.body.contact ? new RegExp('^' + req.body.contact + '$', 'i') : null;
+    let conditions;
+    if (req.body.email && req.body.contact) {
+      conditions = {
+        isDisabled: false,
+        holiday: req.body.holiday,
+        $or: [{ email: e }, { contact: c }]
+      }
+    }
+    if (req.body.email && !req.body.contact) {
+      conditions = {
+        isDisabled: false,
+        holiday: req.body.holiday,
+        email: e
+      }
+    }
+    if (!req.body.email && req.body.contact) {
+      conditions = {
+        isDisabled: false,
+        holiday: req.body.holiday,
+        contact: c
+      }
+    }
+
+    Order.findOne(conditions, function (err, order) {
+      if (err) {
+        console.log(err);
+        const readRegionsMongodbErrorResponse = new BaseResponse(
+          500,
+          "Internal server error",
+          err
+        );
+        res.status(500).send(readRegionsMongodbErrorResponse.toObject());
+      } else {
+        let result = null;
+        if (order) { result = order.userName }
+
+       // console.log("result");
+       // console.log(order);
+       // console.log(result);
+        const readRegionsResponse = new BaseResponse(
+          200,
+          "Query successful",
+          result
+        );
+        res.json(readRegionsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const readRegionsCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      e
+    );
+    res.status(500).send(readRegionsCatchErrorResponse.toObject());
+  }
+});
+
 //create name day order
 
 router.post("/name-day", async (req, res) => {
@@ -1542,8 +1608,8 @@ async function checkActiveList(period, month, isOutDate, minDate, maxDate) {
       "dateBirthday": { $gte: period.date1, $lte: period.date2 },
       "absent": { $ne: true }
     });
-    console.log("seniorToGreet2");
-    console.log(seniorToGreet);
+    //console.log("seniorToGreet2");
+    //console.log(seniorToGreet);
     let check;
 
     if (!seniorToGreet) {

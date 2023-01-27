@@ -10,9 +10,9 @@ import { LineItem } from "src/app/shared/interfaces/line-item.interface";
 import { Order } from "src/app/shared/interfaces/order.interface";
 
 @Component({
-  selector: 'app-february23',
-  templateUrl: './february23.component.html',
-  styleUrls: ['./february23.component.css']
+  selector: "app-february23",
+  templateUrl: "./february23.component.html",
+  styleUrls: ["./february23.component.css"],
 })
 export class February23Component implements OnInit {
   order: Order;
@@ -76,10 +76,10 @@ export class February23Component implements OnInit {
       year1: [null],
       year2: [null],
       date1: [null],
-      date2: [null], 
+      date2: [null],
       region: [null],
       nursingHome: [null],
-      onlyWithPicture: [false]
+      onlyWithPicture: [false],
     });
   }
 
@@ -170,78 +170,96 @@ export class February23Component implements OnInit {
             });
             console.log("ERROR");
           } else {
-/*           if (
-              this.form.controls.date1.value != null &&
-              this.form.controls.date2.value != null &&
-              this.form.controls.date2.value < this.form.controls.date1.value
-            ) {
-              this.resultDialog.open(ConfirmationDialogComponent, {
-                data: {
-                  message:
-                    "Неверно указан период для даты рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
-                },
-                disableClose: true,
-                width: "fit-content",
-              });
-            } else {  */
-              this.spinner = true;
-
-              let newOrder: Order = {
-                userName: this.userName,
-                holiday: this.holiday,
-                clientFirstName: this.form.controls.clientFirstName.value,
-                clientPatronymic: this.form.controls.clientPatronymic.value,
-                clientLastName: this.form.controls.clientLastName.value,
-                email: this.form.controls.email.value,
-                contactType: this.form.controls.contactType.value,
-                contact: this.form.controls.contact.value,
-                institute: this.form.controls.institute.value,
-                amount: this.form.controls.amount.value,
-                isAccepted: this.form.controls.isAccepted.value ? true : false,
-                comment: this.form.controls.comment.value,
-                orderDate: this.orderDate,
-                filter: {
-                  addressFilter: this.addressFilter,
-                  genderFilter: this.genderFilter,
-                  year1: this.form.controls.year1.value,
-                  year2: this.form.controls.year2.value,
-                  date1: this.form.controls.date1.value,
-                  date2: this.form.controls.date2.value, 
-                  region: this.form.controls.region.value,
-                  nursingHome: this.form.controls.nursingHome.value,
-                  onlyWithPicture: this.form.controls.onlyWithPicture.value,
-                },
-              };
-
-              console.log("newOrder");
-              console.log(newOrder);
-
-              this.orderService.createOrderSpring(newOrder).subscribe(
+            this.orderService
+              .checkDoubleOrder(
+                this.holiday,
+                this.form.controls.email.value,
+                this.form.controls.contact.value
+              )
+              .subscribe(
                 async (res) => {
-                  this.spinner = false;
-                  let result = res["data"]["result"];
-                  if (typeof result == "string") {
-                    this.errorMessage = result;
-                    console.log(res);
+                  let result = res["data"];
+                  // console.log("res");
+                  // console.log(res);
+                  if (!result) {
+                    this.fillOrder();
                   } else {
-                    //alert(res.msg);
-                    console.log(res);
-                    this.lineItems = result;
-                    this.canSave = true;
-                    this.successMessage =
-                      "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+                    this.confirmationService.confirm({
+                      message:
+                        "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+                        this.holiday +
+                        " у волонтера " +
+                        result +
+                        ". Вы уверены, что это не дубль?",
+                      accept: () => this.fillOrder(),
+                    });
                   }
                 },
                 (err) => {
-                  this.spinner = false;
                   this.errorMessage = err.error.msg + " " + err.message;
                   console.log(err);
                 }
               );
-            }
           }
         }
       }
     }
   }
 
+  fillOrder() {
+    this.spinner = true;
+
+    let newOrder: Order = {
+      userName: this.userName,
+      holiday: this.holiday,
+      clientFirstName: this.form.controls.clientFirstName.value,
+      clientPatronymic: this.form.controls.clientPatronymic.value,
+      clientLastName: this.form.controls.clientLastName.value,
+      email: this.form.controls.email.value,
+      contactType: this.form.controls.contactType.value,
+      contact: this.form.controls.contact.value,
+      institute: this.form.controls.institute.value,
+      amount: this.form.controls.amount.value,
+      isAccepted: this.form.controls.isAccepted.value ? true : false,
+      comment: this.form.controls.comment.value,
+      orderDate: this.orderDate,
+      filter: {
+        addressFilter: this.addressFilter,
+        genderFilter: this.genderFilter,
+        year1: this.form.controls.year1.value,
+        year2: this.form.controls.year2.value,
+        date1: this.form.controls.date1.value,
+        date2: this.form.controls.date2.value,
+        region: this.form.controls.region.value,
+        nursingHome: this.form.controls.nursingHome.value,
+        onlyWithPicture: this.form.controls.onlyWithPicture.value,
+      },
+    };
+
+    console.log("newOrder");
+    console.log(newOrder);
+
+    this.orderService.createOrderSpring(newOrder).subscribe(
+      async (res) => {
+        this.spinner = false;
+        let result = res["data"]["result"];
+        if (typeof result == "string") {
+          this.errorMessage = result;
+          console.log(res);
+        } else {
+          //alert(res.msg);
+          console.log(res);
+          this.lineItems = result;
+          this.canSave = true;
+          this.successMessage =
+            "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+        }
+      },
+      (err) => {
+        this.spinner = false;
+        this.errorMessage = err.error.msg + " " + err.message;
+        console.log(err);
+      }
+    );
+  }
+}

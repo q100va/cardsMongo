@@ -712,14 +712,19 @@ async function findAllGenderCelebrators(gender) {
 
   // let namesOfUpdatedNursingHome = ["ШИПУНОВО", "ПЕРВОМАЙСКИЙ", "АВДОТЬИНКА", "НИКИТИНКА", "НОВОСЕЛЬЕ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОЛЬШОЕ_КАРПОВО", "НОВОСЛОБОДСК", "ШИПУНОВО_БОА", "КЫТМАНОВО"];
   //let namesOfUpdatedNursingHome = ["ВИШЕРСКИЙ", "ВИШЕНКИ", "ЖЕЛЕЗНОГОРСК", "ДИМИТРОВГРАД", "ПИОНЕРСКИЙ", "СЕБЕЖ", "ТАМБОВСКИЙ_ЛЕСХОЗ", "ТОЛЬЯТТИ", "ЖИГУЛЕВСК", "КАРДЫМОВО", "ПАРФИНО", "НОГИНСК", "ЭЛЕКТРОГОРСК", "ИРКУТСК_КУРОРТНАЯ", "ОКТЯБРЬСКИЙ", "НЯНДОМА", "ЦЕЛИННОЕ", "ПОБЕДИМ"];
-  let namesOfUpdatedNursingHome = ["ОСТРОВ"];
+  //let namesOfUpdatedNursingHome = ["ОСТРОВ"];
+  // let namesOfUpdatedNursingHome = ["ОКТЯБРЬСКИЙ"]; //lastName: "Чеботарева", 
+ // let namesOfUpdatedNursingHome = ["ПРЕОБРАЖЕНСКИЙ", "СТАРОЕ_ШАЙГОВО", "ВЫСОКОВО", "НОВОСЕЛЬЕ", "ЧЕРНЫШЕВКА"];
+ //let namesOfUpdatedNursingHome = ["НОГИНСК"]; // {dateEnter: {$gt: new Date("2023-01-01")}, 
+ let namesOfUpdatedNursingHome = ["БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ", "БЛАГОВЕЩЕНСК_ТЕАТРАЛЬНАЯ", "ЖУКОВКА", "ПАПУЛИНО", "ВОЛГОГРАД_КРИВОРОЖСКАЯ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ДОШИНО", "ИЛЬИНСКИЙ_ПОГОСТ", "КЛИН", "СЛОБОДА-БЕШКИЛЬ", "УВАРОВО", "СТОЛЫПИНО", "САРАТОВ_КЛОЧКОВА", "РЯЗАНЬ", "НОВАЯ_ЦЕЛИНА", "МИХАЙЛОВКА", "МАЛАЯ_РОЩА", "РОМАНОВКА", "НОВОТУЛКА", "КАНДАБУЛАК", "МАЙСКОЕ", "ДЕВЛЕЗЕРКИНО", "ПЕТРОВКА", "ЗАБОРОВЬЕ", "ВОРОНЦОВО", "МОСКВА_РОТЕРТА", "ХВОЙНЫЙ", "АНДРЕЕВСКИЙ", "БОЛШЕВО", "ПЕСЬ", "КРАСНАЯ_ГОРА", "НЕБОЛЧИ", "МОШЕНСКОЕ", "АНЦИФЕРОВО" ];
+
   /*   for (let home of updatedNursingHome) {
       namesOfUpdatedNursingHome.push(home.nursingHome);
     } */
 
   console.log(namesOfUpdatedNursingHome);
 
-  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, gender: gender });
+  let list = await Senior.find({isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, gender: gender });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -1132,9 +1137,9 @@ async function findAllNYDoubles(house) {
 router.post("/new-year/check-fullness", async (req, res) => {
   try {
 
-    console.log("0- check NY doubles " + req.body.nursingHome);
+    console.log("0- check NY fullness " + req.body.nursingHome);
     let result = await checkAllNYFullness(req.body.nursingHome);
-    console.log("4-check NY doubles " + result);
+    console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
     res.json(newListResponse.toObject());
@@ -1185,9 +1190,9 @@ async function checkAllNYFullness(house) {
 router.post("/birthday/check-doubles", async (req, res) => {
   try {
 
-    console.log("0- check NY doubles" + req.body.nursingHome);
+    console.log("0- check HB doubles" + req.body.nursingHome);
     let result = await findAllHBDoubles(req.body.nursingHome);
-    console.log("4-check NY doubles " + result);
+    console.log("4-check HB doubles " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
     res.json(newListResponse.toObject());
@@ -1247,9 +1252,9 @@ async function findAllHBDoubles(house) {
 router.post("/birthday/check-fullness", async (req, res) => {
   try {
 
-    console.log("0- check NY doubles " + req.body.nursingHome);
+    console.log("0- check HB doubles " + req.body.nursingHome);
     let result = await checkAllHBFullness(req.body.nursingHome);
-    console.log("4-check NY doubles " + result);
+    console.log("4-check HB doubles " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
     res.json(newListResponse.toObject());
@@ -1263,7 +1268,7 @@ router.post("/birthday/check-fullness", async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 1, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 2, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1294,7 +1299,7 @@ router.get("/holiday/special-list", async (req, res) => {
 
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Male"});
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Male" });
     let lineItems = [];
     let nursingHomes = await House.find({});
 

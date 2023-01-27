@@ -33,12 +33,19 @@ export class OrderService {
   }
 
   findOrderById(_id: string): Observable<any> {
-    console.log('findOrderById');
+    console.log("findOrderById");
     return this.http.get("/api/orders/" + _id);
   }
 
-  deleteOrder(_id: string, isShowAll: boolean, userName: string): Observable<any> {
-    return this.http.patch("/api/orders/delete/" + _id, {isShowAll: isShowAll, userName: userName});
+  deleteOrder(
+    _id: string,
+    isShowAll: boolean,
+    userName: string
+  ): Observable<any> {
+    return this.http.patch("/api/orders/delete/" + _id, {
+      isShowAll: isShowAll,
+      userName: userName,
+    });
   }
 
   updateOrder(_id: string, updatedOrder: Order): Observable<any> {
@@ -47,32 +54,42 @@ export class OrderService {
     return result;
   }
 
-  confirmOrder(_id: string, isShowAll: boolean, userName: string): Observable<any> {
-    const result = this.http.patch("/api/orders/confirm/" + _id, {isShowAll: isShowAll, userName: userName});
+  confirmOrder(
+    _id: string,
+    isShowAll: boolean,
+    userName: string
+  ): Observable<any> {
+    const result = this.http.patch("/api/orders/confirm/" + _id, {
+      isShowAll: isShowAll,
+      userName: userName,
+    });
     console.log(result);
     return result;
   }
 
   updateList(celebrator_id): Observable<any> {
-
-        return this.http.patch("/api/lists/check/"+ celebrator_id, {amount :1});
+    return this.http.patch("/api/lists/check/" + celebrator_id, { amount: 1 });
   }
 
-  changeActiveList () {
-    let key= this.http.patch("/api/lists/change/", {active : false});
-    return this.http.patch("/api/lists/change/"+ key, {active : true});
+  changeActiveList() {
+    let key = this.http.patch("/api/lists/change/", { active: false });
+    return this.http.patch("/api/lists/change/" + key, { active: true });
   }
 
-   ifCloseList(): Observable<any> {
+  ifCloseList(): Observable<any> {
     return this.http.get("/api/lists/get/active/");
   }
 
+  checkDoubleOrder(holiday: string, email: string, contact: string): Observable<any> {
+    return this.http.post("/api/orders/check-double/", {
+      holiday: holiday,
+      email: email,
+      contact: contact,
+    });
+  }
 
-
-
-   createOrder(newOrder: Order): Observable<any> {
-    
-    return  this.http.post("/api/orders/birthday/" + newOrder.amount, {
+  createOrder(newOrder: Order): Observable<any> {
+    return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
@@ -91,8 +108,7 @@ export class OrderService {
   }
 
   createOrderNewYear(newOrder: Order): Observable<any> {
-    
-    return  this.http.post("/api/orders/new-year/" + newOrder.amount, {
+    return this.http.post("/api/orders/new-year/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
@@ -109,11 +125,9 @@ export class OrderService {
       filter: newOrder.filter,
     });
   }
-
 
   createOrderSpring(newOrder: Order): Observable<any> {
-    
-    return  this.http.post("/api/orders/spring/" + newOrder.amount, {
+    return this.http.post("/api/orders/spring/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
@@ -131,10 +145,8 @@ export class OrderService {
     });
   }
 
-
   createOrderForNameDay(newOrder: Order): Observable<any> {
-    
-    return  this.http.post("/api/orders/name-day", {
+    return this.http.post("/api/orders/name-day", {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
@@ -149,14 +161,11 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       temporaryLineItems: newOrder.temporaryLineItems,
-
     });
- 
   }
 
   createOrderForTeacherDay(newOrder: Order): Observable<any> {
-    
-    return  this.http.post("/api/orders/teacher-day", {
+    return this.http.post("/api/orders/teacher-day", {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
       amount: newOrder.amount,
@@ -171,15 +180,12 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       temporaryLineItems: newOrder.temporaryLineItems,
-
     });
- 
   }
 
-  getRegions(): Observable<any>  {
+  getRegions(): Observable<any> {
     return this.http.get("/api/orders/get/regions/");
   }
-  
 
   //////////////////////////////////////////////////////
 
@@ -195,13 +201,9 @@ export class OrderService {
     return this.http.get("/api/houses/name" + nursingHome)["data"];
   }
 
-
   ///////////////////////////////////////////////////////
 
   findAllOrdersWithAbsents(): Observable<any> {
     return this.http.get("/api/orders/absents/all");
   }
-
-
 }
-

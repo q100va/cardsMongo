@@ -11,15 +11,20 @@ import { ListService } from "src/app/services/list.service";
 export class CheckListsComponent implements OnInit {
   houses: string[] = [];
 
-  index: number = 0;
+  index1: number = 0;
+  index2: number = 0;
+  index3: number = 0;
+  index4: number = 0;
+
+  checkingHouse1: string = "";
+  checkingHouse2: string = "";
+  checkingHouse3: string = "";
+  checkingHouse4: string = "";
+
   isFirst = true;
   isNext = false;
-  checkingHouse: string = "";
-
-  index2: number = 0;
   isFirst2 = true;
   isNext2 = false;
-  checkingHouse2: string = "";
 
   constructor(
     private houseService: HousesService,
@@ -29,25 +34,24 @@ export class CheckListsComponent implements OnInit {
   ngOnInit(): void {
     this.houseService.findAllHouses().subscribe(
       (res) => {
-         console.log(res.data);
-         for (let item of res.data) {
+        console.log(res.data);
+        /*  for (let item of res.data) {
           if (item.isActive) {
           this.houses.push(item.nursingHome);
-          }
-        }   
-      //  this.houses = ["НИКИТИНКА"];
-     //   this.checkingHouse = this.houses[0];
+          } 
+        }   */
+        this.houses = ["ПРЕОБРАЖЕНСКИЙ"];
+        //   this.checkingHouse = this.houses[0];
       },
       (err) => {
         alert(err.error.msg + " " + err.message);
         console.log(err);
       }
     );
-    
   }
   checkDoubles(index: number) {
-     this.checkingHouse = this.houses[this.index];
-        this.listService.checkDoubles(this.houses[index]).subscribe(
+    this.checkingHouse1 = this.houses[this.index1];
+    this.listService.checkDoubles(this.houses[index]).subscribe(
       (res) => {
         alert("Deleted " + res["data"] + " doubles");
       },
@@ -57,9 +61,9 @@ export class CheckListsComponent implements OnInit {
       }
     );
 
-    this.index++;
-   
-    if (this.index < this.houses.length) {
+    this.index1++;
+
+    if (this.index1 < this.houses.length) {
       this.isNext = true;
       this.isFirst = false;
     } else {
@@ -69,69 +73,67 @@ export class CheckListsComponent implements OnInit {
 
   checkFullness(index: number) {
     this.checkingHouse2 = this.houses[this.index2];
-       this.listService.checkFullness(this.houses[index]).subscribe(
-     (res) => {
-       alert("Added " + res["data"] + " seniors");
-     },
-     (err) => {
-       alert(err.error.msg + " " + err.message);
-       console.log(err);
-     }
-   );
+    this.listService.checkFullness(this.houses[index]).subscribe(
+      (res) => {
+        alert("Added " + res["data"] + " seniors");
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
 
-   this.index2++;
-  
-   if (this.index2 < this.houses.length) {
-     this.isNext2 = true;
-     this.isFirst2 = false;
-   } else {
-     this.isNext2 = false;
-   }
- }
+    this.index2++;
 
- checkDoublesHB(index: number) {
-  this.checkingHouse = this.houses[this.index];
-     this.listService.checkDoublesHB(this.houses[index]).subscribe(
-   (res) => {
-     alert("Deleted " + res["data"] + " doubles");
-   },
-   (err) => {
-     alert(err.error.msg + " " + err.message);
-     console.log(err);
-   }
- );
+    if (this.index2 < this.houses.length) {
+      this.isNext2 = true;
+      this.isFirst2 = false;
+    } else {
+      this.isNext2 = false;
+    }
+  }
 
- this.index++;
+  checkDoublesHB(index: number) {
+    this.checkingHouse3 = this.houses[this.index3];
+    this.listService.checkDoublesHB(this.houses[index]).subscribe(
+      (res) => {
+        alert("Deleted " + res["data"] + " doubles");
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
 
- if (this.index < this.houses.length) {
-   this.isNext = true;
-   this.isFirst = false;
- } else {
-   this.isNext = false;
- }
-}
+    this.index3++;
 
-checkFullnessHB(index: number) {
-  this.checkingHouse2 = this.houses[this.index2];
-     this.listService.checkFullnessHB(this.houses[index]).subscribe(
-   (res) => {
-     alert("Added " + res["data"] + " seniors");
-   },
-   (err) => {
-     alert(err.error.msg + " " + err.message);
-     console.log(err);
-   }
- );
+    if (this.index3 < this.houses.length) {
+      this.isNext = true;
+      this.isFirst = false;
+    } else {
+      this.isNext = false;
+    }
+  }
 
- this.index2++;
+  checkFullnessHB(index: number) {
+    this.checkingHouse4 = this.houses[this.index4];
+    this.listService.checkFullnessHB(this.houses[index]).subscribe(
+      (res) => {
+        alert("Added " + res["data"] + " seniors");
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
 
- if (this.index2 < this.houses.length) {
-   this.isNext2 = true;
-   this.isFirst2 = false;
- } else {
-   this.isNext2 = false;
- }
-}
+    this.index4++;
 
-
+    if (this.index4 < this.houses.length) {
+      this.isNext2 = true;
+      this.isFirst2 = false;
+    } else {
+      this.isNext2 = false;
+    }
+  }
 }
