@@ -15,16 +15,18 @@ export class CheckListsComponent implements OnInit {
   index2: number = 0;
   index3: number = 0;
   index4: number = 0;
-
+  index5: number = 0;
   checkingHouse1: string = "";
   checkingHouse2: string = "";
   checkingHouse3: string = "";
   checkingHouse4: string = "";
-
+  checkingHouse5: string = "";
   isFirst = true;
   isNext = false;
   isFirst2 = true;
   isNext2 = false;
+
+  //holiday: string = "";
 
   constructor(
     private houseService: HousesService,
@@ -40,7 +42,7 @@ export class CheckListsComponent implements OnInit {
           this.houses.push(item.nursingHome);
           } 
         }   */
-        this.houses = ["ПРЕОБРАЖЕНСКИЙ"];
+        this.houses = ["ОКТЯБРЬСКИЙ"];
         //   this.checkingHouse = this.houses[0];
       },
       (err) => {
@@ -136,4 +138,30 @@ export class CheckListsComponent implements OnInit {
       this.isNext2 = false;
     }
   }
+
+  checkFullnessHolidays(index: number, holiday: string) {
+    this.checkingHouse5 = this.houses[this.index5];
+    this.listService.checkHolidayFullness(this.houses[index], holiday).subscribe(
+      (res) => {
+        alert("Added " + res["data"]["amountAdded"] + " seniors" + "Deleted " + res["data"]["amountDeleted"] + " seniors" );
+        console.log ("Deleted");
+        console.log (res["data"]["ordersToAware"]);
+      
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
+
+    this.index5++;
+
+    if (this.index5 < this.houses.length) {
+      this.isNext2 = true;
+      this.isFirst2 = false;
+    } else {
+      this.isNext2 = false;
+    }
+  }
+
 }

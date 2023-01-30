@@ -5,56 +5,66 @@
 
     <mat-card-actions>
 
-<div>
-         <button class="submit" (click)="checkDoubles(index1)" mat-raised-button color = 'primary'  [disabled]="!isFirst">Проверить на дубли</button>
-        <p> {{checkingHouse1}}</p>
-         <button class="submit" (click)="checkDoubles(index1)" mat-raised-button color = 'primary'  [disabled]="!isNext">Следующий</button>
+        <div>
+            <button class="submit" (click)="checkDoubles(index1)" mat-raised-button color='primary'
+                [disabled]="!isFirst">Проверить на дубли</button>
+            <p> {{checkingHouse1}}</p>
+            <button class="submit" (click)="checkDoubles(index1)" mat-raised-button color='primary'
+                [disabled]="!isNext">Следующий</button>
 
-</div>
-<br />  <br />
-<div>
-    <button class="submit" (click)="checkFullness(index2)" mat-raised-button color = 'primary'  [disabled]="!isFirst2">Проверить на полноту</button>
-   <p> {{checkingHouse2}}</p>
-    <button class="submit" (click)="checkFullness(index2)" mat-raised-button color = 'primary'  [disabled]="!isNext2">Следующий</button>
+        </div>
+        <br /> <br />
+        <div>
+            <button class="submit" (click)="checkFullness(index2)" mat-raised-button color='primary'
+                [disabled]="!isFirst2">Проверить на полноту</button>
+            <p> {{checkingHouse2}}</p>
+            <button class="submit" (click)="checkFullness(index2)" mat-raised-button color='primary'
+                [disabled]="!isNext2">Следующий</button>
 
-</div>
-<br />  <br />
-<div>
-    <button class="submit" (click)="checkDoublesHB(index3)" mat-raised-button color = 'primary'  [disabled]="!isFirst">Проверить на дубли ДР</button>
-   <p> {{checkingHouse3}}</p>
-    <button class="submit" (click)="checkDoublesHB(index3)" mat-raised-button color = 'primary'  [disabled]="!isNext">Следующий</button>
+        </div>
+        <br /> <br />
+        <div>
+            <button class="submit" (click)="checkDoublesHB(index3)" mat-raised-button color='primary'
+                [disabled]="!isFirst">Проверить на дубли ДР</button>
+            <p> {{checkingHouse3}}</p>
+            <button class="submit" (click)="checkDoublesHB(index3)" mat-raised-button color='primary'
+                [disabled]="!isNext">Следующий</button>
 
-</div>
+        </div>
 
-<br />  <br />
-<div>
-    <button class="submit" (click)="checkFullnessHB(index4)" mat-raised-button color = 'primary'  [disabled]="!isFirst2">Проверить на полноту ДР</button>
-   <p> {{checkingHouse4}}</p>
-    <button class="submit" (click)="checkFullnessHB(index4)" mat-raised-button color = 'primary'  [disabled]="!isNext2">Следующий</button>
+        <br /> <br />
+        <div>
+            <button class="submit" (click)="checkFullnessHB(index4)" mat-raised-button color='primary'
+                [disabled]="!isFirst2">Проверить на полноту ДР</button>
+            <p> {{checkingHouse4}}</p>
+            <button class="submit" (click)="checkFullnessHB(index4)" mat-raised-button color='primary'
+                [disabled]="!isNext2">Следующий</button>
 
-</div>
+        </div>
 
+        <br /> <br />
+        <div>
+            <button class="submit" (click)="checkFullnessHolidays(index5, 'february23')" mat-raised-button
+                color='primary' [disabled]="!isFirst2">Проверить на полноту 23 февраля</button>
+            <p> {{checkingHouse5}}</p>
+            <button class="submit" (click)="checkFullnessHolidays(index5, 'february23')" mat-raised-button
+                color='primary' [disabled]="!isNext2">Следующий</button>
 
-     <!--    <button class="submit" (click)="deleteDoubleList()" mat-raised-button color = 'warn'>Очистить дубли ДР</button>
-     
+        </div>
 
-        <button class="submit" (click)="populateSeniors()" mat-raised-button>Добавить жителей</button>
-        <button class="submit" (click)="addHouses()" mat-raised-button>Добавить интернаты</button>
-        <br /><br /><br />
-        <button class="submit" (click)="generateBirthday()" mat-raised-button>Сформировать список ДР</button>  
-        <button class="submit" (click)="showBirthdayList($event)" mat-raised-button>Показать список ДР</button>
-        <button class="submit" (click)="showLessPlus($event)" mat-raised-button>Показать список меньше 2+</button>
-        <br /><br /><br />
-        <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
-        <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
-        <br /><br /><br />
-        <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список НГ</button>
-       <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
-        <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше 1+</button> -->
+        <br /> <br />
+        <div>
+            <button class="submit" (click)="checkFullnessHolidays(index5, 'march8')" mat-raised-button color='primary'
+                [disabled]="!isFirst2">Проверить на полноту 8 марта</button>
+            <p> {{checkingHouse5}}</p>
+            <button class="submit" (click)="checkFullnessHolidays(index5, 'march8')" mat-raised-button color='primary'
+                [disabled]="!isNext2">Следующий</button>
+
+        </div>
 
     </mat-card-actions>
 
-  <!--   <mat-card-content *ngIf="isShowList">
+    <!--   <mat-card-content *ngIf="isShowList">
         <p>Общее количество - {{listLength}}</p>
         <p>oldWomen - {{oldWomen}}</p>
         <p>oldMen - {{oldMen}}</p>

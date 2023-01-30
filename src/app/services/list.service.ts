@@ -100,6 +100,12 @@ findAllTeacherDayLists(): Observable<any> {
     
   }
 
+  checkHolidayFullness(house: string, holiday: string) {
+    console.log("checkFullness");
+    return this.http.post("/api/lists/holiday/check-fullness/" + holiday, {nursingHome: house});
+    
+  }
+
   checkDoublesHB(house: string) {
     console.log("checkDoubles");
     return this.http.post("/api/lists/birthday/check-doubles", {nursingHome: house});

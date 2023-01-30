@@ -527,9 +527,11 @@ router.get("/get/regions/", async (req, res) => {
 
 router.post("/check-double/", async (req, res) => {
   try {
-
-    let e = req.body.email ? new RegExp('^' + req.body.email + '$', 'i') : null;
-    let c = req.body.contact ? new RegExp('^' + req.body.contact + '$', 'i') : null;
+    let contact;
+    let email = req.body.email;
+    if (req.body.contact.toString()[0] == '+') { contact = req.body.contact.toString().slice(1 , req.body.contact.toString().length ) } else { contact = req.body.contact.toString() }
+    let e = email ? new RegExp('^' + email.toString() + '$', 'i') : null;
+    let c = contact ? new RegExp('^' + contact.toString() + '$', 'i') : null;
     let conditions;
     if (req.body.email && req.body.contact) {
       conditions = {
@@ -566,9 +568,9 @@ router.post("/check-double/", async (req, res) => {
         let result = null;
         if (order) { result = order.userName }
 
-       // console.log("result");
-       // console.log(order);
-       // console.log(result);
+        // console.log("result");
+        // console.log(order);
+        // console.log(result);
         const readRegionsResponse = new BaseResponse(
           200,
           "Query successful",
