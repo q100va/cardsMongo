@@ -529,7 +529,14 @@ router.post("/check-double/", async (req, res) => {
   try {
     let contact;
     let email = req.body.email;
-    if (req.body.contact.toString()[0] == '+') { contact = req.body.contact.toString().slice(1 , req.body.contact.toString().length ) } else { contact = req.body.contact.toString() }
+    console.log(req.body.contact);
+    if (req.body.contact) {
+      if (req.body.contact.toString()[0] == '+') {
+        contact = req.body.contact.toString().slice(1, req.body.contact.toString().length)
+      } else {
+        contact = req.body.contact.toString()
+      }
+    }
     let e = email ? new RegExp('^' + email.toString() + '$', 'i') : null;
     let c = contact ? new RegExp('^' + contact.toString() + '$', 'i') : null;
     let conditions;
