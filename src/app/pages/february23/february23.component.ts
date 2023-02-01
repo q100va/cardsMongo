@@ -182,16 +182,23 @@ export class February23Component implements OnInit {
                   // console.log("res");
                   // console.log(res);
                   if (!result) {
-                    this.fillOrder();
+                    this.fillOrder([]);
                   } else {
+                    let usernameList = "";
+                    for (let user of result.users) {
+                      usernameList =
+                        usernameList.length == 0
+                          ? user
+                          : usernameList + ", " + user;
+                    }
                     this.confirmationService.confirm({
                       message:
                         "Пользователь с такими контактами уже получил адреса на этот праздник: " +
                         this.holiday +
-                        " у волонтера " +
-                        result +
+                        " у волонтера(ов): " +
+                        usernameList +
                         ". Вы уверены, что это не дубль?",
-                      accept: () => this.fillOrder(),
+                      accept: () => this.fillOrder(result.seniorsIds),
                     });
                   }
                 },
@@ -206,7 +213,7 @@ export class February23Component implements OnInit {
     }
   }
 
-  fillOrder() {
+  fillOrder(prohibitedId: []) {
     this.spinner = true;
 
     let newOrder: Order = {
@@ -239,7 +246,7 @@ export class February23Component implements OnInit {
     console.log("newOrder");
     console.log(newOrder);
 
-    this.orderService.createOrderSpring(newOrder).subscribe(
+    this.orderService.createOrderSpring(newOrder, prohibitedId).subscribe(
       async (res) => {
         this.spinner = false;
         let result = res["data"]["result"];

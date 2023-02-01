@@ -202,18 +202,26 @@ export class OrderComponent implements OnInit {
                 .subscribe(
                   async (res) => {
                     let result = res["data"];
-                   // console.log("res");
-                   // console.log(res);
+                    // console.log("res");
+                    // console.log(res);
                     if (!result) {
-                      this.fillOrder();
+                      this.fillOrder([]);
                     } else {
+                      let usernameList = "";
+                      for (let user of result.users) {
+                        usernameList =
+                          usernameList.length == 0
+                            ? user
+                            : usernameList + ", " + user;
+                      }
                       this.confirmationService.confirm({
                         message:
                           "Пользователь с такими контактами уже получил адреса на этот праздник: " +
                           this.holiday +
-                          " у волонтера " + result
-                          +". Вы уверены, что это не дубль?",
-                        accept: () => this.fillOrder(),
+                          " у волонтера(ов): " +
+                          usernameList +
+                          ". Вы уверены, что это не дубль?",
+                        accept: () => this.fillOrder(result.seniorsIds),
                       });
                     }
                   },
@@ -229,7 +237,7 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  fillOrder() {
+  fillOrder(prohibitedId: []) {
     this.spinner = true;
     let newOrder: Order = {
       userName: this.userName,
@@ -261,7 +269,7 @@ export class OrderComponent implements OnInit {
     console.log("newOrder");
     console.log(newOrder);
 
-    this.orderService.createOrder(newOrder).subscribe(
+    this.orderService.createOrder(newOrder, prohibitedId).subscribe(
       async (res) => {
         this.spinner = false;
         let result = res["data"]["result"];

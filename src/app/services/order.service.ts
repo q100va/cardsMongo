@@ -88,7 +88,7 @@ export class OrderService {
     });
   }
 
-  createOrder(newOrder: Order): Observable<any> {
+  createOrder(newOrder: Order, prohibitedId: []): Observable<any> {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
@@ -104,6 +104,7 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       filter: newOrder.filter,
+      prohibitedId: prohibitedId
     });
   }
 
@@ -126,7 +127,7 @@ export class OrderService {
     });
   }
 
-  createOrderSpring(newOrder: Order): Observable<any> {
+  createOrderSpring(newOrder: Order, prohibitedId:[]): Observable<any> {
     return this.http.post("/api/orders/spring/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
@@ -142,6 +143,7 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       filter: newOrder.filter,
+      prohibitedId: prohibitedId
     });
   }
 

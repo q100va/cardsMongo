@@ -562,7 +562,7 @@ router.post("/check-double/", async (req, res) => {
       }
     }
 
-    Order.findOne(conditions, function (err, order) {
+    Order.find(conditions, function (err, orders) {
       if (err) {
         console.log(err);
         const readRegionsMongodbErrorResponse = new BaseResponse(
@@ -572,12 +572,27 @@ router.post("/check-double/", async (req, res) => {
         );
         res.status(500).send(readRegionsMongodbErrorResponse.toObject());
       } else {
-        let result = null;
-        if (order) { result = order.userName }
+        let result = {};
+        let usernames = [];
+        let seniorsIds = [];
+        if (orders.length > 0) {
+          for (let order of orders) {
+            usernames.push(order.userName);
+            for (let lineItem of order.lineItems) {
+              for (let celebrator of lineItem.celebrators) {
+                seniorsIds.push(celebrator._id);
+              }
+            }
+          }
+          let u = new Set(usernames);
+          result.users = Array.from(u);
+          
+          result.seniorsIds = seniorsIds;
+        } else { result = null; }
 
-        // console.log("result");
+         console.log("result");
         // console.log(order);
-        // console.log(result);
+         console.log(result);
         const readRegionsResponse = new BaseResponse(
           200,
           "Query successful",
@@ -892,7 +907,7 @@ router.post("/birthday/:amount", async (req, res) => {
       isCompleted: false
     };
 
-    finalResult = await createOrder(newOrder);
+    finalResult = await createOrder(newOrder, req.body.prohibitedId);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
     const newListResponse = new BaseResponse(200, text, finalResult);
@@ -955,7 +970,7 @@ async function deleteErrorPlus(order_id, ...userName) {
 
 
 // Create order
-async function createOrder(newOrder) {
+async function createOrder(newOrder, prohibitedId) {
   let month = await Month.findOne({ isActive: true });
   //let period = await Period.findOne({ key:0 });
   let period = await Period.findOne({ isActive: true });
@@ -1107,9 +1122,9 @@ async function createOrder(newOrder) {
 
       //if(newOrder.filter.date1 && newOrder.filter.date2) filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: newOrder.filter.date1 };
 
-      seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2);
+      seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId);
     } else {
-      seniorsData = await fillOrder(proportion, period, order_id, filter);
+      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId);
     }
   }
 
@@ -1150,7 +1165,7 @@ async function createOrder(newOrder) {
 
 // create a list of seniors for the order with special dates
 
-async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2) {
+async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId) {
   const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
   let day1, day2, fixed;
 
@@ -1219,7 +1234,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
   let data = {
     houses: {},
     restrictedHouses: [],
-    restrictedPearson: [],
+    restrictedPearson: [...prohibitedId],
     celebratorsAmount: 0,
     date1: day1,
     date2: day2,
@@ -1257,13 +1272,13 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
 
 // create a list of seniors for the order
 
-async function fillOrder(proportion, period, order_id, filter) {
+async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
   const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
 
   let data = {
     houses: {},
     restrictedHouses: [],
-    restrictedPearson: [],
+    restrictedPearson: [...prohibitedId],
     celebratorsAmount: 0,
     /*     date1: period.date1,
         date2: period.date2,
@@ -2306,7 +2321,7 @@ router.post("/spring/:amount", async (req, res) => {
       isCompleted: false
     };
 
-    finalResult = await createOrderSpring(newOrder);
+    finalResult = await createOrderSpring(newOrder, req.body.prohibitedId);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
     const newListResponse = new BaseResponse(200, text, finalResult);
@@ -2375,7 +2390,7 @@ async function deleteErrorPlusSpring(order_id, ...userName) {
 
 
 // Create order
-async function createOrderSpring(newOrder) {
+async function createOrderSpring(newOrder, prohibitedId) {
 
 
   let proportion = {};
@@ -2499,7 +2514,7 @@ async function createOrderSpring(newOrder) {
       }
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
-    seniorsData = await fillOrderSpring(proportion, order_id, filter, order.holiday);
+    seniorsData = await fillOrderSpring(proportion, order_id, filter, order.holiday, prohibitedId);
 
   }
 
@@ -2538,13 +2553,13 @@ async function createOrderSpring(newOrder) {
 
 // create a list of seniors for the order
 
-async function fillOrderSpring(proportion, order_id, filter, holiday) {
+async function fillOrderSpring(proportion, order_id, filter, holiday, prohibitedId) {
   const categories = ["oldWomen", "oldMen", "yang", "special", "specialOnly", "allCategory"];
 
   let data = {
     houses: {},
     restrictedHouses: [],//"ВЫШНИЙ_ВОЛОЧЕК"
-    restrictedPearson: [],
+    restrictedPearson: [...prohibitedId],
     celebratorsAmount: 0,
     /*     date1: period.date1,
         date2: period.date2,
