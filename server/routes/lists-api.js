@@ -19,7 +19,7 @@ const Order = require("../models/order");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
 //const SpecialDay = require("../models/name-day copy");
-const SpecialDay = require("../models/senior");
+
 //const User = require("../models/user");
 
 // Delete double birthday list API 
@@ -186,7 +186,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР февраля 2023',
+      holyday: 'ДР марта 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -373,7 +373,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины февраля 2023',
+      holyday: 'Именины марта 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -1292,14 +1292,23 @@ async function checkAllHBFullness(house) {
   return amount.toString();
 
 }
-
+const SpecialDay = require("../models/senior");
 //Find special lists API
 router.get("/holiday/special-list", async (req, res) => {
   try {
 
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Male" });
+    // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Male" });
+    let updatedNursingHome = await House.find({ isActive: true });
+    let namesOfUpdatedNursingHome = [];
+    for (let home of updatedNursingHome) {
+      namesOfUpdatedNursingHome.push(home.nursingHome);
+    }
+    //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, region: "БАШКОРТОСТАН", gender: "Female" , comment2: {$in: {nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male" , monthBirthday : 3, dateBirthday: 2, yearBirthday: {$lt: 1953}});
+
+
+    let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
     let lineItems = [];
     let nursingHomes = await House.find({});
 

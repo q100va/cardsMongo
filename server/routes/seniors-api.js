@@ -364,7 +364,7 @@ router.post("/add-many/", async (req, res) => {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР февраля 2023',
+      holyday: 'ДР марта 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -757,7 +757,7 @@ router.put("/update-lists/", async (req, res) => {
           fullDayBirthday: cloneFullDayBirthday,
           oldest: cloneOldest,
           category: cloneCategory,
-          holyday: 'ДР февраля 2023',
+          holyday: 'ДР марта 2023',
           fullData: celebrator.nursingHome +
             celebrator.lastName +
             celebrator.firstName +

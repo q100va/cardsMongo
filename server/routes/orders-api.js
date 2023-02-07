@@ -305,7 +305,7 @@ router.patch("/confirm/:id", async (req, res) => {
 /**
  * API to delete order
  */
-router.patch("/delete/:id", async (req, res) => {
+ router.patch("/delete/:id", async (req, res) => {
   try {
     const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isDisabled: true } }, { upsert: false });
     console.log(updatedOrder);
@@ -332,8 +332,46 @@ router.patch("/delete/:id", async (req, res) => {
   }
 });
 
+/* 
+router.patch("/change-status/:id", async (req, res) => {
+  try {
+    //  let updatedOrder;
+    if (req.body.newStatus == "isOverdue") {
+      await Order.updateOne({ _id: req.params.id }, { $set: { isOverdue: true } }, { upsert: false });
+    }
+    if (req.body.newStatus == "isReturned") {
+      await Order.updateOne({ _id: req.params.id }, { $set: { isReturned: true } }, { upsert: false });
+    }
+    if (req.body.newStatus == "isDisabled") {
+      await Order.updateOne({ _id: req.params.id }, { $set: { isDisabled: true } }, { upsert: false });
+    }
+  
+    //console.log(updatedOrder);
+    const updatedOrder = await Order.findOne({ _id: req.params.id });
+    await deletePluses(updatedOrder);
+    //console.log(req.body.isShowAll);
+    let updatedOrders;
+    if (req.body.isShowAll) {
+      updatedOrders = await Order.find({ userName: req.body.userName, isDisabled: false });
+    } else {
+      updatedOrders = await Order.find({ isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false });
+    }
+
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", updatedOrders);
+    res.json(confirmOrderResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    const confirmOrderCatchErrorResponse = new BaseResponse(
+      "500",
+      "MongoDB server error",
+      e
+    );
+    res.status(500).send(confirmOrderCatchErrorResponse.toObject());
+  }
+}); */
+
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения февраля 2023") {
+  if (deletedOrder.holiday == "Дни рождения марта 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -385,7 +423,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины февраля 2023") {
+    if (deletedOrder.holiday == "Именины марта 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -586,13 +624,13 @@ router.post("/check-double/", async (req, res) => {
           }
           let u = new Set(usernames);
           result.users = Array.from(u);
-          
+
           result.seniorsIds = seniorsIds;
         } else { result = null; }
 
-         console.log("result");
+        console.log("result");
         // console.log(order);
-         console.log(result);
+        console.log(result);
         const readRegionsResponse = new BaseResponse(
           200,
           "Query successful",
@@ -1344,7 +1382,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
 async function collectSeniors(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen", "oldMen", "oldest"],
+    oldWomen: ["oldWomen", "oldMen", "oldest", "yang"],
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
     yang: ["yang", "oldMen", "oldWomen", "oldest"],
     special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
@@ -2695,8 +2733,8 @@ async function searchSeniorSpring(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-    secondTime: data.maxPlus > 1 ? true : false,
-    thirdTime: data.maxPlus === 3 ? true : false,
+    // secondTime: data.maxPlus > 1 ? true : false,
+    // thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
