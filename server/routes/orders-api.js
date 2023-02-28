@@ -2622,7 +2622,7 @@ async function fillOrderSpring(proportion, order_id, filter, holiday, prohibited
 
     if (proportion[category]) {
 
-      data.maxPlus = 1;
+      data.maxPlus = 2;
 
       data = await collectSeniorsSpring(data);
 
