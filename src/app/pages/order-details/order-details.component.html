@@ -47,12 +47,12 @@
                         {{celebrator.lastName}}
                         {{celebrator.firstName}}
                         {{celebrator.patronymic}}
-                        {{order.holiday != 'Именины февраля 2023' ? celebrator.fullDayBirthday : ''}}
-                        {{order.holiday == 'Именины февраля 2023' ? '(' + celebrator.specialComment + ')' : ''}}
-                        {{order.holiday == 'Именины февраля 2023' ? celebrator.nameDay : ''}}
+                        {{order.holiday != 'Именины апреля 2023' ? celebrator.fullDayBirthday : ''}}
+                        {{order.holiday == 'Именины апреля 2023' ? '(' + celebrator.specialComment + ')' : ''}}
+                        {{order.holiday == 'Именины апреля 2023' ? celebrator.nameDay : ''}}
                         {{celebrator.comment1}}
                         {{celebrator.linkPhoto}}
-                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины февраля 2023' ? celebrator.specialComment : ''}}
+                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины апреля 2023' ? celebrator.specialComment : ''}}
                         </span>
                         <span style="font-weight: bold; color: rgb(255, 0, 0); " *ngIf="celebrator.absentComment"> {{ celebrator.absentComment}}
                         </span>

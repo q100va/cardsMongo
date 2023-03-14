@@ -186,7 +186,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР марта 2023',
+      holyday: 'ДР апреля 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -373,7 +373,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины марта 2023',
+      holyday: 'Именины апреля 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -717,14 +717,16 @@ async function findAllGenderCelebrators(gender) {
   // let namesOfUpdatedNursingHome = ["ПРЕОБРАЖЕНСКИЙ", "СТАРОЕ_ШАЙГОВО", "ВЫСОКОВО", "НОВОСЕЛЬЕ", "ЧЕРНЫШЕВКА"];
   //let namesOfUpdatedNursingHome = ["НОГИНСК"]; // dateEnter: {$gt: new Date("2023-01-01")}, 
   //let namesOfUpdatedNursingHome = ["БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ", "БЛАГОВЕЩЕНСК_ТЕАТРАЛЬНАЯ", "ЖУКОВКА", "ПАПУЛИНО", "ВОЛГОГРАД_КРИВОРОЖСКАЯ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ДОШИНО", "ИЛЬИНСКИЙ_ПОГОСТ", "КЛИН", "СЛОБОДА-БЕШКИЛЬ", "УВАРОВО", "СТОЛЫПИНО", "САРАТОВ_КЛОЧКОВА", "РЯЗАНЬ", "НОВАЯ_ЦЕЛИНА", "МИХАЙЛОВКА", "МАЛАЯ_РОЩА", "РОМАНОВКА", "НОВОТУЛКА", "КАНДАБУЛАК", "МАЙСКОЕ", "ДЕВЛЕЗЕРКИНО", "ПЕТРОВКА", "ЗАБОРОВЬЕ", "ВОРОНЦОВО", "МОСКВА_РОТЕРТА", "ХВОЙНЫЙ", "АНДРЕЕВСКИЙ", "БОЛШЕВО", "ПЕСЬ", "КРАСНАЯ_ГОРА", "НЕБОЛЧИ", "МОШЕНСКОЕ", "АНЦИФЕРОВО" ];
-  let namesOfUpdatedNursingHome = ["ОКТЯБРЬСКИЙ"]; //lastName: "Чеботарева",
+ // let namesOfUpdatedNursingHome = ["СЫЗРАНЬ_ПОЖАРСКОГО", "СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "МАРКОВА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ПРЯМУХИНО", "ВЯЗЬМА", "ЯРЦЕВО", "БОГОЛЮБОВО", "ОТРАДНЫЙ", "СО_ВЕЛИКИЕ_ЛУКИ", "БЕРЕЗНИКИ", "ДОЛБОТОВО", "ОКТЯБРЬСКИЙ", "КУГЕЙСКИЙ", "ВЕРХНИЙ_УСЛОН","БЛАГОВЕЩЕНКА", "ЯГОТИНО", "БЫТОШЬ", "БАЗГИЕВО","ПРОШКОВО", "ВОЛГОДОНСК","КАРГОПОЛЬ", "УСТЬ-ОРДЫНСКИЙ", "СТАРОДУБ" ]; //lastName: "Чеботарева",
+  //let namesOfUpdatedNursingHome = ["ЧЕЛЯБИНСК", "СЕБЕЖ", "ШОЛОХОВСКИЙ", "ЛИТВИНОВКА", "ГОРНЯЦКИЙ", "УСОЛЬЕ", "БЕЛАЯ_КАЛИТВА", "УСТЬ-МОСИХА", "КРАСНОБОРСК", "ГЛОДНЕВО", "МАЧЕХА", "СЕЛЬЦО"];
+  let namesOfUpdatedNursingHome = ["АНИСИМОВО"];
   /*   for (let home of updatedNursingHome) {
       namesOfUpdatedNursingHome.push(home.nursingHome);
     } */
 
   console.log(namesOfUpdatedNursingHome);
 
-  let list = await Senior.find({ dateEnter: { $gt: new Date("2023-01-26") }, isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, gender: gender });
+  let list = await Senior.find({ dateEnter: { $lt: new Date("2023-01-26") }, isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, gender: gender });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -933,7 +935,8 @@ router.get("/february-23", async (req, res) => {
 //Find all March8 lists API
 router.get("/march-8", async (req, res) => {
   try {
-    March8.find({ absent: { $ne: true } }, function (err, lists) {
+    March8.find({ absent: { $ne: true }}, function (err, lists) {
+      //, nursingHome: {$in : ['АНДРЕЕВСКИЙ',	'БЕГИЧЕВСКИЙ',	'БЕРЕЗНИКИ',	'ВЕРБИЛКИ',	'ВИШЕРСКИЙ',	'ВОЛГОГРАД_КРИВОРОЖСКАЯ',	'ИЛЬИНСКИЙ_ПОГОСТ',	'ИРКУТСК_КУРОРТНАЯ',	'КАРДЫМОВО',	'КАШИРСКОЕ',	'КЛИН',	'МОСКВА_РОТЕРТА',	'НОВОСЕЛЬЕ',	'НОВОСИБИРСК_ЖУКОВСКОГО',	'НОГИНСК',	'НЯНДОМА',	'ОКТЯБРЬСКИЙ',	'ОСТРОВ',	'ПАРФИНО',	'ПЕРВОМАЙСКИЙ',	'ПОБЕДИМ',	'РЯЗАНЬ',	'СОЛИКАМСК_ДУБРАВА',	'СОЛИКАМСК_СЕЛА',	'СОСНОВКА',	'ТАМБОВСКИЙ_ЛЕСХОЗ',	'ТОВАРКОВСКИЙ_ДИПИ',	'ЦЕЛИННОЕ',	'ЭЛЕКТРОГОРСК']} }
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -1268,7 +1271,7 @@ router.post("/birthday/check-fullness", async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 2, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 3, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1299,16 +1302,18 @@ router.get("/holiday/special-list", async (req, res) => {
 
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Male" });
+    //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Female" });
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome: {$in: ["АВДОТЬИНКА"] } });
+    
     let updatedNursingHome = await House.find({ isActive: true });
     let namesOfUpdatedNursingHome = [];
     for (let home of updatedNursingHome) {
       namesOfUpdatedNursingHome.push(home.nursingHome);
     }
     //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, region: "БАШКОРТОСТАН", gender: "Female" , comment2: {$in: {nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male" , monthBirthday : 3, dateBirthday: 2, yearBirthday: {$lt: 1953}});
-
-
-    let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
+    //let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
+    //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, monthBirthday : 4, dateBirthday: 1, yearBirthday: {$lt: 1953}});
+   // let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null,  region: "ТЮМЕНСКАЯ", gender: "Female"});
     let lineItems = [];
     let nursingHomes = await House.find({});
 

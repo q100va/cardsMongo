@@ -364,7 +364,7 @@ router.post("/add-many/", async (req, res) => {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР марта 2023',
+      holyday: 'ДР апреля 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -408,7 +408,7 @@ router.put("/compare-lists/", async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null });
+    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null}); //, monthBirthday:3, monthBirthday:{$gt:3}
 
     newList.sort(
       (prev, next) => {
@@ -757,7 +757,7 @@ router.put("/update-lists/", async (req, res) => {
           fullDayBirthday: cloneFullDayBirthday,
           oldest: cloneOldest,
           category: cloneCategory,
-          holyday: 'ДР марта 2023',
+          holyday: 'ДР апреля 2023',
           fullData: celebrator.nursingHome +
             celebrator.lastName +
             celebrator.firstName +

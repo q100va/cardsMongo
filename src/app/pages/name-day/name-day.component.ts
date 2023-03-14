@@ -28,7 +28,7 @@ export class NameDayComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Именины марта 2023";
+  holiday: string = "Именины апреля 2023";
   lineItems: Array<LineItem>;
   types: Array<string> = [
     "phoneNumber",
