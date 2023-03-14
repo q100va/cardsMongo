@@ -17,6 +17,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { Router } from "@angular/router";
 
+
 @Component({
   selector: 'app-all-orders',
   templateUrl: './all-orders.component.html',
@@ -129,17 +130,15 @@ export class AllOrdersComponent implements AfterViewInit {
   //Delete order
    deleteOrder(orderId: string, isShowAll: boolean) {
 
-    this.confirmationService.confirm({
+
+
+
+/*     this.confirmationService.confirm({
       message: "Вы уверены, что хотите удалить эту заявку?",
       accept: () => {
           this.orderService.deleteOrder(orderId, isShowAll, this.userName).subscribe(
             (res) => {
               this.router.navigate(["/orders/all"]);
-
-/*               this.orders = res["data"];
-              this.orders.reverse();
-              this.dataSource = new MatTableDataSource(this.orders);
-              this.dataSource.paginator = this.paginator; */
             },
             (err) => {
               console.log(err);
@@ -156,6 +155,6 @@ export class AllOrdersComponent implements AfterViewInit {
             }
           );
       },
-    });
+    }); */
   }
 }

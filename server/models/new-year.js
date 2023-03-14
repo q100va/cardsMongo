@@ -42,7 +42,7 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false}
 
   },
-  { collection: "newYear_2023" }
+  { collection: "Easter_2023" }
 );
 
 module.exports = mongoose.model("NewYear", listSchema);

@@ -198,7 +198,7 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
         console.log("req.params.userName");
         console.log(req.params.userName); */
-    Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false }, function (err, orders) {
+    Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false, isOverdue: false, isReturned: false }, function (err, orders) {
       if (err) {
         console.log(err);
         const readUserMongodbErrorResponse = new BaseResponse(
@@ -284,7 +284,7 @@ router.patch("/confirm/:id", async (req, res) => {
     if (req.body.isShowAll) {
       updatedOrders = await Order.find({ userName: req.body.userName, isDisabled: false });
     } else {
-      updatedOrders = await Order.find({ isAccepted: false, userName: req.body.userName, isDisabled: false });
+      updatedOrders = await Order.find({ isAccepted: false, userName: req.body.userName, isDisabled: false,   isReturned: false, isOverdue: false });
     }
 
     const confirmOrderResponse = new BaseResponse("200", "Order confirmed", updatedOrders);
@@ -305,7 +305,7 @@ router.patch("/confirm/:id", async (req, res) => {
 /**
  * API to delete order
  */
- router.patch("/delete/:id", async (req, res) => {
+ /* router.patch("/delete/:id", async (req, res) => {
   try {
     const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isDisabled: true } }, { upsert: false });
     console.log(updatedOrder);
@@ -330,9 +330,9 @@ router.patch("/confirm/:id", async (req, res) => {
     );
     res.status(500).send(confirmOrderCatchErrorResponse.toObject());
   }
-});
+}); */
 
-/* 
+ 
 router.patch("/change-status/:id", async (req, res) => {
   try {
     //  let updatedOrder;
@@ -368,7 +368,7 @@ router.patch("/change-status/:id", async (req, res) => {
     );
     res.status(500).send(confirmOrderCatchErrorResponse.toObject());
   }
-}); */
+}); 
 
 async function deletePluses(deletedOrder) {
   if (deletedOrder.holiday == "Дни рождения апреля 2023") {
@@ -438,7 +438,7 @@ async function deletePluses(deletedOrder) {
         }
       }
       else {
-        if (deletedOrder.holiday == "Новый год 2023") {
+        if (deletedOrder.holiday == "Пасха 2023") {
           for (let lineItem of deletedOrder.lineItems) {
             for (let person of lineItem.celebrators) {
               await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1382,7 +1382,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
 async function collectSeniors(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen", "oldMen", "oldest", "yang"],
+    oldWomen: ["oldWomen","oldest", "yang", "oldMen"],
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
     yang: ["yang", "oldMen", "oldWomen", "oldest"],
     special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
@@ -2435,8 +2435,8 @@ async function createOrderSpring(newOrder, prohibitedId) {
 
   if (newOrder.amount > 50) {
     let oldWomenAmount = Math.round(newOrder.amount * 0.2);
-    let oldMenAmount = Math.round(newOrder.amount * 0.3);
-    let specialAmount = Math.round(newOrder.amount * 0.2);
+    let oldMenAmount = Math.round(newOrder.amount * 0.2);
+    let specialAmount = Math.round(newOrder.amount * 0.3);
     let yangAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialAmount;
 
     proportion = {
@@ -2445,7 +2445,7 @@ async function createOrderSpring(newOrder, prohibitedId) {
       "oldMen": oldMenAmount,
       "special": specialAmount,
       "yang": yangAmount,
-      "oneHouse": Math.round(newOrder.amount * 0.1)
+      "oneHouse": 10 //Math.round(newOrder.amount * 0.1)
     }
     if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
   } else {
@@ -2456,7 +2456,7 @@ async function createOrderSpring(newOrder, prohibitedId) {
         success: false
       };
     } else {
-      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined; //hata
+      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = 1 //undefined; //hata
       //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
       console.log("newOrder.filter.region");
       console.log(newOrder.filter.region);
@@ -2770,7 +2770,7 @@ async function searchSeniorSpring(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
-    //filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
+    //filter.comment1 = ""; //CANCEL
     //filter.comment1 = "(2 корп.)"; //CANCEL
     console.log("filter");
     console.log(filter);

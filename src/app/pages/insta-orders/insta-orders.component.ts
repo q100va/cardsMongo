@@ -145,7 +145,7 @@ export class InstaOrdersComponent implements OnInit {
     );}
 
 
- if (newOrder.holiday == "Новый год 2023")
+ if (newOrder.holiday == "Пасха 2023")
  {this.orderService.createOrderNewYear(newOrder).subscribe(
       async (res) => {
         let result = res["data"]["result"];

@@ -37,14 +37,16 @@ export class OrderService {
     return this.http.get("/api/orders/" + _id);
   }
 
-  deleteOrder(
+  updateOrderStatus(
     _id: string,
     isShowAll: boolean,
-    userName: string
+    userName: string,
+    newStatus: string
   ): Observable<any> {
-    return this.http.patch("/api/orders/delete/" + _id, {
+    return this.http.patch("/api/orders/change-status/" + _id, {
       isShowAll: isShowAll,
       userName: userName,
+      newStatus: newStatus
     });
   }
 

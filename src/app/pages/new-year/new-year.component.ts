@@ -18,7 +18,7 @@ export class NewYearComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Новый год 2023";
+  holiday: string = "Пасха 2023";
   lineItems: Array<LineItem>;
   types: Array<string> = [
     "phoneNumber",

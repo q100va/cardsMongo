@@ -122,10 +122,109 @@ export class OrderListComponent implements AfterViewInit {
     );
   }
 
-  //Delete order
-   deleteOrder(orderId: string, isShowAll: boolean) {
+  moveToOverdue(orderId: string, isShowAll: boolean, isAccepted: boolean) {
+    if (isAccepted) {
+      this.confirmationService.confirm({
+        message: 'Эта заявка имеет статус "подтверждена". Вы уверены, что заявка просрочена?',
+        accept: () => {
+          this.orderService
+            .updateOrderStatus(orderId, isShowAll, this.userName, "isOverdue")
+            .subscribe(
+              (res) => {
+                this.orders = res["data"];
+                console.log(this.orders);
+                this.orders.reverse();
+                this.dataSource = new MatTableDataSource(this.orders);
+                this.dataSource.paginator = this.paginator;
+              },
+              (err) => {
+                console.log(err);
+                alert(
+                  "Произошла ошибка. Сообщите администратору и обновите страницу. " +
+                    err
+                );
+              }
+            );
+        },
+      });
+    } else {
+      this.orderService
+        .updateOrderStatus(orderId, isShowAll, this.userName, "isOverdue")
+        .subscribe(
+          (res) => {
+            this.orders = res["data"];
+            this.orders.reverse();
+            this.dataSource = new MatTableDataSource(this.orders);
+            this.dataSource.paginator = this.paginator;
+          },
+          (err) => {
+            console.log(err);
+            alert(
+              "Произошла ошибка. Сообщите администратору и обновите страницу. " +
+                err
+            );
+          }
+        );
+    }
+  }
 
+  moveToReturned(orderId: string, isShowAll: boolean) {
+    this.orderService
+      .updateOrderStatus(orderId, isShowAll, this.userName, "isReturned")
+      .subscribe(
+        (res) => {
+          this.orders = res["data"];
+          this.orders.reverse();
+          this.dataSource = new MatTableDataSource(this.orders);
+          this.dataSource.paginator = this.paginator;
+        },
+        (err) => {
+          console.log(err);
+          alert(
+            "Произошла ошибка. Сообщите администратору и обновите страницу. " +
+              err
+          );
+        }
+      );
+  }
+
+  moveToDisabled(orderId: string, isShowAll: boolean) {
     this.confirmationService.confirm({
+      message: "Вы уверены, что хотите удалить эту заявку?",
+      accept: () => {
+        this.orderService
+          .updateOrderStatus(orderId, isShowAll, this.userName, "isDisabled")
+          .subscribe(
+            (res) => {
+              this.orders = res["data"];
+              this.orders.reverse();
+              this.dataSource = new MatTableDataSource(this.orders);
+              this.dataSource.paginator = this.paginator;
+            },
+            (err) => {
+              console.log(err);
+              alert(
+                "Произошла ошибка. Сообщите администратору и обновите страницу. " +
+                  err
+              );
+            },
+            () => {
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message: "Заявка удалена.",
+                },
+                disableClose: true,
+                width: "fit-content",
+              });
+            }
+          );
+      },
+    });
+  }
+
+  //Delete order
+  deleteOrder(orderId: string, isShowAll: boolean) {
+    /*     this.confirmationService.confirm({
       message: "Вы уверены, что хотите удалить эту заявку?",
       accept: () => {
           this.orderService.deleteOrder(orderId, isShowAll, this.userName).subscribe(
@@ -150,6 +249,6 @@ export class OrderListComponent implements AfterViewInit {
             }
           );
       },
-    });
+    }); */
   }
 }
