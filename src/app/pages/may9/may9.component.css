@@ -13,7 +13,7 @@ style
 
   .mat-card {
     padding: 35px;
-    background-image: url('src\assets\pngwing.com (51).png');
+    background-image: url('src\assets\pngwing.com (49).png');
     background-repeat: no-repeat;
   }
   
@@ -111,3 +111,6 @@ style
 .mat-raised-button {
   margin-left: 8px;
 }
+ /* div.left {
+  padding-left: 120px;
+} */
