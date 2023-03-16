@@ -187,6 +187,25 @@ export class OrderService {
     });
   }
 
+  createOrderMay9(newOrder: Order): Observable<any> {
+    return this.http.post("/api/orders/may9/" + newOrder.amount, {
+      userName: newOrder.userName,
+      holiday: newOrder.holiday,
+      amount: newOrder.amount,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      institute: newOrder.institute,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      filter: newOrder.filter,
+    });
+  }
+
   getRegions(): Observable<any> {
     return this.http.get("/api/orders/get/regions/");
   }

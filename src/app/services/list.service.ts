@@ -122,7 +122,15 @@ findAllTeacherDayLists(): Observable<any> {
       return this.http.get("/api/lists/holiday/special-list"); 
   }
 
-  
+  create9mayList(): Observable<any> { 
+    return  this.http.post("/api/lists/9may/create" , {
+    });
+  }
+
+
+  findAll9mayLists(): Observable<any> {
+    return this.http.get("/api/lists/9may");
+  }
   
 }
 

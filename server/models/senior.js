@@ -32,6 +32,9 @@ let seniorSchema = new Schema(
     isReleased: { type: Boolean, default: false },
     dateEnter: { type: Date },
     dateExit: { type: Date},
+    veteran: {type: String, default: ""},
+    child: {type: String, default: ""},
+    teacher: {type: String, default: ""},
     key: { type: Number},
 
   },

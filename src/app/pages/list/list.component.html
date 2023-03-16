@@ -28,6 +28,11 @@
         <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше
             1+</button>
         <br /><br /><br />
+        <button class="submit" (click)="generate9mayList()" mat-raised-button>Сформировать список 9 мая</button>
+        <button class="submit" (click)="show9mayList($event)" mat-raised-button>Показать список 9 мая</button>
+        <button class="submit" (click)="showLess9mayList($event)" mat-raised-button>Показать список меньше
+            1+</button>
+        <br /><br /><br />
 
         <button class="submit" (click)="generateFebruary23List()" mat-raised-button>Сформировать список 23</button>
         <button class="submit" (click)="showFebruary23List($event)" mat-raised-button>Показать список 23</button>
@@ -59,8 +64,9 @@
         <mat-list *ngFor="let person of lists">
 
             <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
-                {{person.fullDayBirthday}} {{person.comment1}}
-                {{person.specialComment}} {{person.linkPhoto}} {{person.category}}
+                {{person.fullDayBirthday ? person.fullDayBirthday : person.yearBirthday}} {{person.comment1}} {{person.veteran ? person.veteran : "" }} {{person.child
+                ? person.child : "" }}
+                {{person.specialComment ? person.specialComment : ""}} {{person.linkPhoto}} {{person.category}}
                 {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span
                     style="color: red;" *ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
 
@@ -93,7 +99,7 @@
                 {{celebrator.firstName}}
                 {{celebrator.patronymic}}
                 ({{celebrator.yearBirthday}} г.р.)
-<!--                 ({{celebrator.specialComment}})
+                <!--                 ({{celebrator.specialComment}})
                 {{celebrator.nameDay}} -->
                 {{celebrator.comment1}}
                 {{celebrator.comment2}}

@@ -488,5 +488,84 @@ export class ListComponent implements OnInit {
     this.isShowSpecialList = true;
     //console.log(this.lists);
   }
+
+
+  generate9mayList() {
+    this.listService.create9mayList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
+  show9mayList(event: any) {
+    this.listService.findAll9mayLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        //countries.sort( (a, b) => a.localeCompare(b) )
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+       /*  this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length; */
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
+  showLess9mayList(event: any) {
+    this.listService.findAll9mayLists().subscribe(
+      (res) => {
+       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
+      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        /* this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yang = this.lists.filter((item) => item.category == "yang").length;
+        this.special = this.lists.filter(
+          (item) => item.category == "special"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length; */
+
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  } 
+
   
 }

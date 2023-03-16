@@ -50,6 +50,7 @@ import { NewYearComponent } from "./pages/new-year/new-year.component";
 import { CheckListsComponent } from "./pages/check-lists/check-lists.component";
 import { February23Component } from "./pages/february23/february23.component";
 import { March8Component } from "./pages/march8/march8.component";
+import { May9Component } from "./pages/may9/may9.component";
 
 const routes: Routes = [
   {
@@ -165,6 +166,11 @@ const routes: Routes = [
       {
         path: "orders/new-year",
         component: NewYearComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/may9",
+        component: May9Component,
         canActivate: [AuthGuard],
       },
       {

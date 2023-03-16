@@ -8,6 +8,7 @@
 const express = require("express");
 const List = require("../models/list");
 const NewYear = require("../models/new-year");
+const May9 = require("../models/may-9");
 const NameDay = require("../models/name-day");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
@@ -544,7 +545,11 @@ async function findAllNYCelebrators() {
     console.log("filledIds");
     console.log(filledIds); */
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"#"});
-  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
+ // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
+  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["СТАРОДУБ", "КИРЖАЧ", "САДОВЫЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ВОНЫШЕВО", "МОСАЛЬСК", "ИЛЬИНСКОЕ", "МАРКОВА", "УСТЬ-ИЛИМСК", "КАШИРСКОЕ", "БЕГИЧЕВСКИЙ"] } });
+
+
+
   //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["НОГИНСК"] } });
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ТЮМЕНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
@@ -1445,6 +1450,150 @@ async function checkAllHolidayFullness(house, holiday) {
   }
 
 }
+
+/////////////////////////////////////////
+
+// Create May9 list API 
+router.post("/9may/create", async (req, res) => {
+  try {
+    console.log("0- inside Create list API");
+    let result = await findAllMay9Celebrators();
+    console.log("4-inside Create list API "); // + result
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+async function findAllMay9Celebrators() {
+
+  //throw new Error("Something bad happened");
+  let result = [];
+  console.log("1- inside findAllMonthCelebrators newList");
+  let updatedNursingHome = await House.find({isActive: true, dateLastUpdate: {$gt: new Date("2023-02-28")}});
+  // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
+  //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
+  //let updatedNursingHome = await House.find({isActive: true, region:"ТЮМЕНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
+  //let updatedNursingHome = await House.find({isActive: true, region:"ЧЕЛЯБИНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
+  //let updatedNursingHome = await House.find({isActive: true, region:"ИРКУТСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-6")}});
+  //let updatedNursingHome = await House.find({isActive: true, dateLastUpdate: {$gt: new Date("2022-08-31"), $lt: new Date("2022-10-22")}});
+  //console.log(updatedNursingHome);
+  
+  let namesOfUpdatedNursingHome = [];
+  for (let home of updatedNursingHome) {
+    namesOfUpdatedNursingHome.push(home.nursingHome);
+  }
+
+  console.log(namesOfUpdatedNursingHome);
+
+  let list = await Senior.find({ yearBirthday: {$gt: 0, $lt: 1946}, comment2: {$ne: "только ДР и НГ"}, isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome } }); //
+  //let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: "МИХАЙЛОВ", dateEnter: {$gt: new Date("2022-10-25")} });
+  console.log(list.length);
+
+  if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
+  console.log("2- seniors" + list.length);
+  let updatedCelebrators = [];
+  for (let celebrator of list) {
+
+    /*       let cloneSpecialComment = await specialComment(
+            2022 - celebrator["yearBirthday"]
+          ); */
+
+    let cloneCelebrator = await createCloneCelebrator(celebrator);
+
+    updatedCelebrators.push(cloneCelebrator);
+  }
+
+  //console.log(list);
+  //console.log("celebrator");
+  //console.log("I am here");
+  let newList = await checkDoubles(updatedCelebrators);
+  // newList = newList1.slice();
+
+  console.log("2.5 - " + newList.length);
+
+  const options = { ordered: false };
+  let finalList = await May9.insertMany(newList, options);
+
+  //console.log(finalList);
+
+  console.log(`3- ${finalList.length} documents were inserted`);
+
+  result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length - finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
+  //console.log("3 - final" + finalList); 
+
+  return result;
+  //return true;
+}
+async function createCloneCelebrator(celebrator) {
+
+
+
+  let cloneCelebrator = {
+    region: celebrator.region,
+    nursingHome: celebrator.nursingHome,
+    lastName: celebrator.lastName,
+    firstName: celebrator.firstName,
+    patronymic: celebrator.patronymic,
+    dateBirthday: celebrator.dateBirthday,
+    monthBirthday: celebrator.monthBirthday,
+    yearBirthday: celebrator.yearBirthday,
+    gender: celebrator.gender,
+    comment1: celebrator.comment1,
+    veteran: celebrator.veteran,
+    child: celebrator.child,    
+    linkPhoto: celebrator.linkPhoto,   
+    noAddress: celebrator.noAddress,
+    isReleased: celebrator.isReleased,
+    plusAmount: 0,
+    //specialComment: cloneSpecialComment,
+    holyday: '9 мая 2023',
+    fullData: celebrator.nursingHome +
+      celebrator.lastName +
+      celebrator.firstName +
+      celebrator.patronymic +
+      celebrator.dateBirthday +
+      celebrator.monthBirthday +
+      celebrator.yearBirthday,
+  };
+
+  //console.log("special - " + celebrator["specialComment"]);
+  //console.log("fullday - " + celebrator.fullDayBirthday);
+  //console.log(celebrator);
+  return cloneCelebrator;
+
+}
+
+//Find all NY lists API
+router.get("/9may", async (req, res) => {
+  try {
+    //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
+    May9.find({ absent: { $ne: true } }, function (err, lists) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(lists);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+
+/////////////////////////////////////////
 
 
 // Find by ID

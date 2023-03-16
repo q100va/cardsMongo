@@ -38,6 +38,8 @@ const celebratorSchema = new Schema({
   adminComment:  {type: String}, 
   dateHoliday: { type: Number },
     monthHoliday: { type: Number },
+    veteran:{type: String}, 
+    child: {type: String}, 
 
 });
 
