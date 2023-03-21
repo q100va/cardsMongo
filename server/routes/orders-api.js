@@ -2130,7 +2130,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
       data.maxPlus = 1;
 
       data = await collectSeniorsNewYear(data);
-
+/* 
       if (data.counter < proportion[category]) {
         data.maxPlus = 2;
 
@@ -2141,7 +2141,7 @@ async function fillOrderNewYear(proportion, order_id, filter) {
         data.maxPlus = 3;
 
         data = await collectSeniorsNewYear(data);
-      }
+      } */
 
       if (data.counter < proportion[category]) {
         return data;
@@ -3122,7 +3122,7 @@ async function fillOrderMay9(proportion, order_id, filter) {
 
           data = await collectSeniorsMay9(data);
 
-          if (data.counter < proportion[category]) {
+         if (data.counter < proportion[category]) {
               data.maxPlus = 2;
 
               data = await collectSeniorsMay9(data);

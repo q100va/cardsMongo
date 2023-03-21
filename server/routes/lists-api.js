@@ -19,7 +19,7 @@ const House = require("../models/house");
 const Order = require("../models/order");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
-//const SpecialDay = require("../models/name-day copy");
+//const SpecialDay = require("../models/senior");
 
 //const User = require("../models/user");
 
@@ -122,8 +122,8 @@ async function findAllMonthCelebrators(month) {
   console.log("notActiveHousesNames");
   console.log(notActiveHousesNames);
 
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
-  // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ОКТЯБРЬСКИЙ", dateEnter: { $gt: new Date("2022-12-23") } }); //
+  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ЖЕЛЕЗНОГОРСК", dateEnter: { $lt: new Date("2023-03-15") } }); //
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -546,8 +546,8 @@ async function findAllNYCelebrators() {
     console.log(filledIds); */
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"#"});
  // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
-  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["СТАРОДУБ", "КИРЖАЧ", "САДОВЫЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ВОНЫШЕВО", "МОСАЛЬСК", "ИЛЬИНСКОЕ", "МАРКОВА", "УСТЬ-ИЛИМСК", "КАШИРСКОЕ", "БЕГИЧЕВСКИЙ"] } });
-
+  //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["СТАРОДУБ", "КИРЖАЧ", "САДОВЫЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ВОНЫШЕВО", "МОСАЛЬСК", "ИЛЬИНСКОЕ", "МАРКОВА", "УСТЬ-ИЛИМСК", "КАШИРСКОЕ", "БЕГИЧЕВСКИЙ"] } });
+  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["КАЛИНИНГРАД_КАРТАШЕВА", "ПИОНЕРСКИЙ"] } });
 
 
   //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["НОГИНСК"] } });
@@ -1277,7 +1277,7 @@ router.post("/birthday/check-fullness", async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 3, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 4, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1308,8 +1308,8 @@ router.get("/holiday/special-list", async (req, res) => {
 
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, region: "СВЕРДЛОВСКАЯ", gender: "Female" });
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome: {$in: ["АВДОТЬИНКА"] } });
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress:false, dateExit: null, nursingHome:"ЕКАТЕРИНБУРГ"});
+   // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday:3, dateBirthday:31, yearBirthday: {$lt: 1937} });
     
     let updatedNursingHome = await House.find({ isActive: true });
     let namesOfUpdatedNursingHome = [];
@@ -1505,7 +1505,7 @@ async function findAllMay9Celebrators() {
             2022 - celebrator["yearBirthday"]
           ); */
 
-    let cloneCelebrator = await createCloneCelebrator(celebrator);
+    let cloneCelebrator = await createCloneCelebrator9May(celebrator);
 
     updatedCelebrators.push(cloneCelebrator);
   }
@@ -1531,7 +1531,7 @@ async function findAllMay9Celebrators() {
   return result;
   //return true;
 }
-async function createCloneCelebrator(celebrator) {
+async function createCloneCelebrator9May(celebrator) {
 
 
 
