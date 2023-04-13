@@ -371,7 +371,7 @@ router.patch("/change-status/:id", async (req, res) => {
 }); 
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения апреля 2023") {
+  if (deletedOrder.holiday == "Дни рождения мая 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -423,7 +423,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины апреля 2023") {
+    if (deletedOrder.holiday == "Именины мая 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1229,7 +1229,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
 
   console.log("filter");
   console.log(filter);
-  if (proportion.amount < 31 && !filter.nursingHome && !filter.region && !filter.linkPhoto) {
+  if (proportion.amount < 21 && !filter.nursingHome && !filter.region && !filter.linkPhoto) {
     console.log("if");
     if (fixed == 'date1') {
       if (date1 < period.date1) {
@@ -1497,7 +1497,7 @@ async function searchSenior(
 
   let celebrator;
   //CHANGE!!!
-  //let maxPlusAmount = 2;  
+  //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
   let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
   //console.log("maxPlusAmount");
@@ -2244,9 +2244,9 @@ async function searchSeniorNewYear(
   /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
         standardFilter.isReleased = false;    
     } */
-  /*  if (data.proportion.amount > 12 ) { 
+    if (data.proportion.amount > 12 ) { 
      standardFilter.isReleased = false;    
- }  */
+ } 
   //standardFilter.isReleased = false; // CANCEL
 
 

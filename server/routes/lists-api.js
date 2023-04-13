@@ -9,6 +9,7 @@ const express = require("express");
 const List = require("../models/list");
 const NewYear = require("../models/new-year");
 const May9 = require("../models/may-9");
+const May19 = require("../models/may-19");
 const NameDay = require("../models/name-day");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
@@ -122,8 +123,8 @@ async function findAllMonthCelebrators(month) {
   console.log("notActiveHousesNames");
   console.log(notActiveHousesNames);
 
-  //let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
-  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ЖЕЛЕЗНОГОРСК", dateEnter: { $lt: new Date("2023-03-15") } }); //
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
+ // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ЖЕЛЕЗНОГОРСК", dateEnter: { $lt: new Date("2023-03-15") } }); //
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -374,7 +375,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины апреля 2023',
+      holyday: 'Именины мая 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -547,7 +548,11 @@ async function findAllNYCelebrators() {
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"#"});
  // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
   //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["СТАРОДУБ", "КИРЖАЧ", "САДОВЫЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ВОНЫШЕВО", "МОСАЛЬСК", "ИЛЬИНСКОЕ", "МАРКОВА", "УСТЬ-ИЛИМСК", "КАШИРСКОЕ", "БЕГИЧЕВСКИЙ"] } });
-  let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["КАЛИНИНГРАД_КАРТАШЕВА", "ПИОНЕРСКИЙ"] } });
+  //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["КАЛИНИНГРАД_КАРТАШЕВА", "ПИОНЕРСКИЙ"] } });
+ //const ready = ["КАЛИНИНГРАД_КАРТАШЕВА", "ПИОНЕРСКИЙ", "СТАРОДУБ", "КИРЖАЧ", "САДОВЫЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ВОНЫШЕВО", "МОСАЛЬСК", "ИЛЬИНСКОЕ", "МАРКОВА", "УСТЬ-ИЛИМСК", "КАШИРСКОЕ", "БЕГИЧЕВСКИЙ", "ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"];
+ const ready = ["РЖЕВ"];
+ let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ready }, dateLastUpdate: {$gt: new Date("2023-01-01")} });
+
 
 
   //let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["НОГИНСК"] } });
@@ -564,7 +569,7 @@ async function findAllNYCelebrators() {
 
   console.log(namesOfUpdatedNursingHome);
 
-  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome } }); //
+  let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, comment1: "(1 корп. 2 этаж)" }); //
   //let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: "МИХАЙЛОВ", dateEnter: {$gt: new Date("2022-10-25")} });
   console.log(list.length);
 
@@ -1308,7 +1313,7 @@ router.get("/holiday/special-list", async (req, res) => {
 
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress:false, dateExit: null, nursingHome:"ЕКАТЕРИНБУРГ"});
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
    // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday:3, dateBirthday:31, yearBirthday: {$lt: 1937} });
     
     let updatedNursingHome = await House.find({ isActive: true });
@@ -1476,7 +1481,15 @@ async function findAllMay9Celebrators() {
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
-  let updatedNursingHome = await House.find({isActive: true, dateLastUpdate: {$gt: new Date("2023-02-28")}});
+  let busyNursingHome = await May9.find({},{_id: 0, nursingHome:1});
+  let busyNursingHome2 = [];
+  for (let home of busyNursingHome) {
+    busyNursingHome2.push(home.nursingHome);
+  }
+
+  let notToAdd = Array.from (new Set(busyNursingHome2));
+  let updatedNursingHome = await House.find({isActive: true, isReleased: false, nursingHome: {$nin:notToAdd }, dateLastUpdate: {$lt: new Date("2023-03-31"), $gt: new Date("2022-12-31")}});
+  //let updatedNursingHome = await House.find({isActive: true, dateLastUpdate: {$lt: new Date("2023-03-01"), $gt: new Date("2022-12-31")}});
   // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
   //let updatedNursingHome = await House.find({isActive: true, region:"ТЮМЕНСКАЯ", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-11")}});
