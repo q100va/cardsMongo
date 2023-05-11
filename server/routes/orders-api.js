@@ -371,7 +371,7 @@ router.patch("/change-status/:id", async (req, res) => {
 }); 
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения мая 2023") {
+  if (deletedOrder.holiday == "Дни рождения июня 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -423,7 +423,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины мая 2023") {
+    if (deletedOrder.holiday == "Именины июня 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1390,7 +1390,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
 async function collectSeniors(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen","oldest", "yang", "oldMen"],
+    oldWomen: ["oldWomen","oldest","oldMen"], //, "yang", 
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
     yang: ["yang", "oldMen", "oldWomen", "oldest"],
     special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
@@ -1505,6 +1505,7 @@ async function searchSenior(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
+    //filter.specialComment = /Юбилей/;
     console.log("filter");
     console.log(filter);
     celebrator = await List.findOne(filter);
@@ -3218,7 +3219,7 @@ async function searchSeniorMay9(
       data.filter */
 
   let standardFilter = {
-      nursingHome: { $nin: data.restrictedHouses },
+     // nursingHome: { $nin: data.restrictedHouses },CHANGE
       //secondTime: data.maxPlus > 1 ? true : false,
       //thirdTime: data.maxPlus === 3 ? true : false,
       _id: { $nin: data.restrictedPearson },
@@ -3226,7 +3227,7 @@ async function searchSeniorMay9(
       //dateBirthday: { $gte: data.date1, $lte: data.date2 },
       absent: { $ne: true }
   };
-  if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
+  //if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions }; CHANGE
   if (kind == 'veterans') { standardFilter.veteran = {$ne : ""}; } else { standardFilter.child = {$ne : ""}; }
   //if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
@@ -3248,8 +3249,8 @@ async function searchSeniorMay9(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 1;
-  if (kind == 'veterans') { maxPlusAmount = 3; }
+  let maxPlusAmount = 2;
+  if (kind == 'veterans') { maxPlusAmount = 4; }
 
 
   //let maxPlusAmount = data.maxPlus;  
@@ -3259,7 +3260,7 @@ async function searchSeniorMay9(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
       filter.plusAmount = { $lt: plusAmount };
-      //filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
+    //  filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
       //filter.comment1 = "(2 корп.)"; //CANCEL
       console.log("filter");
       console.log(filter);

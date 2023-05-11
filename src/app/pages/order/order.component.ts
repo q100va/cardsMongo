@@ -27,7 +27,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения мая 2023";
+  holiday: string = "Дни рождения июня 2023";
   lineItems: Array<LineItem>;
   types: Array<string> = [
     "phoneNumber",

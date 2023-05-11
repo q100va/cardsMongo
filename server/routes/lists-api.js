@@ -375,7 +375,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины мая 2023',
+      holyday: 'Именины июня 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -1310,11 +1310,18 @@ const SpecialDay = require("../models/senior");
 //Find special lists API
 router.get("/holiday/special-list", async (req, res) => {
   try {
+    let notActiveHouses = await House.find({ isActive: false });
+    let notActiveHousesNames = [];
+    for (let house of notActiveHouses) {
+      notActiveHousesNames.push(house.nursingHome);
+    }
+    console.log("notActiveHousesNames");
+    console.log(notActiveHousesNames);
 
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-   // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday:3, dateBirthday:31, yearBirthday: {$lt: 1937} });
+   // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday:9, dateBirthday: {$lt:6}, yearBirthday: {$lt: 1957}, nursingHome: {$nin: notActiveHousesNames } });
     
     let updatedNursingHome = await House.find({ isActive: true });
     let namesOfUpdatedNursingHome = [];
@@ -1488,7 +1495,8 @@ async function findAllMay9Celebrators() {
   }
 
   let notToAdd = Array.from (new Set(busyNursingHome2));
-  let updatedNursingHome = await House.find({isActive: true, isReleased: false, nursingHome: {$nin:notToAdd }, dateLastUpdate: {$lt: new Date("2023-03-31"), $gt: new Date("2022-12-31")}});
+  //let updatedNursingHome = await House.find({isActive: true, isReleased: false, nursingHome: {$nin:notToAdd }, dateLastUpdate: {$lt: new Date("2023-03-31"), $gt: new Date("2023-03-28")}});
+  let updatedNursingHome = await House.find({isActive: true, isReleased: false, nursingHome: {$nin:notToAdd }, dateLastUpdate: {$lt: new Date("2022-12-01"), $gt: new Date("2022-08-31")}});
   //let updatedNursingHome = await House.find({isActive: true, dateLastUpdate: {$lt: new Date("2023-03-01"), $gt: new Date("2022-12-31")}});
   // let updatedNursingHome = await House.find({ isActive: true, nursingHome: { $in: ["ЕЛИЗАВЕТОВКА", "ЛАШМА", "ГАВРИЛОВ-ЯМ", "ВИШЕНКИ", "СЕВЕРООНЕЖСК", "СТАРОДУБ", "ИЛОВАТКА", "ПАНКРУШИХА", "АЛЕКСАНДРОВКА", "САВИНСКИЙ", "КРИПЕЦКОЕ"] } });
   //let updatedNursingHome = await House.find({isActive: true, nursingHome:"ВЯЗЬМА", dateLastUpdate: {$gt: new Date("2022-10-21"), $lt: new Date("2022-11-23")}});
@@ -1504,8 +1512,20 @@ async function findAllMay9Celebrators() {
   }
 
   console.log(namesOfUpdatedNursingHome);
-
-  let list = await Senior.find({ yearBirthday: {$gt: 0, $lt: 1946}, comment2: {$ne: "только ДР и НГ"}, isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome } }); //
+ // let list = await Senior.find({ yearBirthday: {$gt: 0, $lt: 1946}, isDisabled: false, dateEnter: {$gt: new Date("2023-04-28")}, dateExit: null, isRestricted: false, nursingHome: "НИКИТИНКА"});
+  let list = await Senior.find({ child: {$ne: ""},yearBirthday: {$gt: 0, $lt: 1946}, comment2: {$ne: "только ДР и НГ"}, isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: [
+      'АРХАНГЕЛЬСК_ДАЧНАЯ',
+    'БОР',           'БУРЕГИ',
+    'ВЕРХНЕУРАЛЬСК', 'ДУБНА',
+    'КАМЕНОЛОМНИ',   'ЛЕУЗА',
+    'МЕТЕЛИ',        'МИСЦЕВО',
+    'МОЛОДОЙ_ТУД',   'НОВЛЯНКА',
+    'НОГУШИ',
+    'ОДОЕВ',        
+    'ПАВЛОВСК',      'ПЕРЕЛОЖНИКОВО',
+    'СЕРГИЕВСКИЙ',   'СОЛЬЦЫ',
+    'СЯВА',          'УФА'
+  ]  } }); //namesOfUpdatedNursingHome
   //let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: "МИХАЙЛОВ", dateEnter: {$gt: new Date("2022-10-25")} });
   console.log(list.length);
 
