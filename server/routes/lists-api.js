@@ -188,7 +188,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР апреля 2023',
+      holyday: 'ДР июля 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -375,7 +375,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины июня 2023',
+      holyday: 'Именины июля 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -1282,7 +1282,7 @@ router.post("/birthday/check-fullness", async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 4, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 6, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1321,7 +1321,7 @@ router.get("/holiday/special-list", async (req, res) => {
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
    // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday:9, dateBirthday: {$lt:6}, yearBirthday: {$lt: 1957}, nursingHome: {$nin: notActiveHousesNames } });
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday:8, dateBirthday: {$lt:6, $gt: 0}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
     
     let updatedNursingHome = await House.find({ isActive: true });
     let namesOfUpdatedNursingHome = [];

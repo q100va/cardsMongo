@@ -371,7 +371,7 @@ router.patch("/change-status/:id", async (req, res) => {
 }); 
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения июня 2023") {
+  if (deletedOrder.holiday == "Дни рождения июля 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -423,7 +423,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины июня 2023") {
+    if (deletedOrder.holiday == "Именины июля 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1390,11 +1390,11 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
 async function collectSeniors(data) {
 
   const searchOrders = {
-    oldWomen: ["oldWomen","oldest","oldMen"], //, "yang", 
+    oldWomen: ["oldWomen","oldest","oldMen", "yang"], //, 
     oldMen: ["oldMen", "oldWomen", "yang", "oldest"],
     yang: ["yang", "oldMen", "oldWomen", "oldest"],
     special: ["special", "yang", "oldWomen", "oldMen", "oldest"],
-    specialOnly: ["special"],
+    specialOnly: ["special", "oldWomen"],
     allCategory: ["oldMen", "oldWomen", "yang", "oldest", "special"]
   };
   //console.log("data.category");
@@ -3219,7 +3219,7 @@ async function searchSeniorMay9(
       data.filter */
 
   let standardFilter = {
-     // nursingHome: { $nin: data.restrictedHouses },CHANGE
+      nursingHome: { $nin: data.restrictedHouses },//CHANGE
       //secondTime: data.maxPlus > 1 ? true : false,
       //thirdTime: data.maxPlus === 3 ? true : false,
       _id: { $nin: data.restrictedPearson },
@@ -3227,7 +3227,7 @@ async function searchSeniorMay9(
       //dateBirthday: { $gte: data.date1, $lte: data.date2 },
       absent: { $ne: true }
   };
-  //if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions }; CHANGE
+  if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions }; //CHANGE
   if (kind == 'veterans') { standardFilter.veteran = {$ne : ""}; } else { standardFilter.child = {$ne : ""}; }
   //if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
