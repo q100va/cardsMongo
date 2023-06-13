@@ -93,7 +93,7 @@ import { CheckListsComponent } from './pages/check-lists/check-lists.component';
 import { February23Component } from './pages/february23/february23.component';
 import { March8Component } from './pages/march8/march8.component';
 import { May9Component } from "./pages/may9/may9.component";
-
+import { FamilyDayComponent } from "./pages/family-day/family-day.component";
 
 @NgModule({
   declarations: [
@@ -139,7 +139,8 @@ import { May9Component } from "./pages/may9/may9.component";
     CheckListsComponent,
     February23Component,
     March8Component,
-    May9Component
+    May9Component,
+    FamilyDayComponent
 
   ],
   imports: [

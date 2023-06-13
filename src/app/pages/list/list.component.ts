@@ -16,6 +16,7 @@ export class ListComponent implements OnInit {
   lists: List[];
   isShowList: Boolean = false;
   isShowSpecialList: Boolean = false;
+  isShowFamilyDayList: Boolean = false;
   listLength: number = 0;
   oldWomen: number = 0;
   oldMen: number = 0;
@@ -566,6 +567,25 @@ export class ListComponent implements OnInit {
     this.isShowList = true;
     //console.log(this.lists);
   } 
+
+  showFamilyDayList(event: any) {
+    this.listService.findAllFamilyDayLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+       // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.listLength = this.lists.length;
+        
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowFamilyDayList = true;
+   }
+
 
   
 }

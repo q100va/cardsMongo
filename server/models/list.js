@@ -41,6 +41,7 @@ const listSchema = new Schema(
 
   },
   { collection: "lists_july2023" }
+ //{ collection: "lists_june2023" }
 );
 
 module.exports = mongoose.model("List", listSchema);

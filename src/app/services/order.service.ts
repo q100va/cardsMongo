@@ -168,6 +168,27 @@ export class OrderService {
     });
   }
 
+  createOrderForFamilyDay(newOrder: Order): Observable<any> {
+    return this.http.post("/api/orders/family-day", {
+      userName: newOrder.userName,
+      holiday: newOrder.holiday,
+      amount: newOrder.amount,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      institute: newOrder.institute,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      temporaryLineItems: newOrder.temporaryLineItems,
+    });
+  }
+
+
+
   createOrderForTeacherDay(newOrder: Order): Observable<any> {
     return this.http.post("/api/orders/teacher-day", {
       userName: newOrder.userName,

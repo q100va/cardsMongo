@@ -21,9 +21,14 @@
         <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
         <br /><br /><br />
+
+        <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
+        <br /><br /><br />
+
+
         <!--         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
         <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
-        <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список Пасха</button>
+        <!--         <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список Пасха</button>
         <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список Пасха</button>
         <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше
             1+</button>
@@ -42,7 +47,7 @@
         <button class="submit" (click)="generateMarch8List()" mat-raised-button>Сформировать список 8</button>
         <button class="submit" (click)="showMarch8List($event)" mat-raised-button>Показать список 8</button>
         <button class="submit" (click)="showLessPlusMarch8List($event)" mat-raised-button>Показать список 8 меньше
-            1+</button>
+            1+</button> -->
         <br /><br /><br />
 
         <button class="submit" (click)="showSpecialList($event)" mat-raised-button>Сформировать список по
@@ -64,7 +69,8 @@
         <mat-list *ngFor="let person of lists">
 
             <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
-                {{person.fullDayBirthday ? person.fullDayBirthday : person.yearBirthday}} {{person.comment1}} {{person.veteran ? person.veteran : "" }} {{person.child
+                {{person.fullDayBirthday ? person.fullDayBirthday : person.yearBirthday}} {{person.comment1}}
+                {{person.veteran ? person.veteran : "" }} {{person.child
                 ? person.child : "" }}
                 {{person.specialComment ? person.specialComment : ""}} {{person.linkPhoto}} {{person.category}}
                 {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span
@@ -102,12 +108,26 @@
                 <!--                 ({{celebrator.specialComment}})
                 {{celebrator.nameDay}} -->
                 {{celebrator.comment1}}
-               <!--  {{celebrator.comment2}} -->
+                <!--  {{celebrator.comment2}} -->
                 {{celebrator.linkPhoto}}
 
             </div>
             <br />
         </div>
+
+    </mat-card-content>
+
+    <mat-card-content *ngIf="isShowFamilyDayList">
+        <p>Общее количество - {{listLength}}</p>
+
+        <mat-list *ngFor="let family of lists">
+
+            <mat-list-item>{{family.plusAmount}} {{family.husbandLastName}} {{family.husbandFirstName}}
+                {{family.husbandPatronymic}}
+                {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}} {{family.nursingHome}}
+            </mat-list-item>
+
+        </mat-list>
 
     </mat-card-content>
 </mat-card>

@@ -6,6 +6,7 @@ import { HousesService } from "src/app/services/houses.service";
 import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { House } from "src/app/shared/interfaces/houses.interface";
+import { ListService } from "src/app/services/list.service";
 
 @Component({
   selector: "app-add-lists",
@@ -14,6 +15,7 @@ import { House } from "src/app/shared/interfaces/houses.interface";
 })
 export class AddListsComponent implements OnInit {
   file: File;
+
   dateOfList: Date;
   arrayOfLists: Array<Array<any>> = [];
   index: number = 0;
@@ -22,12 +24,15 @@ export class AddListsComponent implements OnInit {
   movedFromArrived: number;
   movedFromAbsents: number;
   movedFromDoubtful: number;
+
   startDate: Date;
   endDate: Date;
   arrayOfEmails: Array<string>;
   isShowEmail: boolean = false;
   arrayOfHouses: Array<House>;
 
+  file_second: File;
+  arrayOfFamilies: Array<any> = [];
 
   /*     accepted_lastName: string ="";
     accepted_firstName: string ="";
@@ -71,7 +76,16 @@ export class AddListsComponent implements OnInit {
 
   isStart = false;
 
-  constructor(private seniorsService: SeniorsService, private houseService: HousesService) {}
+  isStartUpload = false;
+  addedFamilies = [];
+  notFoundFamilies = [];
+  isShowFamiliesList = false;
+
+  constructor(
+    private seniorsService: SeniorsService,
+    private houseService: HousesService,
+    private listService: ListService
+  ) {}
 
   displayedColumns = [
     "check",
@@ -80,11 +94,9 @@ export class AddListsComponent implements OnInit {
     "dateLastUpdateClone",
     "nameContact",
     "contact",
-
   ];
   dataSource: MatTableDataSource<House>;
   selection = new SelectionModel<House>(true, []);
-
 
   ngOnInit(): void {}
 
@@ -330,12 +342,11 @@ export class AddListsComponent implements OnInit {
     console.log(endDate);
     this.houseService.findHousesEmail(startDate, endDate).subscribe(
       async (res) => {
-        this.arrayOfHouses = res['data'];
+        this.arrayOfHouses = res["data"];
         console.log("this.arrayOfHouses");
         console.log(this.arrayOfHouses);
         this.dataSource = new MatTableDataSource(this.arrayOfHouses);
         this.isShowEmail = true;
-
       },
       (err) => {
         console.log(err);
@@ -346,10 +357,59 @@ export class AddListsComponent implements OnInit {
   }
 
   copyEmail() {
- this.arrayOfEmails = [];
+    this.arrayOfEmails = [];
 
     for (let value of this.selection["_selection"]) {
       this.arrayOfEmails.push(value.contact);
     }
+  }
+
+  //FAMILIES LIST
+
+  async uploadFile(event) {
+    console.log("START");
+
+    this.file_second = event.target.files[0];
+
+    let rows = await readXlsxFile(this.file_second);
+
+    console.log("rows");
+    console.log(rows);
+
+    let columnsNumber = rows[0].length;
+    let rowsNumber = rows.length;
+
+    for (let j = 1; j < rowsNumber; j++) {
+      let item = {};
+      for (let i = 0; i < columnsNumber; i++) {
+        let propertyName = rows[0][i];
+        item[propertyName.toString()] = rows[j][i];
+        this.arrayOfFamilies[j - 1] = item;
+      }
+    }
+
+    console.log(this.arrayOfFamilies);
+
+    this.isStartUpload = true;
+    console.log(this.isStartUpload);
+  }
+
+  prepareLists(arrayOfFamilies) {
+    //alert("WORKS");
+
+    this.listService.createFamiliesList(arrayOfFamilies).subscribe(
+      async (res) => {
+        this.addedFamilies = await res["data"]["addedFamilies"];
+        this.notFoundFamilies = await res["data"]["notFoundFamilies"];
+        //console.log(this.);
+        this.isShowFamiliesList = true;
+        this.isStartUpload = false;
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+        //stop = true;
+      }
+    );
   }
 }
