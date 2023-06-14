@@ -91,7 +91,7 @@ export class FamilyDayComponent implements OnInit {
       comment: [null],
     });
 
-    this.listService.findAllFamilyDayLists().subscribe(
+    this.listService.findLessFamilyDayLists().subscribe(
       (res) => {
         this.familyDays = res["data"];
         this.familyDays.sort((prev, next) => prev.nursingHome > next.nursingHome ? 1 : -1);
@@ -112,7 +112,7 @@ export class FamilyDayComponent implements OnInit {
     this.notSaved = true;
     this.hide = false;
     this.selection.clear();
-    this.listService.findAllFamilyDayLists().subscribe(
+    this.listService.findLessFamilyDayLists().subscribe(
       (res) => {
         this.familyDays = res["data"];
         this.familyDays.sort((prev, next) => prev.nursingHome > next.nursingHome ? 1 : -1);

@@ -20,7 +20,7 @@ const House = require("../models/house");
 const Order = require("../models/order");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
-const FamilyDay_2023 = require("../models/family-day");
+const FamilyDay = require("../models/family-day");
 
 
 //const SpecialDay = require("../models/senior");
@@ -1707,7 +1707,7 @@ async function checkCouple(family) {
     holiday: "День семьи 2023",
     absent: false
   }
-  await FamilyDay_2023.create(cloneFamily);
+  await FamilyDay.create(cloneFamily);
   return true;
 
 }
@@ -1715,7 +1715,7 @@ async function checkCouple(family) {
 router.get("/family-day", async (req, res) => {
   try {
    
-    FamilyDay_2023.find({ absent: { $ne: true } }, function (err, lists) {
+    FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -1733,7 +1733,27 @@ router.get("/family-day", async (req, res) => {
   }
 });
 
-
+//Find all family day lists API
+router.get("/family-day/less", async (req, res) => {
+  try {
+   
+    FamilyDay.find({ absent: { $ne: true }, plusAmount: {$lt: 2} }, function (err, lists) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(lists);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
 
 
   /////////////////////////////////////////

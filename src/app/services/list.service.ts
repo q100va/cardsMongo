@@ -135,4 +135,8 @@ export class ListService {
     return this.http.get("/api/lists/family-day");
   }
 
+  findLessFamilyDayLists(): Observable<any> {
+    return this.http.get("/api/lists/family-day/less");
+  }
+
 }
