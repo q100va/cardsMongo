@@ -1325,7 +1325,7 @@ router.get("/holiday/special-list", async (req, res) => {
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
     // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday: 8, dateBirthday: { $lt: 32, $gt: 25 }, yearBirthday: { $lt: 2023 }, nursingHome: { $nin: notActiveHousesNames } });
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday: 9, dateBirthday: { $lt: 6, $gt: 0 }, yearBirthday: { $lt: 2023 }, nursingHome: { $nin: notActiveHousesNames } });
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
     let updatedNursingHome = await House.find({ isActive: true });
@@ -1737,7 +1737,7 @@ router.get("/family-day", async (req, res) => {
 router.get("/family-day/less", async (req, res) => {
   try {
    
-    FamilyDay.find({ absent: { $ne: true }, plusAmount: {$lt: 2} }, function (err, lists) {
+    FamilyDay.find({ absent: { $ne: true }, plusAmount: {$lt: 4} }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
