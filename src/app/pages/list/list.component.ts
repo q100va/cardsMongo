@@ -24,6 +24,11 @@ export class ListComponent implements OnInit {
   special: number = 0;
   oldest: number = 0;
   correctedSeniors: Array<any> = [];
+  amountOfVolunteers = 0;
+  isShowAmountOfVolunteers = false;
+  listOfUncertain: List[];
+  listOfUncertainLength = 0;
+  isShowAListOfUncertain = false;
 
   constructor(
     private listService: ListService,
@@ -254,7 +259,7 @@ export class ListComponent implements OnInit {
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <2);
+        this.lists = res["data"].filter(item => item.plusAmount <3);
 
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
@@ -475,8 +480,14 @@ export class ListComponent implements OnInit {
     this.listService.findSpecialLists().subscribe(
       (res) => {
         this.lists = res["data"];
+        let length = 0;
+        for (let house of this.lists){
+           house.celebrators.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+           length = length + house.celebrators.length;
+        }
+       
        // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
-        this.listLength = this.lists.length;
+        this.listLength = length;
         
       },
       (err) => {
@@ -586,6 +597,39 @@ export class ListComponent implements OnInit {
     this.isShowFamilyDayList = true;
    }
 
+   showAmountOfVolunteers(event: any) {
+    this.listService.countAmountOfVolunteers().subscribe(
+      (res) => {
+        this.amountOfVolunteers = res["data"];        
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowAmountOfVolunteers = true;
+   }
+
+   showUncertainList(event: any) {
+    this.listService.findUncertain().subscribe(
+      (res) => {
+        this.listOfUncertain = res["data"];   
+        this.listOfUncertain.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listOfUncertainLength = this.listOfUncertain.length;     
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowAListOfUncertain = true;
+   }
+
+   
 
   
 }

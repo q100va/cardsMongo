@@ -372,7 +372,7 @@ router.patch("/change-status/:id", async (req, res) => {
 });
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения июля 2023") {
+  if (deletedOrder.holiday == "Дни рождения августа 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -424,7 +424,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины июля 2023") {
+    if (deletedOrder.holiday == "Именины августа 2023") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1473,7 +1473,8 @@ async function searchSenior(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-
+//uncertain: true, // DELETE
+//specialComment: {$ne: ""},
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -1509,7 +1510,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
+  let maxPlusAmount = standardFilter.oldest ? 3 : 3; //data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 

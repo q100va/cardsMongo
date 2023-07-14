@@ -28,5 +28,6 @@ export interface List {
   fullData: string;
   dateHoliday?: number;
   monthHoliday?: number;
+  celebrators?: any;
 
 }

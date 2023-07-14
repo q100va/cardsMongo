@@ -6,6 +6,7 @@
 */
 
 const express = require("express");
+const mongoose = require('mongoose');
 const List = require("../models/list");
 const NewYear = require("../models/new-year");
 const May9 = require("../models/may-9");
@@ -191,7 +192,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР июля 2023',
+      holyday: 'ДР августа 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -378,7 +379,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины июля 2023',
+      holyday: 'Именины августа 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -1325,7 +1326,7 @@ router.get("/holiday/special-list", async (req, res) => {
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
     // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday: 9, dateBirthday: { $lt: 6, $gt: 0 }, yearBirthday: { $lt: 2023 }, nursingHome: { $nin: notActiveHousesNames } });
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, monthBirthday: 8, dateBirthday: { $lt: 7, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
     let updatedNursingHome = await House.find({ isActive: true });
@@ -1703,7 +1704,7 @@ async function checkCouple(family) {
     plusAmount: 0,
     noAddress: husband.noAddress,
     isReleased: husband.isReleased,
-    fullData: husband.region+husband.nursingHome+husband.lastName+husband.firstName+wife.lastName+wife.firstName,
+    fullData: husband.region + husband.nursingHome + husband.lastName + husband.firstName + wife.lastName + wife.firstName,
     holiday: "День семьи 2023",
     absent: false
   }
@@ -1714,7 +1715,7 @@ async function checkCouple(family) {
 //Find all family day lists API
 router.get("/family-day", async (req, res) => {
   try {
-   
+
     FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
         console.log(err);
@@ -1736,8 +1737,8 @@ router.get("/family-day", async (req, res) => {
 //Find all family day lists API
 router.get("/family-day/less", async (req, res) => {
   try {
-   
-    FamilyDay.find({ absent: { $ne: true }, plusAmount: {$lt: 4} }, function (err, lists) {
+
+    FamilyDay.find({ absent: { $ne: true }, plusAmount: { $lt: 5 } }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -1755,26 +1756,97 @@ router.get("/family-day/less", async (req, res) => {
   }
 });
 
+//howManyVolunteers
+//const Order = require("../models/order");
+router.get("/amountOfVolunteers", async (req, res) => {
+  try {
 
-  /////////////////////////////////////////
+    console.log("start");
+    let amount = await countAmount();
+    const findAllListsResponse = new BaseResponse("200", "Query successful", amount);
+    res.json(findAllListsResponse.toObject());
 
-  // Find by ID
-  /* router.get("/:listId", async (req, res) => {
-    try {
-      List.findOne({ _id: req.params.listId }, function (err, person) {
-        if (err) {
-          const findListByIdMongodbErrorResponse = new BaseResponse("500", "Internal Server Error", err);
-          res.status(500).send(findListByIdMongodbErrorResponse.toObject());
-        } else {
-          const findListByIdResponse = new BaseResponse("200", "Query Successful", person);
-          res.json(findListByIdResponse.toObject());
-        }
-      });
-    } catch (e) {
-      const findListByIdCatchErrorResponse = new BaseResponse("500", "Internal Server Error", e);
-      res.status(500).send(findListByIdCatchErrorResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+async function countAmount() {
+  let amount = 0;
+  let set = new Set();
+  let orders = await Order.find({ isDisabled: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  for (let order of orders) {
+    if (order.email) {
+      set.add(order.email);
+    } else {
+      set.add(order.contact);
     }
-  }); */
+  }
+  amount = set.size;
+
+  return amount;
+}
 
 
-  module.exports = router;
+// uncertain
+
+router.patch("/uncertain", async (req, res) => {
+  try {
+
+    console.log("start");
+    let listOfUncertain = await findUncertain();
+    const findAllListsResponse = new BaseResponse("200", "Query successful", listOfUncertain);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+async function findUncertain() {
+
+  let list = [];
+  let listOfUncertain = [];
+  let orders = await Order.find({ holiday: "Дни рождения августа 2023", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  for (let order of orders) {
+    for (let lineItem of order.lineItems) {
+      for (let celebrator of lineItem.celebrators) {
+        list.push(mongoose.Types.ObjectId(celebrator.celebrator_id));
+      }
+    }
+  }
+
+    listOfUncertain = await List.find({_id: {$in :list}, plusAmount: {$lt: 3}});
+    await List.updateMany({uncertain: true}, {$set: {uncertain: false}});
+    let result = await List.updateMany({_id: {$in :list}, plusAmount: {$lt: 3}}, {$set: {uncertain: true}});
+console.log(result);
+  return listOfUncertain;
+
+}
+
+/////////////////////////////////////////
+
+// Find by ID
+/* router.get("/:listId", async (req, res) => {
+  try {
+    List.findOne({ _id: req.params.listId }, function (err, person) {
+      if (err) {
+        const findListByIdMongodbErrorResponse = new BaseResponse("500", "Internal Server Error", err);
+        res.status(500).send(findListByIdMongodbErrorResponse.toObject());
+      } else {
+        const findListByIdResponse = new BaseResponse("200", "Query Successful", person);
+        res.json(findListByIdResponse.toObject());
+      }
+    });
+  } catch (e) {
+    const findListByIdCatchErrorResponse = new BaseResponse("500", "Internal Server Error", e);
+    res.status(500).send(findListByIdCatchErrorResponse.toObject());
+  }
+}); */
+
+
+module.exports = router;

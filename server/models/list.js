@@ -38,9 +38,10 @@ const listSchema = new Schema(
     fullData: { type: String },
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
+    uncertain: { type: Boolean, default: false },   
 
   },
-  { collection: "lists_july2023" }
+  { collection: "lists_august2023" }
  //{ collection: "lists_june2023" }
 );
 

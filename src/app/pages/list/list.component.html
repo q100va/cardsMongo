@@ -1,5 +1,5 @@
 <mat-card class="mat-elevation-z0">
-    <mat-card-title> Формирование списка ДР июля 2023 </mat-card-title>
+    <mat-card-title> Формирование списка ДР августа 2023 </mat-card-title>
 
     <br />
 
@@ -17,12 +17,17 @@
         <button class="submit" (click)="generateBirthday()" mat-raised-button>Сформировать список ДР</button>
         <button class="submit" (click)="showBirthdayList($event)" mat-raised-button>Показать список ДР</button>
         <button class="submit" (click)="showLessPlus($event)" mat-raised-button>Показать список меньше 2+</button>
+        <button class="submit" (click)="showUncertainList($event)" mat-raised-button>Показать сомнительных</button>
+        <br /><br /><br />
         <br /><br /><br />
         <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
         <br /><br /><br />
 
         <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
+        <br /><br /><br />
+
+        <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Показать волонтеров</button>
         <br /><br /><br />
 
 
@@ -92,11 +97,12 @@
     <mat-card-content *ngIf="isShowSpecialList">
         <p>Общее количество - {{listLength}}</p>
 
-        <div *ngFor="let lineItem of lists">
+        <mat-card-content *ngFor="let lineItem of lists">
 
             <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-            <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
-            <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
+            <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
+            <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                {{lineItem.adminComment}}</p>
 
             <div *ngFor="let celebrator of lineItem.celebrators">
                 <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
@@ -113,7 +119,7 @@
 
             </div>
             <br />
-        </div>
+        </mat-card-content>
 
     </mat-card-content>
 
@@ -128,6 +134,39 @@
             </mat-list-item>
 
         </mat-list>
+
+    </mat-card-content>
+
+    <mat-card-content *ngIf="isShowAmountOfVolunteers">
+        <p>Общее количество - {{amountOfVolunteers}}</p>
+
+  
+    </mat-card-content>
+
+    <mat-card-content *ngIf="isShowAListOfUncertain">
+        <p>Общее количество - {{listOfUncertainLength}}</p>
+        
+
+
+        <mat-list *ngFor="let person of listOfUncertain">
+
+            <mat-list-item>{{person.plusAmount}} {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+                {{person.fullDayBirthday ? person.fullDayBirthday : person.yearBirthday}} {{person.comment1}}
+                {{person.veteran ? person.veteran : "" }} {{person.child
+                ? person.child : "" }}
+                {{person.specialComment ? person.specialComment : ""}} {{person.linkPhoto}} {{person.category}}
+                {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span
+                    style="color: red;" *ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
+
+        </mat-list>
+
+        <!--         <mat-list *ngFor="let person of lists">
+   
+                 <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
+ {{person.nursingHome}} <span style= "color: red;"*ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
+
+         </mat-list> -->
+
 
     </mat-card-content>
 </mat-card>
