@@ -44,10 +44,16 @@ export class OrderComponent implements OnInit {
   canSave: Boolean = false;
   ready: Boolean = false;
   order_id: any;
+  contactReminder: string = "";
   spinner: Boolean = false;
+  clicked: Boolean = false;
+  useProportion: Boolean = false;
   addressFilter: string = "any";
   genderFilter: string = "any";
-  regions: Array<string> = [];
+  regions = [];
+  nursingHomes = [];
+  activeNursingHomes = [];
+  actualYear = new Date().getFullYear();
 
   constructor(
     private router: Router,
@@ -62,9 +68,20 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.orderService.getRegions().subscribe(
+    /*     this.orderService.getRegions().subscribe(
       async (res) => {
         this.regions = res["data"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    ); */
+
+    this.orderService.getNursingHomes().subscribe(
+      async (res) => {
+        this.nursingHomes = res["data"]["nursingHomes"];
+        this.activeNursingHomes = res["data"]["nursingHomes"];
+        this.regions = res["data"]["regions"];
       },
       (err) => {
         console.log(err);
@@ -79,17 +96,71 @@ export class OrderComponent implements OnInit {
       contactType: [null],
       contact: [null],
       institute: [null],
-      amount: [null, Validators.compose([Validators.required])],
+      amount: [null, Validators.compose([Validators.required, Validators.min(1)])],
       isAccepted: [false],
       comment: [null],
-      year1: [null],
-      year2: [null],
-      date1: [null],
-      date2: [null],
+      femaleAmount: [null, [Validators.min(1)]],
+      maleAmount: [null, [Validators.min(1)]],
+      year1: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
+      year2: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
+      date1: [null, [Validators.min(1), Validators.max(31)]],
+      date2: [null, [Validators.min(1), Validators.max(31)]],
       region: [null],
       nursingHome: [null],
       onlyWithPicture: [false],
+      onlyAnniversaries: [false],
     });
+  }
+
+  correctProportion(genderValue: string) {
+    if (genderValue == 'proportion') {
+      this.useProportion = true;
+    } else {
+      this.useProportion = false;
+      this.form.controls.femaleAmount.setValue(null),
+      this.form.controls.maleAmount.setValue(null)
+    }
+
+  }
+
+  changeNursingHomesList(event) {
+    console.log(this.form.controls.region.value);
+    console.log(this.form.controls.nursingHome.value);
+
+    if (!this.form.controls.region.value) {
+      console.log("no regions were chosen");
+      console.log(this.form.controls.region.value);
+      this.activeNursingHomes = this.nursingHomes;
+    } else {
+      this.activeNursingHomes = this.nursingHomes.filter(
+        (item) => item.region == this.form.controls.region.value
+      );
+
+      if (this.form.controls.nursingHome.value) {
+        let activeNursingHome = this.nursingHomes.filter(
+          (item) => item.nursingHome == this.form.controls.nursingHome.value
+        );
+        if (this.form.controls.region.value != activeNursingHome[0].region) {
+          this.form.controls.nursingHome.setValue(null);
+        }
+      }
+      console.log(this.activeNursingHomes);
+    }
+  }
+
+  changeRegionsSelection(event) {
+    console.log(this.form.controls.region.value);
+    console.log(this.form.controls.nursingHome.value);
+    if (this.form.controls.nursingHome.value) {
+      console.log("homes were chosen");
+      let activeNursingHome = this.nursingHomes.filter(
+        (item) => item.nursingHome == this.form.controls.nursingHome.value
+      );
+
+      this.form.controls.region.setValue(activeNursingHome[0].region);
+
+      // console.log(this.activeNursingHomes);
+    }
   }
 
   exit() {
@@ -98,6 +169,7 @@ export class OrderComponent implements OnInit {
       accept: () => {
         this.successMessage = "";
         this.errorMessage = "";
+        this.contactReminder = "";
         this.lineItems = [];
         this.canSave = false;
         this.router.navigate(["/orders/find/" + this.userName]);
@@ -115,16 +187,30 @@ export class OrderComponent implements OnInit {
   clear(): void {
     this.successMessage = "";
     this.errorMessage = "";
+    this.contactReminder = "";
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
     this.addressFilter = "any";
     this.genderFilter = "any";
-  }
+    this.clicked = false;
+    this.useProportion = false;
 
+  }
+/*   beforeCreateOrder() {
+    console.log("this.spinner");
+    console.log(this.spinner);
+    if (!this.spinner) {
+      this.createOrder();
+    } else {
+      console.log("Clicked twice!");
+    }
+  } */
   createOrder() {
+    this.clicked = true;
     this.successMessage = "";
     this.errorMessage = "";
+    this.contactReminder = "";
     this.lineItems = [];
     this.canSave = false;
 
@@ -136,6 +222,7 @@ export class OrderComponent implements OnInit {
         disableClose: true,
         width: "fit-content",
       });
+      this.clicked = false;
     } else {
       if (
         !this.form.controls.contactType.value &&
@@ -148,6 +235,7 @@ export class OrderComponent implements OnInit {
           disableClose: true,
           width: "fit-content",
         });
+        this.clicked = false;
       } else {
         if (
           this.form.controls.contactType.value &&
@@ -161,9 +249,10 @@ export class OrderComponent implements OnInit {
             disableClose: true,
             width: "fit-content",
           });
+          this.clicked = false;
         } else {
-          console.log(this.form.controls.year2.value);
-          console.log(this.form.controls.year1.value);
+          //console.log(this.form.controls.year2.value);
+          //console.log(this.form.controls.year1.value);
           if (
             this.form.controls.year2.value != null &&
             this.form.controls.year1.value != null &&
@@ -177,6 +266,7 @@ export class OrderComponent implements OnInit {
               disableClose: true,
               width: "fit-content",
             });
+            this.clicked = false;
             console.log("ERROR");
           } else {
             if (
@@ -192,6 +282,21 @@ export class OrderComponent implements OnInit {
                 disableClose: true,
                 width: "fit-content",
               });
+              this.clicked = false;
+            } else {
+              console.log("this.genderFilter");
+              console.log(this.genderFilter);
+
+              if(this.genderFilter == "proportion" && this.form.controls.femaleAmount.value + this.form.controls.maleAmount.value != this.form.controls.amount.value) {
+                this.resultDialog.open(ConfirmationDialogComponent, {
+                  data: {
+                    message:
+                      "Количество в пропорции женщин и мужчин должно совпадать с общим количеством.",
+                  },
+                  disableClose: true,
+                  width: "fit-content",
+                });
+                this.clicked = false;
             } else {
               this.orderService
                 .checkDoubleOrder(
@@ -222,12 +327,14 @@ export class OrderComponent implements OnInit {
                           usernameList +
                           ". Вы уверены, что это не дубль?",
                         accept: () => this.fillOrder(result.seniorsIds),
+                        reject: () =>  this.clicked = false
                       });
                     }
                   },
                   (err) => {
                     this.errorMessage = err.error.msg + " " + err.message;
                     console.log(err);
+                    this.clicked = false;
                   }
                 );
             }
@@ -235,7 +342,7 @@ export class OrderComponent implements OnInit {
         }
       }
     }
-  }
+  }}
 
   fillOrder(prohibitedId: []) {
     this.spinner = true;
@@ -258,35 +365,41 @@ export class OrderComponent implements OnInit {
         genderFilter: this.genderFilter,
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
+        femaleAmount: this.form.controls.femaleAmount.value,
+        maleAmount: this.form.controls.maleAmount.value,
         date1: this.form.controls.date1.value,
         date2: this.form.controls.date2.value,
         region: this.form.controls.region.value,
         nursingHome: this.form.controls.nursingHome.value,
         onlyWithPicture: this.form.controls.onlyWithPicture.value,
+        onlyAnniversaries: this.form.controls.onlyAnniversaries.value,
       },
     };
 
-    console.log("newOrder");
-    console.log(newOrder);
+    //console.log("newOrder");
+    //console.log(newOrder);
 
     this.orderService.createOrder(newOrder, prohibitedId).subscribe(
       async (res) => {
         this.spinner = false;
+        this.clicked = false;
         let result = res["data"]["result"];
         if (typeof result == "string") {
           this.errorMessage = result;
-          console.log(res);
+         // console.log(res);
         } else {
           //alert(res.msg);
-          console.log(res);
+          //console.log(res);
           this.lineItems = result;
           this.canSave = true;
           this.successMessage =
             "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+            this.contactReminder = " Эти адреса для " + res["data"]["contact"];
         }
       },
       (err) => {
         this.spinner = false;
+        this.clicked = false;
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
       }

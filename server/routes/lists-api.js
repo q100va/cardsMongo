@@ -12,6 +12,7 @@ const NewYear = require("../models/new-year");
 const May9 = require("../models/may-9");
 const May19 = require("../models/may-19");
 const NameDay = require("../models/name-day");
+
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
@@ -153,7 +154,7 @@ async function findAllMonthCelebrators(month) {
     if (celebrator["noAddress"]) {
       cloneCategory = "special";
     } else {
-      if (celebrator.yearBirthday < 1942) {
+      if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
         cloneOldest = true;
       }
       if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
@@ -162,7 +163,7 @@ async function findAllMonthCelebrators(month) {
         if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
           cloneCategory = "oldMen";
         } else {
-          if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+          if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday  ) {
             cloneCategory = "yang";
           }
         }
@@ -255,7 +256,10 @@ async function specialComment(age) {
     116: "лет",
     117: "лет",
   };
-  if (age > 103 || age < 18) console.log(`Strange age: ${age}`);
+  if (age > 103 || age < 18) {
+    console.log(`Strange age: ${age}`);
+    return special;
+  }
   if (age % 5 === 0) {
     special = `Юбилей ${age} лет!`;
   } else {
@@ -1156,7 +1160,7 @@ router.post("/new-year/check-fullness", async (req, res) => {
   try {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
-    let result = await checkAllNYFullness(req.body.nursingHome);
+    let result = await checkAllNDFullness(req.body.nursingHome);
     console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
@@ -1168,6 +1172,41 @@ router.post("/new-year/check-fullness", async (req, res) => {
     res.status(500).send(newListCatchErrorResponse.toObject());
   }
 });
+
+async function checkAllNDFullness(house) {
+
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house, monthNameDay: 9});
+  console.log("seniors " + seniors.length);
+  let fullHouse = await NameDay.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+  console.log("fullHouse " + fullHouse.length);
+  let amount = 0;
+  for (let senior of seniors) {
+    let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+    let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
+    //console.log("seniorIndex " + seniorIndex);
+    if (seniorIndex == -1) {
+      amount++;
+      let celebrator = await createCloneCelebrator(senior);
+
+      console.log(celebrator);
+      let newCelebrator = await NameDay.create(celebrator);
+      console.log(newCelebrator.fullData);
+    }
+
+    /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+        let fullData2 = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic);
+        console.log("fullData2 " + fullData2);
+        let seniorIndex = fullHouse.findIndex(item => (item.nursingHome + item.lastName + item.firstName + item.patronymic) == fullData2);
+        console.log("seniorIndex " + seniorIndex);
+        if (seniorIndex > -1) {
+          await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
+          amount++;
+        } */
+  }
+
+  return amount.toString();
+
+}
 
 async function checkAllNYFullness(house) {
 
@@ -1326,7 +1365,7 @@ router.get("/holiday/special-list", async (req, res) => {
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
     // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress:false, dateExit: null, monthBirthday: 9, dateBirthday: { $lt: 31, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress:false, dateExit: null, monthBirthday: 10, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
     let updatedNursingHome = await House.find({ isActive: true });

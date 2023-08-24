@@ -231,6 +231,11 @@ export class OrderService {
     return this.http.get("/api/orders/get/regions/");
   }
 
+  getNursingHomes(): Observable<any> {
+    return this.http.get("/api/orders/get/nursingHomes/");
+  }
+
+
   //////////////////////////////////////////////////////
 
   findNursingHomes(): Observable<any> {

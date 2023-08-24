@@ -28,6 +28,8 @@ const orderSchema = new Schema(
     filter: {
       addressFilter: { type: String },
       genderFilter: { type: String },
+      femaleAmount: { type: Number },
+      maleAmount: { type: Number },
       region: { type: String },
       nursingHome: { type: String },
       year1: { type: Number },
@@ -35,6 +37,7 @@ const orderSchema = new Schema(
       date1: { type: Number },
       date2: { type: Number },
       onlyWithPicture: { type: Boolean, default: false },
+      onlyAnniversaries: { type: Boolean, default: false },
     },
     isCompleted: { type: Boolean, default: false },
     absents: [celebrator],

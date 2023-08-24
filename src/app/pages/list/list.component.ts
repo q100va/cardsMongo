@@ -20,8 +20,11 @@ export class ListComponent implements OnInit {
   listLength: number = 0;
   oldWomen: number = 0;
   oldMen: number = 0;
-  yang: number = 0;
-  special: number = 0;
+  yangMen: number = 0;
+  specialMen: number = 0;
+  specialWomen: number = 0;
+  yangWomen: number = 0;
+
   oldest: number = 0;
   correctedSeniors: Array<any> = [];
   amountOfVolunteers = 0;
@@ -144,14 +147,19 @@ export class ListComponent implements OnInit {
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
+
       },
       (err) => {
         console.log(err);
@@ -169,20 +177,23 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        //countries.sort( (a, b) => a.localeCompare(b) )
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
+
       },
       (err) => {
         console.log(err);
@@ -199,21 +210,24 @@ export class ListComponent implements OnInit {
     this.listService.findAllFebruary23Lists().subscribe(
       (res) => {
         this.lists = res["data"];
-        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        //countries.sort( (a, b) => a.localeCompare(b) )
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+      //  this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
+
       },
       (err) => {
         console.log(err);
@@ -230,20 +244,23 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        //countries.sort( (a, b) => a.localeCompare(b) )
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
+
       },
       (err) => {
         console.log(err);
@@ -260,15 +277,18 @@ export class ListComponent implements OnInit {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
         this.lists = res["data"].filter(item => item.plusAmount <3);
-
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
@@ -290,17 +310,19 @@ export class ListComponent implements OnInit {
   showLessPlusNewYearList(event: any) {
     this.listService.findAllNewYearLists().subscribe(
       (res) => {
-       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
-      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
+        this.lists = res["data"].filter(item => item.plusAmount <3);
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
@@ -321,17 +343,19 @@ export class ListComponent implements OnInit {
   showLessPlusFebruary23List(event: any) {
     this.listService.findAllFebruary23Lists().subscribe(
       (res) => {
-       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
-      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
-        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.lists = res["data"].filter(item => item.plusAmount <3);
+       // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(
@@ -353,17 +377,19 @@ export class ListComponent implements OnInit {
   showLessPlusMarch8List(event: any) {
     this.listService.findAllMarch8Lists().subscribe(
       (res) => {
-       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
-      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
-        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.lists = res["data"].filter(item => item.plusAmount <3);
+       // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yang = this.lists.filter((item) => item.category == "yang").length;
-        this.special = this.lists.filter(
-          (item) => item.category == "special"
+        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
         ).length;
         this.oldest = this.lists.filter((item) => item.oldest == true).length;
         this.oldWomen = this.lists.filter(

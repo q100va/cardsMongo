@@ -18,7 +18,7 @@
                             <mat-card-actions style="text-align: right; padding-right: px;">
                                 <button mat-raised-button (click)="clear()" color="accent">Очистить</button>
                                 <button (click)="createOrder()" mat-raised-button color="primary"
-                                    [disabled]="!form.valid">Сформировать</button>
+                                    [disabled]="!form.valid || clicked">Сформировать</button>
                             </mat-card-actions>
                         </td>
                     </tr>
@@ -71,13 +71,18 @@
                                                     <mat-radio-button class="example-radio-button" [value]="'forKids'">
                                                         для детей
                                                     </mat-radio-button>
+
                                                     <mat-radio-button class="example-radio-button"
                                                         [value]="'noSpecial'">
                                                         без БОА
                                                     </mat-radio-button>
                                                     <mat-radio-button class="example-radio-button"
+                                                        [value]="'noReleased'">
+                                                        без бывших з/к
+                                                    </mat-radio-button>
+                                                    <mat-radio-button class="example-radio-button"
                                                         [value]="'onlySpecial'">
-                                                        только БОА
+                                                        только БОА (без з/к)
                                                     </mat-radio-button>
                                                 </mat-radio-group>
 
@@ -87,21 +92,56 @@
                                                 <mat-radio-group class="example-radio-group" [(ngModel)]="genderFilter"
                                                     [ngModelOptions]="{standalone: true}">
                                                     <mat-radio-button class="example-radio-button" [value]="'any'"
-                                                        default>
+                                                        default (change)="correctProportion('any')">
                                                         любой
                                                     </mat-radio-button>
-                                                    <mat-radio-button class="example-radio-button" [value]="'Female'">
+                                                    <mat-radio-button class="example-radio-button" [value]="'Female'"
+                                                        (change)="correctProportion('Female')">
                                                         женщины
                                                     </mat-radio-button>
-                                                    <mat-radio-button class="example-radio-button" [value]="'Male'">
+                                                    <mat-radio-button class="example-radio-button" [value]="'Male'"
+                                                        (change)="correctProportion('Male')">
                                                         мужчины
                                                     </mat-radio-button>
+
+                                                    <mat-radio-button class="example-radio-button"
+                                                        [value]="'proportion'"
+                                                        (change)="correctProportion('proportion')">
+                                                        в пропорции </mat-radio-button>
+                                                    <div class="example-container" *ngIf="useProportion">
+                                                        <mat-form-field style="width: 40%;" class="example-user-input"
+                                                            appearance="fill">
+                                                            <mat-label>ж</mat-label>
+                                                            <input matInput type="number"
+                                                                [formControl]="form.controls['femaleAmount']"
+                                                                placeholder="0" />
+                                                        </mat-form-field>
+
+                                                        <mat-form-field style="width: 40%;" class="example-user-input"
+                                                            appearance="fill">
+                                                            <mat-label>м</mat-label>
+                                                            <input matInput type="number"
+                                                                [formControl]="form.controls['maleAmount']"
+                                                                placeholder="0" />
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <mat-error class="error"
+                                                        *ngIf="form.controls.femaleAmount.hasError('min') || form.controls.maleAmount.hasError('min') ">
+                                                        Введите валидные данные (min 1)!
+                                                    </mat-error>
+
                                                 </mat-radio-group>
 
                                                 <br />
 
                                                 <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
                                                     Только с фото</mat-slide-toggle>
+
+                                                <br />
+                                                <br />
+
+                                                <mat-slide-toggle [formControl]="form.controls['onlyAnniversaries']">
+                                                    Только юбиляры</mat-slide-toggle>
 
                                             </td>
                                             <td>
@@ -110,7 +150,7 @@
                                                     matTooltip="Можно указать только одно значение: до или после которого должны быть даты.">
                                                     Даты</h4>
 
-                                                <table class="example-half-width" cellspacing="0">
+                                                <table class="example-full-width" cellspacing="0">
                                                     <tr>
                                                         <td>
 
@@ -131,6 +171,14 @@
                                                                     [formControl]="form.controls['date2']"
                                                                     placeholder="15" />
                                                             </mat-form-field>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <mat-error class="error"
+                                                                *ngIf="form.controls.date1.hasError('min') || form.controls.date2.hasError('min') || form.controls.date1.hasError('max') || form.controls.date2.hasError('max')">
+                                                                Введите валидные данные (1-31)!
+                                                            </mat-error>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -168,15 +216,24 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
+                                                            <mat-error class="error"
+                                                                *ngIf="form.controls.year1.hasError('min') || form.controls.year2.hasError('min') || form.controls.year1.hasError('max') || form.controls.year2.hasError('max')">
+                                                                {{"Введите валидные данные (1900-" + actualYear + ")!"}}
+                                                            </mat-error>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
                                                             <h4>Регион (если не работает, введите больший диапазон дат)
                                                             </h4>
                                                             <mat-form-field appearance="fill">
 
-                                                                <mat-select [formControl]="form.controls['region']">
+                                                                <mat-select [formControl]="form.controls['region']"
+                                                                    (selectionChange)="changeNursingHomesList($event)">
                                                                     <mat-option></mat-option>
                                                                     <mat-option *ngFor="let region of regions"
-                                                                        [value]="region.name">
-                                                                        {{ region.name }}
+                                                                        [value]="region">
+                                                                        {{ region }}
                                                                     </mat-option>
                                                                 </mat-select>
                                                             </mat-form-field>
@@ -187,9 +244,20 @@
                                                             <h4>Интернат (если не работает, введите больший диапазон
                                                                 дат)</h4>
                                                             <mat-form-field appearance="fill">
-                                                                <input matInput type="text"
+
+                                                                <!--                                                                 <input matInput type="text"
                                                                     [formControl]="form.controls['nursingHome']"
-                                                                    placeholder="НОГИНСК" />
+                                                                    placeholder="НОГИНСК" /> -->
+
+                                                                <mat-select [formControl]="form.controls['nursingHome']"
+                                                                    (selectionChange)="changeRegionsSelection($event)">
+                                                                    <mat-option></mat-option>
+                                                                    <mat-option
+                                                                        *ngFor="let nursingHome of activeNursingHomes"
+                                                                        [value]="nursingHome.nursingHome">
+                                                                        {{ nursingHome.nursingHome }}
+                                                                    </mat-option>
+                                                                </mat-select>
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
@@ -229,11 +297,12 @@
 
                                         <mat-error class="error"
                                             *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
-                                            Обязательное
-                                            поле!</mat-error>
-                                        <!--                                         <mat-error class="error"
-                                            *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched">
-                                            Только числа!</mat-error> -->
+                                            Обязательное поле!
+                                        </mat-error>
+
+                                        <mat-error class="error" *ngIf="form.controls.amount.hasError('min') ">
+                                            Минимум 1 адрес!
+                                        </mat-error>
 
                                     </td>
                                 </tr>
@@ -314,6 +383,7 @@
                 </mat-card-actions> -->
                 <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
                 <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
+                <p style="color: rgb(175, 19, 175); font-weight: bold; "> {{contactReminder}}</p>
 
                 <br /><br />
                 <dir style="width: 100%;">

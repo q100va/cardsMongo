@@ -25,13 +25,16 @@ export interface Order {
   filter?: {
     addressFilter: string,
     genderFilter: string,
+    femaleAmount?: number,
+    maleAmount?: number,
     region: string,
     nursingHome: string,
     year1: number,
     year2:  number,
     date1:  number,
     date2: number,
-    onlyWithPicture: boolean;
+    onlyWithPicture: boolean,
+    onlyAnniversaries?: boolean,
   },
   temporaryLineItems?: Array<any>
   

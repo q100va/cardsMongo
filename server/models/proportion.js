@@ -9,11 +9,14 @@ const Schema = mongoose.Schema;
 
 const proportionSchema = new Schema({
     amount: { type: Number },
-    oldWomen: { type: Number, unique: true },
+    oldWomen: { type: Number},
     oldMen: { type: Number },
-    special: { type: Number },
-    yang: { type: Number },
+    yangWomen: { type: Number},
+    yangMen: { type: Number },
+    specialWomen: { type: Number },
+    specialMen: { type: Number },    
     oneHouse: { type: Number },
+    oneRegion: { type: Number },
 },  { collection: "proportions" })
 
 module.exports = mongoose.model("Proportion", proportionSchema);
