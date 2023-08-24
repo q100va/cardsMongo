@@ -1123,12 +1123,12 @@ async function createOrder(newOrder, prohibitedId) {
       if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
     } else {
 
-      let oldWomenAmount = Math.round(newOrder.amount * 0.2);
+      let oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
       let oldMenAmount = Math.round(newOrder.amount * 0.2);
-      let specialWomenAmount = Math.round(newOrder.amount * 0.1);
-      let specialMenAmount = Math.round(newOrder.amount * 0.1);
       let yangWomenAmount = Math.round(newOrder.amount * 0.1);
-      let yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
+      let yangMenAmount = Math.round(newOrder.amount * 0.1);
+      let specialMenAmount = Math.round(newOrder.amount * 0.1);
+      let specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
 
       proportion = {
         "amount": newOrder.amount,
