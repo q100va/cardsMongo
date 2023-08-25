@@ -630,7 +630,7 @@ async function createCloneCelebrator(celebrator) {
   if (celebrator["noAddress"]) {
     cloneCategory = "special";
   } else {
-    if (celebrator.yearBirthday < 1941) {
+    if (celebrator.yearBirthday < 1944) {
       cloneOldest = true;
     }
     if (celebrator.yearBirthday < 1958 && celebrator.gender == "Female") {

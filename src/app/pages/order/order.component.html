@@ -83,7 +83,8 @@
                                                         без бывших з/к
                                                     </mat-radio-button>
                                                     <mat-radio-button class="example-radio-button"
-                                                        [value]="'onlySpecial'" (change)="correctMaxNoAddress('onlySpecial')">
+                                                        [value]="'onlySpecial'"
+                                                        (change)="correctMaxNoAddress('onlySpecial')">
                                                         только БОА (без з/к)
                                                     </mat-radio-button>
                                                 </mat-radio-group>
@@ -142,8 +143,18 @@
                                                 <br />
                                                 <br />
 
-                                                <mat-slide-toggle [formControl]="form.controls['onlyAnniversaries']">
+                                                <mat-slide-toggle [formControl]="form.controls['onlyAnniversaries']"
+                                                    (change)="onSlideToggleChange('onlyAnniversaries')">
                                                     Только юбиляры</mat-slide-toggle>
+
+                                                <br />
+
+                                                <mat-slide-toggle
+                                                    [formControl]="form.controls['onlyAnniversariesAndOldest']"
+                                                    (change)="onSlideToggleChange('onlyAnniversariesAndOldest')">
+                                                    Только юбиляры и 80+</mat-slide-toggle>
+
+
 
                                             </td>
                                             <td>
@@ -398,24 +409,36 @@
                 </form>
             </div>
             <div class="right" style="padding-left: 30px; padding-right: 30px;">
-                <mat-card-title> Список поздравляемых </mat-card-title>
-
-                <!--                 <mat-card-actions>
+                <table>
+                    <tr>
+                        <td>
+                            <mat-card-title> Список поздравляемых </mat-card-title>
+                            <!--<mat-card-actions>
                     <button mat-raised-button (click)="clear()" color="primary"
                         [disabled]="!form.valid">Очистить</button>
                     <button (click)="createOrder()" mat-raised-button color="accent"
                         [disabled]="!canSave">Сохранить</button>
                 </mat-card-actions> -->
-                <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
-                <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
-                <p style="color: rgb(175, 19, 175); font-weight: bold; "> {{contactReminder}}</p>
+                            <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
+                            <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
+                            <p style="color: rgb(175, 19, 175); font-weight: bold; "> {{contactReminder}}</p>
+
+                        </td>
+                        <td width="10%">
+                            <button mat-fab matTooltip="Скопировать адреса" color="primary" [disabled]="lineItems.length == 0"
+                                (click)="getAddresses()">
+                                <mat-icon>file_copy</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
 
                 <br /><br />
-                <dir style="width: 100%;">
-                    <dir>
+                <div style="width: 100%;">
+                    <div>
                         <mat-spinner mode="indeterminate" *ngIf="spinner" style="margin:40px auto ;"></mat-spinner>
-                    </dir>
-                </dir>
+                    </div>
+                </div>
 
                 <mat-card-content *ngFor="let lineItem of lineItems">
 

@@ -37,6 +37,7 @@ export interface Order {
     date2: number,
     onlyWithPicture: boolean,
     onlyAnniversaries?: boolean,
+    onlyAnniversariesAndOldest?: boolean,
   },
   temporaryLineItems?: Array<any>
   

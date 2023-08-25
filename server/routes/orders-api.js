@@ -1360,6 +1360,7 @@ async function createOrder(newOrder, prohibitedId) {
 
     if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: "" };
     if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
+    if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{specialComment: /Юбилей/}, {oldest: true}];
     if (newOrder.filter.region) filter.region = newOrder.filter.region;
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
     if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';

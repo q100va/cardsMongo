@@ -40,6 +40,7 @@ const orderSchema = new Schema(
       date2: { type: Number },
       onlyWithPicture: { type: Boolean, default: false },
       onlyAnniversaries: { type: Boolean, default: false },
+      onlyAnniversariesAndOldest: { type: Boolean, default: false },
     },
     isCompleted: { type: Boolean, default: false },
     absents: [celebrator],

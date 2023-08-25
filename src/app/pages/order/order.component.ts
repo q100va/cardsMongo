@@ -14,6 +14,7 @@ import { OrderService } from "src/app/services/order.service";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { LineItem } from "src/app/shared/interfaces/line-item.interface";
 import { Order } from "src/app/shared/interfaces/order.interface";
+import { Clipboard } from '@angular/cdk/clipboard';
 
 //import { ConfirmationService } from "primeng/api";
 //import { MessageService } from "primeng/api";
@@ -28,7 +29,7 @@ export class OrderComponent implements OnInit {
   userName: string;
   form: FormGroup;
   holiday: string = "Дни рождения сентября 2023";
-  lineItems: Array<LineItem>;
+  lineItems: Array<LineItem> =[];
   types: Array<string> = [
     "phoneNumber",
     "whatsApp",
@@ -57,6 +58,7 @@ export class OrderComponent implements OnInit {
   // activeRegions = [];
   activeNursingHomes = [];
   actualYear = new Date().getFullYear();
+  addresses: HTMLElement;
 
   constructor(
     private router: Router,
@@ -65,7 +67,8 @@ export class OrderComponent implements OnInit {
     private orderService: OrderService,
     private resultDialog: MatDialog,
     private cookieService: CookieService,
-    private fb: FormBuilder
+    private clipboard: Clipboard,
+    private fb: FormBuilder 
   ) {
     this.userName = this.cookieService.get("session_user");
   }
@@ -118,6 +121,7 @@ export class OrderComponent implements OnInit {
       maxNoAddress: [null, [Validators.min(1)]],
       onlyWithPicture: [false],
       onlyAnniversaries: [false],
+      onlyAnniversariesAndOldest: [false],
     });
   }
 
@@ -176,6 +180,25 @@ export class OrderComponent implements OnInit {
         }
       }
       console.log(this.activeNursingHomes);
+    }
+  }
+
+  onSlideToggleChange(reason: string) {
+    if (reason == "onlyAnniversaries") {
+      if (
+        this.form.controls.onlyAnniversariesAndOldest.value &&
+        this.form.controls.onlyAnniversaries.value
+      ) {
+        this.form.controls.onlyAnniversariesAndOldest.setValue(false);
+      }
+    }
+    if (reason == "onlyAnniversariesAndOldest") {
+      if (
+        this.form.controls.onlyAnniversariesAndOldest.value &&
+        this.form.controls.onlyAnniversaries.value
+      ) {
+        this.form.controls.onlyAnniversaries.setValue(false);
+      }
     }
   }
 
@@ -447,6 +470,8 @@ export class OrderComponent implements OnInit {
         maxNoAddress: this.form.controls.maxNoAddress.value,
         onlyWithPicture: this.form.controls.onlyWithPicture.value,
         onlyAnniversaries: this.form.controls.onlyAnniversaries.value,
+        onlyAnniversariesAndOldest:
+          this.form.controls.onlyAnniversariesAndOldest.value,
       },
     };
 
@@ -479,118 +504,42 @@ export class OrderComponent implements OnInit {
       }
     );
   }
-}
 
-/*   checkOrder(lineItems, lists) {
-    let isDoubles: boolean = false;
-    for (let lineItem of lineItems) {
+  getAddresses() {
+    let addresses = "";
+    console.log(this.lineItems);
+    for (let lineItem of this.lineItems) {
+      addresses =
+        addresses + lineItem.address + " " + "\n" + 
+        (lineItem.infoComment ? lineItem.infoComment : "") + 
+        (lineItem.infoComment ? "\n" : "") +
+        (lineItem.adminComment ? lineItem.adminComment : "") +
+        (lineItem.adminComment ? "\n" : "");
+
       for (let celebrator of lineItem.celebrators) {
-        for (let list of lists) {
-          console.log(list);
-          let index = list.celebrators.findIndex(
-            (item) => item.celebrator_id == celebrator.celebrator_id
-          );
-          console.log(index);
-          console.log(list.celebrators[index]);
-          if(index>-1) {
-          if (
-            (list.celebrators[index].plusAmount > 2 &&
-              !list.celebrators[index].oldest) ||
-            (list.celebrators[index].plusAmount > 3 &&
-              list.celebrators[index].oldest)
-          ) {
-            isDoubles = true;
-          } else {
-          }
-        }
-        }
+        addresses =
+          addresses +
+          celebrator.lastName +
+          " " +
+          celebrator.firstName +
+          " " +
+          celebrator.patronymic +
+          " " +
+          celebrator.fullDayBirthday +
+          " " +
+          celebrator.comment1 +
+          " " +
+          celebrator.linkPhoto +
+          " " +
+          celebrator.specialComment +
+          "\n";
       }
+      addresses = addresses + "\n";
     }
-    return isDoubles;
-  } */
-
-/* generateOrder() {
-    this.successMessage = "";
-    this.lineItems = [];
-    this.canSave = false;
-
-    if (!this.form.controls.email.value && !this.form.controls.contact.value) {
-      this.resultDialog.open(ConfirmationDialogComponent, {
-        data: {
-          message: "Обязательно укажите email или другой возможный контакт!",
-        },
-        disableClose: true,
-        width: "fit-content",
-      });
-    } else {
-      if (
-        !this.form.controls.contactType.value &&
-        this.form.controls.contact.value
-      ) {
-        this.resultDialog.open(ConfirmationDialogComponent, {
-          data: {
-            message: "Обязательно выберите тип другого возможного контакта!",
-          },
-          disableClose: true,
-          width: "fit-content",
-        });
-      } else {
-        if(this.form.controls.contactType.value &&
-          !this.form.controls.contact.value){
-            this.resultDialog.open(ConfirmationDialogComponent, {
-              data: {
-                message: "Укажите другой контакт или выберите 'пусто' в поле 'Другой контакт'!",
-              },
-              disableClose: true,
-              width: "fit-content",
-            });
-          }
-        else {
-        this.orderService
-          .getProportion(this.form.controls.amount.value)
-          .subscribe(
-            (res) => {
-              let proportion = res["data"];
-              console.log(res);
-              this.orderService.getLists().subscribe(
-                (res) => {
-                  let allLists = res["data"];
-                  console.log(res);
-                  this.orderService.findNursingHomes().subscribe(
-                    (res) => {
-                      let nursingHomes = res["data"];
-                      console.log(res);
-                      let result = this.orderService.generateOrder(
-                        proportion,
-                        allLists,
-                        nursingHomes
-                      );
-                      if (!result) {
-                        this.successMessage =
-                          "Список не может быть сформирован из-за недостатка адресов. Обратитесь к администратору.";
-                        console.log(this.successMessage);
-                      } else {
-                        this.lineItems = result;
-                        this.canSave = true;
-                        this.successMessage =
-                          "Это предварительный список! Не отправляйте его поздравляющему!";
-                                         }
-                    },
-                    (err) => {
-                      console.log(err);
-                    }
-                  );
-                },
-                (err) => {
-                  console.log(err);
-                }
-              );
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-      }}
-    }
+    console.log("addresses");
+    console.log(addresses);
+    const successful = this.clipboard.copy(addresses);
+    console.log("successful");
+    console.log(successful);
   }
-   */
+}
