@@ -48,10 +48,13 @@ export class OrderComponent implements OnInit {
   spinner: Boolean = false;
   clicked: Boolean = false;
   useProportion: Boolean = false;
+  showMaxNoAddress: Boolean = true;
+  showMaxOneHouse: Boolean = true;
   addressFilter: string = "any";
   genderFilter: string = "any";
   regions = [];
   nursingHomes = [];
+  // activeRegions = [];
   activeNursingHomes = [];
   actualYear = new Date().getFullYear();
 
@@ -82,6 +85,7 @@ export class OrderComponent implements OnInit {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
         this.regions = res["data"]["regions"];
+        //  this.activeRegions = res["data"]["regions"];
       },
       (err) => {
         console.log(err);
@@ -96,7 +100,10 @@ export class OrderComponent implements OnInit {
       contactType: [null],
       contact: [null],
       institute: [null],
-      amount: [null, Validators.compose([Validators.required, Validators.min(1)])],
+      amount: [
+        null,
+        Validators.compose([Validators.required, Validators.min(1)]),
+      ],
       isAccepted: [false],
       comment: [null],
       femaleAmount: [null, [Validators.min(1)]],
@@ -107,23 +114,47 @@ export class OrderComponent implements OnInit {
       date2: [null, [Validators.min(1), Validators.max(31)]],
       region: [null],
       nursingHome: [null],
+      maxOneHouse: [null, [Validators.min(1)]],
+      maxNoAddress: [null, [Validators.min(1)]],
       onlyWithPicture: [false],
       onlyAnniversaries: [false],
     });
   }
 
   correctProportion(genderValue: string) {
-    if (genderValue == 'proportion') {
+    if (genderValue == "proportion") {
       this.useProportion = true;
     } else {
       this.useProportion = false;
       this.form.controls.femaleAmount.setValue(null),
-      this.form.controls.maleAmount.setValue(null)
+        this.form.controls.maleAmount.setValue(null);
     }
-
   }
 
-  changeNursingHomesList(event) {
+  correctMaxNoAddress(addressValue: string) {
+    if (addressValue == "any" || addressValue == "noReleased") {
+      this.showMaxNoAddress = true;
+    } else {
+      this.showMaxNoAddress = false;
+      this.form.controls.maxNoAddress.setValue(null);
+    }
+  }
+
+  onChangeNursingHome() {
+    if (!this.form.controls.nursingHome.value) {
+      this.showMaxOneHouse = true;
+      if (this.addressFilter == "any" || "noReleased") {
+        this.showMaxNoAddress = true;
+      }
+    } else {
+      this.showMaxOneHouse = false;
+      this.form.controls.maxOneHouse.setValue(null);
+      this.showMaxNoAddress = false;
+      this.form.controls.maxNoAddress.setValue(null);
+    }
+  }
+
+  onChangeRegion() {
     console.log(this.form.controls.region.value);
     console.log(this.form.controls.nursingHome.value);
 
@@ -148,20 +179,33 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  changeRegionsSelection(event) {
+  /*changeRegionsSelection(event) {
     console.log(this.form.controls.region.value);
     console.log(this.form.controls.nursingHome.value);
-    if (this.form.controls.nursingHome.value) {
+
+    if (!this.form.controls.nursingHome.value) {
+      console.log("no home were chosen");
+      console.log(this.form.controls.nursingHome.value);
+      this.activeRegions = this.regions;
+    } else {
+      this.activeRegions = this.regions.filter(
+        (item) => item.name == this.form.controls.nursingHome.value.region
+      );
+
+      console.log(this.activeRegions);
+    }
+
+    // if (this.form.controls.nursingHome.value) {
       console.log("homes were chosen");
       let activeNursingHome = this.nursingHomes.filter(
         (item) => item.nursingHome == this.form.controls.nursingHome.value
-      );
+      ); 
 
-      this.form.controls.region.setValue(activeNursingHome[0].region);
+     // this.form.controls.region.setValue(activeNursingHome[0].region);
 
       // console.log(this.activeNursingHomes);
-    }
-  }
+    
+  }*/
 
   exit() {
     this.confirmationService.confirm({
@@ -195,9 +239,10 @@ export class OrderComponent implements OnInit {
     this.genderFilter = "any";
     this.clicked = false;
     this.useProportion = false;
-
+    this.showMaxOneHouse = true;
+    this.showMaxNoAddress = true;
   }
-/*   beforeCreateOrder() {
+  /*   beforeCreateOrder() {
     console.log("this.spinner");
     console.log(this.spinner);
     if (!this.spinner) {
@@ -287,7 +332,12 @@ export class OrderComponent implements OnInit {
               console.log("this.genderFilter");
               console.log(this.genderFilter);
 
-              if(this.genderFilter == "proportion" && this.form.controls.femaleAmount.value + this.form.controls.maleAmount.value != this.form.controls.amount.value) {
+              if (
+                this.genderFilter == "proportion" &&
+                this.form.controls.femaleAmount.value +
+                  this.form.controls.maleAmount.value !=
+                  this.form.controls.amount.value
+              ) {
                 this.resultDialog.open(ConfirmationDialogComponent, {
                   data: {
                     message:
@@ -297,55 +347,77 @@ export class OrderComponent implements OnInit {
                   width: "fit-content",
                 });
                 this.clicked = false;
-            } else {
-              this.orderService
-                .checkDoubleOrder(
-                  this.holiday,
-                  this.form.controls.email.value,
-                  this.form.controls.contact.value
-                )
-                .subscribe(
-                  async (res) => {
-                    let result = res["data"];
-                    // console.log("res");
-                    // console.log(res);
-                    if (!result) {
-                      this.fillOrder([]);
-                    } else {
-                      let usernameList = "";
-                      for (let user of result.users) {
-                        usernameList =
-                          usernameList.length == 0
-                            ? user
-                            : usernameList + ", " + user;
+              } else {
+                if (
+                  this.form.controls.maxOneHouse.value >
+                    this.form.controls.amount.value ||
+                  this.form.controls.maxNoAddress.value >
+                    this.form.controls.amount.value
+                ) {
+                  this.resultDialog.open(ConfirmationDialogComponent, {
+                    data: {
+                      message:
+                        "Max количество адресов из одного дома или из БОА не может быть больше общего количества адресов.",
+                    },
+                    disableClose: true,
+                    width: "fit-content",
+                  });
+                  this.clicked = false;
+                } else {
+                  this.orderService
+                    .checkDoubleOrder(
+                      this.holiday,
+                      this.form.controls.email.value,
+                      this.form.controls.contact.value
+                    )
+                    .subscribe(
+                      async (res) => {
+                        let result = res["data"];
+                        // console.log("res");
+                        // console.log(res);
+                        if (!result) {
+                          this.fillOrder([]);
+                        } else {
+                          let usernameList = "";
+                          for (let user of result.users) {
+                            usernameList =
+                              usernameList.length == 0
+                                ? user
+                                : usernameList + ", " + user;
+                          }
+                          this.confirmationService.confirm({
+                            message:
+                              "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+                              this.holiday +
+                              " у волонтера(ов): " +
+                              usernameList +
+                              ". Вы уверены, что это не дубль?",
+                            accept: () => this.fillOrder(result.seniorsIds),
+                            reject: () => (this.clicked = false),
+                          });
+                        }
+                      },
+                      (err) => {
+                        this.errorMessage = err.error.msg + " " + err.message;
+                        console.log(err);
+                        this.clicked = false;
                       }
-                      this.confirmationService.confirm({
-                        message:
-                          "Пользователь с такими контактами уже получил адреса на этот праздник: " +
-                          this.holiday +
-                          " у волонтера(ов): " +
-                          usernameList +
-                          ". Вы уверены, что это не дубль?",
-                        accept: () => this.fillOrder(result.seniorsIds),
-                        reject: () =>  this.clicked = false
-                      });
-                    }
-                  },
-                  (err) => {
-                    this.errorMessage = err.error.msg + " " + err.message;
-                    console.log(err);
-                    this.clicked = false;
-                  }
-                );
+                    );
+                }
+              }
             }
           }
         }
       }
     }
-  }}
+  }
 
   fillOrder(prohibitedId: []) {
     this.spinner = true;
+    /*     if (this.form.controls.genderFilter.value == "proportion") {
+      if (!this.form.controls.femaleAmount.value) {
+      }
+    } */
     let newOrder: Order = {
       userName: this.userName,
       holiday: this.holiday,
@@ -371,6 +443,8 @@ export class OrderComponent implements OnInit {
         date2: this.form.controls.date2.value,
         region: this.form.controls.region.value,
         nursingHome: this.form.controls.nursingHome.value,
+        maxOneHouse: this.form.controls.maxOneHouse.value,
+        maxNoAddress: this.form.controls.maxNoAddress.value,
         onlyWithPicture: this.form.controls.onlyWithPicture.value,
         onlyAnniversaries: this.form.controls.onlyAnniversaries.value,
       },
@@ -386,7 +460,7 @@ export class OrderComponent implements OnInit {
         let result = res["data"]["result"];
         if (typeof result == "string") {
           this.errorMessage = result;
-         // console.log(res);
+          // console.log(res);
         } else {
           //alert(res.msg);
           //console.log(res);
@@ -394,7 +468,7 @@ export class OrderComponent implements OnInit {
           this.canSave = true;
           this.successMessage =
             "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
-            this.contactReminder = " Эти адреса для " + res["data"]["contact"];
+          this.contactReminder = " Эти адреса для " + res["data"]["contact"];
         }
       },
       (err) => {

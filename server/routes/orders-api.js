@@ -1102,12 +1102,23 @@ async function createOrder(newOrder, prohibitedId) {
 
   if (newOrder.filter.genderFilter != 'proportion') {
     if (newOrder.amount > 50) {
-      let oldWomenAmount = Math.round(newOrder.amount * 0.3);
-      let oldMenAmount = Math.round(newOrder.amount * 0.2);
-      let specialWomenAmount = Math.round(newOrder.amount * 0.1);
-      let specialMenAmount = Math.round(newOrder.amount * 0.1);
-      let yangWomenAmount = Math.round(newOrder.amount * 0.1);
-      let yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
+      let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
+      if (!newOrder.filter.maxNoAddress) {
+        oldWomenAmount = Math.round(newOrder.amount * 0.3);
+        oldMenAmount = Math.round(newOrder.amount * 0.2);
+        specialWomenAmount = Math.round(newOrder.amount * 0.1);
+        specialMenAmount = Math.round(newOrder.amount * 0.1);
+        yangWomenAmount = Math.round(newOrder.amount * 0.1);
+        yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
+
+      } else {
+        specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
+        specialMenAmount = newOrder.filter.maxNoAddress - specialWomenAmount;
+        oldWomenAmount = Math.ceil((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
+        oldMenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
+        yangWomenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.2);
+        yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
+      }
 
 
       proportion = {
@@ -1118,18 +1129,36 @@ async function createOrder(newOrder, prohibitedId) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": Math.round(newOrder.amount * 0.3)
+        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
       }
       if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
     } else {
 
-      let oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
-      let oldMenAmount = Math.round(newOrder.amount * 0.2);
-      let yangWomenAmount = Math.round(newOrder.amount * 0.1);
-      let yangMenAmount = Math.round(newOrder.amount * 0.1);
-      let specialMenAmount = Math.round(newOrder.amount * 0.1);
-      let specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
+      /*       let oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
+            let oldMenAmount = Math.round(newOrder.amount * 0.2);
+            let yangWomenAmount = Math.round(newOrder.amount * 0.1);
+            let yangMenAmount = Math.round(newOrder.amount * 0.1);
+            let specialMenAmount = Math.round(newOrder.amount * 0.1);
+            let specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
+       */
 
+      let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
+      if (!newOrder.filter.maxNoAddress) {
+        oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
+        oldMenAmount = Math.round(newOrder.amount * 0.2);
+        yangWomenAmount = Math.round(newOrder.amount * 0.1);
+        yangMenAmount = Math.round(newOrder.amount * 0.1);
+        specialMenAmount = Math.round(newOrder.amount * 0.1);
+        specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
+
+      } else {
+        specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
+        specialMenAmount = newOrder.filter.maxNoAddress - specialWomenAmount;
+        oldWomenAmount = Math.ceil((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
+        oldMenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
+        yangWomenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.2);
+        yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
+      }
       proportion = {
         "amount": newOrder.amount,
         "oldWomen": oldWomenAmount,
@@ -1138,9 +1167,11 @@ async function createOrder(newOrder, prohibitedId) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": Math.round(newOrder.amount * 0.3)
+        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
       }
     }
+
+
     // proportion = await Proportion.findOne({ amount: newOrder.amount });
     if (!proportion) {
       return {
@@ -1148,7 +1179,7 @@ async function createOrder(newOrder, prohibitedId) {
         success: false
       };
     } else {
-      if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
+      if (!newOrder.filter.maxOneHouse && (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region)) proportion.oneHouse = undefined;
       //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
       console.log("newOrder.filter.region");
       console.log(newOrder.filter.region);
@@ -1164,13 +1195,26 @@ async function createOrder(newOrder, prohibitedId) {
 
 
   if (newOrder.filter.genderFilter == 'proportion') {
-    let oldWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.5);
-    let oldMenAmount = Math.round(newOrder.filter.maleAmount * 0.5);
-    let specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.2);
-    let specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.2);
-    let yangWomenAmount = newOrder.filter.femaleAmount - oldWomenAmount - specialWomenAmount;
-    let yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
 
+    let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
+    if (!newOrder.filter.maxNoAddress) {
+      oldWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.5);
+      oldMenAmount = Math.round(newOrder.filter.maleAmount * 0.5);
+      specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.2);
+      specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.2);
+      yangWomenAmount = newOrder.filter.femaleAmount - oldWomenAmount - specialWomenAmount;
+      yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
+
+
+    } else {
+
+      specialWomenAmount = Math.ceil(newOrder.filter.femaleAmount/newOrder.amount * newOrder.filter.maxNoAddress);
+      specialMenAmount = newOrder.filter.maxNoAddress - specialWomenAmount;
+      oldWomenAmount = Math.round((newOrder.filter.femaleAmount - specialWomenAmount) * 0.5);
+      oldMenAmount = Math.round((newOrder.filter.maleAmount - specialMenAmount) * 0.5);
+      yangWomenAmount = newOrder.filter.femaleAmount - oldWomenAmount - specialWomenAmount;
+      yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
+    }
     proportion = {
       "amount": newOrder.amount,
       "oldWomen": oldWomenAmount,
@@ -1179,7 +1223,7 @@ async function createOrder(newOrder, prohibitedId) {
       "specialMen": specialMenAmount,
       "yangWomen": yangWomenAmount,
       "yangMen": yangMenAmount,
-      "oneHouse": Math.round(newOrder.amount * 0.3),
+      "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3),
       "oneRegion": Math.ceil(newOrder.amount * 0.33)
     }
 

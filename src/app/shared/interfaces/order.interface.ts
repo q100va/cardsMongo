@@ -29,6 +29,8 @@ export interface Order {
     maleAmount?: number,
     region: string,
     nursingHome: string,
+    maxOneHouse?: number,
+    maxNoAddress?: number,
     year1: number,
     year2:  number,
     date1:  number,

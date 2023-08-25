@@ -65,23 +65,25 @@
                                                 <mat-radio-group class="example-radio-group" [(ngModel)]="addressFilter"
                                                     [ngModelOptions]="{standalone: true}">
                                                     <mat-radio-button class="example-radio-button" [value]="'any'"
-                                                        default>
+                                                        default (change)="correctMaxNoAddress('any')">
                                                         любые
                                                     </mat-radio-button>
-                                                    <mat-radio-button class="example-radio-button" [value]="'forKids'">
+                                                    <mat-radio-button class="example-radio-button" [value]="'forKids'"
+                                                        (change)="correctMaxNoAddress('forKids')">
                                                         для детей
                                                     </mat-radio-button>
 
-                                                    <mat-radio-button class="example-radio-button"
-                                                        [value]="'noSpecial'">
+                                                    <mat-radio-button class="example-radio-button" [value]="'noSpecial'"
+                                                        (change)="correctMaxNoAddress('noSpecial')">
                                                         без БОА
                                                     </mat-radio-button>
                                                     <mat-radio-button class="example-radio-button"
-                                                        [value]="'noReleased'">
+                                                        [value]="'noReleased'"
+                                                        (change)="correctMaxNoAddress('noReleased')">
                                                         без бывших з/к
                                                     </mat-radio-button>
                                                     <mat-radio-button class="example-radio-button"
-                                                        [value]="'onlySpecial'">
+                                                        [value]="'onlySpecial'" (change)="correctMaxNoAddress('onlySpecial')">
                                                         только БОА (без з/к)
                                                     </mat-radio-button>
                                                 </mat-radio-group>
@@ -114,7 +116,7 @@
                                                             <mat-label>ж</mat-label>
                                                             <input matInput type="number"
                                                                 [formControl]="form.controls['femaleAmount']"
-                                                                placeholder="0" />
+                                                                placeholder="1" />
                                                         </mat-form-field>
 
                                                         <mat-form-field style="width: 40%;" class="example-user-input"
@@ -122,7 +124,7 @@
                                                             <mat-label>м</mat-label>
                                                             <input matInput type="number"
                                                                 [formControl]="form.controls['maleAmount']"
-                                                                placeholder="0" />
+                                                                placeholder="1" />
                                                         </mat-form-field>
                                                     </div>
                                                     <mat-error class="error"
@@ -229,7 +231,7 @@
                                                             <mat-form-field appearance="fill">
 
                                                                 <mat-select [formControl]="form.controls['region']"
-                                                                    (selectionChange)="changeNursingHomesList($event)">
+                                                                    (selectionChange)="onChangeRegion()">
                                                                     <mat-option></mat-option>
                                                                     <mat-option *ngFor="let region of regions"
                                                                         [value]="region">
@@ -245,12 +247,8 @@
                                                                 дат)</h4>
                                                             <mat-form-field appearance="fill">
 
-                                                                <!--                                                                 <input matInput type="text"
-                                                                    [formControl]="form.controls['nursingHome']"
-                                                                    placeholder="НОГИНСК" /> -->
-
                                                                 <mat-select [formControl]="form.controls['nursingHome']"
-                                                                    (selectionChange)="changeRegionsSelection($event)">
+                                                                    (selectionChange)="onChangeNursingHome()">
                                                                     <mat-option></mat-option>
                                                                     <mat-option
                                                                         *ngFor="let nursingHome of activeNursingHomes"
@@ -259,6 +257,33 @@
                                                                     </mat-option>
                                                                 </mat-select>
                                                             </mat-form-field>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div class="example-container">
+                                                                <mat-form-field style="width: 49%;"
+                                                                    class="example-user-input" appearance="fill"
+                                                                    *ngIf="showMaxOneHouse">
+                                                                    <mat-label>max из 1 дома</mat-label>
+                                                                    <input matInput type="number"
+                                                                        [formControl]="form.controls['maxOneHouse']"
+                                                                        placeholder="1" />
+                                                                </mat-form-field>
+
+                                                                <mat-form-field style="width: 49%;"
+                                                                    class="example-user-input" appearance="fill"
+                                                                    *ngIf="showMaxNoAddress">
+                                                                    <mat-label>max БОА</mat-label>
+                                                                    <input matInput type="number"
+                                                                        [formControl]="form.controls['maxNoAddress']"
+                                                                        placeholder="1" />
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <mat-error class="error"
+                                                                *ngIf="form.controls.maxOneHouse.hasError('min') || form.controls.maxNoAddress.hasError('min') ">
+                                                                Введите валидные данные (min 1)!
+                                                            </mat-error>
                                                         </td>
                                                     </tr>
                                                 </table>

@@ -32,6 +32,8 @@ const orderSchema = new Schema(
       maleAmount: { type: Number },
       region: { type: String },
       nursingHome: { type: String },
+      maxOneHouse: { type: Number },
+      maxNoAddress: { type: Number },
       year1: { type: Number },
       year2: { type: Number },
       date1: { type: Number },
