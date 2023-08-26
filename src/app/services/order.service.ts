@@ -94,6 +94,7 @@ export class OrderService {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
+      source: newOrder.source,
       amount: newOrder.amount,
       clientFirstName: newOrder.clientFirstName,
       clientPatronymic: newOrder.clientPatronymic,

@@ -11,6 +11,7 @@ export interface Order {
   _id?: string;
   userName: string;
   holiday: string;
+  source?: string;
   clientFirstName: string;
   clientPatronymic: string;
   clientLastName: string;

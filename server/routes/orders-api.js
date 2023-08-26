@@ -1000,6 +1000,7 @@ router.post("/birthday/:amount", async (req, res) => {
     let newOrder = {
       userName: req.body.userName,
       holiday: req.body.holiday,
+      source: req.body.source,
       amount: req.body.amount,
       clientFirstName: req.body.clientFirstName,
       clientPatronymic: req.body.clientPatronymic,
@@ -1234,6 +1235,7 @@ async function createOrder(newOrder, prohibitedId) {
   const emptyOrder = {
     userName: newOrder.userName,
     holiday: newOrder.holiday,
+    source: newOrder.source,
     amount: newOrder.amount,
     clientFirstName: newOrder.clientFirstName,
     clientPatronymic: newOrder.clientPatronymic,

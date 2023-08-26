@@ -13,6 +13,7 @@ const orderSchema = new Schema(
   {
     userName: { type: String },
     holiday: { type: String },
+    source: { type: String },
     clientFirstName: { type: String },
     clientPatronymic: { type: String },
     clientLastName: { type: String },

@@ -53,12 +53,14 @@ export class OrderComponent implements OnInit {
   showMaxOneHouse: Boolean = true;
   addressFilter: string = "any";
   genderFilter: string = "any";
+  
   regions = [];
   nursingHomes = [];
   // activeRegions = [];
   activeNursingHomes = [];
   actualYear = new Date().getFullYear();
   addresses: HTMLElement;
+
 
   constructor(
     private router: Router,
@@ -108,6 +110,7 @@ export class OrderComponent implements OnInit {
         Validators.compose([Validators.required, Validators.min(1)]),
       ],
       isAccepted: [false],
+      source:  [null, Validators.compose([Validators.required])],
       comment: [null],
       femaleAmount: [null, [Validators.min(1)]],
       maleAmount: [null, [Validators.min(1)]],
@@ -260,6 +263,7 @@ export class OrderComponent implements OnInit {
     this.form.reset();
     this.addressFilter = "any";
     this.genderFilter = "any";
+   
     this.clicked = false;
     this.useProportion = false;
     this.showMaxOneHouse = true;
@@ -453,6 +457,7 @@ export class OrderComponent implements OnInit {
       institute: this.form.controls.institute.value,
       amount: this.form.controls.amount.value,
       isAccepted: this.form.controls.isAccepted.value ? true : false,
+      source: this.form.controls.source.value,
       comment: this.form.controls.comment.value,
       orderDate: this.orderDate,
       filter: {

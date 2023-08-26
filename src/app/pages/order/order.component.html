@@ -33,15 +33,31 @@
                         <div fxLayout="column" fxLayoutGap="10px">
                             <table class="example-full-width" cellspacing="0">
                                 <tr>
-                                    <td>
+                                    <td rowspan="2" >
 
                                         <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
                                         <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
                                     </td>
-                                    <td>
-                                        <mat-slide-toggle [formControl]="form.controls['isAccepted']">Не требует
+                                    <td  align="left">
+                                         <mat-slide-toggle [formControl]="form.controls.isAccepted">Не требует
                                             подтверждения</mat-slide-toggle>
+                                    </td>
+                                </tr>
+                                <tr>
+                     
+                                    <td  align="left">
+                                        <mat-form-field>
+                                            <mat-label>Источник*</mat-label>
+                                            <mat-select [formControl]="form.controls.source">
+                                                <mat-option value="subscription">подписка</mat-option>
+                                                <mat-option value="site">сайт фонда</mat-option>
+                                                <mat-option value="vk">вконтакте</mat-option>
+                                                <mat-option value="telegram">телеграм</mat-option>
+                                                <mat-option value="insta">инста</mat-option>
+                                                <mat-option value="oyher">другое</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
                                     </td>
                                 </tr>
                             </table>
@@ -398,6 +414,7 @@
 
                             </table>
 
+
                             <mat-form-field appearance="fill" style="padding-right: 8px;">
                                 <mat-label>Комментарий</mat-label>
                                 <input type="text" matInput [formControl]="form.controls['comment']" />
@@ -425,8 +442,8 @@
 
                         </td>
                         <td width="10%">
-                            <button mat-fab matTooltip="Скопировать адреса" color="primary" [disabled]="lineItems.length == 0"
-                                (click)="getAddresses()">
+                            <button mat-fab matTooltip="Скопировать адреса" color="primary"
+                                [disabled]="lineItems.length == 0" (click)="getAddresses()">
                                 <mat-icon>file_copy</mat-icon>
                             </button>
                         </td>
