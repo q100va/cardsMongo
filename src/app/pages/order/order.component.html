@@ -33,24 +33,24 @@
                         <div fxLayout="column" fxLayoutGap="10px">
                             <table class="example-full-width" cellspacing="0">
                                 <tr>
-                                    <td rowspan="2" >
+                                    <td rowspan="2">
 
                                         <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
                                         <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
                                     </td>
-                                    <td  align="left">
-                                         <mat-slide-toggle [formControl]="form.controls.isAccepted">Не требует
+                                    <td align="left">
+                                        <mat-slide-toggle [formControl]="form.controls.isAccepted">Не требует
                                             подтверждения</mat-slide-toggle>
                                     </td>
                                 </tr>
                                 <tr>
-                     
-                                    <td  align="left">
+
+                                    <td align="left">
                                         <mat-form-field>
                                             <mat-label>Источник*</mat-label>
                                             <mat-select [formControl]="form.controls.source">
-                                                <mat-option value="subscription">подписка</mat-option>
+                                                <mat-option value="subscription">постоянные</mat-option>
                                                 <mat-option value="site">сайт фонда</mat-option>
                                                 <mat-option value="vk">вконтакте</mat-option>
                                                 <mat-option value="telegram">телеграм</mat-option>
@@ -456,29 +456,30 @@
                         <mat-spinner mode="indeterminate" *ngIf="spinner" style="margin:40px auto ;"></mat-spinner>
                     </div>
                 </div>
+           
+                    <mat-card-content *ngFor="let lineItem of lineItems">
 
-                <mat-card-content *ngFor="let lineItem of lineItems">
+                        <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                        <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}
+                        </p>
+                        <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                            {{lineItem.adminComment}}</p>
 
-                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-                    <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
-                    <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
-                        {{lineItem.adminComment}}</p>
-
-                    <div *ngFor="let celebrator of lineItem.celebrators">
-                        <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
-
-                        {{celebrator.lastName}}
-                        {{celebrator.firstName}}
-                        {{celebrator.patronymic}}
-                        {{celebrator.fullDayBirthday}}
-                        {{celebrator.comment1}}
-                        {{celebrator.linkPhoto}}
-                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
-                        </span>
-                    </div>
-                    <br />
-                </mat-card-content>
-
+                        <div *ngFor="let celebrator of lineItem.celebrators" >
+                      
+                            <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
+                            {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
+                            {{celebrator.lastName}}
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
+                            {{celebrator.fullDayBirthday}}
+                            {{celebrator.comment1}}
+                            {{celebrator.linkPhoto}}
+                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                            </span>
+                        </div>
+                        <br />
+                    </mat-card-content>
 
 
             </div>

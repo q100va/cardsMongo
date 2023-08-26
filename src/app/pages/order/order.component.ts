@@ -53,6 +53,7 @@ export class OrderComponent implements OnInit {
   showMaxOneHouse: Boolean = true;
   addressFilter: string = "any";
   genderFilter: string = "any";
+  i = 0;
   
   regions = [];
   nursingHomes = [];
@@ -285,6 +286,7 @@ export class OrderComponent implements OnInit {
     this.contactReminder = "";
     this.lineItems = [];
     this.canSave = false;
+    this.i = 0;
 
     if (!this.form.controls.email.value && !this.form.controls.contact.value) {
       this.resultDialog.open(ConfirmationDialogComponent, {
@@ -508,6 +510,11 @@ export class OrderComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  initialize() {
+    this.i++;
+    console.log("item" + this.i);
   }
 
   getAddresses() {
