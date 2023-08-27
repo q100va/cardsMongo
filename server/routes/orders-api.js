@@ -1429,7 +1429,8 @@ async function createOrder(newOrder, prohibitedId) {
     result: resultLineItems,
     success: true,
     order_id: order_id,
-    contact: newOrder.email ? newOrder.email : newOrder.contact
+    contact: newOrder.email ? newOrder.email : newOrder.contact,
+    clientFirstName:  newOrder.clientFirstName
   }
 }
 
