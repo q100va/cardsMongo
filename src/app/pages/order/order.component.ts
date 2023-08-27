@@ -271,6 +271,8 @@ export class OrderComponent implements OnInit {
     this.useProportion = false;
     this.showMaxOneHouse = true;
     this.showMaxNoAddress = true;
+    this.showIndexes = false;
+    this.showInstruction = false;
   }
   /*   beforeCreateOrder() {
     console.log("this.spinner");
