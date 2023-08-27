@@ -14,7 +14,7 @@ import { OrderService } from "src/app/services/order.service";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { LineItem } from "src/app/shared/interfaces/line-item.interface";
 import { Order } from "src/app/shared/interfaces/order.interface";
-import { Clipboard } from '@angular/cdk/clipboard';
+import { Clipboard } from "@angular/cdk/clipboard";
 
 //import { ConfirmationService } from "primeng/api";
 //import { MessageService } from "primeng/api";
@@ -29,7 +29,7 @@ export class OrderComponent implements OnInit {
   userName: string;
   form: FormGroup;
   holiday: string = "Дни рождения сентября 2023";
-  lineItems: Array<LineItem> =[];
+  lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "phoneNumber",
     "whatsApp",
@@ -53,15 +53,13 @@ export class OrderComponent implements OnInit {
   showMaxOneHouse: Boolean = true;
   addressFilter: string = "any";
   genderFilter: string = "any";
-  i = 0;
-  
+  showIndexes: false;
   regions = [];
   nursingHomes = [];
   // activeRegions = [];
   activeNursingHomes = [];
   actualYear = new Date().getFullYear();
   addresses: HTMLElement;
-
 
   constructor(
     private router: Router,
@@ -71,7 +69,7 @@ export class OrderComponent implements OnInit {
     private resultDialog: MatDialog,
     private cookieService: CookieService,
     private clipboard: Clipboard,
-    private fb: FormBuilder 
+    private fb: FormBuilder
   ) {
     this.userName = this.cookieService.get("session_user");
   }
@@ -111,7 +109,7 @@ export class OrderComponent implements OnInit {
         Validators.compose([Validators.required, Validators.min(1)]),
       ],
       isAccepted: [false],
-      source:  [null, Validators.compose([Validators.required])],
+      source: [null, Validators.compose([Validators.required])],
       comment: [null],
       femaleAmount: [null, [Validators.min(1)]],
       maleAmount: [null, [Validators.min(1)]],
@@ -264,7 +262,7 @@ export class OrderComponent implements OnInit {
     this.form.reset();
     this.addressFilter = "any";
     this.genderFilter = "any";
-   
+
     this.clicked = false;
     this.useProportion = false;
     this.showMaxOneHouse = true;
@@ -286,7 +284,6 @@ export class OrderComponent implements OnInit {
     this.contactReminder = "";
     this.lineItems = [];
     this.canSave = false;
-    this.i = 0;
 
     if (!this.form.controls.email.value && !this.form.controls.contact.value) {
       this.resultDialog.open(ConfirmationDialogComponent, {
@@ -497,10 +494,19 @@ export class OrderComponent implements OnInit {
           //alert(res.msg);
           //console.log(res);
           this.lineItems = result;
+          let i = 0;
+         for (let lineItem of this.lineItems) {
+            for (let celebrator of lineItem.celebrators) {
+              celebrator.index = i + 1;
+              i++;
+            }
+           
+          }
+
           this.canSave = true;
           this.successMessage =
             "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
-          this.contactReminder = " Эти адреса для " + res["data"]["contact"];
+          this.contactReminder = " для " + res["data"]["contact"];
         }
       },
       (err) => {
@@ -512,25 +518,21 @@ export class OrderComponent implements OnInit {
     );
   }
 
-  initialize() {
-    this.i++;
-    console.log("item" + this.i);
-  }
-
   getAddresses() {
     let addresses = "";
     console.log(this.lineItems);
     for (let lineItem of this.lineItems) {
       addresses =
-        addresses + lineItem.address + " " + "\n" + 
-        (lineItem.infoComment ? lineItem.infoComment : "") + 
-        (lineItem.infoComment ? "\n" : "") +
-        (lineItem.adminComment ? lineItem.adminComment : "") +
-        (lineItem.adminComment ? "\n" : "");
+        addresses +
+        lineItem.address +
+        " " +
+        "\n" +
+        (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +       
+        (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
 
       for (let celebrator of lineItem.celebrators) {
         addresses =
-          addresses +
+          addresses + (this.showIndexes ? celebrator.index +  ". ": "") +
           celebrator.lastName +
           " " +
           celebrator.firstName +

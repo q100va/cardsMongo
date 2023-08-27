@@ -426,10 +426,10 @@
                 </form>
             </div>
             <div class="right" style="padding-left: 30px; padding-right: 30px;">
-                <table>
+                <table class="example-full-width" cellspacing="0">
                     <tr>
                         <td>
-                            <mat-card-title> Список поздравляемых </mat-card-title>
+                            <mat-card-title> Список поздравляемых {{contactReminder}}</mat-card-title>
                             <!--<mat-card-actions>
                     <button mat-raised-button (click)="clear()" color="primary"
                         [disabled]="!form.valid">Очистить</button>
@@ -438,7 +438,7 @@
                 </mat-card-actions> -->
                             <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
                             <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
-                            <p style="color: rgb(175, 19, 175); font-weight: bold; "> {{contactReminder}}</p>
+
 
                         </td>
                         <td width="10%">
@@ -448,6 +448,14 @@
                             </button>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            <span *ngIf="lineItems.length > 0">
+                                <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
+                            </span>
+                        </td>
+                    </tr>
+
                 </table>
 
                 <br /><br />
@@ -456,30 +464,31 @@
                         <mat-spinner mode="indeterminate" *ngIf="spinner" style="margin:40px auto ;"></mat-spinner>
                     </div>
                 </div>
-           
-                    <mat-card-content *ngFor="let lineItem of lineItems">
 
-                        <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-                        <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}
-                        </p>
-                        <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
-                            {{lineItem.adminComment}}</p>
+                <mat-card-content *ngFor="let lineItem of lineItems">
 
-                        <div *ngFor="let celebrator of lineItem.celebrators" >
-                      
-                            <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
+                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                    <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}
+                    </p>
+                    <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                        {{lineItem.adminComment}}</p>
+
+                    <div *ngFor="let celebrator of lineItem.celebrators">
+
+                        <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                             {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
-                            {{celebrator.lastName}}
-                            {{celebrator.firstName}}
-                            {{celebrator.patronymic}}
-                            {{celebrator.fullDayBirthday}}
-                            {{celebrator.comment1}}
-                            {{celebrator.linkPhoto}}
-                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
-                            </span>
-                        </div>
-                        <br />
-                    </mat-card-content>
+                        <span *ngIf="showIndexes">{{celebrator.index}}. </span>
+                        {{celebrator.lastName}}
+                        {{celebrator.firstName}}
+                        {{celebrator.patronymic}}
+                        {{celebrator.fullDayBirthday}}
+                        {{celebrator.comment1}}
+                        {{celebrator.linkPhoto}}
+                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                        </span>
+                    </div>
+                    <br />
+                </mat-card-content>
 
 
             </div>

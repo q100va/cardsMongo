@@ -29,6 +29,7 @@ export interface Celebrator {
     gender:string;   
     plusAmount: number;
     celebrator_id?: string; 
-    holyday: string;    
+    holyday: string;
+    index?: number;    
   }
   
