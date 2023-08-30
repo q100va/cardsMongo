@@ -1581,9 +1581,9 @@ async function createOrder(newOrder, prohibitedId) {
 
       //if(newOrder.filter.date1 && newOrder.filter.date2) filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: newOrder.filter.date1 };
 
-      seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId);
+      seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, newOrder.filter);
     } else {
-      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId);
+      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, newOrder.filter );
     }
   }
 
@@ -1626,7 +1626,7 @@ async function createOrder(newOrder, prohibitedId) {
 
 // create a list of seniors for the order with special dates
 
-async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId) {
+async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId, orderFilter) {
   const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
   let day1, day2, fixed;
 
@@ -1718,7 +1718,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     //console.log(proportion[category]);
 
     if (proportion[category]) {
-      data = await collectSeniors(data);
+      data = await collectSeniors(data, orderFilter);
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -1733,7 +1733,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
 
 // create a list of seniors for the order
 
-async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
+async function fillOrder(proportion, period, order_id, filter, prohibitedId, orderFilter) {
   const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
 
   let data = {
@@ -1767,7 +1767,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
       data.date2 = period.date2;
       data.maxPlus = period.maxPlus;
 
-      data = await collectSeniors(data);
+      data = await collectSeniors(data, orderFilter);
 
       if (data.counter < proportion[category]) {
         //if (orderFilter.date2 > orderFilter.date1 + 5) { }
@@ -1786,7 +1786,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
             data.date2 = period.date2 + 5;
           }
         }
-        data = await collectSeniors(data);
+        data = await collectSeniors(data, orderFilter);
       }
 
       if (data.counter < proportion[category]) {
@@ -1802,10 +1802,10 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId) {
 
 //set restrictions for searching
 
-async function collectSeniors(data) {
+async function collectSeniors(data, orderFilter) {
   let searchOrders = {};
 
-  if (data.filter.genderFilter != 'proportion') {
+  if (orderFilter.genderFilter != 'proportion') {
 
     if (data.filter.addressFilter != 'onlySpecial') {
       if (data.filter.region) {
@@ -1842,8 +1842,8 @@ async function collectSeniors(data) {
     }
   }
 
-  if (data.filter.genderFilter == 'proportion') {
-    if (data.filter.addressFilter != 'onlySpecial') {
+  if (orderFilter.genderFilter == 'proportion') {
+    if (orderFilter.addressFilter != 'onlySpecial') {
       if (data.filter.region) {
         searchOrders = {
           oldWomen: ["oldWomen", "yangWomen", "specialWomen",],
@@ -1876,8 +1876,8 @@ async function collectSeniors(data) {
   }
 
 
-  //console.log("data.category");
-  //console.log(data.category);
+  console.log("searchOrders");
+  console.log(searchOrders);
 
   for (let kind of searchOrders[data.category]) {
     let barrier = data.proportion[data.category] - data.counter;
