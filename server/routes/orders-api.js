@@ -173,10 +173,11 @@ router.get("/find/:userName", async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
+      //  let correctedOrders = correctDate(orders);
         let result = {
           orders: orders,
           length: length
-        }
+        };
         const readUserResponse = new BaseResponse(
           200,
           "Query successful",
@@ -226,14 +227,19 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
+        
+       // let correctedOrders = correctDate(orders);
         let result = {
           orders: orders,
           length: length
-        }
+        };
         console.log('pageSize');
         console.log(pageSize)
         console.log('result');
         console.log(result.length);
+        console.log("result.ORDERS");
+        console.log(result.orders);
+
         const readUserResponse = new BaseResponse(
           200,
           "Query successful",
@@ -317,6 +323,7 @@ router.patch("/confirm/:id", async (req, res) => {
         { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
+    //let correctedOrders = correctDate(updatedOrders);
     let result = {
       orders: updatedOrders,
       length: length
@@ -353,6 +360,7 @@ router.patch("/unconfirmed/:id", async (req, res) => {
         { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
+   // let correctedOrders = correctDate(updatedOrders);
     let result = {
       orders: updatedOrders,
       length: length
@@ -410,6 +418,7 @@ router.patch("/change-status/:id", async (req, res) => {
         { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
+    //let correctedOrders = correctDate(updatedOrders);
     let result = {
       orders: updatedOrders,
       length: length
@@ -568,6 +577,7 @@ router.patch("/restore/:id", async (req, res) => {
         { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
+    //let correctedOrders = correctDate(updatedOrders);
     let result = {
       orders: updatedOrders,
       length: length
@@ -699,6 +709,15 @@ async function restorePluses(updatedOrder) {
   }
 }
 
+/*
+function correctDate(updatedOrders) {
+   for (let order of updatedOrders) {
+    //console.log("HELLO");
+    order.dateOfOrder = new Date(order.dateOfOrder);
+    console.log(typeof order.dateOfOrder);
+  }
+  return updatedOrders; 
+}*/
 
 /**
  * API to find regions (OK)
@@ -1174,12 +1193,17 @@ router.post("/birthday/:amount", async (req, res) => {
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
       orderDate: req.body.orderDate,
+      dateOfOrder: req.body.dateOfOrder,
       temporaryLineItems: [],
       lineItems: [],
       filter: req.body.filter,
       //filter: { noSpecial: true },
       isCompleted: false
     };
+
+    console.log("order.dateOfOrder");
+    console.log(req.body.dateOfOrder);
+    console.log(newOrder.dateOfOrder);
 
     finalResult = await createOrder(newOrder, req.body.prohibitedId);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -1410,10 +1434,14 @@ async function createOrder(newOrder, prohibitedId) {
     isAccepted: newOrder.isAccepted,
     comment: newOrder.comment,
     orderDate: newOrder.orderDate,
+    dateOfOrder: newOrder.dateOfOrder,
     lineItems: [],
     filter: newOrder.filter,
 
   };
+  console.log("emptyOrder.dateOfOrder");
+  console.log(emptyOrder.dateOfOrder);
+
   let order = await Order.create(emptyOrder);
   let order_id = order._id.toString();
 
@@ -3943,16 +3971,18 @@ router.patch("/correct-orders-dates", async (req, res) => {
     let orders = await Order.find(
       {
         userName:
-          { $in: ['okskust'] }, dateOfOrder: null
+          { $ne: 'okskust' }, dateOfOrder: { $gt: new Date('2023-08-29') }
       });
 
     let milliseconds = 1;
 
     for (let order of orders) {
       console.log(order._id);
-      let partOfDate = order.orderDate.split(".") ? order.orderDate.split(".") : order.orderDate.split("/");
-
+      let partOfDate = order.orderDate.split(".");
+      console.log('partOfDate');
+      console.log(partOfDate);
       let newDate = new Date(partOfDate[2] + "-" + partOfDate[1] + "-" + partOfDate[0]);
+
       newDate.setMilliseconds(newDate.getMilliseconds() + milliseconds);
       await Order.updateOne({ _id: order._id }, { $set: { dateOfOrder: newDate } });
       milliseconds++;

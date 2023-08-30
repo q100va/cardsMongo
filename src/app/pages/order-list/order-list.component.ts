@@ -43,7 +43,7 @@ export class OrderListComponent implements AfterViewInit {
     private resultDialog: MatDialog
   ) {
     this.userName = this.cookieService.get("session_user");
-    //this.userName = "dripman";
+   // this.userName = "dripman";
   }
  @ViewChild("paginator") paginator: MatPaginator;
   displayedColumns = [
@@ -61,13 +61,24 @@ export class OrderListComponent implements AfterViewInit {
   ];
   dataSource: MatTableDataSource<Order>;
 
+  
+  correctDate(date: string) {
+      let newDate = new Date(date);
+      let localDate = newDate.toLocaleDateString();
+      console.log("localDate");
+      console.log(localDate);
+      return localDate;
+  }
+
   ngAfterViewInit() {
     this.orderService.findNotConfirmedOrdersByUserId(this.userName, this.pageSize, this.currentPage).subscribe(
       (res) => {
+       // console.log(res);
+       //console.log("res");
         this.orders = res["data"]["orders"];
         this.length = res["data"]["length"];
         //this.orders.reverse();
-        //console.log(this.orders);
+        console.log(this.orders);
         this.dataSource = new MatTableDataSource(this.orders);
         //console.log("this.dataSource");
         //console.log(this.dataSource);
@@ -97,9 +108,14 @@ export class OrderListComponent implements AfterViewInit {
         (res) => {
           this.orders = res["data"]["orders"];
           this.length = res["data"]["length"];
+         
           //this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
           //this.dataSource.paginator = this.paginator;
+
+         // console.log("this.orders[this.length-1].dateOfOrder");
+         // console.log(typeof this.orders[0].dateOfOrder);
+          //console.log(this.orders[0].dateOfOrder.toDateString());
         },
         (err) => {
           console.log(err);

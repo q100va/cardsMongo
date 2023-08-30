@@ -23,6 +23,7 @@ export interface Order {
   isAccepted: boolean;
   comment: string;
   orderDate: string;
+  dateOfOrder?: Date;
   filter?: {
     addressFilter: string,
     genderFilter: string,

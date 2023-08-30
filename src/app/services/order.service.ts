@@ -153,6 +153,7 @@ export class OrderService {
       isAccepted: newOrder.isAccepted,
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId
     });

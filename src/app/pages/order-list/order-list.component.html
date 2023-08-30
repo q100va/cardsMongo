@@ -32,7 +32,8 @@
 
                 <ng-container matColumnDef="orderDate">
                     <mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Дата </mat-header-cell>
-                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.orderDate}} </mat-cell>
+                   <!--  <mat-cell *matCellDef="let dataSource"> {{ dataSource.orderDate}} </mat-cell> -->
+                   <mat-cell *matCellDef="let dataSource"> {{ correctDate(dataSource.dateOfOrder) }} </mat-cell> 
                 </ng-container>
 
                 <ng-container matColumnDef="amount">

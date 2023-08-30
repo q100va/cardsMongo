@@ -466,6 +466,7 @@ export class OrderComponent implements OnInit {
       source: this.form.controls.source.value,
       comment: this.form.controls.comment.value,
       orderDate: this.orderDate,
+      dateOfOrder: new Date (),
       filter: {
         addressFilter: this.addressFilter,
         genderFilter: this.genderFilter,
@@ -485,7 +486,8 @@ export class OrderComponent implements OnInit {
           this.form.controls.onlyAnniversariesAndOldest.value,
       },
     };
-
+    //console.log("newOrder");
+    console.log(newOrder.dateOfOrder);
     //console.log("newOrder");
     //console.log(newOrder);
 
