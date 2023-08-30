@@ -24,12 +24,16 @@ export class OrderService {
     return this.http.get("/api/orders/all/findAllOrdersNotAccepted/");
   }
 
-  findAllOrdersByUserId(userName): Observable<any> {
-    return this.http.get("/api/orders/find/" + userName);
+  findAllOrdersByUserId(userName: string, pageSize:number, currentPage: number): Observable<any> {
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    console.log('queryParams');
+    console.log(queryParams);
+    return this.http.get("/api/orders/find/" + userName + queryParams);
   }
 
-  findNotConfirmedOrdersByUserId(userName): Observable<any> {
-    return this.http.get("/api/orders/findNotConfirmed/" + userName);
+  findNotConfirmedOrdersByUserId(userName: string, pageSize:number, currentPage: number): Observable<any> {
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    return this.http.get("/api/orders/findNotConfirmed/" + userName + queryParams);
   }
 
   findOrderById(_id: string): Observable<any> {
@@ -41,9 +45,14 @@ export class OrderService {
     _id: string,
     isShowAll: boolean,
     userName: string,
-    newStatus: string
+    newStatus: string,
+    pageSize: number, 
+    currentPage: number, 
+
   ): Observable<any> {
-    return this.http.patch("/api/orders/change-status/" + _id, {
+    
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    return this.http.patch("/api/orders/change-status/" + _id + queryParams, {
       isShowAll: isShowAll,
       userName: userName,
       newStatus: newStatus
@@ -59,15 +68,53 @@ export class OrderService {
   confirmOrder(
     _id: string,
     isShowAll: boolean,
-    userName: string
+    userName: string,
+    pageSize: number, 
+    currentPage: number, 
   ): Observable<any> {
-    const result = this.http.patch("/api/orders/confirm/" + _id, {
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    const result = this.http.patch("/api/orders/confirm/" + _id + queryParams, {
       isShowAll: isShowAll,
       userName: userName,
     });
     console.log(result);
     return result;
   }
+
+
+  cancelConfirmOrder(
+    _id: string,
+    isShowAll: boolean,
+    userName: string,
+    pageSize: number, 
+    currentPage: number, 
+  ): Observable<any> {
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    const result = this.http.patch("/api/orders/unconfirmed/" + _id + queryParams, {
+      isShowAll: isShowAll,
+      userName: userName,
+    });
+    console.log(result);
+    return result;
+  }
+
+  restoreOrder(
+    _id: string,
+    isShowAll: boolean,
+    userName: string,
+    pageSize: number, 
+    currentPage: number, 
+  ): Observable<any> {
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    const result = this.http.patch("/api/orders/restore/" + _id + queryParams, {
+      isShowAll: isShowAll,
+      userName: userName,
+    });
+    console.log(result);
+    return result;
+  }
+
+  //////////////////////////////////////////////////////////////////////
 
   updateList(celebrator_id): Observable<any> {
     return this.http.patch("/api/lists/check/" + celebrator_id, { amount: 1 });

@@ -147,4 +147,9 @@ export class ListService {
     return this.http.patch("/api/lists/uncertain", {});
   }
 
+  correctOrdersDates(): Observable<any> {
+    return this.http.patch("/api/orders/correct-orders-dates", {});
+  }
+
+
 }

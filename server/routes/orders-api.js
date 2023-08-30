@@ -155,11 +155,14 @@ router.get("/:id", async (req, res) => {
 });
 
 /**
- * API to find orders by userName (OK)
+ * API to find all orders by userName (OK)
  */
 
 router.get("/find/:userName", async (req, res) => {
   try {
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const length = await Order.countDocuments({ userName: req.params.userName, isDisabled: false });
     Order.find({ userName: req.params.userName, isDisabled: false }, function (err, orders) {
       if (err) {
         console.log(err);
@@ -170,15 +173,20 @@ router.get("/find/:userName", async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
+        let result = {
+          orders: orders,
+          length: length
+        }
         const readUserResponse = new BaseResponse(
           200,
           "Query successful",
-          orders
+          result
         );
         //console.log(orders);
         res.json(readUserResponse.toObject());
       }
-    });
+      // }).sort({dateOfOrder: -1}).skip(10).limit(20);
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
   } catch (e) {
     console.log(e);
     const readUserCatchErrorResponse = new BaseResponse(
@@ -196,12 +204,21 @@ router.get("/find/:userName", async (req, res) => {
 
 router.get("/findNotConfirmed/:userName", async (req, res) => {
   try {
+    console.log('req.query');
+    console.log(req.query)
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
         console.log("req.params.userName");
         console.log(req.params.userName); */
+    const length = await Order.countDocuments(
+      { userName: req.params.userName, isAccepted: false, isDisabled: false, isOverdue: false, isReturned: false }
+    )
+
     Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false, isOverdue: false, isReturned: false }, function (err, orders) {
       if (err) {
         console.log(err);
+
         const readUserMongodbErrorResponse = new BaseResponse(
           500,
           "Internal server error",
@@ -209,16 +226,24 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
+        let result = {
+          orders: orders,
+          length: length
+        }
+        console.log('pageSize');
+        console.log(pageSize)
+        console.log('result');
+        console.log(result.length);
         const readUserResponse = new BaseResponse(
           200,
           "Query successful",
-          orders
+          result
         );
         // console.log("findNotConfirmed");
         //console.log(orders);
         res.json(readUserResponse.toObject());
       }
-    });
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });;
   } catch (e) {
     console.log(e);
     const readUserCatchErrorResponse = new BaseResponse(
@@ -278,17 +303,26 @@ router.patch("/confirm/:id", async (req, res) => {
   try {
     const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isAccepted: true } }, { upsert: false });
     console.log(updatedOrder);
-
     console.log(req.body.isShowAll);
-
     let updatedOrders;
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const length = await Order.countDocuments({});
     if (req.body.isShowAll) {
-      updatedOrders = await Order.find({ userName: req.body.userName, isDisabled: false });
+      updatedOrders = await Order.find(
+        { userName: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      updatedOrders = await Order.find({ isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false });
+      updatedOrders = await Order.find(
+        { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
+    let result = {
+      orders: updatedOrders,
+      length: length
+    };
 
-    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", updatedOrders);
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", result);
     res.json(confirmOrderResponse.toObject());
   } catch (e) {
     console.log(e);
@@ -301,42 +335,48 @@ router.patch("/confirm/:id", async (req, res) => {
   }
 });
 
+router.patch("/unconfirmed/:id", async (req, res) => {
+  try {
+    const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isAccepted: false } }, { upsert: false });
+    console.log(updatedOrder);
+    console.log(req.body.isShowAll);
+    let updatedOrders;
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const length = await Order.countDocuments({});
+    if (req.body.isShowAll) {
+      updatedOrders = await Order.find(
+        { userName: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+    } else {
+      updatedOrders = await Order.find(
+        { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+    }
+    let result = {
+      orders: updatedOrders,
+      length: length
+    };
 
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", result);
+    res.json(confirmOrderResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    const confirmOrderCatchErrorResponse = new BaseResponse(
+      "500",
+      "MongoDB server error",
+      err
+    );
+    res.status(500).send(confirmOrderCatchErrorResponse.toObject());
+  }
+});
 
-/**
- * API to delete order
- */
-/* router.patch("/delete/:id", async (req, res) => {
- try {
-   const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isDisabled: true } }, { upsert: false });
-   console.log(updatedOrder);
-   const deletedOrder = await Order.findOne({ _id: req.params.id });
-   await deletePluses(deletedOrder);
-   console.log(req.body.isShowAll);
-   let updatedOrders;
-   if (req.body.isShowAll) {
-     updatedOrders = await Order.find({ userName: req.body.userName, isDisabled: false });
-   } else {
-     updatedOrders = await Order.find({ isAccepted: false, userName: req.body.userName, isDisabled: false });
-   }
-
-   const confirmOrderResponse = new BaseResponse("200", "Order confirmed", updatedOrders);
-   res.json(confirmOrderResponse.toObject());
- } catch (e) {
-   console.log(e);
-   const confirmOrderCatchErrorResponse = new BaseResponse(
-     "500",
-     "MongoDB server error",
-     e
-   );
-   res.status(500).send(confirmOrderCatchErrorResponse.toObject());
- }
-}); */
-
+//API to change status of order
 
 router.patch("/change-status/:id", async (req, res) => {
   try {
-    //  let updatedOrder;
+    //  let updatedOrder;    
+
     if (req.body.newStatus == "isOverdue") {
       await Order.updateOne({ _id: req.params.id }, { $set: { isOverdue: true } }, { upsert: false });
     }
@@ -349,16 +389,32 @@ router.patch("/change-status/:id", async (req, res) => {
 
     //console.log(updatedOrder);
     const updatedOrder = await Order.findOne({ _id: req.params.id });
-    await deletePluses(updatedOrder);
-    //console.log(req.body.isShowAll);
-    let updatedOrders;
-    if (req.body.isShowAll) {
-      updatedOrders = await Order.find({ userName: req.body.userName, isDisabled: false });
+    if ((req.body.newStatus == "isDisabled") && (updatedOrder.isOverdue || updatedOrder.isReturned)) {
+      console.log("Pluses were already deleted");
     } else {
-      updatedOrders = await Order.find({ isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false });
+      await deletePluses(updatedOrder);
     }
 
-    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", updatedOrders);
+    //console.log(req.body.isShowAll);
+    let updatedOrders;
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const length = await Order.countDocuments({});
+    if (req.body.isShowAll) {
+
+      updatedOrders = await Order.find(
+        { userName: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+    } else {
+      updatedOrders = await Order.find(
+        { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+    }
+    let result = {
+      orders: updatedOrders,
+      length: length
+    };
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", result);
     res.json(confirmOrderResponse.toObject());
   } catch (e) {
     console.log(e);
@@ -484,60 +540,166 @@ async function deletePluses(deletedOrder) {
   }
 }
 
+// API to restore order
 
-
-/**
- * API to delete
- */
-/* router.delete("/:id", async (req, res) => {
+router.patch("/restore/:id", async (req, res) => {
   try {
-    Order.findOne({ _id: req.params.id }, function (err, order) {
-      if (err) {
-        console.log(err);
-        const deleteHouseMongoErrorResponse = new BaseResponse(
-          "500",
-          "MongoDB Server Error",
-          err
-        );
-        res.status(500).send(deleteHouseMongoErrorResponse.toObject());
-      } else {
-        console.log(order);
+    await Order.updateOne({ _id: req.params.id }, {
+      $set: { isOverdue: false, isReturned: false, isAccepted: false }
+    }, { upsert: false });
 
-        order.set({
-          isDisabled: true,
-        });
-        order.save(function (err, savedHouse) {
-          if (err) {
-            console.log(err);
-            const savedHouseMongodbErrorResponse = BaseResponse(
-              "500",
-              "MongoDB server error",
-              err
-            );
-            res.status(500).send(savedHouseMongodbErrorResponse.toObject());
-          } else {
-            console.log(savedHouse);
-            const deleteHouseResponse = new BaseResponse(
-              "200",
-              "Order deleted",
-              savedHouse
-            );
-            res.json(deleteHouseResponse.toObject());
-          }
-        });
-      }
-    });
+    //console.log(updatedOrder);
+    const updatedOrder = await Order.findOne({ _id: req.params.id });
+
+    await restorePluses(updatedOrder);
+
+    //console.log(req.body.isShowAll);
+    let updatedOrders;
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const length = await Order.countDocuments({});
+    if (req.body.isShowAll) {
+
+      updatedOrders = await Order.find(
+        { userName: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+    } else {
+      updatedOrders = await Order.find(
+        { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+    }
+    let result = {
+      orders: updatedOrders,
+      length: length
+    };
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", result);
+    res.json(confirmOrderResponse.toObject());
   } catch (e) {
     console.log(e);
-    const deleteHouseCatchErrorResponse = new BaseResponse(
+    const confirmOrderCatchErrorResponse = new BaseResponse(
       "500",
       "MongoDB server error",
-      err
+      e
     );
-    res.status(500).send(deleteHouseCatchErrorResponse.toObject());
+    res.status(500).send(confirmOrderCatchErrorResponse.toObject());
   }
 });
- */
+
+async function restorePluses(updatedOrder) {
+  if (updatedOrder.holiday == "Дни рождения сентября 2023") {
+
+
+    //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
+    const month = await Month.findOne({ isActive: true });
+    const today = new Date();
+    const inTwoWeeks = new Date();
+    let period, activePeriod, celebrator;
+
+    for (let lineItem of updatedOrder.lineItems) {
+      for (let person of lineItem.celebrators) {
+        if (person.monthBirthday == month.number) {
+          await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+        }
+        /* {  celebrator = await List.findOne({ _id: person.celebrator_id });
+           period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
+           activePeriod = await Period.findOne({ isActive: true });
+           if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
+             period.scoredPluses = period.scoredPluses - 1;
+             if (period.scoredPluses < 3) {
+               await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 }, secondTime: false, maxPlus: 3 }, { upsert: false });
+             } else {
+               await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
+             } 
+ 
+             const controlDate = period.secondTime ? 14 : 10;//
+             inTwoWeeks.setDate(today.getDate() + controlDate);
+             console.log("inTwoWeeks");
+             console.log(inTwoWeeks);
+             console.log("period.isActive == false");
+             console.log(period.isActive);
+             console.log("period.date1 < activePeriod.date1");
+             console.log("period.date1");
+             console.log(period.date1);
+             console.log("activePeriod.date1");
+             console.log(activePeriod.date1);
+             console.log("period.scoredPluses < 3");
+             console.log(period.scoredPluses);
+             const periodDate2 = new Date(month.year, month.number, period.date2);
+             console.log(month.year);
+             console.log(month.number);
+             console.log(period.date2);
+             console.log("periodDate2 > inTwoWeeks");
+             console.log(periodDate2);
+             if (period.isActive == false && period.date1 < activePeriod.date1 && period.scoredPluses < 3 && periodDate2 > inTwoWeeks) {
+               await Period.updateOne({ _id: activePeriod._id }, { isActive: false }, { upsert: false });
+               await Period.updateOne({ _id: period._id }, { isActive: true }, { upsert: false });
+             }
+           }
+         }*/
+      }
+    }
+  } else {
+    if (updatedOrder.holiday == "Именины сентября 2023") {
+      for (let lineItem of updatedOrder.lineItems) {
+        for (let person of lineItem.celebrators) {
+          await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+        }
+      }
+    } else {
+      if (updatedOrder.holiday == "День учителя и дошкольного работника 2022") {
+        for (let lineItem of updatedOrder.lineItems) {
+          for (let person of lineItem.celebrators) {
+            await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+          }
+        }
+      }
+      else {
+        if (updatedOrder.holiday == "Пасха 2023") {
+          for (let lineItem of updatedOrder.lineItems) {
+            for (let person of lineItem.celebrators) {
+              await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+            }
+          }
+        } else {
+          if (updatedOrder.holiday == "8 марта 2023") {
+            for (let lineItem of updatedOrder.lineItems) {
+              for (let person of lineItem.celebrators) {
+                await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+              }
+            }
+          } else {
+            if (updatedOrder.holiday == "23 февраля 2023") {
+              for (let lineItem of updatedOrder.lineItems) {
+                for (let person of lineItem.celebrators) {
+                  await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                }
+              }
+            } else {
+              if (updatedOrder.holiday == "9 мая 2023") {
+                for (let lineItem of updatedOrder.lineItems) {
+                  for (let person of lineItem.celebrators) {
+                    await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                  }
+                }
+              }
+              else {
+                if (updatedOrder.holiday == "День семьи 2023") {
+                  for (let lineItem of updatedOrder.lineItems) {
+                    for (let person of lineItem.celebrators) {
+                      await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
 /**
  * API to find regions (OK)
  */
@@ -1209,7 +1371,7 @@ async function createOrder(newOrder, prohibitedId) {
 
     } else {
 
-      specialWomenAmount = Math.ceil(newOrder.filter.femaleAmount/newOrder.amount * newOrder.filter.maxNoAddress);
+      specialWomenAmount = Math.ceil(newOrder.filter.femaleAmount / newOrder.amount * newOrder.filter.maxNoAddress);
       specialMenAmount = newOrder.filter.maxNoAddress - specialWomenAmount;
       oldWomenAmount = Math.round((newOrder.filter.femaleAmount - specialWomenAmount) * 0.5);
       oldMenAmount = Math.round((newOrder.filter.maleAmount - specialMenAmount) * 0.5);
@@ -1362,7 +1524,7 @@ async function createOrder(newOrder, prohibitedId) {
 
     if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: "" };
     if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
-    if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{specialComment: /Юбилей/}, {oldest: true}];
+    if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{ specialComment: /Юбилей/ }, { oldest: true }];
     if (newOrder.filter.region) filter.region = newOrder.filter.region;
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
     if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
@@ -1430,7 +1592,7 @@ async function createOrder(newOrder, prohibitedId) {
     success: true,
     order_id: order_id,
     contact: newOrder.email ? newOrder.email : newOrder.contact,
-    clientFirstName:  newOrder.clientFirstName
+    clientFirstName: newOrder.clientFirstName
   }
 }
 
@@ -3765,6 +3927,53 @@ async function createOrderForFamilyDay(order) {
 ////////////////////////////////////////////////////
 
 function sendMessageToAdmin(text, e) { console.log(text + e); }
+//////////
+
+
+router.patch("/correct-orders-dates", async (req, res) => {
+  try {
+
+    /*     let orders = await Order.find({
+          userName: "okskust", dateOfOrder: { $lt: new Date("2023-10-1"), $gt: new Date("2022-12-31") }
+        }); */
+    // let orders = await Order.find({userName: "ligeyalag", dateOfOrder: null }); 
+    // let orders = await Order.find({userName: "Veronika"}); 
+    //let orders = await Order.find({userName: "Antik"}); "VasilisaFiva""mielolha" Daria793"ekatkacheva"upr_kult89,Blancanieves['KaterinaFrolova', 'Juliksmirnova', 'Djabirma', 'Vertlina', 'Elena77', 'mashap', 'Sashechkaocean', 'LizaVenchik'] ['dripman', 'Marina_Irkutsk', 'Verun', 'Ludikmila', 'royrai']
+
+    let orders = await Order.find(
+      {
+        userName:
+          { $in: ['okskust'] }, dateOfOrder: null
+      });
+
+    let milliseconds = 1;
+
+    for (let order of orders) {
+      console.log(order._id);
+      let partOfDate = order.orderDate.split(".") ? order.orderDate.split(".") : order.orderDate.split("/");
+
+      let newDate = new Date(partOfDate[2] + "-" + partOfDate[1] + "-" + partOfDate[0]);
+      newDate.setMilliseconds(newDate.getMilliseconds() + milliseconds);
+      await Order.updateOne({ _id: order._id }, { $set: { dateOfOrder: newDate } });
+      milliseconds++;
+      console.log('newDate');
+      console.log(newDate);
+
+    }
+    console.log('orders.length');
+    console.log(orders.length);
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", "updated");
+    res.json(confirmOrderResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    const confirmOrderCatchErrorResponse = new BaseResponse(
+      "500",
+      "MongoDB server error",
+      e
+    );
+    res.status(500).send(confirmOrderCatchErrorResponse.toObject());
+  }
+});
 
 
 

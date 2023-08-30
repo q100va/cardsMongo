@@ -147,11 +147,15 @@ export class ListComponent implements OnInit {
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -159,7 +163,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -181,11 +184,15 @@ export class ListComponent implements OnInit {
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -193,7 +200,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -210,16 +216,20 @@ export class ListComponent implements OnInit {
     this.listService.findAllFebruary23Lists().subscribe(
       (res) => {
         this.lists = res["data"];
-      //  this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        //  this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -227,7 +237,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -248,11 +257,15 @@ export class ListComponent implements OnInit {
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -260,7 +273,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -276,17 +288,21 @@ export class ListComponent implements OnInit {
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <3);
+        this.lists = res["data"].filter((item) => item.plusAmount < 3);
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -294,7 +310,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -305,22 +320,26 @@ export class ListComponent implements OnInit {
 
     this.isShowList = true;
     //console.log(this.lists);
-  } 
+  }
 
   showLessPlusNewYearList(event: any) {
     this.listService.findAllNewYearLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <3);
+        this.lists = res["data"].filter((item) => item.plusAmount < 3);
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -328,7 +347,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -339,21 +357,25 @@ export class ListComponent implements OnInit {
 
     this.isShowList = true;
     //console.log(this.lists);
-  } 
+  }
   showLessPlusFebruary23List(event: any) {
     this.listService.findAllFebruary23Lists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <3);
-       // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.lists = res["data"].filter((item) => item.plusAmount < 3);
+        // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -361,7 +383,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -372,22 +393,26 @@ export class ListComponent implements OnInit {
 
     this.isShowList = true;
     //console.log(this.lists);
-  } 
+  }
 
   showLessPlusMarch8List(event: any) {
     this.listService.findAllMarch8Lists().subscribe(
       (res) => {
-        this.lists = res["data"].filter(item => item.plusAmount <3);
-       // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.lists = res["data"].filter((item) => item.plusAmount < 3);
+        // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
-        this.yangWomen = this.lists.filter((item) => item.category == "yangWomen").length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
         this.specialWomen = this.lists.filter(
           (item) => item.category == "specialWomen"
         ).length;
-        this.yangMen = this.lists.filter((item) => item.category == "yangMen").length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
         this.specialMen = this.lists.filter(
           (item) => item.category == "specialMen"
         ).length;
@@ -395,7 +420,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length;
-
       },
       (err) => {
         console.log(err);
@@ -406,8 +430,7 @@ export class ListComponent implements OnInit {
 
     this.isShowList = true;
     //console.log(this.lists);
-  } 
-
+  }
 
   showNameDayList(event: any) {
     this.listService.findAllNameDayLists().subscribe(
@@ -415,7 +438,6 @@ export class ListComponent implements OnInit {
         this.lists = res["data"];
         this.lists.sort((prev, next) => prev.dateNameDay - next.dateNameDay);
         this.listLength = this.lists.length;
-        
       },
       (err) => {
         console.log(err);
@@ -432,9 +454,8 @@ export class ListComponent implements OnInit {
     this.listService.findAllTeacherDayLists().subscribe(
       (res) => {
         this.lists = res["data"];
-        this.lists.sort(( next, prev) =>  next.dateHoliday - prev.dateHoliday);
+        this.lists.sort((next, prev) => next.dateHoliday - prev.dateHoliday);
         this.listLength = this.lists.length;
-        
       },
       (err) => {
         console.log(err);
@@ -448,24 +469,20 @@ export class ListComponent implements OnInit {
   }
 
   populateSeniors() {
+    this.seniorsService.createSeniorsCollection(seniors).subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
 
-        this.seniorsService.createSeniorsCollection(seniors).subscribe(
-          async (res) => {
-            let result = await res["data"];
-            console.log(result);
-
-            alert(`Добавлено ${result.length} записей из ${seniors.length}.` );
-          },
-          (err) => {
-            console.log(err);
-            alert(
-              "Произошла ошибка, обратитесь к администратору! " + err.message
-            );
-            //stop = true;
-          }
-        ); 
+        alert(`Добавлено ${result.length} записей из ${seniors.length}.`);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+        //stop = true;
       }
-
+    );
+  }
 
   /* 
   prepareSeniorsList() {
@@ -499,7 +516,6 @@ export class ListComponent implements OnInit {
         alert("Произошла ошибка, обратитесь к администратору! " + err.message);
       }
     );
-    
   }
 
   showSpecialList(event: any) {
@@ -507,14 +523,15 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         let length = 0;
-        for (let house of this.lists){
-           house.celebrators.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-           length = length + house.celebrators.length;
+        for (let house of this.lists) {
+          house.celebrators.sort(
+            (prev, next) => prev.dateBirthday - next.dateBirthday
+          );
+          length = length + house.celebrators.length;
         }
-       
-       // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+
+        // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = length;
-        
       },
       (err) => {
         console.log(err);
@@ -526,7 +543,6 @@ export class ListComponent implements OnInit {
     this.isShowSpecialList = true;
     //console.log(this.lists);
   }
-
 
   generate9mayList() {
     this.listService.create9mayList().subscribe(
@@ -548,9 +564,11 @@ export class ListComponent implements OnInit {
         this.lists = res["data"];
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         //countries.sort( (a, b) => a.localeCompare(b) )
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.lists.sort((prev, next) =>
+          prev.nursingHome.localeCompare(next.nursingHome)
+        );
         this.listLength = this.lists.length;
-       /*  this.oldMen = this.lists.filter(
+        /*  this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
         ).length;
         this.yang = this.lists.filter((item) => item.category == "yang").length;
@@ -576,10 +594,14 @@ export class ListComponent implements OnInit {
   showLess9mayList(event: any) {
     this.listService.findAll9mayLists().subscribe(
       (res) => {
-       this.lists = res["data"].filter(item => (item.plusAmount < 1)  );/* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
-      //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
+        this.lists = res["data"].filter(
+          (item) => item.plusAmount < 1
+        ); /* && item.secondTime == true) || (item.plusAmount < 1 && item.secondTime == false) */
+        //this.lists = res["data"].filter(item => (item.plusAmount < 1) );
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        this.lists.sort((prev, next) =>
+          prev.nursingHome.localeCompare(next.nursingHome)
+        );
         this.listLength = this.lists.length;
         /* this.oldMen = this.lists.filter(
           (item) => item.category == "oldMen"
@@ -592,7 +614,6 @@ export class ListComponent implements OnInit {
         this.oldWomen = this.lists.filter(
           (item) => item.category == "oldWomen"
         ).length; */
-
       },
       (err) => {
         console.log(err);
@@ -603,15 +624,14 @@ export class ListComponent implements OnInit {
 
     this.isShowList = true;
     //console.log(this.lists);
-  } 
+  }
 
   showFamilyDayList(event: any) {
     this.listService.findAllFamilyDayLists().subscribe(
       (res) => {
         this.lists = res["data"];
-       // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+        // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = this.lists.length;
-        
       },
       (err) => {
         console.log(err);
@@ -621,12 +641,12 @@ export class ListComponent implements OnInit {
     console.log(event);
 
     this.isShowFamilyDayList = true;
-   }
+  }
 
-   showAmountOfVolunteers(event: any) {
+  showAmountOfVolunteers(event: any) {
     this.listService.countAmountOfVolunteers().subscribe(
       (res) => {
-        this.amountOfVolunteers = res["data"];        
+        this.amountOfVolunteers = res["data"];
       },
       (err) => {
         console.log(err);
@@ -636,14 +656,16 @@ export class ListComponent implements OnInit {
     console.log(event);
 
     this.isShowAmountOfVolunteers = true;
-   }
+  }
 
-   showUncertainList(event: any) {
+  showUncertainList(event: any) {
     this.listService.findUncertain().subscribe(
       (res) => {
-        this.listOfUncertain = res["data"];   
-        this.listOfUncertain.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-        this.listOfUncertainLength = this.listOfUncertain.length;     
+        this.listOfUncertain = res["data"];
+        this.listOfUncertain.sort(
+          (prev, next) => prev.dateBirthday - next.dateBirthday
+        );
+        this.listOfUncertainLength = this.listOfUncertain.length;
       },
       (err) => {
         console.log(err);
@@ -653,9 +675,16 @@ export class ListComponent implements OnInit {
     console.log(event);
 
     this.isShowAListOfUncertain = true;
-   }
+  }
 
-   
-
-  
+  correctOrdersDates(event: any) {
+    this.listService.correctOrdersDates().subscribe(
+      (res) => {
+        alert(res.data);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 }

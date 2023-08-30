@@ -16,10 +16,10 @@
             <!--             <button mat-stroked-button color="primary" routerLink="/dataSource/create/new">
                 Новая заявка
             </button> -->
-            <button *ngIf="isShowAll" mat-raised-button color="accent" (click)="changeShow()">
+            <button *ngIf="isShowAll" mat-raised-button color="accent" (click)="changeShow($event)">
                 Скрыть подтвержденные
             </button>
-            <button *ngIf="!isShowAll" mat-raised-button color="primary" (click)="changeShow()">
+            <button *ngIf="!isShowAll" mat-raised-button color="primary" (click)="changeShow($event)">
                 Показать все
             </button>
         </mat-card-subtitle>
@@ -61,12 +61,14 @@
                         dataSource.contact}}</mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="isAccepted">
+                <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef> Статус </mat-header-cell>
 
                     <mat-cell *matCellDef="let dataSource">
-                        <span *ngIf="dataSource.isAccepted && !dataSource.isOverdue && !dataSource.isReturned">подтверждена</span>
-                        <span *ngIf="!dataSource.isAccepted && !dataSource.isOverdue && !dataSource.isReturned">ожидает подтверждения</span>
+                        <span
+                            *ngIf="dataSource.isAccepted && !dataSource.isOverdue && !dataSource.isReturned">подтверждена</span>
+                        <span *ngIf="!dataSource.isAccepted && !dataSource.isOverdue && !dataSource.isReturned">ожидает
+                            подтверждения</span>
                         <span *ngIf="dataSource.isReturned">аннулирована (отказ)</span>
                         <span *ngIf="dataSource.isOverdue">аннулирована (просрочена)</span>
                     </mat-cell>
@@ -76,14 +78,29 @@
 
                 <!-- Confirm Column -->
                 <ng-container matColumnDef="confirm">
-                    <mat-header-cell *matHeaderCellDef> Подтвердить </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef> Подтвердить</mat-header-cell>
                     <mat-cell *matCellDef="let dataSource">
-                        <button mat-icon-button disabled *ngIf="dataSource.isAccepted">
+<!--                         <button mat-icon-button disabled
+                            *ngIf="dataSource.isAccepted || dataSource.isOverdue || dataSource.isReturned">
+                            <mat-icon> check_circle</mat-icon>
+                        </button> -->
+                        <button color="warn" mat-icon-button
+                            *ngIf="!dataSource.isAccepted && !dataSource.isOverdue && !dataSource.isReturned"
+                            (click)="confirmOrder(dataSource._id, isShowAll)">
                             <mat-icon> check_circle</mat-icon>
                         </button>
-                        <button color="warn" mat-icon-button *ngIf="!dataSource.isAccepted"
-                            (click)="confirmOrder(dataSource._id, isShowAll )">
-                            <mat-icon> check_circle</mat-icon>
+
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Unconfirmed Column -->
+                <ng-container matColumnDef="unconfirmed">
+                    <mat-header-cell *matHeaderCellDef> Отменить<br />подтверждение </mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource">
+                        <button class="grey" mat-icon-button
+                            *ngIf="dataSource.isAccepted && !dataSource.isOverdue && !dataSource.isReturned"
+                            (click)="cancelConfirmOrder(dataSource._id, isShowAll)">
+                            <mat-icon> cancel</mat-icon>
                         </button>
                     </mat-cell>
                 </ng-container>
@@ -108,11 +125,13 @@
                         </button>
                         <mat-menu #menu="matMenu" xPosition="before">
                             <button mat-menu-item
+                                *ngIf="!dataSource.isOverdue && !dataSource.isReturned && !dataSource.isAccepted"
                                 (click)="moveToOverdue(dataSource._id, isShowAll, dataSource.isAccepted )">
                                 <mat-icon>timer</mat-icon>
                                 <span>истек срок</span>
                             </button>
-                            <button mat-menu-item (click)="moveToReturned(dataSource._id, isShowAll)">
+                            <button mat-menu-item *ngIf="!dataSource.isOverdue && !dataSource.isReturned"
+                                (click)="moveToReturned(dataSource._id, isShowAll)">
                                 <mat-icon>assignment_returned</mat-icon>
                                 <span>отказ</span>
                             </button>
@@ -125,6 +144,18 @@
                         <!--                         <button mat-icon-button (click)="deleteOrder(dataSource._id, isShowAll)">
                             <mat-icon class = "orange">delete</mat-icon>
                         </button> -->
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Restore Column -->
+                <ng-container matColumnDef="restore">
+                    <mat-header-cell *matHeaderCellDef> Восстановить</mat-header-cell>
+                    <mat-cell *matCellDef="let dataSource">
+                        <button class="grey" mat-icon-button
+                            *ngIf="dataSource.isOverdue || dataSource.isReturned"
+                            (click)="restoreOrder(dataSource._id, isShowAll)">
+                            <mat-icon> restore_from_trash</mat-icon>
+                        </button>
                     </mat-cell>
                 </ng-container>
 
@@ -143,7 +174,8 @@
             >
 </mat-paginator> -->
 
-            <mat-paginator #paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #paginator [pageSizeOptions]="pageSizeOptions" [length]="length" [pageSize]="pageSize"
+                (page)="onChangedPage($event)"></mat-paginator>
         </mat-card-content>
 
     </mat-card>

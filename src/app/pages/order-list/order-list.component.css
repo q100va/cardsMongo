@@ -26,6 +26,10 @@ mat-card-title {
     color: #FBC02D;
   }
 
+  .grey {
+    color: #abaaa9;
+  }
+
 .mat-column-orderDate,
 .mat-column-isAccepted,
 .mat-column-date

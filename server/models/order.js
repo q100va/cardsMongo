@@ -26,6 +26,7 @@ const orderSchema = new Schema(
     lineItems: [lineItemDocument],
     temporaryLineItems: [celebrator],
     orderDate: { type: String, default: new Date().toLocaleDateString() },
+    dateOfOrder: { type: Date, default: new Date() },
     filter: {
       addressFilter: { type: String },
       genderFilter: { type: String },

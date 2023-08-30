@@ -15,6 +15,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { CookieService } from "ngx-cookie-service";
 import { MatPaginator } from "@angular/material/paginator";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+import { PageEvent } from '@angular/material/paginator';
 //import {MatSort, SortDirection} from '@angular/material/sort';
 
 @Component({
@@ -28,6 +29,10 @@ export class OrderListComponent implements AfterViewInit {
   notConfirmedOrders: Order[];
   userName: string;
   isShowAll: boolean = false;
+  length = 0;
+  currentPage = 1;
+  pageSize = 10;
+  pageSizeOptions = [10, 15, 20];
 
   constructor(
     private dialog: MatDialog,
@@ -38,34 +43,38 @@ export class OrderListComponent implements AfterViewInit {
     private resultDialog: MatDialog
   ) {
     this.userName = this.cookieService.get("session_user");
+    //this.userName = "dripman";
   }
-  @ViewChild("paginator") paginator: MatPaginator;
+ @ViewChild("paginator") paginator: MatPaginator;
   displayedColumns = [
     "orderDate",
     "amount",
     "fullName",
     "contact",
-    "isAccepted",
+    "status",
     "confirm",
+    "unconfirmed",
     "edit",
     "delete",
+    "restore",
     "holiday",
   ];
   dataSource: MatTableDataSource<Order>;
 
   ngAfterViewInit() {
-    this.orderService.findNotConfirmedOrdersByUserId(this.userName).subscribe(
+    this.orderService.findNotConfirmedOrdersByUserId(this.userName, this.pageSize, this.currentPage).subscribe(
       (res) => {
-        this.orders = res["data"];
-        this.orders.reverse();
+        this.orders = res["data"]["orders"];
+        this.length = res["data"]["length"];
+        //this.orders.reverse();
         //console.log(this.orders);
         this.dataSource = new MatTableDataSource(this.orders);
         //console.log("this.dataSource");
         //console.log(this.dataSource);
-        //console.log(this.paginator);
-        this.dataSource.paginator = this.paginator;
-        //console.log("this.dataSource.paginator");
-        //console.log(this.dataSource.paginator);
+     
+       // this.dataSource.paginator = this.paginator;
+      //  console.log("this.dataSource.paginator");
+       // console.log(this.dataSource.paginator);
       },
       (err) => {
         alert(err);
@@ -76,28 +85,36 @@ export class OrderListComponent implements AfterViewInit {
 
   //ngOnInit(): void {}
 
-  changeShow() {
-    this.isShowAll = !this.isShowAll;
+  onChangedPage(pageData: PageEvent) {
+
+    this.currentPage = pageData.pageIndex + 1;
+    this.pageSize = pageData.pageSize;
+   
+    //this.postsService.getPosts(this.postsPerPage, this.currentPage);
+   // this.isShowAll = !this.isShowAll;
     if (this.isShowAll) {
-      this.orderService.findAllOrdersByUserId(this.userName).subscribe(
+      this.orderService.findAllOrdersByUserId(this.userName, this.pageSize, this.currentPage).subscribe(
         (res) => {
-          this.orders = res["data"];
-          this.orders.reverse();
+          this.orders = res["data"]["orders"];
+          this.length = res["data"]["length"];
+          //this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
-          this.dataSource.paginator = this.paginator;
+          //this.dataSource.paginator = this.paginator;
         },
         (err) => {
-          alert(err);
+          console.log(err);
+          alert(err.message);
         },
         () => {}
       );
     } else {
-      this.orderService.findNotConfirmedOrdersByUserId(this.userName).subscribe(
+      this.orderService.findNotConfirmedOrdersByUserId(this.userName, this.pageSize, this.currentPage).subscribe(
         (res) => {
-          this.orders = res["data"];
-          this.orders.reverse();
+          this.orders = res["data"]["orders"];
+          this.length = res["data"]["length"];
+         // this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
-          this.dataSource.paginator = this.paginator;
+         // this.dataSource.paginator = this.paginator;
         },
         (err) => {
           alert(err);
@@ -105,15 +122,58 @@ export class OrderListComponent implements AfterViewInit {
         () => {}
       );
     }
+    
+
+  }
+
+  changeShow(pageData: PageEvent) {
+    this.isShowAll = !this.isShowAll;
+      this.paginator.firstPage();
+/*     this.currentPage = 1; */
+    pageData.pageIndex = 0;
+    pageData.pageSize = this.pageSize;
+  
+    this.onChangedPage(pageData);
+
+/*     if (this.isShowAll) {      
+      this.orderService.findAllOrdersByUserId(this.userName, this.pageSize, this.currentPage).subscribe(
+        (res) => {
+          this.orders = res["data"]["orders"];
+          this.length = res["data"]["length"];
+          //this.orders.reverse();
+          this.dataSource = new MatTableDataSource(this.orders);
+          //this.dataSource.paginator = this.paginator;
+        },
+        (err) => {
+          alert(err);
+        },
+        () => {}
+      );
+    } else {
+      this.orderService.findNotConfirmedOrdersByUserId(this.userName, this.pageSize, this.currentPage).subscribe(
+        (res) => {
+          this.orders = res["data"]["orders"];
+          this.length = res["data"]["length"];
+         // this.orders.reverse();
+          this.dataSource = new MatTableDataSource(this.orders);
+         // this.dataSource.paginator = this.paginator;
+        },
+        (err) => {
+          alert(err);
+        },
+        () => {}
+      );
+    } */
   }
 
   confirmOrder(orderId: string, isShowAll: boolean) {
-    this.orderService.confirmOrder(orderId, isShowAll, this.userName).subscribe(
+    this.orderService.confirmOrder(orderId, isShowAll, this.userName, this.pageSize, this.currentPage).subscribe(
       (res) => {
-        this.orders = res["data"];
-        this.orders.reverse();
+        this.orders = res["data"]["orders"];
+        this.length = res["data"]["length"];
+       // this.orders.reverse();
         this.dataSource = new MatTableDataSource(this.orders);
-        this.dataSource.paginator = this.paginator;
+        //this.dataSource.paginator = this.paginator;
       },
       (err) => {
         alert(err);
@@ -122,20 +182,53 @@ export class OrderListComponent implements AfterViewInit {
     );
   }
 
+  cancelConfirmOrder(orderId: string, isShowAll: boolean) {
+    this.orderService.cancelConfirmOrder(orderId, isShowAll, this.userName, this.pageSize, this.currentPage).subscribe(
+      (res) => {
+        this.orders = res["data"]["orders"];
+        this.length = res["data"]["length"];
+       // this.orders.reverse();
+        this.dataSource = new MatTableDataSource(this.orders);
+        //this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        alert(err);
+      },
+      () => {}
+    ); 
+  }
+
+  restoreOrder(orderId: string, isShowAll: boolean) {
+    this.orderService.restoreOrder(orderId, isShowAll, this.userName, this.pageSize, this.currentPage).subscribe(
+      (res) => {
+        this.orders = res["data"]["orders"];
+        this.length = res["data"]["length"];
+       // this.orders.reverse();
+        this.dataSource = new MatTableDataSource(this.orders);
+        //this.dataSource.paginator = this.paginator;
+      },
+      (err) => {
+        alert(err);
+      },
+      () => {}
+    ); 
+  }
+
   moveToOverdue(orderId: string, isShowAll: boolean, isAccepted: boolean) {
     if (isAccepted) {
       this.confirmationService.confirm({
         message: 'Эта заявка имеет статус "подтверждена". Вы уверены, что заявка просрочена?',
         accept: () => {
           this.orderService
-            .updateOrderStatus(orderId, isShowAll, this.userName, "isOverdue")
+            .updateOrderStatus(orderId, isShowAll, this.userName, "isOverdue", this.pageSize, this.currentPage)
             .subscribe(
               (res) => {
-                this.orders = res["data"];
+                this.orders = res["data"]["orders"];
+                this.length = res["data"]["length"];
                 console.log(this.orders);
-                this.orders.reverse();
+               //this.orders.reverse();
                 this.dataSource = new MatTableDataSource(this.orders);
-                this.dataSource.paginator = this.paginator;
+               // this.dataSource.paginator = this.paginator;
               },
               (err) => {
                 console.log(err);
@@ -149,13 +242,14 @@ export class OrderListComponent implements AfterViewInit {
       });
     } else {
       this.orderService
-        .updateOrderStatus(orderId, isShowAll, this.userName, "isOverdue")
+        .updateOrderStatus(orderId, isShowAll, this.userName, "isOverdue", this.pageSize, this.currentPage)
         .subscribe(
           (res) => {
-            this.orders = res["data"];
-            this.orders.reverse();
+            this.orders = res["data"]["orders"];
+            this.length = res["data"]["length"];
+           // this.orders.reverse();
             this.dataSource = new MatTableDataSource(this.orders);
-            this.dataSource.paginator = this.paginator;
+           // this.dataSource.paginator = this.paginator;
           },
           (err) => {
             console.log(err);
@@ -170,13 +264,14 @@ export class OrderListComponent implements AfterViewInit {
 
   moveToReturned(orderId: string, isShowAll: boolean) {
     this.orderService
-      .updateOrderStatus(orderId, isShowAll, this.userName, "isReturned")
+      .updateOrderStatus(orderId, isShowAll, this.userName, "isReturned", this.pageSize, this.currentPage)
       .subscribe(
         (res) => {
-          this.orders = res["data"];
-          this.orders.reverse();
+          this.orders = res["data"]["orders"];
+          this.length = res["data"]["length"];
+          //this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
-          this.dataSource.paginator = this.paginator;
+          //this.dataSource.paginator = this.paginator;
         },
         (err) => {
           console.log(err);
@@ -193,13 +288,14 @@ export class OrderListComponent implements AfterViewInit {
       message: "Вы уверены, что хотите удалить эту заявку?",
       accept: () => {
         this.orderService
-          .updateOrderStatus(orderId, isShowAll, this.userName, "isDisabled")
+          .updateOrderStatus(orderId, isShowAll, this.userName, "isDisabled", this.pageSize, this.currentPage)
           .subscribe(
             (res) => {
-              this.orders = res["data"];
-              this.orders.reverse();
+              this.orders = res["data"]["orders"];
+              this.length = res["data"]["length"];
+             // this.orders.reverse();
               this.dataSource = new MatTableDataSource(this.orders);
-              this.dataSource.paginator = this.paginator;
+              //this.dataSource.paginator = this.paginator;
             },
             (err) => {
               console.log(err);
@@ -223,8 +319,8 @@ export class OrderListComponent implements AfterViewInit {
   }
 
   //Delete order
-  deleteOrder(orderId: string, isShowAll: boolean) {
-    /*     this.confirmationService.confirm({
+   /*  deleteOrder(orderId: string, isShowAll: boolean) {
+      this.confirmationService.confirm({
       message: "Вы уверены, что хотите удалить эту заявку?",
       accept: () => {
           this.orderService.deleteOrder(orderId, isShowAll, this.userName).subscribe(
@@ -249,6 +345,6 @@ export class OrderListComponent implements AfterViewInit {
             }
           );
       },
-    }); */
-  }
+    }); 
+  }*/
 }

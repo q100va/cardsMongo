@@ -112,7 +112,7 @@ export class AllOrdersComponent implements AfterViewInit {
   }
 
   confirmOrder(orderId: string, isShowAll: boolean) {
-    this.orderService.confirmOrder(orderId, isShowAll, this.userName).subscribe(
+    this.orderService.confirmOrder(orderId, isShowAll, this.userName, 10, 1).subscribe(
       (res) => {
         this.router.navigate(["/orders/all"]);
 /*         this.orders = res["data"];
