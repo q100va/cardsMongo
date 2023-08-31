@@ -211,8 +211,10 @@ export class OrderService {
       contact: newOrder.contact,
       institute: newOrder.institute,
       isAccepted: newOrder.isAccepted,
+      source: newOrder.source,
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
@@ -251,8 +253,10 @@ export class OrderService {
       contact: newOrder.contact,
       institute: newOrder.institute,
       isAccepted: newOrder.isAccepted,
+      source: newOrder.source,
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }

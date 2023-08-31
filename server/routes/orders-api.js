@@ -496,7 +496,7 @@ async function deletePluses(deletedOrder) {
         }
       }
     } else {
-      if (deletedOrder.holiday == "День учителя и дошкольного работника 2022") {
+      if (deletedOrder.holiday == "День учителя и дошкольного работника 2023") {
         for (let lineItem of deletedOrder.lineItems) {
           for (let person of lineItem.celebrators) {
             await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -925,6 +925,7 @@ router.post("/name-day", async (req, res) => {
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
       orderDate: req.body.orderDate,
+      dateOfOrder: req.body.dateOfOrder,
       temporaryLineItems: req.body.temporaryLineItems,
       lineItems: [],
       isCompleted: false,
@@ -1061,6 +1062,7 @@ router.post("/teacher-day", async (req, res) => {
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
       orderDate: req.body.orderDate,
+      dateOfOrder: req.body.dateOfOrder,
       temporaryLineItems: req.body.temporaryLineItems,
       lineItems: [],
       isCompleted: false,

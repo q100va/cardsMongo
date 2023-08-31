@@ -28,7 +28,7 @@ export class TeacherDayComponent implements OnInit {
   order: Order;
   username: string;
   form: FormGroup;
-  holiday: string = "День учителя и дошкольного работника 2022";
+  holiday: string = "День учителя и дошкольного работника 2023";
   lineItems: Array<LineItem>;
   types: Array<string> = [
     "phoneNumber",
@@ -88,7 +88,8 @@ export class TeacherDayComponent implements OnInit {
       contact: [null],
       institute: [null],
       amount: [null, Validators.compose([Validators.required])],
-      isAccepted: [false],
+      isAccepted: [false],      
+      source: [null, Validators.compose([Validators.required])],
       comment: [null],
     });
 
@@ -193,8 +194,10 @@ export class TeacherDayComponent implements OnInit {
               institute: this.form.controls.institute.value,
               amount: this.form.controls.amount.value,
               isAccepted: this.form.controls.isAccepted.value ? true : false,
+              source: this.form.controls.source.value,
               comment: this.form.controls.comment.value,
               orderDate: this.orderDate,
+              dateOfOrder: new Date (),
               temporaryLineItems: temporaryLineItems,
             };
 

@@ -478,7 +478,7 @@ async function findTeachers() {
       //fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'День учителя и дошкольного работника 2022',
+      holyday: 'День учителя и дошкольного работника 2023',
       dateHoliday: celebrator.comment2.includes("учителя") ? 5 : 27,
       monthHoliday: celebrator.comment2.includes("учителя") ? 10 : 9,
       fullData: celebrator.nursingHome +

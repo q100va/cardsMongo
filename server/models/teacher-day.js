@@ -39,7 +39,7 @@ const teacherDaySchema = new Schema(
     absent:  { type: Boolean, default: false },
 
   },
-  { collection: "teacher_day" }
+  { collection: "teacher_day_2023" }
 );
 
 module.exports = mongoose.model("TeacherDay", teacherDaySchema);
