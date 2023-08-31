@@ -11,59 +11,79 @@
 <div fxLayout="column" class="profile-div">
     <mat-card fxFlex class="mat-elevation-z8 profile-container">
 
+        <p-toast position="center"></p-toast>
+        <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
         <mat-card-actions>
-<!--             <button class="cancel" (click)="close()" mat-raised-button>
+            <!--             <button class="cancel" (click)="close()" mat-raised-button>
                 Закрыть
             </button> -->
             <a href="javascript:history.back()">Закрыть</a>
 
         </mat-card-actions>
-        <mat-card-content *ngIf="order" style = "margin-left: 60px;">
+        <mat-card-content *ngIf="order" style="margin-left: 60px;">
             <div fxLayout="column" fxLayoutGap="10px">
-            <mat-card-subtitle>Дата: {{order.orderDate}}</mat-card-subtitle>
-            <mat-card-subtitle>Праздник: {{order.holiday}} </mat-card-subtitle>
-            <mat-card-subtitle>Координатор: {{order.userName}} </mat-card-subtitle>
-            <mat-card-subtitle>Количество: {{order.amount}}</mat-card-subtitle>
-            <mat-card-subtitle>Поздравляющий: {{fullName}} </mat-card-subtitle>
-            <mat-card-subtitle>Контактная информация: {{contact}} </mat-card-subtitle>
-            <mat-card-subtitle>{{needAccepting}} </mat-card-subtitle>
-            <mat-card-subtitle>Комментарий: {{order.comment}} </mat-card-subtitle>
-
-            <mat-card-title>Список поздравляемых
-            </mat-card-title>
-
-
-            <mat-card fxFlex class="mat-elevation-z8 list-container">
+                <mat-card-subtitle>Дата: {{order.orderDate}}</mat-card-subtitle>
+                <mat-card-subtitle>Праздник: {{order.holiday}} </mat-card-subtitle>
+                <mat-card-subtitle>Координатор: {{order.userName}} </mat-card-subtitle>
+                <mat-card-subtitle>Количество: {{order.amount}}</mat-card-subtitle>
+                <mat-card-subtitle>Поздравляющий: {{fullName}} </mat-card-subtitle>
+                <mat-card-subtitle>Контактная информация: {{contact}} </mat-card-subtitle>
+                <mat-card-subtitle>{{needAccepting}} </mat-card-subtitle>
+                <mat-card-subtitle>Комментарий: {{order.comment}} </mat-card-subtitle>
+                <br />
+                <br />
 
 
-                <mat-card-content *ngFor="let lineItem of order.lineItems">
+                <mat-card-title>Список поздравляемых
+                </mat-card-title>
 
-                    <p style="font-weight: bold; margin: 0; ">{{lineItem.address}}</p>
-                    <p style="font-style: italic; margin: 0;">{{lineItem.infoComment}}</p>
-                    <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment}}</p>
 
-                    <div *ngFor="let celebrator of lineItem.celebrators">
+                <mat-card fxFlex class="mat-elevation-z8 list-container">
+                    <section *ngIf="!order.isOverdue && !order.isReturned && isNotOnlyOne && isNotLate"
+                        style="text-align: right;">
+                        <button *ngIf="!isEdit " mat-raised-button (click)="editList()"
+                            color="accent">Редактировать</button>
+                        <button *ngIf="isEdit" mat-raised-button (click)="viewList()" color="primary">К
+                            просмотру</button>
+                    </section>
+                    <mat-card-content *ngFor="let lineItem of order.lineItems">
 
-                        {{celebrator.lastName}}
-                        {{celebrator.firstName}}
-                        {{celebrator.patronymic}}
-                        {{order.holiday != 'Именины сентября 2023' ? celebrator.fullDayBirthday : ''}}
-                        {{order.holiday == 'Именины сентября 2023' ? '(' + celebrator.specialComment + ')' : ''}}
-                        {{order.holiday == 'Именины сентября 2023' ? celebrator.nameDay : ''}}
-                        {{celebrator.comment1}}
-                        {{celebrator.linkPhoto}}
-                        <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины сентября 2023' ? celebrator.specialComment : ''}}
-                        </span>
-                        <span style="font-weight: bold; color: rgb(255, 0, 0); " *ngIf="celebrator.absentComment"> {{ celebrator.absentComment}}
-                        </span>
-                    </div>
-                    <br />
-                </mat-card-content>
 
-            </mat-card>
+                        <p style="font-weight: bold; margin: 0; ">{{lineItem.address}}</p>
+                        <p style="font-style: italic; margin: 0;">{{lineItem.infoComment ? lineItem.infoComment : ""}}
+                        </p>
+                        <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment ?
+                            lineItem.adminComment : ""}}</p>
+
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+                            <button mat-icon-button style="color: red;" *ngIf="isEdit && isNotOnlyOne"
+                                (click)="deleteDestination(celebrator._id)">
+                                <mat-icon> cancel</mat-icon>
+                            </button>
+                            {{celebrator.lastName}}
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
+                            {{order.holiday != 'Именины сентября 2023' ? celebrator.fullDayBirthday : ''}}
+                            {{order.holiday == 'Именины сентября 2023' ? '(' + (celebrator.specialComment ?
+                            celebrator.specialComment : "") + ')' : ''}}
+                            {{order.holiday == 'Именины сентября 2023' ? celebrator.nameDay : ''}}
+                            {{celebrator.comment1}}
+                            {{celebrator.linkPhoto}}
+                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины
+                                сентября 2023' ? celebrator.specialComment : ''}}
+                            </span>
+                            <span style="font-weight: bold; color: rgb(255, 0, 0); " *ngIf="celebrator.absentComment">
+                                {{ celebrator.absentComment}}
+                            </span>
+                        </div>
+                        <br />
+                    </mat-card-content>
+
+                </mat-card>
             </div>
         </mat-card-content>
-       
+
     </mat-card>
 
 

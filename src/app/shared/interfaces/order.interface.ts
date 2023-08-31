@@ -9,6 +9,7 @@ import { LineItem } from "./line-item.interface";
 
 export interface Order {
   _id?: string;
+  
   userName: string;
   holiday: string;
   source?: string;
@@ -21,6 +22,9 @@ export interface Order {
   institute: string;
   amount: number;
   isAccepted: boolean;
+  isOverdue?: boolean;
+  isReturned?: boolean;
+  isDisabled?: boolean;
   comment: string;
   orderDate: string;
   dateOfOrder?: Date;

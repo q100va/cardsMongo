@@ -9,8 +9,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
+import { ConfirmationService } from "primeng/api";
 import { OrderService } from "src/app/services/order.service";
-import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+//import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { Order } from "src/app/shared/interfaces/order.interface";
 //import { ConfirmationService } from "primeng/api";
 //import { MessageService } from "primeng/api";
@@ -30,7 +31,14 @@ export class OrderDetailsComponent implements OnInit {
   noRestricted: string;
   contact: string;
   userName: string;
-
+  isEdit = false;
+  isNotLate = false;
+  isNotOnlyOne = true;
+  openHolidays = [
+    "Дни рождения сентября 2023",
+    "Именины сентября 2023",
+    "День учителя и дошкольного работника 2023",
+  ];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -38,37 +46,16 @@ export class OrderDetailsComponent implements OnInit {
     private resultDialog: MatDialog,
     private fb: FormBuilder,
     private cookieService: CookieService,
+    private confirmationService: ConfirmationService
   ) {
     this.orderId = this.route.snapshot.paramMap.get("id");
     console.log(this.orderId);
+  }
 
+  ngOnInit(): void {
     this.orderService.findOrderById(this.orderId).subscribe(
       (res) => {
-        console.log(res["data"]);
-        this.order = res["data"];
-        this.needAccepting = !this.order.isAccepted
-          ? "Требует подтверждения"
-          : "Не требует подтверждения";
-        this.noRestricted = this.noRestricted ? "Без БОА" : "";
-        this.fullName = (this.order.clientLastName
-        ? this.order.clientLastName
-        : "") + " " + (this.order.clientFirstName
-          ? this.order.clientFirstName
-          : "") + " " + (this.order.clientPatronymic
-          ? this.order.clientPatronymic
-          : "") + (this.order.institute
-          ? this.order.institute
-          : "")
-          ;
-          this.contact = (this.order.email
-          ? this.order.email
-          : "") + " " + (this.order.contactType
-          ? this.order.contactType
-          : "") + " " + (this.order.contact
-          ? this.order.contact
-          : "") ;
-
-          
+        this.findOrder(res);
       },
       (err) => {
         console.log(err);
@@ -76,11 +63,80 @@ export class OrderDetailsComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  findOrder(res) {
+    console.log(res["data"]);
+    this.order = res["data"];
+    this.needAccepting = !this.order.isAccepted
+      ? "Требует подтверждения"
+      : "Не требует подтверждения";
+    this.noRestricted = this.noRestricted ? "Без БОА" : "";
+    this.fullName =
+      (this.order.clientLastName ? this.order.clientLastName : "") +
+      " " +
+      (this.order.clientFirstName ? this.order.clientFirstName : "") +
+      " " +
+      (this.order.clientPatronymic ? this.order.clientPatronymic : "") +
+      (this.order.institute ? this.order.institute : "");
+    this.contact =
+      (this.order.email ? this.order.email : "") +
+      " " +
+      (this.order.contactType ? this.order.contactType : "") +
+      " " +
+      (this.order.contact ? this.order.contact : "");
+    console.log("this.order.holiday");
+    console.log(this.order.holiday);
+
+    if (this.openHolidays.find((item) => item == this.order.holiday)) {
+      this.isNotLate = true;
+      console.log("this.isNotLate");
+      console.log(this.isNotLate);
+    }
+
+    if (this.order.amount == 1) {
+      this.isNotOnlyOne = false;
+    }
+    console.log;
+
+    console.log(
+      "Conditions:" +
+        !this.order.isOverdue +
+        !this.order.isReturned +
+        this.isNotOnlyOne +
+        this.isNotLate
+    );
+  }
+
+  editList() {
+    this.isEdit = true;
+  }
+
+  viewList() {
+    this.isEdit = false;
+  }
+
+  deleteDestination(idCelebrator: string) {
+    // console.log("start");
+
+    this.confirmationService.confirm({
+      message: "Вы уверены, что хотите удалить этого адресата?",
+      accept: () => {
+        this.orderService
+          .deleteDestinationFromOrder(this.orderId, idCelebrator)
+          .subscribe(
+            (res) => {
+              this.findOrder(res);
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+      },
+    });
+  }
 
   close(): void {
     this.userName = this.cookieService.get("session_user");
-    this.router.navigate(["/orders/find/"+ this.userName]);
+    this.router.navigate(["/orders/find/" + this.userName]);
     //alert("Order information is canceled.");
   }
 }

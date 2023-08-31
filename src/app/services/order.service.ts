@@ -24,16 +24,26 @@ export class OrderService {
     return this.http.get("/api/orders/all/findAllOrdersNotAccepted/");
   }
 
-  findAllOrdersByUserId(userName: string, pageSize:number, currentPage: number): Observable<any> {
+  findAllOrdersByUserId(
+    userName: string,
+    pageSize: number,
+    currentPage: number
+  ): Observable<any> {
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
-    console.log('queryParams');
+    console.log("queryParams");
     console.log(queryParams);
     return this.http.get("/api/orders/find/" + userName + queryParams);
   }
 
-  findNotConfirmedOrdersByUserId(userName: string, pageSize:number, currentPage: number): Observable<any> {
+  findNotConfirmedOrdersByUserId(
+    userName: string,
+    pageSize: number,
+    currentPage: number
+  ): Observable<any> {
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
-    return this.http.get("/api/orders/findNotConfirmed/" + userName + queryParams);
+    return this.http.get(
+      "/api/orders/findNotConfirmed/" + userName + queryParams
+    );
   }
 
   findOrderById(_id: string): Observable<any> {
@@ -41,21 +51,29 @@ export class OrderService {
     return this.http.get("/api/orders/" + _id);
   }
 
+  deleteDestinationFromOrder(
+    orderId: string,
+    idCelebrator: string
+  ): Observable<any> {
+    //console.log("findOrderById");
+    return this.http.patch("/api/orders/edit/" + orderId, {
+      idCelebrator: idCelebrator,
+    });
+  }
+
   updateOrderStatus(
     _id: string,
     isShowAll: boolean,
     userName: string,
     newStatus: string,
-    pageSize: number, 
-    currentPage: number, 
-
+    pageSize: number,
+    currentPage: number
   ): Observable<any> {
-    
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
     return this.http.patch("/api/orders/change-status/" + _id + queryParams, {
       isShowAll: isShowAll,
       userName: userName,
-      newStatus: newStatus
+      newStatus: newStatus,
     });
   }
 
@@ -69,8 +87,8 @@ export class OrderService {
     _id: string,
     isShowAll: boolean,
     userName: string,
-    pageSize: number, 
-    currentPage: number, 
+    pageSize: number,
+    currentPage: number
   ): Observable<any> {
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
     const result = this.http.patch("/api/orders/confirm/" + _id + queryParams, {
@@ -81,19 +99,21 @@ export class OrderService {
     return result;
   }
 
-
   cancelConfirmOrder(
     _id: string,
     isShowAll: boolean,
     userName: string,
-    pageSize: number, 
-    currentPage: number, 
+    pageSize: number,
+    currentPage: number
   ): Observable<any> {
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
-    const result = this.http.patch("/api/orders/unconfirmed/" + _id + queryParams, {
-      isShowAll: isShowAll,
-      userName: userName,
-    });
+    const result = this.http.patch(
+      "/api/orders/unconfirmed/" + _id + queryParams,
+      {
+        isShowAll: isShowAll,
+        userName: userName,
+      }
+    );
     console.log(result);
     return result;
   }
@@ -102,8 +122,8 @@ export class OrderService {
     _id: string,
     isShowAll: boolean,
     userName: string,
-    pageSize: number, 
-    currentPage: number, 
+    pageSize: number,
+    currentPage: number
   ): Observable<any> {
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
     const result = this.http.patch("/api/orders/restore/" + _id + queryParams, {
@@ -129,7 +149,11 @@ export class OrderService {
     return this.http.get("/api/lists/get/active/");
   }
 
-  checkDoubleOrder(holiday: string, email: string, contact: string): Observable<any> {
+  checkDoubleOrder(
+    holiday: string,
+    email: string,
+    contact: string
+  ): Observable<any> {
     return this.http.post("/api/orders/check-double/", {
       holiday: holiday,
       email: email,
@@ -155,7 +179,7 @@ export class OrderService {
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
-      prohibitedId: prohibitedId
+      prohibitedId: prohibitedId,
     });
   }
 
@@ -178,7 +202,7 @@ export class OrderService {
     });
   }
 
-  createOrderSpring(newOrder: Order, prohibitedId:[]): Observable<any> {
+  createOrderSpring(newOrder: Order, prohibitedId: []): Observable<any> {
     return this.http.post("/api/orders/spring/" + newOrder.amount, {
       userName: newOrder.userName,
       holiday: newOrder.holiday,
@@ -194,7 +218,7 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       filter: newOrder.filter,
-      prohibitedId: prohibitedId
+      prohibitedId: prohibitedId,
     });
   }
 
@@ -237,8 +261,6 @@ export class OrderService {
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
-
-
 
   createOrderForTeacherDay(newOrder: Order): Observable<any> {
     return this.http.post("/api/orders/teacher-day", {
@@ -287,7 +309,6 @@ export class OrderService {
   getNursingHomes(): Observable<any> {
     return this.http.get("/api/orders/get/nursingHomes/");
   }
-
 
   //////////////////////////////////////////////////////
 

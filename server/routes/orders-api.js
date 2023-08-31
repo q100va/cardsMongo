@@ -173,7 +173,7 @@ router.get("/find/:userName", async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
-      //  let correctedOrders = correctDate(orders);
+        //  let correctedOrders = correctDate(orders);
         let result = {
           orders: orders,
           length: length
@@ -227,8 +227,8 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
-        
-       // let correctedOrders = correctDate(orders);
+
+        // let correctedOrders = correctDate(orders);
         let result = {
           orders: orders,
           length: length
@@ -360,7 +360,7 @@ router.patch("/unconfirmed/:id", async (req, res) => {
         { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
-   // let correctedOrders = correctDate(updatedOrders);
+    // let correctedOrders = correctDate(updatedOrders);
     let result = {
       orders: updatedOrders,
       length: length
@@ -400,7 +400,7 @@ router.patch("/change-status/:id", async (req, res) => {
     if ((req.body.newStatus == "isDisabled") && (updatedOrder.isOverdue || updatedOrder.isReturned)) {
       console.log("Pluses were already deleted");
     } else {
-      await deletePluses(updatedOrder);
+      await deletePluses(updatedOrder, true);
     }
 
     //console.log(req.body.isShowAll);
@@ -436,17 +436,17 @@ router.patch("/change-status/:id", async (req, res) => {
   }
 });
 
-async function deletePluses(deletedOrder) {
+async function deletePluses(deletedOrder, full) {
+let deletedLineItems = full ? deletedOrder.lineItems : deletedOrder.deleted;
+
   if (deletedOrder.holiday == "Дни рождения сентября 2023") {
-
-
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
     const month = await Month.findOne({ isActive: true });
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
 
-    for (let lineItem of deletedOrder.lineItems) {
+    for (let lineItem of deletedLineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == month.number) {
           await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -490,14 +490,14 @@ async function deletePluses(deletedOrder) {
     }
   } else {
     if (deletedOrder.holiday == "Именины сентября 2023") {
-      for (let lineItem of deletedOrder.lineItems) {
+      for (let lineItem of deletedLineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
         }
       }
     } else {
       if (deletedOrder.holiday == "День учителя и дошкольного работника 2023") {
-        for (let lineItem of deletedOrder.lineItems) {
+        for (let lineItem of deletedLineItems) {
           for (let person of lineItem.celebrators) {
             await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
           }
@@ -505,28 +505,28 @@ async function deletePluses(deletedOrder) {
       }
       else {
         if (deletedOrder.holiday == "Пасха 2023") {
-          for (let lineItem of deletedOrder.lineItems) {
+          for (let lineItem of deletedLineItems) {
             for (let person of lineItem.celebrators) {
               await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             }
           }
         } else {
           if (deletedOrder.holiday == "8 марта 2023") {
-            for (let lineItem of deletedOrder.lineItems) {
+            for (let lineItem of deletedLineItems) {
               for (let person of lineItem.celebrators) {
                 await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
               }
             }
           } else {
             if (deletedOrder.holiday == "23 февраля 2023") {
-              for (let lineItem of deletedOrder.lineItems) {
+              for (let lineItem of deletedLineItems) {
                 for (let person of lineItem.celebrators) {
                   await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                 }
               }
             } else {
               if (deletedOrder.holiday == "9 мая 2023") {
-                for (let lineItem of deletedOrder.lineItems) {
+                for (let lineItem of deletedLineItems) {
                   for (let person of lineItem.celebrators) {
                     await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                   }
@@ -534,7 +534,7 @@ async function deletePluses(deletedOrder) {
               }
               else {
                 if (deletedOrder.holiday == "День семьи 2023") {
-                  for (let lineItem of deletedOrder.lineItems) {
+                  for (let lineItem of deletedLineItems) {
                     for (let person of lineItem.celebrators) {
                       await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                     }
@@ -1585,7 +1585,7 @@ async function createOrder(newOrder, prohibitedId) {
 
       seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, newOrder.filter);
     } else {
-      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, newOrder.filter );
+      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, newOrder.filter);
     }
   }
 
@@ -3957,9 +3957,100 @@ async function createOrderForFamilyDay(order) {
 ////////////////////////////////////////////////////
 
 function sendMessageToAdmin(text, e) { console.log(text + e); }
+
+
+///////////////////////
+// Edit order list
+
+router.patch("/edit/:orderId", async (req, res) => {
+  try {
+    console.log("req.params.orderId ");
+    console.log(req.params.orderId);
+    let order = await Order.findOne({ _id: req.params.orderId });
+    //console.log("order");
+    //console.log(order);
+
+    for (let lineItem of order.lineItems) {
+      let deletedCelebratorIndex = lineItem.celebrators.findIndex(item => item._id == req.body.idCelebrator);
+      //console.log("deletedCelebratorIndex ");
+      //console.log(deletedCelebratorIndex);
+
+      let deletedLineItem;
+      if (deletedCelebratorIndex != -1) {
+        let deletedCelebrator = lineItem.celebrators.slice(deletedCelebratorIndex, deletedCelebratorIndex + 1);
+        console.log("deletedCelebrator ");
+        console.log(deletedCelebrator);
+
+        deletedLineItem = {
+          region: lineItem.region,
+          nursingHome: lineItem.nursingHome,
+          address: lineItem.address,
+          infoComment: lineItem.infoComment,
+          adminComment: lineItem.adminComment,
+          noAddress: lineItem.noAddress,
+          celebrators: deletedCelebrator
+        }
+        //console.log("deletedLineItem ");
+        //console.log(deletedLineItem);
+
+        lineItem.celebrators.splice(deletedCelebratorIndex, 1);
+
+        // console.log("lineItem.celebrators ");
+        // console.log(lineItem.celebrators);
+
+        if (lineItem.celebrators.length == 0) {
+          order.lineItems.splice(order.lineItems.indexOf(lineItem), 1);
+        }
+
+        console.log("order.lineItems[4] ");
+        console.log(order.lineItems[order.lineItems.indexOf(lineItem)]);
+
+        order.deleted.push(deletedLineItem);
+        console.log("order.deleted ");
+        console.log(order.deleted);
+
+        await Order.updateOne(
+          { _id: req.params.orderId },
+          {
+            $set: {
+              lineItems: order.lineItems, deleted: order.deleted,  amount: (order.amount - 1)
+            }
+          }
+        );
+
+        console.log("result");
+        //console.log(result);
+
+        break;
+      }
+      /*     
+      splice(pos, deleteCount, ...items) – начиная с индекса pos удаляет deleteCount элементов и вставляет items.
+      slice(start, end) – создаёт новый массив, копируя в него элементы с индекса start до end (не включая end).
+      */
+    }
+    let updatedOrder = await Order.findOne({ _id: req.params.orderId });
+
+    console.log("updatedOrder.lineItems[4] ");
+    console.log(updatedOrder.lineItems[4]);
+
+    await deletePluses(updatedOrder, false);
+    
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", updatedOrder);
+    res.json(confirmOrderResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    const confirmOrderCatchErrorResponse = new BaseResponse(
+      "500",
+      "MongoDB server error",
+      e
+    );
+    res.status(500).send(confirmOrderCatchErrorResponse.toObject());
+  }
+});
+
+
+
 //////////
-
-
 router.patch("/correct-orders-dates", async (req, res) => {
   try {
 

@@ -6,7 +6,7 @@
 
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const lineItemDocument = require("../schemas/line-item");
+const lineItem = require("../schemas/line-item");
 const celebrator = require("../schemas/celebrator");
 
 const orderSchema = new Schema(
@@ -23,7 +23,7 @@ const orderSchema = new Schema(
     institute: { type: String },
     amount: { type: Number },
     comment: { type: String },
-    lineItems: [lineItemDocument],
+    lineItems: [lineItem],
     temporaryLineItems: [celebrator],
     orderDate: { type: String, default: new Date().toLocaleDateString() },
     dateOfOrder: { type: Date, default: new Date() },
@@ -46,6 +46,7 @@ const orderSchema = new Schema(
     },
     isCompleted: { type: Boolean, default: false },
     absents: [celebrator],
+    deleted: [lineItem],
 
     isAccepted: { type: Boolean, default: false },
     isDisabled: { type: Boolean, default: false },
