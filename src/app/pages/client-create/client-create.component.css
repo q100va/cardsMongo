@@ -43,7 +43,11 @@ style
   }
   
   .mat-form-field {
-    width: 100%;
+    width: 90%;
     
   }
+
+ /*  .mat-cell {
+    padding: 8px 8px 8px 0;
+  } */
   

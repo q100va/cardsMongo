@@ -35,9 +35,29 @@
                                 <tr>
                                     <td rowspan="2">
 
-                                        <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
+                                        <mat-card-subtitle>
+                                            Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
-                                        <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
+                                        <mat-card-subtitle>Праздник: <span>
+                                                <button [disabled] = "isBeforeMonth"  mat-icon-button
+                                                    matTooltip="Предыдущий месяц" color="primary"
+                                                    (click)=goBack($event)>
+                                                    <mat-icon>navigate_before</mat-icon>
+                                                </button>
+                                            </span>
+                                            <span class = "header">{{holiday}}</span>
+                                            <span>
+                                                <button [disabled] = "isNextMonth" mat-icon-button
+                                                    matTooltip="Следующий месяц" color="primary"
+                                                    (click)=goNext($event)>
+                                                    <mat-icon>navigate_next</mat-icon>
+                                                </button>
+                                            </span>
+                                        </mat-card-subtitle>
+
+                                    </td>
+                                    <td rowspan="2">
+
                                     </td>
                                     <td align="left">
                                         <mat-slide-toggle [formControl]="form.controls.isAccepted">Не требует
@@ -58,6 +78,13 @@
                                                 <mat-option value="oyher">другое</mat-option>
                                             </mat-select>
                                         </mat-form-field>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <h3 class = "warning" *ngIf = 'isBeforeMonth'>ВНИМАНИЕ: это предыдущий месяц!</h3>
+                                        <h3 class = "warning" *ngIf = 'isNextMonth'>ВНИМАНИЕ: это следующий месяц!</h3>
                                     </td>
                                 </tr>
                             </table>
@@ -499,7 +526,7 @@
                         </p>
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
-                            Дни рождения сентября
+                            {{ holiday }}
                         </h2>
 
 

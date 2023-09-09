@@ -35,8 +35,8 @@ export class OrderDetailsComponent implements OnInit {
   isNotLate = false;
   isNotOnlyOne = true;
   openHolidays = [
-    "Дни рождения сентября 2023",
-    "Именины сентября 2023",
+    "Дни рождения октября 2023",
+    "Именины октября 2023",
     "День учителя и дошкольного работника 2023",
   ];
   constructor(

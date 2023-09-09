@@ -56,6 +56,22 @@ export class ListComponent implements OnInit {
     );
   }
 
+  generateNextBirthday() {
+    this.listService.createNextBirthdayList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
+
+
   generateNameDay() {
     this.listService.createNameDayList().subscribe(
       async (res) => {
@@ -468,7 +484,7 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
-  populateSeniors() {
+/*   populateSeniors() {
     this.seniorsService.createSeniorsCollection(seniors).subscribe(
       async (res) => {
         let result = await res["data"];
@@ -482,7 +498,7 @@ export class ListComponent implements OnInit {
         //stop = true;
       }
     );
-  }
+  } */
 
   /* 
   prepareSeniorsList() {

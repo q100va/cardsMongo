@@ -7,7 +7,8 @@
 
 const express = require("express");
 const mongoose = require('mongoose');
-const List = require("../models/list");
+let List = require("../models/list");
+let ListNext = require("../models/list-next");
 const NewYear = require("../models/new-year");
 const May9 = require("../models/may-9");
 const May19 = require("../models/may-19");
@@ -152,20 +153,29 @@ async function findAllMonthCelebrators(month) {
     let cloneOldest = false;
 
     if (celebrator["noAddress"]) {
-      cloneCategory = "special";
+      if (celebrator.gender == "Female") {
+        cloneCategory = "specialWomen";
+      }
+      if (celebrator.gender == "Male") {
+        cloneCategory = "specialMen";
+      }
+
     } else {
       if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
         cloneOldest = true;
       }
       if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
         cloneCategory = "oldWomen";
-      } else {
-        if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
-          cloneCategory = "oldMen";
-        } else {
-          if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday  ) {
-            cloneCategory = "yang";
-          }
+      }
+      if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+        cloneCategory = "oldMen";
+      }
+      if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+        if (celebrator.gender == "Female") {
+          cloneCategory = "yangWomen";
+        }
+        if (celebrator.gender == "Male") {
+          cloneCategory = "yangMen";
         }
       }
     }
@@ -193,7 +203,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР сентября 2023',
+      holyday: month == 10 ? 'ДР октября 2023' : 'ДР ноября 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -217,7 +227,11 @@ async function findAllMonthCelebrators(month) {
   console.log("2.5 - " + newList.length);
 
   const options = { ordered: false };
-  let finalList = await List.insertMany(newList, options);
+  let finalList;
+
+  if (month == 11) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 10) { finalList = await List.insertMany(newList, options); }
+
 
   //console.log(finalList);
 
@@ -383,7 +397,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины сентября 2023',
+      holyday: 'Именины октября 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -502,6 +516,19 @@ async function findTeachers() {
   // newList = newList1.slice();
 
   console.log("2.5 - " + newList.length);
+  console.log("newList.length");
+  console.log(newList.length);
+  let existedList = await TeacherDay.aggregate([{ $project: { _id: 0, fullData: 1 } }]);
+  console.log("existedList");
+  console.log(existedList);
+
+  for (let teacher of existedList) {
+    let index = newList.findIndex(item => item.fullData == teacher.fullData);
+    newList.splice(index, 1);
+  }
+
+
+
 
   const options = { ordered: false };
   let finalList = await TeacherDay.insertMany(newList, options);
@@ -1175,7 +1202,7 @@ router.post("/new-year/check-fullness", async (req, res) => {
 
 async function checkAllNDFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house, monthNameDay: 9});
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house, monthNameDay: 9 });
   console.log("seniors " + seniors.length);
   let fullHouse = await NameDay.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1365,7 +1392,7 @@ router.get("/holiday/special-list", async (req, res) => {
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
     // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress:false, dateExit: null, monthBirthday: 10, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
+    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 10, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
     let updatedNursingHome = await House.find({ isActive: true });
@@ -1850,7 +1877,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения сентября 2023", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения октября 2023", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
@@ -1859,10 +1886,10 @@ async function findUncertain() {
     }
   }
 
-    listOfUncertain = await List.find({_id: {$in :list}, plusAmount: {$lt: 3}});
-    await List.updateMany({uncertain: true}, {$set: {uncertain: false}});
-    let result = await List.updateMany({_id: {$in :list}, plusAmount: {$lt: 3}}, {$set: {uncertain: true}});
-console.log(result);
+  listOfUncertain = await List.find({ _id: { $in: list }, plusAmount: { $lt: 3 } });
+  await List.updateMany({ uncertain: true }, { $set: { uncertain: false } });
+  let result = await List.updateMany({ _id: { $in: list }, plusAmount: { $lt: 3 } }, { $set: { uncertain: true } });
+  console.log(result);
   return listOfUncertain;
 
 }

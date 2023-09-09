@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения сентября 2023";
+  holiday: string = "Дни рождения октября 2023";
   lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "phoneNumber",
@@ -62,6 +62,9 @@ export class OrderComponent implements OnInit {
   activeNursingHomes = [];
   actualYear = new Date().getFullYear();
   addresses: HTMLElement;
+  isMainMonth = true;
+  isNextMonth = false;
+  isBeforeMonth = false;
 
   constructor(
     private router: Router,
@@ -127,6 +130,42 @@ export class OrderComponent implements OnInit {
       onlyAnniversaries: [false],
       onlyAnniversariesAndOldest: [false],
     });
+  }
+
+  goNext(event) {
+    event.preventDefault();
+
+    this.isMainMonth = !this.isMainMonth;
+    if (this.isMainMonth) {
+      this.isNextMonth = false;
+    } else {
+      this.isNextMonth = true;
+    }
+    this.isBeforeMonth = false;
+    console.log("click");
+    if (this.isMainMonth) {
+      this.holiday = "Дни рождения октября 2023";
+    }
+    if (this.isNextMonth) {
+      this.holiday = "Дни рождения ноября 2023";
+    }
+  }
+
+  goBack(event) {
+    event.preventDefault();
+      this.isMainMonth = !this.isMainMonth;
+    if (this.isMainMonth) {
+      this.isBeforeMonth = false;
+    } else {
+      this.isBeforeMonth = true;
+    }
+    this.isNextMonth = false;
+    if (this.isMainMonth) {
+      this.holiday = "Дни рождения октября 2023";
+    }
+    if (this.isBeforeMonth) {
+      this.holiday = "Дни рождения сентября 2023";
+    }
   }
 
   correctProportion(genderValue: string) {
@@ -273,6 +312,11 @@ export class OrderComponent implements OnInit {
     this.showMaxNoAddress = true;
     this.showIndexes = false;
     this.showInstruction = false;
+
+    this.holiday = "Дни рождения октября 2023";
+    this.isMainMonth = true;
+    this.isNextMonth = false;
+    this.isBeforeMonth = false;
   }
   /*   beforeCreateOrder() {
     console.log("this.spinner");
@@ -466,7 +510,7 @@ export class OrderComponent implements OnInit {
       source: this.form.controls.source.value,
       comment: this.form.controls.comment.value,
       orderDate: this.orderDate,
-      dateOfOrder: new Date (),
+      dateOfOrder: new Date(),
       filter: {
         addressFilter: this.addressFilter,
         genderFilter: this.genderFilter,
@@ -528,11 +572,18 @@ export class OrderComponent implements OnInit {
   }
 
   getAddresses() {
+    let greeting: string;
+    if (this.clientFirstName) {
+      greeting = "Добрый день, " + this.clientFirstName + "!\n\n";
+    } else {
+      greeting = "Добрый день!\n\n";
+    }
     let top =
-      "Добрый день!\n\nПожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
+      "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
       "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
       "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются люди, которых к престарелым совсем не относятся. Это инвалиды, которые проживают в домах престарелых. Иногда сразу после детдомов.\n\n" +
-      "ДНИ РОЖДЕНИЯ СЕНТЯБРЯ\n" +
+      this.holiday +
+      "\n" +
       "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
       "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n\n";
     let bottom =
@@ -577,7 +628,7 @@ export class OrderComponent implements OnInit {
       addresses = addresses + "\n";
     }
     if (this.showInstruction) {
-      addresses = top + addresses + bottom;
+      addresses = greeting + top + addresses + bottom;
     }
     console.log("addresses");
     console.log(addresses);

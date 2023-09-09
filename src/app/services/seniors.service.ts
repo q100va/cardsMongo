@@ -91,10 +91,10 @@ export class SeniorsService {
     return  result;
   } */
 
-  createSeniorsCollection(seniors: Array<Senior>): Observable<any> {
+/*   createSeniorsCollection(seniors: Array<Senior>): Observable<any> {
     console.log("start createSeniorsCollection");
     return this.http.post("/api/seniors/add-many/", { seniors: seniors });
-  }
+  } */
 
   compareListsBackend(arrayOfNewSeniors:  Array<Senior> , house: House): Observable<any> {
 

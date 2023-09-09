@@ -9,7 +9,7 @@ const Schema = mongoose.Schema;
 //const lineItemDocument = require("../schemas/line-item");
 //const celebrator = require ("../schemas/celebrator");
 
-const listSchema = new Schema(
+const listNextSchema = new Schema(
   {
 
     nursingHome: { type: String },
@@ -41,8 +41,8 @@ const listSchema = new Schema(
     uncertain: { type: Boolean, default: false },   
 
   },
-  { collection: "lists_october2023" }
+  { collection: "lists_november2023" }
  //{ collection: "lists_june2023" }
 );
 
-module.exports = mongoose.model("List", listSchema);
+module.exports = mongoose.model("ListNext", listNextSchema);

@@ -12,6 +12,8 @@ const Senior = require("../models/senior");
 const House = require("../models/house");
 const Month = require("../models/month");
 const List = require("../models/list");
+const ListNext = require("../models/list-next");
+const ListBefore = require("../models/list-previous");
 const Order = require("../models/order");
 const NameDay = require("../models/name-day");
 
@@ -263,7 +265,7 @@ router.put("/update/:id", async (req, res) => {
 
 
 // Create many seniors  API
-router.post("/add-many/", async (req, res) => {
+/* router.post("/add-many/", async (req, res) => {
   try {
     console.log("start API");
     let seniors = req.body.seniors;
@@ -399,7 +401,7 @@ router.post("/add-many/", async (req, res) => {
     const createSeniorCatchErrorResponse = new BaseResponse(500, "Internal server error", error.message);
     res.status(500).send(createSeniorCatchErrorResponse.toObject());
   }
-});
+}); */
 
 // Compare seniors lists API
 
@@ -408,7 +410,7 @@ router.put("/compare-lists/", async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null}); //, monthBirthday:3, monthBirthday:{$gt:3}
+    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null }); //, monthBirthday:3, monthBirthday:{$gt:3}
 
     newList.sort(
       (prev, next) => {
@@ -520,9 +522,9 @@ router.put("/compare-lists/", async (req, res) => {
             flag = true;
           } else {
             index = arrived.findIndex(item => item.firstName + item.patronymic == oldSenior.firstName + oldSenior.patronymic);
-          if (index != -1) {
-            flag = true;
-          }
+            if (index != -1) {
+              flag = true;
+            }
           }
         }
       }
@@ -620,12 +622,32 @@ router.put("/update-lists/", async (req, res) => {
       let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
-      if (senior.monthBirthday == month) {
-        let foundSenior = await List.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
+      if (senior.monthBirthday == month || senior.monthBirthday == month + 1 || senior.monthBirthday == month - 1) {
+        let foundSenior;
+        if (senior.monthBirthday == month) {
+          foundSenior = await List.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
+        }
+        if (senior.monthBirthday == month + 1) {
+          foundSenior = await ListNext.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
+        }
+        if (senior.monthBirthday == month - 1) {
+          foundSenior = await ListBefore.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
+        }
+
         console.log("foundSenior");
         console.log(foundSenior);
+        let resList;
         if (foundSenior) {
-          let resList = await List.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
+          if (senior.monthBirthday == month) {
+            resList = await List.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
+          }
+          if (senior.monthBirthday == month + 1) {
+            resList = await ListNext.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
+          }
+          if (senior.monthBirthday == month - 1) {
+            resList = await ListBefore.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
+          }
+
           console.log("resList");
           console.log(resList);
           let ordersToChange = await Order.find({ "lineItems.celebrators.celebrator_id": foundSenior._id, isDisabled: false });
@@ -700,7 +722,7 @@ router.put("/update-lists/", async (req, res) => {
     console.log(resArrived);
 
     for (let celebrator of arrived) {
-      if (celebrator.monthBirthday == month) {
+      if (celebrator.monthBirthday == month || celebrator.monthBirthday == month + 1 || celebrator.monthBirthday == month - 1) {
         let cloneSpecialComment = await specialComment(
           2022 - celebrator["yearBirthday"]
         );
@@ -716,22 +738,41 @@ router.put("/update-lists/", async (req, res) => {
         let cloneOldest = false;
 
         if (celebrator["noAddress"]) {
-          cloneCategory = "special";
+          if (celebrator.gender == "Female") {
+            cloneCategory = "specialWomen";
+          }
+          if (celebrator.gender == "Male") {
+            cloneCategory = "specialMen";
+          }
+
         } else {
-          if (celebrator.yearBirthday < 1941) {
+          if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
             cloneOldest = true;
           }
-          if (celebrator.yearBirthday < 1958 && celebrator.gender == "Female") {
+          if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
             cloneCategory = "oldWomen";
-          } else {
-            if (celebrator.yearBirthday < 1958 && celebrator.gender == "Male") {
-              cloneCategory = "oldMen";
-            } else {
-              if (celebrator.yearBirthday > 1957 || !celebrator.yearBirthday) {
-                cloneCategory = "yang";
-              }
+          }
+          if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+            cloneCategory = "oldMen";
+          }
+          if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+            if (celebrator.gender == "Female") {
+              cloneCategory = "yangWomen";
+            }
+            if (celebrator.gender == "Male") {
+              cloneCategory = "yangMen";
             }
           }
+        }
+        let holiday;
+        if(celebrator.monthBirthday == 9){
+          holiday = 'ДР сентября 2023';
+        }
+        if(celebrator.monthBirthday == 10){
+          holiday = 'ДР октября 2023';
+        }
+        if(celebrator.monthBirthday == 11){
+          holiday = 'ДР ноября 2023';
         }
 
         let cloneCelebrator = {
@@ -757,7 +798,7 @@ router.put("/update-lists/", async (req, res) => {
           fullDayBirthday: cloneFullDayBirthday,
           oldest: cloneOldest,
           category: cloneCategory,
-          holyday: 'ДР сентября 2023',
+          holyday: holiday,
           fullData: celebrator.nursingHome +
             celebrator.lastName +
             celebrator.firstName +
@@ -766,8 +807,16 @@ router.put("/update-lists/", async (req, res) => {
             celebrator.monthBirthday +
             celebrator.yearBirthday,
         };
-
-        let finalList = await List.create(cloneCelebrator);
+        if(celebrator.monthBirthday == 9){
+          await ListBefore.create(cloneCelebrator);
+        }
+        if(celebrator.monthBirthday == 10){
+          await List.create(cloneCelebrator);
+        }
+        if(celebrator.monthBirthday == 11){
+          await ListNext.create(cloneCelebrator);
+        }
+        
 
       }
     }

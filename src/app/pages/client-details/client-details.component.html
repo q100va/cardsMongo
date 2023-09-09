@@ -1,120 +1,29 @@
-<!--
-============================================
- code to update client
-===========================================
--->
-<div fxLayout="column" class="update-div">
-    <mat-card fxFlex class="mat-elevation-z8 update-container">
-      <mat-card-title>Client Details: {{clientName}}</mat-card-title>
-      <br />
-      <mat-divider></mat-divider>
-  
-      <mat-card-content>
-        <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
-          <form [formGroup]="form" (ngSubmit)="saveClient()" #clientForm>
-            <mat-card-content>
-  
-                <div fxLayout="column" fxLayoutGap="10px">
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['firstName']" placeholder="Имя*" />
-                        <mat-error class="error"
-                            *ngIf="form.controls.firstName.hasError('required') && form.controls.firstName.touched">This
-                            field is required!</mat-error>
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['patronymic']"
-                            placeholder="Отчество" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['lastName']" placeholder="Фамилия" />
-                    </mat-form-field>
-
-                    <label>
-                        <input type="radio" value="Male" [formControl]="form.controls['gender']">
-                        <span>м</span>
-                    </label>
-                    <label>
-                        <input type="radio" value="Female" [formControl]="form.controls['gender']">
-                        <span>ж</span>
-                    </label>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['email']" placeholder="Email" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['phoneNumber']"
-                            placeholder="Номер телефона" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['whatsApp']" placeholder="WhatsApp" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['telegram']" placeholder="Телеграм" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['vKontakte']"
-                            placeholder="Вконтакте" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['instagram']"
-                            placeholder="Instagram" />
-                    </mat-form-field>
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['facebook']" placeholder="Facebook" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['country']" placeholder="Страна" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['region']" placeholder="Регион" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['comments']" placeholder="Город" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['institute']" placeholder="Организация" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['correspondent']"
-                            placeholder="Переписывается" />
-                    </mat-form-field>
-
-                    <mat-form-field>
-                        <input type="text" matInput [formControl]="form.controls['coordinator']"
-                            placeholder="Координатор" />
-                    </mat-form-field>
-
-                    <mat-slide-toggle [formControl]="form.controls['nameDay']">Поздравляет с именинами
-                    </mat-slide-toggle>
-                    <mat-slide-toggle [formControl]="form.controls['isRestricted']">Заблокирован</mat-slide-toggle>
-
-
-                </div>
-            </mat-card-content>
-  
-            <mat-card-actions>
-              <button class="cancel" (click)="cancel()" mat-raised-button>
-                Cancel
-              </button>
-              <button class="submit" [disabled]="!form.valid" mat-raised-button>
-                Submit
-              </button>
-            </mat-card-actions>
-          </form>
-        </mat-card>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<h3>Create New Team</h3>
+<div class="team">
+  <form [formGroup]="teamForm" (ngSubmit)="onFormSubmit()">
+    <p><b>Team Name : </b> <input formControlName="teamName">
+      <br /><label *ngIf="teamName?.dirty && teamName?.errors?.required" class="error">
+        Team name required. </label>
+    </p>
+    <b> Employees in Team :</b><br><br>
+    <label *ngIf="employees?.errors?.required" class="error"> Employee required. </label>
+    <label *ngIf="employees?.errors?.maxlength" class="error">
+      Max number of Employee can be 5 only. </label>
+    <div formArrayName="employees">
+      <div *ngFor="let emp of employees.controls; let i = index" class="employee">
+        <p> <b>Employee {{i + 1}} : </b>
+          <input [formControlName]="i">  
+          <button type="button" (click)="deleteEmployeeControl(i)">Delete</button>
+        </p>
+      </div>
+    </div>
+    <button type="button" (click)="addEmployeeControl()">Add More Employee</button><br/>
+    <button type="button" (click)="insertEmployeeControl()">Insert Employee at number 2</button><br/>
+    <button type="button" (click)="patchEmployeeValue()">Patch Value</button><br/>
+    <button type="button" (click)="setEmployeeValue()">Create Default Employee List</button><br/>    
+    <button type="button" (click)="setEmployeeControl()">Set Default Employee at number 3</button><br/>
+    <button type="button" (click)="resetEmployees()">Reset Employees</button><br/>
+    <button type="button" (click)="clearEmployeeControls()">clear Employees</button><br/><br/>
+    <button [disabled]="teamForm.invalid">SUBMIT</button>
+  </form>
+</div> 

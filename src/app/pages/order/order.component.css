@@ -108,3 +108,12 @@ style
 .mat-raised-button {
   margin-left: 8px;
 }
+
+.header {
+  color: limegreen;
+  font-size: 1.5em;
+}
+
+.warning {
+  color: red;
+}
