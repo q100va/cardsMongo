@@ -724,7 +724,7 @@ router.put("/update-lists/", async (req, res) => {
     for (let celebrator of arrived) {
       if (celebrator.monthBirthday == month || celebrator.monthBirthday == month + 1 || celebrator.monthBirthday == month - 1) {
         let cloneSpecialComment = await specialComment(
-          2022 - celebrator["yearBirthday"]
+          2023 - celebrator["yearBirthday"]
         );
 
 

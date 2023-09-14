@@ -57,6 +57,7 @@ export class ClientCreateComponent implements OnInit {
     "выдавать только проверенные адреса",
     "не выдавать адреса",
   ];
+  form: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -68,7 +69,104 @@ export class ClientCreateComponent implements OnInit {
     private seniorsService: SeniorsService
   ) {
     this.userName = this.cookieService.get("session_user");
+    this.form = this.formBuilder.group({
+      firstName: [null, [Validators.required]],
+      patronymic: [null],
+      lastName: [null],
+      institutes: this.formBuilder.array([]),
+      contacts: this.formBuilder.group(
+        {
+          email: [null, Validators.compose([Validators.email])],
+          phoneNumber: [
+            null,
+            Validators.compose([this.phoneNumberFormatValidator()]),
+          ],
+          whatsApp: [
+            null,
+            Validators.compose([this.phoneNumberFormatValidator()]),
+          ],
+          telegram: [
+            null,
+            Validators.compose([this.telegramFormatValidator()]),
+          ],
+          vKontakte: [
+            null,
+            Validators.compose([this.vKontakteFormatValidator()]),
+          ],
+          instagram: [null, Validators.compose([this.instaFormatValidator()])],
+          facebook: [null, Validators.compose([this.fbFormatValidator()])],
+          otherContact: [null],
+        }
+      ),
+      country: [null],
+      region: [null],
+      city: [null],
+      publishers: [false],
+      //nameDay: [false],
+      comments: [null],
+      correspondents: this.formBuilder.array([]),
+      //coordinator: [null],
+      isRestricted: [false],
+      // causeOfRestriction: [null],
+      // preventiveAction: [null],
+      // causeOfRestriction: [null],
+      //preventiveAction: [null],
+    });
+    this.form.get("contacts").setValidators(this.minValidator());
   }
+  /*   minValidator(): ValidatorFn {
+    return (group: FormGroup): ValidationErrors => {
+      const email = group.controls["email"];
+      const phoneNumber = group.controls["phoneNumber"];
+      const whatsApp = group.controls["whatsApp"];
+      const telegram = group.controls["telegram"];
+      const instagram = group.controls["instagram"];
+      const vKontakte = group.controls["vKontakte"];
+      const facebook = group.controls["facebook"];
+      const otherContact = group.controls["otherContact"];
+
+      if (
+        !email &&
+        !phoneNumber &&
+        !whatsApp &&
+        !telegram &&
+        !instagram &&
+        !vKontakte &&
+        !facebook &&
+        !otherContact
+      ) {
+        otherContact.setErrors({noOneContact: true})
+      } else {
+        otherContact.setErrors(null)
+      }
+      return;
+    };
+  } */
+  get contacts() {
+    return this.form.get("contacts") as FormGroup;
+  }
+
+  minValidator(): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      //const fg = ctrl as FormGroup;
+      console.log("group.controls");
+      console.log(group.controls);
+      const controls = Object.values(group.controls);
+      let result;
+      if (controls.every((fc) => !fc.value)) {
+       // group.setErrors({ noContacts: true });
+        result = { noContacts: true };
+
+      } else {
+       //group.setErrors(null);
+        result = null;
+      }
+      console.log("group.errors");
+      console.log(group.errors);
+      return result;
+    };
+  }
+
 
   ngOnInit() {
     this.orderService.getNursingHomes().subscribe(
@@ -85,66 +183,65 @@ export class ClientCreateComponent implements OnInit {
     console.log("this.form.controls.isRestricted.value");
     console.log(this.form.controls.isRestricted.value);
   }
-  form = this.formBuilder.group({
-    firstName: [null, Validators.compose([Validators.required])],
-    patronymic: [null],
-    lastName: [null],
 
-    /*     institutes: this.formBuilder.array([
-      new FormControl("", Validators.minLength(2)),
-    ]), */
-
-    institutes: this.formBuilder.array([]),
-    // institute:[null],
-    // category:[null],
-
-    email: [null, Validators.compose([Validators.email])],
-    phoneNumber: [
-      null,
-      Validators.compose([this.phoneNumberFormatValidator()]),
-    ],
-    whatsApp: [null, Validators.compose([this.phoneNumberFormatValidator()])],
-    telegram: [null, Validators.compose([this.telegramFormatValidator()])],
-    vKontakte: [null, Validators.compose([this.vKontakteFormatValidator()])],
-    instagram: [null, Validators.compose([this.instaFormatValidator()])],
-    facebook: [null, Validators.compose([this.fbFormatValidator()])],
-    otherContact: [null],
-    country: [null],
-    region: [null],
-    city: [null],
-    publishers: [false],
-    //nameDay: [false],
-    comments: [null],
-    correspondents: this.formBuilder.array([]),
-    //coordinator: [null],
-    isRestricted: [false],
-    // causeOfRestriction: [null],
-    // preventiveAction: [null],
-    causeOfRestriction: [null],
-    preventiveAction: [null],
-  });
-
-  handleValidations(){
+  addIfRestricted() {
     if (this.form.controls.isRestricted.value) {
-        this.form.get('causeOfRestriction').setValidators([Validators.required]);
-        this.form.get('preventiveAction').setValidators([Validators.required]);
+      this.form.addControl(
+        "causeOfRestriction",
+        new FormControl(null, Validators.required)
+      );
+      this.form.addControl(
+        "preventiveAction",
+        new FormControl(null, Validators.required)
+      );
     } else {
-        this.form.get('causeOfRestriction').setValidators([Validators.nullValidator]);
-        this.form.get('preventiveAction').setValidators([Validators.nullValidator]);
+      this.form.removeControl("causeOfRestriction");
+      this.form.removeControl("preventiveAction");
+    }
+  }
+
+  /*   handleRestrictValidations() {
+    if (this.form.controls.isRestricted.value) {
+      this.form.get("causeOfRestriction").setValidators([Validators.required]);
+      this.form.get("preventiveAction").setValidators([Validators.required]);
+    } else {
+      this.form
+        .get("causeOfRestriction")
+        .setValidators([Validators.nullValidator]);
+      this.form
+        .get("preventiveAction")
+        .setValidators([Validators.nullValidator]);
     }
     //this.form.controls.causeOfRestriction.setValue(null);
     //this.form.controls.preventiveAction.setValue(null);
-    this.form.get('causeOfRestriction').updateValueAndValidity();
-    this.form.get('preventiveAction').updateValueAndValidity();
-}
-  
-
+    this.form.get("causeOfRestriction").updateValueAndValidity();
+    this.form.get("preventiveAction").updateValueAndValidity();
+  }
+ */
   get institutes() {
     return this.form.get("institutes") as FormArray;
   }
+  addInstituteControl() {
+    const group = this.formBuilder.group({
+      name: [null, [Validators.required]],
+      category: [null, [Validators.required]],
+    });
+    // console.log(group);
 
-  get isRestricted() {
-    return this.form.get("isRestricted") as FormControl;
+    this.institutes.push(group);
+    //console.log(this.institutes);
+    console.log("contacts.errors");
+    console.log(this.contacts.errors);
+  }
+
+  deleteInstituteControl(index: number) {
+    this.institutes.removeAt(index);
+    /*     this.form
+        .get("causeOfRestriction")
+        .setValidators([Validators.nullValidator]);
+      this.form
+        .get("preventiveAction")
+        .setValidators([Validators.nullValidator]); */
   }
 
   phoneNumberFormatValidator(): ValidatorFn {
@@ -215,12 +312,12 @@ export class ClientCreateComponent implements OnInit {
   causeOfRestrictionValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const isRestricted = control?.root?.get("isRestricted")?.value;
-      console.log('isRestricted');
+      console.log("isRestricted");
       console.log(isRestricted);
 
       return !isRestricted || (control.value && isRestricted)
         ? null
-        : { causeOfRestriction: { value: true} };
+        : { causeOfRestriction: { value: true } };
     };
   }
 
@@ -230,23 +327,8 @@ export class ClientCreateComponent implements OnInit {
 
       return !isRestricted || (control.value && isRestricted)
         ? null
-        : { preventiveAction: { value: true} };
+        : { preventiveAction: { value: true } };
     };
-  }
-
-  addInstituteControl() {
-    const group = this.formBuilder.group({
-      name: [null],
-      category: [null],
-    });
-    console.log(group);
-
-    this.institutes.push(group);
-    console.log(this.institutes);
-  }
-
-  deleteInstituteControl(index: number) {
-    this.institutes.removeAt(index);
   }
 
   get correspondents() {
@@ -254,8 +336,8 @@ export class ClientCreateComponent implements OnInit {
   }
   addCorrespondentControl() {
     const group = this.formBuilder.group({
-      nursingHome: [null],
-      fullName: [null],
+      nursingHome: [null, [Validators.required]],
+      fullName: [null, [Validators.required]],
     });
     console.log(group);
 
@@ -265,6 +347,13 @@ export class ClientCreateComponent implements OnInit {
 
   deleteCorrespondentControl(index: number) {
     this.correspondents.removeAt(index);
+
+    /*     this.form
+        .get("nursingHome")
+        .setValidators([Validators.nullValidator]);
+      this.form
+        .get("fullName")
+        .setValidators([Validators.nullValidator]); */
   }
 
   onSelectHome(index) {
@@ -290,7 +379,7 @@ export class ClientCreateComponent implements OnInit {
   // create function for new clients
   create() {
     const newClient = {} as Client;
-    let institutes = this.institutes.getRawValue();    
+    let institutes = this.institutes.getRawValue();
 
     for (let institute of institutes) {
       if (institute.name == null) {
@@ -299,9 +388,7 @@ export class ClientCreateComponent implements OnInit {
       }
     }
 
-    let correspondents = this.correspondents.getRawValue();    
-
-    
+    let correspondents = this.correspondents.getRawValue();
 
     for (let correspondent of correspondents) {
       if (correspondent.fullName == null) {
@@ -327,14 +414,14 @@ export class ClientCreateComponent implements OnInit {
     newClient.firstName = this.form.controls.firstName.value;
     newClient.patronymic = this.form.controls.patronymic.value;
     newClient.lastName = this.form.controls.lastName.value;
-    newClient.email = this.form.controls.email.value;
-    newClient.phoneNumber = this.form.controls.phoneNumber.value;
-    newClient.whatsApp = this.form.controls.whatsApp.value;
-    newClient.telegram = this.form.controls.telegram.value;
-    newClient.vKontakte = this.form.controls.vKontakte.value;
-    newClient.instagram = this.form.controls.instagram.value;
-    newClient.facebook = this.form.controls.facebook.value;
-    newClient.otherContact = this.form.controls.otherContact.value;
+    newClient.email = this.contacts.controls.email.value;
+    newClient.phoneNumber = this.contacts.controls.phoneNumber.value;
+    newClient.whatsApp = this.contacts.controls.whatsApp.value;
+    newClient.telegram = this.contacts.controls.telegram.value;
+    newClient.vKontakte = this.contacts.controls.vKontakte.value;
+    newClient.instagram = this.contacts.controls.instagram.value;
+    newClient.facebook = this.contacts.controls.facebook.value;
+    newClient.otherContact = this.contacts.controls.otherContact.value;
     newClient.country = this.form.controls.country.value;
     newClient.region = this.form.controls.region.value;
     newClient.city = this.form.controls.city.value;
@@ -345,8 +432,12 @@ export class ClientCreateComponent implements OnInit {
     newClient.coordinators = [];
     newClient.publishers = this.publishers;
     newClient.isRestricted = this.form.controls.isRestricted.value;
-    newClient.causeOfRestriction =this.form.controls.isRestricted.value ? this.form.controls.causeOfRestriction.value : null;
-    newClient.preventiveAction = this.form.controls.isRestricted.value ? this.form.controls.preventiveAction.value : null;
+    newClient.causeOfRestriction = this.form.controls.isRestricted.value
+      ? this.form.controls.causeOfRestriction.value
+      : null;
+    newClient.preventiveAction = this.form.controls.isRestricted.value
+      ? this.form.controls.preventiveAction.value
+      : null;
 
     // createClient service method to make network call to create client
     this.clientService.createClient(newClient).subscribe(

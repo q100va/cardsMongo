@@ -147,12 +147,29 @@ export class ListService {
     return this.http.get("/api/lists/amountOfVolunteers");
   }
 
+  countAmountOfSeniors(): Observable<any> {
+    return this.http.get("/api/lists/amountOfSeniors");
+  }
+
   findUncertain(): Observable<any> {
     return this.http.patch("/api/lists/uncertain", {});
   }
 
   correctOrdersDates(): Observable<any> {
     return this.http.patch("/api/orders/correct-orders-dates", {});
+  }
+
+  takeListOfClients(): Observable<any> {
+    return this.http.get("/api/clients/create-clients/all");
+  }
+
+  checkListOfClients(client, index): Observable<any> {
+    return this.http.post("/api/clients/create-clients/" + index, {client: client});
+  }
+
+  saveChangedClient(id, client, idsToDelete): Observable<any> {
+    console.log(id);
+    return this.http.post("/api/clients/update-and-delete-clients/" + id, {client: client, ids: idsToDelete});
   }
 
 

@@ -13,7 +13,6 @@ const NewYear = require("../models/new-year");
 const May9 = require("../models/may-9");
 const May19 = require("../models/may-19");
 const NameDay = require("../models/name-day");
-
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
@@ -1855,6 +1854,39 @@ async function countAmount() {
   return amount;
 }
 
+//howManySeniors
+//const Order = require("../models/order");
+router.get("/amountOfSeniors", async (req, res) => {
+  try {
+
+    console.log("start");
+    let amount = await countAmountSeniors();
+    const findAllListsResponse = new BaseResponse("200", "Query successful", amount);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+async function countAmountSeniors() {
+  let amount = 0;
+  let set = new Set();
+  let orders = await Order.find({ isDisabled: false, isOverdue: false, isReturned: false, dateOfOrder: { $gt: new Date('2022-09-01'), $lt: new Date('2023-10-01') } });   //.project({ _id: 0, email: 1, contact: 1,  });
+  for (let order of orders) {
+    for (let lineItem of order.lineItems) {
+      for (let senior of lineItem.celebrators) {
+        let fullData = senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.fullDayBirthday;
+        set.add(fullData);
+      }
+    }
+  }
+  amount = set.size;
+
+  return amount;
+}
 
 // uncertain
 
@@ -1893,6 +1925,9 @@ async function findUncertain() {
   return listOfUncertain;
 
 }
+
+
+
 
 /////////////////////////////////////////
 

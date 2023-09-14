@@ -52,6 +52,8 @@ const orderSchema = new Schema(
     isDisabled: { type: Boolean, default: false },
     isReturned: { type: Boolean, default: false },
     isOverdue: { type: Boolean, default: false },
+
+    clientId: { type: String }
   },
   { collection: "orders" }
 );

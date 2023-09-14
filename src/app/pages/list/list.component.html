@@ -5,38 +5,44 @@
 
     <mat-card-actions>
 
-        <button class="submit" (click)="deleteList()" mat-raised-button color='warn'>Очистить список ДР</button>
-        <!--   <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button> -->
+        <!--    <button class="submit" (click)="deleteList()" mat-raised-button color='warn'>Очистить список ДР</button>
+       <button class="submit" (click)="prepareSeniorsList()" mat-raised-button>Подготовить коллекцию</button>
 
-        <button class="submit" (click)="deleteDoubleList()" mat-raised-button color='warn'>Очистить дубли ДР</button>
+        <button class="submit" (click)="deleteDoubleList()" mat-raised-button color='warn'>Очистить дубли ДР</button> -->
 
 
-<!--         <button class="submit" (click)="populateSeniors()" mat-raised-button>Добавить жителей</button>
+        <!--         <button class="submit" (click)="populateSeniors()" mat-raised-button>Добавить жителей</button>
         <button class="submit" (click)="addHouses()" mat-raised-button>Добавить интернаты</button> -->
         <br /><br /><br />
         <button class="submit" (click)="generateBirthday()" mat-raised-button>Сформировать список ДР</button>
         <button class="submit" (click)="showBirthdayList($event)" mat-raised-button>Показать список ДР</button>
         <button class="submit" (click)="showLessPlus($event)" mat-raised-button>Показать список меньше 2+</button>
+        <br /><br /><br />
         <button class="submit" (click)="showUncertainList($event)" mat-raised-button>Показать сомнительных</button>
         <br /><br /><br />
-        <button class="submit" (click)=" generateNextBirthday()" mat-raised-button>Сформировать список ДР следующего месяца</button>
+        <button class="submit" (click)=" generateNextBirthday()" mat-raised-button>Сформировать список ДР следующего
+            месяца</button>
         <br /><br /><br />
         <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
         <br /><br /><br />
 
-        <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
+        <!--         <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
+        <br /><br /><br /> -->
+
+        <!--         <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Показать волонтеров</button>
+        <br /><br /><br /> -->
+
+        <!--         <button class="submit" (click)="correctOrdersDates($event)" mat-raised-button>Скорректировать даты в заявках</button>
+        <br /><br /><br /> -->
+        <!-- 
+        <button class="submit" (click)="countSeniors($event)" mat-raised-button>Посчитать поздравляемых</button>
         <br /><br /><br />
-
-        <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Показать волонтеров</button>
-        <br /><br /><br />
-
-        <button class="submit" (click)="correctOrdersDates($event)" mat-raised-button>Скорректировать даты в заявках</button>
-        <br /><br /><br />
+ -->
 
 
-              <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
-        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> 
+        <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
+        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button>
         <!--         <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список Пасха</button>
         <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список Пасха</button>
         <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше
@@ -63,6 +69,19 @@
             запросу</button>
 
         <br /><br /><br />
+
+        <button class="submit" (click)="takeClients()" mat-raised-button [disabled]="disableTakeClients">Создать
+            карточки поздравляющих</button>
+
+        <br /><br /><br />
+
+        <h3 *ngIf='!disableCheckClient'>Проверяется список из {{clientsList.length}} клиентов</h3>
+
+        <button class="submit" (click)="checkClient()" mat-raised-button [disabled]="disableCheckClient">Проверить
+            клиента</button>
+
+        <br /><br /><br />
+
     </mat-card-actions>
 
     <mat-card-content *ngIf="isShowList">
@@ -146,12 +165,17 @@
     <mat-card-content *ngIf="isShowAmountOfVolunteers">
         <p>Общее количество - {{amountOfVolunteers}}</p>
 
-  
+
+    </mat-card-content>
+    <mat-card-content *ngIf="isShowAmountOfSeniors">
+        <p>Общее количество - {{amountOfSeniors}}</p>
+
+
     </mat-card-content>
 
     <mat-card-content *ngIf="isShowAListOfUncertain">
         <p>Общее количество - {{listOfUncertainLength}}</p>
-        
+
 
 
         <mat-list *ngFor="let person of listOfUncertain">
@@ -175,4 +199,167 @@
 
 
     </mat-card-content>
+    <h3> {{index}}</h3>
+    <mat-card-content *ngIf="isNewClient">
+        <h4>{{newClient.dateCreated}}</h4>
+        <h4>
+            Создан новый поздравляющий
+        </h4>
+        <div>{{newClient._id}}</div>
+        <div>{{newClient.firstName}} {{newClient.patronymic}} {{newClient.lastName}}</div>
+        <div>email: {{newClient.email}}</div>
+        <div>telegram: {{newClient.telegram}}</div>
+        <div>phoneNumber: {{newClient.phoneNumber}}</div>
+        <div>whatsApp: {{newClient.whatsApp}}</div>
+        <div>vKontakte: {{newClient.vKontakte}}</div>
+        <div>instagram: {{newClient.instagram}}</div>
+        <div>facebook: {{newClient.facebook}}</div>
+        <div>institutes:
+            <span *ngFor="let institute of newClient.institutes">{{institute.name}} {{institute.category}};</span>
+        </div>
+        <div>publishers:
+            <span *ngFor="let publisher of newClient.publishers">{{publisher}};</span>
+        </div>
+        <div>coordinators:
+            <span *ngFor="let coordinator of newClient.coordinators">{{coordinator}};</span>
+        </div>
+
+        <div *ngIf="deletedClients.length >0">Удалены:
+            <span *ngFor="let id of deletedClients">
+                {{id}}
+            </span>
+        </div>
+    </mat-card-content>
+
+
+
+    <mat-card-content *ngIf="isFirstClient">
+        <h4>{{firstClient.dateCreated}}</h4>
+        <h4>
+            Найдены похожие поздравляющие
+
+            <span *ngFor="let id of idOfSimilarClients">
+                {{id}}
+            </span>
+        </h4>
+
+        <h4 *ngIf='isSame'>Расхождений нет</h4>
+        <h4 *ngIf='!isSame'>ЕСТЬ РАСХОЖДЕНИЯ</h4>
+        <div>Первый найденный - {{firstClient._id}}</div>
+        <div>{{firstClient.firstName}} {{firstClient.patronymic}} {{firstClient.lastName}}</div>
+        <div>email: {{firstClient.email}}</div>
+        <div>telegram: {{firstClient.telegram}}</div>
+        <div>phoneNumber: {{firstClient.phoneNumber}}</div>
+        <div>whatsApp: {{firstClient.whatsApp}}</div>
+        <div>vKontakte: {{firstClient.vKontakte}}</div>
+        <div>instagram: {{firstClient.instagram}}</div>
+        <div>facebook: {{firstClient.facebook}}</div>
+        <div>institutes:
+            <span *ngFor="let institute of firstClient.institutes">{{institute.name}} {{institute.category}};</span>
+        </div>
+        <div>publishers:
+            <span *ngFor="let publisher of firstClient.publishers">{{publisher}};</span>
+        </div>
+        <div>coordinators:
+            <span *ngFor="let coordinator of firstClient.coordinators">{{coordinator}};</span>
+        </div>
+
+        <ng-container *ngIf="!isSame">
+            <h4>Выберите данные:</h4>
+            <div *ngIf="controversialData.clientFirstName.length > 0">
+                <label id="example-radio-group-label">clientFirstName</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_clientFirstName">
+                    <mat-radio-button class="example-radio-button"
+                        *ngFor="let item of controversialData.clientFirstName" [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.clientPatronymic.length > 0">
+                <label id="example-radio-group-label">clientPatronymic</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_clientPatronymic">
+                    <mat-radio-button class="example-radio-button"
+                        *ngFor="let item of controversialData.clientPatronymic" [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.clientLastName.length > 0">
+                <label id="example-radio-group-label">clientLastName</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_clientLastName">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.clientLastName"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.email.length > 0">
+                <label id="example-radio-group-label">email</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_email">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.email"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.telegram.length > 0">
+                <label id="example-radio-group-label">telegram</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_telegram">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.telegram"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.phoneNumber.length > 0">
+                <label id="example-radio-group-label">phoneNumber</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_phoneNumber">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.phoneNumber"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.whatsApp.length > 0">
+                <label id="example-radio-group-label">whatsApp</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_whatsApp">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.whatsApp"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.vKontakte.length > 0">
+                <label id="example-radio-group-label">vKontakte</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_vKontakte">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.vKontakte"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.instagram.length > 0">
+                <label id="example-radio-group-label">instagram</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_instagram">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.instagram"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div *ngIf="controversialData.facebook.length > 0">
+                <label id="example-radio-group-label">facebook</label>
+                <mat-radio-group class="example-radio-group" [(ngModel)]="accepted_facebook">
+                    <mat-radio-button class="example-radio-button" *ngFor="let item of controversialData.facebook"
+                        [value]="item">
+                        {{item}}
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <button class="submit" (click)="saveClient()" mat-raised-button>Сохранить изменения</button>
+        </ng-container>
+
+    </mat-card-content>
+
 </mat-card>

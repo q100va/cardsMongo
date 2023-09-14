@@ -28,10 +28,35 @@ export class ListComponent implements OnInit {
   oldest: number = 0;
   correctedSeniors: Array<any> = [];
   amountOfVolunteers = 0;
+  amountOfSeniors = 0;
   isShowAmountOfVolunteers = false;
+  isShowAmountOfSeniors = false;
   listOfUncertain: List[];
   listOfUncertainLength = 0;
   isShowAListOfUncertain = false;
+
+  disableTakeClients = false;
+  disableCheckClient = true;
+  index = 0;
+  clientsList = [];
+  newClient = {};
+  controversialData = {};
+  idOfSimilarClients = [];
+  firstClient = {};
+  deletedClients = [];
+  isNewClient = false;
+  isFirstClient = false;
+  isSame = true;
+  accepted_clientFirstName = "";
+  accepted_clientPatronymic = "";
+  accepted_clientLastName = "";
+  accepted_email = "";
+  accepted_telegram = "";
+  accepted_phoneNumber = "";
+  accepted_whatsApp = "";
+  accepted_vKontakte = "";
+  accepted_instagram = "";
+  accepted_facebook = "";
 
   constructor(
     private listService: ListService,
@@ -69,8 +94,6 @@ export class ListComponent implements OnInit {
       }
     );
   }
-
-
 
   generateNameDay() {
     this.listService.createNameDayList().subscribe(
@@ -484,7 +507,7 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
-/*   populateSeniors() {
+  /*   populateSeniors() {
     this.seniorsService.createSeniorsCollection(seniors).subscribe(
       async (res) => {
         let result = await res["data"];
@@ -674,6 +697,21 @@ export class ListComponent implements OnInit {
     this.isShowAmountOfVolunteers = true;
   }
 
+  countSeniors(event: any) {
+    this.listService.countAmountOfSeniors().subscribe(
+      (res) => {
+        this.amountOfSeniors = res["data"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowAmountOfSeniors = true;
+  }
+
   showUncertainList(event: any) {
     this.listService.findUncertain().subscribe(
       (res) => {
@@ -702,5 +740,157 @@ export class ListComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  takeClients() {
+    this.listService.takeListOfClients().subscribe(
+      (res) => {
+        this.disableTakeClients = true;
+        this.clientsList = res.data;
+        console.log("res");
+        console.log(res.data);
+        console.log("this.clientsList.length");
+        console.log(this.clientsList.length);
+        this.disableCheckClient = this.clientsList.length > 0 ? false : true;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  checkClient() {
+    this.listService
+      .checkListOfClients(this.clientsList[this.index], this.index)
+      .subscribe(
+        (res) => {
+          if (res.data.resume) {
+            console.log("res");
+            console.log(res.data);
+            this.newClient = res.data.client;
+            this.firstClient = {};
+            this.isNewClient = true;
+            this.isFirstClient = false;
+            this.index++;
+            if (this.index == this.clientsList.length)
+              this.disableCheckClient = true;
+            if (!this.disableCheckClient) this.checkClient();
+          } else {
+            console.log("res");
+            console.log(res.data);
+            this.controversialData = res.data.controversialData;
+            this.idOfSimilarClients = res.data.idOfSimilarClients;
+            this.firstClient = res.data.client;
+            this.newClient = {};
+            this.isNewClient = false;
+            this.isFirstClient = true;
+            this.isSame = true;
+            for (let key in this.controversialData) {
+              /*               console.log("key");
+              console.log(key); */
+              if (this.controversialData[key].length > 0) this.isSame = false;
+            }
+            this.index++;
+            if (this.index == this.clientsList.length)
+              this.disableCheckClient = true;
+            if (this.isSame && !this.disableCheckClient) this.checkClient();
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
+
+  saveClient() {
+    let updatedClient = {
+      firstName:
+        this.accepted_clientFirstName != ""
+          ? this.accepted_clientFirstName
+          : this.firstClient["firstName"],
+      patronymic:
+        this.accepted_clientPatronymic != ""
+          ? this.accepted_clientPatronymic
+          : this.firstClient["patronymic"],
+      lastName:
+        this.accepted_clientLastName != ""
+          ? this.accepted_clientLastName
+          : this.firstClient["lastName"],
+
+      email:
+        this.accepted_email != ""
+          ? this.accepted_email
+          : this.firstClient["email"],
+      phoneNumber:
+        this.accepted_phoneNumber != ""
+          ? this.accepted_phoneNumber
+          : this.firstClient["phoneNumber"],
+      whatsApp:
+        this.accepted_whatsApp != ""
+          ? this.accepted_whatsApp
+          : this.firstClient["whatsApp"],
+      telegram:
+        this.accepted_telegram != ""
+          ? this.accepted_telegram
+          : this.firstClient["telegram"],
+      vKontakte:
+        this.accepted_vKontakte != ""
+          ? this.accepted_vKontakte
+          : this.firstClient["vKontakte"],
+      instagram:
+        this.accepted_instagram != ""
+          ? this.accepted_instagram
+          : this.firstClient["instagram"],
+      facebook:
+        this.accepted_facebook != ""
+          ? this.accepted_facebook
+          : this.firstClient["facebook"],
+      institutes: this.firstClient["institutes"],
+      publishers: this.firstClient["publishers"],
+      coordinators: this.firstClient["coordinators"],
+      otherContact: this.firstClient["otherContact"],
+      country: this.firstClient["country"],
+      region: this.firstClient["region"],
+      city: this.firstClient["city"],
+      nameDayCelebration: this.firstClient["nameDayCelebration"],
+      comments: this.firstClient["comments"],
+      correspondents: this.firstClient["correspondents"],
+      isRestricted: this.firstClient["isRestricted"],
+      causeOfRestriction: this.firstClient["causeOfRestriction"],
+      preventiveAction: this.firstClient["preventiveAction"],
+    };
+    let id = this.idOfSimilarClients[0];
+    console.log("id");
+    console.log(id);
+    this.idOfSimilarClients.splice(0, 1);
+    this.listService
+      .saveChangedClient(id, updatedClient, this.idOfSimilarClients)
+      .subscribe(
+        (res) => {
+          this.newClient = res.data.savedClient;
+          this.firstClient = {};
+          this.deletedClients = res.data.deletedClients;
+          this.firstClient = {};
+          this.isNewClient = true;
+          this.isFirstClient = false;
+          this.controversialData = [];
+          this.idOfSimilarClients = [];
+          this.isSame = true;
+
+          this.accepted_clientFirstName = "";
+          this.accepted_clientPatronymic = "";
+          this.accepted_clientLastName = "";
+          this.accepted_email = "";
+          this.accepted_telegram = "";
+          this.accepted_phoneNumber = "";
+          this.accepted_whatsApp = "";
+          this.accepted_vKontakte = "";
+          this.accepted_instagram = "";
+          this.accepted_facebook = "";
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 }
