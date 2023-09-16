@@ -1785,7 +1785,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     celebratorsAmount: 0,
     date1: day1,
     date2: day2,
-    maxPlus: 3,
+    maxPlus: 4,
     filter: filter,
     order_id: order_id,
     //temporaryLineItems: [],
@@ -1851,7 +1851,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, ord
 
       data.date1 = period.date1;
       data.date2 = period.date2;
-      data.maxPlus = 3; //period.maxPlus;
+      data.maxPlus = 4; //period.maxPlus;
 
       data = await collectSeniors(data, orderFilter, holiday);
 
@@ -1863,7 +1863,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, ord
           data.date2 = period.date2;
         } else {
           if (proportion.amount < 31) {
-            data.maxPlus = 3; //period.maxPlus;
+            data.maxPlus = 4; //period.maxPlus;
             data.date1 = period.date2 + 1;
             data.date2 = period.date2 + 1;
           } else {
@@ -2092,7 +2092,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest ? 3 : data.maxPlus;
+  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
     // filter.yearBirthday = { $lt: 1944 };
