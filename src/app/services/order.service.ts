@@ -161,6 +161,10 @@ export class OrderService {
     });
   }
 
+  getContacts(contactType: string): Observable<any> {
+    return this.http.get("/api/clients/find/" + contactType);
+  }
+
   createOrder(newOrder: Order, prohibitedId: []): Observable<any> {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
