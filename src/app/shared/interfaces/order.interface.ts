@@ -13,7 +13,7 @@ export interface Order {
   userName: string;
   holiday: string;
   source?: string;
-  clientId: string;
+  clientId?: string;
   clientFirstName: string;
   clientPatronymic: string;
   clientLastName: string;
