@@ -95,6 +95,8 @@ import { March8Component } from './pages/march8/march8.component';
 import { May9Component } from "./pages/may9/may9.component";
 import { FamilyDayComponent } from "./pages/family-day/family-day.component";
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import { CreateClientDialogComponent } from './shared/create-client-dialog/create-client-dialog.component';
+import { UpdateClientDialogComponent } from './shared/update-client-dialog/update-client-dialog.component';
 
 @NgModule({
   declarations: [
@@ -141,7 +143,9 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
     February23Component,
     March8Component,
     May9Component,
-    FamilyDayComponent
+    FamilyDayComponent,
+    CreateClientDialogComponent,
+    UpdateClientDialogComponent
 
   ],
   imports: [
@@ -191,6 +195,8 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
   ],
   entryComponents: [
     ConfirmationDialogComponent,
+    CreateClientDialogComponent,
+    UpdateClientDialogComponent
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent],

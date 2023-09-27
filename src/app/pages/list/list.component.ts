@@ -5,6 +5,8 @@ import { List } from "src/app/shared/interfaces/list.interface";
 import { seniors } from "server/models/seniors_list.js";
 import { houses } from "server/models/houses_list.js";
 import { SeniorsService } from "src/app/services/seniors.service";
+import { ClientService } from "src/app/services/client.service";
+import { OrderService } from "src/app/services/order.service";
 import { HttpClient } from "@angular/common/http";
 
 @Component({
@@ -61,6 +63,8 @@ export class ListComponent implements OnInit {
   constructor(
     private listService: ListService,
     private housesService: HousesService,
+    private clientService: ClientService,
+    private orderService: OrderService,
     private seniorsService: SeniorsService,
     private http: HttpClient
   ) {}
@@ -780,6 +784,7 @@ export class ListComponent implements OnInit {
             console.log(res.data);
             this.controversialData = res.data.controversialData;
             this.idOfSimilarClients = res.data.idOfSimilarClients;
+
             this.firstClient = res.data.client;
             this.newClient = {};
             this.isNewClient = false;
@@ -887,10 +892,34 @@ export class ListComponent implements OnInit {
           this.accepted_vKontakte = "";
           this.accepted_instagram = "";
           this.accepted_facebook = "";
+
+          this.checkClient();
         },
         (err) => {
           console.log(err);
         }
       );
+  }
+
+  addSearchArray() {
+    this.clientService.addSearchArray().subscribe(
+      (res) => {
+        alert(res + " обновлено");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  moveInstitutes() {
+    this.orderService.moveInstitutes().subscribe(
+      (res) => {
+        alert(res + " обновлено");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

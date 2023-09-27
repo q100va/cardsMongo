@@ -25,8 +25,8 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class OrderListComponent implements AfterViewInit {
   orders: Order[];
-  allOrders: Order[];
-  notConfirmedOrders: Order[];
+ // allOrders: Order[];
+  //notConfirmedOrders: Order[];
   userName: string;
   isShowAll: boolean = false;
   length = 0;

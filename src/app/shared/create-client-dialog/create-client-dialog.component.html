@@ -6,14 +6,16 @@
 
 <div fxLayout="column" style="padding-top: 30px" class="main">
     <mat-card class="mat-elevation-z0" style="width: 800px; margin: auto;">
-        <mat-card-title> Карточка поздравляющего </mat-card-title>
+        <h4 mat-dialog-title> Карточка поздравляющего </h4>
       
         <br />
 
         <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"
         [style]="{width: '30%'}"></p-confirmDialog>
         <!-- Client Create Form -->
-        <form [formGroup]="form">
+       
+        <form [formGroup]="form" >
+             <div mat-dialog-content>
             <mat-card-content>
                 <div fxLayout="column" fxLayoutGap="10px">
                     <table>
@@ -359,12 +361,14 @@
             </mat-card-content>
 
             <br />
-
+        </div>
+        <div mat-dialog-actions>
             <mat-card-actions align="end">
-                <button mat-raised-button (click)="cancel()" color="accent">Отменить</button>
-                <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid"
-                    (click)="create()">Сохранить</button>
+                <button mat-raised-button  (click)="close()" color="accent">Отменить</button>
+                <button mat-raised-button color="primary" [disabled]="!form.valid"
+                (click) = "createNewClient()" >Сохранить</button>
             </mat-card-actions>
+        </div>
         </form>
     </mat-card>
 </div>

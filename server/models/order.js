@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const lineItem = require("../schemas/line-item");
 const celebrator = require("../schemas/celebrator");
+const institute = require("../schemas/institute");
 
 const orderSchema = new Schema(
   {
@@ -21,6 +22,7 @@ const orderSchema = new Schema(
     contactType: { type: String },
     contact: { type: String },
     institute: { type: String },
+    institutes: [institute],
     amount: { type: Number },
     comment: { type: String },
     lineItems: [lineItem],

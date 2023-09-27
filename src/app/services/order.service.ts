@@ -151,23 +151,22 @@ export class OrderService {
 
   checkDoubleOrder(
     holiday: string,
-    email: string,
-    contact: string
+    clientId: string
   ): Observable<any> {
     return this.http.post("/api/orders/check-double/", {
       holiday: holiday,
-      email: email,
-      contact: contact,
+      clientId: clientId
     });
   }
 
   getContacts(contactType: string): Observable<any> {
-    return this.http.get("/api/clients/find/" + contactType);
+    return this.http.get("/api/clients/find-contacts/" + contactType);
   }
 
   createOrder(newOrder: Order, prohibitedId: []): Observable<any> {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
+      clientId: newOrder.clientId,
       holiday: newOrder.holiday,
       source: newOrder.source,
       amount: newOrder.amount,
@@ -178,6 +177,7 @@ export class OrderService {
       contactType: newOrder.contactType,
       contact: newOrder.contact,
       institute: newOrder.institute,
+      institutes: newOrder.institutes,
       isAccepted: newOrder.isAccepted,
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
@@ -333,4 +333,9 @@ export class OrderService {
   findAllOrdersWithAbsents(): Observable<any> {
     return this.http.get("/api/orders/absents/all");
   }
+
+  moveInstitutes(): Observable<any> {
+    return this.http.get("/api/orders/clients/move-institutes");
+  }
+
 }

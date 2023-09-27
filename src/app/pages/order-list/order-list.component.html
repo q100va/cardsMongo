@@ -50,15 +50,19 @@
                         ? dataSource.clientPatronymic
                         : "") + " " + (dataSource.clientLastName
                         ? dataSource.clientLastName
-                        : "") + " " + (dataSource.institute
-                        ? dataSource.institute
-                        : "") }} </mat-cell>
+                        : "") + " " + (dataSource.institutes[0]
+                        ? dataSource.institutes[0].name
+                        : "") + " " + (dataSource.institutes[1]
+                        ? dataSource.institutes[1].name
+                        : "") + " " + (dataSource.institutes[2]
+                        ? dataSource.institutes[2].name
+                        : "")}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contact">
                     <mat-header-cell *matHeaderCellDef> Контактная информация </mat-header-cell>
-                    <mat-cell *matCellDef="let dataSource"> {{ dataSource.email ? dataSource.email :
-                        dataSource.contactType + " " +
+                    <mat-cell *matCellDef="let dataSource"> {{ 
+                        dataSource.contactType + ": " +
                         dataSource.contact}}</mat-cell>
                 </ng-container>
 

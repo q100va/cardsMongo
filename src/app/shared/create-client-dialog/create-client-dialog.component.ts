@@ -1,14 +1,9 @@
-/*
-============================================
-; Title: WEB450 Bob's Computer Repair Shop Sprint1
-; Author: Professor Krasso
-; Date: April 24, 2022
-; Modified By: House Gryffindor
-; Description: Bob's Computer Repair Shop client-create component
-;===========================================
-*/
-
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
 import {
   AbstractControl,
   FormArray,
@@ -24,19 +19,22 @@ import { Router } from "@angular/router";
 import { Client } from "src/app/shared/interfaces/client.interface";
 import { ClientService } from "src/app/services/client.service";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
 import { countries } from "server/models/countries-list.js";
 import { OrderService } from "src/app/services/order.service";
 import { SeniorsService } from "src/app/services/seniors.service";
 import { ConfirmationService } from "primeng/api";
 
 @Component({
-  selector: "app-client-create",
-  templateUrl: "./client-create.component.html",
-  styleUrls: ["./client-create.component.css"],
+  selector: "app-create-client-dialog",
+  templateUrl: "./create-client-dialog.component.html",
+  styleUrls: ["./create-client-dialog.component.css"],
 })
-export class ClientCreateComponent implements OnInit {
+export class CreateClientDialogComponent implements OnInit {
   userName: string;
+  newContactType: string;
+  newContact: string;
+
+  //
   countries = countries;
   publishers: string[] = [];
   categories = [
@@ -69,32 +67,51 @@ export class ClientCreateComponent implements OnInit {
     private cookieService: CookieService,
     private orderService: OrderService,
     private seniorsService: SeniorsService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private dialogRef: MatDialogRef<CreateClientDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data
   ) {
-    this.userName = this.cookieService.get("session_user");
+    this.userName = data.userName;
+    this.newContactType = data.newContactType;
+    this.newContact = data.newContact;
+
     this.form = this.formBuilder.group({
       firstName: [null, [Validators.required]],
       patronymic: [null],
       lastName: [null],
       institutes: this.formBuilder.array([]),
       contacts: this.formBuilder.group({
-        email: [null, Validators.compose([Validators.email])],
+        email: [
+          this.newContactType == "email" ? this.newContact : null,
+          Validators.compose([Validators.email]),
+        ],
         phoneNumber: [
-          null,
+          this.newContactType == "phoneNumber" ? this.newContact : null,
           Validators.compose([this.phoneNumberFormatValidator()]),
         ],
         whatsApp: [
-          null,
+          this.newContactType == "whatsApp" ? this.newContact : null,
           Validators.compose([this.phoneNumberFormatValidator()]),
         ],
-        telegram: [null, Validators.compose([this.telegramFormatValidator()])],
+        telegram: [
+          this.newContactType == "telegram" ? this.newContact : null,
+          Validators.compose([this.telegramFormatValidator()]),
+        ],
         vKontakte: [
-          null,
+          this.newContactType == "vKontakte" ? this.newContact : null,
           Validators.compose([this.vKontakteFormatValidator()]),
         ],
-        instagram: [null, Validators.compose([this.instaFormatValidator()])],
-        facebook: [null, Validators.compose([this.fbFormatValidator()])],
-        otherContact: [null],
+        instagram: [
+          this.newContactType == "instagram" ? this.newContact : null,
+          Validators.compose([this.instaFormatValidator()]),
+        ],
+        facebook: [
+          this.newContactType == "facebook" ? this.newContact : null,
+          Validators.compose([this.fbFormatValidator()]),
+        ],
+        otherContact: [
+          this.newContactType == "otherContact" ? this.newContact : null,
+        ],
       }),
       country: [null],
       region: [null],
@@ -105,41 +122,9 @@ export class ClientCreateComponent implements OnInit {
       correspondents: this.formBuilder.array([]),
       //coordinator: [null],
       isRestricted: [false],
-      // causeOfRestriction: [null],
-      // preventiveAction: [null],
-      // causeOfRestriction: [null],
-      //preventiveAction: [null],
     });
     this.form.get("contacts").setValidators(this.minValidator());
   }
-  /*   minValidator(): ValidatorFn {
-    return (group: FormGroup): ValidationErrors => {
-      const email = group.controls["email"];
-      const phoneNumber = group.controls["phoneNumber"];
-      const whatsApp = group.controls["whatsApp"];
-      const telegram = group.controls["telegram"];
-      const instagram = group.controls["instagram"];
-      const vKontakte = group.controls["vKontakte"];
-      const facebook = group.controls["facebook"];
-      const otherContact = group.controls["otherContact"];
-
-      if (
-        !email &&
-        !phoneNumber &&
-        !whatsApp &&
-        !telegram &&
-        !instagram &&
-        !vKontakte &&
-        !facebook &&
-        !otherContact
-      ) {
-        otherContact.setErrors({noOneContact: true})
-      } else {
-        otherContact.setErrors(null)
-      }
-      return;
-    };
-  } */
   get contacts() {
     return this.form.get("contacts") as FormGroup;
   }
@@ -196,24 +181,6 @@ export class ClientCreateComponent implements OnInit {
     }
   }
 
-  /*   handleRestrictValidations() {
-    if (this.form.controls.isRestricted.value) {
-      this.form.get("causeOfRestriction").setValidators([Validators.required]);
-      this.form.get("preventiveAction").setValidators([Validators.required]);
-    } else {
-      this.form
-        .get("causeOfRestriction")
-        .setValidators([Validators.nullValidator]);
-      this.form
-        .get("preventiveAction")
-        .setValidators([Validators.nullValidator]);
-    }
-    //this.form.controls.causeOfRestriction.setValue(null);
-    //this.form.controls.preventiveAction.setValue(null);
-    this.form.get("causeOfRestriction").updateValueAndValidity();
-    this.form.get("preventiveAction").updateValueAndValidity();
-  }
- */
   get institutes() {
     return this.form.get("institutes") as FormArray;
   }
@@ -383,8 +350,7 @@ export class ClientCreateComponent implements OnInit {
     );
   }
 
-  // create function for new clients
-  create() {
+  createNewClient() {
     const newClient = {} as Client;
     let institutes = this.institutes.getRawValue();
 
@@ -397,15 +363,13 @@ export class ClientCreateComponent implements OnInit {
 
     let correspondents = this.correspondents.getRawValue();
 
-
     for (let correspondent of correspondents) {
       if (correspondent.fullName == null) {
         let index = correspondents.findIndex((item) => item.fullName == null);
         correspondents.splice(index, 1);
       }
-
     }
-/*     let correspondentsFullList = [];
+    /*     let correspondentsFullList = [];
     for (let correspondent of correspondents) {
       correspondentsFullList.push(correspondent.fullName);
     }
@@ -449,8 +413,9 @@ export class ClientCreateComponent implements OnInit {
     newClient.preventiveAction = this.form.controls.isRestricted.value
       ? this.form.controls.preventiveAction.value
       : null;
-
-      
+    /*       this.data.newClient = newClient;
+      console.log("dialog - this.data.newClient");
+      console.log(this.data.newClient); */
 
     this.clientService.checkDoubleClient(newClient, null).subscribe(
       (res) => {
@@ -459,29 +424,9 @@ export class ClientCreateComponent implements OnInit {
         console.log(res.data);
 
         if (this.doubles.length == 0) {
-          // createClient service method to make network call to create client
-          this.clientService.createClient(newClient).subscribe(
-            (res) => {
-              this.router.navigate(["/clients"]);
-              this.resultDialog.open(ConfirmationDialogComponent, {              
-                data: {
-                  message: "Карточка пользователя была успешно создана..",
-                },
-                disableClose: true,
-                width: "fit-content",
-              });
-            },
-            (err) => {
-              console.log(err);
-              this.resultDialog.open(ConfirmationDialogComponent, {
-                data: {
-                  message: err.error.msg,
-                },
-                disableClose: true,
-                width: "fit-content",
-              });
-            }
-          );
+          this.data.newClient = newClient;
+          this.data.noDoubles = true;
+          this.dialogRef.close(this.data);
         } else {
           if (this.doubles.length > 1) {
             let doublesId = "";
@@ -504,7 +449,6 @@ export class ClientCreateComponent implements OnInit {
             //ОПРЕДЕЛИТЬ ЕСТЬ ИЛИ НЕТ РАСХОЖДЕНИЙ В ДАННЫХ.
             //если нет, то просто сообщить, что пользуйтесь старым + объединить инст, пабл, коорд, корресп
             //если есть, то предложить объединить с выбором вариантов
-
 
             const email = this.doubles[0].email
               ? "email: " + this.doubles[0].email + ", "
@@ -532,29 +476,28 @@ export class ClientCreateComponent implements OnInit {
               : "";
 
             let foundClient =
-              this.doubles[0].firstName + " " + (this.doubles[0].patronymic
+              this.doubles[0].firstName +
+              " " +
+              (this.doubles[0].patronymic
                 ? this.doubles[0].patronymic + " "
-                : "") + (this.doubles[0].lastName
-                ? this.doubles[0].lastName + " "
                 : "") +
-                  email +
-                  phoneNumber +
-                  whatsApp +
-                  telegram +
-                  vKontakte +
-                  instagram +
-                  facebook +
-                  otherContact;
+              (this.doubles[0].lastName ? this.doubles[0].lastName + " " : "") +
+              email +
+              phoneNumber +
+              whatsApp +
+              telegram +
+              vKontakte +
+              instagram +
+              facebook +
+              otherContact;
 
-              
-                  console.log("foundClient[foundClient.length-1]");
-                  console.log(foundClient[foundClient.length-1]);
-                  if(foundClient[foundClient.length-2] == ",") {
-                    console.log("foundClient[foundClient.length-1]");
-                    console.log(foundClient[foundClient.length-1]);
-                    foundClient = foundClient.slice(0 , foundClient.length-2) + ". ";
-                  }
-                 
+            console.log("foundClient[foundClient.length-1]");
+            console.log(foundClient[foundClient.length - 1]);
+            if (foundClient[foundClient.length - 2] == ",") {
+              console.log("foundClient[foundClient.length-1]");
+              console.log(foundClient[foundClient.length - 1]);
+              foundClient = foundClient.slice(0, foundClient.length - 2) + ". ";
+            }
 
             this.confirmationService.confirm({
               message:
@@ -562,21 +505,12 @@ export class ClientCreateComponent implements OnInit {
                 foundClient +
                 "Вы хотите открыть существующую карточку?",
               accept: () => {
-                //this.router.navigate(["clients/update/" + this.doubles[0]._id]);
-                this.router.navigate([]).then((result) => {
-                  window.open("#/clients/update/" + this.doubles[0]._id, '_blank');
-                });
+                this.confirmationService.close();
+                this.data.newClient = newClient;
+                this.data.noDoubles = false;
+                this.data.doubleId = this.doubles[0]._id;
+                this.dialogRef.close(this.data);
 
-
-/*                 let isSame = true;
-                for (let key in newClient) {
-                  if(!newClient[key].isArray && !(typeof newClient[key] == 'boolean')){
-                    if(newClient[key].toLowerCase != this.doubles[0][key].toLowerCase ) {
-                      isSame = false;
-                    }
-                  }
-                }
-                if(isSame){} */
               },
               reject: () => {},
             });
@@ -589,15 +523,16 @@ export class ClientCreateComponent implements OnInit {
           data: {
             message: err.error.msg,
           },
-          disableClose: true,
+       
           width: "fit-content",
         });
       }
     );
   }
 
-  // This is the cancel button.
-  cancel() {
-    this.router.navigate(["/clients"]);
+
+
+  close(): void {
+    this.dialogRef.close();
   }
 }

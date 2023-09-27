@@ -13,13 +13,15 @@ export interface Order {
   userName: string;
   holiday: string;
   source?: string;
+  clientId: string;
   clientFirstName: string;
   clientPatronymic: string;
   clientLastName: string;
-  email: string;
+  email?: string;
   contactType: string;
   contact: string;
-  institute: string;
+  institute?: string;
+  institutes?: Array<any>;
   amount: number;
   isAccepted: boolean;
   isOverdue?: boolean;

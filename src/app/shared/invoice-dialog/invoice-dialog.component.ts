@@ -11,8 +11,8 @@ import {
   templateUrl: "./invoice-dialog.component.html",
   styleUrls: ["./invoice-dialog.component.css"],
 })
-export class InvoiceDialogComponent implements OnInit { */
-/*   //invoice: Invoice;
+export class InvoiceDialogComponent implements OnInit { 
+  invoice: Invoice;
   username: string;
   orderDate: string;
   total: number;

@@ -70,6 +70,14 @@
 
         <br /><br /><br />
 
+<!--         <button class="submit" (click)="addSearchArray()" mat-raised-button>Добавить строку поиска</button>
+
+        <br /><br /><br /> -->
+
+        <button class="submit" (click)="moveInstitutes()" mat-raised-button>Организации в массив</button>
+
+        <br /><br /><br />
+
         <button class="submit" (click)="takeClients()" mat-raised-button [disabled]="disableTakeClients">Создать
             карточки поздравляющих</button>
 
@@ -224,7 +232,7 @@
             <span *ngFor="let coordinator of newClient.coordinators">{{coordinator}};</span>
         </div>
 
-        <div *ngIf="deletedClients.length >0">Удалены:
+        <div *ngIf="deletedClients.length > 0">Удалены:
             <span *ngFor="let id of deletedClients">
                 {{id}}
             </span>
@@ -247,13 +255,13 @@
         <h4 *ngIf='!isSame'>ЕСТЬ РАСХОЖДЕНИЯ</h4>
         <div>Первый найденный - {{firstClient._id}}</div>
         <div>{{firstClient.firstName}} {{firstClient.patronymic}} {{firstClient.lastName}}</div>
-        <div>email: {{firstClient.email}}</div>
-        <div>telegram: {{firstClient.telegram}}</div>
-        <div>phoneNumber: {{firstClient.phoneNumber}}</div>
-        <div>whatsApp: {{firstClient.whatsApp}}</div>
-        <div>vKontakte: {{firstClient.vKontakte}}</div>
-        <div>instagram: {{firstClient.instagram}}</div>
-        <div>facebook: {{firstClient.facebook}}</div>
+        <div *ngIf = "firstClient.email">email: {{firstClient.email}}</div>
+        <div *ngIf = "firstClient.telegram">telegram: {{firstClient.telegram}}</div>
+        <div *ngIf = "firstClient.phoneNumber">phoneNumber: {{firstClient.phoneNumber}}</div>
+        <div *ngIf = "firstClient.whatsApp">whatsApp: {{firstClient.whatsApp}}</div>
+        <div *ngIf = "firstClient.vKontakte">vKontakte: {{firstClient.vKontakte}}</div>
+        <div *ngIf = "firstClient.instagram">instagram: {{firstClient.instagram}}</div>
+        <div *ngIf = "firstClient.facebook">facebook: {{firstClient.facebook}}</div>
         <div>institutes:
             <span *ngFor="let institute of firstClient.institutes">{{institute.name}} {{institute.category}};</span>
         </div>

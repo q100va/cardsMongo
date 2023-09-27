@@ -1,0 +1,160 @@
+mat-table {
+    table-layout: auto;
+    width: 100%;
+}
+
+.mat-list-item {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  .mat-list {
+    
+    padding: 0 10px;
+  }
+
+  div.mat-list-item-content {
+       padding: 0 10px !important;
+  }
+
+.mat-column-contacts {
+
+    white-space: unset !important;
+    flex: 0 0 22% !important;
+    width: 22% !important;
+
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-fullName {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 18% !important;
+    width: 18% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-address {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 7% !important;
+    width: 7% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  .mat-column-publishers {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 7% !important;
+    width: 7% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-institutes {
+
+    white-space: unset !important;
+    flex: 0 0 15% !important;
+    width: 15% !important;
+
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-edit {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 5% !important;
+    width: 5% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  .mat-column-delete {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 5% !important;
+    width: 5% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+
+mat-card-title {
+    text-align: center;
+  }
+  
+  mat-card-subtitle {
+    margin: auto;
+    text-align: center;
+  }
+  
+  .icon-cursor {
+    cursor: pointer;
+  }
+  
+  div {
+    width: 95%;
+    margin: auto;
+  }
+  
+  .orange {
+    color: #FBC02D;
+  }
+
+  .grey {
+    color: #abaaa9;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: #abaaa9;
+    padding-right: 4px;
+  }
+
+  .search  {
+    width: 90%;
+    margin-left: 20%;
+
+ 
+  }

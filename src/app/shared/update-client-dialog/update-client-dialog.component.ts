@@ -1,10 +1,9 @@
-/*
-============================================
-client-details component
-;===========================================
-*/
-
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
 import {
   AbstractControl,
   FormArray,
@@ -15,29 +14,30 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ClientService } from "src/app/services/client.service";
-import { Client } from "src/app/shared/interfaces/client.interface";
-import { ConfirmationService } from "primeng/api";
-//import { MessageService } from "primeng/api";
-import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
-import { MatDialog } from "@angular/material/dialog";
-import { countries } from "server/models/countries-list.js";
 import { CookieService } from "ngx-cookie-service";
+import { Client } from "src/app/shared/interfaces/client.interface";
+import { ClientService } from "src/app/services/client.service";
+import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+import { countries } from "server/models/countries-list.js";
 import { OrderService } from "src/app/services/order.service";
 import { SeniorsService } from "src/app/services/seniors.service";
+import { ConfirmationService } from "primeng/api";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
-  selector: "app-client-details",
-  templateUrl: "./client-details.component.html",
-  styleUrls: ["./client-details.component.css"],
+  selector: "app-update-client-dialog",
+  templateUrl: "./update-client-dialog.component.html",
+  styleUrls: ["./update-client-dialog.component.css"],
 })
-export class ClientDetailsComponent implements OnInit {
+export class UpdateClientDialogComponent implements OnInit {
+  userName: string;
+  updatedContact: string;
+
+  //
   client: Client;
   clientId: string;
   clientName: string;
   form: FormGroup;
-  userName: string;
   countries = countries;
   categories = [
     "образовательное учреждение",
@@ -64,20 +64,20 @@ export class ClientDetailsComponent implements OnInit {
   listOfPublishers = "";
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private router: Router,
     private clientService: ClientService,
     private resultDialog: MatDialog,
     private cookieService: CookieService,
-    private formBuilder: FormBuilder,
     private orderService: OrderService,
     private seniorsService: SeniorsService,
-    private confirmationService: ConfirmationService //private messageService: MessageService
+    private confirmationService: ConfirmationService,
+    private dialogRef: MatDialogRef<UpdateClientDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data
   ) {
-    this.userName = this.cookieService.get("session_user");
-    this.clientId = this.route.snapshot.paramMap.get("id");
-    console.log(this.route.snapshot.paramMap);
-    console.log(this.clientId);
+    this.userName = data.userName;
+    this.clientId = data.id;
 
     this.form = this.formBuilder.group({
       firstName: [null, [Validators.required]],
@@ -107,28 +107,26 @@ export class ClientDetailsComponent implements OnInit {
       region: [null],
       city: [null],
       publishers: [false],
-      //nameDay: [false],
       comments: [null],
       correspondents: this.formBuilder.array([]),
-      //coordinator: [null],
       isRestricted: [false],
-      // causeOfRestriction: [null],
-      // preventiveAction: [null],
     });
-
     this.form.get("contacts").setValidators(this.minValidator());
 
     this.clientService.findClientById(this.clientId).subscribe(
       (res) => {
         this.client = res["data"];
-        console.log("1");
+        console.log("this.client");
+        console.log(this.client);
       },
       (err) => {
         console.log(err);
       },
       () => {
         console.log("inside findClientById ");
-        this.form.controls.publishers.setValue(this.client.publishers.includes(this.userName));
+        this.form.controls.publishers.setValue(
+          this.client.publishers.includes(this.userName)
+        );
         this.form.controls.firstName.setValue(this.client.firstName);
         this.form.controls.patronymic.setValue(this.client.patronymic);
         this.form.controls.lastName.setValue(this.client.lastName);
@@ -157,7 +155,7 @@ export class ClientDetailsComponent implements OnInit {
         this.form.controls.city.setValue(this.client.city);
 
         if (this.client.correspondents.length > 0) {
-let index =0 ;
+          let index = 0;
           for (let correspondent of this.client.correspondents) {
             const group = this.formBuilder.group({
               nursingHome: new FormControl(
@@ -185,13 +183,13 @@ let index =0 ;
                       senior.yearBirthday
                   );
                 }
-        
+
                 console.log("this.seniors");
                 console.log(this.seniors[index]);
               },
               (err) => {},
               () => {}
-            );  
+            );
             group.controls.fullName.setValue(correspondent.fullName);
 
             // group.controls.fullName.setValue(correspondent.fullName);
@@ -216,8 +214,7 @@ let index =0 ;
 
         if (this.client.publishers.length > 0) {
           for (let publisher of this.client.publishers) {
-            this.listOfPublishers =
-              this.listOfPublishers + " " + publisher;
+            this.listOfPublishers = this.listOfPublishers + " " + publisher;
           }
         }
 
@@ -540,7 +537,6 @@ let index =0 ;
     console.log("newClient");
     console.log(newClient);
 
-
     let changesDetails = this.checkChanges(this.client, newClient);
     if (changesDetails.length > 0) {
       changes.changed = changesDetails;
@@ -558,14 +554,16 @@ let index =0 ;
         if (this.doubles.length == 0) {
           this.clientService.updateClient(this.clientId, newClient).subscribe(
             (res) => {
-              this.router.navigate(["/clients"]);
               this.resultDialog.open(ConfirmationDialogComponent, {
                 data: {
-                  message: "Аккаунт пользователя был успешно обновлен.",
+                  message: "Карточка пользователя была успешно обновлена.",
                 },
                 disableClose: true,
                 width: "fit-content",
               });
+
+              this.data.updatedClient = res.data;
+              this.dialogRef.close(this.data);
             },
             (err) => {
               console.log(err);
@@ -580,8 +578,8 @@ let index =0 ;
           );
         } else {
           let doublesId = "";
-          for (let client of this.doubles) {       
-              doublesId = doublesId + client._id + " ";
+          for (let client of this.doubles) {
+            doublesId = doublesId + client._id + " ";
           }
           this.resultDialog.open(ConfirmationDialogComponent, {
             data: {
@@ -626,8 +624,7 @@ let index =0 ;
         prop != "_id" &&
         prop != "creator" &&
         prop != "dateCreated" &&
-        prop != "nameDayCelebration" 
-
+        prop != "nameDayCelebration"
       ) {
         if (oldClient[prop] != newClient[prop]) {
           changes.push({
@@ -709,10 +706,10 @@ let index =0 ;
     return changes;
   }
 
-  edit(): void {
+/*   edit(): void {
     this.readonly = false;
-  }
-
+  } */
+/* 
   cancel(): void {
     this.router.navigate(["/clients"]);
     //alert("Client information is canceled.");
@@ -723,9 +720,9 @@ let index =0 ;
       disableClose: true,
       width: "fit-content",
     });
-  }
+  } */
 
   close(): void {
-    this.router.navigate(["/clients"]);
+    this.dialogRef.close();
   }
 }

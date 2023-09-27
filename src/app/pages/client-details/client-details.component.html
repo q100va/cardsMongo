@@ -3,118 +3,392 @@
  code to update client
 ===========================================
 -->
-<div fxLayout="column" class="update-div">
-  <mat-card fxFlex class="mat-elevation-z8 update-container">
-    <mat-card-title>Client Details: {{clientName}}</mat-card-title>
-    <br />
-    <mat-divider></mat-divider>
-
-    <mat-card-content>
-      <mat-card class="mat-elevation-z0" fxLayout="column" fxLayoutGap="10px">
-        <form [formGroup]="form" (ngSubmit)="saveClient()" #clientForm>
-          <mat-card-content>
-
-              <div fxLayout="column" fxLayoutGap="10px">
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['firstName']" placeholder="Имя*" />
-                      <mat-error class="error"
-                          *ngIf="form.controls.firstName.hasError('required') && form.controls.firstName.touched">This
-                          field is required!</mat-error>
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['patronymic']"
-                          placeholder="Отчество" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['lastName']" placeholder="Фамилия" />
-                  </mat-form-field>
-
-                  <label>
-                      <input type="radio" value="Male" [formControl]="form.controls['gender']">
-                      <span>м</span>
-                  </label>
-                  <label>
-                      <input type="radio" value="Female" [formControl]="form.controls['gender']">
-                      <span>ж</span>
-                  </label>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['email']" placeholder="Email" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['phoneNumber']"
-                          placeholder="Номер телефона" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['whatsApp']" placeholder="WhatsApp" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['telegram']" placeholder="Телеграм" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['vKontakte']"
-                          placeholder="Вконтакте" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['instagram']"
-                          placeholder="Instagram" />
-                  </mat-form-field>
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['facebook']" placeholder="Facebook" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['country']" placeholder="Страна" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['region']" placeholder="Регион" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['comments']" placeholder="Город" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['institute']" placeholder="Организация" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['correspondent']"
-                          placeholder="Переписывается" />
-                  </mat-form-field>
-
-                  <mat-form-field>
-                      <input type="text" matInput [formControl]="form.controls['coordinator']"
-                          placeholder="Координатор" />
-                  </mat-form-field>
-
-                  <mat-slide-toggle [formControl]="form.controls['nameDay']">Поздравляет с именинами
-                  </mat-slide-toggle>
-                  <mat-slide-toggle [formControl]="form.controls['isRestricted']">Заблокирован</mat-slide-toggle>
 
 
-              </div>
-          </mat-card-content>
+<div fxLayout="column" style="padding-top: 30px" class="main">
+    <mat-card class="mat-elevation-z0" style="width: 800px; margin: auto;">
+        <mat-card-title> Карточка поздравляющего </mat-card-title>
 
-          <mat-card-actions>
-            <button class="cancel" (click)="cancel()" mat-raised-button>
-              Cancel
-            </button>
-            <button class="submit" [disabled]="!form.valid" mat-raised-button>
-              Submit
-            </button>
-          </mat-card-actions>
+        <br />
+
+        <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"
+            [style]="{width: '30%'}"></p-confirmDialog>
+        <!-- Client Create Form -->
+        <form [formGroup]="form">
+            <mat-card-actions align="end">
+                <button mat-raised-button (click)="edit()" color="accent" *ngIf="readonly">Редактировать</button>
+
+            </mat-card-actions>
+            <mat-card-content>
+                <div fxLayout="column" fxLayoutGap="10px">
+                    <table>
+                        <tr>
+                            <td colspan="12">
+                                <mat-slide-toggle [formControl]="form.controls['publishers']"
+                                    [disabled]="readonly">Постоянный участник волонтера {{userName}}
+                                </mat-slide-toggle>
+                                <br /><br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <mat-form-field>
+                                    <input type="text" matInput [formControl]="form.controls['firstName']"
+                                        placeholder="Имя*" readonly="{{readonly}}" />
+                                    <mat-error class="error" *ngIf="form.controls.firstName.hasError('required')">Поле
+                                        не может быть пустым</mat-error>
+                                </mat-form-field>
+                            </td>
+                            <td colspan="4">
+                                <mat-form-field>
+                                    <input type="text" matInput [formControl]="form.controls['patronymic']"
+                                        placeholder="Отчество" readonly="{{readonly}}" />
+                                </mat-form-field>
+                            </td>
+                            <td colspan="4">
+                                <mat-form-field>
+                                    <input type="text" matInput [formControl]="form.controls['lastName']"
+                                        placeholder="Фамилия" readonly="{{readonly}}" />
+                                </mat-form-field>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="12">
+                                <mat-label>Представляет организацию:</mat-label>
+                            </td>
+                        </tr>
+                        <tr formArrayName="institutes" *ngFor="let item of institutes.controls; index as i">
+                            <ng-container [formGroupName]="i">
+
+                                <td colspan="10" width="60%">
+                                    <mat-form-field>
+                                        <input type="text" matInput formControlName="name"
+                                            [placeholder]="'Организация '  + (i+1) + '*'" readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="item.get('name').hasError('required') && item.get('name').touched">
+                                            Поле не может быть пустым</mat-error>
+
+                                    </mat-form-field>
+
+                                </td>
+                                <td colspan="1" width="30%">
+                                    <mat-form-field>
+                                        <mat-label>Категория*</mat-label>
+                                        <mat-select formControlName="category" [disabled] = "readonly">
+
+                                            <mat-option *ngFor="let category of categories" [value]="category">
+                                                {{ category }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error class="error" *ngIf="item.get('category').hasError('required')">
+                                            Поле не может быть пустым</mat-error>
+
+                                        <br />
+                                    </mat-form-field>
+                                </td>
+                                <td width="10%">
+                                    <button color="warn" matSuffix mat-icon-button (click)="deleteInstituteControl(i)" *ngIf="!readonly">
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6">
+                                <button mat-stroked-button color="primary" matSuffix (click)="addInstituteControl()"
+                                    *ngIf="!readonly">
+                                    Добавить организацию
+                                </button>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <ng-container formGroupName="contacts">
+                            <tr>
+                                <td colspan="12">
+                                    <mat-label>Контакты*:</mat-label>
+                                    <h5 *ngIf="contacts.errors" class="msg-error">Укажите хотя бы один контакт!
+                                    </h5>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Email</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['email']"
+                                            placeholder="elena85@ya.ru" readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['email'].hasError('email')">Неверный
+                                            формат
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Номер телефона</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['phoneNumber']"
+                                            placeholder="+79031234567" readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['phoneNumber'].hasError('phoneNumberFormat')">Неверный
+                                            формат</mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>WhatsApp</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['whatsApp']"
+                                            placeholder="+79031234567" readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['whatsApp'].hasError('phoneNumberFormat')">Неверный
+                                            формат
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Телеграм</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['telegram']"
+                                            placeholder="@daisy или +79031234567 или #1234567890"
+                                            readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['telegram'].hasError('telegramFormat')">Неверный
+                                            формат
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Вконтакте</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['vKontakte']"
+                                            placeholder="https://vk.com/id1234567 или https://vk.com/daisy"
+                                            readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['vKontakte'].hasError('vKontakteFormat')">Неверный
+                                            формат
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Instagram</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['instagram']"
+                                            placeholder="https://www.instagram.com/daisy" readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['instagram'].hasError('instagramFormat')">Неверный
+                                            формат
+                                        </mat-error>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Facebook</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['facebook']"
+                                            placeholder="https://www.facebook.com/daisy" readonly="{{readonly}}" />
+                                        <mat-error class="error"
+                                            *ngIf="contacts.controls['facebook'].hasError('fbFormat')">Неверный формат
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <br />
+                                    <br />
+                                </td>
+                                <td colspan="3">
+                                    <mat-form-field>
+                                        <mat-label>Другой контакт</mat-label>
+                                        <input type="text" matInput [formControl]="contacts.controls['otherContact']"
+                                            placeholder="все, что не подошло выше" readonly="{{readonly}}" />
+                                    </mat-form-field>
+                                    <br />
+                                    <br />
+                                </td>
+                            </tr>
+
+
+                        </ng-container>
+                    </table>
+
+                    <table>
+                        <tr>
+                            <td colspan="12">
+                                <mat-label>Адрес:</mat-label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <mat-form-field>
+                                    <mat-label>Страна</mat-label>
+                                    <mat-select [formControl]="form.controls['country']"  [disabled] = "readonly">
+                                        <mat-option></mat-option>
+                                        <mat-option *ngFor="let country of countries" [value]="country">
+                                            {{ country }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </td>
+
+                            <td colspan="4">
+                                <mat-form-field>
+                                    <input type="text" matInput [formControl]="form.controls['region']"
+                                        placeholder="Регион" readonly="{{readonly}}" />
+                                </mat-form-field>
+
+                            </td>
+                            <td colspan="4">
+
+                                <mat-form-field>
+                                    <input type="text" matInput [formControl]="form.controls['city']"
+                                        placeholder="Город" readonly="{{readonly}}" />
+                                </mat-form-field>
+
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+
+                    <table>
+                        <tr>
+                            <td colspan="12">
+                                <mat-label>Переписывается с:</mat-label>
+                            </td>
+                        </tr>
+                        <tr formArrayName="correspondents" *ngFor="let item of correspondents.controls; index as i">
+                            <ng-container [formGroupName]="i">
+
+                                <td colspan="4" width="40%">
+                                    <mat-form-field>
+                                        <mat-label>Интернат*</mat-label>
+                                        <mat-select formControlName="nursingHome" (selectionChange)="onSelectHome(i)"  [disabled] = "readonly">
+
+                                            <mat-option *ngFor="let nursingHome of nursingHomes" [value]="nursingHome">
+                                                {{ nursingHome }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error class="error" *ngIf="item.get('nursingHome').hasError('required')">
+                                            Поле не может быть пустым</mat-error>
+
+                                    </mat-form-field>
+                                </td>
+                                <td colspan="7" width="60%">
+                                    <mat-form-field>
+                                        <mat-label>ФИО*</mat-label>
+                                        <mat-select formControlName="fullName"  [disabled] = "readonly" >
+                                            <mat-option *ngFor="let fullName of seniors[i]" [value]="fullName">
+                                                {{ fullName }}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error class="error" *ngIf="item.get('fullName').hasError('required')">
+                                            Поле не может быть пустым</mat-error>
+
+
+                                        <br />
+                                    </mat-form-field>
+                                </td>
+                                <td width="10%">
+                                    <button color="warn" matSuffix mat-icon-button
+                                        (click)="deleteCorrespondentControl(i)" *ngIf="!readonly">
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <button mat-stroked-button color="primary" matSuffix
+                                    (click)="addCorrespondentControl()" *ngIf="!readonly">
+                                    Добавить друга по переписке
+                                </button>
+                                <br />
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">
+                                <mat-label>Координаторы: {{listOfCoordinators}}</mat-label>
+                                <br />    <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">
+                                <mat-label>Подписка на: {{listOfPublishers}}</mat-label>
+                                <br />    <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="12">
+                                <mat-form-field>
+                                    <textarea type="text" matInput [formControl]="form.controls['comments']"
+                                        placeholder="Комментарий" readonly="{{readonly}}"></textarea>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                    <table>
+                        <tr>
+                            <td width="30%">
+                                <mat-slide-toggle [formControl]="form.controls['isRestricted']"
+                                    (change)="  addIfRestricted()" [disabled]="readonly">Требует особого
+                                    внимания</mat-slide-toggle>
+                            </td>
+                        </tr>
+                        <tr *ngIf="form.controls['isRestricted'].value">
+                            <td>
+                                <mat-form-field>
+                                    <textarea type="text" matInput [formControl]="form.controls['causeOfRestriction']"
+                                        placeholder="Причина*" readonly="{{readonly}}"></textarea>
+                                    <mat-error class="error"
+                                        *ngIf="form.controls.causeOfRestriction.hasError('required')">
+                                        Поле не может быть пустым</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr *ngIf="form.controls['isRestricted'].value">
+
+                            <td>
+                                <mat-form-field>
+                                    <mat-label>Ограничения*</mat-label>
+                                    <mat-select [formControl]="form.controls['preventiveAction']"  [disabled] = "readonly">
+
+                                        <mat-option *ngFor="let action of preventiveActions" [value]="action">
+                                            {{ action }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error class="error"
+                                        *ngIf="form.controls.preventiveAction.hasError('required')">
+                                        Поле не может быть пустым</mat-error>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                </div>
+            </mat-card-content>
+
+            <br />
+            <mat-card-actions align="end" *ngIf="readonly">
+                <button mat-raised-button (click)="close()" color="primary">Закрыть</button>
+            </mat-card-actions>
+
+            <mat-card-actions align="end" *ngIf="!readonly">
+                <button mat-raised-button (click)="cancel()" color="accent">Отменить</button>
+                <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid"
+                    (click)="saveClient()">Сохранить</button>
+            </mat-card-actions>
         </form>
-      </mat-card>
-    </mat-card-content>
-  </mat-card>
+    </mat-card>
 </div>

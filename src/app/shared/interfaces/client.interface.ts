@@ -6,6 +6,7 @@ interface file
 
 export interface Client {
   _id?: string;
+  
   firstName: string;
   patronymic?: string;
   lastName?: string;
@@ -30,4 +31,5 @@ export interface Client {
   causeOfRestriction: string;
   preventiveAction: Array<string>;
   isDisabled: boolean;
+  whatChanged: Array<any>;
 }

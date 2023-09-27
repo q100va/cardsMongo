@@ -23,6 +23,7 @@ const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
 const May9 = require("../models/may-9");
 const FamilyDay = require("../models/family-day");
+const order = require("../models/order");
 
 //const { getLocaleDayPeriods } = require("@angular/common");
 
@@ -315,12 +316,14 @@ router.patch("/confirm/:id", async (req, res) => {
     let updatedOrders;
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
-    const length = await Order.countDocuments({});
+    let length;
     if (req.body.isShowAll) {
+      length = await Order.countDocuments({ userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
+      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false });
       updatedOrders = await Order.find(
         { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
@@ -352,12 +355,14 @@ router.patch("/unconfirmed/:id", async (req, res) => {
     let updatedOrders;
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
-    const length = await Order.countDocuments({});
+    let length;
     if (req.body.isShowAll) {
+      length = await Order.countDocuments({ userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
+      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false });
       updatedOrders = await Order.find(
         { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
@@ -409,13 +414,14 @@ router.patch("/change-status/:id", async (req, res) => {
     let updatedOrders;
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
-    const length = await Order.countDocuments({});
+    let length;
     if (req.body.isShowAll) {
-
+      length = await Order.countDocuments({ userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
+      length = await Order.countDocuments({ isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
@@ -588,13 +594,14 @@ router.patch("/restore/:id", async (req, res) => {
     let updatedOrders;
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
-    const length = await Order.countDocuments({});
+    let length;
     if (req.body.isShowAll) {
-
+      length = await Order.countDocuments({ userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
+      length = await Order.countDocuments({ isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
@@ -855,10 +862,10 @@ router.get("/get/nursingHomes/", async (req, res) => {
 
 router.post("/check-double/", async (req, res) => {
   try {
-    let contact;
-    let email = req.body.email;
-    //console.log(req.body.contact);
-    if (req.body.contact) {
+ /*   let contact;
+    let id = req.body.clientId;
+   console.log(req.body.contact);
+     if (req.body.contact) {
       if (req.body.contact.toString()[0] == '+') {
         contact = req.body.contact.toString().slice(1, req.body.contact.toString().length)
       } else {
@@ -866,12 +873,16 @@ router.post("/check-double/", async (req, res) => {
       }
     }
     let e = email ? new RegExp('^' + email.toString() + '$', 'i') : null;
-    let c = contact ? new RegExp('^' + contact.toString() + '$', 'i') : null;
-    let conditions;
-    if (req.body.email && req.body.contact) {
-      conditions = {
-        isDisabled: false,
+    let c = contact ? new RegExp('^' + contact.toString() + '$', 'i') : null; */
+    let conditions = {isDisabled: false,
         holiday: req.body.holiday,
+        clientId: req.body.clientId
+    };
+    console.log("conditions");
+    console.log(conditions);
+/*     if (req.body.email && req.body.contact) {
+      conditions = {
+        
         $or: [{ email: e }, { contact: c }]
       }
     }
@@ -888,7 +899,7 @@ router.post("/check-double/", async (req, res) => {
         holiday: req.body.holiday,
         contact: c
       }
-    }
+    } */
 
     Order.find(conditions, function (err, orders) {
       if (err) {
@@ -918,9 +929,9 @@ router.post("/check-double/", async (req, res) => {
           result.seniorsIds = seniorsIds;
         } else { result = null; }
 
-       // console.log("result");
+        // console.log("result");
         // console.log(order);
-       // console.log(result);
+        // console.log(result);
         const readRegionsResponse = new BaseResponse(
           200,
           "Query successful",
@@ -1215,12 +1226,16 @@ async function createOrderForTeacherDay(order) {
 
 router.post("/birthday/:amount", async (req, res) => {
   let finalResult;
+
+  console.log(" institutes: req.body.institutes,");
+  console.log(req.body.institutes,);
   try {
     let newOrder = {
       userName: req.body.userName,
       holiday: req.body.holiday,
       source: req.body.source,
       amount: req.body.amount,
+      clientId: req.body.clientId,
       clientFirstName: req.body.clientFirstName,
       clientPatronymic: req.body.clientPatronymic,
       clientLastName: req.body.clientLastName,
@@ -1228,6 +1243,7 @@ router.post("/birthday/:amount", async (req, res) => {
       contactType: req.body.contactType,
       contact: req.body.contact,
       institute: req.body.institute,
+      institutes: req.body.institutes,
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
       orderDate: req.body.orderDate,
@@ -1239,9 +1255,9 @@ router.post("/birthday/:amount", async (req, res) => {
       isCompleted: false
     };
 
-   // console.log("order.dateOfOrder");
-   // console.log(req.body.dateOfOrder);
-   // console.log(newOrder.dateOfOrder);
+    // console.log("order.dateOfOrder");
+    // console.log(req.body.dateOfOrder);
+    // console.log(newOrder.dateOfOrder);
 
     finalResult = await createOrder(newOrder, req.body.prohibitedId);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -1332,8 +1348,8 @@ async function createOrder(newOrder, prohibitedId) {
         result: "Обратитесь к администратору. Заявка не сформирована. Не найден активный период.",
         success: false
       }; /* CANCEL */
-      console.log('period');
-      console.log(period);
+    console.log('period');
+    console.log(period);
     let periodResult = await checkActivePeriod(period, month);
     console.log('periodResult');
     console.log(periodResult);
@@ -1509,6 +1525,7 @@ async function createOrder(newOrder, prohibitedId) {
     holiday: newOrder.holiday,
     source: newOrder.source,
     amount: newOrder.amount,
+    clientId: newOrder.clientId,
     clientFirstName: newOrder.clientFirstName,
     clientPatronymic: newOrder.clientPatronymic,
     clientLastName: newOrder.clientLastName,
@@ -1516,6 +1533,7 @@ async function createOrder(newOrder, prohibitedId) {
     contactType: newOrder.contactType,
     contact: newOrder.contact,
     institute: newOrder.institute,
+    institutes: newOrder.institutes,
     //isRestricted: newOrder.isRestricted,
     isAccepted: newOrder.isAccepted,
     comment: newOrder.comment,
@@ -4219,6 +4237,40 @@ router.patch("/correct-orders-dates", async (req, res) => {
     );
     res.status(500).send(confirmOrderCatchErrorResponse.toObject());
   }
+});
+
+//move institute to institutes
+
+router.get("/clients/move-institutes", async (req, res) => {
+  try {
+
+/*     let orders = await Order.find({institute: {$ne: null}}); //({ dateOfOrder: { $gt: new Date('2022-05-01'), $lte: new Date('2022-07-31') } });
+    for (let order of orders) {
+      await Order.updateOne({_id: order._id}, 
+        { $push: { institutes: [{ name: order.institute, category: "образовательное учреждение" }] } })
+        console.log(order._id); 
+    }*/
+    let orders = await Order.find({email: {$ne: null}, contact: null});
+    for (let order of orders) {
+      await Order.updateOne({_id: order._id}, 
+        { $set: { contactType: "email", contact:  order.email} })
+        console.log(order._id); 
+    }
+    
+
+
+
+const confirmOrderResponse = new BaseResponse("200", "Orders updated", true);
+res.json(confirmOrderResponse.toObject());
+  } catch (e) {
+  console.log(e);
+  const readUserCatchErrorResponse = new BaseResponse(
+    500,
+    "Internal server error",
+    err
+  );
+  res.status(500).send(readUserCatchErrorResponse.toObject());
+}
 });
 
 

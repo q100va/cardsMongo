@@ -5,16 +5,30 @@
 */
 
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { ConfirmationService } from "primeng/api";
 import { OrderService } from "src/app/services/order.service";
+import { ClientService } from "src/app/services/client.service";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { LineItem } from "src/app/shared/interfaces/line-item.interface";
 import { Order } from "src/app/shared/interfaces/order.interface";
 import { Clipboard } from "@angular/cdk/clipboard";
+import { Observable } from "rxjs/internal/Observable";
+import { map, startWith } from "rxjs/operators";
+import { error } from "protractor";
+import { of } from "rxjs/internal/observable/of";
+import { Client } from "src/app/shared/interfaces/client.interface";
+import { CreateClientDialogComponent } from "src/app/shared/create-client-dialog/create-client-dialog.component";
+import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog/update-client-dialog.component";
 
 //import { ConfirmationService } from "primeng/api";
 //import { MessageService } from "primeng/api";
@@ -31,13 +45,16 @@ export class OrderComponent implements OnInit {
   holiday: string = "Дни рождения октября 2023";
   lineItems: Array<LineItem> = [];
   types: Array<string> = [
+    "email",
     "phoneNumber",
     "whatsApp",
     "telegram",
     "vKontakte",
     "instagram",
     "facebook",
+    "otherContact",
   ];
+  defaultType = this.types[0];
   orderDate: string = new Date().toLocaleDateString();
   counter: Array<number> = [];
   successMessage: string = "";
@@ -65,30 +82,65 @@ export class OrderComponent implements OnInit {
   isMainMonth = true;
   isNextMonth = false;
   isBeforeMonth = false;
+  options = [];
+  fullOptions = [];
+  //inputContact = null;
+  filteredOptions: Observable<string[]>;
+  //isFirstEnter = true;
+  clientInstitutes = [];
+  client: Client;
+  previousClient = "";
+  newClient: Client;
+  doubles = [];
+
+  categories = [
+    "образовательное учреждение",
+    "коммерческая организация",
+    "бюджетное учреждение",
+    "благотворительная организация",
+    "религиозная организация",
+    "детский или юношеский коллектив/клуб",
+    "взрослые волонтеры",
+    "клуб по интересам (взрослые)",
+    "прочие организации",
+  ];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private orderService: OrderService,
+    private clientService: ClientService,
     private resultDialog: MatDialog,
     private cookieService: CookieService,
     private clipboard: Clipboard,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public dialog: MatDialog
   ) {
     this.userName = this.cookieService.get("session_user");
   }
 
   ngOnInit(): void {
-    /*     this.orderService.getRegions().subscribe(
+    this.orderService.getContacts("email").subscribe(
       async (res) => {
-        this.regions = res["data"];
+        // this.options = res.data['contacts'];
+        console.log("res.data");
+        console.log(res.data);
+        this.fullOptions = res.data["contacts"];
+        for (let client of res.data["contacts"]) {
+          this.options.push(client.email.toLowerCase());
+        }
+        // this.filteredOptions = of([]);
+        //console.log("this.options");
+        // console.log(this.options);
+
+        this.form.controls.contact.setValue("");
       },
       (err) => {
+        this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
       }
-    ); */
-
+    );
     this.orderService.getNursingHomes().subscribe(
       async (res) => {
         this.nursingHomes = res["data"]["nursingHomes"];
@@ -105,10 +157,11 @@ export class OrderComponent implements OnInit {
       clientFirstName: [null],
       clientPatronymic: [null],
       clientLastName: [null],
-      email: [null, Validators.compose([Validators.email])],
-      contactType: [null],
-      contact: [null],
-      institute: [null],
+      //email: [null, Validators.compose([Validators.email])],
+      contactType: [this.defaultType],
+      contact: [null, [Validators.required]],
+      // institute: [null],
+      institutes: this.fb.array([]),
       amount: [
         null,
         Validators.compose([Validators.required, Validators.min(1)]),
@@ -129,7 +182,255 @@ export class OrderComponent implements OnInit {
       onlyWithPicture: [false],
       onlyAnniversaries: [false],
       onlyAnniversariesAndOldest: [false],
+      nameOfInstitute: [null],
+      categoryOfInstitute: [null],
     });
+
+    this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
+      startWith(""),
+      map((value) => this._filter(value || ""))
+    );
+  }
+  private addCheckboxes() {
+    this.clientInstitutes.forEach(() =>
+      this.institutes.push(new FormControl(false))
+    );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    /*     console.log("value");
+    console.log(value);
+    console.log("this.options");
+    console.log(this.options); */
+
+    let result = this.options.filter((option) => option.includes(filterValue));
+    return result;
+  }
+
+  get institutes() {
+    return this.form.get("institutes") as FormArray;
+  }
+  getContacts(afterCreation) {
+    this.orderService
+      .getContacts(this.form.controls.contactType.value)
+      .subscribe(
+        async (res) => {
+          // this.options = res.data['contacts'];
+          //console.log("res.data");
+          //console.log(res.data);
+          this.fullOptions = res.data["contacts"];
+          this.options = [];
+          for (let client of res.data["contacts"]) {
+            this.options.push(
+              client[this.form.controls.contactType.value].toLowerCase()
+            );
+          }
+          // console.log("this.options");
+          // console.log(this.options);
+          if (!afterCreation) {
+            this.form.controls.contact.setValue("");
+            this.client = undefined;
+            this.previousClient = "";
+          }
+          // this.filteredOptions = this.options;
+        },
+        (err) => {
+          this.errorMessage = err.error.msg + " " + err.message;
+          console.log(err);
+        }
+      );
+  }
+
+  checkContactTimeOut() {
+    setTimeout(() => {
+      //console.log("this.previousClient");
+      //console.log(this.previousClient);
+      //console.log("checkContact");
+      // console.log(this.form.controls.contact.value);
+      //console.log(this.options);
+      /*       console.log(
+        this.options.includes(this.form.controls.contact.value.toLowerCase())
+      ); */
+
+      if (this.form.controls.contact.value) {
+        if (
+          !this.options.includes(this.form.controls.contact.value.toLowerCase())
+        ) {
+          this.client = undefined;
+          this.previousClient = this.form.controls.contact.value.toLowerCase();
+          this.institutes.clear();
+          this.confirmationService.confirm({
+            message:
+              "Поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.)",
+            accept: () => {
+              this.openCreateClientDialog();
+            },
+          });
+        } else {
+          if (
+            this.previousClient !=
+            this.form.controls.contact.value.toLowerCase()
+          ) {
+            let index = this.fullOptions.findIndex(
+              (item) =>
+                item[this.form.controls.contactType.value].toLowerCase() ==
+                this.form.controls.contact.value.toLowerCase()
+            );
+            this.clientService
+              .findClientById(this.fullOptions[index]._id)
+              .subscribe(
+                async (res) => {
+                  this.previousClient =
+                    this.form.controls.contact.value.toLowerCase();
+                  console.log("res.data");
+                  console.log(res.data);
+                  this.client = res.data;
+                  this.clientInstitutes = this.client.institutes;
+                  console.log("clientInstitutes");
+                  console.log(this.clientInstitutes);
+                  this.institutes.clear();
+                  this.addCheckboxes();
+                },
+                (err) => {
+                  this.errorMessage = err.error.msg + " " + err.message;
+                  console.log(err);
+                }
+              );
+          }
+        }
+      } else {
+        this.client = undefined;
+        this.clientInstitutes = [];
+        this.previousClient = "";
+        this.institutes.clear();
+      }
+    }, 200);
+  }
+
+  openCreateClientDialog(): void {
+    const dialogRef = this.dialog.open(CreateClientDialogComponent, {
+      data: {
+        userName: this.userName,
+        newContactType: this.form.controls.contactType.value,
+        newContact: this.form.controls.contact.value,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("The dialog was closed");
+      console.log("result");
+      console.log(result);
+
+      if (result.noDoubles) {
+        this.newClient = result.newClient;
+        this.clientService.createClient(this.newClient).subscribe(
+          (res) => {
+            this.client = res.data;
+            this.clientInstitutes = this.client.institutes;
+            this.addCheckboxes();
+            this.getContacts(true);
+            if (this.client[this.form.controls.contactType.value]) {
+              console.log("this.client[this.form.controls.contactType.value]");
+              console.log(this.client[this.form.controls.contactType.value]);
+              this.form.controls.contact.setValue(
+                this.client[this.form.controls.contactType.value]
+              );
+              console.log("this.form.controls.contact.value");
+              console.log(this.form.controls.contact.value);
+            } else {
+              for (let type of this.types) {
+                if (this.client[type]) {
+                  this.form.controls.contactType.setValue(type);
+                  this.form.controls.contact.setValue(this.client[type]);
+                  break;
+                }
+              }
+            }
+
+            this.previousClient = this.form.controls.contact.value;
+
+            this.resultDialog.open(ConfirmationDialogComponent, {
+              data: {
+                message: "Карточка пользователя была успешно создана.",
+              },
+              disableClose: true,
+              width: "fit-content",
+            });
+          },
+          (err) => {
+            console.log(err);
+            this.resultDialog.open(ConfirmationDialogComponent, {
+              data: {
+                message: err.error.msg,
+              },
+              disableClose: true,
+              width: "fit-content",
+            });
+          }
+        );
+      } else {
+        let doubleId = result.doubleId;
+        this.openUpdateClientDialog(doubleId);
+      }
+    });
+  }
+
+  openUpdateClientDialog(doubleId): void {
+    const dialogRef = this.dialog.open(UpdateClientDialogComponent, {
+      data: {
+        userName: this.userName,
+        id: doubleId,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.client = result.updatedClient;
+        this.getContacts(true);
+        if (this.client[this.form.controls.contactType.value]) {
+          console.log("this.client[this.form.controls.contactType.value]");
+          console.log(this.client[this.form.controls.contactType.value]);
+          this.form.controls.contact.setValue(
+            this.client[this.form.controls.contactType.value]
+          );
+          console.log("this.form.controls.contact.value");
+          console.log(this.form.controls.contact.value);
+        } else {
+          for (let type of this.types) {
+            if (this.client[type]) {
+              this.form.controls.contactType.setValue(type);
+              this.form.controls.contact.setValue(this.client[type]);
+              break;
+            }
+          }
+        }
+
+        this.previousClient = this.form.controls.contact.value;
+      }
+    });
+  }
+
+  saveInstitute() {
+    this.clientService
+      .addInstitute(
+        this.client._id,
+        this.form.controls.nameOfInstitute.value,
+        this.form.controls.categoryOfInstitute.value,
+        this.userName
+      )
+      .subscribe(
+        async (res) => {
+          console.log("res.data");
+          console.log(res.data);
+          this.form.controls.nameOfInstitute.setValue(null);
+          this.form.controls.categoryOfInstitute.setValue(null);
+
+          this.clientInstitutes = res.data;
+          this.institutes.push(new FormControl(false));
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   goNext(event) {
@@ -153,7 +454,7 @@ export class OrderComponent implements OnInit {
 
   goBack(event) {
     event.preventDefault();
-      this.isMainMonth = !this.isMainMonth;
+    this.isMainMonth = !this.isMainMonth;
     if (this.isMainMonth) {
       this.isBeforeMonth = false;
     } else {
@@ -317,16 +618,36 @@ export class OrderComponent implements OnInit {
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
+
+    this.options = [];
+    this.fullOptions = [];
+    this.clientInstitutes = [];
+    this.client = undefined;
+    this.previousClient = "";
+    this.form.controls.contactType.setValue(this.defaultType);
+
+    this.orderService.getContacts("email").subscribe(
+      async (res) => {
+        // this.options = res.data['contacts'];
+        console.log("res.data");
+        console.log(res.data);
+        this.fullOptions = res.data["contacts"];
+        for (let client of res.data["contacts"]) {
+          this.options.push(client.email.toLowerCase());
+        }
+        // this.filteredOptions = of([]);
+        //console.log("this.options");
+        // console.log(this.options);
+
+        this.form.controls.contact.setValue("");
+      },
+      (err) => {
+        this.errorMessage = err.error.msg + " " + err.message;
+        console.log(err);
+      }
+    );
   }
-  /*   beforeCreateOrder() {
-    console.log("this.spinner");
-    console.log(this.spinner);
-    if (!this.spinner) {
-      this.createOrder();
-    } else {
-      console.log("Clicked twice!");
-    }
-  } */
+
   createOrder() {
     this.clicked = true;
     this.successMessage = "";
@@ -336,7 +657,7 @@ export class OrderComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
 
-    if (!this.form.controls.email.value && !this.form.controls.contact.value) {
+    if (!this.form.controls.contact.value) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
           message: "Обязательно укажите email или другой возможный контакт!",
@@ -347,26 +668,27 @@ export class OrderComponent implements OnInit {
       this.clicked = false;
     } else {
       if (
-        !this.form.controls.contactType.value &&
-        this.form.controls.contact.value
+        !this.options.includes(this.form.controls.contact.value.toLowerCase())
       ) {
-        this.resultDialog.open(ConfirmationDialogComponent, {
-          data: {
-            message: "Обязательно выберите тип другого возможного контакта!",
+        this.confirmationService.confirm({
+          message:
+            "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
+          accept: () => {
+            this.router.navigate([]).then((result) => {
+              window.open("#/clients/create/new", "_blank");
+            });
           },
-          disableClose: true,
-          width: "fit-content",
         });
         this.clicked = false;
       } else {
         if (
-          this.form.controls.contactType.value &&
-          !this.form.controls.contact.value
+          this.form.controls.nameOfInstitute.value ||
+          this.form.controls.categoryOfInstitute.value
         ) {
           this.resultDialog.open(ConfirmationDialogComponent, {
             data: {
               message:
-                "Укажите другой контакт или выберите 'пусто' в поле 'Другой контакт'!",
+                "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
             },
             disableClose: true,
             width: "fit-content",
@@ -441,12 +763,16 @@ export class OrderComponent implements OnInit {
                   });
                   this.clicked = false;
                 } else {
+/*                   let email =
+                    this.form.controls.contactType.value == "email"
+                      ? this.form.controls.contact.value
+                      : null;
+                  let otherContact =
+                    this.form.controls.contactType.value != "email"
+                      ? this.form.controls.contact.value
+                      : null; */
                   this.orderService
-                    .checkDoubleOrder(
-                      this.holiday,
-                      this.form.controls.email.value,
-                      this.form.controls.contact.value
-                    )
+                    .checkDoubleOrder(this.holiday, this.client._id)
                     .subscribe(
                       async (res) => {
                         let result = res["data"];
@@ -491,20 +817,41 @@ export class OrderComponent implements OnInit {
 
   fillOrder(prohibitedId: []) {
     this.spinner = true;
-    /*     if (this.form.controls.genderFilter.value == "proportion") {
-      if (!this.form.controls.femaleAmount.value) {
+
+    /*     let institutes = this.institutes.getRawValue();
+
+    for (let institute of institutes) {
+      if (institute.name == null) {
+        let index = institutes.findIndex((item) => item.name == null);
+        institutes.splice(index, 1);
       }
     } */
+
+    console.log("this.form.value.institutes");
+    console.log(this.form.value.institutes);
+    const selectedInstitutes = this.form.value.institutes
+      .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
+      .filter((v) => v !== null);
+    console.log("selectedInstitutes");
+    console.log(selectedInstitutes);
+
     let newOrder: Order = {
       userName: this.userName,
       holiday: this.holiday,
-      clientFirstName: this.form.controls.clientFirstName.value,
-      clientPatronymic: this.form.controls.clientPatronymic.value,
-      clientLastName: this.form.controls.clientLastName.value,
-      email: this.form.controls.email.value,
-      contactType: this.form.controls.contactType.value,
-      contact: this.form.controls.contact.value,
-      institute: this.form.controls.institute.value,
+      clientId: this.client._id,
+      clientFirstName: this.client.firstName,
+      clientPatronymic: this.client.patronymic,
+      clientLastName: this.client.lastName,
+/*       email:
+        this.form.controls.contactType.value == "email"
+          ? this.form.controls.contact.value
+          : null, */
+      contactType:
+        this.form.controls.contactType.value,
+      contact:
+       this.form.controls.contact.value,
+       
+      institutes: selectedInstitutes,
       amount: this.form.controls.amount.value,
       isAccepted: this.form.controls.isAccepted.value ? true : false,
       source: this.form.controls.source.value,
@@ -637,3 +984,186 @@ export class OrderComponent implements OnInit {
     console.log(successful);
   }
 }
+/*   firstPlaceGetContacts (): string[]  {
+    let options = [];
+    this.orderService.getContacts("email").subscribe(
+    async (res) => {
+      //this.options = res.data;
+  
+       for(let client of res.data) {
+        options.push(client.email);          
+       } 
+      //console.log("this.options");
+     // console.log(this.options);
+    
+    },
+    (err) => {
+      this.errorMessage = err.error.msg + " " + err.message;
+      console.log(err);    
+    }
+  );
+    return options;
+  } 
+  checkContactTimeOut() {
+    setTimeout(this.checkContact, 100);
+  } */
+
+/*   checkDoubles(newClient) {
+    this.clientService.checkDoubleClient(newClient, null).subscribe(
+      (res) => {
+        this.doubles = res.data;
+        console.log("res.data");
+        console.log(res.data);
+
+        if (this.doubles.length == 0) {
+          // createClient service method to make network call to create client
+          this.clientService.createClient(newClient).subscribe(
+         (res) =>  {
+              this.client = res.data;
+            this.getContacts(true);
+              if (this.client[this.form.controls.contactType.value]) {
+                console.log(
+                  "this.client[this.form.controls.contactType.value]"
+                );
+                console.log(this.client[this.form.controls.contactType.value]);
+                this.form.controls.contact.setValue(
+                  this.client[this.form.controls.contactType.value]
+                );
+                console.log(
+                  "this.form.controls.contact.value"
+                );
+                console.log(this.form.controls.contact.value);
+              } else {
+                for (let type of this.types) {
+                  if (this.client[type]) {
+                    this.form.controls.contactType.setValue(type);
+                    this.form.controls.contact.setValue(this.client[type]);
+                    break;
+                  }
+                }
+              }
+
+              this.previousClient = this.form.controls.contact.value;
+              
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message: "Карточка пользователя была успешно создана.",
+                },
+                disableClose: true,
+                width: "fit-content",
+              });
+            },
+            (err) => {
+              console.log(err);
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message: err.error.msg,
+                },
+                disableClose: true,
+                width: "fit-content",
+              });
+            }
+          );
+        } else {
+          if (this.doubles.length > 1) {
+            let doublesId = "";
+            for (let client of this.doubles) {
+              doublesId = doublesId + client._id + ", ";
+            }
+            this.resultDialog.open(ConfirmationDialogComponent, {
+              data: {
+                message:
+                  "К сожалению, контакт не может быть создан, потому что найдено несколько дублей с id: " +
+                  doublesId +
+                  "сообщите, пожалуйста, эти id администратору!",
+              },
+              disableClose: true,
+              width: "40%",
+            });
+          } else {
+            console.log("1 double");
+            console.log(this.doubles[0]);
+            //ОПРЕДЕЛИТЬ ЕСТЬ ИЛИ НЕТ РАСХОЖДЕНИЙ В ДАННЫХ.
+            //если нет, то просто сообщить, что пользуйтесь старым + объединить инст, пабл, коорд, корресп
+            //если есть, то предложить объединить с выбором вариантов
+
+            const email = this.doubles[0].email
+              ? "email: " + this.doubles[0].email + ", "
+              : "";
+            const phoneNumber = this.doubles[0].phoneNumber
+              ? "phoneNumber: " + this.doubles[0].phoneNumber + ", "
+              : "";
+            const whatsApp = this.doubles[0].whatsApp
+              ? "whatsApp: " + this.doubles[0].whatsApp + ", "
+              : "";
+            const telegram = this.doubles[0].telegram
+              ? "telegram: " + this.doubles[0].telegram + ", "
+              : "";
+            const vKontakte = this.doubles[0].vKontakte
+              ? "vKontakte: " + this.doubles[0].vKontakte + ", "
+              : "";
+            const instagram = this.doubles[0].instagram
+              ? "instagram: " + this.doubles[0].instagram + ", "
+              : "";
+            const facebook = this.doubles[0].facebook
+              ? "facebook: " + this.doubles[0].facebook + ", "
+              : "";
+            const otherContact = this.doubles[0].otherContact
+              ? "другой контакт: " + this.doubles[0].otherContact + ". "
+              : "";
+
+            let foundClient =
+              this.doubles[0].firstName +
+              " " +
+              (this.doubles[0].patronymic
+                ? this.doubles[0].patronymic + " "
+                : "") +
+              (this.doubles[0].lastName ? this.doubles[0].lastName + " " : "") +
+              email +
+              phoneNumber +
+              whatsApp +
+              telegram +
+              vKontakte +
+              instagram +
+              facebook +
+              otherContact;
+
+            console.log("foundClient[foundClient.length-1]");
+            console.log(foundClient[foundClient.length - 1]);
+            if (foundClient[foundClient.length - 2] == ",") {
+              console.log("foundClient[foundClient.length-1]");
+              console.log(foundClient[foundClient.length - 1]);
+              foundClient = foundClient.slice(0, foundClient.length - 2) + ". ";
+            }
+
+            this.confirmationService.confirm({
+              message:
+                "Пользователь с такими контактами уже существует: " +
+                foundClient +
+                "Вы хотите открыть существующую карточку?",
+              accept: () => {
+                //this.router.navigate(["clients/update/" + this.doubles[0]._id]);
+                this.router.navigate([]).then((result) => {
+                  window.open(
+                    "#/clients/update/" + this.doubles[0]._id,
+                    "_blank"
+                  );
+                });
+              },
+              reject: () => {},
+            });
+          }
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.resultDialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: err.error.msg,
+          },
+          disableClose: true,
+          width: "fit-content",
+        });
+      }
+    );
+  } */

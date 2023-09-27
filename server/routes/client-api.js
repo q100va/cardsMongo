@@ -12,6 +12,151 @@ const router = express.Router();
 const saltRounds = 10;
 const Order = require("../models/order");
 
+
+///check doubles
+
+router.post("/check-double", async (req, res) => {
+  try {
+    console.log("/check-double");
+    const newClient = req.body.newClient;
+    const clientId = req.body.id;
+
+
+    const phoneRe = /^((\+7)+([0-9]){10})$/;
+
+    let regExpEM = newClient.email ? new RegExp('^' + newClient.email.toString() + '$', 'i') : null;
+    let regExpPN = newClient.phoneNumber ? newClient.phoneNumber : null;
+    let regExpWA = newClient.whatsApp ? newClient.whatsApp : null;
+    let regExpTG;
+    if (newClient.telegram) regExpTG = phoneRe.test(newClient.telegram) ? newClient.telegram : new RegExp('^' + newClient.telegram.toString() + '$', 'i');
+    console.log("regExpTG");
+    console.log(regExpTG);
+    let regExpVK = newClient.vKontakte ? new RegExp('^' + newClient.vKontakte.toString() + '$', 'i') : null;
+    let regExpIG = newClient.instagram ? new RegExp('^' + newClient.instagram.toString() + '$', 'i') : null;
+    let regExpFB = newClient.facebook ? new RegExp('^' + newClient.facebook.toString() + '$', 'i') : null;
+    let regExpOC = newClient.otherContact ? new RegExp('^' + newClient.otherContact.toString() + '$', 'i') : null;
+
+
+
+
+    let query = [];
+    if (newClient.email) {
+      query.push({ email: regExpEM });
+    }
+
+
+    if (newClient.phoneNumber && newClient.whatsApp && newClient.telegram) {
+      query.push(
+        { phoneNumber: regExpPN },
+        { whatsApp: regExpWA },
+        { telegram: regExpTG }
+      );
+    }
+    if (newClient.phoneNumber && !newClient.whatsApp && !newClient.telegram) {
+      query.push(
+        { phoneNumber: regExpPN },
+        { whatsApp: regExpPN },
+        { telegram: regExpPN }
+      );
+    }
+    if (!newClient.phoneNumber && newClient.whatsApp && !newClient.telegram) {
+      query.push(
+        { phoneNumber: regExpWA },
+        { whatsApp: regExpWA },
+        { telegram: regExpWA }
+      );
+    }
+    if (
+      !newClient.phoneNumber &&
+      !newClient.whatsApp &&
+      phoneRe.test(newClient.telegram)
+    ) {
+      query.push(
+        { phoneNumber: regExpTG },
+        { whatsApp: regExpTG },
+        { telegram: regExpTG }
+      );
+    }
+    if (
+      !newClient.phoneNumber &&
+      newClient.whatsApp &&
+      phoneRe.test(newClient.telegram)
+    ) {
+      query.push(
+        { phoneNumber: regExpTG },
+        { telegram: regExpTG }
+      );
+    }
+    if (
+      newClient.phoneNumber &&
+      !newClient.whatsApp &&
+      phoneRe.test(newClient.telegram)
+    ) {
+      query.push(
+        { whatsApp: regExpTG },
+        { telegram: regExpTG }
+      );
+    }
+    if (!newClient.phoneNumber && newClient.whatsApp && !newClient.telegram) {
+      query.push(
+        { phoneNumber: regExpWA },
+        { whatsApp: regExpWA },
+        { telegram: regExpWA }
+      );
+    }
+    if (newClient.phoneNumber && newClient.whatsApp && !newClient.telegram) {
+      query.push(
+        { whatsApp: regExpWA },
+        { telegram: regExpWA }
+      );
+    }
+    if (!newClient.phoneNumber && newClient.whatsApp && newClient.telegram) {
+      query.push(
+        { phoneNumber: regExpWA },
+        { whatsApp: regExpWA }
+      );
+    }
+
+    if (newClient.telegram && !phoneRe.test(newClient.telegram)) {
+      query.push({ telegram: regExpTG });
+    }
+
+    if (newClient.vKontakte) {
+      query.push({ vKontakte: regExpVK });
+    }
+    if (newClient.instagram) {
+      query.push({ instagram: regExpIG });
+    }
+    if (newClient.facebook) {
+      query.push({ facebook: regExpFB });
+    }
+    if (newClient.otherContact) {
+      query.push({ otherContact: regExpOC });
+    }
+    console.log("query");
+    console.log(query);
+    /*     
+        console.log("queryToFind");
+        console.log(queryToFind); */
+    let doubles;
+    if (clientId) {
+      doubles = await Client.find({ _id: { $ne: clientId }, isDisabled: false, $or: query });
+    } else {
+      doubles = await Client.find({ isDisabled: false, $or: query });
+    }
+
+    console.log("doubles");
+    console.log(doubles);
+    const findAllListsResponse = new BaseResponse("200", "Query successful", doubles);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
 //CreateClient API
 router.post("/", async (req, res) => {
   try {
@@ -42,8 +187,37 @@ router.post("/", async (req, res) => {
       isRestricted: req.body.isRestricted,
       causeOfRestriction: req.body.causeOfRestriction,
       preventiveAction: req.body.preventiveAction,
-
     };
+
+    let searchString = [];
+    for (let key in newClient) {
+      if (
+        key == "firstName" ||
+        key == "patronymic" ||
+        key == "lastName" ||
+        key == "email" ||
+        key == "phoneNumber" ||
+        key == "whatsApp" ||
+        key == "telegram" ||
+        key == "vKontakte" ||
+        key == "instagram" ||
+        key == "facebook" ||
+        key == "otherContact" ||
+        key == "country" ||
+        key == "city" ||
+        key == "region"
+      ) {
+        if (newClient[key]) { searchString.push(newClient[key]); }
+      }
+      if (key == "institutes") {
+        for (let institute of newClient.institutes) {
+          searchString.push(institute.name);
+        }
+      }
+    }
+
+    newClient.searchString = searchString;
+
     console.log(req.body);
 
     Client.create(newClient, function (err, client) {
@@ -131,12 +305,31 @@ router.put("/:id", async (req, res) => {
         res.status(500).send(updateClientMongodbErrorResponse.toObject());
       } else {
         console.log(client);
+        let searchString = [];
+        if (req.body.firstName) searchString.push(req.body.firstName);
+        if (req.body.patronymic) searchString.push(req.body.patronymic);
+        if (req.body.lastName) searchString.push(req.body.lastName);
+        if (req.body.email) searchString.push(req.body.email);
+        if (req.body.phoneNumber) searchString.push(req.body.phoneNumber);
+        if (req.body.whatsApp) searchString.push(req.body.whatsApp);
+        if (req.body.telegram) searchString.push(req.body.telegram);
+        if (req.body.vKontakte) searchString.push(req.body.vKontakte);
+        if (req.body.instagram) searchString.push(req.body.instagram);
+        if (req.body.facebook) searchString.push(req.body.facebook);
+        if (req.body.otherContact) searchString.push(req.body.otherContact);
+        if (req.body.country) searchString.push(req.body.country);
+        if (req.body.region) searchString.push(req.body.region);
+        if (req.body.city) searchString.push(req.body.city);
+
+        for (let institute of req.body.institutes) {
+          searchString.push(institute.name);
+        }
 
         client.set({
+
           firstName: req.body.firstName,
           patronymic: req.body.patronymic,
           lastName: req.body.lastName,
-          institutes: req.body.institutes,
           email: req.body.email,
           phoneNumber: req.body.phoneNumber,
           whatsApp: req.body.whatsApp,
@@ -148,16 +341,18 @@ router.put("/:id", async (req, res) => {
           country: req.body.country,
           region: req.body.region,
           city: req.body.city,
-          nameDayCelebration: req.body.nameDayCelebration,
+          // nameDayCelebration: req.body.nameDayCelebration,
           comments: req.body.comments,
+          institutes: req.body.institutes,
           correspondents: req.body.correspondents,
           coordinators: req.body.coordinators,
           publishers: req.body.publishers,
           isRestricted: req.body.isRestricted,
           causeOfRestriction: req.body.causeOfRestriction,
           preventiveAction: req.body.preventiveAction,
+          whatChanged: req.body.whatChanged,
+          searchString: searchString
         });
-
 
         client.save(function (err, savedClient) {
           if (err) {
@@ -180,7 +375,278 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete Client API 
-router.delete("/:id", async (req, res) => {
+router.patch("/delete/:id", async (req, res) => {
+  try {
+    let message = null;
+    let orders = await Order.find({ clientId: req.params.id, isDisabled: false });
+    if (orders.length > 0) {
+      message = "Карточка поздравляющего не может быть удалена, так как на него оформлены заявки.";
+    } else {
+      let whatChangedNow = {
+        userName: req.body.userName,
+        date: new Date(),
+        changed: [{
+          isDisabledOld: false,
+          isDisabledNew: true,
+        }],
+      }
+      await Client.updateOne({ _id: req.params.id }, { $set: { isDisabled: true }, $push: { whatChanged: whatChangedNow } });
+
+
+    }
+    //console.log(req.body.isShowSubs);
+    let updatedClients;
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    let length;
+    if (!req.body.isShowSubs) {
+      length = await Client.countDocuments({ coordinators: req.body.userName, isDisabled: false });
+      updatedClients = await Client.find(
+        { coordinators: req.body.userName, isDisabled: false }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });
+    } else {
+      length = await Client.countDocuments({ coordinators: req.body.userName, isDisabled: false, publishers: req.body.userName });
+      updatedClients = await Client.find(
+        { coordinators: req.body.userName, isDisabled: false, publishers: req.body.userName }
+      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });
+    }
+    //let correctedOrders = correctDate(updatedClients);
+    let result = {
+      message: message,
+      clients: updatedClients,
+      length: length
+    };
+    const confirmOrderResponse = new BaseResponse("200", "Order confirmed", result);
+    res.json(confirmOrderResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    const confirmOrderCatchErrorResponse = new BaseResponse(
+      "500",
+      "MongoDB server error",
+      e
+    );
+    res.status(500).send(confirmOrderCatchErrorResponse.toObject());
+  }
+});
+
+/**
+ * API to find all clients by userName 
+ */
+
+router.get("/find/:userName", async (req, res) => {
+  try {
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    const length = await Client.countDocuments({ coordinators:  req.params.userName, isDisabled: false }); 
+
+    //const length = await Client.countDocuments({ isDisabled: false , institutes: {$ne: []}}); 
+    Client.find({ coordinators: req.params.userName, isDisabled: false }, function (err, clients) { 
+
+   //Client.find({  isDisabled: false , institutes: {$ne: []} }, function (err, clients) {    //CANCEL!!!!
+      if (err) {
+        console.log(err);
+        const readUserMongodbErrorResponse = new BaseResponse(
+          500,
+          "Internal server error",
+          err
+        );
+        res.status(500).send(readUserMongodbErrorResponse.toObject());
+      } else {
+        //  let correctedOrders = correctDate(orders);
+        let result = {
+          clients: clients,
+          length: length
+        };
+        const readUserResponse = new BaseResponse(
+          200,
+          "Query successful",
+          result
+        );
+        //console.log(clients);
+        res.json(readUserResponse.toObject());
+      }
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });
+  } catch (e) {
+    console.log(e);
+    const readUserCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      err
+    );
+    res.status(500).send(readUserCatchErrorResponse.toObject());
+  }
+});
+
+//API to find subscribers by userName
+
+router.get("/findSubscribers/:userName", async (req, res) => {
+  try {
+    console.log('req.query');
+    console.log(req.query)
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+
+    const length = await Client.countDocuments(
+      { isDisabled: false, publishers: req.params.userName }
+    )
+
+    Client.find({ isDisabled: false, publishers:req.params.userName }, function (err, clients) {
+      if (err) {
+        console.log(err);
+
+        const readUserMongodbErrorResponse = new BaseResponse(
+          500,
+          "Internal server error",
+          err
+        );
+        res.status(500).send(readUserMongodbErrorResponse.toObject());
+      } else {
+
+        let result = {
+          clients: clients,
+          length: length
+        };
+        console.log('pageSize');
+        console.log(pageSize)
+        console.log('result');
+        console.log(result.length);
+        console.log("result.clients");
+        console.log(result.clients);
+
+        const readUserResponse = new BaseResponse(
+          200,
+          "Query successful",
+          result
+        );
+        // console.log("findNotConfirmed");
+        //console.log(orders);
+        res.json(readUserResponse.toObject());
+      }
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });;
+  } catch (e) {
+    console.log(e);
+    const readUserCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      err
+    );
+    res.status(500).send(readUserCatchErrorResponse.toObject());
+  }
+});
+
+/**
+ * API to find clients by search string 
+ */
+
+router.get("/search/:userName", async (req, res) => {
+  try {
+    const pageSize = +req.query.pagesize;
+    const currentPage = +req.query.page;
+    let valueToSearch = req.query.valueToSearch;
+
+    let searchParams = valueToSearch.split(" ");
+    for (let i = 0; i < searchParams.length; i++) {
+      //  par = "/" + par + "/i";
+      searchParams[i] = new RegExp(searchParams[i].toString(), 'i');
+      // console.log(par); 
+    }
+
+    console.log("searchParams");
+    console.log(searchParams);
+    const length = await Client.countDocuments({ coordinators: req.params.userName, isDisabled: false, searchString: { $all: searchParams } });
+    Client.find({ coordinators: req.params.userName, isDisabled: false, searchString: { $all: searchParams } }, function (err, clients) {
+      if (err) {
+        console.log(err);
+        const readUserMongodbErrorResponse = new BaseResponse(
+          500,
+          "Internal server error",
+          err
+        );
+        res.status(500).send(readUserMongodbErrorResponse.toObject());
+      } else {
+        //  let correctedOrders = correctDate(orders);
+        let resume = length ? true : false;
+
+        let result = {
+          found: resume,
+          clients: clients,
+          length: length
+        };
+        const readUserResponse = new BaseResponse(
+          200,
+          "Query successful",
+          result
+        );
+        //console.log(clients);
+        res.json(readUserResponse.toObject());
+      }
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });
+  } catch (e) {
+    console.log(e);
+    const readUserCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      err
+    );
+    res.status(500).send(readUserCatchErrorResponse.toObject());
+  }
+});
+
+/**
+ * API to find all clients by userName 
+ */
+
+router.post("/add-institute/:id", async (req, res) => {
+  console.log('router.post("/add-institute1"');
+  try {
+
+    console.log('router.post("/add-institute2"');
+    //console.log();
+    const id = req.params.id;
+    const name = req.body.name;
+    const category = req.body.category;
+    const userName = req.body.userName;
+
+    let clientOld = await Client.findOne({ _id: id });
+
+
+
+    await Client.updateOne({ _id: id }, {
+      $push: { institutes: { name: name, category: category},  searchString: name ,}
+ 
+    });
+    let clientNew = await Client.findOne({ _id: id });
+
+    await Client.updateOne({ _id: id }, {
+      $push: { whatChanged: { userName: userName, date: new Date(), changed: [{
+        institutesOld: clientOld.institutes,
+        institutesNew: clientNew.institutes,
+      }],  } }
+    });
+
+    const readUserResponse = new BaseResponse(
+      200,
+      "Query successful",
+      clientNew.institutes
+    );
+    res.json(readUserResponse.toObject());
+
+
+
+  } catch (e) {
+    console.log('router.post("/add-instituteERROR"');
+    console.log(e);
+    const readUserCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      err
+    );
+    res.status(500).send(readUserCatchErrorResponse.toObject());
+  }
+});
+
+
+/* router.delete("/:id", async (req, res) => {
   try {
     Client.findOne({ _id: req.params.id }, function (err, client) {
       // If statement for Mongo error
@@ -199,9 +665,17 @@ router.delete("/:id", async (req, res) => {
 
       // console.log to see if code breaks
       console.log(client);
-
+      client.whatChanged.push({
+        userName: userName,
+        date: new Date(),
+        changed: [{
+          isDisabledOld: false,
+          isDisabledNew: true,
+        }],
+      })
       client.set({
         isDisabled: true,
+        whatChanged: client.whatChanged
       });
 
       client.save(function (err, savedClient) {
@@ -224,22 +698,69 @@ router.delete("/:id", async (req, res) => {
     return res.status(500).send(deleteClientCatchErrorResponse.toObject());
   }
 });
+ */
+///find contacts
+router.get("/find-contacts/:contactType", async (req, res) => {
+  try {
+    console.log("/find-contacts/:contactType/:contact");
+    let contacts = await Client.find({ isDisabled: false, [req.params.contactType]: { $ne: null } }, { [req.params.contactType]: 1, _id: 1 });
+    console.log("contacts");
+    console.log(contacts);
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", { contacts: contacts });
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
 
 
+/* router.get("/find-contacts/:contactType/:contact", async (req, res) => {
+  try {
+    console.log("/find/:contactType/:contact");
+   let contacts = await Client.aggregate([
+    {
+      $search: {
+        index: "email",
+        autocomplete: {
+          query: req.params.contact,
+          path: req.params.contactType,
+        }
+      }
+    }
+  ]);
+    console.log("contacts");
+    console.log(contacts);
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", contacts);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+}); */
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///find orders to create clients
 
 router.get("/create-clients/all", async (req, res) => {
   try {
     console.log("start /create-clients");
-    let clients = await Order.find({
-      dateOfOrder: { $gt: new Date('2022-06-30'), $lte: new Date('2022-07-31') }, isDisabled: false
+    let clients = await Order.find({ email:"Nastya.Tymen@mail.ru", isDisabled: false
     }, {
       userName: 1, source: 1,
       clientFirstName: 1, clientPatronymic: 1, clientLastName: 1,
       email: 1, contactType: 1, contact: 1, institute: 1, dateOfOrder: 1
 
-    });
+    });  //   dateOfOrder: { $gt: new Date('2023-05-31'), $lte: new Date('2023-09-30')
 
     console.log(clients.length);
 
@@ -252,7 +773,6 @@ router.get("/create-clients/all", async (req, res) => {
     res.status(500).send(findAllListsCatchErrorResponse.toObject());
   }
 });
-
 
 ///create clients
 
@@ -295,7 +815,7 @@ router.post("/create-clients/:index", async (req, res) => {
         //clientContact = client.contact.toString().slice(1, client.contact.toString().length);
         regExp = client.contact;
       } else {
-      
+
         regExp = new RegExp('^' + client.contact.toString() + '$', 'i');
       }
 
@@ -441,8 +961,28 @@ router.post("/create-clients/:index", async (req, res) => {
         }
       }
     }
-    let newClient;
+
     if (alreadyChecked.length == 0) {
+
+      let searchString = [];
+      for (let key in client) {
+        if (
+          key == "clientFirstName" ||
+          key == "clientPatronymic" ||
+          key == "clientLastName" ||
+          key == "email" ||
+          key == "contact"
+        ) {
+          if (client[key]) { searchString.push(client[key]); }
+        }
+        if (key == "institutes") {
+          for (let institute of client.institutes) {
+            searchString.push(institute.name);
+          }
+        }
+      }
+
+      let newClient;
       newClient = await Client.create({
         firstName: client.clientFirstName,
         patronymic: client.clientPatronymic,
@@ -457,7 +997,9 @@ router.post("/create-clients/:index", async (req, res) => {
         institutes: institutes, //client.institute ? [{ name: client.institute, category: "образовательное учреждение" }] : [],
         publishers: publishers, //client.source == 'subscription' ? [client.userName] : [],
         coordinators: [client.userName],
-        dateCreated: client.dateOfOrder
+        dateCreated: client.dateOfOrder,
+        searchString: searchString,
+        whatChanged: [],
       });
       //  let newClient = await Client.findOne({ _id: insertResult.insertedId });
       // console.log("insertResult");
@@ -490,8 +1032,8 @@ router.post("/create-clients/:index", async (req, res) => {
         if (item.facebook) { controversialData.facebook = controversialData.facebook.concat(item.facebook); }
       }
 
-        await Order.updateOne({ _id: client._id }, { $set: { clientId: alreadyChecked[0] } });
-   
+      await Order.updateOne({ _id: client._id }, { $set: { clientId: alreadyChecked[0] } });
+
 
       let firstClient = await Client.findOne({ _id: alreadyChecked[0] });
       result = {
@@ -531,16 +1073,16 @@ function checkDifferences(oldClient, client) {
   console.log('client');
   console.log(client);
   {
-    if (oldClient.firstName != client.clientFirstName) {
+    if (oldClient.firstName != client.clientFirstName && client.clientFirstName) {
       controversialData.clientFirstName.push(oldClient.firstName, client.clientFirstName);
     }
-    if (oldClient.patronymic != client.clientPatronymic) {
+    if (oldClient.patronymic != client.clientPatronymic && client.clientPatronymic) {
       controversialData.clientPatronymic.push(oldClient.patronymic, client.clientPatronymic);
     }
-    if (oldClient.lastName != client.clientLastName) {
+    if (oldClient.lastName != client.clientLastName && client.clientLastName) {
       controversialData.clientLastName.push(oldClient.lastName, client.clientLastName);
     }
-    if (oldClient.email != client.email) {
+    if (oldClient.email?.toLowerCase() != client.email?.toLowerCase() && client.email) {
       controversialData.email.push(oldClient.email, client.email);
     }
     if (client.contactType == 'telegram' && oldClient.telegram != client.contact) {
@@ -585,6 +1127,27 @@ router.post("/update-and-delete-clients/:id", async (req, res) => {
       } else {
         //console.log(client);
 
+        let searchString = [];
+        if (req.body.client.firstName) searchString.push(req.body.client.firstName);
+        if (req.body.client.patronymic) searchString.push(req.body.client.patronymic);
+        if (req.body.client.lastName) searchString.push(req.body.client.lastName);
+        if (req.body.client.email) searchString.push(req.body.client.email);
+        if (req.body.client.phoneNumber) searchString.push(req.body.client.phoneNumber);
+        if (req.body.client.whatsApp) searchString.push(req.body.client.whatsApp);
+        if (req.body.client.telegram) searchString.push(req.body.client.telegram);
+        if (req.body.client.vKontakte) searchString.push(req.body.client.vKontakte);
+        if (req.body.client.instagram) searchString.push(req.body.client.instagram);
+        if (req.body.client.facebook) searchString.push(req.body.client.facebook);
+        if (req.body.client.otherContact) searchString.push(req.body.client.otherContact);
+        if (req.body.client.country) searchString.push(req.body.client.country);
+        if (req.body.client.region) searchString.push(req.body.client.region);
+        if (req.body.client.city) searchString.push(req.body.client.city);
+
+        for (let institute of req.body.client.institutes) {
+          searchString.push(institute.name);
+        }
+
+
         client.set({
           firstName: req.body.client.firstName,
           patronymic: req.body.client.patronymic,
@@ -609,6 +1172,7 @@ router.post("/update-and-delete-clients/:id", async (req, res) => {
           isRestricted: req.body.client.isRestricted,
           causeOfRestriction: req.body.client.causeOfRestriction,
           preventiveAction: req.body.client.preventiveAction,
+          searchString: searchString
         });
 
 
@@ -622,7 +1186,7 @@ router.post("/update-and-delete-clients/:id", async (req, res) => {
             console.log(client);
             let result = {
               savedClient: savedClient,
-              deletedClients: req.params.id
+              deletedClients: req.body.ids
             };
             const createClientResponse = new BaseResponse(200, "Query successful", result);
             res.json(createClientResponse.toObject());
@@ -638,8 +1202,54 @@ router.post("/update-and-delete-clients/:id", async (req, res) => {
 });
 
 /**
- * API to find client by ID (OK)
+ * API to add-search-array
  */
+
+router.get("/add-search-array", async (req, res) => {
+  try {
+    let clients = await Client.find({});
+    for (let client of clients) {
+      let searchString = [];
+      for (let key in client) {
+        if (
+          key == "firstName" ||
+          key == "patronymic" ||
+          key == "lastName" ||
+          key == "email" ||
+          key == "phoneNumber" ||
+          key == "whatsApp" ||
+          key == "telegram" ||
+          key == "vKontakte" ||
+          key == "instagram" ||
+          key == "facebook" ||
+          key == "otherContact" ||
+          key == "country" ||
+          key == "city" ||
+          key == "region"
+        ) {
+          if (client[key]) { searchString.push(client[key]); }
+        }
+        if (key == "institutes") {
+          for (let institute of client.institutes) {
+            searchString.push(institute.name);
+          }
+        }
+
+      }
+      await Client.updateOne({ _id: client._id }, { $set: { searchString: searchString } });
+      console.log(client._id);
+    }
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", true);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const readClientCatchErrorResponse = new BaseResponse(500, "Internal server error", err);
+    res.status(500).send(readClientCatchErrorResponse.toObject());
+  }
+});
+
 
 router.get("/:id", async (req, res) => {
   try {
@@ -667,5 +1277,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).send(readClientCatchErrorResponse.toObject());
   }
 });
+
 
 module.exports = router;

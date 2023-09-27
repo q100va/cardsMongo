@@ -70,13 +70,17 @@ export class OrderDetailsComponent implements OnInit {
       ? "Требует подтверждения"
       : "Не требует подтверждения";
     this.noRestricted = this.noRestricted ? "Без БОА" : "";
+    let institutes = "";
+    for (let item of this.order.institutes) {
+      institutes = institutes + " " + item.name;
+    }
     this.fullName =
       (this.order.clientLastName ? this.order.clientLastName : "") +
       " " +
       (this.order.clientFirstName ? this.order.clientFirstName : "") +
       " " +
-      (this.order.clientPatronymic ? this.order.clientPatronymic : "") +
-      (this.order.institute ? this.order.institute : "");
+      (this.order.clientPatronymic ? this.order.clientPatronymic : "") + " " + institutes;
+
     this.contact =
       (this.order.email ? this.order.email : "") +
       " " +
