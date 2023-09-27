@@ -754,8 +754,11 @@ router.get("/find-contacts/:contactType", async (req, res) => {
 router.get("/create-clients/all", async (req, res) => {
   try {
     console.log("start /create-clients");
-    let clients = await Order.find({ email:"Nastya.Tymen@mail.ru", isDisabled: false
-    }, {
+    let clients = await Order.find(
+      {
+       clientId: { $exists: false}, isDisabled: true, dateOfOrder: { $lte: new Date('2023-01-25T05:00:00.110+00:00')}
+      }, 
+    {
       userName: 1, source: 1,
       clientFirstName: 1, clientPatronymic: 1, clientLastName: 1,
       email: 1, contactType: 1, contact: 1, institute: 1, dateOfOrder: 1
