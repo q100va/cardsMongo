@@ -18,6 +18,8 @@ const Month = require("../models/month");
 const House = require("../models/house");
 const Region = require("../models/region");
 const NameDay = require("../models/name-day");
+const NameDayNext = require("../models/name-day-next");
+const NameDayBefore = require("../models/name-day-previous");
 const TeacherDay = require("../models/teacher-day");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
@@ -447,37 +449,37 @@ router.patch("/change-status/:id", async (req, res) => {
 async function deletePluses(deletedOrder, full) {
   let deletedLineItems = full ? deletedOrder.lineItems : deletedOrder.deleted;
 
-  if (deletedOrder.holiday == "Дни рождения октября 2023" || deletedOrder.holiday == "Дни рождения ноября 2023" || deletedOrder.holiday == "Дни рождения сентября 2023") {
+  if (deletedOrder.holiday == "Дни рождения ноября 2023" || deletedOrder.holiday == "Дни рождения декабря 2023" || deletedOrder.holiday == "Дни рождения октября 2023") {
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
     const month = await Month.findOne({ isActive: true });
     let monthNumber = month.number;
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (deletedOrder.holiday == "Дни рождения ноября 2023") {
+    if (deletedOrder.holiday == "Дни рождения декабря 2023") {
       monthNumber = monthNumber + 1;
     }
-    if (deletedOrder.holiday == "Дни рождения сентября 2023") {
+    if (deletedOrder.holiday == "Дни рождения октября 2023") {
       monthNumber = monthNumber - 1;
     }
     for (let lineItem of deletedLineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == monthNumber) {
 
-          if (deletedOrder.holiday == "Дни рождения ноября 2023") {
+          if (deletedOrder.holiday == "Дни рождения декабря 2023") {
             await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListNext.findOne({ _id: person.celebrator_id });
           }
-          if (deletedOrder.holiday == "Дни рождения октября 2023") {
+          if (deletedOrder.holiday == "Дни рождения ноября 2023") {
             await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await List.findOne({ _id: person.celebrator_id });
           }
-          if (deletedOrder.holiday == "Дни рождения сентября 2023") {
+          if (deletedOrder.holiday == "Дни рождения октября 2023") {
             await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListBefore.findOne({ _id: person.celebrator_id });
           }
 
-          if (deletedOrder.holiday == "Дни рождения октября 2023") {
+          if (deletedOrder.holiday == "Дни рождения ноября 2023") {
             period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
             activePeriod = await Period.findOne({ isActive: true });
             if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
@@ -517,54 +519,71 @@ async function deletePluses(deletedOrder, full) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины октября 2023") {
+    if (deletedOrder.holiday == "Именины ноября 2023") {
       for (let lineItem of deletedLineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
         }
       }
     } else {
-      if (deletedOrder.holiday == "День учителя и дошкольного работника 2023") {
+      if (deletedOrder.holiday == "Именины декабря 2023") {
         for (let lineItem of deletedLineItems) {
           for (let person of lineItem.celebrators) {
-            await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+            await NameDayNext.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
           }
         }
-      }
-      else {
-        if (deletedOrder.holiday == "Пасха 2023") {
+      } else {
+        if (deletedOrder.holiday == "Именины октября 2023") {
           for (let lineItem of deletedLineItems) {
             for (let person of lineItem.celebrators) {
-              await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+              await NameDayBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             }
           }
         } else {
-          if (deletedOrder.holiday == "8 марта 2023") {
+
+          if (deletedOrder.holiday == "День учителя и дошкольного работника 2023") {
             for (let lineItem of deletedLineItems) {
               for (let person of lineItem.celebrators) {
-                await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
               }
             }
-          } else {
-            if (deletedOrder.holiday == "23 февраля 2023") {
+          }
+          else {
+            if (deletedOrder.holiday == "Пасха 2023") {
               for (let lineItem of deletedLineItems) {
                 for (let person of lineItem.celebrators) {
-                  await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                  await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                 }
               }
             } else {
-              if (deletedOrder.holiday == "9 мая 2023") {
+              if (deletedOrder.holiday == "8 марта 2023") {
                 for (let lineItem of deletedLineItems) {
                   for (let person of lineItem.celebrators) {
-                    await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                    await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                   }
                 }
-              }
-              else {
-                if (deletedOrder.holiday == "День семьи 2023") {
+              } else {
+                if (deletedOrder.holiday == "23 февраля 2023") {
                   for (let lineItem of deletedLineItems) {
                     for (let person of lineItem.celebrators) {
-                      await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                      await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                    }
+                  }
+                } else {
+                  if (deletedOrder.holiday == "9 мая 2023") {
+                    for (let lineItem of deletedLineItems) {
+                      for (let person of lineItem.celebrators) {
+                        await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                      }
+                    }
+                  }
+                  else {
+                    if (deletedOrder.holiday == "День семьи 2023") {
+                      for (let lineItem of deletedLineItems) {
+                        for (let person of lineItem.celebrators) {
+                          await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                        }
+                      }
                     }
                   }
                 }
@@ -625,7 +644,7 @@ router.patch("/restore/:id", async (req, res) => {
 });
 
 async function restorePluses(updatedOrder) {
-  if (updatedOrder.holiday == "Дни рождения октября 2023" || updatedOrder.holiday == "Дни рождения ноября 2023" || updatedOrder.holiday == "Дни рождения сентября 2023") {
+  if (updatedOrder.holiday == "Дни рождения ноября 2023" || updatedOrder.holiday == "Дни рождения декабря 2023" || updatedOrder.holiday == "Дни рождения октября 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -634,20 +653,20 @@ async function restorePluses(updatedOrder) {
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (updatedOrder.holiday == "Дни рождения ноября 2023") {
+    if (updatedOrder.holiday == "Дни рождения декабря 2023") {
       monthNumber = monthNumber + 1;
     }
 
     for (let lineItem of updatedOrder.lineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == month.number) {
-          if (updatedOrder.holiday == "Дни рождения ноября 2023") {
+          if (updatedOrder.holiday == "Дни рождения декабря 2023") {
             await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения октября 2023") {
+          if (updatedOrder.holiday == "Дни рождения ноября 2023") {
             await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения сентября 2023") {
+          if (updatedOrder.holiday == "Дни рождения октября 2023") {
             await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
 
@@ -692,54 +711,71 @@ async function restorePluses(updatedOrder) {
       }
     }
   } else {
-    if (updatedOrder.holiday == "Именины октября 2023") {
+    if (updatedOrder.holiday == "Именины ноября 2023") {
       for (let lineItem of updatedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
         }
       }
     } else {
-      if (updatedOrder.holiday == "День учителя и дошкольного работника 2022") {
+      if (updatedOrder.holiday == "Именины октября 2023") {
         for (let lineItem of updatedOrder.lineItems) {
           for (let person of lineItem.celebrators) {
-            await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+            await NameDayBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
         }
-      }
-      else {
-        if (updatedOrder.holiday == "Пасха 2023") {
+      } else {
+        if (updatedOrder.holiday == "Именины декабря 2023") {
           for (let lineItem of updatedOrder.lineItems) {
             for (let person of lineItem.celebrators) {
-              await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+              await NameDayNext.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
             }
           }
         } else {
-          if (updatedOrder.holiday == "8 марта 2023") {
+
+          if (updatedOrder.holiday == "День учителя и дошкольного работника 2022") {
             for (let lineItem of updatedOrder.lineItems) {
               for (let person of lineItem.celebrators) {
-                await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                await TeacherDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
               }
             }
-          } else {
-            if (updatedOrder.holiday == "23 февраля 2023") {
+          }
+          else {
+            if (updatedOrder.holiday == "Пасха 2023") {
               for (let lineItem of updatedOrder.lineItems) {
                 for (let person of lineItem.celebrators) {
-                  await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                  await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
                 }
               }
             } else {
-              if (updatedOrder.holiday == "9 мая 2023") {
+              if (updatedOrder.holiday == "8 марта 2023") {
                 for (let lineItem of updatedOrder.lineItems) {
                   for (let person of lineItem.celebrators) {
-                    await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                    await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
                   }
                 }
-              }
-              else {
-                if (updatedOrder.holiday == "День семьи 2023") {
+              } else {
+                if (updatedOrder.holiday == "23 февраля 2023") {
                   for (let lineItem of updatedOrder.lineItems) {
                     for (let person of lineItem.celebrators) {
-                      await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                      await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                    }
+                  }
+                } else {
+                  if (updatedOrder.holiday == "9 мая 2023") {
+                    for (let lineItem of updatedOrder.lineItems) {
+                      for (let person of lineItem.celebrators) {
+                        await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                      }
+                    }
+                  }
+                  else {
+                    if (updatedOrder.holiday == "День семьи 2023") {
+                      for (let lineItem of updatedOrder.lineItems) {
+                        for (let person of lineItem.celebrators) {
+                          await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                        }
+                      }
                     }
                   }
                 }
@@ -862,44 +898,45 @@ router.get("/get/nursingHomes/", async (req, res) => {
 
 router.post("/check-double/", async (req, res) => {
   try {
- /*   let contact;
-    let id = req.body.clientId;
-   console.log(req.body.contact);
-     if (req.body.contact) {
-      if (req.body.contact.toString()[0] == '+') {
-        contact = req.body.contact.toString().slice(1, req.body.contact.toString().length)
-      } else {
-        contact = req.body.contact.toString()
-      }
-    }
-    let e = email ? new RegExp('^' + email.toString() + '$', 'i') : null;
-    let c = contact ? new RegExp('^' + contact.toString() + '$', 'i') : null; */
-    let conditions = {isDisabled: false,
-        holiday: req.body.holiday,
-        clientId: req.body.clientId
+    /*   let contact;
+       let id = req.body.clientId;
+      console.log(req.body.contact);
+        if (req.body.contact) {
+         if (req.body.contact.toString()[0] == '+') {
+           contact = req.body.contact.toString().slice(1, req.body.contact.toString().length)
+         } else {
+           contact = req.body.contact.toString()
+         }
+       }
+       let e = email ? new RegExp('^' + email.toString() + '$', 'i') : null;
+       let c = contact ? new RegExp('^' + contact.toString() + '$', 'i') : null; */
+    let conditions = {
+      isDisabled: false,
+      holiday: req.body.holiday,
+      clientId: req.body.clientId
     };
     console.log("conditions");
     console.log(conditions);
-/*     if (req.body.email && req.body.contact) {
-      conditions = {
-        
-        $or: [{ email: e }, { contact: c }]
-      }
-    }
-    if (req.body.email && !req.body.contact) {
-      conditions = {
-        isDisabled: false,
-        holiday: req.body.holiday,
-        email: e
-      }
-    }
-    if (!req.body.email && req.body.contact) {
-      conditions = {
-        isDisabled: false,
-        holiday: req.body.holiday,
-        contact: c
-      }
-    } */
+    /*     if (req.body.email && req.body.contact) {
+          conditions = {
+            
+            $or: [{ email: e }, { contact: c }]
+          }
+        }
+        if (req.body.email && !req.body.contact) {
+          conditions = {
+            isDisabled: false,
+            holiday: req.body.holiday,
+            email: e
+          }
+        }
+        if (!req.body.email && req.body.contact) {
+          conditions = {
+            isDisabled: false,
+            holiday: req.body.holiday,
+            contact: c
+          }
+        } */
 
     Order.find(conditions, function (err, orders) {
       if (err) {
@@ -914,6 +951,7 @@ router.post("/check-double/", async (req, res) => {
         let result = {};
         let usernames = [];
         let seniorsIds = [];
+
         if (orders.length > 0) {
           for (let order of orders) {
             usernames.push(order.userName);
@@ -959,16 +997,20 @@ router.post("/name-day", async (req, res) => {
     console.log("req.body.temporaryLineItems");
     console.log(req.body.temporaryLineItems);
     let newOrder = {
+
       userName: req.body.userName,
       holiday: req.body.holiday,
+      source: req.body.source,
       amount: req.body.amount,
+      clientId: req.body.clientId,
       clientFirstName: req.body.clientFirstName,
       clientPatronymic: req.body.clientPatronymic,
       clientLastName: req.body.clientLastName,
-      email: req.body.email,
+      //email: req.body.email,
       contactType: req.body.contactType,
       contact: req.body.contact,
-      institute: req.body.institute,
+      // institute: req.body.institute,
+      institutes: req.body.institutes,
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
       orderDate: req.body.orderDate,
@@ -1068,7 +1110,15 @@ async function createOrderForNameDay(order) {
 
   let createdOrder = await Order.create(order);
   for (let element of createdOrder.temporaryLineItems) {
-    await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+    if(order.holiday == "Именины ноября 2023") {
+      await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+    }
+    if(order.holiday == "Именины декабря 2023") {
+      await NameDayNext.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+    }
+    if(order.holiday == "Именины октября 2023") {
+      await NameDayBefore.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
+    }
   }
   await Order.updateOne({ _id: createdOrder._id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
   let newOrder = await Order.findOne({ _id: createdOrder._id });
@@ -1239,10 +1289,10 @@ router.post("/birthday/:amount", async (req, res) => {
       clientFirstName: req.body.clientFirstName,
       clientPatronymic: req.body.clientPatronymic,
       clientLastName: req.body.clientLastName,
-      email: req.body.email,
+      //email: req.body.email,
       contactType: req.body.contactType,
       contact: req.body.contact,
-      institute: req.body.institute,
+      //institute: req.body.institute,
       institutes: req.body.institutes,
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
@@ -1310,13 +1360,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
           seniors_ids.push(person.celebrator_id);
         }
 
-        if (holiday == "Дни рождения ноября 2023") {
+        if (holiday == "Дни рождения декабря 2023") {
           await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения октября 2023") {
+        if (holiday == "Дни рождения ноября 2023") {
           await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения сентября 2023") {
+        if (holiday == "Дни рождения октября 2023") {
           await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
 
@@ -1341,7 +1391,7 @@ async function createOrder(newOrder, prohibitedId) {
 
   //let period = await Period.findOne({ key:0 });
   let period;
-  if (newOrder.holiday == "Дни рождения октября 2023") {
+  if (newOrder.holiday == "Дни рождения ноября 2023") {
     period = await Period.findOne({ isActive: true });
     if (!period)
       return {
@@ -1361,7 +1411,7 @@ async function createOrder(newOrder, prohibitedId) {
   }
 
 
-  if (newOrder.holiday == "Дни рождения сентября 2023") {
+  if (newOrder.holiday == "Дни рождения октября 2023") {
     period = {
       "date1": 26,
       "date2": 31,
@@ -1372,7 +1422,7 @@ async function createOrder(newOrder, prohibitedId) {
       "scoredPluses": 2
     }
   }
-  if (newOrder.holiday == "Дни рождения ноября 2023") {
+  if (newOrder.holiday == "Дни рождения декабря 2023") {
     period = {
       "date1": 1,
       "date2": 5,
@@ -1529,10 +1579,10 @@ async function createOrder(newOrder, prohibitedId) {
     clientFirstName: newOrder.clientFirstName,
     clientPatronymic: newOrder.clientPatronymic,
     clientLastName: newOrder.clientLastName,
-    email: newOrder.email,
+    // email: newOrder.email,
     contactType: newOrder.contactType,
     contact: newOrder.contact,
-    institute: newOrder.institute,
+    // institute: newOrder.institute,
     institutes: newOrder.institutes,
     //isRestricted: newOrder.isRestricted,
     isAccepted: newOrder.isAccepted,
@@ -1803,7 +1853,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     celebratorsAmount: 0,
     date1: day1,
     date2: day2,
-    maxPlus: 4,
+    maxPlus: 5,
     filter: filter,
     order_id: order_id,
     //temporaryLineItems: [],
@@ -1907,7 +1957,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, ord
 //set restrictions for searching
 
 async function collectSeniors(data, orderFilter, holiday) {
-  if (holiday == "Дни рождения ноября 2023") {
+  if (holiday == "Дни рождения декабря 2023") {
     console.log('test1');
   }
   console.log('holiday1');
@@ -2007,13 +2057,13 @@ async function collectSeniors(data, orderFilter, holiday) {
       if (result) {
         //console.log(result);
         await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-        if (holiday == "Дни рождения ноября 2023") {
+        if (holiday == "Дни рождения декабря 2023") {
           await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения октября 2023") {
+        if (holiday == "Дни рождения ноября 2023") {
           await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения сентября 2023") {
+        if (holiday == "Дни рождения октября 2023") {
           await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
 
@@ -2127,13 +2177,13 @@ async function searchSenior(
     console.log("filter");
     console.log(filter);
 
-    if (holiday == "Дни рождения ноября 2023") {
+    if (holiday == "Дни рождения декабря 2023") {
       celebrator = await ListNext.findOne(filter);
     }
-    if (holiday == "Дни рождения октября 2023") {
+    if (holiday == "Дни рождения ноября 2023") {
       celebrator = await List.findOne(filter);
     }
-    if (holiday == "Дни рождения сентября 2023") {
+    if (holiday == "Дни рождения октября 2023") {
       celebrator = await ListBefore.findOne(filter);
     }
 
@@ -2211,7 +2261,7 @@ function sendMessageToAdmin(text, e) { console.log(text + e); }
 // check is active period actual
 
 async function checkActivePeriod(period, month) {
-  if (month.number == 10) {
+  if (month.number == 11) {
     let today = new Date();
     let inTwoWeeks = new Date();
     let controlDate = period.secondTime ? 14 : 10;//
@@ -2285,7 +2335,7 @@ async function checkActivePeriod(period, month) {
 //check if active period is close TODO!!!!!
 
 async function checkActiveList(period, month, isOutDate, minDate, maxDate) {
-  if (month == 10) {
+  if (month == 11) {
     try {
 
       if (isOutDate) {
@@ -4244,33 +4294,33 @@ router.patch("/correct-orders-dates", async (req, res) => {
 router.get("/clients/move-institutes", async (req, res) => {
   try {
 
-/*     let orders = await Order.find({institute: {$ne: null}}); //({ dateOfOrder: { $gt: new Date('2022-05-01'), $lte: new Date('2022-07-31') } });
+    /*     let orders = await Order.find({institute: {$ne: null}}); //({ dateOfOrder: { $gt: new Date('2022-05-01'), $lte: new Date('2022-07-31') } });
+        for (let order of orders) {
+          await Order.updateOne({_id: order._id}, 
+            { $push: { institutes: [{ name: order.institute, category: "образовательное учреждение" }] } })
+            console.log(order._id); 
+        }*/
+    let orders = await Order.find({ email: { $ne: null }, contact: null });
     for (let order of orders) {
-      await Order.updateOne({_id: order._id}, 
-        { $push: { institutes: [{ name: order.institute, category: "образовательное учреждение" }] } })
-        console.log(order._id); 
-    }*/
-    let orders = await Order.find({email: {$ne: null}, contact: null});
-    for (let order of orders) {
-      await Order.updateOne({_id: order._id}, 
-        { $set: { contactType: "email", contact:  order.email} })
-        console.log(order._id); 
+      await Order.updateOne({ _id: order._id },
+        { $set: { contactType: "email", contact: order.email } })
+      console.log(order._id);
     }
-    
 
 
 
-const confirmOrderResponse = new BaseResponse("200", "Orders updated", true);
-res.json(confirmOrderResponse.toObject());
+
+    const confirmOrderResponse = new BaseResponse("200", "Orders updated", true);
+    res.json(confirmOrderResponse.toObject());
   } catch (e) {
-  console.log(e);
-  const readUserCatchErrorResponse = new BaseResponse(
-    500,
-    "Internal server error",
-    err
-  );
-  res.status(500).send(readUserCatchErrorResponse.toObject());
-}
+    console.log(e);
+    const readUserCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      err
+    );
+    res.status(500).send(readUserCatchErrorResponse.toObject());
+  }
 });
 
 

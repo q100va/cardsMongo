@@ -27,15 +27,17 @@ router.post("/check-double", async (req, res) => {
     let regExpEM = newClient.email ? new RegExp('^' + newClient.email.toString() + '$', 'i') : null;
     let regExpPN = newClient.phoneNumber ? newClient.phoneNumber : null;
     let regExpWA = newClient.whatsApp ? newClient.whatsApp : null;
-    let regExpTG;
+    let regExpTG = null;
     if (newClient.telegram) regExpTG = phoneRe.test(newClient.telegram) ? newClient.telegram : new RegExp('^' + newClient.telegram.toString() + '$', 'i');
     console.log("regExpTG");
     console.log(regExpTG);
     let regExpVK = newClient.vKontakte ? new RegExp('^' + newClient.vKontakte.toString() + '$', 'i') : null;
     let regExpIG = newClient.instagram ? new RegExp('^' + newClient.instagram.toString() + '$', 'i') : null;
     let regExpFB = newClient.facebook ? new RegExp('^' + newClient.facebook.toString() + '$', 'i') : null;
-    let regExpOC = newClient.otherContact ? new RegExp('^' + newClient.otherContact.toString() + '$', 'i') : null;
+    let regExpOC = null;
+    //if (newClient.otherContact) regExpOC = phoneRe.test(newClient.otherContact) ? newClient.otherContact : new RegExp('^' + newClient.otherContact.toString() + '$', 'i');
 
+    if (newClient.otherContact) regExpOC = newClient.otherContact.toLowerCase();
 
 
 
@@ -437,12 +439,12 @@ router.get("/find/:userName", async (req, res) => {
   try {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
-    const length = await Client.countDocuments({ coordinators:  req.params.userName, isDisabled: false }); 
+     const length = await Client.countDocuments({ coordinators:  req.params.userName, isDisabled: false }); 
 
-    //const length = await Client.countDocuments({ isDisabled: false , institutes: {$ne: []}}); 
-    Client.find({ coordinators: req.params.userName, isDisabled: false }, function (err, clients) { 
+    //const length = await Client.countDocuments({ isDisabled: false, institutes: { $ne: [] }, coordinators: "okskust" });
+   Client.find({ coordinators: req.params.userName, isDisabled: false }, function (err, clients) { 
 
-   //Client.find({  isDisabled: false , institutes: {$ne: []} }, function (err, clients) {    //CANCEL!!!!
+    //Client.find({ isDisabled: false, institutes: { $ne: [] }, coordinators: { $all: ["okskust"] } }, function (err, clients) {    //CANCEL!!!!
       if (err) {
         console.log(err);
         const readUserMongodbErrorResponse = new BaseResponse(
@@ -490,7 +492,7 @@ router.get("/findSubscribers/:userName", async (req, res) => {
       { isDisabled: false, publishers: req.params.userName }
     )
 
-    Client.find({ isDisabled: false, publishers:req.params.userName }, function (err, clients) {
+    Client.find({ isDisabled: false, publishers: req.params.userName }, function (err, clients) {
       if (err) {
         console.log(err);
 
@@ -543,12 +545,22 @@ router.get("/search/:userName", async (req, res) => {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     let valueToSearch = req.query.valueToSearch;
+    console.log("req.query.valueToSearch");
+    console.log(req.query.valueToSearch);
+    console.log("valueToSearch");
+    console.log(valueToSearch);
 
-    let searchParams = valueToSearch.split(" ");
+    //let searchParams = valueToSearch.split(" ");
+    let searchParams = [valueToSearch];
+    console.log("searchParams");
+    console.log(searchParams);
+
     for (let i = 0; i < searchParams.length; i++) {
       //  par = "/" + par + "/i";
-      searchParams[i] = new RegExp(searchParams[i].toString(), 'i');
-      // console.log(par); 
+      const phoneRe = /^((\+7)+([0-9]){10})$/;
+
+      searchParams[i] = phoneRe.test(searchParams[i]) ? searchParams[i] : new RegExp(searchParams[i].toString(), 'i');
+      console.log(phoneRe.test(searchParams[i]));
     }
 
     console.log("searchParams");
@@ -612,16 +624,20 @@ router.post("/add-institute/:id", async (req, res) => {
 
 
     await Client.updateOne({ _id: id }, {
-      $push: { institutes: { name: name, category: category},  searchString: name ,}
- 
+      $push: { institutes: { name: name, category: category }, searchString: name, }
+
     });
     let clientNew = await Client.findOne({ _id: id });
 
     await Client.updateOne({ _id: id }, {
-      $push: { whatChanged: { userName: userName, date: new Date(), changed: [{
-        institutesOld: clientOld.institutes,
-        institutesNew: clientNew.institutes,
-      }],  } }
+      $push: {
+        whatChanged: {
+          userName: userName, date: new Date(), changed: [{
+            institutesOld: clientOld.institutes,
+            institutesNew: clientNew.institutes,
+          }],
+        }
+      }
     });
 
     const readUserResponse = new BaseResponse(
@@ -756,15 +772,17 @@ router.get("/create-clients/all", async (req, res) => {
     console.log("start /create-clients");
     let clients = await Order.find(
       {
-       clientId: { $exists: false}, isDisabled: true, dateOfOrder: { $lte: new Date('2023-01-25T05:00:00.110+00:00')}
-      }, 
-    {
-      userName: 1, source: 1,
-      clientFirstName: 1, clientPatronymic: 1, clientLastName: 1,
-      email: 1, contactType: 1, contact: 1, institute: 1, dateOfOrder: 1
+        email: "anele_09@mail.ru"
+      },
+      {
+        userName: 1, source: 1,
+        clientFirstName: 1, clientPatronymic: 1, clientLastName: 1,
+        email: 1, contactType: 1, contact: 1, institute: 1, dateOfOrder: 1
 
-    });  //   dateOfOrder: { $gt: new Date('2023-05-31'), $lte: new Date('2023-09-30')
+      });
 
+    //   dateOfOrder: { $gt: new Date('2023-05-31'), $lte: new Date('2023-09-30')
+    //clientId: { $exists: false}, isDisabled: true, dateOfOrder: { $lte: new Date('2023-01-25T05:00:00.110+00:00')}
     console.log(clients.length);
 
     const findAllListsResponse = new BaseResponse("200", "Query successful", clients);
@@ -1253,6 +1271,121 @@ router.get("/add-search-array", async (req, res) => {
   }
 });
 
+/**
+ * API to restore coordinators
+ */
+
+router.get("/restore/coordinators", async (req, res) => {
+  try {
+    let clients = await Client.find({ isDisabled: false });
+    for (let client of clients) {
+      let coordinators = [];
+      let orders = await Order.find({ clientId: client._id });
+      for (let order of orders) {
+        if (!coordinators.includes(order.userName)) {
+          coordinators.push(order.userName);
+        }
+      }
+      await Client.updateOne({ _id: client._id }, { $set: { coordinators: coordinators } });
+      console.log(coordinators);
+    }
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", true);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const readClientCatchErrorResponse = new BaseResponse(500, "Internal server error", err);
+    res.status(500).send(readClientCatchErrorResponse.toObject());
+  }
+});
+
+/**
+ * API to correct contacts
+ */
+
+router.get("/contacts/correct", async (req, res) => {
+  try {
+    let clients = await Client.find(
+      {
+        otherContact: { $ne: null }
+      }
+    );
+    //const instaRe = /^https:\/\/www.instagram.com\//;
+
+
+    for (let client of clients) {
+      let newFN, newLN, newP, newContact;
+
+      newFN = client.firstName ? client.firstName.trim() : client.firstName;
+      newLN = client.lastName ? client.lastName.trim() : client.lastName;
+      newP = client.patronymic ? client.patronymic.trim() : client.patronymic;
+      /*       if (client.vKontakte) {
+              client.vKontakte = client.vKontakte.trim();
+              if (contactRe.test(client.vKontakte)) {
+                newContact = client.vKontakte;
+              } else {
+                newContact = client.vKontakte[0] == "@" ? "https://vk.com/" + client.vKontakte.substring(1) : "https://vk.com/" + client.vKontakte;
+                console.log(newContact);
+              }
+            }  */
+
+      /*       if (client.telegram) {
+              client.telegram = client.telegram.trim();
+              client.telegram = client.telegram.replace("https://web.tel.onl/", '');
+      
+              const contactRe = /^((\+7)+([0-9]){10})$/;
+              if (contactRe.test(client.telegram)) {
+                newContact = client.telegram;
+              } else {
+                const eightRe = /^((8)+([0-9]){10})$/;
+                if (eightRe.test(client.telegram)) {
+                  newContact = "+7" + client.telegram.substring(1);
+                } else { */
+      /*             let adjustedContact = '';
+                  const numberRe = /^(([0-9]){1})$/;
+                  for (let letter of client.telegram) {
+                    if (numberRe.test(letter)) {
+                      adjustedContact = adjustedContact + letter;
+                    }
+                  }
+                  newContact = "+7" + adjustedContact.slice(-10); */
+
+      /*            const nicknameRe = /^@/;
+                 if (nicknameRe.test(client.telegram)) {
+                   newContact = client.telegram;
+                 } else {
+                   const idRe = /^(\#+([0-9]){9,10})$/;
+                   if (idRe.test(client.telegram)) {
+                     newContact = client.telegram;
+                   } else {
+                    
+                     newContact = client.telegram;
+                     console.log(newContact);
+                   }
+                 }
+               }
+             }
+           }*/
+
+      await Client.updateOne(
+        { _id: client._id },
+        { $set: { firstName: newFN, lastName: newLN, patronymic: newP, } }
+      );
+      console.log(client._id);//telegram: newContact
+
+    }
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", true);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const readClientCatchErrorResponse = new BaseResponse(500, "Internal server error", err);
+    res.status(500).send(readClientCatchErrorResponse.toObject());
+  }
+});
+
 
 router.get("/:id", async (req, res) => {
   try {
@@ -1281,5 +1414,422 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///find and delete doubles
+
+router.get("/collect-clients/all", async (req, res) => {
+  try {
+    console.log("start /collect-clients");
+    let clients = await Client.find(
+      {
+        isDisabled: false
+      });
+
+    //   dateOfOrder: { $gt: new Date('2023-05-31'), $lte: new Date('2023-09-30')
+    //clientId: { $exists: false}, isDisabled: true, dateOfOrder: { $lte: new Date('2023-01-25T05:00:00.110+00:00')}
+    console.log(clients.length);
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", clients);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+///check clients
+
+router.post("/check-all-clients/:index", async (req, res) => {
+  try {
+
+    console.log("start check-all-clients");
+
+    let client = req.body.client;
+    let result = {};
+    let controversialData = {
+      clientFirstName: [],
+      clientPatronymic: [],
+      clientLastName: [],
+      email: [],
+      telegram: [],
+      phoneNumber: [],
+      whatsApp: [],
+      vKontakte: [],
+      instagram: [],
+      facebook: [],
+    }
+    let differences = [];
+    let alreadyChecked = [client._id];
+
+    let e = client.email ? new RegExp('^' + client.email.toString() + '$', 'i') : null;
+
+    let t = null;
+    if (client.telegram) {
+      if (client.telegram.toString()[0] == '+') {
+        t = client.telegram;
+      } else {
+        t = new RegExp('^' + client.telegram.toString() + '$', 'i');
+      }
+    }
+
+
+
+    let p = client.phoneNumber ? client.phoneNumber : null;
+    let w = client.whatsApp ? client.whatsApp : null;
+    let v = client.vKontakte ? new RegExp('^' + client.vKontakte.toString() + '$', 'i') : null;
+    let i = client.instagram ? new RegExp('^' + client.instagram.toString() + '$', 'i') : null;
+    let f = client.facebook ? new RegExp('^' + client.facebook.toString() + '$', 'i') : null;
+
+    if (e) {
+      let oldClient = await Client.findOne({ email: e, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+      }
+    }
+    if (t) {
+      let oldClient = await Client.findOne({ telegram: t, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+      }
+      if (t.toString()[0] == '+') {
+        oldClient = await Client.findOne({ phoneNumber: t, _id: { $nin: alreadyChecked }, isDisabled: false });
+        if (oldClient) {
+          console.log(client._id + " " + oldClient._id + " " + t);
+        }
+        oldClient = await Client.findOne({ whatsApp: t, _id: { $nin: alreadyChecked }, isDisabled: false });
+        if (oldClient) {
+          console.log(client._id + " " + oldClient._id + " " + t);
+        }
+      }
+    }
+    if (p) {
+      let oldClient = await Client.findOne({ phoneNumber: p, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+      }
+      oldClient = await Client.findOne({ telegram: p, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        console.log(client._id + " " + oldClient._id + " " + p);
+      }
+      oldClient = await Client.findOne({ whatsApp: p, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        console.log(client._id + " " + oldClient._id + " " + p);
+      }
+    }
+
+    if (w) {
+      let oldClient = await Client.findOne({ whatsApp: w, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+      }
+    }
+    if (v) {
+      let oldClient = await Client.findOne({ vKontakte: v, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+      }
+    }
+    if (i) {
+      let oldClient = await Client.findOne({ instagram: i, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+
+      }
+    }
+    if (f) {
+      let oldClient = await Client.findOne({ facebook: f, _id: { $nin: alreadyChecked }, isDisabled: false });
+      if (oldClient) {
+        alreadyChecked.push(oldClient._id);
+        differences = differences.concat(checkDifferencesDouble(oldClient, client));
+      }
+    }
+
+    if (client.firstName && client.patronymic && client.lastName) {
+      let oldClient = await Client.findOne(
+        {
+          firstName: client.firstName,
+          patronymic: client.patronymic,
+          lastName: client.lastName,
+          _id: { $nin: alreadyChecked }
+        }
+      );
+      if (oldClient) {
+        console.log(client._id + " " + oldClient._id + " sameName");
+      }
+    }
+
+    if (client.firstName && !client.patronymic && client.lastName) {
+      let oldClient = await Client.findOne(
+        {
+          firstName: client.firstName,  
+          lastName: client.lastName,
+          _id: { $nin: alreadyChecked }
+        }
+      );
+      if (oldClient) {
+        console.log(client._id + " " + oldClient._id + " sameName");
+      }
+    }
+
+
+
+
+
+
+    if (alreadyChecked.length == 1) {
+
+      result = {
+        resume: true,
+        client: client,
+        idOfSimilarClients: null
+      }
+    } else {
+
+      console.log('differences');
+      console.log(differences);
+
+      for (let item of differences) {
+        if (item.clientFirstName) { controversialData.clientFirstName = controversialData.clientFirstName.concat(item.clientFirstName); }
+        if (item.clientPatronymic) { controversialData.clientPatronymic = controversialData.clientPatronymic.concat(item.clientPatronymic); }
+        if (item.clientLastName) { controversialData.clientLastName = controversialData.clientLastName.concat(item.clientLastName); }
+        if (item.email) { controversialData.email = controversialData.email.concat(item.email); }
+        if (item.telegram) { controversialData.telegram = controversialData.telegram.concat(item.telegram); }
+        if (item.phoneNumber) { controversialData.phoneNumber = controversialData.phoneNumber.concat(item.phoneNumber); }
+        if (item.whatsApp) { controversialData.whatsApp = controversialData.whatsApp.concat(item.whatsApp); }
+        if (item.vKontakte) { controversialData.vKontakte = controversialData.vKontakte.concat(item.vKontakte); }
+        if (item.instagram) { controversialData.instagram = controversialData.instagram.concat(item.instagram); }
+        if (item.facebook) { controversialData.facebook = controversialData.facebook.concat(item.facebook); }
+      }
+
+      let isSame = true;
+      for (let key in controversialData) {
+        if (controversialData[key].length > 0) isSame = false;
+      }
+
+      if (!isSame) {
+        result = {
+          resume: false,
+          controversialData: controversialData,
+          idOfSimilarClients: alreadyChecked,
+          client: client
+        }
+      } else {
+        let mainId = alreadyChecked[0];
+        alreadyChecked.splice(0, 1);
+
+        console.log('deleted');
+        console.log(alreadyChecked);
+
+        await Client.updateMany({ _id: { $in: alreadyChecked } }, { $set: { isDisabled: true } });
+        await Order.updateMany({ clientId: { $in: alreadyChecked } }, { $set: { clientId: mainId } });
+
+        let disabledClients = await Client.find({ _id: { $in: alreadyChecked } });
+        let mainClient = await Client.findOne({ _id: mainId });
+
+        for (let client of disabledClients) {
+          for (let c of client.coordinators) {
+            if (!mainClient.coordinators.includes(c)) {
+              mainClient.coordinators.push(c);
+            }
+          }
+          for (let p of client.publishers) {
+            if (!mainClient.publishers.includes(p)) {
+              mainClient.publishers.push(p);
+            }
+          }
+          for (let i of client.institutes) {
+            mainClient.institutes.push(i);
+          }
+        }
+
+        await Client.updateOne(
+          { _id: mainId },
+          {
+            $set:
+            {
+              coordinators: mainClient.coordinators,
+              publishers: mainClient.publishers,
+              institutes: mainClient.institutes,
+            }
+          });
+        let updatedClient = await Client.findOne({ _id: mainId });
+
+        result = {
+          resume: true,
+          client: updatedClient,
+          idOfSimilarClients: alreadyChecked
+        }
+
+      }
+
+
+    }
+
+    const findAllListsResponse = new BaseResponse("200", "Query successful", result);
+    res.json(findAllListsResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+function checkDifferencesDouble(oldClient, client) {
+  let controversialData = {
+    clientFirstName: [],
+    clientPatronymic: [],
+    clientLastName: [],
+    email: [],
+    telegram: [],
+    phoneNumber: [],
+    whatsApp: [],
+    vKontakte: [],
+    instagram: [],
+    facebook: [],
+  }
+
+  console.log("oldClient");
+  console.log(oldClient);
+  console.log('client');
+  console.log(client);
+  {
+    if (oldClient.firstName != client.firstName) {
+      controversialData.clientFirstName.push(oldClient.firstName, client.firstName);
+    }
+    if (oldClient.patronymic != client.patronymic) {
+      controversialData.clientPatronymic.push(oldClient.patronymic, client.patronymic);
+    }
+    if (oldClient.lastName != client.lastName) {
+      controversialData.clientLastName.push(oldClient.lastName, client.lastName);
+    }
+    if (oldClient.email != client.email) {
+      controversialData.email.push(oldClient.email, client.email);
+    }
+    if (oldClient.telegram != client.telegram) {
+      controversialData.telegram.push(oldClient.telegram, client.telegram);
+    }
+    if (oldClient.phoneNumber != client.phoneNumber) {
+      controversialData.phoneNumber.push(oldClient.phoneNumber, client.phoneNumber);
+    }
+    if (oldClient.whatsApp != client.whatsApp) {
+      controversialData.whatsApp.push(oldClient.whatsApp, client.whatsApp);
+    }
+    if (oldClient.facebook != client.facebook) {
+      controversialData.facebook.push(oldClient.facebook, client.facebook);
+    }
+    if (oldClient.instagram != client.instagram) {
+      controversialData.instagram.push(oldClient.instagram, client.instagram);
+    }
+    if (oldClient.vKontakte != client.vKontakte) {
+      controversialData.vKontakte.push(oldClient.vKontakte, client.vKontakte);
+    }
+  }
+  console.log('controversialData');
+  console.log(controversialData);
+  return controversialData;
+}
+
+
+//update and delete client API
+
+/* router.post("/update-and-delete-clients/:id", async (req, res) => {
+  try {
+    console.log("start update-and-delete-clients");
+    console.log(req.params);
+    await Client.updateMany({ _id: { $in: req.body.ids } }, { $set: { isDisabled: true } });
+    await Order.updateMany({ clientId: { $in: req.body.ids } }, { $set: { clientId: req.params.id } });
+
+    Client.findOne({ _id: req.params.id }, function (err, client) {
+      if (err) {
+        console.log(err);
+        const updateClientMongodbErrorResponse = new BaseResponse(500, "Internal server error", err);
+        res.status(500).send(updateClientMongodbErrorResponse.toObject());
+      } else {
+        //console.log(client);
+
+        let searchString = [];
+        if (req.body.client.firstName) searchString.push(req.body.client.firstName);
+        if (req.body.client.patronymic) searchString.push(req.body.client.patronymic);
+        if (req.body.client.lastName) searchString.push(req.body.client.lastName);
+        if (req.body.client.email) searchString.push(req.body.client.email);
+        if (req.body.client.phoneNumber) searchString.push(req.body.client.phoneNumber);
+        if (req.body.client.whatsApp) searchString.push(req.body.client.whatsApp);
+        if (req.body.client.telegram) searchString.push(req.body.client.telegram);
+        if (req.body.client.vKontakte) searchString.push(req.body.client.vKontakte);
+        if (req.body.client.instagram) searchString.push(req.body.client.instagram);
+        if (req.body.client.facebook) searchString.push(req.body.client.facebook);
+        if (req.body.client.otherContact) searchString.push(req.body.client.otherContact);
+        if (req.body.client.country) searchString.push(req.body.client.country);
+        if (req.body.client.region) searchString.push(req.body.client.region);
+        if (req.body.client.city) searchString.push(req.body.client.city);
+
+        for (let institute of req.body.client.institutes) {
+          searchString.push(institute.name);
+        }
+
+
+        client.set({
+          firstName: req.body.client.firstName,
+          patronymic: req.body.client.patronymic,
+          lastName: req.body.client.lastName,
+          institutes: req.body.client.institutes,
+          email: req.body.client.email,
+          phoneNumber: req.body.client.phoneNumber,
+          whatsApp: req.body.client.whatsApp,
+          telegram: req.body.client.telegram,
+          vKontakte: req.body.client.vKontakte,
+          instagram: req.body.client.instagram,
+          facebook: req.body.client.facebook,
+          otherContact: req.body.client.otherContact,
+          country: req.body.client.country,
+          region: req.body.client.region,
+          city: req.body.client.city,
+          nameDayCelebration: req.body.client.nameDayCelebration,
+          comments: req.body.client.comments,
+          correspondents: req.body.client.correspondents,
+          coordinators: req.body.client.coordinators,
+          publishers: req.body.client.publishers,
+          isRestricted: req.body.client.isRestricted,
+          causeOfRestriction: req.body.client.causeOfRestriction,
+          preventiveAction: req.body.client.preventiveAction,
+          searchString: searchString
+        });
+
+
+        client.save(function (err, savedClient) {
+          if (err) {
+            console.log(err);
+
+            const saveClientMongodbErrorResponse = new BaseResponse(500, "Internal server error", err);
+            res.json(saveClientMongodbErrorResponse.toObject());
+          } else {
+            console.log(client);
+            let result = {
+              savedClient: savedClient,
+              deletedClients: req.body.ids
+            };
+            const createClientResponse = new BaseResponse(200, "Query successful", result);
+            res.json(createClientResponse.toObject());
+          }
+        });
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const updateClientCatchErrorResponse = BaseResponse(500, "Internal server error", e.message);
+    res.status(500).send(updateClientCatchErrorResponse.toObject());
+  }
+}); */
 
 module.exports = router;

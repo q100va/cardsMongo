@@ -292,7 +292,7 @@ export class UpdateClientDialogComponent implements OnInit {
       const allowed_empty = control.value == null || control.value == "";
       const nicknameRe = /^@/;
       const allowed_nickname = nicknameRe.test(control.value);
-      const idRe = /^(\#+([0-9]){10})$/;
+      const idRe = /^(\#+([0-9]){9,10})$/;
       const allowed_id = idRe.test(control.value);
       //console.log("control.value");
       //console.log(allowed_phone);
@@ -487,7 +487,7 @@ export class UpdateClientDialogComponent implements OnInit {
       this.client.publishers.includes(this.userName)
     ) {
       let i = publishers.indexOf(this.userName);
-      publishers.splice(i, 1);
+      publishers = publishers.splice(i, 1);
     }
 
     /*     let coordinators : string[] = this.client.coordinators;
@@ -516,7 +516,7 @@ export class UpdateClientDialogComponent implements OnInit {
     newClient.comments = this.form.controls.comments.value;
     newClient.institutes = institutes;
     newClient.correspondents = correspondents;
-    newClient.coordinators = [this.userName];
+    newClient.coordinators = this.client.coordinators;
     newClient.publishers = publishers;
     newClient.isRestricted = this.form.controls.isRestricted.value;
     newClient.causeOfRestriction = this.form.controls.isRestricted.value

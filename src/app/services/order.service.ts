@@ -229,7 +229,9 @@ export class OrderService {
   createOrderForNameDay(newOrder: Order): Observable<any> {
     return this.http.post("/api/orders/name-day", {
       userName: newOrder.userName,
+      clientId: newOrder.clientId,
       holiday: newOrder.holiday,
+      source: newOrder.source,
       amount: newOrder.amount,
       clientFirstName: newOrder.clientFirstName,
       clientPatronymic: newOrder.clientPatronymic,
@@ -238,11 +240,12 @@ export class OrderService {
       contactType: newOrder.contactType,
       contact: newOrder.contact,
       institute: newOrder.institute,
+      institutes: newOrder.institutes,
       isAccepted: newOrder.isAccepted,
-      source: newOrder.source,
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
+      filter: newOrder.filter,   
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }

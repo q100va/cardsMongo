@@ -228,7 +228,7 @@ export class CreateClientDialogComponent implements OnInit {
       const allowed_empty = control.value == null || control.value == "";
       const nicknameRe = /^@/;
       const allowed_nickname = nicknameRe.test(control.value);
-      const idRe = /^(\#+([0-9]){10})$/;
+      const idRe = /^(\#+([0-9]){9,10})$/;
       const allowed_id = idRe.test(control.value);
       //console.log("control.value");
       //console.log(allowed_phone);

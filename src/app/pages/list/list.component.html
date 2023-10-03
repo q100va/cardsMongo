@@ -1,5 +1,5 @@
 <mat-card class="mat-elevation-z0">
-    <mat-card-title> Формирование списка ДР октября 2023 </mat-card-title>
+    <mat-card-title> Формирование списка ДР ноября 2023 </mat-card-title>
 
     <br />
 
@@ -23,8 +23,10 @@
         <button class="submit" (click)=" generateNextBirthday()" mat-raised-button>Сформировать список ДР следующего
             месяца</button>
         <br /><br /><br />
-        <button class="submit" (click)="generateNameDay()" mat-raised-button>Сформировать список именин</button>
+        <button class="submit" (click)="generateNameDay(11)" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
+        <button class="submit" (click)="generateNameDay(12)" mat-raised-button>Сформировать список именин следующего
+            месяца</button>
         <br /><br /><br />
 
         <!--         <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
@@ -69,14 +71,22 @@
             запросу</button>
 
         <br /><br /><br />
+<!-- 
+         <button class="submit" (click)="addSearchArray()" mat-raised-button>Добавить строку поиска</button>
 
-<!--         <button class="submit" (click)="addSearchArray()" mat-raised-button>Добавить строку поиска</button>
+        <br /><br /><br />  -->
+
+        <button class="submit" (click)="restoreContacts()" mat-raised-button>Восстановить координаторов</button>
+
+        <br /><br /><br /> 
+
+<!--         <button class="submit" (click)="moveInstitutes()" mat-raised-button>Организации в массив</button>
 
         <br /><br /><br /> -->
 
-        <button class="submit" (click)="moveInstitutes()" mat-raised-button>Организации в массив</button>
+<!--         <button class="submit" (click)="correctContacts()" mat-raised-button>Коррекция контактов</button>
 
-        <br /><br /><br />
+        <br /><br /><br /> -->
 
         <button class="submit" (click)="takeClients()" mat-raised-button [disabled]="disableTakeClients">Создать
             карточки поздравляющих</button>

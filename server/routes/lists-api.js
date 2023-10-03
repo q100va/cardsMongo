@@ -13,6 +13,9 @@ const NewYear = require("../models/new-year");
 const May9 = require("../models/may-9");
 const May19 = require("../models/may-19");
 const NameDay = require("../models/name-day");
+const NameDayBefore = require("../models/name-day-previous");
+const NameDayNext = require("../models/name-day-next");
+const Client = require("../models/client");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
@@ -202,7 +205,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 10 ? 'ДР октября 2023' : 'ДР ноября 2023',
+      holyday: month == 11 ? 'ДР ноября 2023' : 'ДР декабря 2023',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -228,8 +231,8 @@ async function findAllMonthCelebrators(month) {
   const options = { ordered: false };
   let finalList;
 
-  if (month == 11) { finalList = await ListNext.insertMany(newList, options); }
-  if (month == 10) { finalList = await List.insertMany(newList, options); }
+  if (month == 12) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 11) { finalList = await List.insertMany(newList, options); }
 
 
   //console.log(finalList);
@@ -372,6 +375,9 @@ async function findAllMonthNameDays(month) {
     if (celebrator.yearBirthday) {
       cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
     }
+    let holiday;
+    if(month == 11) holiday = 'Именины ноября 2023';
+    if(month == 12) holiday = 'Именины декабря 2023';
 
     let cloneCelebrator = {
       region: celebrator.region,
@@ -396,7 +402,7 @@ async function findAllMonthNameDays(month) {
       fullDayBirthday: cloneFullDayBirthday,
       /* oldest: cloneOldest,
       category: cloneCategory, */
-      holyday: 'Именины октября 2023',
+      holyday: holiday,
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -420,7 +426,9 @@ async function findAllMonthNameDays(month) {
   console.log("2.5 - " + newList.length);
 
   const options = { ordered: false };
-  let finalList = await NameDay.insertMany(newList, options);
+  let finalList;
+  if(month == 11) finalList = await NameDay.insertMany(newList, options);
+  if(month == 12) finalList = await NameDayNext.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -1000,20 +1008,64 @@ router.get("/march-8", async (req, res) => {
 });
 
 //Find all name day lists API
-router.get("/name-day", async (req, res) => {
+
+
+/*     let deletedClients = await Client.find({isDisabled: true});
+    for (let client of deletedClients) {
+      let orders = await Order.find({clientId: client._id});
+      if (orders.length > 0) {
+        console.log (client._id);
+      }
+    }
+
+ */
+
+router.get("/name-day/:month", async (req, res) => {
   try {
 
-    NameDay.find({ absent: { $ne: true } }, function (err, nameDays) {
-      if (err) {
-        console.log(err);
-        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
-        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
-      } else {
-        console.log(nameDays);
-        const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
-        res.json(findAllListsResponse.toObject());
-      }
-    });
+    if (req.params.month == "NameDay") {
+      NameDay.find({ absent: { $ne: true } }, function (err, nameDays) {
+        if (err) {
+          console.log(err);
+          const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+          res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+        } else {
+          // console.log(nameDays);
+          const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
+          res.json(findAllListsResponse.toObject());
+        }
+      });
+    }
+    if (req.params.month == "NameDayBefore") {
+      NameDayBefore.find({ absent: { $ne: true } }, function (err, nameDays) {
+        if (err) {
+          console.log(err);
+          const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+          res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+        } else {
+          // console.log(nameDays);
+          const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
+          res.json(findAllListsResponse.toObject());
+        }
+      });
+    }
+    if (req.params.month == "NameDayNext") {
+      NameDayNext.find({ absent: { $ne: true } }, function (err, nameDays) {
+        if (err) {
+          console.log(err);
+          const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+          res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+        } else {
+          // console.log(nameDays);
+          const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
+          res.json(findAllListsResponse.toObject());
+        }
+      });
+    }
+
+
+
+
   } catch (e) {
     console.log(e);
     const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
@@ -1909,7 +1961,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения октября 2023", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения ноября 2023", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {

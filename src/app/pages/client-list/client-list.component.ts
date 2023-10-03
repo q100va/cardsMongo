@@ -28,7 +28,7 @@ export class ClientListComponent implements OnInit {
   isShowSubs: boolean = false;
   length = 0;
   currentPage = 1;
-  pageSize = 100;
+  pageSize = 10;
   pageSizeOptions = [10, 15, 20];
   @ViewChild("paginator") paginator: MatPaginator;
   displayedColumns = [

@@ -35,9 +35,26 @@
 
                                         <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
-                                        <mat-card-subtitle>Праздник: {{holiday}} </mat-card-subtitle>
+                                        <mat-card-subtitle>Праздник: <span>
+                                            <button [disabled]="isBeforeMonth" mat-icon-button
+                                                matTooltip="Предыдущий месяц" color="primary"
+                                                (click)=goBack($event)>
+                                                <mat-icon>navigate_before</mat-icon>
+                                            </button>
+                                        </span>
+                                        <span class="header">{{holiday}}</span>
+                                        <span>
+                                            <button [disabled]="isNextMonth" mat-icon-button
+                                                matTooltip="Следующий месяц" color="primary" (click)=goNext($event)>
+                                                <mat-icon>navigate_next</mat-icon>
+                                            </button>
+                                        </span>
+                                    </mat-card-subtitle>
                                     </td>
-                                    <td>
+                                    <td rowspan="2">
+
+                                    </td>
+                                    <td align="left">
                                         <mat-slide-toggle [formControl]="form.controls['isAccepted']">Не требует
                                             подтверждения</mat-slide-toggle>
                                     </td>
@@ -53,15 +70,183 @@
                                                 <mat-option value="vk">вконтакте</mat-option>
                                                 <mat-option value="telegram">телеграм</mat-option>
                                                 <mat-option value="insta">инста</mat-option>
-                                                <mat-option value="oyher">другое</mat-option>
+                                                <mat-option value="other">другое</mat-option>
                                             </mat-select>
                                         </mat-form-field>
+                                        <mat-error class="error"
+                                        *ngIf="form.controls.source.hasError('required') && form.controls.source.touched">
+                                        Обязательное поле!
+                                    </mat-error>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h3 class="warning" *ngIf='isBeforeMonth'>ВНИМАНИЕ: это предыдущий месяц!</h3>
+                                        <h3 class="warning" *ngIf='isNextMonth'>ВНИМАНИЕ: это следующий месяц!</h3>
                                     </td>
                                 </tr>
                             </table>
 
                             <table class="example-full-width" cellspacing="0">
+
                                 <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Тип контакта*</mat-label>
+                                            <mat-select [(value)]="defaultType"
+                                                [formControl]="form.controls['contactType']"
+                                                (selectionChange)="getContacts(false)">
+                                                <mat-option *ngFor="let type of types" [value]="type">
+                                                    {{ type }}
+                                                </mat-option>
+                                            </mat-select>
+
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Email/аккаунт/номер*</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['contact']"
+                                                [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
+                                            <mat-autocomplete #auto="matAutocomplete">
+                                                <mat-option *ngFor="let option of filteredOptions | async"
+                                                    [value]="option">
+                                                    {{option}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.contact.hasError('required') && form.controls.contact.touched">
+                                            Обязательное поле!
+                                        </mat-error>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Комментарий</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['comment']" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Количество адресов*</mat-label>
+                                            <input type="number" matInput [formControl]="form.controls['amount']" />
+                                        </mat-form-field>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td> <mat-error class="error"
+                                            *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
+                                            Обязательное поле!
+                                        </mat-error>
+
+                                        <mat-error class="error" *ngIf="form.controls.amount.hasError('min') ">
+                                            Минимум 1 адрес!
+                                        </mat-error>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <table *ngIf="client?.firstName">
+                                <tr>
+                                    <td colspan="3">
+                                        <mat-label>ФИО поздравляющего: {{ client.firstName + " " + (client.patronymic ?
+                                            client.patronymic + " ": "") + (client.lastName ? client.lastName + " ":
+                                            "") + (client.country ? client.country + " ": "") + (client.region ?
+                                            client.region + " ":
+                                            "") + (client.city ? client.city: "")}}</mat-label>
+                                        <br /> <br />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td *ngIf="client.isRestricted">
+                                        <h3 class="warning">Внимание! Ограничения!</h3>
+
+                                        <div>
+                                            Причина: {{client.causeOfRestriction }}
+
+                                        </div>
+                                        <div>
+                                            Меры: {{client.preventiveAction }}
+                                        </div>
+                                        <br />
+                                    </td>
+                                </tr>
+
+
+
+                                <tr>
+                                    <td colspan="3">
+                                        <mat-label>Адреса для коллектива:</mat-label>
+                                        <br /> <br />
+                                    </td>
+                                </tr>
+
+                                <tr formArrayName="institutes" *ngFor="let item of institutes.controls; index as i">
+
+                                    <td colspan="3">
+                                        <p><mat-checkbox
+                                                [formControlName]="i">{{clientInstitutes[i].name}}</mat-checkbox></p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td width="40%">
+                                        <mat-form-field>
+                                            <input type="text" matInput [formControl]="form.controls['nameOfInstitute']"
+                                                [placeholder]="'Организация*'" />
+
+                                        </mat-form-field>
+
+                                    </td>
+                                    <td width="30%">
+                                        <mat-form-field>
+                                            <mat-label>Категория*</mat-label>
+                                            <mat-select [formControl]="form.controls['categoryOfInstitute']">
+                                                <mat-option></mat-option>
+
+                                                <mat-option *ngFor="let category of categories" [value]="category">
+                                                    {{ category }}
+                                                </mat-option>
+                                            </mat-select>
+      
+                                            <br />
+                                        </mat-form-field>
+                                    </td>
+                                    <td width="10%">
+                                        <button mat-button (click)="saveInstitute()"
+                                            [disabled]="!form.controls.nameOfInstitute.value || !form.controls.categoryOfInstitute.value">Сохранить</button>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <mat-hint>При необходимости добавьте новую организацию. Обязательно заполните
+                                            оба поля и нажмите "Сохранить".</mat-hint>
+                                    </td>
+                                </tr>
+
+
+
+                                <!-- <tr>
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email</mat-label>
@@ -91,9 +276,7 @@
                                             *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
                                             Обязательное
                                             поле!</mat-error>
-                                        <!--                                         <mat-error class="error"
-                                            *ngIf="form.controls.amount.hasError('pattern') && form.controls.amount.touched">
-                                            Только числа!</mat-error> -->
+                             
 
                                     </td>
                                 </tr>
@@ -149,14 +332,14 @@
                                             <input type="text" matInput [formControl]="form.controls['institute']" />
                                         </mat-form-field>
                                     </td>
-                                </tr>
+                                </tr> -->
 
                             </table>
 
-                            <mat-form-field appearance="fill" style="padding-right: 8px;">
+<!--                             <mat-form-field appearance="fill" style="padding-right: 8px;">
                                 <mat-label>Комментарий</mat-label>
                                 <input type="text" matInput [formControl]="form.controls['comment']" />
-                            </mat-form-field>
+                            </mat-form-field> -->
                         </div>
 
                     </mat-card-content>

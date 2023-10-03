@@ -17,15 +17,15 @@ import { Celebrator } from "../shared/interfaces/celebrator.interface";
 export class ListService {
   constructor(private http: HttpClient) {}
 
-  month = 10;
-  //fullDate = " октября 2023 г.";
+  month = 11;
+  //fullDate = " ноября 2023 г.";
 
   findAllBirthdayLists(): Observable<any> {
     return this.http.get("/api/lists");
   }
 
-  findAllNameDayLists(): Observable<any> {
-    return this.http.get("/api/lists/name-day");
+  findAllNameDayLists(month: string): Observable<any> {
+    return this.http.get("/api/lists/name-day/" + month);
   }  
 
   findAllNewYearLists(): Observable<any> {
@@ -52,8 +52,8 @@ export class ListService {
     return this.http.post("/api/lists/" + (this.month + 1), {});
   }
 
-  createNameDayList(): Observable<any> {
-    return this.http.post("/api/lists/name-day/" + this.month, {});
+  createNameDayList(month: number): Observable<any> {
+    return this.http.post("/api/lists/name-day/" + month, {});
   }
 
   createTeacherDayList(): Observable<any> {
@@ -160,11 +160,13 @@ export class ListService {
   }
 
   takeListOfClients(): Observable<any> {
-    return this.http.get("/api/clients/create-clients/all");
+    //return this.http.get("/api/clients/create-clients/all");
+    return this.http.get("/api/clients/collect-clients/all");
   }
 
   checkListOfClients(client, index): Observable<any> {
-    return this.http.post("/api/clients/create-clients/" + index, {client: client});
+    //return this.http.post("/api/clients/create-clients/" + index, {client: client});
+    return this.http.post("/api/clients/check-all-clients/" + index, {client: client});
   }
 
   saveChangedClient(id, client, idsToDelete): Observable<any> {

@@ -99,8 +99,8 @@ export class ListComponent implements OnInit {
     );
   }
 
-  generateNameDay() {
-    this.listService.createNameDayList().subscribe(
+  generateNameDay(month) {
+    this.listService.createNameDayList(month).subscribe(
       async (res) => {
         let result = await res["data"];
         console.log(result);
@@ -476,7 +476,7 @@ export class ListComponent implements OnInit {
   }
 
   showNameDayList(event: any) {
-    this.listService.findAllNameDayLists().subscribe(
+    this.listService.findAllNameDayLists("NameDay").subscribe(
       (res) => {
         this.lists = res["data"];
         this.lists.sort((prev, next) => prev.dateNameDay - next.dateNameDay);
@@ -769,8 +769,19 @@ export class ListComponent implements OnInit {
       .subscribe(
         (res) => {
           if (res.data.resume) {
-            console.log("res");
-            console.log(res.data);
+            if (res.data.idOfSimilarClients) {
+              console.log("ВНИМАНИЕ!");
+              console.log("res");
+              console.log(res.data);
+              for (let id of this.idOfSimilarClients) {
+                let index = this.clientsList.findIndex(
+                  (item) => item._id == id
+                );
+                if(index > this.index) this.clientsList.splice(index, 1);
+                console.log(this.clientsList.findIndex((item) => item._id == id));
+              }
+            }
+
             this.newClient = res.data.client;
             this.firstClient = {};
             this.isNewClient = true;
@@ -798,7 +809,7 @@ export class ListComponent implements OnInit {
             this.index++;
             if (this.index == this.clientsList.length)
               this.disableCheckClient = true;
-            if (this.isSame && !this.disableCheckClient) this.checkClient();
+            if (this.isSame && !this.disableCheckClient) this.checkClient(); //
           }
         },
         (err) => {
@@ -868,6 +879,12 @@ export class ListComponent implements OnInit {
     console.log("id");
     console.log(id);
     this.idOfSimilarClients.splice(0, 1);
+
+    for (let id of this.idOfSimilarClients) {
+      let index = this.clientsList.findIndex((item) => item._id == id);
+      if(index > this.index)      this.clientsList.splice(index, 1);
+    }
+
     this.listService
       .saveChangedClient(id, updatedClient, this.idOfSimilarClients)
       .subscribe(
@@ -914,6 +931,28 @@ export class ListComponent implements OnInit {
 
   moveInstitutes() {
     this.orderService.moveInstitutes().subscribe(
+      (res) => {
+        alert(res + " обновлено");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  correctContacts() {
+    this.clientService.correctContacts().subscribe(
+      (res) => {
+        alert(res + " обновлено");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  restoreContacts() {
+    this.clientService.restoreContacts().subscribe(
       (res) => {
         alert(res + " обновлено");
       },

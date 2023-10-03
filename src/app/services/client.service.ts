@@ -126,7 +126,17 @@ export class ClientService {
     return this.http.get("/api/clients/add-search-array");
   }
 
+  correctContacts(): Observable<any> {
+    return this.http.get("/api/clients/contacts/correct");
+  }
+
+  restoreContacts(): Observable<any> {
+    return this.http.get("/api/clients/restore/coordinators");
+  }
+
   findClientBySearchString(userName, pageSize, currentPage, valueToSearch): Observable<any> {
+    valueToSearch = valueToSearch.replace("+", "%2B");
+    valueToSearch = valueToSearch.replace("#", "%23");
     const queryParams = `?pagesize=${pageSize}&page=${currentPage}&valueToSearch=${valueToSearch}`;
     console.log("queryParams");
     console.log(queryParams);

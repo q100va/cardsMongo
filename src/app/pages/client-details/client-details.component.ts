@@ -128,7 +128,9 @@ export class ClientDetailsComponent implements OnInit {
       },
       () => {
         console.log("inside findClientById ");
-        this.form.controls.publishers.setValue(this.client.publishers.includes(this.userName));
+        this.form.controls.publishers.setValue(
+          this.client.publishers.includes(this.userName)
+        );
         this.form.controls.firstName.setValue(this.client.firstName);
         this.form.controls.patronymic.setValue(this.client.patronymic);
         this.form.controls.lastName.setValue(this.client.lastName);
@@ -157,7 +159,7 @@ export class ClientDetailsComponent implements OnInit {
         this.form.controls.city.setValue(this.client.city);
 
         if (this.client.correspondents.length > 0) {
-let index =0 ;
+          let index = 0;
           for (let correspondent of this.client.correspondents) {
             const group = this.formBuilder.group({
               nursingHome: new FormControl(
@@ -185,13 +187,13 @@ let index =0 ;
                       senior.yearBirthday
                   );
                 }
-        
+
                 console.log("this.seniors");
                 console.log(this.seniors[index]);
               },
               (err) => {},
               () => {}
-            );  
+            );
             group.controls.fullName.setValue(correspondent.fullName);
 
             // group.controls.fullName.setValue(correspondent.fullName);
@@ -216,8 +218,7 @@ let index =0 ;
 
         if (this.client.publishers.length > 0) {
           for (let publisher of this.client.publishers) {
-            this.listOfPublishers =
-              this.listOfPublishers + " " + publisher;
+            this.listOfPublishers = this.listOfPublishers + " " + publisher;
           }
         }
 
@@ -295,7 +296,7 @@ let index =0 ;
       const allowed_empty = control.value == null || control.value == "";
       const nicknameRe = /^@/;
       const allowed_nickname = nicknameRe.test(control.value);
-      const idRe = /^(\#+([0-9]){10})$/;
+      const idRe = /^(\#+([0-9]){9,10})$/;
       const allowed_id = idRe.test(control.value);
       //console.log("control.value");
       //console.log(allowed_phone);
@@ -490,7 +491,7 @@ let index =0 ;
       this.client.publishers.includes(this.userName)
     ) {
       let i = publishers.indexOf(this.userName);
-      publishers.splice(i, 1);
+      publishers = publishers.splice(i, 1);
     }
 
     /*     let coordinators : string[] = this.client.coordinators;
@@ -500,6 +501,8 @@ let index =0 ;
  */
 
     //create a function
+
+
 
     newClient.firstName = this.form.controls.firstName.value;
     newClient.patronymic = this.form.controls.patronymic.value;
@@ -519,7 +522,7 @@ let index =0 ;
     newClient.comments = this.form.controls.comments.value;
     newClient.institutes = institutes;
     newClient.correspondents = correspondents;
-    newClient.coordinators = [this.userName];
+    newClient.coordinators = this.client.coordinators;
     newClient.publishers = publishers;
     newClient.isRestricted = this.form.controls.isRestricted.value;
     newClient.causeOfRestriction = this.form.controls.isRestricted.value
@@ -539,7 +542,6 @@ let index =0 ;
     console.log(this.client);
     console.log("newClient");
     console.log(newClient);
-
 
     let changesDetails = this.checkChanges(this.client, newClient);
     if (changesDetails.length > 0) {
@@ -580,13 +582,13 @@ let index =0 ;
           );
         } else {
           let doublesId = "";
-          for (let client of this.doubles) {       
-              doublesId = doublesId + client._id + " ";
+          for (let client of this.doubles) {
+            doublesId = doublesId + client._id + " ";
           }
           this.resultDialog.open(ConfirmationDialogComponent, {
             data: {
               message:
-                "К сожалению, контакт c id" +
+                "К сожалению, контакт c id " +
                 this.clientId +
                 " не может быть обновлен, потому что найдены дубли с id: " +
                 doublesId +
@@ -626,8 +628,7 @@ let index =0 ;
         prop != "_id" &&
         prop != "creator" &&
         prop != "dateCreated" &&
-        prop != "nameDayCelebration" 
-
+        prop != "nameDayCelebration"
       ) {
         if (oldClient[prop] != newClient[prop]) {
           changes.push({
