@@ -1711,7 +1711,9 @@ async function createOrder(newOrder, prohibitedId) {
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
     if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
     if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
-    if (newOrder.filter.addressFilter == 'noReleased') filter.isReleased = false;
+    if (newOrder.filter.addressFilter == 'noReleased' || newOrder.filter.addressFilter == 'onlySpecial' || newOrder.filter.addressFilter == 'forKids') filter.isReleased = false;
+    if (newOrder.filter.addressFilter == 'noSpecial' || newOrder.filter.addressFilter == 'forKids') filter.noAddress = false;
+    if (newOrder.filter.addressFilter == 'forKids') filter.yearBirthday = { $lte: 1963 };
     if (newOrder.filter.year1 || newOrder.filter.year2) {
       if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
       if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
@@ -1853,7 +1855,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     celebratorsAmount: 0,
     date1: day1,
     date2: day2,
-    maxPlus: 5,
+    maxPlus: 4,
     filter: filter,
     order_id: order_id,
     //temporaryLineItems: [],
@@ -1964,31 +1966,40 @@ async function collectSeniors(data, orderFilter, holiday) {
   console.log(holiday);
 
 
-  /* let test = await List.findOne({dateBirthday: 1});
-  console.log('test');
-  console.log(test); */
+  /* let test = await List.findOne({dateBirthday: 1});*/
+  console.log('data.filter.addressFilter');
+  console.log(data.filter); 
 
   let searchOrders = {};
 
   if (orderFilter.genderFilter != 'proportion') {
 
     if (data.filter.addressFilter != 'onlySpecial') {
-      if (data.filter.region) {
+      if (data.filter.region  && data.filter.addressFilter != 'forKids') {
         searchOrders = {
           oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen", "specialWomen", "specialMen"],
           oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen", "specialMen", "specialWomen"],
-          yangWomen: ["yangWomen", "oldWomen", "oldMen", "specialMen", "specialWomen"],
-          yangMen: ["yangMen", "oldMen", "oldWomen", "specialMen", "specialWomen"],
+          yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen", "specialMen", "specialWomen"],
+          yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen",  "specialMen", "specialWomen"],
           specialWomen: ["specialWomen", "specialMen", "yangWomen", "yangMen", "oldWomen", "oldMen"],
           specialMen: ["specialMen", "specialWomen", "yangMen", "yangWomen", "oldMen", "oldWomen"],
         }
       } else {
 
+        if (data.filter.addressFilter == 'forKids'){
+          searchOrders = {
+            oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen"],
+            oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen"],
+            yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen"],
+            yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen"]
+          }
+        }
+
         searchOrders = {
           oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen"],
           oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen"],
-          yangWomen: ["yangWomen", "oldWomen", "oldMen"],
-          yangMen: ["yangMen", "oldMen", "oldWomen"],
+          yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen"],
+          yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen"],
           specialWomen: ["specialWomen", "specialMen", "yangWomen", "yangMen", "oldWomen", "oldMen"],
           specialMen: ["specialMen", "specialWomen", "yangMen", "yangWomen", "oldMen", "oldWomen"],
           // specialOnly: ["special", "oldWomen"],
@@ -1999,8 +2010,8 @@ async function collectSeniors(data, orderFilter, holiday) {
       searchOrders = {
         oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen"],
         oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen"],
-        yangWomen: ["yangWomen", "oldWomen", "oldMen"],
-        yangMen: ["yangMen", "oldMen", "oldWomen"],
+        yangWomen: ["yangWomen", "yangMen", "oldWomen", "oldMen"],
+        yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen"],
         specialWomen: ["specialWomen", "specialMen"],
         specialMen: ["specialMen", "specialWomen"],
       };
@@ -2009,7 +2020,7 @@ async function collectSeniors(data, orderFilter, holiday) {
 
   if (orderFilter.genderFilter == 'proportion') {
     if (orderFilter.addressFilter != 'onlySpecial') {
-      if (data.filter.region) {
+      if (data.filter.region && data.filter.addressFilter != 'forKids') {
         searchOrders = {
           oldWomen: ["oldWomen", "yangWomen", "specialWomen",],
           oldMen: ["oldMen", "yangMen", "specialMen",],
@@ -2019,6 +2030,14 @@ async function collectSeniors(data, orderFilter, holiday) {
           specialMen: ["specialMen", "yangMen", "oldMen",],
         }
       } else {
+        if (data.filter.addressFilter == 'forKids'){
+          searchOrders = {
+            oldWomen: ["oldWomen", "yangWomen"],
+            oldMen: ["oldMen", "yangMen"],
+            yangWomen: ["yangWomen", "oldWomen"],
+            yangMen: ["yangMen", "oldMen"]
+          }
+        }
         searchOrders = {
           oldWomen: ["oldWomen", "yangWomen"],
           oldMen: ["oldMen", "yangMen"],
@@ -2131,7 +2150,7 @@ async function searchSenior(
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   // console.log("DATA");
   //console.log(data);
-  if ((data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") && (!data.filter.nursingHome)) {
+  if ((data.proportion.amount > 12 || data.proportion.amount < 5 ) && (!data.filter.nursingHome)) {
     standardFilter.isReleased = false;
   }
 
@@ -3706,6 +3725,7 @@ async function createOrderMay9(newOrder) {
 
     if (newOrder.filter.addressFilter == 'onlySpecial') {
       filter.noAddress = true;
+      
     }
     /*     if (newOrder.filter.nursingHome) {
           proportion.anyCategory = proportion.amount;
