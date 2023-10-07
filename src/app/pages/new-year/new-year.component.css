@@ -13,7 +13,7 @@ style
 
   .mat-card {
     padding: 35px;
-    background-image: url('src\assets\pngwing.com (51).png');
+    background-image: url('src\assets\pngwing.com (23).png');
     background-repeat: no-repeat;
   }
   
@@ -110,4 +110,13 @@ style
   .mat-form-field + .mat-form-field,
 .mat-raised-button {
   margin-left: 8px;
+}
+
+.header {
+  color: limegreen;
+  font-size: 1.1em;
+}
+
+.warning {
+  color: red;
 }

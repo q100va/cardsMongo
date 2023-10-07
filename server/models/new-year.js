@@ -14,6 +14,7 @@ const listSchema = new Schema(
 
     nursingHome: { type: String },
     region: { type: String },
+    seniorId: { type: String },
     lastName: { type: String },
     firstName: { type: String },
     patronymic: { type: String },
@@ -42,7 +43,7 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false}
 
   },
-  { collection: "Easter_2023" }
+  { collection: "newYear_2024" }
 );
 
 module.exports = mongoose.model("NewYear", listSchema);

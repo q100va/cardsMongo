@@ -18,6 +18,10 @@ export class HousesService {
     return this.http.get("/api/houses");
   }
 
+  findActiveHouses(): Observable<any> {
+    return this.http.get("/api/houses/find/active/");
+  }
+
   deleteHouse(_id: string): Observable<any> {
     return this.http.delete("/api/houses/" + _id);
   }

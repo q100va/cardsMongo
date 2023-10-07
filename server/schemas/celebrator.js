@@ -10,6 +10,7 @@ const Schema = mongoose.Schema;
 const celebratorSchema = new Schema({
   nursingHome: { type: String },
   region: { type: String },
+  seniorId: { type: String },
   lastName: { type: String },
   firstName: { type: String },
   patronymic: { type: String },

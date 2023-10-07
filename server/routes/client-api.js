@@ -524,7 +524,7 @@ router.get("/findSubscribers/:userName", async (req, res) => {
         //console.log(orders);
         res.json(readUserResponse.toObject());
       }
-    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });;
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ firstName: 1, lastName: 1, _id: 1 });
   } catch (e) {
     console.log(e);
     const readUserCatchErrorResponse = new BaseResponse(

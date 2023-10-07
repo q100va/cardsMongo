@@ -20,4 +20,5 @@ export interface House {
   nameContact?: string;
   contact?: string;
   website?:string;
+  statistic?: any;
 }

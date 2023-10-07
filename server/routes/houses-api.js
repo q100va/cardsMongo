@@ -8,6 +8,7 @@ const express = require("express");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const House = require("../models/house");
+const NewYear = require("../models/new-year");
 
 
 // Create  API
@@ -33,6 +34,32 @@ router.post("/", async (req, res) => {
       isDisabled: req.body.isDisabled,
       isReleased: req.body.isReleased,
       website: req.body.website,
+      statistic: {
+        newYear: {
+          oldWomen: 0,
+          oldMen: 0,
+          yangMen: 0,
+          yangWomen: 0,
+          specialWomen: 0,
+          specialMen: 0,
+          amount: 0,
+          time: 0,
+          plus0: 0,
+          plus1: 0,
+          plus2: 0,
+          plus3: 0,
+          oldMenPlus: 0,
+          oldWomenPlus: 0,
+          yangMenPlus: 0,
+          yangWomenPlus: 0,
+          specialMenPlus: 0,
+          specialWomenPlus: 0,
+        }
+      }
+
+
+
+
     };
     House.create(newHouse, function (err, house) {
       // If statement for an error with Mongo
@@ -105,12 +132,12 @@ router.post("/email", async (req, res) => {
     console.log(startDate);
     console.log("endDate");
     console.log(endDate);
-    const houses = await House.find({dateLastUpdate: {$gte : startDate, $lte: endDate }, isActive: true} ); 
+    const houses = await House.find({ dateLastUpdate: { $gte: startDate, $lte: endDate }, isActive: true });
     console.log("houses");
     console.log(houses);
-          const findAllResponse = new BaseResponse(200, "Query successful", houses);
-          res.json(findAllResponse.toObject());  
-     
+    const findAllResponse = new BaseResponse(200, "Query successful", houses);
+    res.json(findAllResponse.toObject());
+
   } catch (e) {
     console.log(e);
     const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
@@ -136,6 +163,161 @@ router.get("/", async (req, res) => {
           res.json(findAllResponse.toObject());
         }
       });
+  } catch (e) {
+    console.log(e);
+    const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(findAllCatchErrorResponse.toObject());
+  }
+});
+
+// Find all active 
+router.get("/find/active", async (req, res) => {
+  console.log("houses/find/active");
+  try {
+    let houses = await House.find({ isActive: true }).sort({ dateLastUpdate: -1, _id: 1 });
+    /*     console.log("houses");
+        console.log(houses); */
+    //statistic
+
+    /*  let updatedHouses = [];
+ 
+     for (let house of houses) {
+       console.log("houses");
+       console.log(house.nursingHome);
+     //  let statistic = {};
+      // let celebrators = await NewYear.find({ absent: false, nursingHome: house.nursingHome });
+       //let plus0 = 0, plus1 = 0, plus2 = 0, plus3 = 0;
+       //let specialMen = 0, specialWomen = 0, oldMen = 0, oldWomen = 0, yangMen = 0, yangWomen = 0;
+      // let specialMenPlus = 0, specialWomenPlus = 0, oldMenPlus = 0, oldWomenPlus = 0, yangMenPlus = 0, yangWomenPlus = 0;
+ 
+       let plus0 = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0 } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.plus0": plus0.count}});
+ 
+       let plus1 = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 1 } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.plus1": plus1.count}});
+ 
+       let plus2 = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 2 } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.plus2": plus2.count}});
+ 
+       let plus3 = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 3 } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.plus3": plus3.count}});
+ 
+       if (house.noAddress) {
+       let specialMenPlus = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0, category: "specialMen" } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.specialMenPlus": specialMenPlus.count}});
+ 
+       let specialWomenPlus = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0, category: "specialWomen" } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.specialWomenPlus": specialWomenPlus.count}});
+ 
+     } else {
+       let oldMenPlus = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0, category: "oldMen" } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.oldMenPlus": oldMenPlus.count}});
+ 
+       let oldWomenPlus = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0, category: "oldWomen" } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.oldWomenPlus": oldWomenPlus.count}});
+ 
+       let yangMenPlus = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0, category: "yangMen" } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.yangMenPlus": yangMenPlus.count}});
+ 
+       let yangWomenPlus = await NewYear.aggregate([
+         { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0, category: "yangWomen" } },
+         { $group: { _id: null, count: { $sum: 1 } } }
+       ]);
+       await House.updateOne({_id: house._id}, {$set: {"statistic.newYear.yangWomenPlus": yangWomenPlus.count}});
+ 
+ 
+     }
+  */
+
+
+    /*    for (let senior of celebrators) {
+ 
+ 
+         if (senior.plusAmount == 0) plus0++;
+         if (senior.plusAmount == 1) plus1++;
+         if (senior.plusAmount == 2) plus2++;
+         if (senior.plusAmount == 3) plus3++;
+ 
+         if (senior.category == "specialMen") {
+ 
+           specialMenPlus = specialMenPlus + senior.plusAmount;
+         }
+         if (senior.category == "specialWomen") {
+ 
+           specialWomenPlus = specialWomenPlus + senior.plusAmount;
+         }
+         if (senior.category == "oldMen") {
+ 
+           oldMenPlus = oldMenPlus + senior.plusAmount;
+         }
+         if (senior.category == "oldWomen") {
+ 
+           oldWomenPlus = oldWomenPlus + senior.plusAmount;
+         }
+         if (senior.category == "yangMen") {
+ 
+           yangMenPlus = yangMenPlus + senior.plusAmount;
+         }
+         if (senior.category == "yangWomen") {
+ 
+           yangWomenPlus = yangWomenPlus + senior.plusAmount;
+         }
+       } */
+
+    /*       console.log("house.statistic");
+          console.log(plus0);
+    
+          house.statistic.newYear.plus0 = plus0;
+          house.statistic.newYear.plus1 = plus1;
+          house.statistic.newYear.plus2 = plus2;
+          house.statistic.newYear.plus3 = plus3;
+    
+          house.statistic.newYear.specialMenPlus = (specialMenPlus / house.statistic.newYear.specialMen).toFixed(1);
+          house.statistic.newYear.specialWomenPlus = (specialWomenPlus / house.statistic.newYear.specialWomen).toFixed(1);
+          house.statistic.newYear.oldMenPlus = (oldMenPlus / house.statistic.newYear.oldMen).toFixed(1);
+          house.statistic.newYear.oldWomenPlus = (oldWomenPlus / house.statistic.newYear.oldWomen).toFixed(1);
+          house.statistic.newYear.yangMenPlus = (yangMenPlus / house.statistic.newYear.yangMen).toFixed(1);
+          house.statistic.newYear.yangWomenPlus = (yangWomenPlus / house.statistic.newYear.yangWomen).toFixed(1);
+    
+    
+          console.log("house.statistic");
+          console.log(house.statistic); 
+    
+          updatedHouses.push(house);
+    
+        }*/
+
+    const findAllResponse = new BaseResponse(200, "Query successful", houses);
+    res.json(findAllResponse.toObject());
+
+
   } catch (e) {
     console.log(e);
     const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
@@ -240,7 +422,7 @@ router.delete("/:id", async (req, res) => {
 /**
  * API to delete many
  */
- router.delete("/", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
 
     House.deleteMany({}, function (err, result) {
@@ -266,7 +448,7 @@ router.delete("/:id", async (req, res) => {
 router.post("/add-many/", async (req, res) => {
 
   try {
-   let houses = req.body.houses;
+    let houses = req.body.houses;
     for (let house of houses) {
       house.isActive = true;
       house.dateLastUpdate = '';
@@ -277,8 +459,8 @@ router.post("/add-many/", async (req, res) => {
       house.isReleased = false;
       house.isDisabled = false;
       house.website = '';
-      if(!house.infoComment) house.infoComment = '';
-      if(!house.adminComment) house.adminComment = '';
+      if (!house.infoComment) house.infoComment = '';
+      if (!house.adminComment) house.adminComment = '';
     }
 
     const result = await House.insertMany(houses, { ordered: false });

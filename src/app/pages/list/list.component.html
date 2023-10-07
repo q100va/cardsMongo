@@ -1,5 +1,5 @@
 <mat-card class="mat-elevation-z0">
-    <mat-card-title> Формирование списка ДР ноября 2023 </mat-card-title>
+    <mat-card-title> Формирование списков на поздравление </mat-card-title>
 
     <br />
 
@@ -41,12 +41,13 @@
         <button class="submit" (click)="countSeniors($event)" mat-raised-button>Посчитать поздравляемых</button>
         <br /><br /><br />
  -->
+ <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
 
-
+<!-- 
         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
-        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button>
+        <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
         <!--         <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список Пасха</button>
-        <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список Пасха</button>
+       
         <button class="submit" (click)="showLessPlusNewYearList($event)" mat-raised-button>Показать список меньше
             1+</button>
         <br /><br /><br />
@@ -103,14 +104,14 @@
     </mat-card-actions>
 
     <mat-card-content *ngIf="isShowList">
-        <p>Общее количество - {{listLength}}</p>
-        <p>oldWomen - {{oldWomen}}</p>
-        <p>oldMen - {{oldMen}}</p>
-        <p>yangWomen - {{yangWomen}}</p>
-        <p>yangMen - {{yangMen}}</p>
-        <p>specialWomen - {{specialWomen}}</p>
-        <p>specialMen - {{specialMen}}</p>
-        <p>oldest - {{oldest}}</p>
+        <p>Общее количество - {{listLength}} - 100%</p>
+        <p>oldWomen - {{oldWomen}} - {{oldWomen/listLength*100}}</p>
+        <p>oldMen - {{oldMen}} - {{oldMen/listLength*100}}</p>
+        <p>yangWomen - {{yangWomen}} - {{yangWomen/listLength*100}}</p>
+        <p>yangMen - {{yangMen}} - {{yangMen/listLength*100}}</p>
+        <p>specialWomen - {{specialWomen}} - {{specialWomen/listLength*100}}</p>
+        <p>specialMen - {{specialMen}} - {{specialMen/listLength*100}}</p>
+       <p>oldest - {{oldest}}</p>
         <p>Общее количество с запасом - {{listLength+oldest}}</p>
 
 

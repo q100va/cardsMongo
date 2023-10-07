@@ -112,3 +112,12 @@ style
 .list {
     width: 100%;
 }
+
+.header {
+  color: limegreen;
+  font-size: 1.1em;
+}
+
+.warning {
+  color: red;
+}

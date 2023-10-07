@@ -52,6 +52,7 @@ import { February23Component } from "./pages/february23/february23.component";
 import { March8Component } from "./pages/march8/march8.component";
 import { May9Component } from "./pages/may9/may9.component";
 import { FamilyDayComponent } from "./pages/family-day/family-day.component";
+import { AdminNewYearComponent } from "./admin-new-year/admin-new-year.component";
 const routes: Routes = [
   {
     path: "",
@@ -227,6 +228,11 @@ const routes: Routes = [
         path: "orders/march-8",
         component: March8Component,
         canActivate: [AuthGuard],
+      },
+      {
+        path: "lists/admin-new-year",
+        component: AdminNewYearComponent,
+        canActivate: [AuthGuard, RoleGuard],
       },
 
 

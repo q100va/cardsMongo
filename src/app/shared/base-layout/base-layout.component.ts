@@ -53,6 +53,9 @@ export class BaseLayoutComponent implements OnInit {
   redirectToLists(): void {
     this.router.navigate(["/lists/"]);
   }
+  redirectToNYLists(): void {
+    this.router.navigate(["/lists/admin-new-year"]);
+  }
 
   redirectToClients(): void {
     this.router.navigate(["/clients/"]);

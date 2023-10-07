@@ -18,8 +18,8 @@
           <h1>&nbsp;Проект "Внуки по переписке: Поздравить открыткой"</h1>
         </div>
         <div fxLayoutAlign="end center" fxFlex="85">
-          <button class="navbar-link" routerLink="/orders/teacher-day" mat-button>День учителя</button> 
-         <!-- <button class="navbar-link" routerLink="/orders/new-year" mat-button>Пасха</button>  -->
+    <!--   <button class="navbar-link" routerLink="/orders/teacher-day" mat-button>День учителя</button>  -->
+          <button class="navbar-link" routerLink="/orders/new-year" mat-button>Новый год</button>  
 
 <!--           <button class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
           <button class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button> 
@@ -45,6 +45,10 @@
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToNYLists()">
+              <mat-icon color="primary">list</mat-icon>
+              <span>Списки НГ 2023</span>
             </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToCheck()">
               <mat-icon color="primary">bug_report</mat-icon>

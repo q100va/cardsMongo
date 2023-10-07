@@ -97,6 +97,7 @@ import { FamilyDayComponent } from "./pages/family-day/family-day.component";
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { CreateClientDialogComponent } from './shared/create-client-dialog/create-client-dialog.component';
 import { UpdateClientDialogComponent } from './shared/update-client-dialog/update-client-dialog.component';
+import { AdminNewYearComponent } from './admin-new-year/admin-new-year.component';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { UpdateClientDialogComponent } from './shared/update-client-dialog/updat
     May9Component,
     FamilyDayComponent,
     CreateClientDialogComponent,
-    UpdateClientDialogComponent
+    UpdateClientDialogComponent,
+    AdminNewYearComponent
 
   ],
   imports: [

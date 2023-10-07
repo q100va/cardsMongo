@@ -42,7 +42,7 @@ export class NameDayComponent implements OnInit {
   userName: string;
   form: FormGroup;
   holiday: string = "Именины ноября 2023";
-  lineItems: Array<LineItem>;
+  lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "email",
     "phoneNumber",
@@ -610,6 +610,11 @@ export class NameDayComponent implements OnInit {
         for (let value of this.selection["_selection"]) {
           temporaryLineItems.push(value);
         }
+
+              console.log("temporaryLineItems.length != this.form.controls.amount.value");
+         console.log(temporaryLineItems.length);
+         console.log( this.form.controls.amount.value);
+
         if (temporaryLineItems.length != this.form.controls.amount.value) {
           this.resultDialog.open(ConfirmationDialogComponent, {
             data: {
@@ -718,9 +723,18 @@ export class NameDayComponent implements OnInit {
           console.log(result);
           console.log(this.notSaved);
           this.lineItems = result;
+          let i = 0;
+          for (let lineItem of this.lineItems) {
+            for (let celebrator of lineItem.celebrators) {
+              celebrator.index = i + 1;
+              i++;
+            }
+          }
           this.canSave = true;
           this.successMessage =
-            "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и создайте другую.";
+          "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+        this.contactReminder = " для " + res["data"]["contact"];
+        this.clientFirstName = res["data"]["clientFirstName"];
         }
       },
       (err) => {

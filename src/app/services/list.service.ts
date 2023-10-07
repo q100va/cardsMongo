@@ -60,8 +60,8 @@ export class ListService {
     return this.http.post("/api/lists/teacher-day/create", {});
   }
 
-  createNewYearList(): Observable<any> {
-    return this.http.post("/api/lists/new-year/create", {});
+  createNewYearList(NYList): Observable<any> {
+    return this.http.post("/api/lists/new-year/create", {list: NYList});
   }
 
   createFebruary23List(): Observable<any> {
