@@ -11,11 +11,11 @@ const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const saltRounds = 10;
 const Order = require("../models/order");
-
+const checkAuth = require("../middleware/check-auth");
 
 ///check doubles
 
-router.post("/check-double", async (req, res) => {
+router.post("/check-double", checkAuth, async (req, res) => {
   try {
     console.log("/check-double");
     const newClient = req.body.newClient;
@@ -160,7 +160,7 @@ router.post("/check-double", async (req, res) => {
 });
 
 //CreateClient API
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
   try {
 
 
@@ -244,7 +244,7 @@ router.post("/", async (req, res) => {
  * API to find client by clientname (OK)
  */
 
-router.get("/client/:clientName", async (req, res) => {
+router.get("/client/:clientName", checkAuth, async (req, res) => {
   try {
     Client.findOne({ clientName: req.params.clientName }, function (err, client) {
       if (err) {
@@ -273,7 +273,7 @@ router.get("/client/:clientName", async (req, res) => {
 /**
  * API to find all clients (OK)
  */
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     Client.find({})
       .where("isDisabled")
@@ -298,7 +298,7 @@ router.get("/", async (req, res) => {
 
 //update client API
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
   try {
     Client.findOne({ _id: req.params.id }, function (err, client) {
       if (err) {
@@ -377,7 +377,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete Client API 
-router.patch("/delete/:id", async (req, res) => {
+router.patch("/delete/:id", checkAuth, async (req, res) => {
   try {
     let message = null;
     let orders = await Order.find({ clientId: req.params.id, isDisabled: false });
@@ -435,7 +435,7 @@ router.patch("/delete/:id", async (req, res) => {
  * API to find all clients by userName 
  */
 
-router.get("/find/:userName", async (req, res) => {
+router.get("/find/:userName", checkAuth, async (req, res) => {
   try {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
@@ -481,7 +481,7 @@ router.get("/find/:userName", async (req, res) => {
 
 //API to find subscribers by userName
 
-router.get("/findSubscribers/:userName", async (req, res) => {
+router.get("/findSubscribers/:userName", checkAuth, async (req, res) => {
   try {
     console.log('req.query');
     console.log(req.query)
@@ -540,7 +540,7 @@ router.get("/findSubscribers/:userName", async (req, res) => {
  * API to find clients by search string 
  */
 
-router.get("/search/:userName", async (req, res) => {
+router.get("/search/:userName", checkAuth, async (req, res) => {
   try {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
@@ -608,7 +608,7 @@ router.get("/search/:userName", async (req, res) => {
  * API to find all clients by userName 
  */
 
-router.post("/add-institute/:id", async (req, res) => {
+router.post("/add-institute/:id", checkAuth, async (req, res) => {
   console.log('router.post("/add-institute1"');
   try {
 
@@ -662,7 +662,7 @@ router.post("/add-institute/:id", async (req, res) => {
 });
 
 
-/* router.delete("/:id", async (req, res) => {
+/* router.delete("/:id", checkAuth, async (req, res) => {
   try {
     Client.findOne({ _id: req.params.id }, function (err, client) {
       // If statement for Mongo error
@@ -716,7 +716,7 @@ router.post("/add-institute/:id", async (req, res) => {
 });
  */
 ///find contacts
-router.get("/find-contacts/:contactType", async (req, res) => {
+router.get("/find-contacts/:contactType", checkAuth, async (req, res) => {
   try {
     console.log("/find-contacts/:contactType/:contact");
     let contacts = await Client.find({ isDisabled: false, [req.params.contactType]: { $ne: null } }, { [req.params.contactType]: 1, _id: 1 });
@@ -734,7 +734,7 @@ router.get("/find-contacts/:contactType", async (req, res) => {
 });
 
 
-/* router.get("/find-contacts/:contactType/:contact", async (req, res) => {
+/* router.get("/find-contacts/:contactType/:contact", checkAuth, async (req, res) => {
   try {
     console.log("/find/:contactType/:contact");
    let contacts = await Client.aggregate([
@@ -767,7 +767,7 @@ router.get("/find-contacts/:contactType", async (req, res) => {
 
 ///find orders to create clients
 
-router.get("/create-clients/all", async (req, res) => {
+router.get("/create-clients/all", checkAuth, async (req, res) => {
   try {
     console.log("start /create-clients");
     let clients = await Order.find(
@@ -797,7 +797,7 @@ router.get("/create-clients/all", async (req, res) => {
 
 ///create clients
 
-router.post("/create-clients/:index", async (req, res) => {
+router.post("/create-clients/:index", checkAuth, async (req, res) => {
   try {
 
     console.log("start /create-clients/check");
@@ -1133,7 +1133,7 @@ function checkDifferences(oldClient, client) {
 
 //update and delete client API
 
-router.post("/update-and-delete-clients/:id", async (req, res) => {
+router.post("/update-and-delete-clients/:id", checkAuth, async (req, res) => {
   try {
     console.log("start update-and-delete-clients");
     console.log(req.params);
@@ -1226,7 +1226,7 @@ router.post("/update-and-delete-clients/:id", async (req, res) => {
  * API to add-search-array
  */
 
-router.get("/add-search-array", async (req, res) => {
+router.get("/add-search-array", checkAuth, async (req, res) => {
   try {
     let clients = await Client.find({});
     for (let client of clients) {
@@ -1275,7 +1275,7 @@ router.get("/add-search-array", async (req, res) => {
  * API to restore coordinators
  */
 
-router.get("/restore/coordinators", async (req, res) => {
+router.get("/restore/coordinators", checkAuth, async (req, res) => {
   try {
     let clients = await Client.find({ isDisabled: false });
     for (let client of clients) {
@@ -1304,7 +1304,7 @@ router.get("/restore/coordinators", async (req, res) => {
  * API to correct contacts
  */
 
-router.get("/contacts/correct", async (req, res) => {
+router.get("/contacts/correct", checkAuth, async (req, res) => {
   try {
     let clients = await Client.find(
       {
@@ -1387,7 +1387,7 @@ router.get("/contacts/correct", async (req, res) => {
 });
 
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   try {
     Client.findOne({ _id: req.params.id }, function (err, client) {
       console.log(req.params.id);
@@ -1419,7 +1419,7 @@ router.get("/:id", async (req, res) => {
 
 ///find and delete doubles
 
-router.get("/collect-clients/all", async (req, res) => {
+router.get("/collect-clients/all", checkAuth, async (req, res) => {
   try {
     console.log("start /collect-clients");
     let clients = await Client.find(
@@ -1443,7 +1443,7 @@ router.get("/collect-clients/all", async (req, res) => {
 
 ///check clients
 
-router.post("/check-all-clients/:index", async (req, res) => {
+router.post("/check-all-clients/:index", checkAuth, async (req, res) => {
   try {
 
     console.log("start check-all-clients");
@@ -1743,7 +1743,7 @@ function checkDifferencesDouble(oldClient, client) {
 
 //update and delete client API
 
-/* router.post("/update-and-delete-clients/:id", async (req, res) => {
+/* router.post("/update-and-delete-clients/:id", checkAuth, async (req, res) => {
   try {
     console.log("start update-and-delete-clients");
     console.log(req.params);

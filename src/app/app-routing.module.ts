@@ -52,7 +52,7 @@ import { February23Component } from "./pages/february23/february23.component";
 import { March8Component } from "./pages/march8/march8.component";
 import { May9Component } from "./pages/may9/may9.component";
 import { FamilyDayComponent } from "./pages/family-day/family-day.component";
-import { AdminNewYearComponent } from "./admin-new-year/admin-new-year.component";
+import { AdminNewYearComponent } from "./pages/admin-new-year/admin-new-year.component";
 const routes: Routes = [
   {
     path: "",

@@ -16,9 +16,11 @@ const BaseResponse = require("../models/base-response");
 
 const router = express.Router();
 const saltRounds = 10;
+const jwt = require("jsonwebtoken");
+const checkAuth = require("../middleware/check-auth");
 
 // User sign-in
-router.post("/signin", async (req, res) => {
+router.post("/signin",  async (req, res) => {
   try {
     User.findOne({ userName: req.body.userName }, function (err, user) {
       if (err) {
@@ -32,7 +34,17 @@ router.post("/signin", async (req, res) => {
 
           if (passwordIsValid) {
             console.log("Login Successful");
-            const signinResponse = new BaseResponse(200, "Login Successful", user);
+            const token = jwt.sign({
+              userName: user.userName,
+              userId: user._id
+            },
+              'Learning a little each day adds up. Research shows that students who make learning a habit are more likely to reach their goals. Set time aside to learn and get reminders using your learning scheduler.',
+              { expiresIn: "4h" }
+            );
+            //user["token"] = token;
+            console.log(user);
+            const signinResponse = new BaseResponse(200, "Login Successful", { user: user, token: token, expiresIn: 3600 });
+            console.log(signinResponse.toObject());
             res.json(signinResponse.toObject());
           } else {
             console.log(`Invalid password for username: ${user.userName}`);
@@ -67,7 +79,7 @@ router.post("/signin", async (req, res) => {
 
 //Reset Password API
 
-router.post("/users/:userName/reset-password", async (req, res) => {
+router.post("/users/:userName/reset-password", checkAuth, async (req, res) => {
   try {
     const password = req.body.password;
 

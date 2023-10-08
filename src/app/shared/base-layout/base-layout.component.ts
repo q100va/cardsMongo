@@ -13,6 +13,8 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { RoleService } from "src/app/services/roles.service";
+import { SigninService } from "src/app/services/signin.service";
+
 
 @Component({
   selector: "app-base-layout",
@@ -27,7 +29,11 @@ export class BaseLayoutComponent implements OnInit {
   isAdmin: boolean;
   userName: string;
 
-  constructor(private cookieService: CookieService, private router: Router, private roleService: RoleService) {
+  constructor(
+    private cookieService: CookieService, 
+    private router: Router, 
+    private roleService: RoleService,
+    private signinService: SigninService) {
     
     this.roleService.findUserRole(this.cookieService.get("session_user")).subscribe((res) => {
       this.userRole = res["data"];
@@ -63,7 +69,8 @@ export class BaseLayoutComponent implements OnInit {
 
   signOut() {
     this.cookieService.deleteAll();
-    this.router.navigate(["/session/signin"]);
+    this.signinService.logout();
+
   }
 
   redirectToSeniors(): void {

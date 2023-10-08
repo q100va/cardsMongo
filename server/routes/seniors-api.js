@@ -16,10 +16,10 @@ const ListNext = require("../models/list-next");
 const ListBefore = require("../models/list-previous");
 const Order = require("../models/order");
 const NameDay = require("../models/name-day");
-
+const checkAuth = require("../middleware/check-auth");
 
 // Find all seniors
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     Senior.find({})
       .where("isDisabled")
@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
 
 
 // Find all seniors from one home
-router.get("/one-home/:nursingHome", async (req, res) => {
+router.get("/one-home/:nursingHome", checkAuth, async (req, res) => {
   try {
     Senior.find({ nursingHome: req.params.nursingHome })
       .where("isDisabled")
@@ -70,7 +70,7 @@ router.get("/one-home/:nursingHome", async (req, res) => {
  * API to find senior by ID (OK)
  */
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   try {
     Senior.findOne({ _id: req.params.id }, function (err, senior) {
       console.log(req.params.id);
@@ -100,7 +100,7 @@ router.get("/:id", async (req, res) => {
 
 //Create Senior API
 
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
   console.log("step1");
   try {
     console.log("step2");
@@ -153,7 +153,7 @@ router.post("/", async (req, res) => {
 /**
  * API to delete all
  */
-router.delete("/", async (req, res) => {
+router.delete("/", checkAuth, async (req, res) => {
   try {
 
     console.log("delete3");
@@ -177,7 +177,7 @@ router.delete("/", async (req, res) => {
 });
 
 // Delete senior API
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   try {
     Senior.findOne({ _id: req.params.id }, function (err, senior) {
       if (err) {
@@ -221,7 +221,7 @@ router.delete("/:id", async (req, res) => {
 
 // Update senior API
 
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id", checkAuth, async (req, res) => {
   try {
     let senior = await Senior.findOne({ _id: req.params.id });
     let house = await House.findOne({ nursingHome: req.body.nursingHome, });
@@ -265,7 +265,7 @@ router.put("/update/:id", async (req, res) => {
 
 
 // Create many seniors  API
-/* router.post("/add-many/", async (req, res) => {
+/* router.post("/add-many/", checkAuth, async (req, res) => {
   try {
     console.log("start API");
     let seniors = req.body.seniors;
@@ -405,7 +405,7 @@ router.put("/update/:id", async (req, res) => {
 
 // Compare seniors lists API
 
-router.put("/compare-lists/", async (req, res) => {
+router.put("/compare-lists/", checkAuth, async (req, res) => {
   try {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
@@ -592,7 +592,7 @@ router.put("/compare-lists/", async (req, res) => {
 });
 
 // Update seniors list  API
-router.put("/update-lists/", async (req, res) => {
+router.put("/update-lists/", checkAuth, async (req, res) => {
   try {
     console.log("start API update-lists");
     let absents = req.body.absents;
@@ -1001,7 +1001,7 @@ async function checkDoubles(array) {
 
 
 /* API to delete from DB senior
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   try {
     Senior.findByIdAndDelete(
       { _id: req.params.id },

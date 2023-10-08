@@ -10,9 +10,10 @@ const Role = require("../models/role");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const User = require("../models/user");
+const checkAuth = require("../middleware/check-auth");
 
 // Create role API 
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
 
   try {
     Role.findOne({ 'text': req.body.text }, function (err, role) {
@@ -76,7 +77,7 @@ router.post("/", async (req, res) => {
  * API to update a role (OK)
  */
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
   try {
     Role.findOne({ _id: req.params.id }, function (err, role) {
       if (err) {
@@ -131,7 +132,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //Find all roles API
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     Role.find({})
       .where("isDisabled")
@@ -155,7 +156,7 @@ router.get("/", async (req, res) => {
 });
 
 // Find by ID
-router.get("/:roleId", async (req, res) => {
+router.get("/:roleId", checkAuth, async (req, res) => {
   try {
     Role.findOne({ _id: req.params.roleId }, function (err, role) {
       if (err) {
@@ -174,7 +175,7 @@ router.get("/:roleId", async (req, res) => {
 
 //Delete role API
 
-router.delete("/:roleId", async (req, res) => {
+router.delete("/:roleId", checkAuth, async (req, res) => {
   try {
     // Find the role by id
     Role.findOne({ _id: req.params.roleId }, function (err, role) {
@@ -248,7 +249,7 @@ router.delete("/:roleId", async (req, res) => {
 
 // API to delete role - SHOULD BE DELETED (ONLY FOR TEST) - OK
 
-//  router.delete("/:id", async (req, res) => {
+//  router.delete("/:id", checkAuth, async (req, res) => {
 //   try {
 //     const roleId = req.params.id;
 

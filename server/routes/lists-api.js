@@ -27,6 +27,7 @@ const Order = require("../models/order");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
 const FamilyDay = require("../models/family-day");
+const checkAuth = require("../middleware/check-auth");
 
 
 //const SpecialDay = require("../models/senior");
@@ -35,7 +36,7 @@ const FamilyDay = require("../models/family-day");
 
 // Delete double birthday list API 
 
-router.delete("/double", async (req, res) => {
+router.delete("/double", checkAuth, async (req, res) => {
   try {
     let lists = await List.find();
 
@@ -89,7 +90,7 @@ router.delete("/double", async (req, res) => {
 }); */
 
 // Create birthday list API 
-router.post("/:month", async (req, res) => {
+router.post("/:month", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
    // let result = await findAllMonthCelebrators(req.params.month);
@@ -331,7 +332,7 @@ async function checkDoubles(array) {
 /////////////////////////////////////////
 
 // Create name day list API 
-router.post("/name-day/:month", async (req, res) => {
+router.post("/name-day/:month", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
     let result = await findAllMonthNameDays(req.params.month);
@@ -449,7 +450,7 @@ async function findAllMonthNameDays(month) {
 /////////////////////////////////////////
 
 // Create teacher day list API 
-router.post("/teacher-day/create", async (req, res) => {
+router.post("/teacher-day/create", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
     let result = await findTeachers();
@@ -557,7 +558,7 @@ async function findTeachers() {
 /////////////////////////////////////////
 
 // Create NY list API 
-router.post("/new-year/create", async (req, res) => {
+router.post("/new-year/create", checkAuth, async (req, res) => {
   try {
     const houses = req.body.list;
     console.log("0- inside Create list API");
@@ -598,7 +599,7 @@ async function findAllNYCelebrators(houses) {
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
   console.log("2- seniors" + list.length);
 
-  await House.updateMany({},
+/*   await House.updateMany({},
     {$set:{
       "statistic.newYear.time": 0,
       "statistic.newYear.plus0": 0,
@@ -620,7 +621,7 @@ async function findAllNYCelebrators(houses) {
       "statistic.newYear.yangWomenPlus": 0,
     }
   
-  });
+  }); */
 
   let updatedCelebrators = [];
   for (let celebrator of list) {
@@ -762,7 +763,7 @@ async function createCloneCelebrator(celebrator) {
 /////////////////////////////////////////
 
 // Create February23 and March8 list API 
-router.post("/february-23/create", async (req, res) => {
+router.post("/february-23/create", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
     let result = await findAllGenderCelebrators("Male");
@@ -778,7 +779,7 @@ router.post("/february-23/create", async (req, res) => {
   }
 });
 
-router.post("/march-8/create", async (req, res) => {
+router.post("/march-8/create", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
     let result = await findAllGenderCelebrators("Female");
@@ -931,7 +932,7 @@ function createCloneCelebratorGender(celebrator) {
 /**
  * API to delete all
  */
-router.delete("/", async (req, res) => {
+router.delete("/", checkAuth, async (req, res) => {
   try {
 
     console.log("delete3");
@@ -960,7 +961,7 @@ router.delete("/", async (req, res) => {
 
 
 //Find all birthday lists API
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     List.find({ absent: { $ne: true } }, function (err, lists) {
@@ -982,7 +983,7 @@ router.get("/", async (req, res) => {
 });
 
 //Find all NY lists API
-router.get("/new-year", async (req, res) => {
+router.get("/new-year", checkAuth, async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     NewYear.find({ absent: { $ne: true } }, function (err, lists) {
@@ -1004,7 +1005,7 @@ router.get("/new-year", async (req, res) => {
 });
 
 //Find all February23 lists API
-router.get("/february-23", async (req, res) => {
+router.get("/february-23", checkAuth, async (req, res) => {
   try {
     February23.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
@@ -1025,7 +1026,7 @@ router.get("/february-23", async (req, res) => {
 });
 
 //Find all March8 lists API
-router.get("/march-8", async (req, res) => {
+router.get("/march-8", checkAuth, async (req, res) => {
   try {
     March8.find({ absent: { $ne: true } }, function (err, lists) {
       //, nursingHome: {$in : ['АНДРЕЕВСКИЙ',	'БЕГИЧЕВСКИЙ',	'БЕРЕЗНИКИ',	'ВЕРБИЛКИ',	'ВИШЕРСКИЙ',	'ВОЛГОГРАД_КРИВОРОЖСКАЯ',	'ИЛЬИНСКИЙ_ПОГОСТ',	'ИРКУТСК_КУРОРТНАЯ',	'КАРДЫМОВО',	'КАШИРСКОЕ',	'КЛИН',	'МОСКВА_РОТЕРТА',	'НОВОСЕЛЬЕ',	'НОВОСИБИРСК_ЖУКОВСКОГО',	'НОГИНСК',	'НЯНДОМА',	'ОКТЯБРЬСКИЙ',	'ОСТРОВ',	'ПАРФИНО',	'ПЕРВОМАЙСКИЙ',	'ПОБЕДИМ',	'РЯЗАНЬ',	'СОЛИКАМСК_ДУБРАВА',	'СОЛИКАМСК_СЕЛА',	'СОСНОВКА',	'ТАМБОВСКИЙ_ЛЕСХОЗ',	'ТОВАРКОВСКИЙ_ДИПИ',	'ЦЕЛИННОЕ',	'ЭЛЕКТРОГОРСК']} }
@@ -1059,7 +1060,7 @@ router.get("/march-8", async (req, res) => {
 
  */
 
-router.get("/name-day/:month", async (req, res) => {
+router.get("/name-day/:month", checkAuth, async (req, res) => {
   try {
 
     if (req.params.month == "NameDay") {
@@ -1113,7 +1114,7 @@ router.get("/name-day/:month", async (req, res) => {
 });
 
 //Find all teacher day lists API
-router.get("/teacher-day", async (req, res) => {
+router.get("/teacher-day", checkAuth, async (req, res) => {
   try {
 
     TeacherDay.find({ absent: { $ne: true } }, function (err, teacherDays) {
@@ -1136,7 +1137,7 @@ router.get("/teacher-day", async (req, res) => {
 
 
 /////correct doubles
-router.get("/new-year/correct", async (res) => {
+router.get("/new-year/correct", checkAuth, async (res) => {
   try {
 
     let doubles = await NewYear.find({ plusAmount: 2, nursingHome: "НОВОТУЛКА" });//secondTime: false,
@@ -1160,7 +1161,7 @@ router.get("/new-year/correct", async (res) => {
 });
 
 /////correct doubles
-router.get("/new-year/check-orders", async (res) => {
+router.get("/new-year/check-orders", checkAuth, async (res) => {
   try {
 
     let orders = ['elenamikhno02@mail.ru', 'liz.grinberg3@gmail.com', 'dariarazumova@yahoo.com', 'yulaleto@mail.ru', 'veronika1555@yandex.ru', 'pashenkodas@gmail.com', 'tata.mann@yandex.ru', 'puma777777@mail.ru', 'Vtsinoeva@gmail.com', 'V_goldman@bk.ru', 'anastasiya.sarantseva@yandex.ru', 'nesterova_ri30@icloud.com', 'coraline13.10@yandex.ru', 'Ekerimova@lenta.ru', 'akopianstella@yandex.ru', 'Nushanja00@mail.ru', 'valeriyaa_cvetkova@mail.ru', 'Lena3174@yandex.ru', 'lika-saz99@mail.ru', 'ae_video_ru@mail.ru', 'juliana.24@yandex.ru', '@jul-tag@yandex.ru', 'Delmis@list.ru', 'irasharafutdinova26@icloud.com', 'your.orange@mail.ru', 'Chudnova.nadezhda@mail.ru', 'babuhina.olya@gmail.com', 'Lisovetc@bk.ru', 'arinaliagina@yandex.ru', 'Tatyanas-88@mail.ru', 'kar15mash08kina08@yandex.ru', 'Poliakovaka@mail.ru', 'mrs.lazarev@mail.ru', 'Vinychenko.i@yandex.ru', 'natali1992_92@mail.ru', 'Ambre21@mail.ru', 'ju-liyah@yandex.ru', 'arnulftatiana@gmail.com', 'kas40289@mail.ru', 'gembickaya_yana@mail.ru', 'Danchenkoira@yahoo.com', 'ok.medwe2011@yandex.ru', 'smaalina@yandex.ru', 'linasokolova96@mail.ru', 'a.nadtochikh@yandex.ru', 'O.sheiko1986@mail.ru', 'mrs_evgeniyavolkova@gmail.com', 'domonova@icloud.con', 'Lena.izhevsk@gmail.com', 'Mashde@yandex.ru', 'Lenusik_11@mail.ru', 'rogulina89@bk.ru', 'daryadarya18@icloud.com', 'tanya19mail@gmail.com', 'Vika.vika.ivlieva@mail.ru', 'l.oksana123@yandex.ru', 'bekk-e@bk.ru', 'annbarinova15@yandex.ru', 'luckyanna-1987@mail.ru', 'bahshieva-job@mail.ru', 'di.fyodorowa@yandex.ru', 'Ljk_90@mail.ru', 'voronina_alex@mail.ru', 'Teabetkam@gmail.com', 'Devochka_vesna87@bk.ru', 'gushkan2014@yandex.ru', 'Elena.Kireeva2707@gmail.com', 'Arhinova@yandex.ru', 'angelinad9@mail.ru', 'fantutta@gmail.com', 'Camizmn@list.ru', 'jakson.86@mail.ru', 'Kat.sizikova2015@yandex.ru', 'zaharcevaolya@mail.ru', 'amatsievskaya@bk.ru', 'a.valkova2702@mail.ru', 'dmukhovskaya@mail.ru', 'Sontasya@yandex.ru', 'kuzzmina96@bk.ru', 'dmargo133@yahoo.com', 'sealight_@mail.ru', 'karabejanova@mail.ru', 'kat_13357@mail.ru', '79995994313@ya.ru', '8894675@gmail.com', 'i_kutsenko@list.ru', 'katya_danilova@list@ru', 'Feliz_21.7@mail.ru', 'thekitika@yandex.ru', 'febacold@yandex.ru',];
@@ -1184,7 +1185,7 @@ router.get("/new-year/check-orders", async (res) => {
 });
 
 /////absents
-router.get("/new-year/absents", async (res) => {
+router.get("/new-year/absents", checkAuth, async (res) => {
   try {
     let absents = await Senior.find({ dateExit: { $gt: new Date("2022-10-22") } });//secondTime: false,
 
@@ -1209,7 +1210,7 @@ router.get("/new-year/absents", async (res) => {
 });
 
 // check NY doubles
-router.post("/new-year/check-doubles", async (req, res) => {
+router.post("/new-year/check-doubles", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check NY doubles" + req.body.nursingHome);
@@ -1273,7 +1274,7 @@ async function findAllNYDoubles(house) {
 
 
 // check NY fullness
-router.post("/new-year/check-fullness", async (req, res) => {
+router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
@@ -1361,7 +1362,7 @@ async function checkAllNYFullness(house) {
 }
 
 // check HB doubles
-router.post("/birthday/check-doubles", async (req, res) => {
+router.post("/birthday/check-doubles", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check HB doubles" + req.body.nursingHome);
@@ -1423,7 +1424,7 @@ async function findAllHBDoubles(house) {
 }
 
 // check HB fullness
-router.post("/birthday/check-fullness", async (req, res) => {
+router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check HB doubles " + req.body.nursingHome);
@@ -1469,7 +1470,7 @@ async function checkAllHBFullness(house) {
 const SpecialDay = require("../models/senior");
 //const SpecialDay = require("../models/list");
 //Find special lists API
-router.get("/holiday/special-list", async (req, res) => {
+router.get("/holiday/special-list", checkAuth, async (req, res) => {
   try {
     let notActiveHouses = await House.find({ isActive: false });
     let notActiveHousesNames = [];
@@ -1548,7 +1549,7 @@ router.get("/holiday/special-list", async (req, res) => {
 });
 
 // check holiday fullness
-router.post("/holiday/check-fullness/:holiday", async (req, res) => {
+router.post("/holiday/check-fullness/:holiday", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
@@ -1628,7 +1629,7 @@ async function checkAllHolidayFullness(house, holiday) {
 /////////////////////////////////////////
 
 // Create May9 list API 
-router.post("/9may/create", async (req, res) => {
+router.post("/9may/create", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
     let result = await findAllMay9Celebrators();
@@ -1770,7 +1771,7 @@ async function createCloneCelebrator9May(celebrator) {
 }
 
 //Find all NY lists API
-router.get("/9may", async (req, res) => {
+router.get("/9may", checkAuth, async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     May9.find({ absent: { $ne: true } }, function (err, lists) {
@@ -1795,7 +1796,7 @@ router.get("/9may", async (req, res) => {
 /////////////////////////////////////////
 
 // FAMILIES LIST
-router.post("/create/family-day", async (req, res) => {
+router.post("/create/family-day", checkAuth, async (req, res) => {
   let arrayOfFamilies = req.body.listOfFamilies;
   try {
 
@@ -1869,7 +1870,7 @@ async function checkCouple(family) {
 
 }
 //Find all family day lists API
-router.get("/family-day", async (req, res) => {
+router.get("/family-day", checkAuth, async (req, res) => {
   try {
 
     FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
@@ -1891,7 +1892,7 @@ router.get("/family-day", async (req, res) => {
 });
 
 //Find all family day lists API
-router.get("/family-day/less", async (req, res) => {
+router.get("/family-day/less", checkAuth, async (req, res) => {
   try {
 
     FamilyDay.find({ absent: { $ne: true }, plusAmount: { $lt: 5 } }, function (err, lists) {
@@ -1914,7 +1915,7 @@ router.get("/family-day/less", async (req, res) => {
 
 //howManyVolunteers
 //const Order = require("../models/order");
-router.get("/amountOfVolunteers", async (req, res) => {
+router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
   try {
 
     console.log("start");
@@ -1947,7 +1948,7 @@ async function countAmount() {
 
 //howManySeniors
 //const Order = require("../models/order");
-router.get("/amountOfSeniors", async (req, res) => {
+router.get("/amountOfSeniors", checkAuth, async (req, res) => {
   try {
 
     console.log("start");
@@ -1981,7 +1982,7 @@ async function countAmountSeniors() {
 
 // uncertain
 
-router.patch("/uncertain", async (req, res) => {
+router.patch("/uncertain", checkAuth, async (req, res) => {
   try {
 
     console.log("start");

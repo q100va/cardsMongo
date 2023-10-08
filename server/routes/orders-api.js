@@ -26,6 +26,7 @@ const March8 = require("../models/march-8");
 const May9 = require("../models/may-9");
 const FamilyDay = require("../models/family-day");
 const order = require("../models/order");
+const checkAuth = require("../middleware/check-auth");
 
 //const { getLocaleDayPeriods } = require("@angular/common");
 
@@ -35,7 +36,7 @@ const order = require("../models/order");
 
 //Create period
 
-router.post("/create/period/", async (req, res) => {
+router.post("/create/period/", checkAuth, async (req, res) => {
   try {
     let newPeriod = {
       date1: req.params.date1,
@@ -83,7 +84,7 @@ router.post("/create/period/", async (req, res) => {
  * API to find all orders (OK)
  */
 
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     Order.find({ isDisabled: false, userName: { $ne: "okskust" }, isAccepted: false }, function (err, orders) {
       /* Order.find({ isDisabled: false , userName: "royrai"}, function (err, orders) { */
@@ -120,7 +121,7 @@ router.get("/", async (req, res) => {
  * API to find order by ID (OK)
  */
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   try {
     Order.findOne({ _id: req.params.id, isDisabled: false }, function (err, order) {
       console.log(req.params.id);
@@ -163,7 +164,7 @@ router.get("/:id", async (req, res) => {
  * API to find all orders by userName (OK)
  */
 
-router.get("/find/:userName", async (req, res) => {
+router.get("/find/:userName", checkAuth, async (req, res) => {
   try {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
@@ -208,7 +209,7 @@ router.get("/find/:userName", async (req, res) => {
  * API to find not confirmed orders by userName (OK)
  */
 
-router.get("/findNotConfirmed/:userName", async (req, res) => {
+router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
   try {
     console.log('req.query');
     console.log(req.query)
@@ -270,7 +271,7 @@ router.get("/findNotConfirmed/:userName", async (req, res) => {
  * API to find not confirmed orders (OK)
  */
 
-router.get("/all/findAllOrdersNotAccepted/", async (req, res) => {
+router.get("/all/findAllOrdersNotAccepted/", checkAuth, async (req, res) => {
   try {
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
         console.log("req.params.userName");
@@ -310,7 +311,7 @@ router.get("/all/findAllOrdersNotAccepted/", async (req, res) => {
 /**
  * API to confirm order
  */
-router.patch("/confirm/:id", async (req, res) => {
+router.patch("/confirm/:id", checkAuth, async (req, res) => {
   try {
     const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isAccepted: true } }, { upsert: false });
     console.log(updatedOrder);
@@ -349,7 +350,7 @@ router.patch("/confirm/:id", async (req, res) => {
   }
 });
 
-router.patch("/unconfirmed/:id", async (req, res) => {
+router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
   try {
     const updatedOrder = await Order.updateOne({ _id: req.params.id }, { $set: { isAccepted: false } }, { upsert: false });
     console.log(updatedOrder);
@@ -390,7 +391,7 @@ router.patch("/unconfirmed/:id", async (req, res) => {
 
 //API to change status of order
 
-router.patch("/change-status/:id", async (req, res) => {
+router.patch("/change-status/:id", checkAuth, async (req, res) => {
   try {
     //  let updatedOrder;    
 
@@ -618,7 +619,7 @@ async function deletePluses(deletedOrder, full) {
 
 // API to restore order
 
-router.patch("/restore/:id", async (req, res) => {
+router.patch("/restore/:id", checkAuth, async (req, res) => {
   try {
     await Order.updateOne({ _id: req.params.id }, {
       $set: { isOverdue: false, isReturned: false, isAccepted: false }
@@ -822,7 +823,7 @@ function correctDate(updatedOrders) {
  * API to find regions (OK)
  */
 
-router.get("/get/regions/", async (req, res) => {
+router.get("/get/regions/", checkAuth, async (req, res) => {
   try {
     Region.find({}, function (err, regions) {
       if (err) {
@@ -860,7 +861,7 @@ router.get("/get/regions/", async (req, res) => {
   }
 });
 
-router.get("/get/nursingHomes/", async (req, res) => {
+router.get("/get/nursingHomes/", checkAuth, async (req, res) => {
   try {
     House.find({ isActive: true }, function (err, nursingHomes) {
       if (err) {
@@ -916,7 +917,7 @@ router.get("/get/nursingHomes/", async (req, res) => {
 
 //check double order
 
-router.post("/check-double/", async (req, res) => {
+router.post("/check-double/", checkAuth, async (req, res) => {
   try {
     /*   let contact;
        let id = req.body.clientId;
@@ -1011,7 +1012,7 @@ router.post("/check-double/", async (req, res) => {
 
 //create name day order
 
-router.post("/name-day", async (req, res) => {
+router.post("/name-day", checkAuth, async (req, res) => {
   let finalResult;
   try {
     console.log("req.body.temporaryLineItems");
@@ -1160,7 +1161,7 @@ async function createOrderForNameDay(order) {
 
 //create teacher day order
 
-router.post("/teacher-day", async (req, res) => {
+router.post("/teacher-day", checkAuth, async (req, res) => {
   let finalResult;
   try {
     console.log("req.body.temporaryLineItems");
@@ -1294,7 +1295,7 @@ async function createOrderForTeacherDay(order) {
 }
 ////////////////////////////////////////////////////BIRTHDAY 789
 
-router.post("/birthday/:amount", async (req, res) => {
+router.post("/birthday/:amount", checkAuth, async (req, res) => {
   let finalResult;
 
   console.log(" institutes: req.body.institutes,");
@@ -2489,7 +2490,7 @@ async function checkActiveList(period, month, isOutDate, minDate, maxDate) {
 /**
  * API to delete
  */
-router.delete("/", async (req, res) => {
+router.delete("/", checkAuth, async (req, res) => {
   try {
 
     console.log("delete3");
@@ -2514,7 +2515,7 @@ router.delete("/", async (req, res) => {
 
 // API to find all orders with absents
 
-router.get("/absents/all", async (req, res) => {
+router.get("/absents/all", checkAuth, async (req, res) => {
   try {
     let orders = await Order.find({ isDisabled: false, "lineItems.celebrators.absentComment": "ВЫБЫЛ(А), НЕ ПОЗДРАВЛЯТЬ!" });
 
@@ -2570,7 +2571,7 @@ function upgradeOrders(orders) {
 
 ////////////////////////////////////////////////////  NY
 
-router.post("/new-year/:amount", async (req, res) => {
+router.post("/new-year/:amount", checkAuth, async (req, res) => {
   let finalResult;
   try {
     let newOrder = {
@@ -3337,7 +3338,7 @@ async function generateLineItemsNewYear(nursingHomes, order_id) {
 //////////////////////////////////////////////////
 //February23 and March8 orders
 
-router.post("/spring/:amount", async (req, res) => {
+router.post("/spring/:amount", checkAuth, async (req, res) => {
   let finalResult;
   try {
     let newOrder = {
@@ -3851,7 +3852,7 @@ async function generateLineItemsSpring(nursingHomes, order_id) {
 
 ////////////////////////////////////////////////////
 
-router.post("/may9/:amount", async (req, res) => {
+router.post("/may9/:amount", checkAuth, async (req, res) => {
   let finalResult;
   try {
     let newOrder = {
@@ -4329,7 +4330,7 @@ async function generateLineItemsMay9(nursingHomes, order_id) {
 
 //create family day order
 
-router.post("/family-day", async (req, res) => {
+router.post("/family-day", checkAuth, async (req, res) => {
   let finalResult;
   try {
     console.log("req.body.temporaryLineItems");
@@ -4464,7 +4465,7 @@ function sendMessageToAdmin(text, e) { console.log(text + e); }
 ///////////////////////
 // Edit order list
 
-router.patch("/edit/:orderId", async (req, res) => {
+router.patch("/edit/:orderId", checkAuth, async (req, res) => {
   try {
     console.log("req.params.orderId ");
     console.log(req.params.orderId);
@@ -4553,7 +4554,7 @@ router.patch("/edit/:orderId", async (req, res) => {
 
 
 //////////
-router.patch("/correct-orders-dates", async (req, res) => {
+router.patch("/correct-orders-dates", checkAuth, async (req, res) => {
   try {
 
     /*     let orders = await Order.find({
@@ -4602,7 +4603,7 @@ router.patch("/correct-orders-dates", async (req, res) => {
 
 //move institute to institutes
 
-router.get("/clients/move-institutes", async (req, res) => {
+router.get("/clients/move-institutes", checkAuth, async (req, res) => {
   try {
 
     /*     let orders = await Order.find({institute: {$ne: null}}); //({ dateOfOrder: { $gt: new Date('2022-05-01'), $lte: new Date('2022-07-31') } });

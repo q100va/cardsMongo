@@ -10,49 +10,51 @@ const User = require("../models/user");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const saltRounds = 10;
+const checkAuth = require("../middleware/check-auth");
+
 
 //CreateUser API
-router.post("/", async (req, res) => {
-   try {
-     let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
-     standardRole = "standard";
+router.post("/", checkAuth, async (req, res) => {
+  try {
+    let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
+    standardRole = "standard";
 
-     //user object
-     let newUser = {
-       userName: req.body.userName,
-       password: hashedPassword,
-       firstName: req.body.firstName,
-       lastName: req.body.lastName,
-       phoneNumber: req.body.phoneNumber,
-       address: req.body.address,
-       email: req.body.email,
-       role: standardRole,       
-     };
-     console.log(req.body);
+    //user object
+    let newUser = {
+      userName: req.body.userName,
+      password: hashedPassword,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      phoneNumber: req.body.phoneNumber,
+      address: req.body.address,
+      email: req.body.email,
+      role: standardRole,
+    };
+    console.log(req.body);
 
-     User.create(newUser, function (err, user) {
-       if (err) {
-         console.log(err);
-         const createUserMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
-         res.status(500).send(createUserMongodbErrorResponse.toObject());
-       } else {
-         console.log(user);
-         const createUserResponse = new BaseResponse(200, "Query Successful", user);
-         res.json(createUserResponse.toObject());
-       }
-     });
-   } catch (e) {
-     console.log(e);
-     const createUserCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
-     res.status(500).send(createUserCatchErrorResponse.toObject());
-   }
- }); 
+    User.create(newUser, function (err, user) {
+      if (err) {
+        console.log(err);
+        const createUserMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
+        res.status(500).send(createUserMongodbErrorResponse.toObject());
+      } else {
+        console.log(user);
+        const createUserResponse = new BaseResponse(200, "Query Successful", user);
+        res.json(createUserResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const createUserCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(createUserCatchErrorResponse.toObject());
+  }
+});
 
 /**
  * API to find user by username (OK)
  */
 
-router.get("/:userName", async (req, res) => {
+router.get("/:userName", checkAuth, async (req, res) => {
   try {
     User.findOne({ userName: req.params.userName }, function (err, user) {
       if (err) {
@@ -81,7 +83,7 @@ router.get("/:userName", async (req, res) => {
 /**
  * API to find all users (OK)
  */
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     User.find({})
       .where("isDisabled")
@@ -106,12 +108,12 @@ router.get("/", async (req, res) => {
 
 //update user API
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
   try {
 
-    console.log(req.body.password);
-    let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
-    User.findOne({ _id: req.params.id }, function (err, user) {
+    // console.log(req.body.password);
+    // let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
+    User.findOne({ _id: req.params.id }, async function (err, user) {
       if (err) {
         console.log(err);
         const updateUserMongodbErrorResponse = new BaseResponse(500, "Internal server error", err);
@@ -119,28 +121,41 @@ router.put("/:id", async (req, res) => {
       } else {
         console.log(user);
 
-        user.set({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          phoneNumber: req.body.phoneNumber,
-          address: req.body.address,
-          email: req.body.email,
-          role: req.body.role,
-          password: hashedPassword,
-        });
-        
-
-        user.save(function (err, savedUser) {
-          if (err) {
-            console.log(err);
-            const saveUserMongodbErrorResponse = new BaseResponse(200, "Query successful", savedUser);
-            res.json(saveUserMongodbErrorResponse.toObject());
-          } else {
-            console.log(user);
-            const createUserResponse = new BaseResponse(200, "Query successful", user);
-            res.json(createUserResponse.toObject());
+        await User.updateOne({ _id: req.params.id }, {
+          $set: {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            phoneNumber: req.body.phoneNumber,
+            address: req.body.address,
+            email: req.body.email,
+            role: req.body.role,
           }
-        });
+        })
+        const createUserResponse = new BaseResponse(200, "Query successful", true);
+        res.json(createUserResponse.toObject());
+
+        /*         user.set({
+                  firstName: req.body.firstName,
+                  lastName: req.body.lastName,
+                  phoneNumber: req.body.phoneNumber,
+                  address: req.body.address,
+                  email: req.body.email,
+                  role: req.body.role,
+                  password: hashedPassword,
+                });
+                
+        
+                user.save(function (err, savedUser) {
+                  if (err) {
+                    console.log(err);
+                    const saveUserMongodbErrorResponse = new BaseResponse(200, "Query successful", savedUser);
+                    res.json(saveUserMongodbErrorResponse.toObject());
+                  } else {
+                    console.log(user);
+                    const createUserResponse = new BaseResponse(200, "Query successful", user);
+                    res.json(createUserResponse.toObject());
+                  }
+                }); */
       }
     });
   } catch (e) {
@@ -151,7 +166,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete User API - In progress-
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   try {
     User.findOne({ _id: req.params.id }, function (err, user) {
       // If statement for Mongo error
@@ -200,7 +215,7 @@ router.delete("/:id", async (req, res) => {
  * API to find user by ID (OK)
  */
 
-router.get("/user/:id", async (req, res) => {
+router.get("/user/:id", checkAuth, async (req, res) => {
   try {
     User.findOne({ _id: req.params.id }, function (err, user) {
       console.log(req.params.id);
@@ -232,7 +247,7 @@ router.get("/user/:id", async (req, res) => {
  * API to find user's role by user ID (OK)
  */
 
-router.get("/:userName/role", async (req, res) => {
+router.get("/:userName/role", checkAuth, async (req, res) => {
   try {
     User.findOne({ userName: req.params.userName }, function (err, user) {
       console.log(req.params.userName);

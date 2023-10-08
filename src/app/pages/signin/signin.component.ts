@@ -17,6 +17,7 @@ import { HttpClient } from "@angular/common/http";
 import { Message } from "primeng/api/message";
 import { MessageService } from "primeng/api";
 import { ConfirmationService } from "primeng/api";
+import { SigninService } from "src/app/services/signin.service";
 
 
 @Component({
@@ -35,13 +36,16 @@ export class SigninComponent implements OnInit {
     this.display = true;
   }
 
+
   constructor(
     private router: Router,
     private cookieService: CookieService,
     private fb: FormBuilder,
     private http: HttpClient,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private signinService: SigninService,
+
   ) {
     
   }
@@ -67,18 +71,16 @@ export class SigninComponent implements OnInit {
     const userName = this.form.controls.userName.value;
     const password = this.form.controls.password.value;
 
-    this.http
-      .post("/api/session/signin", {
-        userName,
-        password,
-      })
-      .subscribe(
+    this.signinService.logIn(userName, password);
+
+/*     .subscribe(
         (res) => {
           if (res["data"].userName) {
             this.cookieService.set("session_user", res["data"].userName, 1);
             // Need to be able to send lastName and firstName to home page to display in menu.
 
             sessionStorage.setItem("name", `${res["data"].firstName} ${res["data"].lastName}`);
+            //this.token = res["data"].token;
             this.router.navigate(["/"]);
             console.log(res["data"].userName);
             console.log(res["data"].firstName);
@@ -90,6 +92,6 @@ export class SigninComponent implements OnInit {
           console.log(err);
           this.errorMessage = err.error.msg;
         }
-      );
+      ); */
   }
 }

@@ -19,7 +19,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
-import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FlexModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
@@ -97,7 +97,8 @@ import { FamilyDayComponent } from "./pages/family-day/family-day.component";
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { CreateClientDialogComponent } from './shared/create-client-dialog/create-client-dialog.component';
 import { UpdateClientDialogComponent } from './shared/update-client-dialog/update-client-dialog.component';
-import { AdminNewYearComponent } from './admin-new-year/admin-new-year.component';
+import { AdminNewYearComponent } from './pages/admin-new-year/admin-new-year.component';
+import { AuthInterceptor } from "./services/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -200,7 +201,12 @@ import { AdminNewYearComponent } from './admin-new-year/admin-new-year.component
     CreateClientDialogComponent,
     UpdateClientDialogComponent
   ],
-  providers: [ConfirmationService, MessageService],
+  providers: [
+    ConfirmationService,
+    MessageService,
+    {provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

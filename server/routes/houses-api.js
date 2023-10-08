@@ -9,10 +9,10 @@ const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const House = require("../models/house");
 const NewYear = require("../models/new-year");
-
+const checkAuth = require("../middleware/check-auth");
 
 // Create  API
-router.post("/", async (req, res) => {
+router.post("/", checkAuth, async (req, res) => {
   let status = 200;
 
   try {
@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
 // End CreateAPI
 
 // Find  by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkAuth, async (req, res) => {
   try {
     House.findOne({ _id: req.params.id }, function (err, house) {
       if (err) {
@@ -105,7 +105,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Find  by name
-router.get("/name/:name", async (req, res) => {
+router.get("/name/:name", checkAuth, async (req, res) => {
   try {
     House.findOne({ nursingHome: req.params.name }, function (err, house) {
       if (err) {
@@ -124,7 +124,7 @@ router.get("/name/:name", async (req, res) => {
 });
 
 // Find all houses needed to be updated
-router.post("/email", async (req, res) => {
+router.post("/email", checkAuth, async (req, res) => {
   try {
     let startDate = req.body.startDate;
     let endDate = req.body.endDate;
@@ -146,7 +146,7 @@ router.post("/email", async (req, res) => {
 });
 
 // Find all 
-router.get("/", async (req, res) => {
+router.get("/", checkAuth, async (req, res) => {
   try {
     House.find({} /* )
       .where("isDisabled")
@@ -171,7 +171,7 @@ router.get("/", async (req, res) => {
 });
 
 // Find all active 
-router.get("/find/active", async (req, res) => {
+router.get("/find/active", checkAuth, async (req, res) => {
   console.log("houses/find/active");
   try {
     let houses = await House.find({ isActive: true }).sort({ dateLastUpdate: -1, _id: 1 });
@@ -329,7 +329,7 @@ router.get("/find/active", async (req, res) => {
  * API to update  (OK)
  */
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", checkAuth, async (req, res) => {
   try {
     House.findOne({ _id: req.params.id }, function (err, house) {
       if (err) {
@@ -386,7 +386,7 @@ router.put("/:id", async (req, res) => {
 /**
  * API to delete
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkAuth, async (req, res) => {
   try {
     House.findOne({ _id: req.params.id }, function (err, house) {
       if (err) {
@@ -422,7 +422,7 @@ router.delete("/:id", async (req, res) => {
 /**
  * API to delete many
  */
-router.delete("/", async (req, res) => {
+router.delete("/", checkAuth, async (req, res) => {
   try {
 
     House.deleteMany({}, function (err, result) {
@@ -445,7 +445,7 @@ router.delete("/", async (req, res) => {
 });
 
 // Create many houses  API
-router.post("/add-many/", async (req, res) => {
+router.post("/add-many/", checkAuth, async (req, res) => {
 
   try {
     let houses = req.body.houses;
