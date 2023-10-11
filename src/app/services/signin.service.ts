@@ -16,6 +16,7 @@ import { CookieService } from "ngx-cookie-service";
 export class SigninService {
   private token: string;
   private tokenTimer: any;
+  result: string;
 
   constructor(
     private http: HttpClient,
@@ -24,12 +25,12 @@ export class SigninService {
   ) {}
 
   getToken() {
-    console.log("this.token");
-    console.log(this.token);
+   // console.log("this.token");
+   // console.log(this.token);
     return this.token;
   }
 
-  logIn(userName, password) {
+  async logIn(userName, password): Promise<string> {
     this.http
       .post("/api/session/signin", {
         userName: userName,
@@ -61,19 +62,22 @@ export class SigninService {
               console.log(expirationDate);
               this.saveAuthData(this.token, expirationDate);
               this.router.navigate(["/"]);
-              console.log(this.token);
-              console.log(res["data"].user.userName);
-              console.log(res["data"].user.firstName);
-              console.log(res["data"].user.lastName);
+             // console.log(this.token);
+              //console.log(res["data"].user.userName);
+              //console.log(res["data"].user.firstName);
+             // console.log(res["data"].user.lastName);
             }
           }
+          this.result = "Success";
         },
         (err) => {
           console.log("error");
           console.log(err.error.msg);
           // this.errorMessage = err.error.msg;
+          this.result = err.error.msg;
         }
       );
+      return this.result;
   }
 
   autoAuthUser() {

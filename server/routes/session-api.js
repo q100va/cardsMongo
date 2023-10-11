@@ -43,7 +43,7 @@ router.post("/signin",  async (req, res) => {
             );
             //user["token"] = token;
             console.log(user);
-            const signinResponse = new BaseResponse(200, "Login Successful", { user: user, token: token, expiresIn: 3600 });
+            const signinResponse = new BaseResponse(200, "Login Successful", { user: user, token: token, expiresIn: 14400 });
             console.log(signinResponse.toObject());
             res.json(signinResponse.toObject());
           } else {

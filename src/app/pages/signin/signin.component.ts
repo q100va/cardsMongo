@@ -71,7 +71,14 @@ export class SigninComponent implements OnInit {
     const userName = this.form.controls.userName.value;
     const password = this.form.controls.password.value;
 
-    this.signinService.logIn(userName, password);
+   this.signinService.logIn(userName, password).then(
+    (res) => {
+      if (res != "Success") this.errorMessage = res;
+    },
+    (err) => {   
+      console.log(err); 
+    }
+   );
 
 /*     .subscribe(
         (res) => {

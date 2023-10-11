@@ -17,13 +17,13 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const authToken = this.signinService.getToken();
-    console.log("authToken");
-    console.log(authToken);
+   // console.log("authToken");
+   // console.log(authToken);
     const authRequest = req.clone({
         headers: req.headers.set('Authorization', "Bearer " + authToken)
     })
-    console.log("authRequest");
-    console.log(authRequest);
+   // console.log("authRequest");
+   // console.log(authRequest);
     return next.handle(authRequest);
   }
 }
