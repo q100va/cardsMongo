@@ -443,7 +443,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
       if (!senior.patronymic) senior.patronymic = '';
       if (!senior.comment1) senior.comment1 = '';
       if (!senior.comment2) senior.comment2 = '';
-      if (!senior.linkPhoto) senior.linkPhoto = '';
+      if (!senior.linkPhoto) senior.linkPhoto = null;
       if (!senior.nameDay) senior.nameDay = '';
       if (senior.gender == 'ж') senior.gender = 'Female';
       if (senior.gender == 'м') senior.gender = 'Male';

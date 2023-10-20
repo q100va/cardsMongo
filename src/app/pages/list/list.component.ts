@@ -961,4 +961,16 @@ export class ListComponent implements OnInit {
       }
     );
   }
+
+  restorePluses() {
+    this.orderService.restorePluses().subscribe(
+      (res) => {
+        alert(res + " обновлено");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
 }

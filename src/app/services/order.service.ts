@@ -163,6 +163,8 @@ export class OrderService {
     return this.http.get("/api/clients/find-contacts/" + contactType);
   }
 
+  
+
   createOrder(newOrder: Order, prohibitedId: []): Observable<any> {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
@@ -344,6 +346,10 @@ export class OrderService {
 
   moveInstitutes(): Observable<any> {
     return this.http.get("/api/orders/clients/move-institutes");
+  }
+
+  restorePluses(): Observable<any> {
+    return this.http.get("/api/orders/hb/restore-pluses");
   }
 
 }
