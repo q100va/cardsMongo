@@ -36,8 +36,12 @@ export class OrderDetailsComponent implements OnInit {
   isNotOnlyOne = true;
   openHolidays = [
     "Дни рождения ноября 2023",
+    "Дни рождения октября 2023",
+    "Дни рождения декабря 2023",
     "Именины ноября 2023",
-    "День учителя и дошкольного работника 2023",
+    "Именины октября 2023",
+    "Именины декабря 2023",
+    "Новый год 2024"
   ];
   constructor(
     private router: Router,

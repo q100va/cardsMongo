@@ -788,16 +788,18 @@ export class NameDayComponent implements OnInit {
           celebrator.firstName +
           " " +
           celebrator.patronymic +
-          " " +
-          celebrator.fullDayBirthday +
+          " (" +
+          celebrator.specialComment +
+          ") " +
+          celebrator.nameDay +
           " " +
           celebrator.comment1 +
           " " +
           celebrator.linkPhoto +
-          " " +
-          celebrator.specialComment +
           "\n";
       }
+
+
       addresses = addresses + "\n";
     }
     if (this.showInstruction) {

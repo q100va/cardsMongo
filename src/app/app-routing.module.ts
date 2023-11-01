@@ -102,17 +102,17 @@ const routes: Routes = [
       {
         path: "clients",
         component: ClientListComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard],
       },
       {
         path: "clients/update/:id",
         component: ClientDetailsComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard],
       },
       {
         path: "clients/create/new",
         component: ClientCreateComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard],
       },
       {
         path: "users/user/profile",

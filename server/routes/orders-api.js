@@ -448,7 +448,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
 });
 
 async function deletePluses(deletedOrder, full) {
-  let deletedLineItems = full ? deletedOrder.lineItems : deletedOrder.deleted[deletedOrder.deleted.length - 1];
+  let deletedLineItems = full ? deletedOrder.lineItems : [deletedOrder.deleted[deletedOrder.deleted.length - 1]];
 
   if (deletedOrder.holiday == "Дни рождения ноября 2023" || deletedOrder.holiday == "Дни рождения декабря 2023" || deletedOrder.holiday == "Дни рождения октября 2023") {
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -3264,7 +3264,7 @@ async function searchSeniorNewYear(
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
-    //filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
+    //filter.comment1 = "(1 корп. 3 этаж)"; //CANCEL
     //filter.comment1 = "(2 корп.)"; //CANCEL
     console.log("filter");
     console.log(filter);
@@ -4533,8 +4533,8 @@ router.patch("/edit/:orderId", checkAuth, async (req, res) => {
     }
     let updatedOrder = await Order.findOne({ _id: req.params.orderId });
 
-    console.log("updatedOrder.lineItems[4] ");
-    console.log(updatedOrder.lineItems[4]);
+   // console.log("updatedOrder.lineItems[4] ");
+   // console.log(updatedOrder.lineItems[4]);
 
     await deletePluses(updatedOrder, false);
 
@@ -4644,21 +4644,21 @@ router.get("/hb/restore-pluses", checkAuth, async (req, res) => {
     const celebratorsNovember = await List.find({ absent: false });
     const celebratorsDecember = await ListNext.find({ absent: false });
 
-    for (let celebrator of celebratorsOctober) {
+/*     for (let celebrator of celebratorsOctober) {
       console.log(celebrator._id);
       let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
       await ListBefore.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
-    }
+    } */
     for (let celebrator of celebratorsNovember) {
       console.log(celebrator._id);
       let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
       await List.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
     }
-    for (let celebrator of celebratorsDecember) {
+/*     for (let celebrator of celebratorsDecember) {
       console.log(celebrator._id);
       let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
       await ListNext.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
-    }
+    } */
 
     const confirmOrderResponse = new BaseResponse("200", "Plus amounts updated", true);
     res.json(confirmOrderResponse.toObject());
