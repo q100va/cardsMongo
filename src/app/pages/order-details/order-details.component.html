@@ -47,7 +47,7 @@
                         <button *ngIf="isEdit" mat-raised-button (click)="viewList()" color="primary">К
                             просмотру</button>
                     </section>
-                    <mat-card-content *ngFor="let lineItem of order.lineItems">
+                 <mat-card-content *ngFor="let lineItem of order.lineItems">
 
 
                         <p style="font-weight: bold; margin: 0; ">{{lineItem.address}}</p>
@@ -78,7 +78,38 @@
                             </span>
                         </div>
                         <br />
-                    </mat-card-content>
+                    </mat-card-content> 
+
+
+                    <!--                     <mat-card-content *ngFor="let lineItem of order.lineItems">
+
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+                            {{celebrator.lastName}}
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
+
+                            <p style=" margin: 0; ">{{lineItem.address + (celebrator.comment1 ? ", " +
+                                celebrator.comment1 : '')}}</p>
+                            <br />
+                        </div>
+
+                    </mat-card-content> -->
+
+<!--                     <mat-card-content *ngFor="let lineItem of order.lineItems">
+
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+                            {{lineItem.nursingHome}}
+                            *
+                            {{celebrator.lastName}}
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
+                            *
+
+                  {{lineItem.address}}
+                            <br />
+                        </div>
+
+                    </mat-card-content> -->
 
                 </mat-card>
             </div>

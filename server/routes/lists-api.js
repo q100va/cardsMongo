@@ -93,7 +93,7 @@ router.delete("/double", checkAuth, async (req, res) => {
 router.post("/:month", checkAuth, async (req, res) => {
   try {
     console.log("0- inside Create list API");
-   // let result = await findAllMonthCelebrators(req.params.month);
+    // let result = await findAllMonthCelebrators(req.params.month);
     let result = await findAllMonthCelebrators(10);
     console.log("4-inside Create list API " + result);
     //const newList = newList1.slice();
@@ -134,10 +134,10 @@ async function findAllMonthCelebrators(month) {
   console.log("notActiveHousesNames");
   console.log(notActiveHousesNames);
 
- // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
-  
- let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome:  "КРАСНОВИШЕРСК" , dateEnter: { $lt: new Date("2023-06-15") }});
- // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ЖЕЛЕЗНОГОРСК", dateEnter: { $lt: new Date("2023-03-15") } }); //
+  // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: { $nin: notActiveHousesNames } });
+
+  let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "КРАСНОВИШЕРСК", dateEnter: { $lt: new Date("2023-06-15") } });
+  // let list = await Senior.find({ "monthBirthday": month, "isDisabled": false, dateExit: null, isRestricted: false, nursingHome: "ЖЕЛЕЗНОГОРСК", dateEnter: { $lt: new Date("2023-03-15") } }); //
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -599,29 +599,29 @@ async function findAllNYCelebrators(houses) {
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
   console.log("2- seniors" + list.length);
 
-/*   await House.updateMany({},
-    {$set:{
-      "statistic.newYear.time": 0,
-      "statistic.newYear.plus0": 0,
-      "statistic.newYear.plus1": 0,
-      "statistic.newYear.plus2": 0,
-      "statistic.newYear.plus3": 0,
-      "statistic.newYear.specialMen": 0,
-      "statistic.newYear.specialWomen": 0,
-      "statistic.newYear.oldMen": 0,
-      "statistic.newYear.oldWomen": 0,
-      "statistic.newYear.yangMen": 0,
-      "statistic.newYear.yangWomen": 0,
-      "statistic.newYear.amount": 0,
-      "statistic.newYear.specialMenPlus": 0,
-      "statistic.newYear.specialWomenPlus": 0,
-      "statistic.newYear.oldMenPlus": 0,
-      "statistic.newYear.oldWomenPlus": 0,
-      "statistic.newYear.yangMenPlus": 0,
-      "statistic.newYear.yangWomenPlus": 0,
-    }
-  
-  }); */
+  /*   await House.updateMany({},
+      {$set:{
+        "statistic.newYear.time": 0,
+        "statistic.newYear.plus0": 0,
+        "statistic.newYear.plus1": 0,
+        "statistic.newYear.plus2": 0,
+        "statistic.newYear.plus3": 0,
+        "statistic.newYear.specialMen": 0,
+        "statistic.newYear.specialWomen": 0,
+        "statistic.newYear.oldMen": 0,
+        "statistic.newYear.oldWomen": 0,
+        "statistic.newYear.yangMen": 0,
+        "statistic.newYear.yangWomen": 0,
+        "statistic.newYear.amount": 0,
+        "statistic.newYear.specialMenPlus": 0,
+        "statistic.newYear.specialWomenPlus": 0,
+        "statistic.newYear.oldMenPlus": 0,
+        "statistic.newYear.oldWomenPlus": 0,
+        "statistic.newYear.yangMenPlus": 0,
+        "statistic.newYear.yangWomenPlus": 0,
+      }
+    
+    }); */
 
   let updatedCelebrators = [];
   for (let celebrator of list) {
@@ -632,30 +632,30 @@ async function findAllNYCelebrators(houses) {
 
     let cloneCelebrator = await createCloneCelebrator(celebrator);
 
-   
+
 
     if (cloneCelebrator.category == "specialMen") {
-      await House.updateOne ({nursingHome: cloneCelebrator.nursingHome}, {$inc: {"statistic.newYear.specialMen" : 1, "statistic.newYear.amount" : 1, "statistic.newYear.plus0": 1}} );
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.newYear.specialMen": 1, "statistic.newYear.amount": 1, "statistic.newYear.plus0": 1 } });
     }
     if (cloneCelebrator.category == "specialWomen") {
-      await House.updateOne ({nursingHome: cloneCelebrator.nursingHome}, {$inc: {"statistic.newYear.specialWomen" : 1, "statistic.newYear.amount" : 1, "statistic.newYear.plus0": 1}} );
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.newYear.specialWomen": 1, "statistic.newYear.amount": 1, "statistic.newYear.plus0": 1 } });
     }
     if (cloneCelebrator.category == "oldMen") {
-      await House.updateOne ({nursingHome: cloneCelebrator.nursingHome}, {$inc: {"statistic.newYear.oldMen" : 1, "statistic.newYear.amount" : 1, "statistic.newYear.plus0": 1}} );
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.newYear.oldMen": 1, "statistic.newYear.amount": 1, "statistic.newYear.plus0": 1 } });
     }
     if (cloneCelebrator.category == "oldWomen") {
-      await House.updateOne ({nursingHome: cloneCelebrator.nursingHome}, {$inc: {"statistic.newYear.oldWomen" : 1, "statistic.newYear.amount" : 1, "statistic.newYear.plus0": 1}} );
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.newYear.oldWomen": 1, "statistic.newYear.amount": 1, "statistic.newYear.plus0": 1 } });
     }
     if (cloneCelebrator.category == "yangMen") {
-      await House.updateOne ({nursingHome: cloneCelebrator.nursingHome}, {$inc: {"statistic.newYear.yangMen" : 1, "statistic.newYear.amount" : 1, "statistic.newYear.plus0": 1}} );
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.newYear.yangMen": 1, "statistic.newYear.amount": 1, "statistic.newYear.plus0": 1 } });
     }
     if (cloneCelebrator.category == "yangWomen") {
-      await House.updateOne ({nursingHome: cloneCelebrator.nursingHome}, {$inc: {"statistic.newYear.yangWomen" : 1, "statistic.newYear.amount" : 1, "statistic.newYear.plus0": 1}} );
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.newYear.yangWomen": 1, "statistic.newYear.amount": 1, "statistic.newYear.plus0": 1 } });
     }
 
     updatedCelebrators.push(cloneCelebrator);
   }
-  await House.updateMany ({nursingHome: {$in : namesOfUpdatedNursingHome}}, {$inc: {"statistic.newYear.time" : 1}} );
+  await House.updateMany({ nursingHome: { $in: namesOfUpdatedNursingHome } }, { $inc: { "statistic.newYear.time": 1 } });
 
   //console.log(list);
   //console.log("celebrator");
@@ -668,11 +668,11 @@ async function findAllNYCelebrators(houses) {
   const options = { ordered: false };
   let finalList = await NewYear.insertMany(newList, options);
 
-  await 
+  await
 
-  //console.log(finalList);
+    //console.log(finalList);
 
-  console.log(`3- ${finalList.length} documents were inserted`);
+    console.log(`3- ${finalList.length} documents were inserted`);
 
   result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length - finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
   //console.log("3 - final" + finalList); 
@@ -1228,7 +1228,7 @@ router.post("/new-year/check-doubles", checkAuth, async (req, res) => {
 });
 
 async function findAllNYDoubles(house) {
-  let fullHouse = await March8.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
+  let fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
   let fullDataHouse = [];
   /*   console.log("fullHouse");
     console.log(fullHouse); */
@@ -1260,9 +1260,9 @@ async function findAllNYDoubles(house) {
     }
     for (let i = 0; i < someHouses.length; i++) {
       if (i == 0) {
-        await March8.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
+        await NewYear.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
       } else {
-        await March8.deleteOne({ _id: someHouses[i]._id });
+        await NewYear.deleteOne({ _id: someHouses[i]._id });
       }
     }
   }
@@ -1278,7 +1278,7 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
-    let result = await checkAllNDFullness(req.body.nursingHome);
+    let result = await checkAllNYFullness(req.body.nursingHome);
     console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
@@ -1355,6 +1355,32 @@ async function checkAllNYFullness(house) {
           await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
           amount++;
         } */
+  }
+
+  //*****/
+
+  let seniorsAbsent = await Senior.find({ isDisabled: false, dateExit: { $ne: null }, isRestricted: false, nursingHome: house });
+  console.log("seniorsAbsent" );
+  console.log(seniorsAbsent );
+
+  let fullHouseAbsent = await NewYear.find({ nursingHome: house, absent: true }, { seniorId: 1 }); //
+  console.log("fullHouseAbsent" );
+  console.log(fullHouseAbsent );
+
+  for (let senior of seniorsAbsent) {
+   // let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+    let seniorIndex = fullHouseAbsent.findIndex(item => item.seniorId == senior._id);
+    console.log("seniorIndex " + seniorIndex);
+
+    if (seniorIndex == -1) {
+
+      let result = await NewYear.updateOne({ seniorId: senior._id }, { $set: { absent: true } });
+      console.log(result.nModified );
+
+    } else {
+      //console.log("seniorIndex " + seniorIndex);
+    }
+
   }
 
   return amount.toString();
@@ -1479,11 +1505,11 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     }
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
-
+    let nameDays = await SpecialDay.find({ nursingHome: "ВОЛГОГРАД_КРИВОРОЖСКАЯ", yearBirthday: 0, dateExit: null, isDisabled: false });
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
     // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
-    let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 10, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
+    //  let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 10, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
     let updatedNursingHome = await House.find({ isActive: true });

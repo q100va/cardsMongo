@@ -42,7 +42,7 @@ export class CheckListsComponent implements OnInit {
           this.houses.push(item.nursingHome);
           } 
         }   */ 
-        this.houses = ["ШАХУНЬЯ", ];
+        this.houses = ["ТОЛЬЯТТИ", "ВЛАДИКАВКАЗ", "БАЗГИЕВО", "СЕМЕНОВСКОЕ", "ПЕРВОМАЙСКИЙ", "ЖУКОВКА", "" ];
         //   this.checkingHouse = this.houses[0];
       },
       (err) => {

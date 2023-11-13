@@ -2738,7 +2738,7 @@ async function createOrderNewYear(newOrder, prohibitedId) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
+        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.2)
       }
       if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
     } else {
@@ -2768,7 +2768,7 @@ async function createOrderNewYear(newOrder, prohibitedId) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
+        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.2)
       }
     }
 
@@ -2822,7 +2822,7 @@ async function createOrderNewYear(newOrder, prohibitedId) {
       "specialMen": specialMenAmount,
       "yangWomen": yangWomenAmount,
       "yangMen": yangMenAmount,
-      "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3),
+      "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.2),
       "oneRegion": Math.ceil(newOrder.amount * 0.33)
     }
 
