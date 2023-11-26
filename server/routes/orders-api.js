@@ -1415,13 +1415,22 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   //let period = await Period.findOne({ key:0 });
   let period;
   if (newOrder.holiday == "Дни рождения декабря 2023") {
-    period = await Period.findOne({ isActive: true });
+    period = {
+      "date1": 26,
+      "date2": 31,
+      "isActive": true,
+      "key": 5,
+      "maxPlus": 4,
+      "secondTime": false,
+      "scoredPluses": 2
+    }
+/*     period = await Period.findOne({ isActive: true });
     if (!period)
       return {
         result: "Обратитесь к администратору. Заявка не сформирована. Не найден активный период.",
         success: false
-      }; /* CANCEL */
-    console.log('period');
+      };*/ /* CANCEL */
+    /*console.log('period');
     console.log(period);
     let periodResult = await checkActivePeriod(period, month);
     console.log('periodResult');
@@ -1430,7 +1439,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       result: "Обратитесь к администратору. Заявка не сформирована. Не найден активный период.",
       success: false
     };
-    if (typeof periodResult == "string") period = await Period.findOne({ isActive: true }); /* CANCEL */
+    if (typeof periodResult == "string") period = await Period.findOne({ isActive: true }); */ /* CANCEL */
   }
 
 
