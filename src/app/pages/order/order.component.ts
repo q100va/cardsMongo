@@ -42,7 +42,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения ноября 2023";
+  holiday: string = "Дни рождения декабря 2023";
   lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "email",
@@ -445,10 +445,10 @@ export class OrderComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения ноября 2023";
+      this.holiday = "Дни рождения декабря 2023";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения декабря 2023";
+      this.holiday = "Дни рождения января 2024";
     }
   }
 
@@ -462,10 +462,10 @@ export class OrderComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения ноября 2023";
+      this.holiday = "Дни рождения декабря 2023";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения октября 2023";
+      this.holiday = "Дни рождения ноября 2023";
     }
   }
 
@@ -614,7 +614,7 @@ export class OrderComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения ноября 2023";
+    this.holiday = "Дни рождения декабря 2023";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -779,7 +779,7 @@ export class OrderComponent implements OnInit {
                         // console.log("res");
                         // console.log(res);
                         if (!result) {
-                          this.fillOrder([]);
+                          this.fillOrder([],[]);
                         } else {
                           let usernameList = "";
                           for (let user of result.users) {
@@ -795,7 +795,7 @@ export class OrderComponent implements OnInit {
                               " у волонтера(ов): " +
                               usernameList +
                               ". Вы уверены, что это не дубль?",
-                            accept: () => this.fillOrder(result.seniorsIds),
+                            accept: () => this.fillOrder(result.seniorsIds, []),//result.houses
                             reject: () => (this.clicked = false),
                           });
                         }
@@ -815,7 +815,7 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  fillOrder(prohibitedId: []) {
+  fillOrder(prohibitedId: [], restrictedHouses: []) {
     this.spinner = true;
 
     /*     let institutes = this.institutes.getRawValue();
@@ -882,7 +882,7 @@ export class OrderComponent implements OnInit {
     //console.log("newOrder");
     //console.log(newOrder);
 
-    this.orderService.createOrder(newOrder, prohibitedId).subscribe(
+    this.orderService.createOrder(newOrder, prohibitedId, restrictedHouses).subscribe(
       async (res) => {
         this.spinner = false;
         this.clicked = false;

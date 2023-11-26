@@ -165,7 +165,7 @@ export class OrderService {
 
   
 
-  createOrder(newOrder: Order, prohibitedId: []): Observable<any> {
+  createOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -186,10 +186,11 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
+      restrictedHouses: restrictedHouses
     });
   }
 
-  createOrderNewYear(newOrder: Order, prohibitedId: []): Observable<any> {
+  createOrderNewYear(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
     return this.http.post("/api/orders/new-year/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -210,6 +211,7 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
+      restrictedHouses: restrictedHouses
     });
   }
 

@@ -450,37 +450,37 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
 async function deletePluses(deletedOrder, full) {
   let deletedLineItems = full ? deletedOrder.lineItems : [deletedOrder.deleted[deletedOrder.deleted.length - 1]];
 
-  if (deletedOrder.holiday == "Дни рождения ноября 2023" || deletedOrder.holiday == "Дни рождения декабря 2023" || deletedOrder.holiday == "Дни рождения октября 2023") {
+  if (deletedOrder.holiday == "Дни рождения декабря 2023" || deletedOrder.holiday == "Дни рождения января 2024" || deletedOrder.holiday == "Дни рождения ноября 2023") {
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
     const month = await Month.findOne({ isActive: true });
     let monthNumber = month.number;
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (deletedOrder.holiday == "Дни рождения декабря 2023") {
+    if (deletedOrder.holiday == "Дни рождения января 2024") {
       monthNumber = monthNumber + 1;
     }
-    if (deletedOrder.holiday == "Дни рождения октября 2023") {
+    if (deletedOrder.holiday == "Дни рождения ноября 2023") {
       monthNumber = monthNumber - 1;
     }
     for (let lineItem of deletedLineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == monthNumber) {
 
-          if (deletedOrder.holiday == "Дни рождения декабря 2023") {
+          if (deletedOrder.holiday == "Дни рождения января 2024") {
             await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListNext.findOne({ _id: person.celebrator_id });
           }
-          if (deletedOrder.holiday == "Дни рождения ноября 2023") {
+          if (deletedOrder.holiday == "Дни рождения декабря 2023") {
             await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await List.findOne({ _id: person.celebrator_id });
           }
-          if (deletedOrder.holiday == "Дни рождения октября 2023") {
+          if (deletedOrder.holiday == "Дни рождения ноября 2023") {
             await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListBefore.findOne({ _id: person.celebrator_id });
           }
 
-          if (deletedOrder.holiday == "Дни рождения ноября 2023") {
+          if (deletedOrder.holiday == "Дни рождения декабря 2023") {
             period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
             activePeriod = await Period.findOne({ isActive: true });
             if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
@@ -520,21 +520,21 @@ async function deletePluses(deletedOrder, full) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины ноября 2023") {
+    if (deletedOrder.holiday == "Именины декабря 2023") {
       for (let lineItem of deletedLineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
         }
       }
     } else {
-      if (deletedOrder.holiday == "Именины декабря 2023") {
+      if (deletedOrder.holiday == "Именины января 2024") {
         for (let lineItem of deletedLineItems) {
           for (let person of lineItem.celebrators) {
             await NameDayNext.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
           }
         }
       } else {
-        if (deletedOrder.holiday == "Именины октября 2023") {
+        if (deletedOrder.holiday == "Именины ноября 2023") {
           for (let lineItem of deletedLineItems) {
             for (let person of lineItem.celebrators) {
               await NameDayBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -665,7 +665,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
 });
 
 async function restorePluses(updatedOrder) {
-  if (updatedOrder.holiday == "Дни рождения ноября 2023" || updatedOrder.holiday == "Дни рождения декабря 2023" || updatedOrder.holiday == "Дни рождения октября 2023") {
+  if (updatedOrder.holiday == "Дни рождения декабря 2023" || updatedOrder.holiday == "Дни рождения января 2024" || updatedOrder.holiday == "Дни рождения ноября 2023") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -674,20 +674,20 @@ async function restorePluses(updatedOrder) {
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (updatedOrder.holiday == "Дни рождения декабря 2023") {
+    if (updatedOrder.holiday == "Дни рождения января 2024") {
       monthNumber = monthNumber + 1;
     }
 
     for (let lineItem of updatedOrder.lineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == month.number) {
-          if (updatedOrder.holiday == "Дни рождения декабря 2023") {
+          if (updatedOrder.holiday == "Дни рождения января 2024") {
             await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения ноября 2023") {
+          if (updatedOrder.holiday == "Дни рождения декабря 2023") {
             await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения октября 2023") {
+          if (updatedOrder.holiday == "Дни рождения ноября 2023") {
             await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
 
@@ -732,21 +732,21 @@ async function restorePluses(updatedOrder) {
       }
     }
   } else {
-    if (updatedOrder.holiday == "Именины ноября 2023") {
+    if (updatedOrder.holiday == "Именины декабря 2023") {
       for (let lineItem of updatedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
         }
       }
     } else {
-      if (updatedOrder.holiday == "Именины октября 2023") {
+      if (updatedOrder.holiday == "Именины ноября 2023") {
         for (let lineItem of updatedOrder.lineItems) {
           for (let person of lineItem.celebrators) {
             await NameDayBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
         }
       } else {
-        if (updatedOrder.holiday == "Именины декабря 2023") {
+        if (updatedOrder.holiday == "Именины января 2024") {
           for (let lineItem of updatedOrder.lineItems) {
             for (let person of lineItem.celebrators) {
               await NameDayNext.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -972,25 +972,28 @@ router.post("/check-double/", checkAuth, async (req, res) => {
         let result = {};
         let usernames = [];
         let seniorsIds = [];
-
+        let houses = [];
         if (orders.length > 0) {
           for (let order of orders) {
             usernames.push(order.userName);
             for (let lineItem of order.lineItems) {
+               houses.push(lineItem.nursingHome);
               for (let celebrator of lineItem.celebrators) {
                 seniorsIds.push(celebrator._id);
+               
               }
             }
           }
+          let h = new Set(houses);
           let u = new Set(usernames);
           result.users = Array.from(u);
-
+          result.houses = Array.from(h);
           result.seniorsIds = seniorsIds;
         } else { result = null; }
 
-        // console.log("result");
+        console.log("result");
         // console.log(order);
-        // console.log(result);
+         console.log(result);
         const readRegionsResponse = new BaseResponse(
           200,
           "Query successful",
@@ -1131,13 +1134,13 @@ async function createOrderForNameDay(order) {
 
   let createdOrder = await Order.create(order);
   for (let element of createdOrder.temporaryLineItems) {
-    if (order.holiday == "Именины ноября 2023") {
+    if (order.holiday == "Именины декабря 2023") {
       await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
     }
-    if (order.holiday == "Именины декабря 2023") {
+    if (order.holiday == "Именины января 2024") {
       await NameDayNext.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
     }
-    if (order.holiday == "Именины октября 2023") {
+    if (order.holiday == "Именины ноября 2023") {
       await NameDayBefore.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
     }
   }
@@ -1329,7 +1332,7 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
     // console.log(req.body.dateOfOrder);
     // console.log(newOrder.dateOfOrder);
 
-    finalResult = await createOrder(newOrder, req.body.prohibitedId);
+    finalResult = await createOrder(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
     const newListResponse = new BaseResponse(200, text, finalResult);
@@ -1380,13 +1383,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
           seniors_ids.push(person.celebrator_id);
         }
 
-        if (holiday == "Дни рождения декабря 2023") {
+        if (holiday == "Дни рождения января 2024") {
           await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения ноября 2023") {
+        if (holiday == "Дни рождения декабря 2023") {
           await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения октября 2023") {
+        if (holiday == "Дни рождения ноября 2023") {
           await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
 
@@ -1404,14 +1407,14 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
 
 
 // Create order
-async function createOrder(newOrder, prohibitedId) {
+async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let month = await Month.findOne({ isActive: true });
   console.log('month');
   console.log(month);
 
   //let period = await Period.findOne({ key:0 });
   let period;
-  if (newOrder.holiday == "Дни рождения ноября 2023") {
+  if (newOrder.holiday == "Дни рождения декабря 2023") {
     period = await Period.findOne({ isActive: true });
     if (!period)
       return {
@@ -1431,24 +1434,24 @@ async function createOrder(newOrder, prohibitedId) {
   }
 
 
-  if (newOrder.holiday == "Дни рождения октября 2023") {
+  if (newOrder.holiday == "Дни рождения ноября 2023") {
     period = {
       "date1": 26,
       "date2": 31,
       "isActive": true,
       "key": 5,
       "maxPlus": 5,
-      "secondTime": false,
+      "secondTime": true,
       "scoredPluses": 2
     }
   }
-  if (newOrder.holiday == "Дни рождения декабря 2023") {
+  if (newOrder.holiday == "Дни рождения января 2024") {
     period = {
       "date1": 1,
       "date2": 5,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3,
+      "maxPlus": 4,
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -1758,9 +1761,9 @@ async function createOrder(newOrder, prohibitedId) {
 
       //if(newOrder.filter.date1 && newOrder.filter.date2) filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: newOrder.filter.date1 };
 
-      seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, newOrder.filter, newOrder.holiday);
+      seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
     } else {
-      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, newOrder.filter, newOrder.holiday);
+      seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
     }
   }
 
@@ -1803,7 +1806,7 @@ async function createOrder(newOrder, prohibitedId) {
 
 // create a list of seniors for the order with special dates
 
-async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId, orderFilter, holiday) {
+async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId, restrictedHouses, orderFilter, holiday) {
   const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
   let day1, day2, fixed;
 
@@ -1871,7 +1874,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
 
   let data = {
     houses: {},
-    restrictedHouses: [],
+    restrictedHouses: [...restrictedHouses],
     restrictedPearson: [...prohibitedId],
     celebratorsAmount: 0,
     date1: day1,
@@ -1910,12 +1913,12 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
 
 // create a list of seniors for the order 789
 
-async function fillOrder(proportion, period, order_id, filter, prohibitedId, orderFilter, holiday) {
+async function fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, orderFilter, holiday) {
   const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
 
   let data = {
     houses: {},
-    restrictedHouses: [],
+    restrictedHouses: [...restrictedHouses],
     restrictedPearson: [...prohibitedId],
     celebratorsAmount: 0,
     /*     date1: period.date1,
@@ -1980,7 +1983,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, ord
 //set restrictions for searching
 
 async function collectSeniors(data, orderFilter, holiday) {
-  if (holiday == "Дни рождения декабря 2023") {
+  if (holiday == "Дни рождения января 2024") {
     console.log('test1');
   }
   console.log('holiday1');
@@ -2097,13 +2100,13 @@ async function collectSeniors(data, orderFilter, holiday) {
       if (result) {
         //console.log(result);
         await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-        if (holiday == "Дни рождения декабря 2023") {
+        if (holiday == "Дни рождения января 2024") {
           await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения ноября 2023") {
+        if (holiday == "Дни рождения декабря 2023") {
           await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения октября 2023") {
+        if (holiday == "Дни рождения ноября 2023") {
           await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
 
@@ -2217,13 +2220,13 @@ async function searchSenior(
     console.log("filter");
     console.log(filter);
 
-    if (holiday == "Дни рождения декабря 2023") {
+    if (holiday == "Дни рождения января 2024") {
       celebrator = await ListNext.findOne(filter);
     }
-    if (holiday == "Дни рождения ноября 2023") {
+    if (holiday == "Дни рождения декабря 2023") {
       celebrator = await List.findOne(filter);
     }
-    if (holiday == "Дни рождения октября 2023") {
+    if (holiday == "Дни рождения ноября 2023") {
       celebrator = await ListBefore.findOne(filter);
     }
 
@@ -2375,7 +2378,7 @@ async function checkActivePeriod(period, month) {
 //check if active period is close TODO!!!!!
 
 async function checkActiveList(period, month, isOutDate, minDate, maxDate) {
-  if (month == 11) {
+  if (month == 12) {
     try {
 
       if (isOutDate) {
@@ -2597,8 +2600,9 @@ router.post("/new-year/:amount", checkAuth, async (req, res) => {
       filter: req.body.filter,
       isCompleted: false
     };
-
-    finalResult = await createOrderNewYear(newOrder, req.body.prohibitedId);
+    console.log("req.body.restrictedHouses");
+    console.log(req.body.restrictedHouses);
+    finalResult = await createOrderNewYear(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
     const newListResponse = new BaseResponse(200, text, finalResult);
@@ -2684,7 +2688,7 @@ async function deleteErrorPlusNewYear(order_id, ...userName) {
 
 
 // Create order
-async function createOrderNewYear(newOrder, prohibitedId) {
+async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
 
 
   /*   let proportion = {};
@@ -2942,7 +2946,7 @@ async function createOrderNewYear(newOrder, prohibitedId) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
-    seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, newOrder.filter);
+    seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
   }
 
@@ -2983,13 +2987,13 @@ async function createOrderNewYear(newOrder, prohibitedId) {
 
 // create a list of seniors for the order 789
 
-async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, orderFilter) {
+async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, orderFilter) {
 
   const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
 
   let data = {
     houses: {},
-    restrictedHouses: [],
+    restrictedHouses: [...restrictedHouses],
     restrictedPearson: [...prohibitedId],
     celebratorsAmount: 0,
     /*     date1: period.date1,
@@ -3225,6 +3229,7 @@ async function searchSeniorNewYear(
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
     secondTime: data.maxPlus > 1 ? true : false,
+   // secondTime: true,
     thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
@@ -3255,7 +3260,9 @@ async function searchSeniorNewYear(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 1;
+
+ let maxPlusAmount = 1;
+  //let maxPlusAmount = 2;
 
   //let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;

@@ -683,10 +683,10 @@ export class NewYearComponent implements OnInit {
                     .subscribe(
                       async (res) => {
                         let result = res["data"];
-                        // console.log("res");
-                        // console.log(res);
+                         console.log("RESULT");
+                       console.log(result);
                         if (!result) {
-                          this.fillOrder([]);
+                          this.fillOrder([],[]);
                         } else {
                           let usernameList = "";
                           for (let user of result.users) {
@@ -702,7 +702,7 @@ export class NewYearComponent implements OnInit {
                               " у волонтера(ов): " +
                               usernameList +
                               ". Вы уверены, что это не дубль?",
-                            accept: () => this.fillOrder(result.seniorsIds),
+                            accept: () => this.fillOrder(result.seniorsIds, []),//result.houses
                             reject: () => (this.clicked = false),
                           });
                         }
@@ -722,7 +722,7 @@ export class NewYearComponent implements OnInit {
     }
   }
 
-  fillOrder(prohibitedId: []) {
+  fillOrder(prohibitedId: [], restrictedHouses: []) {
     this.spinner = true;
 
     /*     let institutes = this.institutes.getRawValue();
@@ -786,7 +786,7 @@ export class NewYearComponent implements OnInit {
     //console.log("newOrder");
     //console.log(newOrder);
 
-    this.orderService.createOrderNewYear(newOrder, prohibitedId).subscribe(
+    this.orderService.createOrderNewYear(newOrder, prohibitedId, restrictedHouses).subscribe(
       async (res) => {
         this.spinner = false;
         this.clicked = false;
