@@ -38,7 +38,7 @@
                                         <mat-card-subtitle>
                                             Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
-                                        <mat-card-subtitle>Праздник: 
+                                        <mat-card-subtitle>Праздник:
                                             <span class="header">{{holiday}}</span>
 
                                         </mat-card-subtitle>
@@ -424,7 +424,7 @@
                                                     {{ category }}
                                                 </mat-option>
                                             </mat-select>
-      
+
                                             <br />
                                         </mat-form-field>
                                     </td>
@@ -523,6 +523,10 @@
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
                         </h2>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-weight: bold; font-style: italic;">
+                            (открытки просим отправить не ранее середины декабря - примерные сроки на
+                            <a href="https://www.pochta.ru/letters">www.pochta.ru/letters</a> - и только простыми отправлениями)
+                        </p>
 
 
                         <p style="font-style: italic; font-family: 'Times New Roman', Times, serif;">
@@ -536,169 +540,168 @@
 
 
 
-                <mat-card-content *ngFor="let lineItem of lineItems">
+                    <mat-card-content *ngFor="let lineItem of lineItems">
 
-                    <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-                    <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}
-                    </p>
-                    <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
-                        {{lineItem.adminComment}}</p>
+                        <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                        <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}
+                        </p>
+                        <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                            {{lineItem.adminComment}}</p>
 
-                    <div *ngFor="let celebrator of lineItem.celebrators">
-                        <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-                        {{celebrator.lastName}}
-                        {{celebrator.firstName}}
-                        {{celebrator.patronymic}}
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+                            <span *ngIf="showIndexes">{{celebrator.index}}. </span>
+                            {{celebrator.lastName}}
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
 
-                        <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span>
-                        {{celebrator.comment1}}
-                        {{celebrator.linkPhoto}}
+                            <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span>
+                            {{celebrator.comment1}}
+                            {{celebrator.linkPhoto}}
 
-                    </div>
-                    <br />
-                </mat-card-content>
+                        </div>
+                        <br />
+                    </mat-card-content>
 
 
 
-                <mat-card-content *ngIf="showInstruction"
-                style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%; ">
+                    <mat-card-content *ngIf="showInstruction"
+                        style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%; ">
 
-                <h3
-                    style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                    Отправляйте письма правильно!</h3>
-                <ul>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
-                        (НЕ заказными).
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Каждому адресату отправляйте отдельную открытку в отдельном конверте
-                        или отдельную почтовую открытку без конверта.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Учтите, что по России письма идут 7-14 дней.
-                    </li>
-                </ul>
+                        <h3
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Отправляйте письма правильно!</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
+                                (НЕ заказными).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Каждому адресату отправляйте отдельную открытку в отдельном конверте
+                                или отдельную почтовую открытку без конверта.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Учтите, что по России письма идут 7-14 дней.
+                            </li>
+                        </ul>
 
-                <h3
-                    style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                    Как писать поздравления?</h3>
-                <ul>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Используйте обращение на "Вы" и по имени-отчеству (если отчество
-                        указано).
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Пишите поздравления от себя лично (не от организации, не от школы, не
-                        от фонда).
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">По возможности укажите ваш
-                        обратный адрес (кроме случаев, когда мы просим этого не далать)*.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в правом
-                        нижнем
-                        углу.
-                    </li>
-                </ul>
+                        <h3
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Как писать поздравления?</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Используйте обращение на "Вы" и по имени-отчеству (если отчество
+                                указано).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Пишите поздравления от себя лично (не от организации, не от школы, не
+                                от фонда).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">По возможности укажите ваш
+                                обратный адрес (кроме случаев, когда мы просим этого не далать)*.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в правом
+                                нижнем
+                                углу.
+                            </li>
+                        </ul>
 
-                <h3
-                    style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                    Что писать не надо.</h3>
-                <ul>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Не желайте семейного уюта, любви близких, финансового благополучия и
-                        т.п.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы
-                        на
-                        200%,
-                        что вам начнут звонить и писать в любое время.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Если написано, что поздравления нужно отправлять без указания обратного адреса, не
-                        давайте
-                        свой обратный адрес и любые другие контакты*.
-                    </li>
-                </ul>
+                        <h3
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Что писать не надо.</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Не желайте семейного уюта, любви близких, финансового благополучия и
+                                т.п.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы
+                                на
+                                200%,
+                                что вам начнут звонить и писать в любое время.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Если написано, что поздравления нужно отправлять без указания обратного адреса, не
+                                давайте
+                                свой обратный адрес и любые другие контакты*.
+                            </li>
+                        </ul>
 
-                <h3
-                    style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                    Получили ответ?</h3>
-                <ul>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Если получили ответ от жителя интерната, обязательно сообщите об этом
-                        нам.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Не вступайте в переписку с ответившим до того, как это будет
-                        согласовано с координатором.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">Если ваша открытка вернулась,
-                        также сообщите нам.</li>
-                </ul>
+                        <h3
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Получили ответ?</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Если получили ответ от жителя интерната, обязательно сообщите об этом
+                                нам.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Не вступайте в переписку с ответившим до того, как это будет
+                                согласовано с координатором.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">Если ваша открытка вернулась,
+                                также сообщите нам.</li>
+                        </ul>
 
-                <h3
-                    style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                    Чего просим не делать.</h3>
-                <ul>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Запрещены любые публикации (в соцсетях, на сайтах учебных заведений,
-                        на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч.
-                        фото конвертов или открыток, на которых указаны адрес и/или ФИО
-                        подопечного).
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить
-                        праздник других людей.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        Не отправляйте посылки, бандероли, заказные/ценные письма, письма
-                        первого класса и прочие регистрируемые отправления, так как возможны
-                        проблемы с получением подобной корреспонденции и ваше отправление
-                        может вернуться.
-                    </li>
-                    <li style="font-family: 'Times New Roman', Times, serif;">
-                        По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять
-                        людей со
-                        всеми
-                        праздниками или писать им письма!
-                    </li>
-                </ul>
-                <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                    Нашим подопечным нужны продукты, дрова для обогрева домов, медицинская помощь. Сделайте
-                    пожертвование на
-                    <a href="https:/starikam.org/">starikam.org</a>
-                </p>
-                <hr />
-                <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                    Огромное вам спасибо за радость для наших подопечных! <br />
-                    Будут вопросы — обращайтесь!
-                </p>
-                <br />
-                <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">* - Мы просим
-                    отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ)
-                    и
-                    специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их
-                    жители не
-                    потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под
-                    ним
-                    обязательно идет соответствующий комментарий:
-                    <span style="color: rgb(255, 0, 0);"> (администрация настоятельно просит не указывать ваш
-                        личный
-                        адрес на отправлениях в этот
-                        интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого –
-                        Волонтер и ваше имя)</span>.
-                    Если такого комментария нет, то можете указать свой личный адрес.
-                </p>
-            </mat-card-content>
+                        <h3
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Чего просим не делать.</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Запрещены любые публикации (в соцсетях, на сайтах учебных заведений,
+                                на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч.
+                                фото конвертов или открыток, на которых указаны адрес и/или ФИО
+                                подопечного).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить
+                                праздник других людей.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Не отправляйте посылки, бандероли, заказные/ценные письма, письма
+                                первого класса и прочие регистрируемые отправления, так как возможны
+                                проблемы с получением подобной корреспонденции и ваше отправление
+                                может вернуться.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять
+                                людей со
+                                всеми
+                                праздниками или писать им письма!
+                            </li>
+                        </ul>
+                        <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
+                            Помогите нам подарить новогодние подарки и угощенья 102 400 бабушкам и дедушкам 
+                            <a href="https://ng.starikam.org/">ng.starikam.org</a>
+                        </p>
+                        <hr />
+                        <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
+                            Огромное вам спасибо за радость для наших подопечных! <br />
+                            Будут вопросы — обращайтесь!
+                        </p>
+                        <br />
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">* - Мы просим
+                            отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ)
+                            и
+                            специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их
+                            жители не
+                            потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под
+                            ним
+                            обязательно идет соответствующий комментарий:
+                            <span style="color: rgb(255, 0, 0);"> (администрация настоятельно просит не указывать ваш
+                                личный
+                                адрес на отправлениях в этот
+                                интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого –
+                                Волонтер и ваше имя)</span>.
+                            Если такого комментария нет, то можете указать свой личный адрес.
+                        </p>
+                    </mat-card-content>
 
-        </section>
-    </div>
-</div>
-</mat-card>
+                </section>
+            </div>
+        </div>
+    </mat-card>
 </div>

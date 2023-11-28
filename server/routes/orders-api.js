@@ -3282,6 +3282,7 @@ async function searchSeniorNewYear(
     filter.plusAmount = { $lt: plusAmount };
     //filter.comment1 = "(1 корп. 3 этаж)"; //CANCEL
     //filter.comment1 = "(2 корп.)"; //CANCEL
+   // filter.nursingHome = { $in:  ["КРАСНОЯРСК"]   }
     console.log("filter");
     console.log(filter);
     celebrator = await NewYear.findOne(filter);

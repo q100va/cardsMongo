@@ -565,6 +565,8 @@ export class ListComponent implements OnInit {
     this.listService.findSpecialLists().subscribe(
       (res) => {
         this.lists = res["data"];
+
+        console.log(this.lists);
         let length = 0;
         for (let house of this.lists) {
           house.celebrators.sort(
@@ -575,6 +577,14 @@ export class ListComponent implements OnInit {
 
         // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = length;
+
+        let i = 0;
+        for (let lineItem of this.lists) {
+          for (let celebrator of lineItem.celebrators) {
+            celebrator.index = i + 1;
+            i++;
+          }
+        }
       },
       (err) => {
         console.log(err);

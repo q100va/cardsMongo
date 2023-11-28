@@ -150,16 +150,17 @@
 
             <div *ngFor="let celebrator of lineItem.celebrators">
                 <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
-
+                <span>{{celebrator.index}}. </span>
                 {{celebrator.lastName}}
                 {{celebrator.firstName}}
                 {{celebrator.patronymic}}
-                {{celebrator.dateBirthday}}.{{celebrator.monthBirthday}}.{{celebrator.yearBirthday}}
+                <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span>
+              <!--   {{celebrator.dateBirthday}}.{{celebrator.monthBirthday}}.{{celebrator.yearBirthday}} -->
                 <!--                 ({{celebrator.specialComment}})
                 {{celebrator.nameDay}} -->
                 {{celebrator.comment1}}
                 <!--  {{celebrator.comment2}} -->
-                {{celebrator.linkPhoto}}
+               <!-- {{celebrator.linkPhoto}}-->
 
             </div>
             <br />
