@@ -934,7 +934,8 @@ router.post("/check-double/", checkAuth, async (req, res) => {
     let conditions = {
       isDisabled: false,
       holiday: req.body.holiday,
-      clientId: req.body.clientId
+      clientId: req.body.clientId,
+      //isReturned: false
     };
     console.log("conditions");
     console.log(conditions);
@@ -976,6 +977,8 @@ router.post("/check-double/", checkAuth, async (req, res) => {
         if (orders.length > 0) {
           for (let order of orders) {
             usernames.push(order.userName);
+            console.log("order._id");
+            console.log(order._id);
             for (let lineItem of order.lineItems) {
                houses.push(lineItem.nursingHome);
               for (let celebrator of lineItem.celebrators) {
@@ -991,9 +994,9 @@ router.post("/check-double/", checkAuth, async (req, res) => {
           result.seniorsIds = seniorsIds;
         } else { result = null; }
 
-        console.log("result");
+       // console.log("result");
         // console.log(order);
-         console.log(result);
+       //  console.log(result);
         const readRegionsResponse = new BaseResponse(
           200,
           "Query successful",
@@ -2842,6 +2845,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region || newOrder.amount > 20) {
       proportion.oneRegion = undefined;
     }
+    //proportion.oneRegion = 14; //удалить
   }
   const emptyOrder = {
     userName: newOrder.userName,
@@ -3034,14 +3038,14 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
       data.maxPlus = 1;
 
       data = await collectSeniorsNewYear(data, orderFilter);
-      /* 
+      
             if (data.counter < proportion[category]) {
               data.maxPlus = 2;
       
-              data = await collectSeniorsNewYear(data);
+              data = await collectSeniorsNewYear(data, orderFilter);
             }
       
-            if (data.counter < proportion[category]) {
+          /*  if (data.counter < proportion[category]) {
               data.maxPlus = 3;
       
               data = await collectSeniorsNewYear(data);
@@ -3245,6 +3249,7 @@ async function searchSeniorNewYear(
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true }
   };
+
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
@@ -3262,6 +3267,7 @@ async function searchSeniorNewYear(
   //console.log("maxPlus");
   //console.log(maxPlus);
 
+
   let filter = Object.assign(standardFilter, data.filter);
   //console.log("filter");
 
@@ -3270,19 +3276,21 @@ async function searchSeniorNewYear(
   //CHANGE!!!
   // let maxPlusAmount = 3;  
 
- let maxPlusAmount = 1;
-  //let maxPlusAmount = 2;
+ //let maxPlusAmount = 1
+ //let maxPlusAmount = 2;
 
-  //let maxPlusAmount = data.maxPlus;  
+  let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
-    //filter.comment1 = "(1 корп. 3 этаж)"; //CANCEL
-    //filter.comment1 = "(2 корп.)"; //CANCEL
-   // filter.nursingHome = { $in:  ["КРАСНОЯРСК"]   }
+   //filter.comment1 = "(2 корп. 4 этаж)"; //CANCEL
+   //filter.comment2 = /Брайл/; //CANCEL
+   //filter.nursingHome = { $in:    ["АВДОТЬИНКА","НЕБОЛЧИ" ]       }
+   //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
+   //
     console.log("filter");
     console.log(filter);
     celebrator = await NewYear.findOne(filter);

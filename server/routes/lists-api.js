@@ -1471,7 +1471,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 6, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 12, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1526,7 +1526,8 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     // let nameDays = await SpecialDay.find({ nursingHome: "ВОЛГОГРАД_КРИВОРОЖСКАЯ", yearBirthday: 0, dateExit: null, isDisabled: false });
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-    // let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["ЕКАТЕРИНБУРГ", "БЕРЕЗОВСКИЙ"]}});
+     //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["НОГИНСК"]}});
+     let nameDays = await SpecialDay.find({ absent: false, nursingHome:{$in: ["НОГИНСК"]}});
     //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 2, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
