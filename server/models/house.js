@@ -34,6 +34,7 @@ let housesSchema = new Schema(
         plus1: { type: Number },
         plus2: { type: Number },
         plus3: { type: Number },
+        plus4: { type: Number },
         specialMen: { type: Number },
         specialWomen: { type: Number },
         oldMen: { type: Number },

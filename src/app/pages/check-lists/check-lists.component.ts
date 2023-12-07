@@ -37,12 +37,12 @@ export class CheckListsComponent implements OnInit {
     this.houseService.findAllHouses().subscribe(
       (res) => {
         console.log(res.data);
-        for (let item of res.data) {
+/*        for (let item of res.data) {
           if (item.isActive) {
           this.houses.push(item.nursingHome);
           } 
-        }   
-       // this.houses = ["СТАРАЯ_КУПАВНА", "ЧЕРНОГОЛОВКА" , "НОГИНСК", "АВДОТЬИНКА"];
+        }   */   
+       this.houses = ["НОВОСЕЛЬЕ", "КАШИРСКОЕ"];
         //   this.checkingHouse = this.houses[0];
       },
       (err) => {
@@ -77,7 +77,7 @@ export class CheckListsComponent implements OnInit {
     this.checkingHouse2 = this.houses[this.index2];
     this.listService.checkFullness(this.houses[index]).subscribe(
       (res) => {
-        alert("Added " + res["data"] + " seniors");
+        //alert("Added " + res["data"] + " seniors");
       },
       (err) => {
         alert(err.error.msg + " " + err.message);

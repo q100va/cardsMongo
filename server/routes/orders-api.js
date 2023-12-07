@@ -761,11 +761,28 @@ async function restorePluses(updatedOrder) {
               }
             }
           }
-          else {
+          else { //ADDED STATISTIC!!!
             if (updatedOrder.holiday == "Новый год 2024") {
               for (let lineItem of updatedOrder.lineItems) {
                 for (let person of lineItem.celebrators) {
                   await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                  let senior = await NewYear.findOne({ _id: person._id });
+                  let newP = senior.plusAmount;
+                  let p = newP - 1;
+                  let c = senior.category;
+                  await House.updateOne(
+                    {
+                      nursingHome: senior.nursingHome
+                    },
+                    {
+                      $inc: {
+                        ["statistic.newYear.plus" + p]: -1,
+                        ["statistic.newYear.plus" + newP]: 1,
+                        ["statistic.newYear." + c + "Plus"]: 1,
+                      }
+                    }
+          
+                  );
                 }
               }
             } else {
@@ -1891,7 +1908,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     celebratorsAmount: 0,
     date1: day1,
     date2: day2,
-    maxPlus: 4,
+    maxPlus: period.maxPlus,
     filter: filter,
     order_id: order_id,
     //temporaryLineItems: [],
@@ -1957,7 +1974,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
 
       data.date1 = period.date1;
       data.date2 = period.date2;
-      data.maxPlus = 4; //period.maxPlus;
+      data.maxPlus = period.maxPlus;
 
       data = await collectSeniors(data, orderFilter, holiday);
 
@@ -1969,7 +1986,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
           data.date2 = period.date2;
         } else {
           if (proportion.amount < 31) {
-            data.maxPlus = 4; //period.maxPlus;
+            data.maxPlus = period.maxPlus;
             data.date1 = period.date2 + 1;
             data.date2 = period.date2 + 1;
           } else {
@@ -3003,7 +3020,11 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
 async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, orderFilter) {
 
   const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
-
+/*   restrictedHouses.push("ПОРЕЧЬЕ-РЫБНОЕ");
+  restrictedHouses.push("СЕВЕРОДВИНСК");
+  restrictedHouses.push("РЖЕВ");
+  restrictedHouses.push("ПЕРВОМАЙСКИЙ");
+  restrictedHouses.push("ВЯЗЬМА"); */
   let data = {
     houses: {},
     restrictedHouses: [...restrictedHouses],
@@ -3044,13 +3065,12 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
       
               data = await collectSeniorsNewYear(data, orderFilter);
             }
-      
-          /*  if (data.counter < proportion[category]) {
+     
+           if (data.counter < proportion[category]) {
               data.maxPlus = 3;
       
-              data = await collectSeniorsNewYear(data);
-            } */
-
+              data = await collectSeniorsNewYear(data, orderFilter);
+            }  
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -3241,8 +3261,8 @@ async function searchSeniorNewYear(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-    secondTime: data.maxPlus > 1 ? true : false,
-   // secondTime: true,
+   secondTime: data.maxPlus > 1 ? true : false,
+  // secondTime: true,
     thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
@@ -3274,7 +3294,7 @@ async function searchSeniorNewYear(
 
   let celebrator;
   //CHANGE!!!
-  // let maxPlusAmount = 3;  
+
 
  //let maxPlusAmount = 1
  //let maxPlusAmount = 2;
@@ -3283,11 +3303,12 @@ async function searchSeniorNewYear(
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
-
+  //maxPlusAmount = 3;
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
-   //filter.comment1 = "(2 корп. 4 этаж)"; //CANCEL
-   //filter.comment2 = /Брайл/; //CANCEL
+   //filter.comment1 = "(2 корп. 3 этаж)"; //CANCEL
+   //filter.comment1 = "(отд. 3)"; //CANCEL
+   //filter.comment1 = /верующ/; //CANCEL
    //filter.nursingHome = { $in:    ["АВДОТЬИНКА","НЕБОЛЧИ" ]       }
    //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
    //
@@ -4668,17 +4689,31 @@ router.get("/hb/restore-pluses", checkAuth, async (req, res) => {
     const celebratorsOctober = await ListBefore.find({ absent: false });
     const celebratorsNovember = await List.find({ absent: false });
     const celebratorsDecember = await ListNext.find({ absent: false });
+    const celebratorsNY = await NewYear.find({ absent: false, nursingHome: "КАШИРСКОЕ" });
+
+    for (let celebrator of celebratorsNY) {
+      console.log(celebrator.seniorId);
+      let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
+      await NewYear.updateOne({ seniorId: celebrator.seniorId}, {$set: {plusAmount: plusAmount }});
+      let updatedCelebrator = await NewYear.findOne({seniorId: celebrator.seniorId});
+
+      console.log("result");
+      console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+
+    }
+
+
 
 /*     for (let celebrator of celebratorsOctober) {
       console.log(celebrator._id);
       let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
       await ListBefore.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
     } */
-    for (let celebrator of celebratorsNovember) {
+/*     for (let celebrator of celebratorsNovember) {
       console.log(celebrator._id);
       let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
       await List.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
-    }
+    } */
 /*     for (let celebrator of celebratorsDecember) {
       console.log(celebrator._id);
       let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();

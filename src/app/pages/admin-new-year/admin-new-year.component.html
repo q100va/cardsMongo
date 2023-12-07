@@ -46,6 +46,7 @@
                         {{"plus1" + " : " + house.statistic.newYear.plus1 }}<br />
                         {{"plus2" + " : " + house.statistic.newYear.plus2 }}<br />
                         {{"plus3" + " : " + house.statistic.newYear.plus3 }}<br />
+                        {{"plus4" + " : " + house.statistic.newYear.plus4 }}<br />
 
                     </mat-cell>
                 </ng-container>
@@ -73,16 +74,16 @@
                     <mat-cell *matCellDef="let house">
 
                         <span *ngIf="!house.noAddress">
-                            {{"oldWomen" + " : " + house.statistic.newYear.oldWomenPlus/house.statistic.newYear.oldWomen
+                            {{"oldWomen" + " : " + (house.statistic.newYear.oldWomenPlus/house.statistic.newYear.oldWomen).toFixed(2)
                             }}<br />
-                            {{"oldMen" + " : " + house.statistic.newYear.oldMenPlus/house.statistic.newYear.oldMen }}<br />
-                            {{"yangWomen" + " : " + house.statistic.newYear.yangWomenPlus/house.statistic.newYear.yangWomen }}<br />
-                            {{"yangMen" + " : " + house.statistic.newYear.yangMenPlus/house.statistic.newYear.yangMen }}<br />
+                            {{"oldMen" + " : " + (house.statistic.newYear.oldMenPlus/house.statistic.newYear.oldMen).toFixed(2) }}<br />
+                            {{"yangWomen" + " : " + (house.statistic.newYear.yangWomenPlus/house.statistic.newYear.yangWomen).toFixed(2) }}<br />
+                            {{"yangMen" + " : " + (house.statistic.newYear.yangMenPlus/house.statistic.newYear.yangMen).toFixed(2) }}<br />
                         </span>
                         <span *ngIf="house.noAddress">
                             {{"specialWomen" + " : " +
-                            house.statistic.newYear.specialWomenPlus/house.statistic.newYear.specialWomen }}<br />
-                            {{"specialMen" + " : " + house.statistic.newYear.specialMenPlus/house.statistic.newYear.specialMen }}<br />
+                            (house.statistic.newYear.specialWomenPlus/house.statistic.newYear.specialWomen).toFixed(2) }}<br />
+                            {{"specialMen" + " : " + (house.statistic.newYear.specialMenPlus/house.statistic.newYear.specialMen).toFixed(2) }}<br />
                         </span>
 
                     </mat-cell>

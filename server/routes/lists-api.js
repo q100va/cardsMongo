@@ -1230,12 +1230,12 @@ router.post("/new-year/check-doubles", checkAuth, async (req, res) => {
 });
 
 async function findAllNYDoubles(house) {
-  let fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
+  let fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1, plusAmount: 1 });
   let fullDataHouse = [];
   /*   console.log("fullHouse");
     console.log(fullHouse); */
   for (let item of fullHouse) {
-    fullDataHouse.push(item.fullData);
+    fullDataHouse.push(item.seniorId);
   }
   /*   console.log("fullDataHouse");
     console.log(fullDataHouse); */
@@ -1253,7 +1253,7 @@ async function findAllNYDoubles(house) {
   if (duplicates.length == 0) return '0';
 
   for (let senior of duplicates) {
-    let someHouses = fullHouse.filter(item => item.fullData == senior);
+    let someHouses = fullHouse.filter(item => item.seniorId == senior);
     console.log("someHouses");
     console.log(someHouses);
     let plusAmount = 0;
@@ -1268,6 +1268,8 @@ async function findAllNYDoubles(house) {
       }
     }
   }
+  console.log("All duplicates");
+  console.log(duplicates.length.toString());
   return duplicates.length.toString();
 
 
@@ -1280,6 +1282,7 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
+
     let result = await checkAllNYFullness(req.body.nursingHome);
     console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
@@ -1292,6 +1295,276 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
     res.status(500).send(newListCatchErrorResponse.toObject());
   }
 });
+
+
+
+async function checkAllNYFullness(house) {
+
+  await findAllNYDoubles(house);
+
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house });
+  console.log("seniors " + seniors.length);
+  let fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1 }); //
+  console.log("fullHouse " + fullHouse.length);
+  let amount = 0;
+  for (let senior of seniors) {
+
+    let seniorIndex = fullHouse.findIndex(item => item.seniorId == senior._id);
+    //console.log("seniorIndex " + seniorIndex);
+    if (seniorIndex == -1) {
+      amount++;
+      let celebrator = await createCloneCelebrator(senior);
+      let newCelebrator = await NewYear.create(celebrator);
+      console.log("added");
+      console.log(newCelebrator.fullData);
+    }
+  }
+  console.log("All added");
+  console.log(amount);
+
+  fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1 , seniorId: 1});
+  let count = 0;
+  for (let celebrator of fullHouse) {
+    let celebratorIndex = seniors.findIndex(item => item._id == celebrator.seniorId);
+    if (celebratorIndex == -1) {
+
+      await NewYear.updateOne({ seniorId: celebrator.seniorId }, { $set: { absent: true } });
+      count++;
+      console.log("deleted");
+      console.log(celebrator.fullData);
+
+    }
+  }
+  console.log("All deleted");
+  console.log(count);
+
+
+  /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+      let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
+      //console.log("seniorIndex " + seniorIndex);
+      if (seniorIndex == -1) {
+        amount++;
+        let celebrator = await createCloneCelebrator(senior);
+  
+        console.log(celebrator);
+        let newCelebrator = await NewYear.create(celebrator);
+        console.log(newCelebrator.fullData);
+      } */
+  /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+      let fullData2 = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic);
+      console.log("fullData2 " + fullData2);
+      let seniorIndex = fullHouse.findIndex(item => (item.nursingHome + item.lastName + item.firstName + item.patronymic) == fullData2);
+      console.log("seniorIndex " + seniorIndex);
+      if (seniorIndex > -1) {
+        await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
+        amount++;
+      } */
+
+
+  //*****/
+
+  /*   let seniorsAbsent = await Senior.find({ isDisabled: false, dateExit: { $ne: null }, isRestricted: false, nursingHome: house });
+    console.log("seniorsAbsent");
+    console.log(seniorsAbsent);
+  
+    let fullHouseAbsent = await NewYear.find({ nursingHome: house, absent: true }, { seniorId: 1 }); //
+    console.log("fullHouseAbsent");
+    console.log(fullHouseAbsent);
+  
+    for (let senior of seniorsAbsent) {
+      // let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+      let seniorIndex = fullHouseAbsent.findIndex(item => item.seniorId == senior._id);
+      console.log("seniorIndex " + seniorIndex);
+  
+      if (seniorIndex == -1) {
+  
+        let result = await NewYear.updateOne({ seniorId: senior._id }, { $set: { absent: true } });
+        console.log(result.nModified);
+  
+      } else {
+        //console.log("seniorIndex " + seniorIndex);
+      }
+  
+    } */
+
+  await findAllNYDoubles(house);
+  await restoreStatistic(house);
+
+  return amount.toString();
+
+}
+
+async function restoreStatistic(activeHouse) {
+  console.log("activeHouse");
+  console.log(activeHouse);
+
+  let house = await House.findOne({ nursingHome: activeHouse });
+/*       console.log("house");
+      console.log(house); */
+
+
+  /*   for (let house of houses) {
+
+   */
+  let plus0 = await NewYear.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+/*   console.log("plus0");
+  console.log(plus0); */
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus0": plus0[0]?.count ?  plus0[0].count : 0 } });
+
+  let plus1 = await NewYear.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 1 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+/*   console.log("plus1");
+  console.log(plus1); */
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus1": plus1[0]?.count ?  plus1[0].count : 0 } });
+
+  let plus2 = await NewYear.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 2 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+/* 
+  console.log("plus2");
+  console.log(plus2); */
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus2": plus2[0]?.count ?  plus2[0].count : 0 } });
+
+  let plus3 = await NewYear.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 3 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+/*   console.log("plus3");
+  console.log(plus3); */
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus3": plus3[0]?.count ?  plus3[0].count : 0 }});
+
+  let plus4 = await NewYear.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 4 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+/*   console.log("plus3");
+  console.log(plus3); */
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus4": plus4[0]?.count ?  plus4[0].count : 0 }});
+
+  if (house.noAddress) {
+    let specialMenPlus = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialMenPlus": specialMenPlus[0]?.count ? specialMenPlus[0].count :0 } });
+
+    let specialWomenPlus = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialWomenPlus": specialWomenPlus[0]?.count ? specialWomenPlus[0].count :0} });
+
+  } else {
+    let oldMenPlus = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldMen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+/*   console.log("oldMenPlus");
+  console.log(oldMenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldMenPlus": oldMenPlus[0]?.count ? oldMenPlus[0].count : 0} });
+
+    let oldWomenPlus = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldWomen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+/*     console.log("oldWomenPlus");
+    console.log(oldWomenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldWomenPlus": oldWomenPlus[0]?.count ? oldWomenPlus[0].count :0} });
+
+    let yangMenPlus = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false,  category: "yangMen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+/*     console.log("yangMenPlus");
+    console.log(yangMenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangMenPlus": yangMenPlus[0]?.count ? yangMenPlus[0].count :0} });
+
+    let yangWomenPlus = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+/*     console.log("yangWomenPlus");
+    console.log(yangWomenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangWomenPlus": yangWomenPlus[0]?.count ? yangWomenPlus[0].count : 0} });
+     
+  }
+
+  let amount = await NewYear.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false} },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.amount": amount[0].count } });
+
+  console.log("amount");
+    console.log(amount); 
+
+  if (house.noAddress) {
+    let specialMen = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialMen": specialMen[0]?.count ? specialMen[0].count :0 } });
+
+    let specialWomen = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialWomen": specialWomen[0]?.count ? specialWomen[0].count :0} });
+
+  } else {
+    let oldMen = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldMen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+/*   console.log("oldMen");
+  console.log(oldMen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldMen": oldMen[0]?.count ? oldMen[0].count : 0} });
+
+    let oldWomen = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldWomen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+/*     console.log("oldWomen");
+    console.log(oldWomen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldWomen": oldWomen[0]?.count ? oldWomen[0].count :0} });
+
+    let yangMen = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false,  category: "yangMen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+/*     console.log("yangMen");
+    console.log(yangMen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangMen": yangMen[0]?.count ? yangMen[0].count :0} });
+
+    let yangWomen = await NewYear.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+/*     console.log("yangWomen");
+    console.log(yangWomen); */
+
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangWomen": yangWomen[0]?.count ? yangWomen[0].count : 0} });
+   
+
+  }
+
+  /*   } */
+
+  /*   } */
+}
 
 async function checkAllNDFullness(house) {
 
@@ -1322,67 +1595,6 @@ async function checkAllNDFullness(house) {
           await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
           amount++;
         } */
-  }
-
-  return amount.toString();
-
-}
-
-async function checkAllNYFullness(house) {
-
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house });
-  console.log("seniors " + seniors.length);
-  let fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
-  console.log("fullHouse " + fullHouse.length);
-  let amount = 0;
-  for (let senior of seniors) {
-    let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
-    let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
-    //console.log("seniorIndex " + seniorIndex);
-    if (seniorIndex == -1) {
-      amount++;
-      let celebrator = await createCloneCelebrator(senior);
-
-      console.log(celebrator);
-      let newCelebrator = await NewYear.create(celebrator);
-      console.log(newCelebrator.fullData);
-    }
-
-    /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
-        let fullData2 = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic);
-        console.log("fullData2 " + fullData2);
-        let seniorIndex = fullHouse.findIndex(item => (item.nursingHome + item.lastName + item.firstName + item.patronymic) == fullData2);
-        console.log("seniorIndex " + seniorIndex);
-        if (seniorIndex > -1) {
-          await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
-          amount++;
-        } */
-  }
-
-  //*****/
-
-  let seniorsAbsent = await Senior.find({ isDisabled: false, dateExit: { $ne: null }, isRestricted: false, nursingHome: house });
-  console.log("seniorsAbsent");
-  console.log(seniorsAbsent);
-
-  let fullHouseAbsent = await NewYear.find({ nursingHome: house, absent: true }, { seniorId: 1 }); //
-  console.log("fullHouseAbsent");
-  console.log(fullHouseAbsent);
-
-  for (let senior of seniorsAbsent) {
-    // let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
-    let seniorIndex = fullHouseAbsent.findIndex(item => item.seniorId == senior._id);
-    console.log("seniorIndex " + seniorIndex);
-
-    if (seniorIndex == -1) {
-
-      let result = await NewYear.updateOne({ seniorId: senior._id }, { $set: { absent: true } });
-      console.log(result.nModified);
-
-    } else {
-      //console.log("seniorIndex " + seniorIndex);
-    }
-
   }
 
   return amount.toString();
@@ -1508,17 +1720,17 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     }
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
-/*     let ordersM = await Order.find({ contact: "kosenkova_ov@magnit.ru", isDisabled: false });
-    let lineItemsM = [];
-    for (let order of ordersM) {
-      for (let item of order.lineItems) {
-        for (let i of item.celebrators) {
-          lineItemsM.push(i);
+        let ordersM = await Order.find({ contact: "@tterros", isDisabled: false, holiday:"Новый год 2024" });
+        let lineItemsM = [];
+        for (let order of ordersM) {
+          for (let item of order.lineItems) {
+            for (let i of item.celebrators) {
+              lineItemsM.push(i);
+            }
+            
+          }
         }
-        
-      }
-    }
-    let nameDays = lineItemsM; */
+        let nameDays = lineItemsM; 
 
     //let housesForMagnit = Array.from(new Set(housesM));
     //let nameDays = await SpecialDay.find({ absent: false,  nursingHome: {$in: housesForMagnit}});
@@ -1526,8 +1738,8 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     // let nameDays = await SpecialDay.find({ nursingHome: "ВОЛГОГРАД_КРИВОРОЖСКАЯ", yearBirthday: 0, dateExit: null, isDisabled: false });
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
     //  let nameDays = await SpecialDay.find({isRestricted: false, isReleased: false, dateEnter: {$gt:  new Date("2023-1-1") }, dateExit: null});
-     //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["НОГИНСК"]}});
-     let nameDays = await SpecialDay.find({ absent: false, nursingHome:{$in: ["НОГИНСК"]}});
+    //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, dateExit: null, nursingHome:{$in: ["НОГИНСК"]}});
+    //let nameDays = await SpecialDay.find({ absent: false, nursingHome: { $in: ["НОГИНСК"] } });
     //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 2, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
