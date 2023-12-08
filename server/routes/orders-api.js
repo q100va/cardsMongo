@@ -2990,6 +2990,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     }
   }
 
+//НАВИГАТОРЫ
 
   let resultLineItems = await generateLineItemsNewYear(nursingHomes, order_id);
   // console.log("resultLineItems");
@@ -3068,6 +3069,12 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
      
            if (data.counter < proportion[category]) {
               data.maxPlus = 3;
+      
+              data = await collectSeniorsNewYear(data, orderFilter);
+            }  
+
+            if (data.counter < proportion[category]) {
+              data.maxPlus = 4;
       
               data = await collectSeniorsNewYear(data, orderFilter);
             }  
@@ -3263,7 +3270,8 @@ async function searchSeniorNewYear(
     nursingHome: { $nin: data.restrictedHouses },
    secondTime: data.maxPlus > 1 ? true : false,
   // secondTime: true,
-    thirdTime: data.maxPlus === 3 ? true : false,
+    thirdTime: data.maxPlus > 2 ? true : false,
+    forthTime: data.maxPlus === 4 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -3306,10 +3314,10 @@ async function searchSeniorNewYear(
   //maxPlusAmount = 3;
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
-   //filter.comment1 = "(2 корп. 3 этаж)"; //CANCEL
-   //filter.comment1 = "(отд. 3)"; //CANCEL
+   //filter.comment1 = "(2 корп. 2 этаж)"; //CANCEL
+  // filter.comment1 = {$ne: "(отд. 4)"}; //CANCEL
    //filter.comment1 = /верующ/; //CANCEL
-   //filter.nursingHome = { $in:    ["АВДОТЬИНКА","НЕБОЛЧИ" ]       }
+  //filter.nursingHome = { $nin:    ["СЕВЕРОДВИНСК","ПОРЕЧЬЕ-РЫБНОЕ" ]       }
    //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
    //
     console.log("filter");

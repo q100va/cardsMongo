@@ -40,8 +40,8 @@ const listSchema = new Schema(
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
     secondTime: {type: Boolean, default: false},
-    thirdTime: {type: Boolean, default: false}
-
+    thirdTime: {type: Boolean, default: false},
+    forthTime:     {type: Boolean, default: false}
   },
   { collection: "newYear_2024" }
 );
