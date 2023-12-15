@@ -871,7 +871,7 @@ export class NewYearComponent implements OnInit {
         
           celebrator.comment1 +
           " " +
-          celebrator.linkPhoto +
+          (celebrator.linkPhoto ? celebrator.linkPhoto : "") +
           " " +
           "\n";
       }
