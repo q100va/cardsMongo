@@ -619,8 +619,8 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
     for (let senior of absents) {
       /*       console.log("senior");
             console.log(senior); */
-      let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
-      // let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
+     let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
+     // let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
       if (senior.monthBirthday == month || senior.monthBirthday == month + 1 || senior.monthBirthday == month - 1) {
@@ -773,13 +773,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
         }
         let holiday;
         if (celebrator.monthBirthday == 11) {
-          holiday = 'ДР ноября 2023';
-        }
-        if (celebrator.monthBirthday == 12) {
           holiday = 'ДР декабря 2023';
         }
-        if (celebrator.monthBirthday == 1) {
+        if (celebrator.monthBirthday == 12) {
           holiday = 'ДР января 2024';
+        }
+        if (celebrator.monthBirthday == 1) {
+          holiday = 'ДР февраля 2024';
         }
 
         let cloneCelebrator = {
@@ -839,7 +839,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           lastName: senior.lastName,
           firstName: senior.firstName,
           patronymic: senior.patronymic,
-          isRestricted: senior.isRestricted,
+          isRestricted: senior.isRestricted,//false,
           dateBirthday: senior.dateBirthday,
           monthBirthday: senior.monthBirthday,
           yearBirthday: senior.yearBirthday,

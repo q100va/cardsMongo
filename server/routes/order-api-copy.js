@@ -371,7 +371,7 @@ router.patch("/change-status/:id", async (req, res) => {
 }); 
 
 async function deletePluses(deletedOrder) {
-  if (deletedOrder.holiday == "Дни рождения декабря 2023") {
+  if (deletedOrder.holiday == "Дни рождения января 2024") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -423,7 +423,7 @@ async function deletePluses(deletedOrder) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины декабря 2023") {
+    if (deletedOrder.holiday == "Именины января 2024") {
       for (let lineItem of deletedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });

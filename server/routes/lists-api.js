@@ -211,7 +211,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 12 ? 'ДР декабря 2023' : 'ДР января 2024',
+      holyday: month == 1 ? 'ДР января 2024' : 'ДР февраля 2024',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -237,10 +237,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 11) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 1) { finalList = await ListNext.insertMany(newList, options); }
-  if (month == 12) { finalList = await List.insertMany(newList, options); }
-
+  if (month == 12) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 1) { finalList = await List.insertMany(newList, options); }
+  if (month == 2) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -383,8 +382,8 @@ async function findAllMonthNameDays(month) {
       cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
     }
     let holiday;
-    if (month == 12) holiday = 'Именины декабря 2023';
     if (month == 1) holiday = 'Именины января 2024';
+    if (month == 2) holiday = 'Именины февраля 2024';
 
     let cloneCelebrator = {
       region: celebrator.region,
@@ -434,8 +433,8 @@ async function findAllMonthNameDays(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 12) finalList = await NameDay.insertMany(newList, options);
-  if (month == 1) finalList = await NameDayNext.insertMany(newList, options);
+  if (month == 1) finalList = await NameDay.insertMany(newList, options);
+  if (month == 2) finalList = await NameDayNext.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -1322,7 +1321,7 @@ async function checkAllNYFullness(house) {
   console.log("All added");
   console.log(amount);
 
-  fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1 , seniorId: 1});
+  fullHouse = await NewYear.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1 });
   let count = 0;
   for (let celebrator of fullHouse) {
     let celebratorIndex = seniors.findIndex(item => item._id == celebrator.seniorId);
@@ -1399,8 +1398,8 @@ async function restoreStatistic(activeHouse) {
   console.log(activeHouse);
 
   let house = await House.findOne({ nursingHome: activeHouse });
-/*       console.log("house");
-      console.log(house); */
+  /*       console.log("house");
+        console.log(house); */
 
 
   /*   for (let house of houses) {
@@ -1411,153 +1410,153 @@ async function restoreStatistic(activeHouse) {
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
 
-/*   console.log("plus0");
-  console.log(plus0); */
+  /*   console.log("plus0");
+    console.log(plus0); */
 
-  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus0": plus0[0]?.count ?  plus0[0].count : 0 } });
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus0": plus0[0]?.count ? plus0[0].count : 0 } });
 
   let plus1 = await NewYear.aggregate([
     { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 1 } },
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
 
-/*   console.log("plus1");
-  console.log(plus1); */
-  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus1": plus1[0]?.count ?  plus1[0].count : 0 } });
+  /*   console.log("plus1");
+    console.log(plus1); */
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus1": plus1[0]?.count ? plus1[0].count : 0 } });
 
   let plus2 = await NewYear.aggregate([
     { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 2 } },
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
-/* 
-  console.log("plus2");
-  console.log(plus2); */
-  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus2": plus2[0]?.count ?  plus2[0].count : 0 } });
+  /* 
+    console.log("plus2");
+    console.log(plus2); */
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus2": plus2[0]?.count ? plus2[0].count : 0 } });
 
   let plus3 = await NewYear.aggregate([
     { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 3 } },
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
 
-/*   console.log("plus3");
-  console.log(plus3); */
+  /*   console.log("plus3");
+    console.log(plus3); */
 
-  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus3": plus3[0]?.count ?  plus3[0].count : 0 }});
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus3": plus3[0]?.count ? plus3[0].count : 0 } });
 
   let plus4 = await NewYear.aggregate([
     { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 4 } },
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
 
-/*   console.log("plus3");
-  console.log(plus3); */
+  /*   console.log("plus3");
+    console.log(plus3); */
 
-  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus4": plus4[0]?.count ?  plus4[0].count : 0 }});
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus4": plus4[0]?.count ? plus4[0].count : 0 } });
 
   if (house.noAddress) {
     let specialMenPlus = await NewYear.aggregate([
       { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
       { $group: { _id: null, count: { $sum: "$plusAmount" } } }
     ]);
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialMenPlus": specialMenPlus[0]?.count ? specialMenPlus[0].count :0 } });
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialMenPlus": specialMenPlus[0]?.count ? specialMenPlus[0].count : 0 } });
 
     let specialWomenPlus = await NewYear.aggregate([
       { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
       { $group: { _id: null, count: { $sum: "$plusAmount" } } }
     ]);
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialWomenPlus": specialWomenPlus[0]?.count ? specialWomenPlus[0].count :0} });
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialWomenPlus": specialWomenPlus[0]?.count ? specialWomenPlus[0].count : 0 } });
 
   } else {
     let oldMenPlus = await NewYear.aggregate([
-      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldMen" } },
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldMen" } },
       { $group: { _id: null, count: { $sum: "$plusAmount" } } }
     ]);
-/*   console.log("oldMenPlus");
-  console.log(oldMenPlus);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldMenPlus": oldMenPlus[0]?.count ? oldMenPlus[0].count : 0} });
+    /*   console.log("oldMenPlus");
+      console.log(oldMenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldMenPlus": oldMenPlus[0]?.count ? oldMenPlus[0].count : 0 } });
 
     let oldWomenPlus = await NewYear.aggregate([
-      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldWomen" } },
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldWomen" } },
       { $group: { _id: null, count: { $sum: "$plusAmount" } } }
     ]);
-/*     console.log("oldWomenPlus");
-    console.log(oldWomenPlus);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldWomenPlus": oldWomenPlus[0]?.count ? oldWomenPlus[0].count :0} });
+    /*     console.log("oldWomenPlus");
+        console.log(oldWomenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldWomenPlus": oldWomenPlus[0]?.count ? oldWomenPlus[0].count : 0 } });
 
     let yangMenPlus = await NewYear.aggregate([
-      { $match: { nursingHome: house.nursingHome, absent: false,  category: "yangMen" } },
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangMen" } },
       { $group: { _id: null, count: { $sum: "$plusAmount" } } }
     ]);
-/*     console.log("yangMenPlus");
-    console.log(yangMenPlus);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangMenPlus": yangMenPlus[0]?.count ? yangMenPlus[0].count :0} });
+    /*     console.log("yangMenPlus");
+        console.log(yangMenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangMenPlus": yangMenPlus[0]?.count ? yangMenPlus[0].count : 0 } });
 
     let yangWomenPlus = await NewYear.aggregate([
       { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
       { $group: { _id: null, count: { $sum: "$plusAmount" } } }
     ]);
-/*     console.log("yangWomenPlus");
-    console.log(yangWomenPlus);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangWomenPlus": yangWomenPlus[0]?.count ? yangWomenPlus[0].count : 0} });
-     
+    /*     console.log("yangWomenPlus");
+        console.log(yangWomenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangWomenPlus": yangWomenPlus[0]?.count ? yangWomenPlus[0].count : 0 } });
+
   }
 
   let amount = await NewYear.aggregate([
-    { $match: { nursingHome: house.nursingHome, absent: false} },
+    { $match: { nursingHome: house.nursingHome, absent: false } },
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
   await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.amount": amount[0].count } });
 
   console.log("amount");
-    console.log(amount); 
+  console.log(amount);
 
   if (house.noAddress) {
     let specialMen = await NewYear.aggregate([
       { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialMen": specialMen[0]?.count ? specialMen[0].count :0 } });
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialMen": specialMen[0]?.count ? specialMen[0].count : 0 } });
 
     let specialWomen = await NewYear.aggregate([
       { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialWomen": specialWomen[0]?.count ? specialWomen[0].count :0} });
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.specialWomen": specialWomen[0]?.count ? specialWomen[0].count : 0 } });
 
   } else {
     let oldMen = await NewYear.aggregate([
-      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldMen" } },
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldMen" } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-/*   console.log("oldMen");
-  console.log(oldMen);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldMen": oldMen[0]?.count ? oldMen[0].count : 0} });
+    /*   console.log("oldMen");
+      console.log(oldMen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldMen": oldMen[0]?.count ? oldMen[0].count : 0 } });
 
     let oldWomen = await NewYear.aggregate([
-      { $match: { nursingHome: house.nursingHome, absent: false,  category: "oldWomen" } },
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldWomen" } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-/*     console.log("oldWomen");
-    console.log(oldWomen);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldWomen": oldWomen[0]?.count ? oldWomen[0].count :0} });
+    /*     console.log("oldWomen");
+        console.log(oldWomen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.oldWomen": oldWomen[0]?.count ? oldWomen[0].count : 0 } });
 
     let yangMen = await NewYear.aggregate([
-      { $match: { nursingHome: house.nursingHome, absent: false,  category: "yangMen" } },
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangMen" } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-/*     console.log("yangMen");
-    console.log(yangMen);  */
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangMen": yangMen[0]?.count ? yangMen[0].count :0} });
+    /*     console.log("yangMen");
+        console.log(yangMen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangMen": yangMen[0]?.count ? yangMen[0].count : 0 } });
 
     let yangWomen = await NewYear.aggregate([
       { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-/*     console.log("yangWomen");
-    console.log(yangWomen); */
+    /*     console.log("yangWomen");
+        console.log(yangWomen); */
 
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangWomen": yangWomen[0]?.count ? yangWomen[0].count : 0} });
-   
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.yangWomen": yangWomen[0]?.count ? yangWomen[0].count : 0 } });
+
 
   }
 
@@ -1683,7 +1682,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 12, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 1, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1710,6 +1709,7 @@ async function checkAllHBFullness(house) {
 //const SpecialDay = require("../models/senior");
 //const SpecialDay = require("../models/list");
 const SpecialDay = require("../models/new-year");
+const { convertCompilerOptionsFromJson } = require("typescript");
 //Find special lists API
 router.get("/holiday/special-list", checkAuth, async (req, res) => {
   try {
@@ -1720,17 +1720,30 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     }
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
-        let ordersM = await Order.find({ contact: "@tterros", isDisabled: false, holiday:"Новый год 2024" });
-        let lineItemsM = [];
-        for (let order of ordersM) {
-          for (let item of order.lineItems) {
-            for (let i of item.celebrators) {
-              lineItemsM.push(i);
-            }
-            
-          }
+    let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: "Новый год 2024" });
+    let lineItemsM = [];
+    for (let order of ordersM) {
+      for (let item of order.lineItems) {
+        for (let i of item.celebrators) {
+          lineItemsM.push(i);
         }
-        let nameDays = lineItemsM; 
+
+      }
+    }
+    let lineItemsM_3 = [];
+    for (let line of lineItemsM) {
+      if (lineItemsM_3.length == 0 || lineItemsM_3.filter(item => item.seniorId == line.seniorId) != -1) {
+  
+        let someseniors = lineItemsM.filter(item => item.seniorId == line.seniorId);
+        if (someseniors.length == 3) {
+          lineItemsM_3.push(line);
+        }
+      }
+
+      console.log(lineItemsM_3.length);
+    }
+
+    let nameDays = lineItemsM_3;
 
     //let housesForMagnit = Array.from(new Set(housesM));
     //let nameDays = await SpecialDay.find({ absent: false,  nursingHome: {$in: housesForMagnit}});
@@ -2190,13 +2203,10 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
 async function countAmount() {
   let amount = 0;
   let set = new Set();
-  let orders = await Order.find({ isDisabled: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ isDisabled: false, isOverdue: false, isReturned: false, institutes: {$ne: []}, "institutes.category": "образовательное учреждение", dateOfOrder: { $gt: new Date('2023-01-01'), $lt: new Date('2023-12-31') }  });   //.project({ _id: 0, email: 1, contact: 1,  });
+  console.log(orders.length);
   for (let order of orders) {
-    if (order.email) {
-      set.add(order.email);
-    } else {
       set.add(order.contact);
-    }
   }
   amount = set.size;
 
@@ -2258,7 +2268,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения декабря 2023", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения января 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {

@@ -65,15 +65,15 @@
                             {{celebrator.firstName}}
                             {{celebrator.patronymic}}
                             {{order.holiday == 'Новый год 2024' ? celebrator.yearBirthday : ''}}
-                            {{order.holiday == 'Дни рождения декабря 2023' ? celebrator.fullDayBirthday : ''}}
-                            {{order.holiday == 'Дни рождения декабря 2023' ? '(' + (celebrator.specialComment ?
+                            {{order.holiday == 'Дни рождения января 2024' ? celebrator.fullDayBirthday : ''}}
+                            {{order.holiday == 'Дни рождения января 2024' ? '(' + (celebrator.specialComment ?
                             celebrator.specialComment : "") + ')' : ''}}
-                            {{order.holiday == 'Именины декабря 2023' ? celebrator.nameDay : ''}}
+                            {{order.holiday == 'Именины января 2024' ? celebrator.nameDay : ''}}
                             {{celebrator.comment1}}
                             {{celebrator.linkPhoto}}
 <!--                 {{celebrator._id}}             -->
                             <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины
-                                декабря 2023' ? celebrator.specialComment : ''}}
+                                января 2024' ? celebrator.specialComment : ''}}
                             </span>
                             <span style="font-weight: bold; color: rgb(255, 0, 0); " *ngIf="celebrator.absentComment">
                                 {{ celebrator.absentComment}}
