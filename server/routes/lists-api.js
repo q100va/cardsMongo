@@ -1709,7 +1709,7 @@ async function checkAllHBFullness(house) {
 //const SpecialDay = require("../models/senior");
 //const SpecialDay = require("../models/list");
 const SpecialDay = require("../models/new-year");
-const { convertCompilerOptionsFromJson } = require("typescript");
+//const { convertCompilerOptionsFromJson } = require("typescript");
 //Find special lists API
 router.get("/holiday/special-list", checkAuth, async (req, res) => {
   try {
