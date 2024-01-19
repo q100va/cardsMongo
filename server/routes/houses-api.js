@@ -54,6 +54,26 @@ router.post("/", checkAuth, async (req, res) => {
           yangWomenPlus: 0,
           specialMenPlus: 0,
           specialWomenPlus: 0,
+        },
+        spring: {
+          oldWomen: 0,
+          oldMen: 0,
+          yangMen: 0,
+          yangWomen: 0,
+          specialWomen: 0,
+          specialMen: 0,
+          amount: 0,
+          time: 0,
+          plus0: 0,
+          plus1: 0,
+          plus2: 0,
+          plus3: 0,
+          oldMenPlus: 0,
+          oldWomenPlus: 0,
+          yangMenPlus: 0,
+          yangWomenPlus: 0,
+          specialMenPlus: 0,
+          specialWomenPlus: 0,
         }
       }
 

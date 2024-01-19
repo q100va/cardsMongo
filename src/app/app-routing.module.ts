@@ -53,6 +53,7 @@ import { March8Component } from "./pages/march8/march8.component";
 import { May9Component } from "./pages/may9/may9.component";
 import { FamilyDayComponent } from "./pages/family-day/family-day.component";
 import { AdminNewYearComponent } from "./pages/admin-new-year/admin-new-year.component";
+import { AdminSpringComponent } from "./pages/admin-spring/admin-spring.component";
 const routes: Routes = [
   {
     path: "",
@@ -232,6 +233,11 @@ const routes: Routes = [
       {
         path: "lists/admin-new-year",
         component: AdminNewYearComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "lists/admin-spring",
+        component: AdminSpringComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
 

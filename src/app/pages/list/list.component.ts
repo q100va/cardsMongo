@@ -141,7 +141,7 @@ export class ListComponent implements OnInit {
     );
   } */
 
-  generateFebruary23List() {
+/*   generateFebruary23List() {
     this.listService.createFebruary23List().subscribe(
       async (res) => {
         let result = await res["data"];
@@ -167,7 +167,7 @@ export class ListComponent implements OnInit {
         alert("Произошла ошибка, обратитесь к администратору! " + err.message);
       }
     );
-  }
+  } */
 
   deleteList() {
     console.log("delete");

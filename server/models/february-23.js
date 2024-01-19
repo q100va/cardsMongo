@@ -17,6 +17,7 @@ const listSchema = new Schema(
     lastName: { type: String },
     firstName: { type: String },
     patronymic: { type: String },
+    seniorId: { type: String },
     dateBirthday: { type: Number },
     monthBirthday: { type: Number },
     yearBirthday: { type: Number },
@@ -42,7 +43,7 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false}
 
   },
-  { collection: "february_23_2023" }
+  { collection: "february_23_2024" }
 );
 
 module.exports = mongoose.model("February23", listSchema);

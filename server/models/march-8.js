@@ -42,7 +42,7 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false}
 
   },
-  { collection: "march_8_2023" }
+  { collection: "march_8_2024" }
 );
 
 module.exports = mongoose.model("March8", listSchema);

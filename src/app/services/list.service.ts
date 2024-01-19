@@ -64,12 +64,12 @@ export class ListService {
     return this.http.post("/api/lists/new-year/create", {list: NYList});
   }
 
-  createFebruary23List(): Observable<any> {
-    return this.http.post("/api/lists/february-23/create", {});
+  createFebruary23List(list): Observable<any> {
+    return this.http.post("/api/lists/february-23/create", {list: list});
   }
 
-  createMarch8List(): Observable<any> {
-    return this.http.post("/api/lists/march-8/create", {});
+  createMarch8List(list): Observable<any> {
+    return this.http.post("/api/lists/march-8/create", {list: list});
   }
 
   deleteList() {

@@ -99,6 +99,7 @@ import { CreateClientDialogComponent } from './shared/create-client-dialog/creat
 import { UpdateClientDialogComponent } from './shared/update-client-dialog/update-client-dialog.component';
 import { AdminNewYearComponent } from './pages/admin-new-year/admin-new-year.component';
 import { AuthInterceptor } from "./services/auth.interceptor";
+import { AdminSpringComponent } from './pages/admin-spring/admin-spring.component';
 
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import { AuthInterceptor } from "./services/auth.interceptor";
     FamilyDayComponent,
     CreateClientDialogComponent,
     UpdateClientDialogComponent,
-    AdminNewYearComponent
+    AdminNewYearComponent,
+    AdminSpringComponent
 
   ],
   imports: [

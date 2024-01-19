@@ -32,7 +32,7 @@ export interface Order {
   dateOfOrder?: Date;
   filter?: {
     addressFilter: string,
-    genderFilter: string,
+    genderFilter?: string,
     femaleAmount?: number,
     maleAmount?: number,
     region: string,

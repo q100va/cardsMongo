@@ -63,6 +63,10 @@ export class BaseLayoutComponent implements OnInit {
     this.router.navigate(["/lists/admin-new-year"]);
   }
 
+  redirectToSpringLists(): void {
+    this.router.navigate(["/lists/admin-spring"]);
+  }
+
   redirectToClients(): void {
     this.router.navigate(["/clients/"]);
   }
