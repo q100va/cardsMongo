@@ -41,8 +41,8 @@ export class CheckListsComponent implements OnInit {
           if (item.isActive) {
           this.houses.push(item.nursingHome);
           } 
-        }      
-     //  this.houses =  ["НОВОСИБИРСК_ЖУКОВСКОГО", "СЕВЕРО-АГЕЕВСКИЙ", "СОСНОВКА"];
+        }       
+   // this.houses =  ["НОВОСЕЛЬЕ"];
        //  this.checkingHouse = this.houses[0];
       },
       (err) => {

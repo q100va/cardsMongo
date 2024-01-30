@@ -41,7 +41,7 @@ export class NameDayComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Именины января 2024";
+  holiday: string = "именины февраля 2024";
   lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "email",
@@ -442,7 +442,7 @@ export class NameDayComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Именины января 2024";
+      this.holiday = "именины февраля 2024";
       this.listService.findAllNameDayLists("NameDay").subscribe(
         (res) => {
           this.nameDays = res["data"];
@@ -457,7 +457,7 @@ export class NameDayComponent implements OnInit {
       );
     }
     if (this.isNextMonth) {
-      this.holiday = "Именины февраля 2024";
+      this.holiday = "именины марта 2024";
       this.listService.findAllNameDayLists("NameDayNext").subscribe(
         (res) => {
           this.nameDays = res["data"];
@@ -483,7 +483,7 @@ export class NameDayComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Именины января 2024";
+      this.holiday = "именины февраля 2024";
       this.listService.findAllNameDayLists("NameDay").subscribe(
         (res) => {
           this.nameDays = res["data"];
@@ -498,7 +498,7 @@ export class NameDayComponent implements OnInit {
       );
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Именины декабря 2023";
+      this.holiday = "именины января 2023";
       this.listService.findAllNameDayLists("NameDayBefore").subscribe(
         (res) => {
           this.nameDays = res["data"];
@@ -539,7 +539,7 @@ export class NameDayComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Именины января 2024";
+    this.holiday = "именины февраля 2024";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;

@@ -28,7 +28,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения января 2024";
+  holiday: string = "Дни рождения февраля 2024";
   lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "phoneNumber",
@@ -144,10 +144,10 @@ export class OrderComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения января 2024";
+      this.holiday = "Дни рождения февраля 2024";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения февраля 2024";
+      this.holiday = "Дни рождения марта 2024";
     }
   }
 
@@ -161,10 +161,10 @@ export class OrderComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения января 2024";
+      this.holiday = "Дни рождения февраля 2024";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения декабря 2023";
+      this.holiday = "Дни рождения января 2023";
     }
   }
 
@@ -313,7 +313,7 @@ export class OrderComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения января 2024";
+    this.holiday = "Дни рождения февраля 2024";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;

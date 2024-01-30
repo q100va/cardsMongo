@@ -727,11 +727,11 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
         let cloneSpecialComment;
         if (celebrator.monthBirthday == month || celebrator.monthBirthday == month - 1) {
           cloneSpecialComment = await specialComment(
-            2023 - celebrator["yearBirthday"]
+            2024 - celebrator["yearBirthday"]
           );
         } else {
           cloneSpecialComment = await specialComment(
-            204 - celebrator["yearBirthday"]
+            2024 - celebrator["yearBirthday"]
           );
         }
 
@@ -772,14 +772,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
         let holiday;
-        if (celebrator.monthBirthday == 11) {
-          holiday = 'ДР декабря 2023';
-        }
-        if (celebrator.monthBirthday == 12) {
+        if (celebrator.monthBirthday == 1) {
           holiday = 'ДР января 2024';
         }
-        if (celebrator.monthBirthday == 1) {
+        if (celebrator.monthBirthday == 2) {
           holiday = 'ДР февраля 2024';
+        }
+        if (celebrator.monthBirthday == 3) {
+          holiday = 'ДР марта 2024';
         }
 
         let cloneCelebrator = {
@@ -814,13 +814,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
             celebrator.monthBirthday +
             celebrator.yearBirthday,
         };
-        if (celebrator.monthBirthday == 11) {
+        if (celebrator.monthBirthday == 1) {
           await ListBefore.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 12) {
+        if (celebrator.monthBirthday == 2) {
           await List.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 1) {
+        if (celebrator.monthBirthday == 3) {
           await ListNext.create(cloneCelebrator);
         }
 

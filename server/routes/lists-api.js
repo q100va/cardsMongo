@@ -237,9 +237,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 12) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 1) { finalList = await List.insertMany(newList, options); }
-  if (month == 2) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 1) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 2) { finalList = await List.insertMany(newList, options); }
+  if (month == 3) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -382,8 +382,8 @@ async function findAllMonthNameDays(month) {
       cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
     }
     let holiday;
-    if (month == 1) holiday = 'Именины января 2024';
-    if (month == 2) holiday = 'Именины февраля 2024';
+    if (month == 2) holiday = 'именины февраля 2024';
+    if (month == 3) holiday = 'именины марта 2024';
 
     let cloneCelebrator = {
       region: celebrator.region,
@@ -433,8 +433,8 @@ async function findAllMonthNameDays(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 1) finalList = await NameDay.insertMany(newList, options);
-  if (month == 2) finalList = await NameDayNext.insertMany(newList, options);
+  if (month == 2) finalList = await NameDay.insertMany(newList, options);
+  if (month == 3) finalList = await NameDayNext.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -1714,7 +1714,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 1, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 2, isRestricted: false, nursingHome: house });
   console.log("seniors " + seniors.length);
   let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse " + fullHouse.length);
@@ -1738,14 +1738,14 @@ async function checkAllHBFullness(house) {
   return amount.toString();
 
 }
-//const SpecialDay = require("../models/senior");
+const SpecialDay = require("../models/senior");
 //const SpecialDay = require("../models/list");
-const SpecialDay = require("../models/new-year");
+//const SpecialDay = require("../models/new-year");
 //const { convertCompilerOptionsFromJson } = require("typescript");
 //Find special lists API
 router.get("/holiday/special-list", checkAuth, async (req, res) => {
   try {
-    let notActiveHouses = await House.find({ isActive: false });
+/*     let notActiveHouses = await House.find({ isActive: false });
     let notActiveHousesNames = [];
     for (let house of notActiveHouses) {
       notActiveHousesNames.push(house.nursingHome);
@@ -1773,9 +1773,9 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
       }
 
       console.log(lineItemsM_3.length);
-    }
+    } */
 
-    let nameDays = lineItemsM_3;
+    //let nameDays = lineItemsM_3;
 
     //let housesForMagnit = Array.from(new Set(housesM));
     //let nameDays = await SpecialDay.find({ absent: false,  nursingHome: {$in: housesForMagnit}});
@@ -1788,23 +1788,23 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 2, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
-    let updatedNursingHome = await House.find({ isActive: true });
+    let updatedNursingHome = await House.find({ isActive: true , "statistic.spring.amount" :{$gt: 300}});
     let namesOfUpdatedNursingHome = [];
     for (let home of updatedNursingHome) {
       namesOfUpdatedNursingHome.push(home.nursingHome);
     }
-    //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, region: "БАШКОРТОСТАН", gender: "Female" , comment2: {$in: {nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male" , monthBirthday : 3, dateBirthday: 2, yearBirthday: {$lt: 1953}});
+    let nameDays = await SpecialDay.find({nursingHome: {$in:[ "ВЕРХНЕУРАЛЬСК", "ЧЕРНЫШЕВКА"] }, isRestricted: false, isReleased: false, dateExit: null, noAddress: false});
     //let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
     //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, monthBirthday : 4, dateBirthday: 1, yearBirthday: {$lt: 1953}});
     // let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null,  region: "ТЮМЕНСКАЯ", gender: "Female"});
     let lineItems = [];
     let nursingHomes = await House.find({});
 
-    nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
-
+    //nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+let i = 0;
     for (let person of nameDays) {
-      console.log("person");
-      console.log(person);
+      console.log(i++);
+     // console.log(person);
       //console.log(lineItems);
       let index = -1;
       //console.log(lineItems.length);
@@ -2300,7 +2300,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения января 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения февраля 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
