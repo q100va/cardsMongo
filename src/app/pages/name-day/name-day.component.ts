@@ -581,97 +581,113 @@ export class NameDayComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
 
+    const selectedInstitutes = this.form.value.institutes
+      .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
+      .filter((v) => v !== null);
 
-
-    if (!this.form.controls.contact.value) {
+    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
-          message: "Обязательно укажите email или другой возможный контакт!",
+          message:
+            "За адресами для коллективов, организаций, учреждений и т.п. обращайтесь, пожалуйста, к Оксане Кустовой!",
         },
         disableClose: true,
         width: "fit-content",
       });
+     
     } else {
-      if (
-        !this.options.includes(this.form.controls.contact.value.toLowerCase())
-      ) {
-        this.confirmationService.confirm({
-          message:
-            "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
-          accept: () => {
-            this.router.navigate([]).then((result) => {
-              window.open("#/clients/create/new", "_blank");
-            });
+      if (!this.form.controls.contact.value) {
+        this.resultDialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: "Обязательно укажите email или другой возможный контакт!",
           },
+          disableClose: true,
+          width: "fit-content",
         });
       } else {
-        let temporaryLineItems = [];
-
-        for (let value of this.selection["_selection"]) {
-          temporaryLineItems.push(value);
-        }
-
-              console.log("temporaryLineItems.length != this.form.controls.amount.value");
-         console.log(temporaryLineItems.length);
-         console.log( this.form.controls.amount.value);
-
-        if (temporaryLineItems.length != this.form.controls.amount.value) {
-          this.resultDialog.open(ConfirmationDialogComponent, {
-            data: {
-              message:
-                "Количества выбранных и указанных адресов должны совпадать.",
+        if (
+          !this.options.includes(this.form.controls.contact.value.toLowerCase())
+        ) {
+          this.confirmationService.confirm({
+            message:
+              "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
+            accept: () => {
+              this.router.navigate([]).then((result) => {
+                window.open("#/clients/create/new", "_blank");
+              });
             },
-            disableClose: true,
-            width: "fit-content",
           });
         } else {
-          if (
-            this.form.controls.nameOfInstitute.value ||
-            this.form.controls.categoryOfInstitute.value
-          ) {
+          let temporaryLineItems = [];
+
+          for (let value of this.selection["_selection"]) {
+            temporaryLineItems.push(value);
+          }
+
+          console.log(
+            "temporaryLineItems.length != this.form.controls.amount.value"
+          );
+          console.log(temporaryLineItems.length);
+          console.log(this.form.controls.amount.value);
+
+          if (temporaryLineItems.length != this.form.controls.amount.value) {
             this.resultDialog.open(ConfirmationDialogComponent, {
               data: {
                 message:
-                  "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
+                  "Количества выбранных и указанных адресов должны совпадать.",
               },
               disableClose: true,
               width: "fit-content",
             });
           } else {
-            console.log("orderService.checkDoubleOrder");
-            this.orderService
-              .checkDoubleOrder(this.holiday, this.client._id)
-              .subscribe(
-                async (res) => {
-                  let result = res["data"];
-                  console.log("res");
-                  console.log(res);
-                  if (!result) {
-                    this.saveOrder(temporaryLineItems);
-                  } else {
-                    let usernameList = "";
-                    for (let user of result.users) {
-                      usernameList =
-                        usernameList.length == 0
-                          ? user
-                          : usernameList + ", " + user;
-                    }
-                    this.confirmationService.confirm({
-                      message:
-                        "Пользователь с такими контактами уже получил адреса на этот праздник: " +
-                        this.holiday +
-                        " у волонтера(ов): " +
-                        usernameList +
-                        ". Вы уверены, что это не дубль?",
-                      accept: () => this.saveOrder(temporaryLineItems),
-                    });
-                  }
+            if (
+              this.form.controls.nameOfInstitute.value ||
+              this.form.controls.categoryOfInstitute.value
+            ) {
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message:
+                    "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
                 },
-                (err) => {
-                  this.errorMessage = err.error.msg + " " + err.message;
-                  console.log(err);
-                }
-              );
+                disableClose: true,
+                width: "fit-content",
+              });
+            } else {
+              console.log("orderService.checkDoubleOrder");
+              this.orderService
+                .checkDoubleOrder(this.holiday, this.client._id)
+                .subscribe(
+                  async (res) => {
+                    let result = res["data"];
+                    console.log("res");
+                    console.log(res);
+                    if (!result) {
+                      this.saveOrder(temporaryLineItems);
+                    } else {
+                      let usernameList = "";
+                      for (let user of result.users) {
+                        usernameList =
+                          usernameList.length == 0
+                            ? user
+                            : usernameList + ", " + user;
+                      }
+                      this.confirmationService.confirm({
+                        message:
+                          "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+                          this.holiday +
+                          " у волонтера(ов): " +
+                          usernameList +
+                          ". Вы уверены, что это не дубль?",
+                        accept: () => this.saveOrder(temporaryLineItems),
+                      });
+                    }
+                  },
+                  (err) => {
+                    this.errorMessage = err.error.msg + " " + err.message;
+                    console.log(err);
+                  }
+                );
+            }
           }
         }
       }
@@ -679,11 +695,10 @@ export class NameDayComponent implements OnInit {
   }
 
   saveOrder(temporaryLineItems) {
-
     const selectedInstitutes = this.form.value.institutes
-    .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
-    .filter((v) => v !== null);
-    
+      .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
+      .filter((v) => v !== null);
+
     this.spinner = true;
     let newOrder: Order = {
       userName: this.userName,
@@ -732,9 +747,9 @@ export class NameDayComponent implements OnInit {
           }
           this.canSave = true;
           this.successMessage =
-          "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
-        this.contactReminder = " для " + res["data"]["contact"];
-        this.clientFirstName = res["data"]["clientFirstName"];
+            "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+          this.contactReminder = " для " + res["data"]["contact"];
+          this.clientFirstName = res["data"]["clientFirstName"];
         }
       },
       (err) => {
@@ -798,7 +813,6 @@ export class NameDayComponent implements OnInit {
           celebrator.linkPhoto +
           "\n";
       }
-
 
       addresses = addresses + "\n";
     }

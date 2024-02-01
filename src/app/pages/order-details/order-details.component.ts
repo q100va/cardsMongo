@@ -41,7 +41,9 @@ export class OrderDetailsComponent implements OnInit {
     "именины февраля 2024",
     "именины января 2023",
     "именины марта 2024",
-    "Новый год 2024"
+    "Новый год 2024",
+    "8 марта 2024",
+    "23 февраля 2024"
   ];
   constructor(
     private router: Router,

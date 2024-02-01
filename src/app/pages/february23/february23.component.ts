@@ -70,7 +70,7 @@ export class February23Component implements OnInit {
   activeNursingHomes = [];
   actualYear = new Date().getFullYear();
   addresses: HTMLElement;
-/*   isMainMonth = true;
+  /*   isMainMonth = true;
   isNextMonth = false;
   isBeforeMonth = false; */
   options = [];
@@ -164,13 +164,13 @@ export class February23Component implements OnInit {
       //maleAmount: [null, [Validators.min(1)]],
       year1: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
       year2: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
-      
+
       region: [null],
       nursingHome: [null],
       maxOneHouse: [null, [Validators.min(1)]],
       maxNoAddress: [null, [Validators.min(1)]],
       onlyWithPicture: [false],
-      
+
       nameOfInstitute: [null],
       categoryOfInstitute: [null],
     });
@@ -422,8 +422,7 @@ export class February23Component implements OnInit {
       );
   }
 
-
-/*   correctProportion(genderValue: string) {
+  /*   correctProportion(genderValue: string) {
     if (genderValue == "proportion") {
       this.useProportion = true;
     } else {
@@ -481,7 +480,6 @@ export class February23Component implements OnInit {
     }
   }
 
-
   exit() {
     this.confirmationService.confirm({
       message: "Вы уверены, что хотите выйти без сохранения заявки?",
@@ -513,16 +511,16 @@ export class February23Component implements OnInit {
     this.canSave = false;
     this.form.reset();
     this.addressFilter = "any";
-   // this.genderFilter = "any";
+    // this.genderFilter = "any";
 
     this.clicked = false;
-   // this.useProportion = false;
+    // this.useProportion = false;
     this.showMaxOneHouse = true;
     this.showMaxNoAddress = true;
     this.showIndexes = false;
     this.showInstruction = false;
-    
-/*     this.isMainMonth = true;
+
+    /*     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false; */
 
@@ -563,64 +561,80 @@ export class February23Component implements OnInit {
     this.clientFirstName = "";
     this.lineItems = [];
     this.canSave = false;
+     // console.log(this.form.controls.amount.value);
 
-    if (!this.form.controls.contact.value) {
+    const selectedInstitutes = this.form.value.institutes
+      .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
+      .filter((v) => v !== null);
+
+    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
-          message: "Обязательно укажите email или другой возможный контакт!",
+          message:
+            "За адресами для коллективов, организаций, учреждений и т.п. обращайтесь, пожалуйста, к Оксане Кустовой!",
         },
         disableClose: true,
         width: "fit-content",
       });
       this.clicked = false;
     } else {
-      if (
-        !this.options.includes(this.form.controls.contact.value.toLowerCase())
-      ) {
-        this.confirmationService.confirm({
-          message:
-            "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
-          accept: () => {
-            this.router.navigate([]).then((result) => {
-              window.open("#/clients/create/new", "_blank");
-            });
+      if (!this.form.controls.contact.value) {
+        this.resultDialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: "Обязательно укажите email или другой возможный контакт!",
           },
+          disableClose: true,
+          width: "fit-content",
         });
         this.clicked = false;
       } else {
         if (
-          this.form.controls.nameOfInstitute.value ||
-          this.form.controls.categoryOfInstitute.value
+          !this.options.includes(this.form.controls.contact.value.toLowerCase())
         ) {
-          this.resultDialog.open(ConfirmationDialogComponent, {
-            data: {
-              message:
-                "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
+          this.confirmationService.confirm({
+            message:
+              "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
+            accept: () => {
+              this.router.navigate([]).then((result) => {
+                window.open("#/clients/create/new", "_blank");
+              });
             },
-            disableClose: true,
-            width: "fit-content",
           });
           this.clicked = false;
         } else {
-          //console.log(this.form.controls.year2.value);
-          //console.log(this.form.controls.year1.value);
           if (
-            this.form.controls.year2.value != null &&
-            this.form.controls.year1.value != null &&
-            this.form.controls.year2.value < this.form.controls.year1.value
+            this.form.controls.nameOfInstitute.value ||
+            this.form.controls.categoryOfInstitute.value
           ) {
             this.resultDialog.open(ConfirmationDialogComponent, {
               data: {
                 message:
-                  "Неверно указан период для года рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
+                  "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
               },
               disableClose: true,
               width: "fit-content",
             });
             this.clicked = false;
-            console.log("ERROR");
           } else {
-/*             if (
+            //console.log(this.form.controls.year2.value);
+            //console.log(this.form.controls.year1.value);
+            if (
+              this.form.controls.year2.value != null &&
+              this.form.controls.year1.value != null &&
+              this.form.controls.year2.value < this.form.controls.year1.value
+            ) {
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message:
+                    "Неверно указан период для года рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
+                },
+                disableClose: true,
+                width: "fit-content",
+              });
+              this.clicked = false;
+              console.log("ERROR");
+            } else {
+              /*             if (
               this.form.controls.date1.value != null &&
               this.form.controls.date2.value != null &&
               this.form.controls.date2.value < this.form.controls.date1.value
@@ -654,23 +668,23 @@ export class February23Component implements OnInit {
                 });
                 this.clicked = false;
               } else {*/
-                if (
-                  this.form.controls.maxOneHouse.value >
-                    this.form.controls.amount.value ||
-                  this.form.controls.maxNoAddress.value >
-                    this.form.controls.amount.value
-                ) {
-                  this.resultDialog.open(ConfirmationDialogComponent, {
-                    data: {
-                      message:
-                        "Max количество адресов из одного дома или из БОА не может быть больше общего количества адресов.",
-                    },
-                    disableClose: true,
-                    width: "fit-content",
-                  });
-                  this.clicked = false;
-                } else {
-/*                   let email =
+              if (
+                this.form.controls.maxOneHouse.value >
+                  this.form.controls.amount.value ||
+                this.form.controls.maxNoAddress.value >
+                  this.form.controls.amount.value
+              ) {
+                this.resultDialog.open(ConfirmationDialogComponent, {
+                  data: {
+                    message:
+                      "Max количество адресов из одного дома или из БОА не может быть больше общего количества адресов.",
+                  },
+                  disableClose: true,
+                  width: "fit-content",
+                });
+                this.clicked = false;
+              } else {
+                /*                   let email =
                     this.form.controls.contactType.value == "email"
                       ? this.form.controls.contact.value
                       : null;
@@ -678,45 +692,44 @@ export class February23Component implements OnInit {
                     this.form.controls.contactType.value != "email"
                       ? this.form.controls.contact.value
                       : null; */
-                  this.orderService
-                    .checkDoubleOrder(this.holiday, this.client._id)
-                    .subscribe(
-                      async (res) => {
-                        let result = res["data"];
-                         console.log("RESULT");
-                       console.log(result);
-                        if (!result) {
-                          this.fillOrder([],[]);
-                        } else {
-                          let usernameList = "";
-                          for (let user of result.users) {
-                            usernameList =
-                              usernameList.length == 0
-                                ? user
-                                : usernameList + ", " + user;
-                          }
-                          this.confirmationService.confirm({
-                            message:
-                              "Пользователь с такими контактами уже получил адреса на этот праздник: " +
-                              this.holiday +
-                              " у волонтера(ов): " +
-                              usernameList +
-                              ". Вы уверены, что это не дубль?",
-                            accept: () => this.fillOrder(result.seniorsIds, []),//result.houses
-                            reject: () => (this.clicked = false),
-                          });
+                this.orderService
+                  .checkDoubleOrder(this.holiday, this.client._id)
+                  .subscribe(
+                    async (res) => {
+                      let result = res["data"];
+                      console.log("RESULT");
+                      console.log(result);
+                      if (!result) {
+                        this.fillOrder([], []);
+                      } else {
+                        let usernameList = "";
+                        for (let user of result.users) {
+                          usernameList =
+                            usernameList.length == 0
+                              ? user
+                              : usernameList + ", " + user;
                         }
-                      },
-                      (err) => {
-                        this.errorMessage = err.error.msg + " " + err.message;
-                        console.log(err);
-                        this.clicked = false;
+                        this.confirmationService.confirm({
+                          message:
+                            "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+                            this.holiday +
+                            " у волонтера(ов): " +
+                            usernameList +
+                            ". Вы уверены, что это не дубль?",
+                          accept: () => this.fillOrder(result.seniorsIds, []), //result.houses
+                          reject: () => (this.clicked = false),
+                        });
                       }
-                    );
-                }
+                    },
+                    (err) => {
+                      this.errorMessage = err.error.msg + " " + err.message;
+                      console.log(err);
+                      this.clicked = false;
+                    }
+                  );
               }
-            
-          
+            }
+          }
         }
       }
     }
@@ -749,15 +762,13 @@ export class February23Component implements OnInit {
       clientFirstName: this.client.firstName,
       clientPatronymic: this.client.patronymic,
       clientLastName: this.client.lastName,
-/*       email:
+      /*       email:
         this.form.controls.contactType.value == "email"
           ? this.form.controls.contact.value
           : null, */
-      contactType:
-        this.form.controls.contactType.value,
-      contact:
-       this.form.controls.contact.value,
-       
+      contactType: this.form.controls.contactType.value,
+      contact: this.form.controls.contact.value,
+
       institutes: selectedInstitutes,
       amount: this.form.controls.amount.value,
       isAccepted: this.form.controls.isAccepted.value ? true : false,
@@ -778,7 +789,6 @@ export class February23Component implements OnInit {
         maxOneHouse: this.form.controls.maxOneHouse.value,
         maxNoAddress: this.form.controls.maxNoAddress.value,
         onlyWithPicture: this.form.controls.onlyWithPicture.value,
-
       },
     };
     //console.log("newOrder");
@@ -786,40 +796,42 @@ export class February23Component implements OnInit {
     //console.log("newOrder");
     //console.log(newOrder);
 
-    this.orderService.createOrderSpring(newOrder, prohibitedId, restrictedHouses).subscribe(
-      async (res) => {
-        this.spinner = false;
-        this.clicked = false;
-        let result = res["data"]["result"];
-        if (typeof result == "string") {
-          this.errorMessage = result;
-          // console.log(res);
-        } else {
-          //alert(res.msg);
-          //console.log(res);
-          this.lineItems = result;
-          let i = 0;
-          for (let lineItem of this.lineItems) {
-            for (let celebrator of lineItem.celebrators) {
-              celebrator.index = i + 1;
-              i++;
+    this.orderService
+      .createOrderSpring(newOrder, prohibitedId, restrictedHouses)
+      .subscribe(
+        async (res) => {
+          this.spinner = false;
+          this.clicked = false;
+          let result = res["data"]["result"];
+          if (typeof result == "string") {
+            this.errorMessage = result;
+            // console.log(res);
+          } else {
+            //alert(res.msg);
+            //console.log(res);
+            this.lineItems = result;
+            let i = 0;
+            for (let lineItem of this.lineItems) {
+              for (let celebrator of lineItem.celebrators) {
+                celebrator.index = i + 1;
+                i++;
+              }
             }
-          }
 
-          this.canSave = true;
-          this.successMessage =
-            "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
-          this.contactReminder = " для " + res["data"]["contact"];
-          this.clientFirstName = res["data"]["clientFirstName"];
+            this.canSave = true;
+            this.successMessage =
+              "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
+            this.contactReminder = " для " + res["data"]["contact"];
+            this.clientFirstName = res["data"]["clientFirstName"];
+          }
+        },
+        (err) => {
+          this.spinner = false;
+          this.clicked = false;
+          this.errorMessage = err.error.msg + " " + err.message;
+          console.log(err);
         }
-      },
-      (err) => {
-        this.spinner = false;
-        this.clicked = false;
-        this.errorMessage = err.error.msg + " " + err.message;
-        console.log(err);
-      }
-    );
+      );
   }
 
   getAddresses() {
@@ -833,10 +845,11 @@ export class February23Component implements OnInit {
       "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
       "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
       "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются люди, которых к престарелым совсем не относятся. Это инвалиды, которые проживают в домах престарелых. Иногда сразу после детдомов.\n\n" +
-      this.holiday + "   (примерные сроки доставки на https://www.pochta.ru/letters - только простые отправления) "
-      "\n" +
+      this.holiday +
+      "   (примерные сроки доставки на https://www.pochta.ru/letters - только простые отправления) ";
+    "\n" +
       "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
-      "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n"+
+      "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n" +
       "Просим, чтобы поздравления с 23 февраля были очень тактичными, потому что поздравляемым может оказаться человек, который в силу инвалидности не смог служить в армии.\n\n";
     let bottom =
       "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Учтите, что по России письма идут 7-14 дней.\n\n" +
@@ -868,8 +881,9 @@ export class February23Component implements OnInit {
           " " +
           celebrator.patronymic +
           " " +
-          (celebrator.yearBirthday > 0 ? "- " + celebrator.yearBirthday + " г.р." : "") +
-        
+          (celebrator.yearBirthday > 0
+            ? "- " + celebrator.yearBirthday + " г.р."
+            : "") +
           celebrator.comment1 +
           " - " +
           celebrator.comment2 +
