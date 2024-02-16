@@ -576,7 +576,7 @@ export class March8Component implements OnInit {
         width: "fit-content",
       });
       this.clicked = false;
-    } else {
+    } else { 
       if (!this.form.controls.contact.value) {
         this.resultDialog.open(ConfirmationDialogComponent, {
           data: {

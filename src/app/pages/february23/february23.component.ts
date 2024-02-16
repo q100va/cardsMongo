@@ -563,7 +563,7 @@ export class February23Component implements OnInit {
     this.canSave = false;
      // console.log(this.form.controls.amount.value);
 
-    const selectedInstitutes = this.form.value.institutes
+   const selectedInstitutes = this.form.value.institutes
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 

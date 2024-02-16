@@ -23,9 +23,9 @@
         <button class="submit" (click)=" generateNextBirthday()" mat-raised-button>Сформировать список ДР следующего
             месяца</button>
         <br /><br /><br />
-        <button class="submit" (click)="generateNameDay(2)" mat-raised-button>Сформировать список именин</button>
+        <button class="submit" (click)="generateNameDay(3)" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
-        <button class="submit" (click)="generateNameDay(3)" mat-raised-button>Сформировать список именин следующего
+        <button class="submit" (click)="generateNameDay(4)" mat-raised-button>Сформировать список именин следующего
             месяца</button>
         <br /><br /><br />
 
@@ -39,8 +39,8 @@
         <button class="submit" (click)="countSeniors($event)" mat-raised-button>Посчитать поздравляемых</button>
         <br /><br /><br />
  -->
-<!--  <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>
- <button class="submit" (click)="restorePluses()" mat-raised-button>Восстановить плюсы</button> -->
+<!--  <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>-->
+ <button class="submit" (click)="restorePluses()" mat-raised-button>Восстановить плюсы</button> 
 <!-- 
         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
         <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
@@ -124,7 +124,7 @@
                 {{person.veteran ? person.veteran : "" }} {{person.child
                 ? person.child : "" }}
                 {{person.specialComment ? person.specialComment : ""}} {{person.linkPhoto}} {{person.category}}
-                {{person.noAddress}} {{person.oldest}} {{person.gender}} {{person.nursingHome}} <span
+                {{person.noAddress}} {{person.oldest}} {{person.gender}} * {{person.nursingHome}} <span
                     style="color: red;" *ngIf="person.absent"> ВЫБЫЛ(А)</span></mat-list-item>
 
         </mat-list>
