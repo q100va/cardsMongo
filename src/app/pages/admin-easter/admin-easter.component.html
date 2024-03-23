@@ -7,18 +7,14 @@
 <br />
 <div fxLayout="column">
     <mat-card>
-        <mat-card-title>Поздравление с 23 февраля и 8 марта</mat-card-title>
+        <mat-card-title>Поздравление с НГ</mat-card-title>
         <br /><br />
         <p-toast position="center"></p-toast>
         <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
         <mat-card-subtitle>
-            <button mat-stroked-button color="primary" (click)="generateFebruary23List()">
-                Добавить списки 23 февраля
-            </button>
-
-            <button mat-stroked-button color="primary" (click)="generateMarch8List()">
-                Добавить списки 8 марта
+            <button mat-stroked-button color="primary" (click)="generateEasterList()">
+                Добавить списки
             </button>
         </mat-card-subtitle>
 
@@ -37,7 +33,7 @@
                 <ng-container matColumnDef="amount">
                     <mat-header-cell *matHeaderCellDef> Кол-во </mat-header-cell>
                     <mat-cell *matCellDef="let house">
-                        {{house.statistic.spring.amount }}<br />
+                        {{house.statistic.easter.amount }}<br />
 
                     </mat-cell>
                 </ng-container>
@@ -46,12 +42,13 @@
                     <mat-header-cell *matHeaderCellDef> Плюсы </mat-header-cell>
                     <mat-cell *matCellDef="let house">
 
-                        {{"plus0" + " : " + house.statistic.spring.plus0 }}<br />
-                        {{"plus1" + " : " + house.statistic.spring.plus1 }}<br />
-                        {{"plus2" + " : " + house.statistic.spring.plus2 }}<br />
-                   {{"plus3" + " : " + house.statistic.spring.plus3 }}<br />
-                        {{"plus4" + " : " + house.statistic.spring.plus4 }}<br /> 
-                        {{"plus5" + " : " + house.statistic.spring.plus5 }}<br /> 
+                        {{"plus0" + " : " + house.statistic.easter.plus0 }}<br />
+                        {{"plus1" + " : " + house.statistic.easter.plus1 }}<br />
+                        {{"plus2" + " : " + house.statistic.easter.plus2 }}<br />
+                        {{"plus3" + " : " + house.statistic.easter.plus3 }}<br />
+                        {{"plus4" + " : " + house.statistic.easter.plus4 }}<br />
+                        {{"plus5" + " : " + house.statistic.easter.plus5 }}<br />
+
                     </mat-cell>
                 </ng-container>
 
@@ -60,14 +57,14 @@
                     <mat-cell *matCellDef="let house">
 
                         <span *ngIf="!house.noAddress">
-                            {{"oldWomen" + " : " + house.statistic.spring.oldWomen }}<br />
-                            {{"oldMen" + " : " + house.statistic.spring.oldMen }}<br />
-                            {{"yangWomen" + " : " + house.statistic.spring.yangWomen }}<br />
-                            {{"yangMen" + " : " + house.statistic.spring.yangMen }}<br />
+                            {{"oldWomen" + " : " + house.statistic.easter.oldWomen }}<br />
+                            {{"oldMen" + " : " + house.statistic.easter.oldMen }}<br />
+                            {{"yangWomen" + " : " + house.statistic.easter.yangWomen }}<br />
+                            {{"yangMen" + " : " + house.statistic.easter.yangMen }}<br />
                         </span>
                         <span *ngIf="house.noAddress">
-                            {{"specialWomen" + " : " + house.statistic.spring.specialWomen}}<br />
-                            {{"specialMen" + " : " + house.statistic.spring.specialMen }}<br />
+                            {{"specialWomen" + " : " + house.statistic.easter.specialWomen}}<br />
+                            {{"specialMen" + " : " + house.statistic.easter.specialMen }}<br />
                         </span>             
 
                     </mat-cell>
@@ -78,16 +75,16 @@
                     <mat-cell *matCellDef="let house">
 
                         <span *ngIf="!house.noAddress">
-                            {{"oldWomen" + " : " + (house.statistic.spring.oldWomenPlus/house.statistic.spring.oldWomen).toFixed(2)
+                            {{"oldWomen" + " : " + (house.statistic.easter.oldWomenPlus/house.statistic.easter.oldWomen).toFixed(2)
                             }}<br />
-                            {{"oldMen" + " : " + (house.statistic.spring.oldMenPlus/house.statistic.spring.oldMen).toFixed(2) }}<br />
-                            {{"yangWomen" + " : " + (house.statistic.spring.yangWomenPlus/house.statistic.spring.yangWomen).toFixed(2) }}<br />
-                            {{"yangMen" + " : " + (house.statistic.spring.yangMenPlus/house.statistic.spring.yangMen).toFixed(2) }}<br />
+                            {{"oldMen" + " : " + (house.statistic.easter.oldMenPlus/house.statistic.easter.oldMen).toFixed(2) }}<br />
+                            {{"yangWomen" + " : " + (house.statistic.easter.yangWomenPlus/house.statistic.easter.yangWomen).toFixed(2) }}<br />
+                            {{"yangMen" + " : " + (house.statistic.easter.yangMenPlus/house.statistic.easter.yangMen).toFixed(2) }}<br />
                         </span>
                         <span *ngIf="house.noAddress">
                             {{"specialWomen" + " : " +
-                            (house.statistic.spring.specialWomenPlus/house.statistic.spring.specialWomen).toFixed(2) }}<br />
-                            {{"specialMen" + " : " + (house.statistic.spring.specialMenPlus/house.statistic.spring.specialMen).toFixed(2) }}<br />
+                            (house.statistic.easter.specialWomenPlus/house.statistic.easter.specialWomen).toFixed(2) }}<br />
+                            {{"specialMen" + " : " + (house.statistic.easter.specialMenPlus/house.statistic.easter.specialMen).toFixed(2) }}<br />
                         </span>
 
                     </mat-cell>
@@ -127,17 +124,6 @@
                 <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
             </mat-table>
         </mat-card-content>
-
-<!--     <mat-card-content>
-        <mat-list *ngFor="let house of houses">
-       {{house.address}} * {{house.statistic.spring.oldMen + house.statistic.spring.yangMen}} * {{house.statistic.spring.oldWomen + house.statistic.spring.yangWomen}}
-       <br>
-       </mat-list>
-
-    </mat-card-content> -->
-
-
-
         <!-- Add button to create new house in the mat-card-subtitle below -->
 
 

@@ -562,7 +562,7 @@ export class March8Component implements OnInit {
     this.lineItems = [];
     this.canSave = false;
 
-    const selectedInstitutes = this.form.value.institutes
+/*     const selectedInstitutes = this.form.value.institutes
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
@@ -576,7 +576,7 @@ export class March8Component implements OnInit {
         width: "fit-content",
       });
       this.clicked = false;
-    } else { 
+    } else { */
       if (!this.form.controls.contact.value) {
         this.resultDialog.open(ConfirmationDialogComponent, {
           data: {
@@ -732,7 +732,7 @@ export class March8Component implements OnInit {
         }
       }
     }
-  }
+  
 
   fillOrder(prohibitedId: [], restrictedHouses: []) {
     this.spinner = true;

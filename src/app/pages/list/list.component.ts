@@ -126,6 +126,20 @@ export class ListComponent implements OnInit {
       }
     );
   }
+/*   generateEasterList() {
+    this.listService.createEasterList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+ */
 
 /*   generateNewYearList() {
     this.listService.createNewYearList().subscribe(
@@ -255,6 +269,43 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
+  showEasterList(event: any) {
+    this.listService.findAllEasterLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
   showFebruary23List(event: any) {
     this.listService.findAllFebruary23Lists().subscribe(
       (res) => {
@@ -291,6 +342,7 @@ export class ListComponent implements OnInit {
     this.isShowList = true;
     //console.log(this.lists);
   }
+
   showMarch8List(event: any) {
     this.listService.findAllMarch8Lists().subscribe(
       (res) => {
@@ -401,10 +453,48 @@ export class ListComponent implements OnInit {
     this.isShowList = true;
     //console.log(this.lists);
   }
+
+    showLessPlusEasterList(event: any) {
+      this.listService.findAllNewYearLists().subscribe(
+        (res) => {
+          this.lists = res["data"].filter((item) => item.plusAmount < 3);
+          //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+          this.listLength = this.lists.length;
+          this.oldMen = this.lists.filter(
+            (item) => item.category == "oldMen"
+          ).length;
+          this.yangWomen = this.lists.filter(
+            (item) => item.category == "yangWomen"
+          ).length;
+          this.specialWomen = this.lists.filter(
+            (item) => item.category == "specialWomen"
+          ).length;
+          this.yangMen = this.lists.filter(
+            (item) => item.category == "yangMen"
+          ).length;
+          this.specialMen = this.lists.filter(
+            (item) => item.category == "specialMen"
+          ).length;
+          this.oldest = this.lists.filter((item) => item.oldest == true).length;
+          this.oldWomen = this.lists.filter(
+            (item) => item.category == "oldWomen"
+          ).length;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
   showLessPlusFebruary23List(event: any) {
     this.listService.findAllFebruary23Lists().subscribe(
       (res) => {
-        this.lists = res["data"].filter((item) => item.plusAmount < 3);
+        this.lists = res["data"].filter((item) => item.plusAmount < 1);
         // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
@@ -441,7 +531,7 @@ export class ListComponent implements OnInit {
   showLessPlusMarch8List(event: any) {
     this.listService.findAllMarch8Lists().subscribe(
       (res) => {
-        this.lists = res["data"].filter((item) => item.plusAmount < 3);
+        this.lists = res["data"].filter((item) => item.plusAmount < 1);
         // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
@@ -565,26 +655,27 @@ export class ListComponent implements OnInit {
     this.listService.findSpecialLists().subscribe(
       (res) => {
         this.lists = res["data"];
-
         console.log(this.lists);
-        let length = 0;
+/*         let length = 0;
         for (let house of this.lists) {
           house.celebrators.sort(
             (prev, next) => prev.dateBirthday - next.dateBirthday
           );
           length = length + house.celebrators.length;
-        }
+        } */
 
-        // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
-        this.listLength = length;
+         this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
 
-        let i = 0;
+
+        this.listLength = this.lists.length;
+
+/*         let i = 0;
         for (let lineItem of this.lists) {
           for (let celebrator of lineItem.celebrators) {
             celebrator.index = i + 1;
             i++;
           }
-        }
+        } */
       },
       (err) => {
         console.log(err);

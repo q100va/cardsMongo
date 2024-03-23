@@ -37,12 +37,12 @@ export class CheckListsComponent implements OnInit {
     this.houseService.findAllHouses().subscribe(
       (res) => {
         console.log(res.data);
-       for (let item of res.data) {
+/*        for (let item of res.data) {
           if (item.isActive) {
           this.houses.push(item.nursingHome);
           } 
-        }      
-    //this.houses =  ["БИЙСК", "СТАРОЕ_ШАЙГОВО", "СЕВЕРО-АГЕЕВСКИЙ", "КАРДЫМОВО", "СЕМЕНОВСКОЕ"];
+        }  */     
+   this.houses =  ["СО_ВЕЛИКИЕ_ЛУКИ"];
        //  this.checkingHouse = this.houses[0];
       },
       (err) => {

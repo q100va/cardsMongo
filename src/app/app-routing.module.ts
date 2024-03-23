@@ -54,6 +54,8 @@ import { May9Component } from "./pages/may9/may9.component";
 import { FamilyDayComponent } from "./pages/family-day/family-day.component";
 import { AdminNewYearComponent } from "./pages/admin-new-year/admin-new-year.component";
 import { AdminSpringComponent } from "./pages/admin-spring/admin-spring.component";
+import { EasterComponent } from "./pages/easter/easter.component";
+import { AdminEasterComponent } from "./pages/admin-easter/admin-easter.component";
 const routes: Routes = [
   {
     path: "",
@@ -171,6 +173,11 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: "orders/easter",
+        component: EasterComponent,
+        canActivate: [AuthGuard],
+      },
+      {
         path: "orders/may9",
         component: May9Component,
         canActivate: [AuthGuard],
@@ -240,7 +247,11 @@ const routes: Routes = [
         component: AdminSpringComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
-
+      {
+        path: "lists/admin-easter",
+        component: AdminEasterComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
 
     ],
   },

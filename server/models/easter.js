@@ -9,11 +9,12 @@ const Schema = mongoose.Schema;
 //const lineItemDocument = require("../schemas/line-item");
 //const celebrator = require ("../schemas/celebrator");
 
-const listNextSchema = new Schema(
+const listSchema = new Schema(
   {
 
     nursingHome: { type: String },
     region: { type: String },
+    seniorId: { type: String },
     lastName: { type: String },
     firstName: { type: String },
     patronymic: { type: String },
@@ -38,11 +39,12 @@ const listNextSchema = new Schema(
     fullData: { type: String },
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
-    uncertain: { type: Boolean, default: false },   
-
+    secondTime: {type: Boolean, default: false},
+    thirdTime: {type: Boolean, default: false},
+    forthTime:     {type: Boolean, default: false},
+    noName: { type: Boolean, default: false },  
   },
-  { collection: "lists_may2024" }
- //{ collection: "lists_june2023" }
+  { collection: "Easter_2024" }
 );
 
-module.exports = mongoose.model("ListNext", listNextSchema);
+module.exports = mongoose.model("Easter", listSchema);

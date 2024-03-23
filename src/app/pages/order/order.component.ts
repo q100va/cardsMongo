@@ -42,8 +42,8 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения марта 2024";
-  lineItems: Array<LineItem> = [];
+  holiday: string = "Дни рождения апреля 2024";
+  lineItems = [];
   types: Array<string> = [
     "email",
     "phoneNumber",
@@ -445,10 +445,10 @@ export class OrderComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения марта 2024";
+      this.holiday = "Дни рождения апреля 2024";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения апреля 2024";
+      this.holiday = "Дни рождения мая 2024";
     }
   }
 
@@ -462,10 +462,10 @@ export class OrderComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения марта 2024";
+      this.holiday = "Дни рождения апреля 2024";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения февраля 2024";
+      this.holiday = "Дни рождения марта 2024";
     }
   }
 
@@ -614,7 +614,7 @@ export class OrderComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения марта 2024";
+    this.holiday = "Дни рождения апреля 2024";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -913,9 +913,13 @@ export class OrderComponent implements OnInit {
             this.lineItems = result;
             let i = 0;
             for (let lineItem of this.lineItems) {
+              lineItem.Female = 0;
+              lineItem.Male = 0;
               for (let celebrator of lineItem.celebrators) {
                 celebrator.index = i + 1;
                 i++;
+                if (celebrator.gender == "Female") lineItem.Female++;
+                if (celebrator.gender == "Male") lineItem.Male++;
               }
             }
 

@@ -563,7 +563,7 @@ export class February23Component implements OnInit {
     this.canSave = false;
      // console.log(this.form.controls.amount.value);
 
-   const selectedInstitutes = this.form.value.institutes
+/*     const selectedInstitutes = this.form.value.institutes
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
@@ -577,7 +577,7 @@ export class February23Component implements OnInit {
         width: "fit-content",
       });
       this.clicked = false;
-    } else {
+    } else { */
       if (!this.form.controls.contact.value) {
         this.resultDialog.open(ConfirmationDialogComponent, {
           data: {
@@ -733,7 +733,7 @@ export class February23Component implements OnInit {
         }
       }
     }
-  }
+
 
   fillOrder(prohibitedId: [], restrictedHouses: []) {
     this.spinner = true;

@@ -1,9 +1,3 @@
-/*
-============================================
- order-details component
-;===========================================
-*/
-
 import { Component, OnInit } from "@angular/core";
 import {
   FormArray,
@@ -13,35 +7,33 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { ConfirmationService } from "primeng/api";
 import { OrderService } from "src/app/services/order.service";
-import { ListService } from "src/app/services/list.service";
 import { ClientService } from "src/app/services/client.service";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { LineItem } from "src/app/shared/interfaces/line-item.interface";
-import { NameDay } from "src/app/shared/interfaces/name-day.interface";
 import { Order } from "src/app/shared/interfaces/order.interface";
-import { SelectionModel } from "@angular/cdk/collections";
+import { Clipboard } from "@angular/cdk/clipboard";
 import { Observable } from "rxjs/internal/Observable";
 import { map, startWith } from "rxjs/operators";
-import { Clipboard } from "@angular/cdk/clipboard";
+import { error } from "protractor";
+import { of } from "rxjs/internal/observable/of";
 import { Client } from "src/app/shared/interfaces/client.interface";
 import { CreateClientDialogComponent } from "src/app/shared/create-client-dialog/create-client-dialog.component";
 import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog/update-client-dialog.component";
 
 @Component({
-  selector: "app-name-day",
-  templateUrl: "./name-day.component.html",
-  styleUrls: ["./name-day.component.css"],
+  selector: 'app-easter',
+  templateUrl: './easter.component.html',
+  styleUrls: ['./easter.component.css']
 })
-export class NameDayComponent implements OnInit {
+export class EasterComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Именины апреля 2024";
+  holiday: string = "Пасха 2024";
   lineItems: Array<LineItem> = [];
   types: Array<string> = [
     "email",
@@ -59,19 +51,25 @@ export class NameDayComponent implements OnInit {
   successMessage: string = "";
   errorMessage: string = "";
   canSave: Boolean = false;
-  notSaved: Boolean = true;
-  hide: Boolean = false;
   ready: Boolean = false;
   order_id: any;
   contactReminder: string = "";
-  spinner: Boolean = false;
-
-  /*  addressFilter: string = "any";
-  genderFilter: string = "any";
-  regions: Array<string> = []; */
-  nameDays: Array<any> = [];
   clientFirstName: string = "";
-
+  spinner: Boolean = false;
+  clicked: Boolean = false;
+  useProportion: Boolean = false;
+  showMaxNoAddress: Boolean = true;
+  showMaxOneHouse: Boolean = true;
+  addressFilter: string = "any";
+  genderFilter: string = "any";
+  showIndexes: false;
+  showInstruction: false;
+  regions = [];
+  nursingHomes = [];
+  // activeRegions = [];
+  activeNursingHomes = [];
+  actualYear = new Date().getFullYear();
+  addresses: HTMLElement;
   isMainMonth = true;
   isNextMonth = false;
   isBeforeMonth = false;
@@ -85,9 +83,6 @@ export class NameDayComponent implements OnInit {
   previousClient = "";
   newClient: Client;
   doubles = [];
-
-  showIndexes: false;
-  showInstruction: false;
 
   categories = [
     "образовательное учреждение",
@@ -106,28 +101,15 @@ export class NameDayComponent implements OnInit {
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private orderService: OrderService,
+    private clientService: ClientService,
     private resultDialog: MatDialog,
     private cookieService: CookieService,
-    private fb: FormBuilder,
-    private listService: ListService,
-    private clientService: ClientService,
     private clipboard: Clipboard,
+    private fb: FormBuilder,
     public dialog: MatDialog
   ) {
     this.userName = this.cookieService.get("session_user");
   }
-
-  displayedColumns = [
-    "check",
-    "plusAmount",
-    "name",
-    "nameDay",
-    "DOB",
-    "house",
-    "region",
-  ];
-  dataSource: MatTableDataSource<NameDay>;
-  selection = new SelectionModel<NameDay>(true, []);
 
   ngOnInit(): void {
     this.orderService.getContacts("email").subscribe(
@@ -150,6 +132,17 @@ export class NameDayComponent implements OnInit {
         console.log(err);
       }
     );
+    this.orderService.getNursingHomes().subscribe(
+      async (res) => {
+        this.nursingHomes = res["data"]["nursingHomes"];
+        this.activeNursingHomes = res["data"]["nursingHomes"];
+        this.regions = res["data"]["regions"];
+        //  this.activeRegions = res["data"]["regions"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
     this.form = this.fb.group({
       clientFirstName: [null],
@@ -158,7 +151,7 @@ export class NameDayComponent implements OnInit {
       //email: [null, Validators.compose([Validators.email])],
       contactType: [this.defaultType],
       contact: [null, [Validators.required]],
-      //institute: [null],
+      // institute: [null],
       institutes: this.fb.array([]),
       amount: [
         null,
@@ -167,6 +160,17 @@ export class NameDayComponent implements OnInit {
       isAccepted: [false],
       source: [null, Validators.compose([Validators.required])],
       comment: [null],
+      femaleAmount: [null, [Validators.min(1)]],
+      maleAmount: [null, [Validators.min(1)]],
+      year1: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
+      year2: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
+      
+      region: [null],
+      nursingHome: [null],
+      maxOneHouse: [null, [Validators.min(1)]],
+      maxNoAddress: [null, [Validators.min(1)]],
+      onlyWithPicture: [false],
+      
       nameOfInstitute: [null],
       categoryOfInstitute: [null],
     });
@@ -175,19 +179,7 @@ export class NameDayComponent implements OnInit {
       startWith(""),
       map((value) => this._filter(value || ""))
     );
-
-    this.listService.findAllNameDayLists("NameDay").subscribe(
-      (res) => {
-        this.nameDays = res["data"];
-        this.nameDays.sort((prev, next) => prev.dateNameDay - next.dateNameDay);
-        this.dataSource = new MatTableDataSource(this.nameDays);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
   }
-
   private addCheckboxes() {
     this.clientInstitutes.forEach(() =>
       this.institutes.push(new FormControl(false))
@@ -430,88 +422,86 @@ export class NameDayComponent implements OnInit {
       );
   }
 
-  goNext(event) {
-    event.preventDefault();
 
-    this.isMainMonth = !this.isMainMonth;
-    if (this.isMainMonth) {
-      this.isNextMonth = false;
+  correctProportion(genderValue: string) {
+    if (genderValue == "proportion") {
+      this.useProportion = true;
     } else {
-      this.isNextMonth = true;
-    }
-    this.isBeforeMonth = false;
-    console.log("click");
-    if (this.isMainMonth) {
-      this.holiday = "Именины апреля 2024";
-      this.listService.findAllNameDayLists("NameDay").subscribe(
-        (res) => {
-          this.nameDays = res["data"];
-          this.nameDays.sort(
-            (prev, next) => prev.dateNameDay - next.dateNameDay
-          );
-          this.dataSource = new MatTableDataSource(this.nameDays);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    }
-    if (this.isNextMonth) {
-      this.holiday = "Именины мая 2024";
-      this.listService.findAllNameDayLists("NameDayNext").subscribe(
-        (res) => {
-          this.nameDays = res["data"];
-          this.nameDays.sort(
-            (prev, next) => prev.dateNameDay - next.dateNameDay
-          );
-          this.dataSource = new MatTableDataSource(this.nameDays);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+      this.useProportion = false;
+      this.form.controls.femaleAmount.setValue(null),
+        this.form.controls.maleAmount.setValue(null);
     }
   }
 
-  goBack(event) {
-    event.preventDefault();
-    this.isMainMonth = !this.isMainMonth;
-    if (this.isMainMonth) {
-      this.isBeforeMonth = false;
+  correctMaxNoAddress(addressValue: string) {
+    if (addressValue == "any" || addressValue == "noReleased") {
+      this.showMaxNoAddress = true;
     } else {
-      this.isBeforeMonth = true;
+      this.showMaxNoAddress = false;
+      this.form.controls.maxNoAddress.setValue(null);
     }
-    this.isNextMonth = false;
-    if (this.isMainMonth) {
-      this.holiday = "Именины апреля 2024";
-      this.listService.findAllNameDayLists("NameDay").subscribe(
-        (res) => {
-          this.nameDays = res["data"];
-          this.nameDays.sort(
-            (prev, next) => prev.dateNameDay - next.dateNameDay
-          );
-          this.dataSource = new MatTableDataSource(this.nameDays);
-        },
-        (err) => {
-          console.log(err);
-        }
+  }
+
+  onChangeNursingHome() {
+    if (!this.form.controls.nursingHome.value) {
+      this.showMaxOneHouse = true;
+      if (this.addressFilter == "any" || "noReleased") {
+        this.showMaxNoAddress = true;
+      }
+    } else {
+      this.showMaxOneHouse = false;
+      this.form.controls.maxOneHouse.setValue(null);
+      this.showMaxNoAddress = false;
+      this.form.controls.maxNoAddress.setValue(null);
+    }
+  }
+
+  onChangeRegion() {
+    console.log(this.form.controls.region.value);
+    console.log(this.form.controls.nursingHome.value);
+
+    if (!this.form.controls.region.value) {
+      console.log("no regions were chosen");
+      console.log(this.form.controls.region.value);
+      this.activeNursingHomes = this.nursingHomes;
+    } else {
+      this.activeNursingHomes = this.nursingHomes.filter(
+        (item) => item.region == this.form.controls.region.value
       );
-    }
-    if (this.isBeforeMonth) {
-      this.holiday = "Именины марта 2024";
-      this.listService.findAllNameDayLists("NameDayBefore").subscribe(
-        (res) => {
-          this.nameDays = res["data"];
-          this.nameDays.sort(
-            (prev, next) => prev.dateNameDay - next.dateNameDay
-          );
-          this.dataSource = new MatTableDataSource(this.nameDays);
-        },
-        (err) => {
-          console.log(err);
+
+      if (this.form.controls.nursingHome.value) {
+        let activeNursingHome = this.nursingHomes.filter(
+          (item) => item.nursingHome == this.form.controls.nursingHome.value
+        );
+        if (this.form.controls.region.value != activeNursingHome[0].region) {
+          this.form.controls.nursingHome.setValue(null);
         }
-      );
+      }
+      console.log(this.activeNursingHomes);
     }
+  }
+
+
+  exit() {
+    this.confirmationService.confirm({
+      message: "Вы уверены, что хотите выйти без сохранения заявки?",
+      accept: () => {
+        this.successMessage = "";
+        this.errorMessage = "";
+        this.contactReminder = "";
+        this.clientFirstName = "";
+        this.lineItems = [];
+        this.canSave = false;
+        this.router.navigate(["/orders/find/" + this.userName]);
+        this.resultDialog.open(ConfirmationDialogComponent, {
+          data: {
+            message: "Заявка не была сохранена",
+          },
+          disableClose: true,
+          width: "fit-content",
+        });
+      },
+    });
   }
 
   clear(): void {
@@ -522,24 +512,16 @@ export class NameDayComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.notSaved = true;
-    this.hide = false;
-    this.selection.clear();
-    this.listService.findAllNameDayLists("NameDay").subscribe(
-      (res) => {
-        this.nameDays = res["data"];
-        this.nameDays.sort((prev, next) => prev.dateNameDay - next.dateNameDay);
-        this.dataSource = new MatTableDataSource(this.nameDays);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.addressFilter = "any";
+    this.genderFilter = "any";
 
+    this.clicked = false;
+    this.useProportion = false;
+    this.showMaxOneHouse = true;
+    this.showMaxNoAddress = true;
     this.showIndexes = false;
     this.showInstruction = false;
-
-    this.holiday = "Именины апреля 2024";
+    
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -574,6 +556,7 @@ export class NameDayComponent implements OnInit {
   }
 
   createOrder() {
+    this.clicked = true;
     this.successMessage = "";
     this.errorMessage = "";
     this.contactReminder = "";
@@ -581,125 +564,201 @@ export class NameDayComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
 
-     const selectedInstitutes = this.form.value.institutes
-      .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
-      .filter((v) => v !== null);
+    const selectedInstitutes = this.form.value.institutes
+    .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
+    .filter((v) => v !== null);
 
-    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
+  if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
+    this.resultDialog.open(ConfirmationDialogComponent, {
+      data: {
+        message:
+          "За адресами для коллективов, организаций, учреждений и т.п. обращайтесь, пожалуйста, к Оксане Кустовой!",
+      },
+      disableClose: true,
+      width: "fit-content",
+    });
+    this.clicked = false;
+  } else {
+
+    if (!this.form.controls.contact.value) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
-          message:
-            "За адресами для коллективов, организаций, учреждений и т.п. обращайтесь, пожалуйста, к Оксане Кустовой!",
+          message: "Обязательно укажите email или другой возможный контакт!",
         },
         disableClose: true,
         width: "fit-content",
       });
-     
+      this.clicked = false;
     } else {
-      if (!this.form.controls.contact.value) {
-        this.resultDialog.open(ConfirmationDialogComponent, {
-          data: {
-            message: "Обязательно укажите email или другой возможный контакт!",
+      if (
+        !this.options.includes(this.form.controls.contact.value.toLowerCase())
+      ) {
+        this.confirmationService.confirm({
+          message:
+            "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
+          accept: () => {
+            this.router.navigate([]).then((result) => {
+              window.open("#/clients/create/new", "_blank");
+            });
           },
-          disableClose: true,
-          width: "fit-content",
         });
+        this.clicked = false;
       } else {
         if (
-          !this.options.includes(this.form.controls.contact.value.toLowerCase())
+          this.form.controls.nameOfInstitute.value ||
+          this.form.controls.categoryOfInstitute.value
         ) {
-          this.confirmationService.confirm({
-            message:
-              "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
-            accept: () => {
-              this.router.navigate([]).then((result) => {
-                window.open("#/clients/create/new", "_blank");
-              });
+          this.resultDialog.open(ConfirmationDialogComponent, {
+            data: {
+              message:
+                "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
             },
+            disableClose: true,
+            width: "fit-content",
           });
+          this.clicked = false;
         } else {
-          let temporaryLineItems = [];
-
-          for (let value of this.selection["_selection"]) {
-            temporaryLineItems.push(value);
-          }
-
-          console.log(
-            "temporaryLineItems.length != this.form.controls.amount.value"
-          );
-          console.log(temporaryLineItems.length);
-          console.log(this.form.controls.amount.value);
-
-          if (temporaryLineItems.length != this.form.controls.amount.value) {
+          //console.log(this.form.controls.year2.value);
+          //console.log(this.form.controls.year1.value);
+          if (
+            this.form.controls.year2.value != null &&
+            this.form.controls.year1.value != null &&
+            this.form.controls.year2.value < this.form.controls.year1.value
+          ) {
             this.resultDialog.open(ConfirmationDialogComponent, {
               data: {
                 message:
-                  "Количества выбранных и указанных адресов должны совпадать.",
+                  "Неверно указан период для года рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
               },
               disableClose: true,
               width: "fit-content",
             });
+            this.clicked = false;
+            console.log("ERROR");
           } else {
-            if (
-              this.form.controls.nameOfInstitute.value ||
-              this.form.controls.categoryOfInstitute.value
+/*             if (
+              this.form.controls.date1.value != null &&
+              this.form.controls.date2.value != null &&
+              this.form.controls.date2.value < this.form.controls.date1.value
             ) {
               this.resultDialog.open(ConfirmationDialogComponent, {
                 data: {
                   message:
-                    "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
+                    "Неверно указан период для даты рождения: значение 'С' должно быть меньше или равно значению 'ПО'.",
                 },
                 disableClose: true,
                 width: "fit-content",
               });
-            } else {
-              console.log("orderService.checkDoubleOrder");
-              this.orderService
-                .checkDoubleOrder(this.holiday, this.client._id)
-                .subscribe(
-                  async (res) => {
-                    let result = res["data"];
-                    console.log("res");
-                    console.log(res);
-                    if (!result) {
-                      this.saveOrder(temporaryLineItems);
-                    } else {
-                      let usernameList = "";
-                      for (let user of result.users) {
-                        usernameList =
-                          usernameList.length == 0
-                            ? user
-                            : usernameList + ", " + user;
-                      }
-                      this.confirmationService.confirm({
-                        message:
-                          "Пользователь с такими контактами уже получил адреса на этот праздник: " +
-                          this.holiday +
-                          " у волонтера(ов): " +
-                          usernameList +
-                          ". Вы уверены, что это не дубль?",
-                        accept: () => this.saveOrder(temporaryLineItems),
-                      });
-                    }
+              this.clicked = false;
+            } else { */
+              console.log("this.genderFilter");
+              console.log(this.genderFilter);
+
+              if (
+                this.genderFilter == "proportion" &&
+                this.form.controls.femaleAmount.value +
+                  this.form.controls.maleAmount.value !=
+                  this.form.controls.amount.value
+              ) {
+                this.resultDialog.open(ConfirmationDialogComponent, {
+                  data: {
+                    message:
+                      "Количество в пропорции женщин и мужчин должно совпадать с общим количеством.",
                   },
-                  (err) => {
-                    this.errorMessage = err.error.msg + " " + err.message;
-                    console.log(err);
-                  }
-                );
-            }
+                  disableClose: true,
+                  width: "fit-content",
+                });
+                this.clicked = false;
+              } else {
+                if (
+                  this.form.controls.maxOneHouse.value >
+                    this.form.controls.amount.value ||
+                  this.form.controls.maxNoAddress.value >
+                    this.form.controls.amount.value
+                ) {
+                  this.resultDialog.open(ConfirmationDialogComponent, {
+                    data: {
+                      message:
+                        "Max количество адресов из одного дома или из БОА не может быть больше общего количества адресов.",
+                    },
+                    disableClose: true,
+                    width: "fit-content",
+                  });
+                  this.clicked = false;
+                } else {
+/*                   let email =
+                    this.form.controls.contactType.value == "email"
+                      ? this.form.controls.contact.value
+                      : null;
+                  let otherContact =
+                    this.form.controls.contactType.value != "email"
+                      ? this.form.controls.contact.value
+                      : null; */
+                  this.orderService
+                    .checkDoubleOrder(this.holiday, this.client._id)
+                    .subscribe(
+                      async (res) => {
+                        let result = res["data"];
+                         console.log("RESULT");
+                       console.log(result);
+                        if (!result) {
+                          this.fillOrder([],[]);
+                        } else {
+                          let usernameList = "";
+                          for (let user of result.users) {
+                            usernameList =
+                              usernameList.length == 0
+                                ? user
+                                : usernameList + ", " + user;
+                          }
+                          this.confirmationService.confirm({
+                            message:
+                              "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+                              this.holiday +
+                              " у волонтера(ов): " +
+                              usernameList +
+                              ". Вы уверены, что это не дубль?",
+                            accept: () => this.fillOrder(result.seniorsIds, []),//result.houses
+                            reject: () => (this.clicked = false),
+                          });
+                        }
+                      },
+                      (err) => {
+                        this.errorMessage = err.error.msg + " " + err.message;
+                        console.log(err);
+                        this.clicked = false;
+                      }
+                    );
+                }
+              }
+            
           }
         }
       }
     }
   }
+}
 
-  saveOrder(temporaryLineItems) {
+  fillOrder(prohibitedId: [], restrictedHouses: []) {
+    this.spinner = true;
+
+    /*     let institutes = this.institutes.getRawValue();
+
+    for (let institute of institutes) {
+      if (institute.name == null) {
+        let index = institutes.findIndex((item) => item.name == null);
+        institutes.splice(index, 1);
+      }
+    } */
+
+    console.log("this.form.value.institutes");
+    console.log(this.form.value.institutes);
     const selectedInstitutes = this.form.value.institutes
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
+    console.log("selectedInstitutes");
+    console.log(selectedInstitutes);
 
-    this.spinner = true;
     let newOrder: Order = {
       userName: this.userName,
       holiday: this.holiday,
@@ -707,8 +766,15 @@ export class NameDayComponent implements OnInit {
       clientFirstName: this.client.firstName,
       clientPatronymic: this.client.patronymic,
       clientLastName: this.client.lastName,
-      contactType: this.form.controls.contactType.value,
-      contact: this.form.controls.contact.value,
+/*       email:
+        this.form.controls.contactType.value == "email"
+          ? this.form.controls.contact.value
+          : null, */
+      contactType:
+        this.form.controls.contactType.value,
+      contact:
+       this.form.controls.contact.value,
+       
       institutes: selectedInstitutes,
       amount: this.form.controls.amount.value,
       isAccepted: this.form.controls.isAccepted.value ? true : false,
@@ -716,27 +782,38 @@ export class NameDayComponent implements OnInit {
       comment: this.form.controls.comment.value,
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
-      temporaryLineItems: temporaryLineItems,
+      filter: {
+        addressFilter: this.addressFilter,
+        genderFilter: this.genderFilter,
+        year1: this.form.controls.year1.value,
+        year2: this.form.controls.year2.value,
+        femaleAmount: this.form.controls.femaleAmount.value,
+        maleAmount: this.form.controls.maleAmount.value,
+
+        region: this.form.controls.region.value,
+        nursingHome: this.form.controls.nursingHome.value,
+        maxOneHouse: this.form.controls.maxOneHouse.value,
+        maxNoAddress: this.form.controls.maxNoAddress.value,
+        onlyWithPicture: this.form.controls.onlyWithPicture.value,
+
+      },
     };
+    //console.log("newOrder");
+    console.log(newOrder.dateOfOrder);
+    //console.log("newOrder");
+    //console.log(newOrder);
 
-    console.log("newOrder");
-    console.log(newOrder);
-    console.log(this.selection);
-
-    this.orderService.createOrderForNameDay(newOrder).subscribe(
+    this.orderService.createOrderEaster(newOrder, prohibitedId, restrictedHouses).subscribe(
       async (res) => {
         this.spinner = false;
-        this.hide = true;
-        this.notSaved = false;
-        let result = res["data"];
+        this.clicked = false;
+        let result = res["data"]["result"];
         if (typeof result == "string") {
-          this.errorMessage = res["data"];
-          console.log(res);
+          this.errorMessage = result;
+          // console.log(res);
         } else {
           //alert(res.msg);
-          console.log("result");
-          console.log(result);
-          console.log(this.notSaved);
+          //console.log(res);
           this.lineItems = result;
           let i = 0;
           for (let lineItem of this.lineItems) {
@@ -745,6 +822,7 @@ export class NameDayComponent implements OnInit {
               i++;
             }
           }
+
           this.canSave = true;
           this.successMessage =
             "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
@@ -754,11 +832,13 @@ export class NameDayComponent implements OnInit {
       },
       (err) => {
         this.spinner = false;
+        this.clicked = false;
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
       }
     );
   }
+
   getAddresses() {
     let greeting: string;
     if (this.clientFirstName) {
@@ -770,17 +850,18 @@ export class NameDayComponent implements OnInit {
       "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
       "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
       "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются люди, которых к престарелым совсем не относятся. Это инвалиды, которые проживают в домах престарелых. Иногда сразу после детдомов.\n\n" +
-      this.holiday +
+      this.holiday + " празднуется 5 мая \n (открытки просим отправить 17-21 апреля и только простыми отправлениями) "+
       "\n" +
+      "Мы не можем сказать, кто из наших подопечных верующий и какого вероисповедания придерживается. Мы поздравляем всех. Если вы сомневаетесь, что человек празднует Пасху, можно начать ваше поздравление следующим образом: 'Уважаемая ...! Поздравляю Вас с наступившей весной и праздником Пасхи, если Вы отмечаете! Желаю....'"+ "\n" +
       "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
       "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n\n";
     let bottom =
-      "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Учтите, что по России письма идут 7-14 дней.\n\n" +
+      "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Учтите, что по России письма идут 12-18 дней.\n\n" +
       "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не далать)*.\n – Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
       "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
       "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
       "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, бандероли, заказные/ценные письма, письма первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
-      "Нашим подопечным нужны продукты, дрова для обогрева домов, медицинская помощь. Сделайте пожертвование на starikam.org\n\n" +
+      "Чтобы помочь бабушкам и дедушкам в Республике Тыва с продуктами, перейдите по ссылке: https://starikam.org/campaign/produkty-v-dalnij-kozhuun/ \n\n" +
       "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n" +
       "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
     let addresses = "";
@@ -803,17 +884,15 @@ export class NameDayComponent implements OnInit {
           celebrator.firstName +
           " " +
           celebrator.patronymic +
-          " (" +
-          celebrator.specialComment +
-          ") " +
-          celebrator.nameDay +
           " " +
+          (celebrator.yearBirthday > 0 ? "- " + celebrator.yearBirthday + " г.р." : "") +
+        
           celebrator.comment1 +
           " " +
-          celebrator.linkPhoto +
+          (celebrator.linkPhoto ? celebrator.linkPhoto : "") +
+          " " +
           "\n";
       }
-
       addresses = addresses + "\n";
     }
     if (this.showInstruction) {

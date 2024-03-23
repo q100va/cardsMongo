@@ -28,7 +28,7 @@ const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
 const FamilyDay = require("../models/family-day");
 const checkAuth = require("../middleware/check-auth");
-
+const Easter = require("../models/easter");
 
 //const SpecialDay = require("../models/senior");
 
@@ -211,7 +211,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 3 ? 'ДР марта 2024' : 'ДР апреля 2024',
+      holyday: month == 4 ? 'Дни рождения апреля 2024' : 'Дни рождения мая 2024',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -237,9 +237,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 2) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 3) { finalList = await List.insertMany(newList, options); }
-  if (month == 4) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 3) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 4) { finalList = await List.insertMany(newList, options); }
+  if (month == 5) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -382,8 +382,8 @@ async function findAllMonthNameDays(month) {
       cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
     }
     let holiday;
-    if (month == 3) holiday = 'Именины марта 2024';
     if (month == 4) holiday = 'Именины апреля 2024';
+    if (month == 5) holiday = 'Именины мая 2024';
 
     let cloneCelebrator = {
       region: celebrator.region,
@@ -433,8 +433,8 @@ async function findAllMonthNameDays(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 3) finalList = await NameDay.insertMany(newList, options);
-  if (month == 4) finalList = await NameDayNext.insertMany(newList, options);
+  if (month == 4) finalList = await NameDay.insertMany(newList, options);
+  if (month == 5) finalList = await NameDayNext.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -817,12 +817,12 @@ async function findAllGenderCelebrators(gender, houses) {
   console.log(namesOfUpdatedNursingHome);
 
 
-/*   let activeHouses = await House.find({ isActive: true });
-  for (let house of activeHouses) {
-    let amount = await Senior.find({ isDisabled: false, dateExit: null, nursingHome: house.nursingHome }).countDocuments();
-    await House.updateOne({ nursingHome: house.nursingHome }, { $set: { "statistic.spring.amount": amount } });
-  }
- */
+  /*   let activeHouses = await House.find({ isActive: true });
+    for (let house of activeHouses) {
+      let amount = await Senior.find({ isDisabled: false, dateExit: null, nursingHome: house.nursingHome }).countDocuments();
+      await House.updateOne({ nursingHome: house.nursingHome }, { $set: { "statistic.spring.amount": amount } });
+    }
+   */
 
 
   let list = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, gender: gender });
@@ -856,7 +856,7 @@ async function findAllGenderCelebrators(gender, houses) {
     }
     if (cloneCelebrator.category == "yangWomen") {
       await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.spring.yangWomen": 1, "statistic.spring.plus0": 1 } });
-    } 
+    }
 
     updatedCelebrators.push(cloneCelebrator);
   }
@@ -1158,6 +1158,28 @@ router.get("/teacher-day", checkAuth, async (req, res) => {
       } else {
         console.log(teacherDays);
         const findAllListsResponse = new BaseResponse("200", "Query successful", teacherDays);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+//Find all Easter lists API
+router.get("/easter", checkAuth, async (req, res) => {
+  try {
+    //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
+    Easter.find({ absent: { $ne: true } }, function (err, lists) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(lists);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
         res.json(findAllListsResponse.toObject());
       }
     });
@@ -1746,14 +1768,14 @@ const SpecialDay = require("../models/senior");
 //Find special lists API
 router.get("/holiday/special-list", checkAuth, async (req, res) => {
   try {
-/*     let notActiveHouses = await House.find({ isActive: false });
+   /*  let notActiveHouses = await House.find({ isActive: false });
     let notActiveHousesNames = [];
     for (let house of notActiveHouses) {
       notActiveHousesNames.push(house.nursingHome);
     }
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
-    let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: "Новый год 2024" });
+    let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2024", "23 февраля 2024"] });
     let lineItemsM = [];
     for (let order of ordersM) {
       for (let item of order.lineItems) {
@@ -1776,10 +1798,11 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
       console.log(lineItemsM_3.length);
     } */
 
-    //let nameDays = lineItemsM_3;
+  //  let nameDays = lineItemsM_3;
 
     //let housesForMagnit = Array.from(new Set(housesM));
-    //let nameDays = await SpecialDay.find({ absent: false,  nursingHome: {$in: housesForMagnit}});
+    let housesForMagnit = ["ТОЛЬЯТТИ", "БИЙСК", "ОКТЯБРЬСКИЙ", "КАНДАЛАКША", "ПЕРВОМАЙСКИЙ"];
+    let nameDays = await SpecialDay.find({  nursingHome: {$in: housesForMagnit}, dateExit: null, isRestricted: false, monthBirthday: 6});
 
     // let nameDays = await SpecialDay.find({ nursingHome: "ВОЛГОГРАД_КРИВОРОЖСКАЯ", yearBirthday: 0, dateExit: null, isDisabled: false });
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
@@ -1789,59 +1812,59 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     //let nameDays = await SpecialDay.find({ isRestricted: false, isReleased: false, noAddress: false, dateExit: null, monthBirthday: 2, dateBirthday: { $lt: 6, $gt: 0 }, nursingHome: { $nin: notActiveHousesNames } });//yearBirthday: { $lt: 2023 }
     // let nameDays = await SpecialDay.find({  isReleased: false, absent: false, plusAmount:3, monthBirthday:6, dateBirthday: {$lt:31, $gt: 28}, yearBirthday: {$lt: 2023}, nursingHome: {$nin: notActiveHousesNames } });
 
-    let updatedNursingHome = await House.find({ isActive: true , "statistic.spring.amount" :{$gt: 300}});
-    let namesOfUpdatedNursingHome = [];
-    for (let home of updatedNursingHome) {
-      namesOfUpdatedNursingHome.push(home.nursingHome);
-    }
-    let nameDays = await SpecialDay.find({nursingHome: {$in:[ "ВЕРХНЕУРАЛЬСК", "ЧЕРНЫШЕВКА"] }, isRestricted: false, isReleased: false, dateExit: null, noAddress: false});
-    //let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
-    //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, monthBirthday : 4, dateBirthday: 1, yearBirthday: {$lt: 1953}});
-    // let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null,  region: "ТЮМЕНСКАЯ", gender: "Female"});
-    let lineItems = [];
-    let nursingHomes = await House.find({});
-
-    //nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
-let i = 0;
-    for (let person of nameDays) {
-      console.log(i++);
-     // console.log(person);
-      //console.log(lineItems);
-      let index = -1;
-      //console.log(lineItems.length);
-      if (lineItems.length > 0) {
-        index = lineItems.findIndex(
-          (item) => item.nursingHome == person.nursingHome
-        );
+    /*   let updatedNursingHome = await House.find({ isActive: true , "statistic.spring.amount" :{$gt: 300}});
+      let namesOfUpdatedNursingHome = [];
+      for (let home of updatedNursingHome) {
+        namesOfUpdatedNursingHome.push(home.nursingHome);
       }
-      // console.log(index);
-      if (index > -1) {
-        lineItems[index].celebrators.push(person);
-      } else {
-        let foundHouse = nursingHomes.find(
-          (item) => item.nursingHome == person.nursingHome
-        );
-        //console.log(foundHouse);
-        //console.log(person.nursingHome);
-        if (!foundHouse) {
-          console.log(`Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`);
-          const findAllListsMongodbErrorResponse = new BaseResponse("500", `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`, err);
-          res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      let nameDays = await SpecialDay.find({nursingHome: {$in:[ "ВЕРХНЕУРАЛЬСК", "ЧЕРНЫШЕВКА"] }, isRestricted: false, isReleased: false, dateExit: null, noAddress: false});
+      //let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
+      //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, monthBirthday : 4, dateBirthday: 1, yearBirthday: {$lt: 1953}});
+      // let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null,  region: "ТЮМЕНСКАЯ", gender: "Female"});
+      let lineItems = [];
+      let nursingHomes = await House.find({});
+  
+      //nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+  let i = 0;
+      for (let person of nameDays) {
+        console.log(i++);
+       // console.log(person);
+        //console.log(lineItems);
+        let index = -1;
+        //console.log(lineItems.length);
+        if (lineItems.length > 0) {
+          index = lineItems.findIndex(
+            (item) => item.nursingHome == person.nursingHome
+          );
         }
-        lineItems.push({
-          region: foundHouse.region,
-          nursingHome: foundHouse.nursingHome,
-          address: foundHouse.address,
-          infoComment: foundHouse.infoComment,
-          adminComment: foundHouse.adminComment,
-          noAddress: foundHouse.noAddress,
-          celebrators: [person],
-        });
-      }
-    }
-    //console.log(nameDays);
+        // console.log(index);
+        if (index > -1) {
+          lineItems[index].celebrators.push(person);
+        } else {
+          let foundHouse = nursingHomes.find(
+            (item) => item.nursingHome == person.nursingHome
+          );
+          //console.log(foundHouse);
+          //console.log(person.nursingHome);
+          if (!foundHouse) {
+            console.log(`Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`);
+            const findAllListsMongodbErrorResponse = new BaseResponse("500", `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${person.nursingHome}.`, err);
+            res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+          }
+          lineItems.push({
+            region: foundHouse.region,
+            nursingHome: foundHouse.nursingHome,
+            address: foundHouse.address,
+            infoComment: foundHouse.infoComment,
+            adminComment: foundHouse.adminComment,
+            noAddress: foundHouse.noAddress,
+            celebrators: [person],
+          });
+        }
+      } */
+    console.log(nameDays);
 
-    const findAllListsResponse = new BaseResponse("200", "Query successful", lineItems);
+    const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
     res.json(findAllListsResponse.toObject());
 
   } catch (e) {
@@ -1852,7 +1875,7 @@ let i = 0;
 });
 
 // check holiday fullness
-router.post("/holiday/check-fullness/:holiday", checkAuth, async (req, res) => {
+/* router.post("/holiday/check-fullness/:holiday", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
@@ -1927,7 +1950,7 @@ async function checkAllHolidayFullness(house, holiday) {
     ordersToAware: ordersToAware
   }
 
-}
+} */
 
 /////////////////////////////////////////
 
@@ -2235,16 +2258,43 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
 
 async function countAmount() {
   let amount = 0;
-  let set = new Set();
-  let orders = await Order.find({holiday:"Дни рождения февраля 2024", "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false,  });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }
-  console.log(orders.length);
-
-
-  for (let order of orders) {
-    set.add(order.contact);
-    console.log(order.institutes);
+  let setClients = new Set();
+  let setInstitutes = new Set();
+  let setSchools = new Set();
+  let ordersBirthday = await Order.find({ holiday: "Дни рождения марта 2024", isDisabled: false, isOverdue: false, isReturned: false, });  
+  let ordersNameDay = await Order.find({ holiday: "Именины марта 2024", isDisabled: false, isOverdue: false, isReturned: false, }); 
+  let ordersFebruary23 = await Order.find({ holiday: "23 февраля 2024", isDisabled: false, isOverdue: false, isReturned: false, }); 
+  for (let order of ordersBirthday) {
+    setClients.add(order.contact);
   }
-  amount = set.size;
+  for (let order of ordersNameDay) {
+    setClients.add(order.contact);
+  }
+  for (let order of ordersFebruary23) {
+    setClients.add(order.contact);
+  }
+  console.log("поздравляющих");
+  console.log(setClients.size);
+
+  let ordersInstitutes = await Order.find({ holiday: {$in: ["Дни рождения марта 2024", "23 февраля 2024"]}, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });  
+  let ordersSchools = await Order.find({ holiday: {$in: ["Дни рождения марта 2024", "23 февраля 2024"]}, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }
+
+
+
+  for (let order of ordersInstitutes) {
+    setInstitutes.add(order.contact); 
+  }
+  console.log("учреждений");
+  console.log(setInstitutes.size);
+
+  for (let order of ordersSchools) {
+    setSchools.add(order.contact);  
+  }
+  console.log("образовательных");
+  console.log(setSchools.size);
+
+  
+  amount = setSchools.size;
 
   return amount;
 }
@@ -2304,7 +2354,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения марта 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения апреля 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
@@ -2343,6 +2393,967 @@ async function findUncertain() {
     res.status(500).send(findListByIdCatchErrorResponse.toObject());
   }
 }); */
+
+
+
+
+// check SPRING doubles
+router.post("/holiday/check-doubles/:holiday", checkAuth, async (req, res) => {
+  try {
+    console.log("0- check SPRING doubles" + req.body.nursingHome);
+    let result = await findAllSpringDoubles(req.body.nursingHome, req.params.holiday);
+    console.log("4-check SPRING doubles " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+async function findAllSpringDoubles(house, holiday) {
+
+  let Holiday = holiday == "february23" ? February23 : March8;
+
+
+  let fullHouse = await Holiday.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1, plusAmount: 1 });
+  let fullDataHouse = [];
+  /*   console.log("fullHouse");
+    console.log(fullHouse); */
+  for (let item of fullHouse) {
+    fullDataHouse.push(item.fullData);
+  }
+  /*   console.log("fullDataHouse");
+    console.log(fullDataHouse); */
+  let duplicates = [];
+  fullDataHouse.sort();
+
+  //console.log(tempArray);
+  for (let i = 0; i < fullDataHouse.length - 1; i++) {
+    if (fullDataHouse[i + 1] == fullDataHouse[i]) {
+      duplicates.push(fullDataHouse[i]);
+    }
+  }
+  console.log("duplicates");
+  console.log(duplicates);
+  if (duplicates.length == 0) return '0';
+
+  for (let senior of duplicates) {
+    let someHouses = fullHouse.filter(item => item.fullData == senior);
+    console.log("someHouses");
+    console.log(someHouses);
+    let plusAmount = 0;
+    for (let senior of someHouses) {
+      plusAmount = plusAmount + senior.plusAmount;
+    }
+    for (let i = 0; i < someHouses.length; i++) {
+      if (i == 0) {
+        await Holiday.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
+      } else {
+        await Holiday.deleteOne({ _id: someHouses[i]._id });
+      }
+    }
+  }
+  console.log("All duplicates");
+  console.log(duplicates.length.toString());
+  return duplicates.length.toString();
+
+
+}
+
+
+
+// check SPRING fullness
+router.post("/holiday/check-fullness/:holiday", checkAuth, async (req, res) => {
+  try {
+
+    console.log("0- check NY fullness " + req.body.nursingHome);
+
+    let result = await checkAllSpringFullness(req.body.nursingHome, req.params.holiday);
+    console.log("4-check NY fullness " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+
+async function checkAllSpringFullness(house, holiday) {
+  let restrictedHouses = [ "КОСТРОМА_КИНЕШЕМСКОЕ", "МОСКВА_РОТЕРТА", "СЕВЕРО-АГЕЕВСКИЙ", "АЛАКУРТТИ", "ХВОЙНЫЙ", "ВОЛГОГРАД_КРИВОРОЖСКАЯ", "УСОЛЬЕ", "ЧЕРКАССКАЯ_КОНОПЕЛЬКА", "МАМОНТОВО", "ЧЕРМЕНИНО", "ЧЕРЕМХОВО", "КРИВЕЦ", "КРИПЕЦКОЕ"]
+  let index = restrictedHouses.findIndex(i => i == house);
+  if (index != -1 && holiday == "february23") {
+    return { amountAdded: null, amountDeleted: null };
+  }
+
+
+  await findAllSpringDoubles(house, holiday);
+  let Holiday
+  if (holiday == "february23") {
+    Holiday = require("../models/february-23");
+  } else {
+    Holiday = require("../models/march-8");
+  }
+  let seniors;
+  if (holiday == "february23") {
+    seniors = await Senior.find({ isReleased: false, isDisabled: false, dateExit: null, isRestricted: false, gender: "Male", nursingHome: house });
+  } else {
+    seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house, gender: "Female" });
+  }
+
+
+  console.log("seniors " + seniors.length);
+  let fullHouse = await Holiday.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+
+  for (let senior of seniors) {
+    senior.fullData = senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday;
+  }
+
+  console.log("fullHouse " + fullHouse.length);
+  let amount = 0;
+  for (let senior of seniors) {
+
+    let seniorIndex = fullHouse.findIndex(item => item.fullData == senior.fullData);
+    //console.log("seniorIndex " + seniorIndex);
+    if (seniorIndex == -1) {
+      amount++;
+      let celebrator = await createCloneCelebrator(senior);
+      let newCelebrator = await Holiday.create(celebrator);
+      console.log("added");
+      console.log(newCelebrator.fullData);
+    }
+  }
+  console.log("All added");
+  console.log(amount);
+
+  fullHouse = await Holiday.find({ nursingHome: house, absent: false }, { fullData: 1, });
+  let count = 0;
+  for (let celebrator of fullHouse) {
+    let celebratorIndex = seniors.findIndex(item => item.fullData == celebrator.fullData);
+    if (celebratorIndex == -1) {
+
+      await Holiday.updateOne({ fullData: celebrator.fullData }, { $set: { absent: true } });
+      count++;
+      console.log("deleted");
+      console.log(celebrator.fullData);
+
+    }
+  }
+  console.log("All deleted");
+  console.log(count);
+
+  await findAllNYDoubles(house, holiday);
+  await restoreStatistic(house, holiday);
+
+  return { amountAdded: amount, amountDeleted: count };
+
+}
+
+async function restoreStatistic(activeHouse, holiday) {
+  console.log("activeHouse");
+  console.log(activeHouse);
+
+  let house = await House.findOne({ nursingHome: activeHouse });
+
+  let Holiday;
+  if (holiday == "february23") {
+    Holiday = require("../models/february-23");
+  } else {
+    Holiday = require("../models/march-8");
+  }
+
+
+  for (let i = 0; i < 6; i++) {
+
+    let plusM = await February23.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: i } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+
+    let plusF = await March8.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: i } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+
+/*     console.log("plusM");
+    console.log(plusM);
+
+    console.log("plusF");
+    console.log(plusF); */
+
+    let plusMen = plusM.length > 0 ? plusM[0].count : 0;
+    let plusWomen = plusF.length > 0 ? plusF[0].count : 0;
+    let plus = plusMen + plusWomen;
+
+    console.log("plus");
+    console.log(plus);
+
+
+    switch (i) {
+      case 0:
+        await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.plus0": plus } });
+        break;
+      case 1:
+        await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.plus1": plus } });
+        break;
+      case 2:
+        await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.plus2": plus } });
+        break;
+      case 3:
+        await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.plus3": plus } });
+        break;
+      case 4:
+        await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.plus4": plus } });
+        break;
+      case 5:
+        await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.plus5": plus } });
+        break;
+    }
+
+
+  }
+
+  if (house.noAddress) {
+
+    if (holiday == "february23") {
+      let specialMenPlus = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
+        { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+      ]);
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.specialMenPlus": specialMenPlus[0]?.count ? specialMenPlus[0].count : 0 } });
+    } else {
+      let specialWomenPlus = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
+        { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+      ]);
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.specialWomenPlus": specialWomenPlus[0]?.count ? specialWomenPlus[0].count : 0 } });
+
+    }
+
+
+  } else {
+
+    if (holiday == "february23") {
+      let oldMenPlus = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "oldMen" } },
+        { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+      ]);
+      /*   console.log("oldMenPlus");
+        console.log(oldMenPlus);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.oldMenPlus": oldMenPlus[0]?.count ? oldMenPlus[0].count : 0 } });
+      let yangMenPlus = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "yangMen" } },
+        { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+      ]);
+      /*     console.log("yangMenPlus");
+          console.log(yangMenPlus);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.yangMenPlus": yangMenPlus[0]?.count ? yangMenPlus[0].count : 0 } });
+
+    } else {
+      let oldWomenPlus = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "oldWomen" } },
+        { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+      ]);
+      /*     console.log("oldWomenPlus");
+          console.log(oldWomenPlus);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.oldWomenPlus": oldWomenPlus[0]?.count ? oldWomenPlus[0].count : 0 } });
+
+
+      let yangWomenPlus = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
+        { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+      ]);
+      /*     console.log("yangWomenPlus");
+          console.log(yangWomenPlus);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.yangWomenPlus": yangWomenPlus[0]?.count ? yangWomenPlus[0].count : 0 } });
+
+    }
+
+
+  }
+
+  let amountM = await February23.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+  let amountF = await March8.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+/*     console.log("plusM");
+  console.log(plusM);
+
+  console.log("plusF");
+  console.log(plusF); */
+
+  let amountMen = amountM.length > 0 ? amountM[0].count : 0;
+  let amountWomen = amountF.length > 0 ? amountF[0].count : 0;
+  let amount = amountMen + amountWomen;
+
+  console.log("amount");
+  console.log(amount);
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.amount": amount } });
+
+
+
+  if (house.noAddress) {
+
+    if (holiday == "february23") {
+      let specialMen = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.specialMen": specialMen[0]?.count ? specialMen[0].count : 0 } });
+    } else {
+
+      let specialWomen = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.specialWomen": specialWomen[0]?.count ? specialWomen[0].count : 0 } });
+
+    }
+
+  } else {
+
+    if (holiday == "february23") {
+      let oldMen = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "oldMen" } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      /*   console.log("oldMen");
+        console.log(oldMen);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.oldMen": oldMen[0]?.count ? oldMen[0].count : 0 } });
+
+      let yangMen = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "yangMen" } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      /*     console.log("yangMen");
+          console.log(yangMen);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.yangMen": yangMen[0]?.count ? yangMen[0].count : 0 } });
+
+    } else {
+      let oldWomen = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "oldWomen" } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      /*     console.log("oldWomen");
+          console.log(oldWomen);  */
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.oldWomen": oldWomen[0]?.count ? oldWomen[0].count : 0 } });
+
+
+      let yangWomen = await Holiday.aggregate([
+        { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      /*     console.log("yangWomen");
+          console.log(yangWomen); */
+
+      await House.updateOne({ _id: house._id }, { $set: { "statistic.spring.yangWomen": yangWomen[0]?.count ? yangWomen[0].count : 0 } });
+    }
+  }
+
+  /*   } */
+
+  /*   } */
+}
+
+
+
+///////////////////////////////////////// EASTER
+
+// Create EASTER list API 
+router.post("/easter/create", checkAuth, async (req, res) => {
+  try {
+    const houses = req.body.list;
+    console.log("0- inside Create list API");
+  let result = await findAllEasterCelebrators(houses);
+  // let result = await countAmount();
+
+    console.log("4-inside Create list API " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+/* async function countAmount() {
+  let houses = await House.find({ isActive: true },{nursingHome: 1, _id:0});
+ // console.log(houses);
+  for (let house of houses) {
+
+    let amount = await Senior.aggregate([
+      { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+  console.log(house.nursingHome);
+    console.log(amount[0].count);
+    let find = await House.findOne({ nursingHome: house.nursingHome });
+    console.log(find.nursingHome);
+   let update = await House.updateOne({ nursingHome: house.nursingHome }, { $set: { "statistic.easter.amount": amount[0].count } });
+   console.log(update);
+  }
+
+  return true;
+} */
+
+
+
+async function findAllEasterCelebrators(houses) {
+
+  //throw new Error("Something bad happened");
+  let result = [];
+  console.log("1- inside findAllMonthCelebrators newList");
+
+  let namesOfUpdatedNursingHome = [];
+  for (let home of houses) {
+    namesOfUpdatedNursingHome.push(home.nursingHome);
+  }
+  console.log(namesOfUpdatedNursingHome);
+
+
+  let list = await Senior.find(
+    {
+      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }
+    }
+  );
+  console.log(list.length);
+
+  if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
+  console.log("2- seniors" + list.length);
+
+  /*   await House.updateMany({},
+      {$set:{
+        "statistic.easter.time": 0,
+        "statistic.easter.plus0": 0,
+        "statistic.easter.plus1": 0,
+        "statistic.easter.plus2": 0,
+        "statistic.easter.plus3": 0,
+        "statistic.easter.specialMen": 0,
+        "statistic.easter.specialWomen": 0,
+        "statistic.easter.oldMen": 0,
+        "statistic.easter.oldWomen": 0,
+        "statistic.easter.yangMen": 0,
+        "statistic.easter.yangWomen": 0,
+        "statistic.easter.amount": 0,
+        "statistic.easter.specialMenPlus": 0,
+        "statistic.easter.specialWomenPlus": 0,
+        "statistic.easter.oldMenPlus": 0,
+        "statistic.easter.oldWomenPlus": 0,
+        "statistic.easter.yangMenPlus": 0,
+        "statistic.easter.yangWomenPlus": 0,
+      }
+    
+    }); */
+
+  let updatedCelebrators = [];
+  for (let celebrator of list) {
+
+    /*       let cloneSpecialComment = await specialComment(
+            2022 - celebrator["yearBirthday"]
+          ); */
+
+    let cloneCelebrator = await createCloneEasterCelebrator(celebrator);
+
+
+
+    if (cloneCelebrator.category == "specialMen") {
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.easter.specialMen": 1, "statistic.easter.amount": 1, "statistic.newYear.plus0": 1 } });
+    }
+    if (cloneCelebrator.category == "specialWomen") {
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.easter.specialWomen": 1, "statistic.easter.amount": 1, "statistic.newYear.plus0": 1 } });
+    }
+    if (cloneCelebrator.category == "oldMen") {
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.easter.oldMen": 1, "statistic.easter.amount": 1, "statistic.newYear.plus0": 1 } });
+    }
+    if (cloneCelebrator.category == "oldWomen") {
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.easter.oldWomen": 1, "statistic.easter.amount": 1, "statistic.newYear.plus0": 1 } });
+    }
+    if (cloneCelebrator.category == "yangMen") {
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.easter.yangMen": 1, "statistic.easter.amount": 1, "statistic.newYear.plus0": 1 } });
+    }
+    if (cloneCelebrator.category == "yangWomen") {
+      await House.updateOne({ nursingHome: cloneCelebrator.nursingHome }, { $inc: { "statistic.easter.yangWomen": 1, "statistic.easter.amount": 1, "statistic.newYear.plus0": 1 } });
+    }
+
+    updatedCelebrators.push(cloneCelebrator);
+  }
+  await House.updateMany({ nursingHome: { $in: namesOfUpdatedNursingHome } }, { $inc: { "statistic.easter.time": 1 } });
+
+  //console.log(list);
+  //console.log("celebrator");
+  //console.log("I am here");
+  let newList = await checkDoubles(updatedCelebrators);
+  // newList = newList1.slice();
+
+  console.log("2.5 - " + newList.length);
+
+  const options = { ordered: false };
+  let finalList = await Easter.insertMany(newList, options);
+
+
+  //console.log(finalList);
+
+  console.log(`3- ${finalList.length} documents were inserted`);
+
+  result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length - finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
+  //console.log("3 - final" + finalList); 
+
+  return result;
+  //return true;
+}
+async function createCloneEasterCelebrator(celebrator) {
+
+  let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+    ? celebrator.dateBirthday
+    : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+      ? celebrator.monthBirthday
+      : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+
+  let cloneCategory = '';
+  let cloneOldest = false;
+
+  if (celebrator["noAddress"]) {
+    if (celebrator.gender == "Female") {
+      cloneCategory = "specialWomen";
+    }
+    if (celebrator.gender == "Male") {
+      cloneCategory = "specialMen";
+    }
+
+  } else {
+    if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
+      cloneOldest = true;
+    }
+    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
+      cloneCategory = "oldWomen";
+    }
+    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+      cloneCategory = "oldMen";
+    }
+    if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+      if (celebrator.gender == "Female") {
+        cloneCategory = "yangWomen";
+      }
+      if (celebrator.gender == "Male") {
+        cloneCategory = "yangMen";
+      }
+    }
+  }
+
+  let cloneCelebrator = {
+    seniorId: celebrator._id,
+    region: celebrator.region,
+    nursingHome: celebrator.nursingHome,
+    lastName: celebrator.lastName,
+    firstName: celebrator.firstName,
+    patronymic: celebrator.patronymic,
+    dateBirthday: celebrator.dateBirthday,
+    monthBirthday: celebrator.monthBirthday,
+    yearBirthday: celebrator.yearBirthday,
+    gender: celebrator.gender,
+    comment1: celebrator.comment1,
+    comment2: celebrator.comment2,
+    linkPhoto: celebrator.linkPhoto,
+    nameDay: celebrator.nameDay,
+    dateNameDay: celebrator.dateNameDay,
+    monthNameDay: celebrator.monthNameDay,
+    noAddress: celebrator.noAddress,
+    isReleased: celebrator.isReleased,
+    plusAmount: 0,
+    //specialComment: cloneSpecialComment,
+    fullDayBirthday: cloneFullDayBirthday,
+    oldest: cloneOldest,
+    category: cloneCategory,
+    holyday: 'Пасха 2024',
+    fullData: celebrator.nursingHome +
+      celebrator.lastName +
+      celebrator.firstName +
+      celebrator.patronymic +
+      celebrator.dateBirthday +
+      celebrator.monthBirthday +
+      celebrator.yearBirthday,
+  };
+  //console.log("special - " + celebrator["specialComment"]);
+  //console.log("fullday - " + celebrator.fullDayBirthday);
+  //console.log(celebrator);
+  return cloneCelebrator;
+
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////// check EASTER doubles
+router.post("/easter/check-doubles", checkAuth, async (req, res) => {
+  try {
+
+    console.log("0- check NY doubles" + req.body.nursingHome);
+    let result = await findAllEasterDoubles(req.body.nursingHome);
+    console.log("4-check NY doubles " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+async function findAllEasterDoubles(house) {
+  let fullHouse = await Easter.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1, plusAmount: 1 });
+  let fullDataHouse = [];
+  /*   console.log("fullHouse");
+    console.log(fullHouse); */
+  for (let item of fullHouse) {
+    fullDataHouse.push(item.seniorId);
+  }
+  /*   console.log("fullDataHouse");
+    console.log(fullDataHouse); */
+  let duplicates = [];
+  fullDataHouse.sort();
+
+  //console.log(tempArray);
+  for (let i = 0; i < fullDataHouse.length - 1; i++) {
+    if (fullDataHouse[i + 1] == fullDataHouse[i]) {
+      duplicates.push(fullDataHouse[i]);
+    }
+  }
+  console.log("duplicates");
+  console.log(duplicates);
+  if (duplicates.length == 0) return '0';
+
+  for (let senior of duplicates) {
+    let someHouses = fullHouse.filter(item => item.seniorId == senior);
+    console.log("someHouses");
+    console.log(someHouses);
+    let plusAmount = 0;
+    for (let senior of someHouses) {
+      plusAmount = plusAmount + senior.plusAmount;
+    }
+    for (let i = 0; i < someHouses.length; i++) {
+      if (i == 0) {
+        await Easter.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
+      } else {
+        await Easter.deleteOne({ _id: someHouses[i]._id });
+      }
+    }
+  }
+  console.log("All duplicates");
+  console.log(duplicates.length.toString());
+  return duplicates.length.toString();
+
+
+}
+
+
+
+// check EASTER fullness
+router.post("/easter/check-fullness", checkAuth, async (req, res) => {
+  try {
+
+    console.log("0- check NY fullness " + req.body.nursingHome);
+
+    let result = await checkAllEasterFullness(req.body.nursingHome);
+    console.log("4-check Easter fullness " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+
+async function checkAllEasterFullness(house) {
+
+  await findAllEasterDoubles(house);
+
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house });
+  console.log("seniors " + seniors.length);
+  let fullHouse = await Easter.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1 }); //
+  console.log("fullHouse " + fullHouse.length);
+  let amount = 0;
+  for (let senior of seniors) {
+
+    let seniorIndex = fullHouse.findIndex(item => item.seniorId == senior._id);
+    //console.log("seniorIndex " + seniorIndex);
+    if (seniorIndex == -1) {
+      amount++;
+      let celebrator = await createCloneCelebrator(senior);
+      let newCelebrator = await Easter.create(celebrator);
+      console.log("added");
+      console.log(newCelebrator.fullData);
+    }
+  }
+  console.log("All added");
+  console.log(amount);
+
+  fullHouse = await Easter.find({ nursingHome: house, absent: false }, { fullData: 1, seniorId: 1 });
+  let count = 0;
+  for (let celebrator of fullHouse) {
+    let celebratorIndex = seniors.findIndex(item => item._id == celebrator.seniorId);
+    if (celebratorIndex == -1) {
+
+      await Easter.updateOne({ seniorId: celebrator.seniorId }, { $set: { absent: true } });
+      count++;
+      console.log("deleted");
+      console.log(celebrator.fullData);
+
+    }
+  }
+  console.log("All deleted");
+  console.log(count);
+
+
+  /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+      let seniorIndex = fullHouse.findIndex(item => item.fullData == fullData);
+      //console.log("seniorIndex " + seniorIndex);
+      if (seniorIndex == -1) {
+        amount++;
+        let celebrator = await createCloneCelebrator(senior);
+  
+        console.log(celebrator);
+        let newCelebrator = await NewYear.create(celebrator);
+        console.log(newCelebrator.fullData);
+      } */
+  /*     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+      let fullData2 = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic);
+      console.log("fullData2 " + fullData2);
+      let seniorIndex = fullHouse.findIndex(item => (item.nursingHome + item.lastName + item.firstName + item.patronymic) == fullData2);
+      console.log("seniorIndex " + seniorIndex);
+      if (seniorIndex > -1) {
+        await NewYear.updateOne({ _id: fullHouse[seniorIndex]._id }, { $set: { fullData: fullData } });
+        amount++;
+      } */
+
+
+  //*****/
+
+  /*   let seniorsAbsent = await Senior.find({ isDisabled: false, dateExit: { $ne: null }, isRestricted: false, nursingHome: house });
+    console.log("seniorsAbsent");
+    console.log(seniorsAbsent);
+  
+    let fullHouseAbsent = await NewYear.find({ nursingHome: house, absent: true }, { seniorId: 1 }); //
+    console.log("fullHouseAbsent");
+    console.log(fullHouseAbsent);
+  
+    for (let senior of seniorsAbsent) {
+      // let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
+      let seniorIndex = fullHouseAbsent.findIndex(item => item.seniorId == senior._id);
+      console.log("seniorIndex " + seniorIndex);
+  
+      if (seniorIndex == -1) {
+  
+        let result = await NewYear.updateOne({ seniorId: senior._id }, { $set: { absent: true } });
+        console.log(result.nModified);
+  
+      } else {
+        //console.log("seniorIndex " + seniorIndex);
+      }
+  
+    } */
+
+  await findAllEasterDoubles(house);
+  await restoreEasterStatistic(house);
+
+  return amount.toString();
+
+}
+
+async function restoreEasterStatistic(activeHouse) {
+  console.log("activeHouse");
+  console.log(activeHouse);
+
+  let house = await House.findOne({ nursingHome: activeHouse });
+  /*       console.log("house");
+        console.log(house); */
+
+
+  /*   for (let house of houses) {
+
+   */
+  let plus0 = await Easter.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 0 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+  /*   console.log("plus0");
+    console.log(plus0); */
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.plus0": plus0[0]?.count ? plus0[0].count : 0 } });
+
+  let plus1 = await Easter.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 1 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+  /*   console.log("plus1");
+    console.log(plus1); */
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.plus1": plus1[0]?.count ? plus1[0].count : 0 } });
+
+  let plus2 = await Easter.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 2 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+  /* 
+    console.log("plus2");
+    console.log(plus2); */
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.plus2": plus2[0]?.count ? plus2[0].count : 0 } });
+
+  let plus3 = await Easter.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 3 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+  /*   console.log("plus3");
+    console.log(plus3); */
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.plus3": plus3[0]?.count ? plus3[0].count : 0 } });
+
+  let plus4 = await Easter.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: 4 } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+
+  /*   console.log("plus3");
+    console.log(plus3); */
+
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.plus4": plus4[0]?.count ? plus4[0].count : 0 } });
+
+  if (house.noAddress) {
+    let specialMenPlus = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.specialMenPlus": specialMenPlus[0]?.count ? specialMenPlus[0].count : 0 } });
+
+    let specialWomenPlus = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.specialWomenPlus": specialWomenPlus[0]?.count ? specialWomenPlus[0].count : 0 } });
+
+  } else {
+    let oldMenPlus = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldMen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    /*   console.log("oldMenPlus");
+      console.log(oldMenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.oldMenPlus": oldMenPlus[0]?.count ? oldMenPlus[0].count : 0 } });
+
+    let oldWomenPlus = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldWomen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    /*     console.log("oldWomenPlus");
+        console.log(oldWomenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.oldWomenPlus": oldWomenPlus[0]?.count ? oldWomenPlus[0].count : 0 } });
+
+    let yangMenPlus = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangMen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    /*     console.log("yangMenPlus");
+        console.log(yangMenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.yangMenPlus": yangMenPlus[0]?.count ? yangMenPlus[0].count : 0 } });
+
+    let yangWomenPlus = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
+      { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+    ]);
+    /*     console.log("yangWomenPlus");
+        console.log(yangWomenPlus);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.yangWomenPlus": yangWomenPlus[0]?.count ? yangWomenPlus[0].count : 0 } });
+
+  }
+
+  let amount = await Easter.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.amount": amount[0].count } });
+
+  console.log("amount");
+  console.log(amount);
+
+  if (house.noAddress) {
+    let specialMen = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialMen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.specialMen": specialMen[0]?.count ? specialMen[0].count : 0 } });
+
+    let specialWomen = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "specialWomen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.specialWomen": specialWomen[0]?.count ? specialWomen[0].count : 0 } });
+
+  } else {
+    let oldMen = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldMen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    /*   console.log("oldMen");
+      console.log(oldMen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.oldMen": oldMen[0]?.count ? oldMen[0].count : 0 } });
+
+    let oldWomen = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "oldWomen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    /*     console.log("oldWomen");
+        console.log(oldWomen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.oldWomen": oldWomen[0]?.count ? oldWomen[0].count : 0 } });
+
+    let yangMen = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangMen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    /*     console.log("yangMen");
+        console.log(yangMen);  */
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.yangMen": yangMen[0]?.count ? yangMen[0].count : 0 } });
+
+    let yangWomen = await Easter.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, category: "yangWomen" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    /*     console.log("yangWomen");
+        console.log(yangWomen); */
+
+    await House.updateOne({ _id: house._id }, { $set: { "statistic.easter.yangWomen": yangWomen[0]?.count ? yangWomen[0].count : 0 } });
+
+
+  }
+
+  /*   } */
+
+  /*   } */
+}
 
 
 module.exports = router;
