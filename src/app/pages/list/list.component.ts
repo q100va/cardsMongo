@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ListService } from "src/app/services/list.service";
 import { HousesService } from "src/app/services/houses.service";
 import { List } from "src/app/shared/interfaces/list.interface";
-import { seniors } from "server/models/seniors_list.js";
-import { houses } from "server/models/houses_list.js";
+//import { seniors } from "server/models/seniors_list.js";
+//import { houses } from "server/models/houses_list.js";
 import { SeniorsService } from "src/app/services/seniors.service";
 import { ClientService } from "src/app/services/client.service";
 import { OrderService } from "src/app/services/order.service";
@@ -623,7 +623,7 @@ export class ListComponent implements OnInit {
   }
  */
 
-  addHouses() {
+/*   addHouses() {
     this.housesService.addManyHouses(houses).subscribe(
       async (res) => {
         let result = await res["data"];
@@ -636,7 +636,7 @@ export class ListComponent implements OnInit {
       }
     );
   }
-
+ */
   deleteDoubleList() {
     this.listService.deleteDoubleList().subscribe(
       async (res) => {
