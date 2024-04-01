@@ -1583,11 +1583,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения апреля 2024") {
     period = {
-      "date1": 11,
-      "date2": 15,
+      "date1": 16,
+      "date2": 20,
       "isActive": true,
       "key": 5,
-      "maxPlus": 3, //PLUSES
+      "maxPlus": 4, //PLUSES
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2071,6 +2071,8 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     order_id: order_id,
     //temporaryLineItems: [],
   }
+
+  console.log(data.maxPlus);
   if (proportion.oneRegion) {
     data.regions = {};
     data.restrictedRegions = [];
@@ -5957,6 +5959,7 @@ async function searchSeniorEaster(
   //  filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
     //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
     //
+    filter.noName = false; //ОРГАНИЗАЦИИ
     console.log("filter");
     console.log(filter);
     celebrator = await Easter.findOne(filter);
