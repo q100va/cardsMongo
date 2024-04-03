@@ -61,19 +61,18 @@
                                 (click)="deleteDestination(celebrator._id)">
                                 <mat-icon> cancel</mat-icon>
                             </button>
-                            {{celebrator.lastName}}
+                            {{order.source != "dobroru" ? celebrator.lastName : ''}}
                             {{celebrator.firstName}}
                             {{celebrator.patronymic}}
                             {{order.holiday == 'Новый год 2024' ? celebrator.yearBirthday : ''}}
-                            {{(order.holiday == 'Дни рождения апреля 2024' ||  order.holiday == 'Дни рождения мая 2024' || order.holiday == 'Дни рождения марта 2024') ? celebrator.fullDayBirthday : ''}}
+                            {{order.source != "dobroru" && (order.holiday == 'Дни рождения апреля 2024' ||  order.holiday == 'Дни рождения мая 2024' || order.holiday == 'Дни рождения марта 2024') ? celebrator.fullDayBirthday : ''}}
 <!--                             {{(order.holiday == 'Дни рождения апреля 2024' ||  order.holiday == 'Дни рождения мая 2024' || order.holiday == 'Дни рождения марта 2024') ? '(' + (celebrator.specialComment ?
                             celebrator.specialComment : "") + ')' : ''}} -->
                             {{order.holiday == 'Именины апреля 2024' ? celebrator.nameDay : ''}}
                             {{celebrator.comment1}}
-                            {{celebrator.linkPhoto}}
+                            {{order.source != "dobroru" ? celebrator.linkPhoto: ''}}
 <!--                 {{celebrator._id}}             -->
-                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины
-                                января 2024' ? celebrator.specialComment : ''}}
+                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday != 'Именины января 2024' && order.source != "dobroru" ? celebrator.specialComment : ''}}
                             </span>
                             <span style="font-weight: bold; color: rgb(255, 0, 0); " *ngIf="celebrator.absentComment">
                                 {{ celebrator.absentComment}}
