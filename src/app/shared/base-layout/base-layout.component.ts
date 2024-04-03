@@ -27,6 +27,7 @@ export class BaseLayoutComponent implements OnInit {
   isLoggedIn: boolean;
   name: string;
   isAdmin: boolean;
+  isDobroru: boolean;
   userName: string;
 
   constructor(
@@ -39,6 +40,7 @@ export class BaseLayoutComponent implements OnInit {
       this.userRole = res["data"];
       console.log(this.userRole);
       this.isAdmin = this.userRole === "admin" ? true : false;
+      this.isDobroru = (this.userRole === "dobroru") ? true : false;
     });
     this.isLoggedIn = this.cookieService.get("session_user") ? true : false;
     this.userName = this.cookieService.get("session_user");
