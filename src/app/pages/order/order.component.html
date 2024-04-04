@@ -74,6 +74,7 @@
                                                 <mat-option value="vk">вконтакте</mat-option>
                                                 <mat-option value="telegram">телеграм</mat-option>
                                                 <mat-option value="insta">инста</mat-option>
+                                                <mat-option value="dobroru">добро ру</mat-option>
                                                 <mat-option value="other">другое</mat-option>
                                             </mat-select>
                                         </mat-form-field>
@@ -644,8 +645,7 @@
                         </p>
                         <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
                             {{lineItem.adminComment}}</p>
-
-        <!--      <p style="font-weight: bold; margin: 0;">{{lineItem.celebrators.length}} открыток: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p> -->
+       <!-- <p style="font-weight: bold; margin: 0;">{{lineItem.celebrators.length}} открыток: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>  -->
                         <div *ngFor="let celebrator of lineItem.celebrators">
 
                             <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 

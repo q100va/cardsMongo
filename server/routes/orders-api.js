@@ -28,6 +28,7 @@ const FamilyDay = require("../models/family-day");
 const order = require("../models/order");
 const checkAuth = require("../middleware/check-auth");
 const Easter = require("../models/easter");
+const Client = require("../models/client");
 
 //const { getLocaleDayPeriods } = require("@angular/common");
 
@@ -648,8 +649,8 @@ async function deletePluses(deletedOrder, full) {
                       if (deletedOrder.holiday == "Пасха 2024") {
                         for (let lineItem of deletedLineItems) {
                           for (let person of lineItem.celebrators) {
-          
-          
+
+
                             let senior = await Easter.findOne({ _id: person._id });
                             let p = senior.plusAmount;
                             let newP = p - 1;
@@ -665,9 +666,9 @@ async function deletePluses(deletedOrder, full) {
                                   ["statistic.easter." + c + "Plus"]: -1,
                                 }
                               }
-          
+
                             );
-          
+
                             await Easter.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                           }
                         }
@@ -956,7 +957,7 @@ async function restorePluses(updatedOrder) {
                                   ["statistic.easter." + c + "Plus"]: 1,
                                 }
                               }
-          
+
                             );
                           }
                         }
@@ -1212,6 +1213,13 @@ router.post("/name-day", checkAuth, async (req, res) => {
     };
     console.log("newOrder.temporaryLineItems");
     console.log(newOrder.temporaryLineItems);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+
     finalResult = await createOrderForNameDay(newOrder);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
@@ -1357,6 +1365,13 @@ router.post("/teacher-day", checkAuth, async (req, res) => {
     };
     console.log("newOrder.temporaryLineItems");
     console.log(newOrder.temporaryLineItems);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+
     finalResult = await createOrderForTeacherDay(newOrder);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
@@ -1498,6 +1513,12 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
     // console.log("order.dateOfOrder");
     // console.log(req.body.dateOfOrder);
     // console.log(newOrder.dateOfOrder);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
 
     finalResult = await createOrder(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -1650,12 +1671,12 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
 
       } else {
-     specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
+        specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
         specialMenAmount = newOrder.filter.maxNoAddress - specialWomenAmount;
 
-  /*       specialWomenAmount = 0
-        specialMenAmount = newOrder.filter.maxNoAddress;
- */
+        /*       specialWomenAmount = 0
+              specialMenAmount = newOrder.filter.maxNoAddress;
+       */
         oldWomenAmount = Math.ceil((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
         oldMenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
         yangWomenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.2);
@@ -1691,17 +1712,17 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = Math.round(newOrder.amount * 0.1);
 
-       // specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount;
+        // specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount;
 
         specialMenAmount = Math.round(newOrder.amount * 0.1);
-       specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
+        specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
 
       } else {
-         specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
+        specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
         specialMenAmount = newOrder.filter.maxNoAddress - specialWomenAmount;
- 
-/*         specialWomenAmount = 0
-        specialMenAmount = newOrder.filter.maxNoAddress; */
+
+        /*         specialWomenAmount = 0
+                specialMenAmount = newOrder.filter.maxNoAddress; */
         oldWomenAmount = Math.ceil((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
         oldMenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.3);
         yangWomenAmount = Math.round((newOrder.amount - newOrder.filter.maxNoAddress) * 0.2);
@@ -2209,10 +2230,10 @@ async function collectSeniors(data, orderFilter, holiday) {
         }
 
         searchOrders = {
-          oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen","oldest"],//
-          oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen","oldest"],//
-          yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen","oldest"],//
-          yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen","oldest"],//
+          oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen", "oldest"],//
+          oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen", "oldest"],//
+          yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen", "oldest"],//
+          yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen", "oldest"],//
           specialWomen: ["specialWomen", "specialMen", "yangWomen", "yangMen", "oldWomen", "oldMen"],
           specialMen: ["specialMen", "specialWomen", "yangMen", "yangWomen", "oldMen", "oldWomen"],
           // specialOnly: ["special", "oldWomen"],
@@ -2351,16 +2372,16 @@ async function searchSenior(
       data.filter */
 
   let standardFilter = {
-nursingHome: { $nin: data.restrictedHouses },  //PLUSES
- 
- //nursingHome: { $in: ["ТАМБОВСКИЙ_ЛЕСХОЗ", "МОСКВА_РОТЕРТА", "ШЕБЕКИНО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "ЯРЦЕВО", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК", "КРИПЕЦКОЕ", "ЧЕРМЕНИНО", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "КРАСНОВИШЕРСК", "ЗЕРНОГРАД_МИРА", "ЗЕРНОГРАД_САМОХВАЛОВА", "НОВОЧЕРКАССК", "БЕРЕЗОВСКИЙ", "АЛАКУРТТИ", "ТОВАРКОВСКИЙ_ДИПИ", "КОСТРОМА_КИНЕШЕМСКОЕ", "ТОЛЬЯТТИ", "СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "УСОЛЬЕ", "ДМИТРОВСКИЙ_ПОГОСТ_ОКТЯБРЬСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АНДРЕЕВСКИЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ПРОШКОВО", "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ВОРОНЕЖ_ДНЕПРОВСКИЙ","ДИМИТРОВГРАД","БЕРДСК",] }, 
-// nursingHome: { $in: ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ",] }, 
- //nursingHome: { $in: ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ","РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "СОСНОВКА", "СКОПИН", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК",] }, 
- //nursingHome: { $in: [ "ШЕБЕКИНО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "ЯРЦЕВО", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "ТОЛЬЯТТИ",  "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", ] }, 
-  
- //nursingHome: { $in: ["МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК",  "ДУБНА_ТУЛЬСКАЯ", "БИЙСК",] }, 
+    nursingHome: { $nin: data.restrictedHouses },  //PLUSES
 
-//nursingHome: { $in: ["МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ", "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОГРАД", "ВЛАДИКАВКАЗ", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "КАНДАЛАКША",  "РАЙЧИХИНСК",  "СОСНОВКА", "СКОПИН", "ЖЕЛЕЗНОГОРСК", "ТОЛЬЯТТИ", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", ]}, //ДОБРО РУ    //uncertain: true, // DELETE
+    //nursingHome: { $in: ["ТАМБОВСКИЙ_ЛЕСХОЗ", "МОСКВА_РОТЕРТА", "ШЕБЕКИНО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "ЯРЦЕВО", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК", "КРИПЕЦКОЕ", "ЧЕРМЕНИНО", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "КРАСНОВИШЕРСК", "ЗЕРНОГРАД_МИРА", "ЗЕРНОГРАД_САМОХВАЛОВА", "НОВОЧЕРКАССК", "БЕРЕЗОВСКИЙ", "АЛАКУРТТИ", "ТОВАРКОВСКИЙ_ДИПИ", "КОСТРОМА_КИНЕШЕМСКОЕ", "ТОЛЬЯТТИ", "СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "УСОЛЬЕ", "ДМИТРОВСКИЙ_ПОГОСТ_ОКТЯБРЬСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АНДРЕЕВСКИЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ПРОШКОВО", "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ВОРОНЕЖ_ДНЕПРОВСКИЙ","ДИМИТРОВГРАД","БЕРДСК",] }, 
+    // nursingHome: { $in: ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ",] }, 
+    //nursingHome: { $in: ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ","РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "СОСНОВКА", "СКОПИН", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК",] }, 
+    //nursingHome: { $in: [ "ШЕБЕКИНО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "ЯРЦЕВО", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "ТОЛЬЯТТИ",  "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", ] }, 
+
+    //nursingHome: { $in: ["МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК",  "ДУБНА_ТУЛЬСКАЯ", "БИЙСК",] }, 
+
+    //nursingHome: { $in: ["МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ", "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОГРАД", "ВЛАДИКАВКАЗ", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "КАНДАЛАКША",  "РАЙЧИХИНСК",  "СОСНОВКА", "СКОПИН", "ЖЕЛЕЗНОГОРСК", "ТОЛЬЯТТИ", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", ]}, //ДОБРО РУ    //uncertain: true, // DELETE
     //specialComment: {$ne: ""},
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
@@ -2402,7 +2423,7 @@ nursingHome: { $nin: data.restrictedHouses },  //PLUSES
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
   let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
- // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
+  // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
     // filter.yearBirthday = { $lt: 1944 };
@@ -2801,6 +2822,13 @@ router.post("/new-year/:amount", checkAuth, async (req, res) => {
     };
     console.log("req.body.restrictedHouses");
     console.log(req.body.restrictedHouses);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+
     finalResult = await createOrderNewYear(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
@@ -3601,6 +3629,12 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
       isCompleted: false
     };
 
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+
     finalResult = await createOrderSpring(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
@@ -4195,7 +4229,7 @@ async function searchSeniorSpring(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-  // firstName: "Галина",
+    // firstName: "Галина",
     // secondTime: data.maxPlus > 1 ? true : false,
     // thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
@@ -4359,6 +4393,12 @@ router.post("/may9/:amount", checkAuth, async (req, res) => {
       //filter: { noSpecial: true },
       isCompleted: false
     };
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
 
     finalResult = await createOrderMay9(newOrder);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -4839,6 +4879,13 @@ router.post("/family-day", checkAuth, async (req, res) => {
     };
     console.log("newOrder.temporaryLineItems");
     console.log(newOrder.temporaryLineItems);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+
     finalResult = await createOrderForFamilyDay(newOrder);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
@@ -5132,42 +5179,42 @@ router.get("/hb/restore-pluses", checkAuth, async (req, res) => {
 
     // const celebratorsNY = await NewYear.find({ absent: false, nursingHome: { $in: ["НОВОСИБИРСК_ЖУКОВСКОГО", "СЕВЕРО-АГЕЕВСКИЙ", "СОСНОВКА"] } });
 
- //   const celebratorsS = await February23.find({ absent: false,  nursingHome: { $in:["НОВОСЕЛЬЕ", "ЗАОЗЕРЬЕ", "СТАРОЕ_ШАЙГОВО", ] } }); //nursingHome: { $in: ["МАРКОВА"] }
+    //   const celebratorsS = await February23.find({ absent: false,  nursingHome: { $in:["НОВОСЕЛЬЕ", "ЗАОЗЕРЬЕ", "СТАРОЕ_ШАЙГОВО", ] } }); //nursingHome: { $in: ["МАРКОВА"] }
 
-/*     const celebratorsS = await March8.find({ absent: false,  nursingHome: { $in:["СО_ВЕЛИКИЕ_ЛУКИ", ] }});//
-    for (let celebrator of celebratorsS) {
-      //console.log(celebrator.seniorId);
-      let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "8 марта 2024" }).countDocuments();
-      await March8.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
-      let updatedCelebrator = await March8.findOne({ _id: celebrator._id });
-
-      console.log("result");
-      console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-
-    }  */
+    /*     const celebratorsS = await March8.find({ absent: false,  nursingHome: { $in:["СО_ВЕЛИКИЕ_ЛУКИ", ] }});//
+        for (let celebrator of celebratorsS) {
+          //console.log(celebrator.seniorId);
+          let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "8 марта 2024" }).countDocuments();
+          await March8.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
+          let updatedCelebrator = await March8.findOne({ _id: celebrator._id });
     
-/*     for (let celebrator of celebratorsS) {
-      console.log(celebrator.lastName);
-      let plusAmount = await Order.find({ "lineItems.celebrators.nursingHome": { $in: ["БЛАГОВЕЩЕНКА"] }, "lineItems.celebrators.lastName": celebrator.lastName, isDisabled: false, isOverdue: false, isReturned: false, holiday: "8 марта 2024" }).countDocuments();
-      await March8.updateOne({ lastName: celebrator.lastName,  nursingHome: { $in: ["БЛАГОВЕЩЕНКА"] }}, { $set: { plusAmount: plusAmount } });
-    //  let updatedCelebrator = await March8.findOne({ seniorId: celebrator.seniorId });
+          console.log("result");
+          console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+    
+        }  */
 
-      console.log(plusAmount);
-    //  console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+    /*     for (let celebrator of celebratorsS) {
+          console.log(celebrator.lastName);
+          let plusAmount = await Order.find({ "lineItems.celebrators.nursingHome": { $in: ["БЛАГОВЕЩЕНКА"] }, "lineItems.celebrators.lastName": celebrator.lastName, isDisabled: false, isOverdue: false, isReturned: false, holiday: "8 марта 2024" }).countDocuments();
+          await March8.updateOne({ lastName: celebrator.lastName,  nursingHome: { $in: ["БЛАГОВЕЩЕНКА"] }}, { $set: { plusAmount: plusAmount } });
+        //  let updatedCelebrator = await March8.findOne({ seniorId: celebrator.seniorId });
+    
+          console.log(plusAmount);
+        //  console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+    
+        }  */
 
-    }  */
-
-/* 
-     for (let celebrator of celebratorsS) {
-      console.log(celebrator.seniorId);
-      let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "23 февраля 2024" }).countDocuments();
-      await February23.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
-      let updatedCelebrator = await February23.findOne({ seniorId: celebrator.seniorId });
-
-      console.log("result");
-      console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-
-    } */
+    /* 
+         for (let celebrator of celebratorsS) {
+          console.log(celebrator.seniorId);
+          let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "23 февраля 2024" }).countDocuments();
+          await February23.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
+          let updatedCelebrator = await February23.findOne({ seniorId: celebrator.seniorId });
+    
+          console.log("result");
+          console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+    
+        } */
 
     for (let celebrator of celebratorsEaster) {
       console.log(celebrator.seniorId);
@@ -5258,6 +5305,13 @@ router.post("/easter/:amount", checkAuth, async (req, res) => {
     };
     console.log("req.body.restrictedHouses");
     console.log(req.body.restrictedHouses);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+
     finalResult = await createOrderEaster(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
@@ -5688,29 +5742,29 @@ async function fillOrderEaster(proportion, order_id, filter, prohibitedId, restr
 
       data = await collectSeniorsEaster(data, orderFilter);
 
-         /*   if (data.counter < proportion[category]) {
-        data.maxPlus = 2;
+      /*   if (data.counter < proportion[category]) {
+     data.maxPlus = 2;
 
-        data = await collectSeniorsEaster(data, orderFilter);
-      }
+     data = await collectSeniorsEaster(data, orderFilter);
+   }
 
-      if (data.counter < proportion[category]) {
-        data.maxPlus = 3;
+   if (data.counter < proportion[category]) {
+     data.maxPlus = 3;
 
-        data = await collectSeniorsEaster(data, orderFilter);
-      }
+     data = await collectSeniorsEaster(data, orderFilter);
+   }
 
 
-      if (data.counter < proportion[category]) {
-        data.maxPlus = 4;
+   if (data.counter < proportion[category]) {
+     data.maxPlus = 4;
 
-        data = await collectSeniorsEaster(data, orderFilter);
-      }
-     if (data.counter < proportion[category]) {
-             data.maxPlus = 5;
-     
-             data = await collectSeniorsEaster(data, orderFilter);
-           }    */
+     data = await collectSeniorsEaster(data, orderFilter);
+   }
+  if (data.counter < proportion[category]) {
+          data.maxPlus = 5;
+  
+          data = await collectSeniorsEaster(data, orderFilter);
+        }    */
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -5956,7 +6010,7 @@ async function searchSeniorEaster(
     // filter.comment1 = {$ne: "(отд. 4)"}; //CANCEL
     // filter.comment2 = /труда/; //CANCEL
     //filter.comment1 = /верующ/; //CANCEL
-  //  filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
+    //  filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТИНО", "МОЛОДОЙ_ТУД", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
     //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
     //
     filter.noName = false; //ОРГАНИЗАЦИИ

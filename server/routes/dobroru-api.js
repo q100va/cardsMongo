@@ -28,6 +28,7 @@ const FamilyDay = require("../models/family-day");
 const order = require("../models/order");
 const checkAuth = require("../middleware/check-auth");
 const Easter = require("../models/easter");
+const Client = require("../models/client");
 
 
 router.post("/birthday/:amount", checkAuth, async (req, res) => {
@@ -63,6 +64,12 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
         // console.log("order.dateOfOrder");
         // console.log(req.body.dateOfOrder);
         // console.log(newOrder.dateOfOrder);
+
+        let client = await Client.findOne({ _id: newOrder.clientId });
+        let index = client.coordinators.findIndex(item => item == newOrder.userName);
+        if (index == -1) {
+          await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+        }
 
         finalResult = await createOrder(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
         let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -284,7 +291,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
             }
         }
-
+        
+       
 
         // proportion = await Proportion.findOne({ amount: newOrder.amount });789
         if (!proportion) {
@@ -476,8 +484,6 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             }
           } */
 
-        console.log("proportion");
-        console.log(proportion);
 
         if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
         if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
@@ -518,6 +524,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
         }
     }
+    console.log("proportion");
+    console.log(proportion);
+
+    console.log("newOrder.filter.maxOneHouse");
+    console.log(newOrder.filter.maxOneHouse);
 
     if (seniorsData.celebratorsAmount < newOrder.amount) {
 
@@ -916,7 +927,11 @@ async function searchSenior(
         data.maxPlus,
         data.filter */
 
-    let usingHouses = ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ", "ОКТЯБРЬСКИЙ", "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "СОСНОВКА", "СКОПИН", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "РАЙЧИХИНСК", "ТАЛИЦА_УРГА", "КРАСНОЯРСК",]
+    let usingHouses = ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ", "ОКТЯБРЬСКИЙ", "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "СОСНОВКА", "СКОПИН", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "РАЙЧИХИНСК", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "УГЛИЧ", "ТОЛЬЯТТИ", "ЖЕЛЕЗНОГОРСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО",]
+    console.log('data.restrictedHouses');
+    console.log(data.restrictedHouses);
+
+    
     if (data.restrictedHouses.length > 0) {
         for (let house of data.restrictedHouses) {
             let index = usingHouses.findIndex(item => item == house);
