@@ -595,7 +595,7 @@ export class DobroruComponent implements OnInit {
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
-    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
+    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 30) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
           message:
