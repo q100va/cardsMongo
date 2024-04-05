@@ -176,7 +176,7 @@ const routes: Routes = [
       {
         path: "orders/easter",
         component: EasterComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard],
       },
       {
         path: "orders/dobroru",
