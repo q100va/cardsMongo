@@ -68,7 +68,7 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
         let client = await Client.findOne({ _id: newOrder.clientId });
         let index = client.coordinators.findIndex(item => item == newOrder.userName);
         if (index == -1) {
-          await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+            await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
         }
 
         finalResult = await createOrder(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
@@ -291,8 +291,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
             }
         }
-        
-       
+
+
 
         // proportion = await Proportion.findOne({ amount: newOrder.amount });789
         if (!proportion) {
@@ -585,8 +585,8 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
         fixed = false;
     }
 
-    console.log("filter");
-    console.log(filter);
+    //console.log("filter");
+    //console.log(filter);
     //ДОБРО РУ
     if (proportion.amount < 1 && !filter.nursingHome && !filter.region && !filter.linkPhoto) {
         console.log("if");
@@ -878,6 +878,7 @@ async function collectSeniors(data, orderFilter, holiday) {
 
                 data.celebratorsAmount++;
                 data.restrictedPearson.push(result.celebrator_id);
+            
                 data.counter++;
                 // console.log("data.proportion.oneHouse");
                 // console.log(data.proportion.oneHouse);
@@ -887,9 +888,14 @@ async function collectSeniors(data, orderFilter, holiday) {
                 // console.log(data.regions);
 
                 if (data.proportion.oneHouse) {
-                    if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
+                    if (data.houses[result["nursingHome"]] >= data.proportion["oneHouse"]) {
                         data.restrictedHouses.push(result["nursingHome"]);
                     }
+                }
+                if (data.celebratorsAmount == 30) { 
+                    data.restrictedHouses = []; 
+                    console.log(data.celebratorsAmount);
+
                 }
                 if (data.proportion.oneRegion) {
                     if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
@@ -930,16 +936,15 @@ async function searchSenior(
     let usingHouses = ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ", "ОКТЯБРЬСКИЙ", "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "ТАМБОВСКИЙ_ЛЕСХОЗ", "СКОПИН", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "РАЙЧИХИНСК", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "УГЛИЧ", "ТОЛЬЯТТИ", "ЖЕЛЕЗНОГОРСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ЯРЦЕВО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК",];
     console.log('data.restrictedHouses');
     console.log(data.restrictedHouses);
-
-    
-    if (data.restrictedHouses.length > 0) {
-        for (let house of data.restrictedHouses) {
-            let index = usingHouses.findIndex(item => item == house);
-            if (index != -1) {
-                usingHouses.splice(index, 1);
+   
+        if (data.restrictedHouses.length > 0) {
+            for (let house of data.restrictedHouses) {
+                let index = usingHouses.findIndex(item => item == house);
+                if (index != -1) {
+                    usingHouses.splice(index, 1);
+                }
             }
         }
-    }
     let standardFilter = {
         nursingHome: { $in: usingHouses },
 
@@ -1008,8 +1013,8 @@ async function searchSenior(
         filter.plusAmount = { $lt: plusAmount };
 
 
-        console.log("filter CHECK");
-        console.log(filter);
+        //console.log("filter CHECK");
+        //console.log(filter);
 
         if (holiday == "Дни рождения мая 2024") {
             celebrator = await ListNext.findOne(filter);
