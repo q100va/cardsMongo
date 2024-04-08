@@ -22,8 +22,8 @@
           <button class="navbar-link" routerLink="/orders/new-year" mat-button>Новый год</button>  -->
 
           <!--  <button class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
-          <button class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>
-            <button class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button> -->
+          <button class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>-->
+            <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button> 
           <!--   <button class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
     <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru" mat-button>ДОБРО РУ</button>  
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/easter" mat-button>Пасха</button> 
@@ -59,6 +59,10 @@
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToEasterLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки Пасха</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToVeteransLists()">
+              <mat-icon color="primary">list</mat-icon>
+              <span>Списки 9 мая</span>
             </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToCheck()">
               <mat-icon color="primary">bug_report</mat-icon>

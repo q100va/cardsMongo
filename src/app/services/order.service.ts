@@ -392,7 +392,7 @@ export class OrderService {
   }
 
   findNursingHome(nursingHome: string): Observable<any> {
-    return this.http.get("/api/houses/name" + nursingHome)["data"];
+    return this.http.get("/api/houses/name/" + nursingHome)["data"];
   }
 
   ///////////////////////////////////////////////////////
@@ -405,8 +405,33 @@ export class OrderService {
     return this.http.get("/api/orders/clients/move-institutes");
   }
 
-  restorePluses(): Observable<any> {
-    return this.http.get("/api/orders/hb/restore-pluses");
+  restorePluses(holiday): Observable<any> {
+    return this.http.get("/api/orders/restore-pluses/" + holiday);
+  }
+
+  createOrderVeterans(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+    return this.http.post("/api/orders/veterans/" + newOrder.amount, {
+      userName: newOrder.userName,
+      clientId: newOrder.clientId,
+      holiday: newOrder.holiday,
+      source: newOrder.source,
+      amount: newOrder.amount,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      institute: newOrder.institute,
+      institutes: newOrder.institutes,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
+      filter: newOrder.filter,
+      prohibitedId: prohibitedId,
+      restrictedHouses: restrictedHouses
+    });
   }
 
 }

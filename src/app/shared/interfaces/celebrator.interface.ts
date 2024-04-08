@@ -31,5 +31,6 @@ export interface Celebrator {
     celebrator_id?: string; 
     holyday: string;
     index?: number;    
+    seniorId?: string; 
   }
   

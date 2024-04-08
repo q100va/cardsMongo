@@ -73,6 +73,10 @@ export class BaseLayoutComponent implements OnInit {
     this.router.navigate(["/lists/admin-easter"]);
   }
 
+  redirectToVeteransLists(): void {
+    this.router.navigate(["/lists/admin-veterans"]);
+  }
+
   redirectToClients(): void {
     this.router.navigate(["/clients/"]);
   }

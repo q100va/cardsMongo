@@ -455,9 +455,9 @@ export class ListComponent implements OnInit {
   }
 
     showLessPlusEasterList(event: any) {
-      this.listService.findAllNewYearLists().subscribe(
+      this.listService.findAllEasterLists().subscribe(
         (res) => {
-          this.lists = res["data"].filter((item) => item.plusAmount < 3);
+          this.lists = res["data"].filter((item) => item.plusAmount < 1);
           //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
           this.listLength = this.lists.length;
           this.oldMen = this.lists.filter(
@@ -1063,8 +1063,8 @@ export class ListComponent implements OnInit {
     );
   }
 
-  restorePluses() {
-    this.orderService.restorePluses().subscribe(
+  restorePluses(holiday) {
+    this.orderService.restorePluses(holiday).subscribe(
       (res) => {
         alert(res + " обновлено");
       },

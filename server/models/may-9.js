@@ -34,10 +34,11 @@ const listSchema = new Schema(
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
     secondTime: {type: Boolean, default: false},
-    thirdTime: {type: Boolean, default: false}
+    thirdTime: {type: Boolean, default: false},
+    seniorId: { type: String },
 
   },
-  { collection: "may_9_2023" }
+  { collection: "may_9_2024" }
 );
 
 module.exports = mongoose.model("May9", listSchema);

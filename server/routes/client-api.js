@@ -1277,7 +1277,7 @@ router.get("/add-search-array", checkAuth, async (req, res) => {
 
 router.get("/restore/coordinators", checkAuth, async (req, res) => {
   try {
-    let clients = await Client.find({ isDisabled: false });
+/*     let clients = await Client.find({ isDisabled: false });
     for (let client of clients) {
       let coordinators = [];
       let orders = await Order.find({ clientId: client._id });
@@ -1289,6 +1289,17 @@ router.get("/restore/coordinators", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: client._id }, { $set: { coordinators: coordinators } });
       console.log(coordinators);
     }
+ */
+    let orders = await Order.find({ userName: "eberdnikova" });
+    for (let order of orders) {
+      let client = await Client.findOne({ _id: order.clientId });
+
+      if (!client.coordinators.includes("eberdnikova")) {
+        await Client.updateOne({ _id: order.clientId }, { $push: { coordinators: "eberdnikova" } });
+      }
+    }
+
+
 
     const findAllListsResponse = new BaseResponse("200", "Query successful", true);
     res.json(findAllListsResponse.toObject());

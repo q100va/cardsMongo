@@ -21,8 +21,9 @@
     displayedColumns = [
       "nursingHome",
       "amount",
+            "statistic2",
       "statistic1",
-      "statistic2",
+
       "statistic3",
       "check",
   

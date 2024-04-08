@@ -631,7 +631,7 @@ async function deletePluses(deletedOrder, full) {
                     }
                   }
                 } else {
-                  if (deletedOrder.holiday == "9 мая 2023") {
+                  if (deletedOrder.holiday == "9 мая 2024") {
                     for (let lineItem of deletedLineItems) {
                       for (let person of lineItem.celebrators) {
                         await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -918,7 +918,7 @@ async function restorePluses(updatedOrder) {
                     }
                   }
                 } else {
-                  if (updatedOrder.holiday == "9 мая 2023") {
+                  if (updatedOrder.holiday == "9 мая 2024") {
                     for (let lineItem of updatedOrder.lineItems) {
                       for (let person of lineItem.celebrators) {
                         await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -2373,6 +2373,7 @@ async function searchSenior(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },  //PLUSES
+    //firstName: "Тамара",
 
     //nursingHome: { $in: ["ТАМБОВСКИЙ_ЛЕСХОЗ", "МОСКВА_РОТЕРТА", "ШЕБЕКИНО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "ЯРЦЕВО", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК", "КРИПЕЦКОЕ", "ЧЕРМЕНИНО", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "КРАСНОВИШЕРСК", "ЗЕРНОГРАД_МИРА", "ЗЕРНОГРАД_САМОХВАЛОВА", "НОВОЧЕРКАССК", "БЕРЕЗОВСКИЙ", "АЛАКУРТТИ", "ТОВАРКОВСКИЙ_ДИПИ", "КОСТРОМА_КИНЕШЕМСКОЕ", "ТОЛЬЯТТИ", "СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "УСОЛЬЕ", "ДМИТРОВСКИЙ_ПОГОСТ_ОКТЯБРЬСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АНДРЕЕВСКИЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ПРОШКОВО", "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ВОРОНЕЖ_ДНЕПРОВСКИЙ","ДИМИТРОВГРАД","БЕРДСК",] }, 
     // nursingHome: { $in: ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ",] }, 
@@ -4229,7 +4230,7 @@ async function searchSeniorSpring(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-    // firstName: "Галина",
+    //firstName: "Надежда",
     // secondTime: data.maxPlus > 1 ? true : false,
     // thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
@@ -5168,96 +5169,51 @@ router.get("/clients/move-institutes", checkAuth, async (req, res) => {
 
 //restore plusAmount
 // Восстановление плюсов
-router.get("/hb/restore-pluses", checkAuth, async (req, res) => {
+router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
   try {
 
     const celebratorsDecember = await ListBefore.find({ absent: false });
     const celebratorsJanuary = await List.find({ absent: false });
     const celebratorsFebruary = await ListNext.find({ absent: false });
 
-    const celebratorsEaster = await Easter.find({ absent: false });
+    if (req.params.holiday == "easter") {
+      const celebratorsEaster = await Easter.find({ absent: false });
+      for (let celebrator of celebratorsEaster) {
+        console.log(celebrator.seniorId);
+        let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Пасха 2024" }).countDocuments();
+        await Easter.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
+        let updatedCelebrator = await Easter.findOne({ seniorId: celebrator.seniorId });
 
-    // const celebratorsNY = await NewYear.find({ absent: false, nursingHome: { $in: ["НОВОСИБИРСК_ЖУКОВСКОГО", "СЕВЕРО-АГЕЕВСКИЙ", "СОСНОВКА"] } });
+        console.log("result");
+        console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
 
-    //   const celebratorsS = await February23.find({ absent: false,  nursingHome: { $in:["НОВОСЕЛЬЕ", "ЗАОЗЕРЬЕ", "СТАРОЕ_ШАЙГОВО", ] } }); //nursingHome: { $in: ["МАРКОВА"] }
-
-    /*     const celebratorsS = await March8.find({ absent: false,  nursingHome: { $in:["СО_ВЕЛИКИЕ_ЛУКИ", ] }});//
-        for (let celebrator of celebratorsS) {
-          //console.log(celebrator.seniorId);
-          let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "8 марта 2024" }).countDocuments();
-          await March8.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
-          let updatedCelebrator = await March8.findOne({ _id: celebrator._id });
-    
-          console.log("result");
-          console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-    
-        }  */
-
-    /*     for (let celebrator of celebratorsS) {
-          console.log(celebrator.lastName);
-          let plusAmount = await Order.find({ "lineItems.celebrators.nursingHome": { $in: ["БЛАГОВЕЩЕНКА"] }, "lineItems.celebrators.lastName": celebrator.lastName, isDisabled: false, isOverdue: false, isReturned: false, holiday: "8 марта 2024" }).countDocuments();
-          await March8.updateOne({ lastName: celebrator.lastName,  nursingHome: { $in: ["БЛАГОВЕЩЕНКА"] }}, { $set: { plusAmount: plusAmount } });
-        //  let updatedCelebrator = await March8.findOne({ seniorId: celebrator.seniorId });
-    
-          console.log(plusAmount);
-        //  console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-    
-        }  */
-
-    /* 
-         for (let celebrator of celebratorsS) {
-          console.log(celebrator.seniorId);
-          let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "23 февраля 2024" }).countDocuments();
-          await February23.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
-          let updatedCelebrator = await February23.findOne({ seniorId: celebrator.seniorId });
-    
-          console.log("result");
-          console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-    
-        } */
-
-    for (let celebrator of celebratorsEaster) {
-      console.log(celebrator.seniorId);
-      let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "23 февраля 2024" }).countDocuments();
-      await February23.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
-      let updatedCelebrator = await Easter.findOne({ seniorId: celebrator.seniorId });
-
-      console.log("result");
-      console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-
+      }
     }
 
+    if (req.params.holiday == "veterans") {
+      let housesSet = new Set();
+      const celebratorsMay9 = await May9.find({ absent: false });
+      for (let celebrator of celebratorsMay9) {
+
+/*         console.log(celebrator.seniorId);
+        let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "9 мая 2024" }).countDocuments();
+        await May9.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
+        let updatedCelebrator = await May9.findOne({ seniorId: celebrator.seniorId });
+        console.log("result");
+        console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount); */
+
+        housesSet.add(celebrator.nursingHome);
+
+      }
+     let houses = Array.from(housesSet);
 
 
-    /* 
-        for (let celebrator of celebratorsNY) {
-          console.log(celebrator.seniorId);
-          let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
-          await NewYear.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
-          let updatedCelebrator = await NewYear.findOne({ seniorId: celebrator.seniorId });
-    
-          console.log("result");
-          console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
-    
-        } */
 
+      for (let house of houses) {
+        await restoreVeteransStatistic(house);
+      }
+    }
 
-
-    /*     for (let celebrator of celebratorsOctober) {
-          console.log(celebrator._id);
-          let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
-          await ListBefore.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
-        } */
-    /*     for (let celebrator of celebratorsNovember) {
-          console.log(celebrator._id);
-          let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
-          await List.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
-        } */
-    /*     for (let celebrator of celebratorsDecember) {
-          console.log(celebrator._id);
-          let plusAmount = await Order.find({ "lineItems.celebrators.celebrator_id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false }).countDocuments();
-          await ListNext.updateOne({ _id: celebrator._id}, {$set: {plusAmount: plusAmount }});
-        } */
 
     const confirmOrderResponse = new BaseResponse("200", "Plus amounts updated", true);
     res.json(confirmOrderResponse.toObject());
@@ -5272,6 +5228,78 @@ router.get("/hb/restore-pluses", checkAuth, async (req, res) => {
   }
 });
 
+async function restoreVeteransStatistic(activeHouse) {
+  console.log("activeHouse");
+  console.log(activeHouse);
+
+  let house = await House.findOne({ nursingHome: activeHouse });
+       console.log("house");
+        console.log(house.nursingHome); 
+
+
+  /*   for (let house of houses) {
+
+   */
+
+  for (let i = 0; i < 6; i++) {
+    let plus = await May9.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: i, veteran: { $ne: "" } } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { ["statistic.veterans.veteranPlus" + i]: plus[0]?.count ? plus[0].count : 0 } });
+    console.log("plusVeteran" + i);
+    console.log(plus[0]?.count); 
+  }
+
+  for (let i = 0; i < 3; i++) {
+    let plus = await May9.aggregate([
+      { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: i, child: { $ne: "" } } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+    await House.updateOne({ _id: house._id }, { $set: { ["statistic.veterans.childPlus" + i]: plus[0]?.count ? plus[0].count : 0 } });
+  }
+
+  let veteranPlus = await May9.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, veteran: { $ne: "" } } },
+    { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.veteranPlus": veteranPlus[0]?.count ? veteranPlus[0].count : 0 } });
+
+  let childPlus = await May9.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, child: { $ne: "" } } },
+    { $group: { _id: null, count: { $sum: "$plusAmount" } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.childPlus": childPlus[0]?.count ? childPlus[0].count : 0 } });
+
+
+  let amount = await May9.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.amount": amount[0].count} });
+
+  console.log("amount 9May");
+  console.log(amount);
+
+
+  let veteran = await May9.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, veteran: { $ne: "" } } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0 } });
+
+  let child = await May9.aggregate([
+    { $match: { nursingHome: house.nursingHome, absent: false, child: { $ne: "" } } },
+    { $group: { _id: null, count: { $sum: 1 } } }
+  ]);
+  await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.child": child[0]?.count ? child[0].count : 0 } });
+
+
+
+  /*   } */
+
+  /*   } */
+}
 
 
 
@@ -5321,7 +5349,7 @@ router.post("/easter/:amount", checkAuth, async (req, res) => {
     console.log(e);
     let text = 'Обратитесь к администратору. Заявка не сформирована.';
     if (!finalResult) {
-      let answer = await deleteErrorPlus(false, req.body.userName);
+      let answer = await deleteErrorPlusEaster(false, req.body.userName);
       console.log("answer");
       console.log(answer);
       if (!answer) {
@@ -5944,16 +5972,12 @@ async function searchSeniorEaster(
   data
   /*   restrictedHouses,
     restrictedPearson,
-    date1,
-    date2,
     maxPlus,
     orderFilter */
 ) {
 
   /*  data.restrictedHouses,
       data.restrictedPearson,
-      data.date1,
-      data.date2,
       data.maxPlus,
       data.filter */
 
@@ -6079,6 +6103,542 @@ async function generateLineItemsEaster(nursingHomes, order_id) {
   //console.log("updatedOrder");
   //console.log(updatedOrder);
   // console.log(lineItems);
+  return lineItems;
+}
+
+
+////////////VETERANS ORDER////////////////////////////////////////
+
+router.post("/veterans/:amount", checkAuth, async (req, res) => {
+  let finalResult;
+  try {
+    let newOrder = {
+      userName: req.body.userName,
+      holiday: req.body.holiday,
+      source: req.body.source,
+      amount: req.body.amount,
+      clientId: req.body.clientId,
+      clientFirstName: req.body.clientFirstName,
+      clientPatronymic: req.body.clientPatronymic,
+      clientLastName: req.body.clientLastName,
+      //email: req.body.email,
+      contactType: req.body.contactType,
+      contact: req.body.contact,
+      //institute: req.body.institute,
+      institutes: req.body.institutes,
+      isAccepted: req.body.isAccepted,
+      comment: req.body.comment,
+      orderDate: req.body.orderDate,
+      dateOfOrder: req.body.dateOfOrder,
+      temporaryLineItems: [],
+      lineItems: [],
+      filter: req.body.filter,
+      isCompleted: false
+    };
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+    console.log("veterans1");
+
+    finalResult = await createOrderVeterans(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
+    let text = !finalResult.success ? finalResult.result : "Query Successful";
+    console.log("veteransF");
+    const newListResponse = new BaseResponse(200, text, finalResult);
+    res.json(newListResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    let text = 'Обратитесь к администратору. Заявка не сформирована.';
+    if (!finalResult) {
+      let answer = await deleteErrorPlusVeterans(false, req.body.userName);
+      console.log("answer");
+      console.log(answer);
+      if (!answer) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+
+    } else {
+      if (finalResult && finalResult.success) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+      if (finalResult && !finalResult.success) {
+        text = finalResult.result;
+      }
+    }
+    const newListCatchErrorResponse = new BaseResponse(
+      500,
+      text,
+      e
+    );
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+//delete pluses because of error 
+
+async function deleteErrorPlusVeterans(order_id, ...userName) {
+  try {
+    let filter = order_id ? { _id: order_id } : { userName: userName[0], isCompleted: false };
+    //console.log("userName[0]");
+    //console.log(userName[0]);
+
+    let order = await Order.findOne(filter);  //, { projection: { _id: 0, temporaryLineItems: 1 } }
+    if (order) {
+      if (order.temporaryLineItems && order.temporaryLineItems.length > 0) {
+        let seniors_ids = [];
+        for (let person of order.temporaryLineItems) {
+          seniors_ids.push(person.celebrator_id);
+        }
+
+        for (let id of seniors_ids) {
+          let senior = await May9.findOne({ _id: id });
+          let p = senior.plusAmount;
+          let newP = p - 1;
+          let c = senior.veteran ? "veteranPlus" : "childPlus";
+          await House.updateOne(
+            {
+              nursingHome: senior.nursingHome
+            },
+            {
+              $inc: {
+                ["statistic.veterans." + c + p]: -1,
+                ["statistic.veterans." + c + newP]: 1,
+                ["statistic.veterans." + c]: -1,
+              }
+            }
+
+          );
+
+        }
+
+        await May9.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
+      }
+      await Order.deleteOne({ _id: order._id });
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    sendMessageToAdmin('something wrong with "deleteErrorPlus"', e);
+  }
+}
+
+
+// Create order
+async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
+
+
+  let proportion = {};
+
+  let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+  let children = newOrder.amount - veterans;
+
+  proportion = {
+    "amount": newOrder.amount,
+    "veterans": veterans,
+    "children": children,
+    "oneHouse": Math.round(newOrder.amount * 0.1) > 0 ? Math.round(newOrder.amount * 0.1) : 1
+  }
+  // if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
+
+  // if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined; //hata
+  if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture) proportion.oneHouse = undefined;
+  console.log("newOrder.filter.region");
+  console.log(newOrder.filter.region);
+
+  console.log("proportion.oneHouse");
+  console.log(proportion.oneHouse);
+
+  if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome /* && newOrder.amount < 21 */) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+  console.log("proportion.oneRegion");
+  console.log(proportion.oneRegion);
+
+
+
+  const emptyOrder = {
+    userName: newOrder.userName,
+    holiday: newOrder.holiday,
+    source: newOrder.source,
+    amount: newOrder.amount,
+    clientId: newOrder.clientId,
+    clientFirstName: newOrder.clientFirstName,
+    clientPatronymic: newOrder.clientPatronymic,
+    clientLastName: newOrder.clientLastName,
+    // email: newOrder.email,
+    contactType: newOrder.contactType,
+    contact: newOrder.contact,
+    // institute: newOrder.institute,
+    institutes: newOrder.institutes,
+    //isRestricted: newOrder.isRestricted,
+    isAccepted: newOrder.isAccepted,
+    comment: newOrder.comment,
+    orderDate: newOrder.orderDate,
+    dateOfOrder: newOrder.dateOfOrder,
+    lineItems: [],
+    filter: newOrder.filter,
+
+  };
+  let order = await Order.create(emptyOrder);
+  let order_id = order._id.toString();
+
+  //console.log("order");
+  //console.log(order);
+
+  let seniorsData;
+  let filter = {};
+
+
+  if (newOrder.filter) {
+    if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
+    /*         if ((newOrder.filter.onlyWithPicture || newOrder.filter.nursingHome || newOrder.filter.region) && newOrder.filter.addressFilter == 'any') {
+                proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
+                proportion.oldWomen = 0;
+                proportion.oldMen = 0;
+                proportion.yang = 0;
+                proportion.special = 0;
+            } */
+    if (newOrder.filter.addressFilter == 'forKids') {
+      filter.noAddress = false;
+    }
+
+    if (newOrder.filter.addressFilter == 'noSpecial') {
+      filter.noAddress = false;
+    }
+
+    if (newOrder.filter.addressFilter == 'onlySpecial') {
+      filter.noAddress = true;
+
+    }
+    /*     if (newOrder.filter.nursingHome) {
+          proportion.anyCategory = proportion.amount;
+          proportion.oldWomen = 0;
+          proportion.oldMen = 0;
+          proportion.yang = 0;
+          proportion.special = 0;
+        } */
+
+    if (newOrder.filter.region) filter.region = newOrder.filter.region;
+    if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
+    if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
+    if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
+    if (newOrder.filter.year1 || newOrder.filter.year2) {
+      if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
+      if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 1945, $gte: newOrder.filter.year1 };
+      if (newOrder.filter.year1 > 1943) {
+        proportion.children = proportion.children + proportion.veterans;
+        proportion.veterans = 0;
+      }
+      if (newOrder.filter.year1 < 1928) {
+        proportion.veterans = proportion.children + proportion.veterans;
+        proportion.children = 0;
+      }
+
+      if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
+    }
+
+    console.log("veterans2");
+    seniorsData = await fillOrderVeterans(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
+
+  }
+
+  if (seniorsData.celebratorsAmount < newOrder.amount) {
+
+    await deleteErrorPlusVeterans(order_id);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+      success: false
+
+    }
+  }
+
+  const nursingHomes = await House.find({});
+  let resultLineItems = await generateLineItemsVeterans(nursingHomes, order_id);
+  console.log("resultLineItems");
+  console.log(resultLineItems);
+  console.log(typeof resultLineItems);
+
+  if (typeof resultLineItems == "string") {
+
+    console.log("resultLineItems222");
+    await deleteErrorPlusMay9(order_id);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
+      success: false
+    };
+  }
+  console.log("veterans2F");
+  return {
+    result: resultLineItems,
+    success: true,
+    order_id: order_id,
+    contact: newOrder.email ? newOrder.email : newOrder.contact,
+    clientFirstName: newOrder.clientFirstName
+  }
+}
+
+// create a list of seniors for the order
+
+async function fillOrderVeterans(proportion, order_id, filter, prohibitedId, restrictedHouses, orderFilter) {
+  const categories = ["veterans", "children"];
+
+  let data = {
+    houses: {},
+    restrictedHouses: [...restrictedHouses],//"ВЫШНИЙ_ВОЛОЧЕК"
+    restrictedPearson: [...prohibitedId],
+    celebratorsAmount: 0,
+    filter: filter,
+    order_id: order_id,
+    //temporaryLineItems: [],
+  }
+  if (proportion.oneRegion) {
+    data.regions = {};
+    data.restrictedRegions = [];
+  }
+
+  for (let category of categories) {
+
+    data.category = category;
+    data.proportion = proportion;
+    data.counter = 0;
+    //console.log(category);
+    //console.log(proportion[category]);
+
+    if (proportion[category]) {
+
+      data.maxPlus = 1;
+      console.log("veterans3");
+      data = await collectSeniorsVeterans(data, orderFilter);
+
+      /*       if (data.counter < proportion[category]) {
+              data.maxPlus = 2;
+      
+              data = await collectSeniorsVeterans(data);
+            }
+      
+            if (data.counter < proportion[category]) {
+              data.maxPlus = 3;
+      
+              data = await collectSeniorsVeterans(data);
+            }
+       */
+      if (data.counter < proportion[category]) {
+        return data;
+      }
+    }
+  }
+  //console.log(data.restrictedHouses);
+  //console.log(data.restrictedPearson);
+  console.log("veterans3F");
+  return data;
+}
+
+
+//set restrictions for searching
+
+async function collectSeniorsVeterans(data) {
+
+  const searchOrders = {
+    veterans: ["veterans", "children"],//, 
+    children: ["children", "veterans"],
+  };
+  //console.log("data.category");
+  //console.log(data.category);
+
+  for (let kind of searchOrders[data.category]) {
+    let barrier = data.proportion[data.category] - data.counter;
+
+    outer1: for (let i = 0; i < barrier; i++) {
+      console.log("veterans4");
+      let result = await searchSeniorVeterans(
+        kind,
+        data
+
+      );
+      if (result) {
+        //console.log(result);
+        await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
+        await May9.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+
+
+        let senior = await May9.findOne({ _id: result.celebrator_id });
+        let newP = senior.plusAmount;
+        let p = newP - 1;
+        let c = senior.veteran ? "veteranPlus" : "childPlus";
+        await House.updateOne(
+          {
+            nursingHome: senior.nursingHome
+          },
+          {
+            $inc: {
+              ["statistic.veterans." + c + p]: -1,
+              ["statistic.veterans." + c + newP]: 1,
+              ["statistic.veterans." + c]: 1,
+            }
+          }
+
+        );
+
+
+        data.celebratorsAmount++;
+        data.restrictedPearson.push(result.celebrator_id);
+        data.counter++;
+        console.log("data.proportion.oneHouse");
+        console.log(data.proportion.oneHouse);
+        if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
+        if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
+        console.log("data.regions");
+        console.log(data.regions);
+
+        if (data.proportion.oneHouse) {
+          if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
+            data.restrictedHouses.push(result["nursingHome"]);
+          }
+        }
+        if (data.proportion.oneRegion) {
+          if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
+            data.restrictedRegions.push(result["region"]);
+          }
+        }
+
+      } else {
+        break outer1;
+      }
+    }
+  }
+  console.log("veterans4F");
+  return data;
+}
+
+// get senior
+async function searchSeniorVeterans(
+  kind,
+  data
+  /*   restrictedHouses,
+    restrictedPearson,
+    maxPlus,
+    orderFilter */
+) {
+
+  /*  data.restrictedHouses,
+      data.restrictedPearson,
+      data.maxPlus,
+      data.filter */
+
+  let standardFilter = {
+    nursingHome: { $nin: data.restrictedHouses },//CHANGE
+    //secondTime: data.maxPlus > 1 ? true : false,
+    //thirdTime: data.maxPlus === 3 ? true : false,
+    _id: { $nin: data.restrictedPearson },
+    //plusAmount: { $lt: maxPlus },
+    //dateBirthday: { $gte: data.date1, $lte: data.date2 },
+    absent: { $ne: true }
+  };
+  if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions }; //CHANGE
+  if (kind == 'veterans') { standardFilter.veteran = { $ne: "" }; } else { standardFilter.child = { $ne: "" }; }
+  //if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
+  /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
+        standardFilter.isReleased = false;    
+    } */
+  /*  if (data.proportion.amount > 12 ) { 
+     standardFilter.isReleased = false;    
+ }  */
+  //standardFilter.isReleased = false; // CANCEL
+
+
+  //console.log("maxPlus");
+  //console.log(maxPlus);
+
+  let filter = Object.assign(standardFilter, data.filter);
+  //console.log("filter");
+
+
+  let celebrator;
+  //CHANGE!!!
+  // let maxPlusAmount = 3;  
+  let maxPlusAmount = 1;
+  if (kind == 'veterans') { maxPlusAmount = 2; }
+
+
+  //let maxPlusAmount = data.maxPlus;  
+  //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
+  //console.log("maxPlusAmount");
+  //console.log(maxPlusAmount);
+
+  for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
+    filter.plusAmount = { $lt: plusAmount };
+    //  filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
+    //filter.comment1 = "(2 корп.)"; //CANCEL
+    console.log("filter");
+    console.log(filter);
+    celebrator = await May9.findOne(filter);
+    console.log("celebrator May9");
+    console.log(celebrator);
+    if (celebrator) {
+      //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
+      //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      celebrator.celebrator_id = celebrator._id.toString();
+      return celebrator;
+    }
+  }
+
+  if (!celebrator) {
+
+    console.log("veterans5F");
+    return false;
+  }
+}
+
+//fill lineItems
+async function generateLineItemsVeterans(nursingHomes, order_id) {
+  //console.log(nursingHomes);
+
+  let lineItems = [];
+  let order = await Order.findOne({ _id: order_id })
+
+  console.log("order.temporaryLineItems");
+  //console.log(order.temporaryLineItems);
+
+  for (let person of order.temporaryLineItems) {
+    console.log("person");
+    console.log(person);
+    //console.log(lineItems);
+    let index = -1;
+    //console.log(lineItems.length);
+    if (lineItems.length > 0) {
+      index = lineItems.findIndex(
+        (item) => item.nursingHome == person.nursingHome
+      );
+    }
+    // console.log(index);
+    if (index > -1) {
+      lineItems[index].celebrators.push(person);
+    } else {
+      let foundHouse = nursingHomes.find(
+        (item) => item.nursingHome == person.nursingHome
+      );
+      //console.log(foundHouse);
+      //console.log(person.nursingHome);
+      if (!foundHouse) { return person.nursingHome; }
+      lineItems.push({
+        region: foundHouse.region,
+        nursingHome: foundHouse.nursingHome,
+        address: foundHouse.address,
+        infoComment: foundHouse.infoComment,
+        adminComment: foundHouse.adminComment,
+        noAddress: foundHouse.noAddress,
+        celebrators: [person],
+      });
+    }
+  }
+  await Order.updateOne({ _id: order_id }, { $set: { lineItems: lineItems, isCompleted: true }, $unset: { temporaryLineItems: 1 } }, { upsert: false });
+  //throw new Error('test1'); //delete
+  //console.log("updatedOrder");
+  //console.log(updatedOrder);
+  // console.log(lineItems);
+  console.log("veterans6F");
   return lineItems;
 }
 

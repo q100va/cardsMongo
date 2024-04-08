@@ -16,11 +16,15 @@ export class CheckListsComponent implements OnInit {
   index3: number = 0;
   index4: number = 0;
   index5: number = 0;
+  index6: number = 0;
+  index7: number = 0;
   checkingHouse1: string = "";
   checkingHouse2: string = "";
   checkingHouse3: string = "";
   checkingHouse4: string = "";
   checkingHouse5: string = "";
+  checkingHouse6: string = "";
+  checkingHouse7: string = "";
   isFirst = true;
   isNext = false;
   isFirst2 = true;
@@ -37,12 +41,19 @@ export class CheckListsComponent implements OnInit {
     this.houseService.findAllHouses().subscribe(
       (res) => {
         console.log(res.data);
-/*        for (let item of res.data) {
+      /*  for (let item of res.data) {
           if (item.isActive) {
           this.houses.push(item.nursingHome);
           } 
-        }  */     
-   this.houses =  ["СО_ВЕЛИКИЕ_ЛУКИ"];
+        }   */    
+   this.houses =  [ "БИЙСК"];
+/*    this.houses =  [ "ШИПУНОВО", "ШИПУНОВО_БОА","КАРДЫМОВО", "ПЕРВОМАЙСКИЙ", "БЕРЕЗОВСКИЙ", "СОСНОВКА", "КРАСНОБОРСК", "ДОЛБОТОВО","СТАРОДУБ", "НОВЛЯНКА", "ИЛЬИНСКОЕ", "КОВЫЛКИНО",
+   "ДМИТРОВСКИЙ_ПОГОСТ_ОКТЯБРЬСКАЯ", "АНЦИФЕРОВО","НЕБОЛЧИ", "СУЗУН", "ЖИТИЩИ", "МАСЛЯТКА",
+   "РОСЛАВЛЬ", "СТУДЕНЕЦ","СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "ПЕТРОВКА", "АЛЕКСАНДРОВКА","ЕЛИЗАВЕТОВКА", "ЗЕРНОГРАД_САМОХВАЛОВА","ЛАШМА", "НОГИНСК", "ЭЛЕКТРОГОРСК", "СТАРАЯ_КУПАВНА",
+   "ЧЕРНОГОЛОВКА", "КАРГОПОЛЬ","СТАРОЕ_ШАЙГОВО", "СЕМЕНОВСКОЕ", "НИКИТИНКА", "ЯГОТИНО",
+   "ВОЛГОГРАД_ВОСТОЧНАЯ", "ДУБНА","ПРОШКОВО", "БИЙСК", "БЛАГОВЕЩЕНКА", "РЯЗАНЬ", "ВЫСОКОВО", "СЕВЕРО-АГЕЕВСКИЙ"];
+ */
+
        //  this.checkingHouse = this.houses[0];
       },
       (err) => {
@@ -118,7 +129,11 @@ export class CheckListsComponent implements OnInit {
   }
 
   checkFullnessHB(index: number) {
+
+   
     this.checkingHouse4 = this.houses[this.index4];
+    console.log("Проверяем");
+     console.log(this.houses[index]);
     this.listService.checkFullnessHB(this.houses[index]).subscribe(
       (res) => {
         alert("Added " + res["data"] + " seniors");
@@ -163,5 +178,53 @@ export class CheckListsComponent implements OnInit {
       this.isNext2 = false;
     }
   }
+
+
+  checkDoublesEaster(index: number) {
+    this.checkingHouse6 = this.houses[this.index6];
+    this.listService.checkDoublesEaster(this.houses[index]).subscribe(
+      (res) => {
+        alert("Deleted " + res["data"] + " doubles");
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
+
+    this.index6++;
+
+    if (this.index6 < this.houses.length) {
+      this.isNext = true;
+      this.isFirst = false;
+    } else {
+      this.isNext = false;
+    }
+  }
+
+  checkFullnessEaster(index: number) {
+    this.checkingHouse7 = this.houses[this.index7];
+    this.listService.checkFullnessEaster(this.houses[index]).subscribe(
+      (res) => {
+        alert("Added " + res["data"]["amountAdded"] + " seniors" + "Deleted " + res["data"]["amountDeleted"] + " seniors" );
+        console.log ("Deleted");
+        console.log (res["data"]["ordersToAware"]);
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
+
+    this.index7++;
+
+    if (this.index7 < this.houses.length) {
+      this.isNext2 = true;
+      this.isFirst2 = false;
+    } else {
+      this.isNext2 = false;
+    }
+  }
+
 
 }

@@ -79,6 +79,7 @@ let housesSchema = new Schema(
         plus2: { type: Number },
         plus3: { type: Number },
         plus4: { type: Number },
+        plus5: { type: Number },
         specialMen: { type: Number },
         specialWomen: { type: Number },
         oldMen: { type: Number },
@@ -92,6 +93,27 @@ let housesSchema = new Schema(
         oldWomenPlus: { type: Number },
         yangMenPlus: { type: Number },
         yangWomenPlus: { type: Number },
+        amount: { type: Number },
+
+      },
+
+      veterans: {
+        time: { type: Number },
+        veteranPlus0: { type: Number },
+        veteranPlus1: { type: Number },
+        veteranPlus2: { type: Number },
+        veteranPlus3: { type: Number },
+        veteranPlus4: { type: Number },
+        veteranPlus5: { type: Number },
+        childPlus0: { type: Number },
+        childPlus1: { type: Number },
+        childPlus2: { type: Number },
+        childPlus3: { type: Number },
+        veteran: { type: Number },
+        child: { type: Number },        
+        veteranPlus: { type: Number },
+        childPlus: { type: Number },
+        amount: { type: Number },
 
       }
     }

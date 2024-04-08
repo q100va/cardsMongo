@@ -72,6 +72,11 @@ export class ListService {
     return this.http.post("/api/lists/easter/create", {list: easterList});
   }
 
+  createVeteransList(veteransList): Observable<any> {
+    return this.http.post("/api/lists/veterans/create", {list: veteransList});
+  }
+
+
   createFebruary23List(list): Observable<any> {
     return this.http.post("/api/lists/february-23/create", {list: list});
   }
@@ -121,6 +126,20 @@ export class ListService {
   checkFullnessHB(house: string) {
     console.log("checkFullness");
     return this.http.post("/api/lists/birthday/check-fullness", {
+      nursingHome: house,
+    });
+  }
+
+  checkDoublesEaster(house: string) {
+    console.log("checkDoubles");
+    return this.http.post("/api/lists/easter/check-doubles", {
+      nursingHome: house,
+    });
+  }
+
+  checkFullnessEaster(house: string) {
+    console.log("checkFullness");
+    return this.http.post("/api/lists/easter/check-fullness", {
       nursingHome: house,
     });
   }

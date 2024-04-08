@@ -103,6 +103,7 @@ import { AdminSpringComponent } from './pages/admin-spring/admin-spring.componen
 import { EasterComponent } from './pages/easter/easter.component';
 import { AdminEasterComponent } from './pages/admin-easter/admin-easter.component';
 import { DobroruComponent } from './pages/dobroru/dobroru.component';
+import { AdminVeteransComponent } from './pages/admin-veterans/admin-veterans.component';
 
 @NgModule({
   declarations: [
@@ -156,7 +157,8 @@ import { DobroruComponent } from './pages/dobroru/dobroru.component';
     AdminSpringComponent,
     EasterComponent,
     AdminEasterComponent,
-    DobroruComponent
+    DobroruComponent,
+    AdminVeteransComponent
 
   ],
   imports: [

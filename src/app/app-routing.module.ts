@@ -57,6 +57,7 @@ import { AdminSpringComponent } from "./pages/admin-spring/admin-spring.componen
 import { EasterComponent } from "./pages/easter/easter.component";
 import { AdminEasterComponent } from "./pages/admin-easter/admin-easter.component";
 import { DobroruComponent } from "./pages/dobroru/dobroru.component";
+import { AdminVeteransComponent } from "./pages/admin-veterans/admin-veterans.component";
 const routes: Routes = [
   {
     path: "",
@@ -178,6 +179,7 @@ const routes: Routes = [
         component: EasterComponent,
         canActivate: [AuthGuard],
       },
+
       {
         path: "orders/dobroru",
         component: DobroruComponent,
@@ -256,6 +258,11 @@ const routes: Routes = [
       {
         path: "lists/admin-easter",
         component: AdminEasterComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "lists/admin-veterans",
+        component: AdminVeteransComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
 

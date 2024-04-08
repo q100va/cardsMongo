@@ -5,7 +5,7 @@
 
     <mat-card-actions>
 
-        <div>
+<!--         <div>
             <button class="submit" (click)="checkDoubles(index1)" mat-raised-button color='primary'
                 [disabled]="!isFirst">Проверить на дубли</button>
             <p> {{checkingHouse1}}</p>
@@ -22,7 +22,7 @@
                 [disabled]="!isNext2">Следующий</button>
 
         </div>
-        <br /> <br />
+        <br /> <br /> -->
         <div>
             <button class="submit" (click)="checkDoublesHB(index3)" mat-raised-button color='primary'
                 [disabled]="!isFirst">Проверить на дубли ДР</button>
@@ -43,7 +43,7 @@
         </div>
 
         <br /> <br />
-        <div>
+<!--         <div>
             <button class="submit" (click)="checkFullnessHolidays(index5, 'february23')" mat-raised-button
                 color='primary' [disabled]="!isFirst2">Проверить на полноту 23 февраля</button>
             <p> {{checkingHouse5}}</p>
@@ -52,12 +52,32 @@
 
         </div>
 
-        <br /> <br />
+        <br /> <br /> -->
         <div>
             <button class="submit" (click)="checkFullnessHolidays(index5, 'march8')" mat-raised-button color='primary'
                 [disabled]="!isFirst2">Проверить на полноту 8 марта</button>
             <p> {{checkingHouse5}}</p>
             <button class="submit" (click)="checkFullnessHolidays(index5, 'march8')" mat-raised-button color='primary'
+                [disabled]="!isNext2">Следующий</button>
+
+        </div>   
+        
+        <br /> <br />
+
+        <div>
+            <button class="submit" (click)="checkDoublesEaster(index6)" mat-raised-button color='primary'
+                [disabled]="!isFirst">Проверить на дубли Пасху</button>
+            <p> {{checkingHouse6}}</p>
+            <button class="submit" (click)="checkDoublesEaster(index6)" mat-raised-button color='primary'
+                [disabled]="!isNext">Следующий</button>
+
+        </div>
+        <br /> <br />
+        <div>
+            <button class="submit" (click)="checkFullnessEaster(index7)" mat-raised-button color='primary'
+                [disabled]="!isFirst2">Проверить на полноту Пасху</button>
+            <p> {{checkingHouse7}}</p>
+            <button class="submit" (click)="checkFullnessEaster(index7)" mat-raised-button color='primary'
                 [disabled]="!isNext2">Следующий</button>
 
         </div>

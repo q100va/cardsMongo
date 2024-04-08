@@ -13,7 +13,7 @@
         <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
         <mat-card-subtitle>
-            <button mat-stroked-button color="primary" (click)="generateEasterList()">
+            <button mat-stroked-button color="primary" (click)="generateVeteransList()">
                 Добавить списки
             </button>
         </mat-card-subtitle>
@@ -33,7 +33,10 @@
                 <ng-container matColumnDef="amount">
                     <mat-header-cell *matHeaderCellDef> Кол-во </mat-header-cell>
                     <mat-cell *matCellDef="let house">
-                        {{house.statistic.easter.amount }}<br />
+                         {{house.statistic.veterans.amount }}<br />
+                        <!-- ветераны - {{house.statistic.veterans.veteran }}<br />
+                        дети войны - {{house.statistic.veterans.child }}<br /> -->
+
 
                     </mat-cell>
                 </ng-container>
@@ -42,12 +45,16 @@
                     <mat-header-cell *matHeaderCellDef> Плюсы </mat-header-cell>
                     <mat-cell *matCellDef="let house">
 
-                        {{"plus0" + " : " + house.statistic.easter.plus0 }}<br />
-                        {{"plus1" + " : " + house.statistic.easter.plus1 }}<br />
-                        {{"plus2" + " : " + house.statistic.easter.plus2 }}<br />
-<!--                         {{"plus3" + " : " + house.statistic.easter.plus3 }}<br />
-                        {{"plus4" + " : " + house.statistic.easter.plus4 }}<br />
-                        {{"plus5" + " : " + house.statistic.easter.plus5 }}<br /> -->
+                        {{"veteranPlus0" + " : " + house.statistic.veterans.veteranPlus0 }}<br />
+                        {{"veteranPlus1" + " : " + house.statistic.veterans.veteranPlus1 }}<br />
+                        {{"veteranPlus2" + " : " + house.statistic.veterans.veteranPlus2 }}<br />
+<!--                         {{"veteranPlus3" + " : " + house.statistic.veterans.veteranPlus3 }}<br />
+                        {{"veteranPlus4" + " : " + house.statistic.veterans.veteranPlus4 }}<br />
+                        {{"veteranPlus5" + " : " + house.statistic.veterans.veteranPlus5 }}<br /> -->
+                        {{"childPlus0" + " : " + house.statistic.veterans.childPlus0 }}<br />
+                        {{"childPlus1" + " : " + house.statistic.veterans.childPlus1 }}<br />
+<!--                         {{"childPlus2" + " : " + house.statistic.veterans.childPlus2 }}<br />
+                        {{"childPlus3" + " : " + house.statistic.veterans.childPlus3 }}<br /> -->
 
                     </mat-cell>
                 </ng-container>
@@ -55,17 +62,11 @@
                 <ng-container matColumnDef="statistic2">
                     <mat-header-cell *matHeaderCellDef> Поздр-е </mat-header-cell>
                     <mat-cell *matCellDef="let house">
-
-                        <span *ngIf="!house.noAddress">
-                            {{"oldWomen" + " : " + house.statistic.easter.oldWomen }}<br />
-                            {{"oldMen" + " : " + house.statistic.easter.oldMen }}<br />
-                            {{"yangWomen" + " : " + house.statistic.easter.yangWomen }}<br />
-                            {{"yangMen" + " : " + house.statistic.easter.yangMen }}<br />
-                        </span>
-                        <span *ngIf="house.noAddress">
-                            {{"specialWomen" + " : " + house.statistic.easter.specialWomen}}<br />
-                            {{"specialMen" + " : " + house.statistic.easter.specialMen }}<br />
-                        </span>             
+           
+                            {{"veteran" + " : " + house.statistic.veterans.veteran }}<br />
+                            {{"child" + " : " + house.statistic.veterans.child }}<br />
+       
+       
 
                     </mat-cell>
                 </ng-container>
@@ -73,19 +74,11 @@
                 <ng-container matColumnDef="statistic3">
                     <mat-header-cell *matHeaderCellDef> Плюсы по кат-м </mat-header-cell>
                     <mat-cell *matCellDef="let house">
-
-                        <span *ngIf="!house.noAddress">
-                            {{"oldWomen" + " : " + (house.statistic.easter.oldWomenPlus/house.statistic.easter.oldWomen).toFixed(2)
+                 
+                            {{"veteran" + " : " + (house.statistic.veterans.veteranPlus/house.statistic.veterans.veteran).toFixed(2)
                             }}<br />
-                            {{"oldMen" + " : " + (house.statistic.easter.oldMenPlus/house.statistic.easter.oldMen).toFixed(2) }}<br />
-                            {{"yangWomen" + " : " + (house.statistic.easter.yangWomenPlus/house.statistic.easter.yangWomen).toFixed(2) }}<br />
-                            {{"yangMen" + " : " + (house.statistic.easter.yangMenPlus/house.statistic.easter.yangMen).toFixed(2) }}<br />
-                        </span>
-                        <span *ngIf="house.noAddress">
-                            {{"specialWomen" + " : " +
-                            (house.statistic.easter.specialWomenPlus/house.statistic.easter.specialWomen).toFixed(2) }}<br />
-                            {{"specialMen" + " : " + (house.statistic.easter.specialMenPlus/house.statistic.easter.specialMen).toFixed(2) }}<br />
-                        </span>
+                            {{"child" + " : " + (house.statistic.veterans.childPlus/house.statistic.veterans.child).toFixed(2) }}<br />
+                           
 
                     </mat-cell>
                 </ng-container>

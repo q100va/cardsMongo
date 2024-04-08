@@ -10,6 +10,7 @@ const router = express.Router();
 const House = require("../models/house");
 const NewYear = require("../models/new-year");
 const checkAuth = require("../middleware/check-auth");
+const Senior = require("../models/senior");
 
 // Create  API
 router.post("/", checkAuth, async (req, res) => {
@@ -74,6 +75,44 @@ router.post("/", checkAuth, async (req, res) => {
           yangWomenPlus: 0,
           specialMenPlus: 0,
           specialWomenPlus: 0,
+        },
+        easter: {
+          oldWomen: 0,
+          oldMen: 0,
+          yangMen: 0,
+          yangWomen: 0,
+          specialWomen: 0,
+          specialMen: 0,
+          amount: 0,
+          time: 0,
+          plus0: 0,
+          plus1: 0,
+          plus2: 0,
+          plus3: 0,
+          oldMenPlus: 0,
+          oldWomenPlus: 0,
+          yangMenPlus: 0,
+          yangWomenPlus: 0,
+          specialMenPlus: 0,
+          specialWomenPlus: 0,
+        },
+        veterans: {
+          veteran: 0,
+          child: 0,          
+          amount: 0,
+          time: 0,
+          veteranPlus0: 0,
+          veteranPlus1: 0,
+          veteranPlus2: 0,
+          veteranPlus3: 0,
+          veteranPlus4: 0,
+          veteranPlus5: 0,
+          childPlus0: 0,
+          childPlus1: 0,
+          childPlus3: 0,
+          veteranPlus: 0,
+          childPlus: 0,
+          
         }
       }
 
@@ -194,7 +233,52 @@ router.get("/", checkAuth, async (req, res) => {
 router.get("/find/active", checkAuth, async (req, res) => {
   console.log("houses/find/active");
   try {
-    let houses = await House.find({ isActive: true }).sort({ dateLastUpdate: -1, _id: 1 });
+     let houses = await House.find({ isActive: true }).sort({ dateLastUpdate: -1, _id: 1 });
+    // console.log(houses);
+
+/*     let houses = await House.find({ isActive: true }, { nursingHome: 1, _id: 0 });
+
+    for (let house of houses) {
+
+      let amount = await Senior.aggregate([
+        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      console.log(house.nursingHome);
+      console.log(amount[0]?.count);
+
+      let veteran = await Senior.aggregate([
+        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, veteran: { $ne: "" } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+
+      console.log(veteran[0]?.count);
+
+      let child = await Senior.aggregate([
+        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, child: { $ne: "" } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      console.log(child[0]?.count);
+
+      let find = await House.findOne({ nursingHome: house.nursingHome });
+      console.log(find.nursingHome);
+      let update = await House.updateOne(
+        { nursingHome: house.nursingHome },
+        {
+          $set: {
+            "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
+            "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
+            "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
+            "statistic.veterans.veteranPlus0": 0, //veteran[0]?.count ? veteran[0].count : 
+            "statistic.veterans.childPlus0":  0, //child[0]?.count ? child[0].count :
+          }
+        });
+      console.log(update);
+    } */
+
+
+
+
     /*     console.log("houses");
         console.log(houses); */
     //statistic
