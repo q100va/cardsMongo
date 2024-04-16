@@ -200,7 +200,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "date2": 31,
             "isActive": true,
             "key": 0,
-            "maxPlus": 4,  //PLUSES
+            "maxPlus": 5,  //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }
@@ -892,7 +892,7 @@ async function collectSeniors(data, orderFilter, holiday) {
                         data.restrictedHouses.push(result["nursingHome"]);
                     }
                 }
-                if (data.celebratorsAmount == 30) { 
+                if (data.celebratorsAmount == 15 || data.celebratorsAmount == 30 ) { 
                     data.restrictedHouses = []; 
                     console.log(data.celebratorsAmount);
 
