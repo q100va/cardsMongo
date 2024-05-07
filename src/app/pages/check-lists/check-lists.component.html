@@ -64,7 +64,7 @@
         
         <br /> <br />
 
-        <div>
+<!--         <div>
             <button class="submit" (click)="checkDoublesEaster(index6)" mat-raised-button color='primary'
                 [disabled]="!isFirst">Проверить на дубли Пасху</button>
             <p> {{checkingHouse6}}</p>
@@ -72,13 +72,16 @@
                 [disabled]="!isNext">Следующий</button>
 
         </div>
+        <br /> <br /> -->
+        <div>
+            <button class="submit" (click)="checkFullnessEaster()" mat-raised-button color='primary'
+                [disabled]="!isFirst2">Проверить на полноту Пасху</button>
+        </div>
         <br /> <br />
         <div>
-            <button class="submit" (click)="checkFullnessEaster(index7)" mat-raised-button color='primary'
-                [disabled]="!isFirst2">Проверить на полноту Пасху</button>
-            <p> {{checkingHouse7}}</p>
-            <button class="submit" (click)="checkFullnessEaster(index7)" mat-raised-button color='primary'
-                [disabled]="!isNext2">Следующий</button>
+            <button class="submit" (click)="checkFullnessVeterans()" mat-raised-button color='primary'
+                [disabled]="!isFirst2">Проверить на полноту 9 мая</button>
+
 
         </div>
 

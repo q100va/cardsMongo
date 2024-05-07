@@ -41,13 +41,13 @@ export class CheckListsComponent implements OnInit {
     this.houseService.findAllHouses().subscribe(
       (res) => {
         console.log(res.data);
-      /*  for (let item of res.data) {
+   for (let item of res.data) {
           if (item.isActive) {
           this.houses.push(item.nursingHome);
           } 
-        }   */    
-   this.houses =  [ "БИЙСК"];
-/*    this.houses =  [ "ШИПУНОВО", "ШИПУНОВО_БОА","КАРДЫМОВО", "ПЕРВОМАЙСКИЙ", "БЕРЕЗОВСКИЙ", "СОСНОВКА", "КРАСНОБОРСК", "ДОЛБОТОВО","СТАРОДУБ", "НОВЛЯНКА", "ИЛЬИНСКОЕ", "КОВЫЛКИНО",
+        }    
+   /*this.houses =  [ "БИЙСК"];
+    this.houses =  [ "ШИПУНОВО", "ШИПУНОВО_БОА","КАРДЫМОВО", "ПЕРВОМАЙСКИЙ", "БЕРЕЗОВСКИЙ", "СОСНОВКА", "КРАСНОБОРСК", "ДОЛБОТОВО","СТАРОДУБ", "НОВЛЯНКА", "ИЛЬИНСКОЕ", "КОВЫЛКИНО",
    "ДМИТРОВСКИЙ_ПОГОСТ_ОКТЯБРЬСКАЯ", "АНЦИФЕРОВО","НЕБОЛЧИ", "СУЗУН", "ЖИТИЩИ", "МАСЛЯТКА",
    "РОСЛАВЛЬ", "СТУДЕНЕЦ","СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "ПЕТРОВКА", "АЛЕКСАНДРОВКА","ЕЛИЗАВЕТОВКА", "ЗЕРНОГРАД_САМОХВАЛОВА","ЛАШМА", "НОГИНСК", "ЭЛЕКТРОГОРСК", "СТАРАЯ_КУПАВНА",
    "ЧЕРНОГОЛОВКА", "КАРГОПОЛЬ","СТАРОЕ_ШАЙГОВО", "СЕМЕНОВСКОЕ", "НИКИТИНКА", "ЯГОТИНО",
@@ -202,13 +202,10 @@ export class CheckListsComponent implements OnInit {
     }
   }
 
-  checkFullnessEaster(index: number) {
-    this.checkingHouse7 = this.houses[this.index7];
-    this.listService.checkFullnessEaster(this.houses[index]).subscribe(
+  checkFullnessEaster() {
+    this.listService.checkFullnessEaster().subscribe(
       (res) => {
-        alert("Added " + res["data"]["amountAdded"] + " seniors" + "Deleted " + res["data"]["amountDeleted"] + " seniors" );
-        console.log ("Deleted");
-        console.log (res["data"]["ordersToAware"]);
+        alert("OK" );
       },
       (err) => {
         alert(err.error.msg + " " + err.message);
@@ -216,14 +213,20 @@ export class CheckListsComponent implements OnInit {
       }
     );
 
-    this.index7++;
+  }
 
-    if (this.index7 < this.houses.length) {
-      this.isNext2 = true;
-      this.isFirst2 = false;
-    } else {
-      this.isNext2 = false;
-    }
+  checkFullnessVeterans() {
+    this.listService.checkFullnessVeterans().subscribe(
+      (res) => {
+        alert("OK");
+
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      }
+    );
+
   }
 
 

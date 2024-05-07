@@ -12,7 +12,7 @@
                     <tr>
                         <td>
                             <mat-card-title> Новая заявка </mat-card-title>
-                            <mat-card-title> </mat-card-title>
+
                         </td>
                         <td>
                             <mat-card-actions style="text-align: right; padding-right: px;">
@@ -216,7 +216,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <h4>Регион (если не работает, введите больший диапазон дат)
+                                                            <h4>Регион (если не работает, обратитесь к администратору)
                                                             </h4>
                                                             <mat-form-field appearance="fill">
 
@@ -233,8 +233,8 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <h4>Интернат (если не работает, введите больший диапазон
-                                                                дат)</h4>
+                                                            <h4>Интернат (если не работает, обратитесь к администратору)
+                                                            </h4>
                                                             <mat-form-field appearance="fill">
 
                                                                 <mat-select [formControl]="form.controls['nursingHome']"
@@ -452,12 +452,7 @@
                     <tr>
                         <td>
                             <mat-card-title> Список поздравляемых {{contactReminder}}</mat-card-title>
-                            <!--<mat-card-actions>
-                    <button mat-raised-button (click)="clear()" color="primary"
-                        [disabled]="!form.valid">Очистить</button>
-                    <button (click)="createOrder()" mat-raised-button color="accent"
-                        [disabled]="!canSave">Сохранить</button>
-                </mat-card-actions> -->
+
                             <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
                             <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
 
@@ -521,13 +516,16 @@
                         </p>
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
-                            {{ holiday + " празднуется 5 мая"}}   <br />(открытки просим отправить 7-12 апреля и только простыми отправлениями)
+                            {{ holiday + " празднуется 5 мая и следующих 40 дней"}} <br />(открытки просим отправить в ближайшие дни и только простыми отправлениями)
                         </h2>
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">                      
-                            Мы не можем сказать, кто из наших подопечных верующий и какого вероисповедания придерживается. 
-                            Мы поздравляем всех. 
-                            Если вы сомневаетесь, что человек празднует Пасху, можно начать ваше поздравление следующим образом: 
-                            “Уважаемая ...! Поздравляю Вас с наступившей весной и праздником Пасхи, если Вы отмечаете! Желаю....”
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Мы не можем сказать, кто из наших подопечных верующий и какого вероисповедания
+                            придерживается.
+                            Мы поздравляем всех.
+                            Если вы сомневаетесь, что человек празднует Пасху, можно начать ваше поздравление следующим
+                            образом:
+                            “Уважаемая ...! Поздравляю Вас с наступившей весной и праздником Пасхи, если Вы отмечаете!
+                            Желаю....”
                         </p>
 
 
@@ -549,6 +547,8 @@
                         </p>
                         <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
                             {{lineItem.adminComment}}</p>
+                        <p *ngIf="selectedInstitutes.length > 0" style="font-weight: bold; margin: 0;">{{lineItem.celebrators.length}} откр.:
+                            {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
 
                         <div *ngFor="let celebrator of lineItem.celebrators">
                             <span *ngIf="showIndexes">{{celebrator.index}}. </span>
@@ -556,7 +556,7 @@
                             {{celebrator.firstName}}
                             {{celebrator.patronymic}}
 
-                            <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span>
+                            <span *ngIf="celebrator.yearBirthday > 0 "> - {{celebrator.yearBirthday}} г.р.</span>
                             {{celebrator.comment1}}
                             {{celebrator.linkPhoto}}
 
@@ -582,7 +582,7 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Учтите, что по России письма идут 12-18 дней.
+                                Учтите, что по России письма идут 14-20 дней.
                             </li>
                         </ul>
 
@@ -676,8 +676,8 @@
                             </li>
                         </ul>
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                            Чтобы помочь бабушкам и дедушкам в Республике Тыва с продуктами, перейдите по ссылке: 
-                            <a href="https://starikam.org/campaign/produkty-v-dalnij-kozhuun/">starikam.org</a>
+                            Чтобы помочь накормить горячим обедом 80 пожилых, перейдите по ссылке:
+                            <a href="https://starikam.org/campaign/nakormit-goryachim-obedom/">starikam.org</a>
                         </p>
                         <hr />
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">

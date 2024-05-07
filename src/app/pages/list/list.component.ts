@@ -60,6 +60,18 @@ export class ListComponent implements OnInit {
   accepted_instagram = "";
   accepted_facebook = "";
 
+  amountOfRegions = 0;
+  amountOfHouses = 0;
+  plusesHBAmount = 0;
+  celebratorsHBAmount = 0;
+  plusesNDAmount = 0;
+  celebratorsNDAmount = 0;
+  plusesM8Amount = 0;
+  celebratorsM8Amount = 0;
+  volunteersAmount = 0;
+  schoolsAmount = 0;
+  institutesAmount = 0;
+
   constructor(
     private listService: ListService,
     private housesService: HousesService,
@@ -126,7 +138,7 @@ export class ListComponent implements OnInit {
       }
     );
   }
-/*   generateEasterList() {
+  /*   generateEasterList() {
     this.listService.createEasterList().subscribe(
       async (res) => {
         let result = await res["data"];
@@ -141,7 +153,7 @@ export class ListComponent implements OnInit {
   }
  */
 
-/*   generateNewYearList() {
+  /*   generateNewYearList() {
     this.listService.createNewYearList().subscribe(
       async (res) => {
         let result = await res["data"];
@@ -155,7 +167,7 @@ export class ListComponent implements OnInit {
     );
   } */
 
-/*   generateFebruary23List() {
+  /*   generateFebruary23List() {
     this.listService.createFebruary23List().subscribe(
       async (res) => {
         let result = await res["data"];
@@ -454,36 +466,36 @@ export class ListComponent implements OnInit {
     //console.log(this.lists);
   }
 
-    showLessPlusEasterList(event: any) {
-      this.listService.findAllEasterLists().subscribe(
-        (res) => {
-          this.lists = res["data"].filter((item) => item.plusAmount < 1);
-          //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
-          this.listLength = this.lists.length;
-          this.oldMen = this.lists.filter(
-            (item) => item.category == "oldMen"
-          ).length;
-          this.yangWomen = this.lists.filter(
-            (item) => item.category == "yangWomen"
-          ).length;
-          this.specialWomen = this.lists.filter(
-            (item) => item.category == "specialWomen"
-          ).length;
-          this.yangMen = this.lists.filter(
-            (item) => item.category == "yangMen"
-          ).length;
-          this.specialMen = this.lists.filter(
-            (item) => item.category == "specialMen"
-          ).length;
-          this.oldest = this.lists.filter((item) => item.oldest == true).length;
-          this.oldWomen = this.lists.filter(
-            (item) => item.category == "oldWomen"
-          ).length;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+  showLessPlusEasterList(event: any) {
+    this.listService.findAllEasterLists().subscribe(
+      (res) => {
+        this.lists = res["data"].filter((item) => item.plusAmount < 1);
+        //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
+        this.listLength = this.lists.length;
+        this.oldMen = this.lists.filter(
+          (item) => item.category == "oldMen"
+        ).length;
+        this.yangWomen = this.lists.filter(
+          (item) => item.category == "yangWomen"
+        ).length;
+        this.specialWomen = this.lists.filter(
+          (item) => item.category == "specialWomen"
+        ).length;
+        this.yangMen = this.lists.filter(
+          (item) => item.category == "yangMen"
+        ).length;
+        this.specialMen = this.lists.filter(
+          (item) => item.category == "specialMen"
+        ).length;
+        this.oldest = this.lists.filter((item) => item.oldest == true).length;
+        this.oldWomen = this.lists.filter(
+          (item) => item.category == "oldWomen"
+        ).length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
     console.log(event);
 
@@ -623,7 +635,7 @@ export class ListComponent implements OnInit {
   }
  */
 
-/*   addHouses() {
+  /*   addHouses() {
     this.housesService.addManyHouses(houses).subscribe(
       async (res) => {
         let result = await res["data"];
@@ -656,7 +668,7 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         console.log(this.lists);
-/*         let length = 0;
+        /*         let length = 0;
         for (let house of this.lists) {
           house.celebrators.sort(
             (prev, next) => prev.dateBirthday - next.dateBirthday
@@ -664,12 +676,13 @@ export class ListComponent implements OnInit {
           length = length + house.celebrators.length;
         } */
 
-         this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
-
+        this.lists.sort((prev, next) =>
+          prev.nursingHome.localeCompare(next.nursingHome)
+        );
 
         this.listLength = this.lists.length;
 
-/*         let i = 0;
+        /*         let i = 0;
         for (let lineItem of this.lists) {
           for (let celebrator of lineItem.celebrators) {
             celebrator.index = i + 1;
@@ -790,7 +803,19 @@ export class ListComponent implements OnInit {
   showAmountOfVolunteers(event: any) {
     this.listService.countAmountOfVolunteers().subscribe(
       (res) => {
-        this.amountOfVolunteers = res["data"];
+        //this.amountOfVolunteers = res["data"];
+        this.amountOfRegions = res["data"]["regionsAmount"];
+        this.amountOfHouses = res["data"]["housesAmount"];
+        this.plusesHBAmount = res["data"]["plusesHBAmount"];
+        this.celebratorsHBAmount = res["data"]["celebratorsHBAmount"];
+        this.plusesNDAmount = res["data"]["plusesNDAmount"];
+        this.celebratorsNDAmount = res["data"]["celebratorsNDAmount"];
+        this.plusesM8Amount = res["data"]["plusesM8Amount"];
+        this.celebratorsM8Amount = res["data"]["celebratorsM8Amount"];
+        this.volunteersAmount = res["data"]["volunteersAmount"];
+        this.schoolsAmount = res["data"]["schoolsAmount"];
+        this.institutesAmount = res["data"]["institutesAmount"];
+
       },
       (err) => {
         console.log(err);
@@ -878,8 +903,10 @@ export class ListComponent implements OnInit {
                 let index = this.clientsList.findIndex(
                   (item) => item._id == id
                 );
-                if(index > this.index) this.clientsList.splice(index, 1);
-                console.log(this.clientsList.findIndex((item) => item._id == id));
+                if (index > this.index) this.clientsList.splice(index, 1);
+                console.log(
+                  this.clientsList.findIndex((item) => item._id == id)
+                );
               }
             }
 
@@ -983,7 +1010,7 @@ export class ListComponent implements OnInit {
 
     for (let id of this.idOfSimilarClients) {
       let index = this.clientsList.findIndex((item) => item._id == id);
-      if(index > this.index)      this.clientsList.splice(index, 1);
+      if (index > this.index) this.clientsList.splice(index, 1);
     }
 
     this.listService
@@ -1073,5 +1100,4 @@ export class ListComponent implements OnInit {
       }
     );
   }
-
 }

@@ -190,6 +190,31 @@ export class OrderService {
     });
   }
 
+  createInstitutesOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+    return this.http.post("/api/orders/birthdayForInstitutes/" + newOrder.amount, {
+      userName: newOrder.userName,
+      clientId: newOrder.clientId,
+      holiday: newOrder.holiday,
+      source: newOrder.source,
+      amount: newOrder.amount,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      institute: newOrder.institute,
+      institutes: newOrder.institutes,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
+      filter: newOrder.filter,
+      prohibitedId: prohibitedId,
+      restrictedHouses: restrictedHouses
+    });
+  }
+
   createDobroruOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
     return this.http.post("/api/dobroru/birthday/" + newOrder.amount, {
       userName: newOrder.userName,

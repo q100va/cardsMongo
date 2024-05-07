@@ -67,6 +67,8 @@ export class AddListsComponent implements OnInit {
   accepted_gender: string;
   accepted_comment1: string;
   accepted_comment2: string;
+  accepted_veteran: string;
+  accepted_child: string;
   accepted_linkPhoto: string;
   accepted_nameDay: string;
   accepted_dateNameDay: number;
@@ -265,6 +267,8 @@ export class AddListsComponent implements OnInit {
       gender: accepted.gender ? accepted.gender : person.gender,
       comment1: accepted.comment1 ? accepted.comment1 : person.comment1,
       comment2: accepted.comment2 ? accepted.comment2 : person.comment2,
+      veteran: accepted.veteran ? accepted.veteran : person.veteran,
+      child: accepted.child ? accepted.child : person.child,
       linkPhoto: accepted.linkPhoto ? accepted.linkPhoto : person.linkPhoto,
       nameDay: accepted.nameDay ? accepted.nameDay : person.nameDay,
       dateNameDay: accepted.dateNameDay
@@ -294,6 +298,8 @@ export class AddListsComponent implements OnInit {
     this.accepted_gender = undefined;
     this.accepted_comment1 = undefined;
     this.accepted_comment2 = undefined;
+    this.accepted_veteran = undefined;
+    this.accepted_child = undefined;
     this.accepted_linkPhoto = undefined;
     this.accepted_nameDay = undefined;
     this.accepted_dateNameDay = undefined;

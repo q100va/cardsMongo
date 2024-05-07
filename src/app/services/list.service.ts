@@ -17,7 +17,7 @@ import { Celebrator } from "../shared/interfaces/celebrator.interface";
 export class ListService {
   constructor(private http: HttpClient) {}
 
-  month = 4;
+  month = 5;
   //fullDate = " апрель 2024 г.";
 
   findAllBirthdayLists(): Observable<any> {
@@ -137,10 +137,19 @@ export class ListService {
     });
   }
 
-  checkFullnessEaster(house: string) {
+  checkFullnessEaster() {
     console.log("checkFullness");
     return this.http.post("/api/lists/easter/check-fullness", {
-      nursingHome: house,
+
+    });
+  }
+
+
+
+  checkFullnessVeterans() {
+    console.log("checkFullness");
+    return this.http.post("/api/lists/veterans/check-fullness", {
+     
     });
   }
 

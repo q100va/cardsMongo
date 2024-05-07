@@ -34,7 +34,7 @@ export class May9Component implements OnInit {
   userName: string;
   form: FormGroup;
   holiday: string = "9 мая 2024";
-  lineItems: Array<LineItem> = [];
+  lineItems = [];
   types: Array<string> = [
     "email",
     "phoneNumber",
@@ -83,6 +83,7 @@ export class May9Component implements OnInit {
   previousClient = "";
   newClient: Client;
   doubles = [];
+  selectedInstitutes = [];
 
   categories = [
     "образовательное учреждение",
@@ -565,11 +566,11 @@ export class May9Component implements OnInit {
     this.lineItems = [];
     this.canSave = false;
 
-    const selectedInstitutes = this.form.value.institutes
+    this.selectedInstitutes = this.form.value.institutes
     .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
     .filter((v) => v !== null);
 
-  if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
+/*   if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
     this.resultDialog.open(ConfirmationDialogComponent, {
       data: {
         message:
@@ -579,7 +580,8 @@ export class May9Component implements OnInit {
       width: "fit-content",
     });
     this.clicked = false;
-  } else { 
+  } else { */
+
     if (!this.form.controls.contact.value) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
@@ -737,7 +739,7 @@ export class May9Component implements OnInit {
       }
     }
   }
- } 
+/* } */
 
   fillOrder(prohibitedId: [], restrictedHouses: []) {
     this.spinner = true;
@@ -816,12 +818,16 @@ export class May9Component implements OnInit {
           console.log(result);
           this.lineItems = result;
           let i = 0;
-          for (let lineItem of this.lineItems) {
-            for (let celebrator of lineItem.celebrators) {
-              celebrator.index = i + 1;
-              i++;
+            for (let lineItem of this.lineItems) {
+              lineItem.Veteran = 0;
+              lineItem.Child = 0;
+              for (let celebrator of lineItem.celebrators) {
+                celebrator.index = i + 1;
+                i++;
+                if (celebrator.veteran != "") lineItem.Veteran++;
+                if (celebrator.child != "") lineItem.Child++;
+              }
             }
-          }
 
           this.canSave = true;
           this.successMessage =
@@ -850,7 +856,7 @@ export class May9Component implements OnInit {
       "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
       "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
       "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО).\n\n" +
-      this.holiday + "\n (открытки просим отправить 11-15 апреля и только простыми отправлениями) "+
+      this.holiday + "\n (открытки просим отправить в ближайшие дни и только простыми отправлениями) "+
       "\n" +
       "ветераны ВОВ — совсем не обязательно участники ВОВ, в основном в наших списках это труженики тыла, жители и защитники блокадного Ленинграда, Севастополя, Сталинграда, работники объектов противовоздушной обороны и др."+ "\n" +
       "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
@@ -861,7 +867,7 @@ export class May9Component implements OnInit {
       "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
       "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
       "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, бандероли, заказные/ценные письма, письма первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
-      "Чтобы помочь бабушкам и дедушкам в Республике Тыва с продуктами, перейдите по ссылке: https://starikam.org/campaign/produkty-v-dalnij-kozhuun/ \n\n" +
+      "Чтобы помочь накормить горячим обедом 80 пожилых, перейдите по ссылке: https://starikam.org/campaign/nakormit-goryachim-obedom/ \n\n" +
       "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n" +
       "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
     let addresses = "";

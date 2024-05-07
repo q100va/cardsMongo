@@ -324,6 +324,26 @@
                                     </mat-radio-group>
                                 </div>
                                 <br />
+                                <div *ngIf="person.old.veteran!=person.new.veteran">
+                                    <mat-radio-group [(ngModel)]="accepted_veteran">
+                                        <span>veteran</span>
+                                        <mat-radio-button [value]="person.old.veteran">{{person.old.veteran}}
+                                        </mat-radio-button>
+                                        <mat-radio-button [value]="person.new.veteran">{{person.new.veteran}}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                <br />
+                                <div *ngIf="person.old.child!=person.new.child">
+                                    <mat-radio-group [(ngModel)]="accepted_child">
+                                        <span>child</span>
+                                        <mat-radio-button [value]="person.old.child">{{person.old.child}}
+                                        </mat-radio-button>
+                                        <mat-radio-button [value]="person.new.child">{{person.new.child}}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                <br />
                                 <div *ngIf="person.old.linkPhoto!=person.new.linkPhoto">
                                     <mat-radio-group [(ngModel)]="accepted_linkPhoto">
                                         <span>linkPhoto</span>
@@ -364,7 +384,7 @@
                                 <br />
         
                                 <button mat-raised-button
-                                    (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2,linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay }, person.key, person.old)">
+                                    (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay }, person.key, person.old)">
                                     Принять изменения
                                 </button>
         

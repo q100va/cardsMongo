@@ -443,6 +443,8 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
       if (!senior.patronymic) senior.patronymic = '';
       if (!senior.comment1) senior.comment1 = '';
       if (!senior.comment2) senior.comment2 = '';
+      if (!senior.veteran) senior.veteran = '';
+      if (!senior.child) senior.child = '';
       if (!senior.linkPhoto) senior.linkPhoto = null;
       if (!senior.nameDay) senior.nameDay = '';
       if (senior.gender == 'ж') senior.gender = 'Female';
@@ -474,6 +476,8 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
           //newSenior.dateExit != oldList[index].dateExit ||
           newSenior.comment1 != oldList[index].comment1 ||
           newSenior.comment2 != oldList[index].comment2 ||
+          newSenior.veteran != oldList[index].veteran ||
+          newSenior.child != oldList[index].child ||
           newSenior.linkPhoto != oldList[index].linkPhoto ||
           newSenior.nameDay != oldList[index].nameDay ||
           newSenior.gender != oldList[index].gender
@@ -773,13 +777,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
         }
         let holiday;
         if (celebrator.monthBirthday == 3) {
-          holiday = 'Дни рождения марта 2024';
-        }
-        if (celebrator.monthBirthday == 4) {
           holiday = 'Дни рождения апреля 2024';
         }
-        if (celebrator.monthBirthday == 5) {
+        if (celebrator.monthBirthday == 4) {
           holiday = 'Дни рождения мая 2024';
+        }
+        if (celebrator.monthBirthday == 5) {
+          holiday = 'Дни рождения июня 2024';
         }
 
         let cloneCelebrator = {
@@ -794,6 +798,8 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           gender: celebrator.gender,
           comment1: celebrator.comment1,
           comment2: celebrator.comment2,
+          veteran: celebrator.veteran,
+          child: celebrator.child,
           linkPhoto: celebrator.linkPhoto,
           nameDay: celebrator.nameDay,
           dateNameDay: celebrator.dateNameDay,
@@ -846,6 +852,8 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           gender: senior.gender,
           comment1: senior.comment1,
           comment2: senior.comment2,
+          veteran: senior.veteran,
+          child: senior.child,
           linkPhoto: senior.linkPhoto,
           nameDay: senior.nameDay,
           dateNameDay: senior.dateNameDay,

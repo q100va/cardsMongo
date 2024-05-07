@@ -94,10 +94,11 @@
                                 </tr>
                             </table>
 
-                            <mat-accordion class="example-headers-align">
+                            <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3>
+                            <mat-accordion class="example-headers-align" *ngIf="showFilter">
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
-                                        <mat-panel-title>
+                                        <mat-panel-title matTooltip="Фильтры не работают для коллективных заявок.">
                                             Фильтры
                                         </mat-panel-title>
                                         <mat-panel-description>
@@ -464,8 +465,9 @@
                                 <tr formArrayName="institutes" *ngFor="let item of institutes.controls; index as i">
 
                                     <td colspan="3">
-                                        <p><mat-checkbox
-                                                [formControlName]="i">{{clientInstitutes[i].name}}</mat-checkbox></p>
+                                        <p><mat-checkbox [formControlName]="i"
+                                                (change)="checkInstitutes()">{{clientInstitutes[i].name}}
+                                            </mat-checkbox></p>
                                     </td>
 
                                 </tr>
@@ -489,7 +491,7 @@
                                                     {{ category }}
                                                 </mat-option>
                                             </mat-select>
-      
+
                                             <br />
                                         </mat-form-field>
                                     </td>
@@ -507,41 +509,6 @@
                                     </td>
                                 </tr>
 
-
-
-
-                                <!--                          <tr>
-                                    <td>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>Имя</mat-label>
-                                            <input type="text" matInput
-                                                [formControl]="form.controls['clientFirstName']" />
-                                        </mat-form-field>
-                                    </td>
-                                    <td>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>Отчество</mat-label>
-                                            <input type="text" matInput
-                                                [formControl]="form.controls['clientPatronymic']" />
-                                        </mat-form-field>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>Фамилия</mat-label>
-                                            <input type="text" matInput
-                                                [formControl]="form.controls['clientLastName']" />
-                                        </mat-form-field>
-                                    </td>
-                                    <td>
-                                        <mat-form-field appearance="fill">
-                                            <mat-label>Представляет коллектив</mat-label>
-                                            <input type="text" matInput [formControl]="form.controls['institute']" />
-                                        </mat-form-field>
-                                    </td>
-                                </tr>
- -->
                             </table>
 
 
@@ -645,20 +612,21 @@
                         </p>
                         <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
                             {{lineItem.adminComment}}</p>
-       <!-- <p style="font-weight: bold; margin: 0;">{{lineItem.celebrators.length}} открыток: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>  -->
+                        <p *ngIf="selectedInstitutes.length > 0" style="font-weight: bold; margin: 0;">
+                            {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
                         <div *ngFor="let celebrator of lineItem.celebrators">
 
                             <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                             {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                             <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-             {{celebrator.lastName}}  
+                            {{celebrator.lastName}}
                             {{celebrator.firstName}}
                             {{celebrator.patronymic}}
-               {{celebrator.fullDayBirthday}} 
+                            {{celebrator.fullDayBirthday}}
                             {{celebrator.comment1}}
-                        {{celebrator.linkPhoto}} 
-                   <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
-                            </span>  
+                            {{celebrator.linkPhoto}}
+                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                            </span>
                         </div>
                         <br />
                     </mat-card-content>
@@ -679,7 +647,7 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Учтите, что по России письма идут 12-18 дней. Рекомендуем отправить открытки в ближайшие дни.
+                                Учтите, что по России письма идут 14-20 дней.
                             </li>
                         </ul>
 
@@ -699,7 +667,7 @@
                                 Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">По возможности укажите ваш
-                                обратный адрес (кроме случаев, когда мы просим этого не далать)*.
+                                обратный адрес (кроме случаев, когда мы просим этого не делать)*.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в правом
@@ -774,8 +742,7 @@
                         </ul>
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
                             Помогите согреть
-                            <a
-                                href="https://starikam.org/campaign/pomogite-sogret/">starikam.org</a>
+                            <a href="https://starikam.org/campaign/pomogite-sogret/">starikam.org</a>
                         </p>
                         <hr />
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">

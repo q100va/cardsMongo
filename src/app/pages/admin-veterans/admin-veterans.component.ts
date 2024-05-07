@@ -10,9 +10,9 @@ import { MatTableDataSource } from "@angular/material/table";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
-  selector: 'app-admin-veterans',
-  templateUrl: './admin-veterans.component.html',
-  styleUrls: ['./admin-veterans.component.css']
+  selector: "app-admin-veterans",
+  templateUrl: "./admin-veterans.component.html",
+  styleUrls: ["./admin-veterans.component.css"],
 })
 export class AdminVeteransComponent implements OnInit {
   houses: House[];
@@ -21,9 +21,9 @@ export class AdminVeteransComponent implements OnInit {
   displayedColumns = [
     "nursingHome",
     "amount",
-       "statistic2",
+    "statistic2",
     "statistic1",
- 
+
     "statistic3",
     "check",
 
@@ -47,6 +47,29 @@ export class AdminVeteransComponent implements OnInit {
     this.housesService.findActiveHouses().subscribe(
       (res) => {
         this.houses = res["data"];
+        this.houses = this.houses.filter(
+          (item) =>
+          item.statistic.veterans.amount >  
+         
+            item.statistic.veterans.veteranPlus2 +
+            item.statistic.veterans.veteranPlus3 +
+            item.statistic.veterans.childPlus1 +
+            item.statistic.veterans.childPlus2 &&
+            item.isReleased != true &&
+            item.noAddress != true
+        ); //item.statistic.veterans.veteranPlus1 + 
+
+/*         this.houses = this.houses.filter(
+          (item) =>
+            item.statistic.veterans.amount >
+              item.statistic.veterans.veteranPlus1 +
+                item.statistic.veterans.veteranPlus2 +
+                item.statistic.veterans.childPlus1 +
+                item.statistic.veterans.childPlus2 &&
+            item.isReleased != true &&
+            item.noAddress != true &&
+            item.statistic.veterans.veteran != 0
+        ); */
         console.log(this.houses);
       },
       (err) => {
@@ -89,6 +112,3 @@ export class AdminVeteransComponent implements OnInit {
     }
   }
 }
-
-
-

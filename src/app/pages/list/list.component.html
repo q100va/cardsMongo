@@ -197,7 +197,13 @@
     </mat-card-content>
 
     <mat-card-content *ngIf="isShowAmountOfVolunteers">
-        <p>Общее количество - {{amountOfVolunteers}}</p>
+        <p>в проекте принимают участие {{amountOfHouses}} интернатов из {{amountOfRegions}} регионов </p>
+        <p>с ДР марта поздравили {{celebratorsHBAmount}} чел., отправили  {{plusesHBAmount}} откр. </p>
+        <p>с Именинами марта поздравили {{celebratorsNDAmount}} чел., отправили  {{plusesNDAmount}} откр. </p>
+        <p>с 8 марта поздравили {{celebratorsM8Amount}} чел., отправили  {{plusesM8Amount}} откр. </p>
+        <p>в поздравлениях приняли участие {{volunteersAmount}} поздравляющих, в т.ч. {{schoolsAmount}} образовательных учреждения и {{institutesAmount}} организаций
+        </p>
+ <!--        <p>Общее количество - {{amountOfVolunteers}}</p> -->
 
 
     </mat-card-content>
