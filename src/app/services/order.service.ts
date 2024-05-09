@@ -191,6 +191,8 @@ export class OrderService {
   }
 
   createInstitutesOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+
+    console.log(" api/orders/birthdayForInstitutes");
     return this.http.post("/api/orders/birthdayForInstitutes/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,

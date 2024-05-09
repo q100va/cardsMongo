@@ -47,7 +47,8 @@ export interface Order {
     onlyAnniversaries?: boolean,
     onlyAnniversariesAndOldest?: boolean,
   },
-  temporaryLineItems?: Array<any>
+  temporaryLineItems?: Array<any>,
+  lineItems?: Array<any>
   
 
 }

@@ -98,6 +98,17 @@ export class OrderDetailsComponent implements OnInit {
     console.log("this.order.holiday");
     console.log(this.order.holiday);
 
+    for (let lineItem of this.order.lineItems) {
+      lineItem.Female = 0;
+      lineItem.Male = 0;
+      for (let celebrator of lineItem.celebrators) {
+        /*                 celebrator.index = i + 1;
+        i++; */
+        if (celebrator.gender == "Female") lineItem.Female++;
+        if (celebrator.gender == "Male") lineItem.Male++;
+      }
+    }
+
     if (this.openHolidays.find((item) => item == this.order.holiday)) {
       this.isNotLate = true;
       console.log("this.isNotLate");
