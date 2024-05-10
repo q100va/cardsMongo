@@ -843,9 +843,9 @@ export class OrderComponent implements OnInit {
           }
           this.confirmationService.confirm({
             message:
-              "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+              "Пользователь с такими контактами уже получил адреса на праздник '" +
               this.holiday +
-              " у волонтера(ов): " +
+              "' у волонтера(ов): " +
               usernameList +
               ". Вы уверены, что это не дубль?",
             accept: () => {
@@ -1109,10 +1109,11 @@ export class OrderComponent implements OnInit {
       console.log("addresses1");
       console.log(addresses);
 
-      for (let celebrator of lineItem.celebrators) {
-        console.log("celebrator");
-        console.log(celebrator.lastName);
-        if (!this.isForInstitutes) {
+      if (!this.isForInstitutes) {
+        for (let celebrator of lineItem.celebrators) {
+          console.log("celebrator");
+          console.log(celebrator.lastName);
+
           addresses =
             addresses +
             (this.showIndexes ? celebrator.index + ". " : "") +
@@ -1140,7 +1141,8 @@ export class OrderComponent implements OnInit {
           lineItem.Female +
           " жен. + " +
           lineItem.Male +
-          " муж." + "\n";
+          " муж." +
+          "\n";
       }
       addresses = addresses + "\n";
 

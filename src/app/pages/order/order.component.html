@@ -544,7 +544,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <span *ngIf="lineItems.length > 0">
+                            <span *ngIf="lineItems.length > 0 && !isForInstitutes">
                                 <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
                             </span>
                         </td>

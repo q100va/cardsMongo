@@ -154,10 +154,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения мая 2024") {
+    if (newOrder.holiday == "Дни рождения июня 2024") {
         period = {
-            "date1": 16,
-            "date2": 20,
+            "date1": 5,
+            "date2": 10,
             "isActive": true,
             "key": 5,
             "maxPlus": 5, //PLUSES
@@ -961,15 +961,19 @@ async function searchSenior(
         //plusAmount: { $lt: maxPlus },
         dateBirthday: { $gte: data.date1, $lte: data.date2 },
         absent: { $ne: true },
+        patronymic : {$ne: ""},
         //firstName: "Светлана"
     };
-    if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
-    if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
+    standardFilter.isReleased = false;
+    standardFilter.noAddress = false;
+
+    //if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
+    //if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
     // console.log("DATA");
     //console.log(data);
-    if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
+/*     if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
         standardFilter.isReleased = false;
-    }
+    } */
 
     /*   console.log("data.filter.addressFilter");
       console.log(data.filter.addressFilter);

@@ -715,13 +715,13 @@ export class May9Component implements OnInit {
                           }
                           this.confirmationService.confirm({
                             message:
-                              "Пользователь с такими контактами уже получил адреса на этот праздник: " +
-                              this.holiday +
-                              " у волонтера(ов): " +
-                              usernameList +
-                              ". Вы уверены, что это не дубль?",
-                            accept: () => this.fillOrder(result.seniorsIds, []),//result.houses
-                            reject: () => (this.clicked = false),
+                            "Пользователь с такими контактами уже получил адреса на праздник '" +
+                            this.holiday +
+                            "' у волонтера(ов): " +
+                            usernameList +
+                            ". Вы уверены, что это не дубль?",
+                          accept: () => this.fillOrder(result.seniorsIds, []), //result.houses
+                          reject: () => (this.clicked = false),
                           });
                         }
                       },

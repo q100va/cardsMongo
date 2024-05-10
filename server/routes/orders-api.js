@@ -1140,9 +1140,11 @@ router.post("/check-double/", checkAuth, async (req, res) => {
         let usernames = [];
         let seniorsIds = [];
         let houses = [];
+        let amount = 0;
         if (orders.length > 0) {
           for (let order of orders) {
             usernames.push(order.userName);
+            amount += order.amount;
             console.log("order._id");
             console.log(order._id);
             for (let lineItem of order.lineItems) {
@@ -1158,6 +1160,7 @@ router.post("/check-double/", checkAuth, async (req, res) => {
           result.users = Array.from(u);
           result.houses = Array.from(h);
           result.seniorsIds = seniorsIds;
+          result.amount = amount;
         } else { result = null; }
 
         // console.log("result");
@@ -6460,11 +6463,11 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
   let proportion = {};
 
- // let veterans = 1;  //ВЕТЕРАНЫ
+ let veterans = 4;  //ВЕТЕРАНЫ
 
 
 
-  let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+ // let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
   let children = newOrder.amount - veterans;
 
   proportion = {
@@ -6922,7 +6925,9 @@ router.post("/birthdayForInstitutes/:amount", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
 
-    finalResult = await createOrderForInstitutes(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
+    let restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...req.body.restrictedHouses]
+
+    finalResult = await createOrderForInstitutes(newOrder, req.body.prohibitedId, restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
     const newListResponse = new BaseResponse(200, text, finalResult);

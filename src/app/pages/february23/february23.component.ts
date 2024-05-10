@@ -711,9 +711,9 @@ export class February23Component implements OnInit {
                         }
                         this.confirmationService.confirm({
                           message:
-                            "Пользователь с такими контактами уже получил адреса на этот праздник: " +
+                            "Пользователь с такими контактами уже получил адреса на праздник '" +
                             this.holiday +
-                            " у волонтера(ов): " +
+                            "' у волонтера(ов): " +
                             usernameList +
                             ". Вы уверены, что это не дубль?",
                           accept: () => this.fillOrder(result.seniorsIds, []), //result.houses
