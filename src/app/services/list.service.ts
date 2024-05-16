@@ -17,8 +17,8 @@ import { Celebrator } from "../shared/interfaces/celebrator.interface";
 export class ListService {
   constructor(private http: HttpClient) {}
 
-  month = 5;
-  //fullDate = " апрель 2024 г.";
+  month = 6;
+  //fullDate = "июнь 2024 г.";
 
   findAllBirthdayLists(): Observable<any> {
     return this.http.get("/api/lists");

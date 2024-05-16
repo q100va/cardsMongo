@@ -122,13 +122,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения июня 2024") {
+                if (holiday == "Дни рождения июля 2024") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения мая 2024") {
+                if (holiday == "Дни рождения июня 2024") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения апреля 2024") {
+                if (holiday == "Дни рождения мая 2024") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -156,8 +156,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     let period;
     if (newOrder.holiday == "Дни рождения июня 2024") {
         period = {
-            "date1": 26,
-            "date2": 31,
+            "date1": 11,
+            "date2": 20,
             "isActive": true,
             "key": 5,
             "maxPlus": 5, //PLUSES
@@ -167,7 +167,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     }
 
 /* 
-    if (newOrder.holiday == "Дни рождения апреля 2024") {
+    if (newOrder.holiday == "Дни рождения мая 2024") {
         period = {
             "date1": 26,
             "date2": 31,
@@ -178,10 +178,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "scoredPluses": 2
         }
     }
-    if (newOrder.holiday == "Дни рождения июня 2024") {
+    if (newOrder.holiday == "Дни рождения июля 2024") {
         period = {
-            "date1": 21,
-            "date2": 25,
+            "date1": 1,
+            "date2": 5,
             "isActive": true,
             "key": 0,
             "maxPlus": 5,  //PLUSES
@@ -850,13 +850,13 @@ async function collectSeniors(data, orderFilter, holiday) {
             if (result) {
                 //console.log(result);
                 await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-                if (holiday == "Дни рождения июня 2024") {
+                if (holiday == "Дни рождения июля 2024") {
                     await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения мая 2024") {
+                if (holiday == "Дни рождения июня 2024") {
                     await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения апреля 2024") {
+                if (holiday == "Дни рождения мая 2024") {
                     await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
 
@@ -914,7 +914,7 @@ async function searchSenior(
         data.restrictedPearson,
         data.date1,
         data.date2,
-        data.maxPlus,
+        БАЗГИЕВОdata.maxPlus,
         data.filter */
 
     let usingHouses = [  
@@ -930,7 +930,15 @@ async function searchSenior(
         "ЖЕЛЕЗНОГОРСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", 
         "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ЯРЦЕВО", 
         "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", 
-        "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК",];
+        "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК",
+        "ЦЕЛИННОЕ", "КРЕСТЬЯНКА", "ДРУЖБА", "УСТЬ-МОСИХА",
+        "АРХАРА", "ЗАОЗЕРЬЕ", "МЫЗА", "НЯНДОМА","КАРГОПОЛЬ",
+        "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "БАЗГИЕВО", "КУДЕЕВСКИЙ",
+        "ДОЛБОТОВО", "ГЛОДНЕВО", "ГОРНЯЦКИЙ", "ДОНЕЦК", "МЕЧЕТИНСКАЯ", "БОЛЬШАЯ_ОРЛОВКА", "НОВЫЙ_ЕГОРЛЫК",
+        "МАКСИМОВКА", "МАЙСКОЕ", "КАНДАБУЛАК", "ПЕТРОВКА", "ДЕВЛЕЗЕРКИНО", "НИКИТИНКА", "ЧАПАЕВСК", "ЖИГУЛЕВСК",
+         "САРАТОВ_КЛОЧКОВА", "ЛАШМА", "УВАРОВО", 
+
+    ];
 
     console.log('data.restrictedHouses');
     console.log(data.restrictedHouses);
@@ -1018,13 +1026,13 @@ async function searchSenior(
         //console.log("filter CHECK");
         //console.log(filter);
 
-        if (holiday == "Дни рождения июня 2024") {
+        if (holiday == "Дни рождения июля 2024") {
             celebrator = await ListNext.findOne(filter);
         }
-        if (holiday == "Дни рождения мая 2024") {
+        if (holiday == "Дни рождения июня 2024") {
             celebrator = await List.findOne(filter);
         }
-        if (holiday == "Дни рождения апреля 2024") {
+        if (holiday == "Дни рождения мая 2024") {
             celebrator = await ListBefore.findOne(filter);
         }
 
