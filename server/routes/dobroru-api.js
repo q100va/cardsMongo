@@ -312,6 +312,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
 
 
+
         } else {
 
             specialWomenAmount = Math.ceil(newOrder.filter.femaleAmount / newOrder.amount * newOrder.filter.maxNoAddress);
@@ -942,6 +943,9 @@ async function searchSenior(
 
     console.log('data.restrictedHouses');
     console.log(data.restrictedHouses);
+
+    console.log('data.proportion');
+    console.log(data.proportion);
    
         if (data.restrictedHouses.length > 0) {
             for (let house of data.restrictedHouses) {
@@ -976,7 +980,7 @@ async function searchSenior(
     standardFilter.noAddress = false;
 
     //if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
-    //if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
+    if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
     // console.log("DATA");
     //console.log(data);
 /*     if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
@@ -1001,8 +1005,8 @@ async function searchSenior(
     //console.log(maxPlus);
 
     let filter = Object.assign(standardFilter, data.filter);
-    //console.log("FILTER");
-    //console.log(filter);
+   console.log("FILTER");
+    console.log(filter);
 
     let celebrator;
     //CHANGE!!!
