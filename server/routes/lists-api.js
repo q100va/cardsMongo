@@ -1805,8 +1805,8 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     //  let nameDays = lineItemsM_3;
 
     //let housesForMagnit = Array.from(new Set(housesM));
-    let housesForMagnit = ["ТОЛЬЯТТИ", "БИЙСК", "ОКТЯБРЬСКИЙ", "КАНДАЛАКША", "ПЕРВОМАЙСКИЙ"];
-    let nameDays = await SpecialDay.find({ nursingHome: { $in: housesForMagnit }, dateExit: null, isRestricted: false, monthBirthday: 6 });
+    let housesForMagnit = ["РЖЕВ",  "ОКТЯБРЬСКИЙ", "УВАРОВО", "НОВОСИБИРСК_ЖУКОВСКОГО", "РОСТОВ-НА-ДОНУ", "КАНДАЛАКША"];
+    let nameDays = await SpecialDay.find({ nursingHome: { $in: housesForMagnit }, dateExit: null, isRestricted: false, monthBirthday: 8 });
 
     // let nameDays = await SpecialDay.find({ nursingHome: "ВОЛГОГРАД_КРИВОРОЖСКАЯ", yearBirthday: 0, dateExit: null, isDisabled: false });
     //  let nameDays = await SpecialDay.find({ absent: { $ne: true }, $or: [{ dateNameDay: 25 }, { dateNameDay: 27 }] });
@@ -1825,10 +1825,11 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
       //let nameDays = await SpecialDay.find({ nursingHome: { $in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, gender: "Male", comment2: { $in: ["ветеран ВОВ, труженик тыла", "ВВОВ,труженик тыла", "Ветеран ВОВ", "Афганистан", "участник боевых действий", "Ветеран ВОВ,  Ветеран  труда", "Ветеран ВОВ,  Ветеран  труда", "военный водитель", "малолетний узник, ветеран ВОВ"] } });
       //let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null, monthBirthday : 4, dateBirthday: 1, yearBirthday: {$lt: 1953}});
       // let nameDays = await SpecialDay.find({nursingHome: {$in: namesOfUpdatedNursingHome }, isRestricted: false, isReleased: false, dateExit: null,  region: "ТЮМЕНСКАЯ", gender: "Female"});
-      let lineItems = [];
+      */
+     let lineItems = [];
       let nursingHomes = await House.find({});
   
-      //nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+      nameDays.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
   let i = 0;
       for (let person of nameDays) {
         console.log(i++);
@@ -1865,10 +1866,10 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
             celebrators: [person],
           });
         }
-      } */
+      } 
     console.log(nameDays);
 
-    const findAllListsResponse = new BaseResponse("200", "Query successful", nameDays);
+    const findAllListsResponse = new BaseResponse("200", "Query successful", lineItems);
     res.json(findAllListsResponse.toObject());
 
   } catch (e) {

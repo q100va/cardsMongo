@@ -31,18 +31,18 @@
 
         <!--         <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
         <br /><br /><br /> -->
-       <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Отчет за апрель 2024</button>
-        <br /><br /><br /> 
+        <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Отчет за апрель 2024</button>
+        <br /><br /><br />
         <!--         <button class="submit" (click)="correctOrdersDates($event)" mat-raised-button>Скорректировать даты в заявках</button>
         <br /><br /><br /> -->
         <!-- 
         <button class="submit" (click)="countSeniors($event)" mat-raised-button>Посчитать поздравляемых</button>
         <br /><br /><br />
  -->
-<!--  <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>-->
- <button class="submit" (click)="restorePluses('easter')" mat-raised-button>Восстановить плюсы Пасха</button> 
- <button class="submit" (click)="restorePluses('veterans')" mat-raised-button>Восстановить плюсы 9 мая</button> 
-<!-- 
+        <!--  <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>-->
+        <button class="submit" (click)="restorePluses('easter')" mat-raised-button>Восстановить плюсы Пасха</button>
+        <button class="submit" (click)="restorePluses('veterans')" mat-raised-button>Восстановить плюсы 9 мая</button>
+        <!-- 
         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
         <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
         <!--         <button class="submit" (click)="generateNewYearList()" mat-raised-button>Сформировать список Пасха</button>
@@ -68,7 +68,7 @@
             1+</button> 
         <br /><br /><br />-->
 
-   <!--      <button class="submit" (click)="generateEasterList()" mat-raised-button>Сформировать список Пасха</button> -->
+        <!--      <button class="submit" (click)="generateEasterList()" mat-raised-button>Сформировать список Пасха</button> -->
         <button class="submit" (click)="showEasterList($event)" mat-raised-button>Показать список Пасха</button>
         <button class="submit" (click)="showLessPlusEasterList($event)" mat-raised-button>Показать список меньше
             1+</button>
@@ -83,7 +83,7 @@
             запросу</button>
 
         <br /><br /><br />
-<!-- 
+        <!-- 
          <button class="submit" (click)="addSearchArray()" mat-raised-button>Добавить строку поиска</button>
 
         <br /><br /><br /> 
@@ -92,11 +92,11 @@
 
         <br /><br /><br />  -->
 
-<!--         <button class="submit" (click)="moveInstitutes()" mat-raised-button>Организации в массив</button>
+        <!--         <button class="submit" (click)="moveInstitutes()" mat-raised-button>Организации в массив</button>
 
         <br /><br /><br /> -->
 
-<!--         <button class="submit" (click)="correctContacts()" mat-raised-button>Коррекция контактов</button>
+        <!--         <button class="submit" (click)="correctContacts()" mat-raised-button>Коррекция контактов</button>
 
         <br /><br /><br /> -->
 
@@ -122,7 +122,7 @@
         <p>yangMen - {{yangMen}} - {{yangMen/listLength*100}}</p>
         <p>specialWomen - {{specialWomen}} - {{specialWomen/listLength*100}}</p>
         <p>specialMen - {{specialMen}} - {{specialMen/listLength*100}}</p>
-       <p>oldest - {{oldest}}</p>
+        <p>oldest - {{oldest}}</p>
         <p>Общее количество с запасом - {{listLength+oldest}}</p>
 
 
@@ -151,36 +151,35 @@
 
     <mat-card-content *ngIf="isShowSpecialList">
         <p>Общее количество - {{listLength}}</p>
-<!-- 
-        <mat-card-content *ngFor="let lineItem of lists"> -->
+       
+        <mat-card-content *ngFor="let lineItem of lists"> 
 
-<!--             <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+               <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
             <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}</p>
             <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
-                {{lineItem.adminComment}}</p> -->
+                {{lineItem.adminComment}}</p> 
 
-            <div *ngFor="let celebrator of lists">
-                <!--   <mat-icon font-size="1px">brightness_1</mat-icon> -->
-        <!--         <span>{{celebrator.index}}. </span> 
-            {{celebrator.lastName}} -->
-            {{celebrator.nursingHome}}
-                {{celebrator.firstName}}
-                {{celebrator.patronymic}}
-          <!--       <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span> -->
-              <!--   {{celebrator.dateBirthday}}.{{celebrator.monthBirthday}}.{{celebrator.yearBirthday}} -->
-                <!--                 ({{celebrator.specialComment}})
-                {{celebrator.nameDay}} -->
-          <!--       {{celebrator.comment1}} 
+        <div *ngFor="let celebrator of lineItem.celebrators">
+            <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
+            <span>{{celebrator.index}}. </span>-->
+            {{celebrator.lastName}}
+          <!--   {{celebrator.nursingHome}} -->
+            {{celebrator.firstName}}
+            {{celebrator.patronymic}}
+            <!--         <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span> -->
+            {{celebrator.dateBirthday}}.{{celebrator.monthBirthday}}.{{celebrator.yearBirthday}}
+<!--             ({{celebrator.specialComment}}) -->
+            <!--     {{celebrator.nameDay}} -->
+                {{celebrator.comment1}} 
+              <!--{{lineItem.infoComment}}
+            {{celebrator.comment2}} -->
+            <!-- {{celebrator.linkPhoto}}-->
 
-               * {{lineItem.address}}  {{lineItem.infoComment}}-->
-                <!--  {{celebrator.comment2}} -->
-               <!-- {{celebrator.linkPhoto}}-->
+        </div>
+        <br />
+    </mat-card-content>
 
-            </div>
-            <br />
-        </mat-card-content>
-
-<!--     </mat-card-content> -->
+     </mat-card-content>
 
     <mat-card-content *ngIf="isShowFamilyDayList">
         <p>Общее количество - {{listLength}}</p>
@@ -198,12 +197,13 @@
 
     <mat-card-content *ngIf="isShowAmountOfVolunteers">
         <p>в проекте принимают участие {{amountOfHouses}} интернатов из {{amountOfRegions}} регионов </p>
-        <p>с ДР апреля поздравили {{celebratorsHBAmount}} чел., отправили  {{plusesHBAmount}} откр. </p>
-        <p>с Именинами апреля поздравили {{celebratorsNDAmount}} чел., отправили  {{plusesNDAmount}} откр. </p>
-<!--         <p>с 8 марта поздравили {{celebratorsM8Amount}} чел., отправили  {{plusesM8Amount}} откр. </p> -->
-        <p>в поздравлениях приняли участие {{volunteersAmount}} поздравляющих, в т.ч. {{schoolsAmount}} образовательных учреждения и {{institutesAmount}} организаций
+        <p>с ДР апреля поздравили {{celebratorsHBAmount}} чел., отправили {{plusesHBAmount}} откр. </p>
+        <p>с Именинами апреля поздравили {{celebratorsNDAmount}} чел., отправили {{plusesNDAmount}} откр. </p>
+        <!--         <p>с 8 марта поздравили {{celebratorsM8Amount}} чел., отправили  {{plusesM8Amount}} откр. </p> -->
+        <p>в поздравлениях приняли участие {{volunteersAmount}} поздравляющих, в т.ч. {{schoolsAmount}} образовательных
+            учреждения и {{institutesAmount}} организаций
         </p>
- <!--        <p>Общее количество - {{amountOfVolunteers}}</p> -->
+        <!--        <p>Общее количество - {{amountOfVolunteers}}</p> -->
 
 
     </mat-card-content>
@@ -287,13 +287,13 @@
         <h4 *ngIf='!isSame'>ЕСТЬ РАСХОЖДЕНИЯ</h4>
         <div>Первый найденный - {{firstClient._id}}</div>
         <div>{{firstClient.firstName}} {{firstClient.patronymic}} {{firstClient.lastName}}</div>
-        <div *ngIf = "firstClient.email">email: {{firstClient.email}}</div>
-        <div *ngIf = "firstClient.telegram">telegram: {{firstClient.telegram}}</div>
-        <div *ngIf = "firstClient.phoneNumber">phoneNumber: {{firstClient.phoneNumber}}</div>
-        <div *ngIf = "firstClient.whatsApp">whatsApp: {{firstClient.whatsApp}}</div>
-        <div *ngIf = "firstClient.vKontakte">vKontakte: {{firstClient.vKontakte}}</div>
-        <div *ngIf = "firstClient.instagram">instagram: {{firstClient.instagram}}</div>
-        <div *ngIf = "firstClient.facebook">facebook: {{firstClient.facebook}}</div>
+        <div *ngIf="firstClient.email">email: {{firstClient.email}}</div>
+        <div *ngIf="firstClient.telegram">telegram: {{firstClient.telegram}}</div>
+        <div *ngIf="firstClient.phoneNumber">phoneNumber: {{firstClient.phoneNumber}}</div>
+        <div *ngIf="firstClient.whatsApp">whatsApp: {{firstClient.whatsApp}}</div>
+        <div *ngIf="firstClient.vKontakte">vKontakte: {{firstClient.vKontakte}}</div>
+        <div *ngIf="firstClient.instagram">instagram: {{firstClient.instagram}}</div>
+        <div *ngIf="firstClient.facebook">facebook: {{firstClient.facebook}}</div>
         <div>institutes:
             <span *ngFor="let institute of firstClient.institutes">{{institute.name}} {{institute.category}};</span>
         </div>

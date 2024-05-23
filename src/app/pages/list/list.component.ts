@@ -668,13 +668,13 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         console.log(this.lists);
-        /*         let length = 0;
+              let length = 0;
         for (let house of this.lists) {
           house.celebrators.sort(
             (prev, next) => prev.dateBirthday - next.dateBirthday
           );
           length = length + house.celebrators.length;
-        } */
+        } 
 
         this.lists.sort((prev, next) =>
           prev.nursingHome.localeCompare(next.nursingHome)
