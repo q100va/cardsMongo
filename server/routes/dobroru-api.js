@@ -156,8 +156,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     let period;
     if (newOrder.holiday == "Дни рождения июня 2024") {
         period = {
-            "date1": 6,
-            "date2": 10,
+            "date1": 1,
+            "date2": 30,
             "isActive": true,
             "key": 5,
             "maxPlus": 5, //PLUSES
@@ -919,7 +919,7 @@ async function searchSenior(
         data.filter */
 
     let usingHouses = [  
-        //"БЕРДСК", "ТОМАРИ", "БОГРАД",   
+        "ЖУКОВКА", "ТУТАЕВ", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ",   
         "РЖЕВ", "ПЕРВОМАЙСКИЙ", 
         "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", 
         "МАГАДАН_АРМАНСКАЯ", "ОКТЯБРЬСКИЙ", 
