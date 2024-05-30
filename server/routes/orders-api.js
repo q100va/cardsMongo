@@ -1608,11 +1608,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения июня 2024") {
     period = {
-      "date1": 26,
-      "date2": 30,
+      "date1": 21,
+      "date2": 25,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES
+      "maxPlus": 4, //PLUSES
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2451,7 +2451,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldMen") || (standardFilter.category == "yangWomen") ? 4 : data.maxPlus;
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -6463,11 +6463,11 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
   let proportion = {};
 
- let veterans = 4;  //ВЕТЕРАНЫ
+ //let veterans = 4;  //ВЕТЕРАНЫ
 
 
 
- // let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+ let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
   let children = newOrder.amount - veterans;
 
   proportion = {
@@ -6679,7 +6679,7 @@ async function fillOrderVeterans(proportion, order_id, filter, prohibitedId, res
 async function collectSeniorsVeterans(data) {
 
   const searchOrders = {
-    veterans: ["veterans",],//"children"
+    veterans: ["veterans","children"],//"children"
     children: ["children", "veterans"],//
   };
   //console.log("data.category");
@@ -6796,8 +6796,8 @@ async function searchSeniorVeterans(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 2;
-  if (kind == 'veterans') { maxPlusAmount = 3; }
+  let maxPlusAmount = 3;
+  if (kind == 'veterans') { maxPlusAmount = 4; }
 
 
   //let maxPlusAmount = data.maxPlus;  
