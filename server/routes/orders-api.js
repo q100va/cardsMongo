@@ -7073,7 +7073,7 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Дни рождения июля 2024") {
       count = await List.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 5 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
