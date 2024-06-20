@@ -67,6 +67,7 @@
                                     (click)="deleteDestination(celebrator._id)">
                                     <mat-icon> cancel</mat-icon>
                                 </button>
+                                <span *ngIf = "order.holiday != 'День семьи 2024'">
                                 {{order.source != "dobroru" ? celebrator.lastName : ''}}
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
@@ -86,6 +87,17 @@
                                     *ngIf="celebrator.absentComment">
                                     {{ celebrator.absentComment}}
                                 </span>
+                            </span>
+
+                            <span *ngIf = "order.holiday == 'День семьи 2024'">
+                 
+                                    {{celebrator.husbandLastName}} {{celebrator.husbandFirstName}}
+                                    {{celebrator.husbandPatronymic}} ({{celebrator.husbandYearBirthday}}) и {{celebrator.wifeLastName}}
+                                    {{celebrator.wifeFirstName}}
+                                    {{celebrator.wifePatronymic}} ({{celebrator.wifeYearBirthday}}) {{celebrator.comment1}}                           
+
+                            </span>
+
                             </div>
                         </section>
 

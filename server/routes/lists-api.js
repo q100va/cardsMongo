@@ -1891,7 +1891,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     //  let nameDays = lineItemsM_3;
 
     //let housesForMagnit = Array.from(new Set(housesM));
-    let housesForMagnit = ["РЖЕВ", "ОКТЯБРЬСКИЙ", "УВАРОВО", "НОВОСИБИРСК_ЖУКОВСКОГО", "РОСТОВ-НА-ДОНУ", "КАНДАЛАКША"];
+    let housesForMagnit = ["БИЙСК", "ЖУКОВКА", "ТУТАЕВ", "МАГАДАН_АРМАНСКАЯ","УГЛИЧ","БЕРДСК", "СОСНОВКА"]; //"ОКТЯБРЬСКИЙ", "УВАРОВО", "НОВОСИБИРСК_ЖУКОВСКОГО", "КАНДАЛАКША"
     let nameDays = await SpecialDay.find({ nursingHome: { $in: housesForMagnit }, dateExit: null, isRestricted: false, monthBirthday: 8 });
 
     // let nameDays = await SpecialDay.find({ nursingHome: "ВОЛГОГРАД_КРИВОРОЖСКАЯ", yearBirthday: 0, dateExit: null, isDisabled: false });

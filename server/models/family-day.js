@@ -31,7 +31,7 @@ const familyDaySchema = new Schema(
         absent: { type: Boolean, default: false },
 
     },
-    { collection: "familyDay_2023" }
+    { collection: "familyDay_2024" }
 );
 
-module.exports = mongoose.model("FamilyDay_2023", familyDaySchema);
+module.exports = mongoose.model("FamilyDay", familyDaySchema);

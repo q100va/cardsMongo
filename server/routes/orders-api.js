@@ -640,7 +640,7 @@ async function deletePluses(deletedOrder, full) {
                     }
                   }
                   else {
-                    if (deletedOrder.holiday == "День семьи 2023") {
+                    if (deletedOrder.holiday == "День семьи 2024") {
                       for (let lineItem of deletedLineItems) {
                         for (let person of lineItem.celebrators) {
                           await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -927,7 +927,7 @@ async function restorePluses(updatedOrder) {
                     }
                   }
                   else {
-                    if (updatedOrder.holiday == "День семьи 2023") {
+                    if (updatedOrder.holiday == "День семьи 2024") {
                       for (let lineItem of updatedOrder.lineItems) {
                         for (let person of lineItem.celebrators) {
                           await FamilyDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -1641,7 +1641,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 25,
       "isActive": true,
       "key": 4,
-      "maxPlus": 4,
+      "maxPlus": 3,
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -4891,17 +4891,21 @@ router.post("/family-day", checkAuth, async (req, res) => {
     let newOrder = {
       userName: req.body.userName,
       holiday: req.body.holiday,
+      source: req.body.source,
       amount: req.body.amount,
+      clientId: req.body.clientId,
       clientFirstName: req.body.clientFirstName,
       clientPatronymic: req.body.clientPatronymic,
       clientLastName: req.body.clientLastName,
-      email: req.body.email,
+      //email: req.body.email,
       contactType: req.body.contactType,
       contact: req.body.contact,
-      institute: req.body.institute,
+      // institute: req.body.institute,
+      institutes: req.body.institutes,
       isAccepted: req.body.isAccepted,
       comment: req.body.comment,
       orderDate: req.body.orderDate,
+      dateOfOrder: req.body.dateOfOrder,
       temporaryLineItems: req.body.temporaryLineItems,
       lineItems: [],
       isCompleted: false,
@@ -7079,14 +7083,14 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Дни рождения августа 2024") {
       count = await ListNext.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 5 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
 
     if (holiday == "Дни рождения июня 2024") {
       count = await ListBefore.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 5 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
