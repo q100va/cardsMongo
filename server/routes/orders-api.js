@@ -1608,11 +1608,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения июля 2024") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 21,
+      "date2": 25,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES
+      "maxPlus": 2, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2451,7 +2451,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest  ? 4 : data.maxPlus; //|| (standardFilter.category == "oldMen") || (standardFilter.category == "yangWomen")
+  let maxPlusAmount = standardFilter.oldest   ? 3 : data.maxPlus; // || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") || (standardFilter.category == "yangWomen") PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;

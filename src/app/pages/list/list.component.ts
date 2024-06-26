@@ -66,8 +66,12 @@ export class ListComponent implements OnInit {
   celebratorsHBAmount = 0;
   plusesNDAmount = 0;
   celebratorsNDAmount = 0;
-  plusesM8Amount = 0;
-  celebratorsM8Amount = 0;
+  //plusesM8Amount = 0;
+  //celebratorsM8Amount = 0;
+  plusesEasterAmount = 0;
+  celebratorsEasterAmount = 0;
+  plusesMay9Amount = 0;
+  celebratorsMay9Amount = 0;
   volunteersAmount = 0;
   schoolsAmount = 0;
   institutesAmount = 0;
@@ -395,7 +399,7 @@ export class ListComponent implements OnInit {
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter((item) => item.plusAmount < 3);
+        this.lists = res["data"].filter((item) => item.plusAmount < 2);
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
@@ -810,12 +814,16 @@ export class ListComponent implements OnInit {
         this.celebratorsHBAmount = res["data"]["celebratorsHBAmount"];
         this.plusesNDAmount = res["data"]["plusesNDAmount"];
         this.celebratorsNDAmount = res["data"]["celebratorsNDAmount"];
-        this.plusesM8Amount = res["data"]["plusesM8Amount"];
-        this.celebratorsM8Amount = res["data"]["celebratorsM8Amount"];
+        //this.plusesM8Amount = res["data"]["plusesM8Amount"];
+        //this.celebratorsM8Amount = res["data"]["celebratorsM8Amount"];
+        this.plusesEasterAmount = res["data"]["plusesEasterAmount"];
+        this.celebratorsEasterAmount = res["data"]["celebratorsEasterAmount"];
+        this.plusesMay9Amount = res["data"]["plusesMay9Amount"];
+        this.celebratorsMay9Amount = res["data"]["celebratorsMay9Amount"];
         this.volunteersAmount = res["data"]["volunteersAmount"];
         this.schoolsAmount = res["data"]["schoolsAmount"];
         this.institutesAmount = res["data"]["institutesAmount"];
-
+        this.isShowAmountOfVolunteers = true;
       },
       (err) => {
         console.log(err);
@@ -824,7 +832,7 @@ export class ListComponent implements OnInit {
 
     console.log(event);
 
-    this.isShowAmountOfVolunteers = true;
+  
   }
 
   countSeniors(event: any) {
