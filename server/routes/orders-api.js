@@ -471,54 +471,54 @@ async function deletePluses(deletedOrder, full) {
         if (person.monthBirthday == monthNumber) {
 
           if (deletedOrder.holiday == "Дни рождения августа 2024") {
-            await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
-            celebrator = await ListNext.findOne({ _id: person.celebrator_id });
+            await ListNext.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+            celebrator = await ListNext.findOne({ _id: person._id });
           }
           if (deletedOrder.holiday == "Дни рождения июля 2024") {
-            await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
-            celebrator = await List.findOne({ _id: person.celebrator_id });
+            await List.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+            celebrator = await List.findOne({ _id: person._id });
           }
           if (deletedOrder.holiday == "Дни рождения июня 2024") {
-            await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: -1 } }, { upsert: false });
-            celebrator = await ListBefore.findOne({ _id: person.celebrator_id });
+            await ListBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+            celebrator = await ListBefore.findOne({ _id: person._id });
           }
 
-/*           if (deletedOrder.holiday == "Дни рождения июля 2024") {
-            period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
-            activePeriod = await Period.findOne({ isActive: true });
-            if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
-              period.scoredPluses = period.scoredPluses - 1;
-              if (period.scoredPluses < 3) {
-                await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 }, secondTime: false, maxPlus: 3 }, { upsert: false });
-              } else {
-                await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
-              }
-
-              const controlDate = period.secondTime ? 14 : 10;//
-              inTwoWeeks.setDate(today.getDate() + controlDate);
-              console.log("inTwoWeeks");
-              console.log(inTwoWeeks);
-              console.log("period.isActive == false");
-              console.log(period.isActive);
-              console.log("period.date1 < activePeriod.date1");
-              console.log("period.date1");
-              console.log(period.date1);
-              console.log("activePeriod.date1");
-              console.log(activePeriod.date1);
-              console.log("period.scoredPluses < 3");
-              console.log(period.scoredPluses);
-              const periodDate2 = new Date(month.year, month.number, period.date2);
-              console.log(month.year);
-              console.log(month.number);
-              console.log(period.date2);
-              console.log("periodDate2 > inTwoWeeks");
-              console.log(periodDate2);
-              if (period.isActive == false && period.date1 < activePeriod.date1 && period.scoredPluses < 3 && periodDate2 > inTwoWeeks) {
-                await Period.updateOne({ _id: activePeriod._id }, { isActive: false }, { upsert: false });
-                await Period.updateOne({ _id: period._id }, { isActive: true }, { upsert: false });
-              }
-            }
-          } */
+          /*           if (deletedOrder.holiday == "Дни рождения июля 2024") {
+                      period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
+                      activePeriod = await Period.findOne({ isActive: true });
+                      if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
+                        period.scoredPluses = period.scoredPluses - 1;
+                        if (period.scoredPluses < 3) {
+                          await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 }, secondTime: false, maxPlus: 3 }, { upsert: false });
+                        } else {
+                          await Period.updateOne({ _id: period._id }, { $inc: { scoredPluses: -1 } }, { upsert: false });
+                        }
+          
+                        const controlDate = period.secondTime ? 14 : 10;//
+                        inTwoWeeks.setDate(today.getDate() + controlDate);
+                        console.log("inTwoWeeks");
+                        console.log(inTwoWeeks);
+                        console.log("period.isActive == false");
+                        console.log(period.isActive);
+                        console.log("period.date1 < activePeriod.date1");
+                        console.log("period.date1");
+                        console.log(period.date1);
+                        console.log("activePeriod.date1");
+                        console.log(activePeriod.date1);
+                        console.log("period.scoredPluses < 3");
+                        console.log(period.scoredPluses);
+                        const periodDate2 = new Date(month.year, month.number, period.date2);
+                        console.log(month.year);
+                        console.log(month.number);
+                        console.log(period.date2);
+                        console.log("periodDate2 > inTwoWeeks");
+                        console.log(periodDate2);
+                        if (period.isActive == false && period.date1 < activePeriod.date1 && period.scoredPluses < 3 && periodDate2 > inTwoWeeks) {
+                          await Period.updateOne({ _id: activePeriod._id }, { isActive: false }, { upsert: false });
+                          await Period.updateOne({ _id: period._id }, { isActive: true }, { upsert: false });
+                        }
+                      }
+                    } */
         }
       }
     }
@@ -1608,11 +1608,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения июля 2024") {
     period = {
-      "date1": 21,
-      "date2": 25,
+      "date1": 16,
+      "date2": 20,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 3, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2451,7 +2451,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest   ? 3 : data.maxPlus; // || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") || (standardFilter.category == "yangWomen") PLUSES1
+  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus; //|| (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") || (standardFilter.category == "yangWomen") PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -5204,9 +5204,22 @@ router.get("/clients/move-institutes", checkAuth, async (req, res) => {
 router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
   try {
 
-    const celebratorsDecember = await ListBefore.find({ absent: false });
+    /* const celebratorsDecember = await ListBefore.find({ absent: false });
     const celebratorsJanuary = await List.find({ absent: false });
-    const celebratorsFebruary = await ListNext.find({ absent: false });
+    const celebratorsFebruary = await ListNext.find({ absent: false }); */
+
+    if (req.params.holiday == "birthday") {
+      const celebratorsHB = await ListNext.find({ absent: false });
+      for (let celebrator of celebratorsHB) {
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения августа 2024" }).countDocuments();
+        await ListNext.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
+        let updatedCelebrator = await ListNext.findOne({  _id: celebrator._id });
+
+        console.log("result");
+        console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+      }
+
+    }
 
     if (req.params.holiday == "easter") {
       let housesSet = new Set();
@@ -6467,11 +6480,11 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
   let proportion = {};
 
- //let veterans = 4;  //ВЕТЕРАНЫ
+  //let veterans = 4;  //ВЕТЕРАНЫ
 
 
 
- let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+  let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
   let children = newOrder.amount - veterans;
 
   proportion = {
@@ -6683,7 +6696,7 @@ async function fillOrderVeterans(proportion, order_id, filter, prohibitedId, res
 async function collectSeniorsVeterans(data) {
 
   const searchOrders = {
-    veterans: ["veterans","children"],//"children"
+    veterans: ["veterans", "children"],//"children"
     children: ["children", "veterans"],//
   };
   //console.log("data.category");
@@ -7069,7 +7082,7 @@ async function fillOrderForInstitutes(
   let count;
 
   //console.log("prohibitedId");
- // console.log(prohibitedId);
+  // console.log(prohibitedId);
 
 
 
@@ -7109,7 +7122,7 @@ async function fillOrderForInstitutes(
       biggerHouse = house.nursingHome;
     }
 
-    if (count < amount) {
+    if (count < amount && count > 2) {
       smallerHouses.push(
         {
           nursingHome: house.nursingHome,
@@ -7270,7 +7283,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
 
     for (let senior of seniorsData) {
-      await ListNext.updateOne({ _id: senior.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      await ListNext.updateOne({  _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
     }
   }
 
@@ -7280,12 +7293,15 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     seniorsData = await List.find({
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 5 },
+      plusAmount: { $lt: 3 },
       _id: { $nin: prohibitedId }
     }).limit(amount);
 
     for (let senior of seniorsData) {
-      await List.updateOne({ _id: senior.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      await List.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      console.log("BIRTHDAY INSTITUTES");
+      console.log(senior._id);
+
     }
   }
 
@@ -7299,7 +7315,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }).limit(amount);
 
     for (let senior of seniorsData) {
-      await ListBefore.updateOne({ _id: senior.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      await ListBefore.updateOne({  _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
     }
 
   }
