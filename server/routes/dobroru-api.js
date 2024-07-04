@@ -154,13 +154,13 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения июля 2024") {
+    if (newOrder.holiday == "Дни рождения августа 2024") {
         period = {
-            "date1": 16,
-            "date2": 20,
+            "date1": 1,
+            "date2": 10,
             "isActive": true,
             "key": 0,
-            "maxPlus": 4, //PLUSES
+            "maxPlus": 2, //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }
