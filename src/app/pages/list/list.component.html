@@ -23,9 +23,9 @@
         <button class="submit" (click)=" generateNextBirthday()" mat-raised-button>Сформировать список ДР следующего
             месяца</button>
         <br /><br /><br />
-        <button class="submit" (click)="generateNameDay(7)" mat-raised-button>Сформировать список именин</button>
+        <button class="submit" (click)="generateNameDay(8)" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
-        <button class="submit" (click)="generateNameDay(8)" mat-raised-button>Сформировать список именин следующего
+        <button class="submit" (click)="generateNameDay(9)" mat-raised-button>Сформировать список именин следующего
             месяца</button>
         <br /><br /><br />
 
@@ -40,8 +40,11 @@
         <br /><br /><br />
  -->
         <!--  <button class="submit" (click)="showNewYearList($event)" mat-raised-button>Показать список НГ</button>-->
-        <button class="submit" (click)="restorePluses('easter')" mat-raised-button>Восстановить плюсы Пасха</button>
-        <button class="submit" (click)="restorePluses('veterans')" mat-raised-button>Восстановить плюсы 9 мая</button>
+
+        <button class="submit" (click)="restorePluses('birthday')" mat-raised-button>Восстановить плюсы ДР</button>
+
+<!--         <button class="submit" (click)="restorePluses('easter')" mat-raised-button>Восстановить плюсы Пасха</button>
+        <button class="submit" (click)="restorePluses('veterans')" mat-raised-button>Восстановить плюсы 9 мая</button> -->
         <!-- 
         <button class="submit" (click)="generateTeacherDay()" mat-raised-button>Сформировать список ДУ</button>
         <button class="submit" (click)="showTeacherDayList($event)" mat-raised-button>Показать список ДУ</button> -->
@@ -197,8 +200,8 @@
 
     <mat-card-content *ngIf="isShowAmountOfVolunteers">
         <p>в проекте принимают участие {{amountOfHouses}} интернатов из {{amountOfRegions}} регионов </p>
-        <p>с ДР июня поздравили {{celebratorsHBAmount}} чел., отправили {{plusesHBAmount}} откр. </p>
-        <p>с Именинами июня поздравили {{celebratorsNDAmount}} чел., отправили {{plusesNDAmount}} откр. </p>
+        <p>с ДР июля поздравили {{celebratorsHBAmount}} чел., отправили {{plusesHBAmount}} откр. </p>
+        <p>с Именинами июля поздравили {{celebratorsNDAmount}} чел., отправили {{plusesNDAmount}} откр. </p>
                 <p>с Пасхой поздравили {{celebratorsEasterAmount}} чел., отправили  {{plusesEasterAmount}} откр. </p>
                <p>с 9 мая поздравили {{celebratorsMay9Amount}} чел., отправили  {{plusesMay9Amount}} откр. </p> 
         <p>в поздравлениях приняли участие {{volunteersAmount}} поздравляющих, в т.ч. {{schoolsAmount}} образовательных
