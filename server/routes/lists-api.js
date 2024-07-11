@@ -2408,10 +2408,10 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
       celebratorsNDAmount: nameDayAmount.celebratorsAmount,
       //plusesM8Amount: march8Amount.plusesAmount,
       //celebratorsM8Amount: march8Amount.celebratorsAmount,
-      plusesEasterAmount: easterAmount.plusesAmount,
-      celebratorsEasterAmount: easterAmount.celebratorsAmount,
-      plusesMay9Amount: may9Amount.plusesAmount,
-      celebratorsMay9Amount: may9Amount.celebratorsAmount,
+     // plusesEasterAmount: easterAmount.plusesAmount,
+      //celebratorsEasterAmount: easterAmount.celebratorsAmount,
+     // plusesMay9Amount: may9Amount.plusesAmount,
+     // celebratorsMay9Amount: may9Amount.celebratorsAmount,
 
       volunteersAmount: amount.volunteersAmount,
       schoolsAmount: amount.schoolsAmount,
@@ -2660,8 +2660,8 @@ async function countVolonteers() {
   let ordersBirthday = await Order.find({ holiday: "Дни рождения июля 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   let ordersNameDay = await Order.find({ holiday: "Именины июля 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersMarch8 = await Order.find({ holiday: "8 марта 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersEaster = await Order.find({ holiday: "Пасха 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersMay9 = await Order.find({ holiday: "9 мая 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+ // let ordersEaster = await Order.find({ holiday: "Пасха 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+ // let ordersMay9 = await Order.find({ holiday: "9 мая 2024", isDisabled: false, isOverdue: false, isReturned: false, });
 
   for (let order of ordersBirthday) {
     setClients.add(order.contact);
@@ -2671,7 +2671,7 @@ async function countVolonteers() {
   }
   /*   for (let order of ordersMarch8) {
       setClients.add(order.contact);
-    } */
+    } 
 
   for (let order of ordersEaster) {
     setClients.add(order.contact);
@@ -2679,12 +2679,12 @@ async function countVolonteers() {
 
   for (let order of ordersMay9) {
     setClients.add(order.contact);
-  }
+  }*/
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения июля 2024", "Пасха 2024", "9 мая 2024"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения июля 2024", "Пасха 2024", "9 мая 2024"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения июля 2024"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2024", "9 мая 2024"
+  let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения июля 2024"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2024", "9 мая 2024"
 
 
 

@@ -1612,7 +1612,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 5,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3, //PLUSES1
+      "maxPlus": 4, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -7090,7 +7090,7 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Дни рождения августа 2024") {
       count = await List.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
@@ -7293,7 +7293,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     seniorsData = await List.find({
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 3 },
+      plusAmount: { $lt: 4 },
       _id: { $nin: prohibitedId }
     }).limit(amount);
 
