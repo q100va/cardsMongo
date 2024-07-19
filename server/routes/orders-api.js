@@ -1641,7 +1641,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 25,
       "isActive": true,
       "key": 4,
-      "maxPlus": 1,
+      "maxPlus": 2,
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -2451,7 +2451,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus; // || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") || (standardFilter.category == "yangWomen") PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") ? 5 : data.maxPlus; //  || (standardFilter.category == "yangWomen") PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -7090,7 +7090,7 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Дни рождения августа 2024") {
       count = await List.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 5 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
@@ -7293,7 +7293,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     seniorsData = await List.find({
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 4 },
+      plusAmount: { $lt: 5 },
       _id: { $nin: prohibitedId }
     }).limit(amount);
 
