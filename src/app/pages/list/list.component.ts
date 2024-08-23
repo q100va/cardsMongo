@@ -399,7 +399,7 @@ export class ListComponent implements OnInit {
   showLessPlus(event: any) {
     this.listService.findAllBirthdayLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter((item) => item.plusAmount < 4 ); //&& item.noAddress == false && item.isReleased == false
+        this.lists = res["data"].filter((item) => item.plusAmount < 2 ); //&& item.noAddress == false && item.isReleased == false
         this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
@@ -547,7 +547,7 @@ export class ListComponent implements OnInit {
   showLessPlusMarch8List(event: any) {
     this.listService.findAllMarch8Lists().subscribe(
       (res) => {
-        this.lists = res["data"].filter((item) => item.plusAmount < 1);
+        this.lists = res["data"].filter((item) => item.plusAmount < 2);
         // this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(

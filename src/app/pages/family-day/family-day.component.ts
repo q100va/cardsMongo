@@ -503,7 +503,7 @@ export class FamilyDayComponent implements OnInit {
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
-    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 20) {
+    if (selectedInstitutes.length > 0 || this.form.controls.amount.value > 120) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
           message:
@@ -688,7 +688,7 @@ export class FamilyDayComponent implements OnInit {
       "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
       "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
       "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются люди, которых к престарелым совсем не относятся. Это инвалиды, которые проживают в домах престарелых. Иногда сразу после детдомов.\n\n" +
-      this.holiday + " - 8 июля"
+      this.holiday + " - 8 августа"
       "\n" +
       "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
       "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n\n";
