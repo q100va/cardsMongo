@@ -61,7 +61,7 @@
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Дни рождения августа 2024'">Дни рождения августа</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Пасха 2023'">НОВЫЙ ГОД</h3>
+                *ngIf="order.holiday == 'Пасха 2024'">НОВЫЙ ГОД</h3>
 
             <p style="font-style: italic">
                 Если какие-то адреса вам не подходят, обязательно возвращайте -
@@ -87,7 +87,7 @@
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
                     <span *ngIf="order.holiday == 'Дни рождения августа 2024'">{{celebrator.fullDayBirthday}}</span>
-                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2023'">-
+                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2024'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
@@ -221,7 +221,7 @@
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Дни рождения августа 2024'">Дни рождения августа</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Пасха 2023'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
+                *ngIf="order.holiday == 'Пасха 2024'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
                 февраля)</h3>
 
             <mat-card-content *ngFor="let lineItem of lineItems"
@@ -239,7 +239,7 @@
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
                     <span *ngIf="order.holiday == 'Дни рождения августа 2024'">{{celebrator.fullDayBirthday}}</span>
-                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2023'">-
+                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2024'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}

@@ -34,6 +34,7 @@ export interface Celebrator {
     seniorId?: string; 
     veteran?: string; 
     child?: string; 
+    teacher?: string; 
     husbandLastName?: string; 
     husbandFirstName?: string; 
     husbandPatronymic?: string; 

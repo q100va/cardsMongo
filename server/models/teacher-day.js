@@ -22,6 +22,7 @@ const teacherDaySchema = new Schema(
     yearBirthday: { type: Number },
     comment1: { type: String },
     comment2: { type: String },
+    teacher: { type: String },
     specialComment: { type: String },
     linkPhoto: { type: String },
     plusAmount: { type: Number },
@@ -39,7 +40,7 @@ const teacherDaySchema = new Schema(
     absent:  { type: Boolean, default: false },
 
   },
-  { collection: "teacher_day_2023" }
+  { collection: "teacher_day_2024" }
 );
 
 module.exports = mongoose.model("TeacherDay", teacherDaySchema);

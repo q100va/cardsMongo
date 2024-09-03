@@ -366,7 +366,7 @@ router.put("/update/:id", checkAuth, async (req, res) => {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР мая 2023',
+      holyday: 'ДР мая 2024',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -410,7 +410,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null }); //, monthBirthday:3, monthBirthday:{$gt:3}
+    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null,  }); //, monthBirthday:3, monthBirthday:{$gt:3}monthBirthday: 9
 
     newList.sort(
       (prev, next) => {
@@ -513,7 +513,14 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     let indexes = [];
     for (let oldSenior of absents) {
       let flag = false;
-      let index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
+
+      let index = arrived.findIndex(item => item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday == oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday);
+      if (index != -1) {
+        flag = true;
+      }
+
+
+/*       let index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
       if (index != -1) {
         flag = true;
       } else {
@@ -531,7 +538,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
             }
           }
         }
-      }
+      } */
       // console.log("index");
       //console.log(index);
 

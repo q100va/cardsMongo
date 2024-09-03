@@ -12,6 +12,7 @@ export interface TeacherDay {
   fullDayBirthday?: string;
   comment1?: string;
   comment2?: string;
+  teacher?: string;
   specialComment?: string;
   linkPhoto?: string;
   dateHoliday?: number;

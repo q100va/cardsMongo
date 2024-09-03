@@ -41,6 +41,7 @@ const celebratorSchema = new Schema({
   monthHoliday: { type: Number },
   veteran: { type: String },
   child: { type: String },
+  teacher: { type: String },
   husbandLastName: { type: String },
   husbandFirstName: { type: String },
   husbandPatronymic: { type: String },
