@@ -25,6 +25,7 @@ const TeacherDay = require("../models/teacher-day");
 const House = require("../models/house");
 const Region = require("../models/region");
 const Order = require("../models/order");
+const SeniorDay = require("../models/senior-day");
 const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
 const FamilyDay = require("../models/family-day");
@@ -548,6 +549,111 @@ async function findTeachers() {
 
   const options = { ordered: false };
   let finalList = await TeacherDay.insertMany(newList, options);
+
+  //console.log(finalList);
+
+  console.log(`3- ${finalList.length} documents were inserted`);
+
+  result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length < finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
+  //console.log("3 - final" + finalList); 
+  return result;
+}
+
+/////////////////////////////////////////
+
+// Create senior day list API 
+router.post("/senior-day/create", checkAuth, async (req, res) => {
+  try {
+    console.log("0- inside Create list API");
+    let result = await findSeniors();
+    //console.log("4-inside Create list API " + result);
+    //const newList = newList1.slice();
+    const newListResponse = new BaseResponse(200, "Query Successful", result);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+async function findSeniors() {
+
+  //throw new Error("Something bad happened");
+  let result = [];
+  //console.log("1- inside findAllMonthNameDays newList");
+  //let list = await Senior.find({ $or: [{ "comment2": /учителя/ }, { "comment2": /дошкольного/ }], "isDisabled": false, dateExit: null, isRestricted: false });
+  let houses = ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ" ];
+  let list = await Senior.find({nursingHome: {$in: houses}, isDisabled: false, dateExit: null, isRestricted: false, noAddress: false, isReleased: false, yearBirthday: {$lt: 1965} });
+  //console.log(list);
+
+  if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
+  console.log("2- seniors" + list.length);
+  let updatedCelebrators = [];
+  for (let celebrator of list) {
+
+/*     let cloneSpecialComment;
+    if (celebrator.yearBirthday) {
+      cloneSpecialComment = celebrator.yearBirthday + ' г.р.';
+    } */
+
+    let cloneCelebrator = {
+      region: celebrator.region,
+      nursingHome: celebrator.nursingHome,
+      lastName: celebrator.lastName,
+      firstName: celebrator.firstName,
+      patronymic: celebrator.patronymic,
+      //dateBirthday: celebrator.dateBirthday,
+      //monthBirthday: celebrator.monthBirthday,
+      yearBirthday: celebrator.yearBirthday,
+      gender: celebrator.gender,
+      comment1: celebrator.comment1,
+      comment2: celebrator.comment2,
+      //teacher: celebrator.teacher,
+      linkPhoto: celebrator.linkPhoto,
+      noAddress: celebrator.noAddress,
+      isReleased: celebrator.isReleased,
+      plusAmount: 0,
+      //specialComment: cloneSpecialComment,
+      //fullDayBirthday: cloneFullDayBirthday,
+      /* oldest: cloneOldest,
+      category: cloneCategory, */
+      holyday: 'День пожилого человека 2024',
+      //dateHoliday: celebrator.teacher.includes("учителя") ? 5 : 27,
+      //monthHoliday: celebrator.teacher.includes("учителя") ? 10 : 9,
+      fullData: celebrator.nursingHome +
+        celebrator.lastName +
+        celebrator.firstName +
+        celebrator.patronymic +     
+        celebrator.yearBirthday,
+    };
+    //console.log("special - " + celebrator["specialComment"]);
+    //console.log("fullday - " + celebrator.fullDayBirthday);
+    //console.log(celebrator);
+    updatedCelebrators.push(cloneCelebrator);
+  }
+
+  //console.log(list);
+  //console.log("celebrator");
+  //console.log("I am here");
+  let newList = await checkDoubles(updatedCelebrators);
+  // newList = newList1.slice();
+
+  console.log("2.5 - " + newList.length);
+  console.log("newList.length");
+  console.log(newList.length);
+  let existedList = await SeniorDay.aggregate([{ $project: { _id: 0, fullData: 1 } }]);
+  console.log("existedList");
+  console.log(existedList);
+
+  for (let senior of existedList) {
+    let index = newList.findIndex(item => item.fullData == senior.fullData);
+    newList.splice(index, 1);
+  }
+  
+  const options = { ordered: false };
+  let finalList = await SeniorDay.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -1245,6 +1351,28 @@ router.get("/teacher-day", checkAuth, async (req, res) => {
       } else {
         console.log(teacherDays);
         const findAllListsResponse = new BaseResponse("200", "Query successful", teacherDays);
+        res.json(findAllListsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
+    res.status(500).send(findAllListsCatchErrorResponse.toObject());
+  }
+});
+
+//Find all teacher day lists API
+router.get("/senior-day", checkAuth, async (req, res) => {
+  try {
+
+    SeniorDay.find({ absent: { $ne: true } }, function (err, seniorDays) {
+      if (err) {
+        console.log(err);
+        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+      } else {
+        console.log(seniorDays);
+        const findAllListsResponse = new BaseResponse("200", "Query successful", seniorDays);
         res.json(findAllListsResponse.toObject());
       }
     });

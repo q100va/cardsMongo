@@ -58,6 +58,7 @@ import { EasterComponent } from "./pages/easter/easter.component";
 import { AdminEasterComponent } from "./pages/admin-easter/admin-easter.component";
 import { DobroruComponent } from "./pages/dobroru/dobroru.component";
 import { AdminVeteransComponent } from "./pages/admin-veterans/admin-veterans.component";
+import { SeniorDayComponent } from "./pages/senior-day/senior-day.component";
 const routes: Routes = [
   {
     path: "",
@@ -193,6 +194,11 @@ const routes: Routes = [
       {
         path: "orders/family-day",
         component: FamilyDayComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/senior-day",
+        component: SeniorDayComponent,
         canActivate: [AuthGuard],
       },
       {

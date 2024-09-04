@@ -25,6 +25,7 @@ const February23 = require("../models/february-23");
 const March8 = require("../models/march-8");
 const May9 = require("../models/may-9");
 const FamilyDay = require("../models/family-day");
+const SeniorDay = require("../models/senior-day");
 const order = require("../models/order");
 const checkAuth = require("../middleware/check-auth");
 const Easter = require("../models/easter");
@@ -673,6 +674,14 @@ async function deletePluses(deletedOrder, full) {
                             await Easter.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
                           }
                         }
+                      } else {
+                        if (deletedOrder.holiday == "День пожилого человека 2024") {
+                          for (let lineItem of deletedLineItems) {
+                            for (let person of lineItem.celebrators) {
+                              await SeniorDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -962,6 +971,12 @@ async function restorePluses(updatedOrder) {
                             );
                           }
                         }
+                      } else if (updatedOrder.holiday == "День пожилого человека 2024") {
+                        for (let lineItem of updatedOrder.lineItems) {
+                          for (let person of lineItem.celebrators) {
+                            await SeniorDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
+                          }
+                        }
                       }
                     }
                   }
@@ -1126,11 +1141,11 @@ router.post("/check-double/", checkAuth, async (req, res) => {
           }
         } */
     let result = await checkDoubleOrder(conditions);
-    const readRegionsResponse = new BaseResponse(
-      200,
-      "Query successful",
-      result
-    );
+    console.log("result inside");
+    console.log(result);
+    const readRegionsResponse = new BaseResponse(200, "Query successful", result);
+    console.log("result response");
+    console.log(readRegionsResponse);
     res.json(readRegionsResponse.toObject());
 
   } catch (e) {
@@ -1145,50 +1160,39 @@ router.post("/check-double/", checkAuth, async (req, res) => {
 });
 
 async function checkDoubleOrder(conditions) {
-  let result;
-  Order.find(conditions, function (err, orders) {
-    if (err) {
-      console.log(err);
-      const readRegionsMongodbErrorResponse = new BaseResponse(
-        500,
-        "Internal server error",
-        err
-      );
-      res.status(500).send(readRegionsMongodbErrorResponse.toObject());
-    } else {
-      result = {};
-      let usernames = [];
-      let seniorsIds = [];
-      let houses = [];
-      let amount = 0;
-      if (orders.length > 0) {
-        for (let order of orders) {
-          usernames.push(order.userName);
-          amount += order.amount;
-          console.log("order._id");
-          console.log(order._id);
-          for (let lineItem of order.lineItems) {
-            houses.push(lineItem.nursingHome);
-            for (let celebrator of lineItem.celebrators) {
-              seniorsIds.push(celebrator._id);
+  let result = {};
+  let orders = await Order.find(conditions);
+  let usernames = [];
+  let seniorsIds = [];
+  let houses = [];
+  let amount = 0;
+  if (orders.length > 0) {
+    for (let order of orders) {
+      usernames.push(order.userName);
+      amount += order.amount;
+      console.log("order._id");
+      console.log(order._id);
+      for (let lineItem of order.lineItems) {
+        houses.push(lineItem.nursingHome);
+        for (let celebrator of lineItem.celebrators) {
+          seniorsIds.push(celebrator._id);
 
-            }
-          }
         }
-        let h = new Set(houses);
-        let u = new Set(usernames);
-        result.users = Array.from(u);
-        result.houses = Array.from(h);
-        result.seniorsIds = seniorsIds;
-        result.amount = amount;
-      } else { result = null; }
-
-       console.log("result");
-      // console.log(order);
-      console.log(result);
-
+      }
     }
-  });
+    let h = new Set(houses);
+    let u = new Set(usernames);
+    result.users = Array.from(u);
+    result.houses = Array.from(h);
+    result.seniorsIds = seniorsIds;
+    result.amount = amount;
+  } else { result = null; }
+
+  console.log("result checkDoubleOrder");
+  // console.log(order);
+  console.log(result);
+
+
   return result;
 }
 
@@ -1538,14 +1542,14 @@ router.post("/teacher-day-for-institute", checkAuth, async (req, res) => {
     if (index == -1) {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
-    let doneHouses = await checkDoubleOrder({isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId});
+    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
     let restrictedHouses;
     if (doneHouses) {
       restrictedHouses = ["ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...doneHouses.houses];
     } else {
       restrictedHouses = ["ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР"];
     }
-    
+
 
     finalResult = await createOrderForTeacherDayForInstitute(newOrder, restrictedHouses);
     console.log("finalResult");
@@ -1659,6 +1663,165 @@ async function createOrderForTeacherDayForInstitute(newOrder, restrictedHouses) 
     //institutes: newOrder.institutes,
   }
 }
+
+
+///////////////////////////////////////////////////////
+
+//create senior day order
+
+router.post("/senior-day", checkAuth, async (req, res) => {
+  let finalResult;
+  try {
+
+    let newOrder = {
+      userName: req.body.userName,
+      holiday: req.body.holiday,
+      source: req.body.source,
+      amount: req.body.amount,
+      clientId: req.body.clientId,
+      clientFirstName: req.body.clientFirstName,
+      clientPatronymic: req.body.clientPatronymic,
+      clientLastName: req.body.clientLastName,
+      //email: req.body.email,
+      contactType: req.body.contactType,
+      contact: req.body.contact,
+      // institute: req.body.institute,
+      institutes: req.body.institutes,
+      isAccepted: req.body.isAccepted,
+      comment: req.body.comment,
+      orderDate: req.body.orderDate,
+      dateOfOrder: req.body.dateOfOrder,
+      temporaryLineItems: req.body.temporaryLineItems,
+      lineItems: [],
+      isCompleted: false,
+    };
+    console.log("newOrder.temporaryLineItems");
+    console.log(newOrder.temporaryLineItems);
+
+    let client = await Client.findOne({ _id: newOrder.clientId });
+    let index = client.coordinators.findIndex(item => item == newOrder.userName);
+    if (index == -1) {
+      await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+    }
+    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
+    let restrictedHouses = [];
+    if (doneHouses) restrictedHouses = doneHouses.houses;
+
+
+
+    finalResult = await createOrderForSeniorDay(newOrder, restrictedHouses);
+    console.log("finalResult");
+    console.log(finalResult);
+    let text = !finalResult.success ? finalResult.result : "Query Successful";
+
+    const newListResponse = new BaseResponse(200, text, finalResult);
+    res.json(newListResponse.toObject());
+  } catch (e) {
+    console.log(e);
+    let text = 'Обратитесь к администратору. Заявка не сформирована.';
+    if (!finalResult) {
+      let answer = await deleteErrorPlus(false, req.body.userName);
+      console.log("answer");
+      console.log(answer);
+      if (!answer) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+
+    } else {
+      if (finalResult && finalResult.success) {
+        text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+      }
+      if (finalResult && !finalResult.success) {
+        text = finalResult.result;
+      }
+    }
+    const newListCatchErrorResponse = new BaseResponse(
+      500,
+      text,
+      e
+    );
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+//fill lineItems
+async function createOrderForSeniorDay(newOrder, restrictedHouses) {
+  const emptyOrder = {
+    userName: newOrder.userName,
+    holiday: newOrder.holiday,
+    source: newOrder.source,
+    amount: newOrder.amount,
+    clientId: newOrder.clientId,
+    clientFirstName: newOrder.clientFirstName,
+    clientPatronymic: newOrder.clientPatronymic,
+    clientLastName: newOrder.clientLastName,
+    // email: newOrder.email,
+    contactType: newOrder.contactType,
+    contact: newOrder.contact,
+    // institute: newOrder.institute,
+    institutes: newOrder.institutes,
+    //isRestricted: newOrder.isRestricted,
+    isAccepted: newOrder.isAccepted,
+    comment: newOrder.comment,
+    orderDate: newOrder.orderDate,
+    dateOfOrder: newOrder.dateOfOrder,
+    lineItems: [],
+    filter: newOrder.filter,
+
+  };
+  console.log("emptyOrder.dateOfOrder");
+  console.log(emptyOrder.dateOfOrder);
+
+  let order = await Order.create(emptyOrder);
+  let order_id = order._id.toString();
+
+  //console.log("order");
+  //console.log(order);
+
+  let seniorsData = await fillOrderForInstitutes(
+    order_id,
+    [],
+    restrictedHouses,
+    newOrder.holiday,
+    newOrder.amount
+  );
+
+  if (seniorsData.length < newOrder.amount) {
+
+    await deleteErrorPlus(order_id, newOrder.holiday);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+      success: false
+
+    }
+  }
+  const nursingHomes = await House.find({});
+  let resultLineItems = await generateLineItems(nursingHomes, order_id);
+  // console.log("resultLineItems");
+  //console.log(resultLineItems);
+  //console.log(typeof resultLineItems);
+
+  if (typeof resultLineItems == "string") {
+
+    // console.log("resultLineItems222");
+    await deleteErrorPlus(order_id, newOrder.holiday);
+    return {
+      result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
+      success: false
+    };
+  }
+
+  return {
+    result: resultLineItems,
+    success: true,
+    order_id: order_id,
+    contact: newOrder.email ? newOrder.email : newOrder.contact,
+    clientFirstName: newOrder.clientFirstName,
+    //institutes: newOrder.institutes,
+  }
+}
+
 
 
 ////////////////////////////////////////////////////BIRTHDAY 789
@@ -7270,6 +7433,7 @@ async function fillOrderForInstitutes(
   for (let house of activeHouse) {
     //console.log(house.nursingHome);
 
+
     if (holiday == "Дни рождения сентября 2024") {
       count = await List.find({
         nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 5 }, _id: { $nin: prohibitedId }
@@ -7292,6 +7456,12 @@ async function fillOrderForInstitutes(
     if (holiday == "День учителя и дошкольного работника 2024") {
       count = await TeacherDay.find({
         teacher: /учителя/, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }
+      }).countDocuments();
+    }
+
+    if (holiday == "День пожилого человека 2024") {
+      count = await SeniorDay.find({
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
@@ -7476,6 +7646,25 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
     for (let senior of seniorsData) {
       await TeacherDay.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+    }
+  }
+
+  if (holiday == "День пожилого человека 2024") {
+
+    seniorsData = await SeniorDay.find({
+      nursingHome: nursingHome,
+      absent: false,
+      plusAmount: { $lt: 1 },
+      _id: { $nin: prohibitedId }
+    }).limit(amount);
+
+    console.log("seniorsData");
+    console.log(nursingHome);
+    console.log(seniorsData.length);
+
+
+    for (let senior of seniorsData) {
+      await SeniorDay.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
     }
   }
 

@@ -48,6 +48,10 @@ export class ListService {
     return this.http.get("/api/lists/teacher-day");
   }
 
+  findAllSeniorDayLists(): Observable<any> {
+    return this.http.get("/api/lists/senior-day");
+  }
+
   createBirthdayList(): Observable<any> {
     return this.http.post("/api/lists/" + this.month, {});
   }
@@ -62,6 +66,10 @@ export class ListService {
 
   createTeacherDayList(): Observable<any> {
     return this.http.post("/api/lists/teacher-day/create", {});
+  }
+
+  createSeniorDayList(): Observable<any> {
+    return this.http.post("/api/lists/senior-day/create", {});
   }
 
   createNewYearList(NYList): Observable<any> {

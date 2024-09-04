@@ -1,9 +1,9 @@
 /*
 ============================================
- order-details component
+ senior-day component
 ;===========================================
 */
-import { TeacherDay } from "src/app/shared/interfaces/teacher-day.interface";
+import { SeniorDay } from "src/app/shared/interfaces/senior-day.interface";
 import { Component, OnInit } from "@angular/core";
 import {
   FormArray,
@@ -13,7 +13,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { ConfirmationService } from "primeng/api";
@@ -21,10 +20,7 @@ import { OrderService } from "src/app/services/order.service";
 import { ListService } from "src/app/services/list.service";
 import { ClientService } from "src/app/services/client.service";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
-import { LineItem } from "src/app/shared/interfaces/line-item.interface";
-
 import { Order } from "src/app/shared/interfaces/order.interface";
-import { SelectionModel } from "@angular/cdk/collections";
 import { Observable } from "rxjs/internal/Observable";
 import { map, startWith } from "rxjs/operators";
 import { Clipboard } from "@angular/cdk/clipboard";
@@ -33,15 +29,15 @@ import { CreateClientDialogComponent } from "src/app/shared/create-client-dialog
 import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog/update-client-dialog.component";
 
 @Component({
-  selector: "app-teacher-day",
-  templateUrl: "./teacher-day.component.html",
-  styleUrls: ["./teacher-day.component.css"],
+  selector: "app-senior-day",
+  templateUrl: "./senior-day.component.html",
+  styleUrls: ["./senior-day.component.css"],
 })
-export class TeacherDayComponent implements OnInit {
+export class SeniorDayComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "День учителя и дошкольного работника 2024";
+  holiday: string = "День пожилого человека 2024";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -67,8 +63,8 @@ export class TeacherDayComponent implements OnInit {
   spinner: Boolean = false;
   /*  addressFilter: string = "any";
   genderFilter: string = "any";
-  regions: Array<string> = []; */
-  teacherDays: Array<any> = [];
+  regions: Array<string> = []; 
+  teacherDays: Array<any> = [];*/
   clientFirstName: string = "";
 
   options = [];
@@ -82,7 +78,6 @@ export class TeacherDayComponent implements OnInit {
   newClient: Client;
   doubles = [];
   selectedInstitutes = [];
-  showList = true;
   isForInstitutes = false;
 
   showIndexes: false;
@@ -115,19 +110,6 @@ export class TeacherDayComponent implements OnInit {
   ) {
     this.userName = this.cookieService.get("session_user");
   }
-
-  displayedColumns = [
-    "check",
-    "plusAmount",
-    "name",
-    "DOB",
-    "holiday",
-    "house",
-    "region",
-  ];
-
-  dataSource: MatTableDataSource<TeacherDay>;
-  selection = new SelectionModel<TeacherDay>(true, []);
 
   ngOnInit(): void {
     this.orderService.getContacts("email").subscribe(
@@ -174,23 +156,6 @@ export class TeacherDayComponent implements OnInit {
     this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
       startWith(""),
       map((value) => this._filter(value || ""))
-    );
-
-    this.listService.findAllTeacherDayLists().subscribe(
-      (res) => {
-        this.teacherDays = res["data"];
-        this.teacherDays.sort((prev, next) =>
-          prev.nursingHome > next.nursingHome ? 1 : -1
-        );
-        this.teacherDays.sort(
-          (prev, next) => prev.monthHoliday - next.monthHoliday
-        );
-        this.dataSource = new MatTableDataSource(this.teacherDays);
-        console.log(this.teacherDays);
-      },
-      (err) => {
-        console.log(err);
-      }
     );
   }
 
@@ -301,8 +266,8 @@ export class TeacherDayComponent implements OnInit {
                 }
               );
             this.selectedInstitutes = [];
-            this.showList = true;
             this.isForInstitutes = false;
+            this.lineItems = [];
           }
         }
       } else {
@@ -311,8 +276,8 @@ export class TeacherDayComponent implements OnInit {
         this.previousClient = "";
         this.institutes.clear();
         this.selectedInstitutes = [];
-        this.showList = true;
         this.isForInstitutes = false;
+        this.lineItems = [];
       }
     }, 200);
   }
@@ -448,11 +413,9 @@ export class TeacherDayComponent implements OnInit {
       .filter((v) => v !== null);
 
     if (this.selectedInstitutes.length > 0) {
-      this.showList = false;
       //this.isForInstitutes = true;
     } else {
-      this.showList = true;
-     // this.isForInstitutes = false;
+      // this.isForInstitutes = false;
     }
   }
 
@@ -468,34 +431,18 @@ export class TeacherDayComponent implements OnInit {
     this.form.reset();
     this.notSaved = true;
     this.hide = false;
-    this.selection.clear();
-    this.listService.findAllTeacherDayLists().subscribe(
-      (res) => {
-        this.teacherDays = res["data"];
-        this.teacherDays.sort((prev, next) =>
-          prev.nursingHome > next.nursingHome ? 1 : -1
-        );
-        this.teacherDays.sort(
-          (prev, next) => prev.monthHoliday - next.monthHoliday
-        );
-        this.dataSource = new MatTableDataSource(this.teacherDays);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
 
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "День учителя и дошкольного работника 2024";
+    this.holiday = "День пожилого человека 2024";
     this.options = [];
     this.fullOptions = [];
     this.clientInstitutes = [];
     this.client = undefined;
     this.previousClient = "";
     this.form.controls.contactType.setValue(this.defaultType);
-    this.showList = true;
+
     this.isForInstitutes = false;
 
     this.orderService.getContacts("email").subscribe(
@@ -521,31 +468,29 @@ export class TeacherDayComponent implements OnInit {
   }
 
   checkOrder() {
-    
-     const selectedInstitutes = this.form.value.institutes
+    const selectedInstitutes = this.form.value.institutes
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
-      console.log("коллектив проверка");
-      console.log(this.client.institutes.length);
-      console.log(this.form.controls.amount.value);
-      console.log(selectedInstitutes.length);
+    console.log("коллектив проверка");
+    console.log(this.client.institutes.length);
+    console.log(this.form.controls.amount.value);
+    console.log(selectedInstitutes.length);
 
-
-      if (
-        (this.client.institutes.length > 0 ||
-          this.form.controls.amount.value > 20) &&
-        selectedInstitutes.length == 0
-      ) {
-        console.log("коллектив?");
-        this.confirmationService.confirm({
-          message: "Вы уверены, что эта заявка не для колллектива?",
-          accept: () => this.createOrder(),
-        });
-      } else {
-        this.createOrder();
+    if (
+      (this.client.institutes.length > 0 ||
+        this.form.controls.amount.value > 20) &&
+      selectedInstitutes.length == 0
+    ) {
+      console.log("коллектив?");
+      this.confirmationService.confirm({
+        message: "Вы уверены, что эта заявка не для колллектива?",
+        accept: () => this.createOrder(),
+      });
+    } else {
+      this.createOrder();
+    }
   }
-}
 
   createOrder() {
     this.successMessage = "";
@@ -554,126 +499,90 @@ export class TeacherDayComponent implements OnInit {
     this.clientFirstName = "";
     this.lineItems = [];
     this.canSave = false;
-      if (!this.form.controls.contact.value) {
-        this.resultDialog.open(ConfirmationDialogComponent, {
-          data: {
-            message: "Обязательно укажите email или другой возможный контакт!",
+    if (!this.form.controls.contact.value) {
+      this.resultDialog.open(ConfirmationDialogComponent, {
+        data: {
+          message: "Обязательно укажите email или другой возможный контакт!",
+        },
+        disableClose: true,
+        width: "fit-content",
+      });
+    } else {
+      if (
+        !this.options.includes(this.form.controls.contact.value.toLowerCase())
+      ) {
+        this.confirmationService.confirm({
+          message:
+            "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
+          accept: () => {
+            this.router.navigate([]).then((result) => {
+              window.open("#/clients/create/new", "_blank");
+            });
           },
-          disableClose: true,
-          width: "fit-content",
         });
       } else {
         if (
-          !this.options.includes(this.form.controls.contact.value.toLowerCase())
+          this.form.controls.nameOfInstitute.value ||
+          this.form.controls.categoryOfInstitute.value
         ) {
-          this.confirmationService.confirm({
-            message:
-              "Заявка не может быть сформирована: поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.",
-            accept: () => {
-              this.router.navigate([]).then((result) => {
-                window.open("#/clients/create/new", "_blank");
-              });
+          this.resultDialog.open(ConfirmationDialogComponent, {
+            data: {
+              message:
+                "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
             },
+            disableClose: true,
+            width: "fit-content",
           });
         } else {
-          let temporaryLineItems = [];
-          if (this.showList) {
-            for (let value of this.selection["_selection"]) {
-              temporaryLineItems.push(value);
-            }
-
-            console.log(
-              "temporaryLineItems.length != this.form.controls.amount.value"
-            );
-            console.log(temporaryLineItems.length);
-            console.log(this.form.controls.amount.value);
-          }
-
-          if (
-            temporaryLineItems.length != this.form.controls.amount.value &&
-            this.showList
-          ) {
-            this.resultDialog.open(ConfirmationDialogComponent, {
-              data: {
-                message:
-                  "Количества выбранных и указанных адресов должны совпадать.",
-              },
-              disableClose: true,
-              width: "fit-content",
-            });
-          } else {
-            if (
-              this.form.controls.nameOfInstitute.value ||
-              this.form.controls.categoryOfInstitute.value
-            ) {
-              this.resultDialog.open(ConfirmationDialogComponent, {
-                data: {
-                  message:
-                    "Вы не завершили сохранение организации. Сохраните или удалите введенные данные.",
-                },
-                disableClose: true,
-                width: "fit-content",
-              });
-            } else {
-              console.log("orderService.checkDoubleOrder");
-              this.orderService
-                .checkDoubleOrder(this.holiday, this.client._id)
-                .subscribe(
-                  async (res) => {
-                    let result = res["data"];
-                    console.log("result");
-                    console.log(result);
-                    if (!result) {
-                      console.log("!result");
-                      console.log(result);
-                      if (this.showList) {
-                        this.saveOrder(temporaryLineItems);
-                      } else {
-                        this.createOrderForInstitute();
-                      }
-                    } else {
-                      let usernameList = "";
-                      for (let user of result.users) {
-                        usernameList =
-                          usernameList.length == 0
-                            ? user
-                            : usernameList + ", " + user;
-                      }
-                      this.confirmationService.confirm({
-                        message:
-                          "Пользователь с такими контактами уже получил адреса на праздник '" +
-                          this.holiday +
-                          "' у волонтера(ов): " +
-                          usernameList +
-                          ". Вы уверены, что это не дубль?",
-                        accept: () => {
-                          if (this.showList) {
-                            this.saveOrder(temporaryLineItems);
-                          } else {
-                            this.createOrderForInstitute();
-                          }
-                        },
-                      });
-                    }
-                  },
-                  (err) => {
-                    this.errorMessage = err.error.msg + " " + err.message;
-                    console.log(err);
+          console.log("orderService.checkDoubleOrder");
+          this.orderService
+            .checkDoubleOrder(this.holiday, this.client._id)
+            .subscribe(
+              async (res) => {
+                let result = res["data"];
+                console.log("result checkDoubleOrder");
+                console.log(res);
+                if (!result) {
+                  console.log("!result");
+                  console.log(result);
+                  this.createOrderNoNames();
+                } else {
+                  let usernameList = "";
+                  for (let user of result.users) {
+                    usernameList =
+                      usernameList.length == 0
+                        ? user
+                        : usernameList + ", " + user;
                   }
-                );
-            }
-          }
+                  this.confirmationService.confirm({
+                    message:
+                      "Пользователь с такими контактами уже получил адреса на праздник '" +
+                      this.holiday +
+                      "' у волонтера(ов): " +
+                      usernameList +
+                      ". Вы уверены, что это не дубль?",
+                    accept: () => this.createOrderNoNames(),
+                  });
+                }
+              },
+              (err) => {
+                this.errorMessage = err.error.msg + " " + err.message;
+                console.log(err);
+              }
+            );
         }
       }
     }
-  
+  }
 
-  createOrderForInstitute() {
-    this.isForInstitutes = true;
+  createOrderNoNames() {
     const selectedInstitutes = this.form.value.institutes
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
-
+    if (selectedInstitutes.length > 0) {
+      this.isForInstitutes = true;
+    }
+    this.hide = true;
     this.spinner = true;
     let newOrder: Order = {
       userName: this.userName,
@@ -697,15 +606,16 @@ export class TeacherDayComponent implements OnInit {
     console.log("newOrder");
     console.log(newOrder);
 
-    this.orderService.createOrderForTeacherDayForInstitute(newOrder).subscribe(
+    this.orderService.createOrderForSeniorDay(newOrder).subscribe(
       async (res) => {
         this.spinner = false;
-        this.hide = true;
+        this.hide = false;
         this.notSaved = false;
         let result = res["data"]["result"];
         if (typeof result == "string") {
           this.errorMessage = result;
           console.log(this.errorMessage);
+         
         } else {
           //alert(res.msg);
           console.log("result");
@@ -729,83 +639,18 @@ export class TeacherDayComponent implements OnInit {
           this.contactReminder = " для " + res["data"]["contact"];
           this.clientFirstName = res["data"]["clientFirstName"];
           console.log(res);
+         
         }
       },
       (err) => {
         this.spinner = false;
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
+        this.hide = false;
       }
     );
   }
 
-  saveOrder(temporaryLineItems) {
-    this.isForInstitutes = false;
-
-    const selectedInstitutes = this.form.value.institutes
-      .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
-      .filter((v) => v !== null);
-
-    this.spinner = true;
-    let newOrder: Order = {
-      userName: this.userName,
-      holiday: this.holiday,
-      clientId: this.client._id,
-      clientFirstName: this.client.firstName,
-      clientPatronymic: this.client.patronymic,
-      clientLastName: this.client.lastName,
-      contactType: this.form.controls.contactType.value,
-      contact: this.form.controls.contact.value,
-      institutes: selectedInstitutes,
-      amount: this.form.controls.amount.value,
-      isAccepted: this.form.controls.isAccepted.value ? true : false,
-      source: this.form.controls.source.value,
-      comment: this.form.controls.comment.value,
-      orderDate: this.orderDate,
-      dateOfOrder: new Date(),
-      temporaryLineItems: temporaryLineItems,
-    };
-
-    console.log("newOrder");
-    console.log(newOrder);
-    console.log(this.selection);
-    this.orderService.createOrderForTeacherDay(newOrder).subscribe(
-      async (res) => {
-        this.spinner = false;
-        this.hide = true;
-        this.notSaved = false;
-        let result = res["data"]["result"];
-        if (typeof result == "string") {
-          this.errorMessage = result;
-          console.log(this.errorMessage);
-        } else {
-          //alert(res.msg);
-          console.log("result");
-          console.log(result);
-          console.log(this.notSaved);
-          this.lineItems = result;
-          let i = 0;
-          for (let lineItem of this.lineItems) {
-            for (let celebrator of lineItem.celebrators) {
-              celebrator.index = i + 1;
-              i++;
-            }
-          }
-          this.canSave = true;
-          this.successMessage =
-            "Ваша заявка сформирована и сохранена. Пожалуйста, скопируйте список и отправьте поздравляющему. Если список вас не устраивает, удалите эту заявку и обратитесь к администратору.";
-          this.contactReminder = " для " + res["data"]["contact"];
-          this.clientFirstName = res["data"]["clientFirstName"];
-          console.log(res);
-        }
-      },
-      (err) => {
-        this.spinner = false;
-        this.errorMessage = err.error.msg + " " + err.message;
-        console.log(err);
-      }
-    );
-  }
   getAddresses() {
     let greeting: string;
     if (this.clientFirstName) {
@@ -819,42 +664,36 @@ export class TeacherDayComponent implements OnInit {
       top =
         "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
         "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
-        "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются люди, которых к престарелым совсем не относятся. Это инвалиды, которые проживают в домах престарелых. Иногда сразу после детдомов.\n\n" +
+        "Сообщаю вам только адреса интернатов и количество поздравляемых, то есть открытки будут не именные. Сотрудники интернатов вручат открытки тем подопечным, которым будет приятно быть поздравленными с этим праздником.\n\n" +
         this.holiday +
+        " - 1 октября " +
         "\n" +
         "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
         "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n\n";
-      bottom =
-        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Учтите, что по России письма идут 14-20 дней.\n\n" +
-        "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
-        "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
-        "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
-        "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, бандероли, заказные/ценные письма, письма первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
-        "Нашим подопечным нужны продукты, дрова для обогрева домов, медицинская помощь. Сделайте пожертвование на - https://starikam.org/ \n\n" +
-        "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n" +
-        "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
     } else {
       top =
         "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
         "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
         "В правила поздравления были внесены изменения, поэтому сообщаю вам только адреса интернатов и количество поздравляемых, то есть открытки будут не именные.\n Открытки нужно будет отправить ПРОСТОЙ бандеролью на адрес интерната через Почту России. НЕ заказной, НЕ ценной, НЕ первого класса и никакой другой регистрируемой. Потому что простую бандероль почтальон приносит в интернат, а за регистрируемыми отправлениями нужно идти на почту с доверенностью. Правда, к сожалению, простая бандероль не имеет трек номера и ее нельзя отследить.\n То есть все открытки нужно упаковать в один почтовый пакет (или конверт), заполнить адресную часть и отнести на почту, там отправить ПРОСТУЮ бандероль через оператора. Если вес будет менее 100 г, то отправление оформят как простое письмо с доплатой за вес. Часто работники почты уговаривают отправителей на заказные или ценные бандероли, говорят, что это быстрее и надежнее, но нам такой вариант совершенно не подходит, так как такие отправления с 99% вероятностью вернутся обратно.\n\n" +
-        "ДЕНЬ УЧИТЕЛЯ - 5 октября 2024" +
+        this.holiday +
+        " - 1 октября " +
         "\n" +
         "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
         "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n\n";
-      bottom =
-        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ бандеролями (от 100 г до 5 кг) или ПРОСТЫМИ письмами (до 100 г).\n – Рассчитывайте, что срок доставки будет примерно 14-20 дней.\n – В графе 'кому' указывайте название интерната (учреждения). Указывать ФИО получателя совершенно не обязательно.\n – На конверте/пакете укажите название праздника/праздников. (Например, 'День учителя').\n\n" +
-        "Как писать поздравления?\n – Начните ваше поздравление с приветствия: 'Добрый день! Поздравляю Вас...' или 'Здравствуйте! Поздравляю Вас...'.\n –  В поздравлениях с Днем учителя можно использовать обращения: 'Дорогая учительница!', 'Уважаемый преподаватель!'. \n – Не используйте такие обращения, как 'дедушка' или 'бабушка': в интернатах проживают и молодые люди - инвалиды.\n – Обязательно используйте обращение на 'Вы'.\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n\n" +
-        "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде в открытке (или на конверте, если каждая открытка в конверте) не указывайте ваш телефон, если не готовы на 200%, что вам начнут звонить и писать в любое время.\n\n" +
-        "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваше отправление вернулось, также сообщите нам.\n\n" +
-        "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, заказные/ценные бандероли, заказные/ценные письма, письма и бандероли первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
-        "Нашим подопечным нужны продукты, дрова для обогрева домов, медицинская помощь. Сделайте пожертвование на - https://starikam.org/ \n\n" +
-        "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n";
     }
+    bottom =
+      "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ бандеролями (от 100 г до 5 кг) или ПРОСТЫМИ письмами (до 100 г).\n – Рассчитывайте, что срок доставки будет примерно 14-20 дней.\n – В графе 'кому' указывайте название интерната (учреждения). Указывать ФИО получателя совершенно не обязательно.\n – На конверте/пакете укажите название праздника/праздников, особенно это актуально для дней рождений. (Например, 'Дни рождения октября').\n\n" +
+      "Как писать поздравления?\n – Начните ваше поздравление с приветствия: 'Добрый день! Поздравляю Вас...' или 'Здравствуйте! Поздравляю Вас...'.\n –  В поздравлениях с днями рождения можно использовать обращения: 'Дорогая именинница!', 'Уважаемый именинник!'. \n – Не используйте такие обращения, как 'дедушка' или 'бабушка': в интернатах проживают и молодые люди - инвалиды.\n – Обязательно используйте обращение на 'Вы'.\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n\n" +
+      "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде в открытке (или на конверте, если каждая открытка в конверте) не указывайте ваш телефон, если не готовы на 200%, что вам начнут звонить и писать в любое время.\n\n" +
+      "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваше отправление вернулось, также сообщите нам.\n\n" +
+      "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, заказные/ценные бандероли, заказные/ценные письма, письма и бандероли первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
+      "Нашим подопечным нужны продукты, дрова для обогрева домов, медицинская помощь. Сделайте пожертвование на - https://starikam.org/ \n\n" +
+      "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n";
+
     let addresses = "";
     console.log(this.lineItems);
     for (let lineItem of this.lineItems) {
-      if (!this.isForInstitutes) {
+      /*       if (!this.isForInstitutes) {
         addresses =
           addresses +
           lineItem.address +
@@ -862,10 +701,10 @@ export class TeacherDayComponent implements OnInit {
           "\n" +
           (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +
           (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
-      } else {
-        addresses = addresses + lineItem.address + " " + "\n";
-      }
-      if (!this.isForInstitutes) {
+      } else { */
+      addresses = addresses + lineItem.address + " " + "\n";
+      /*       } */
+      /*       if (!this.isForInstitutes) {
         for (let celebrator of lineItem.celebrators) {
           addresses =
             addresses +
@@ -885,19 +724,17 @@ export class TeacherDayComponent implements OnInit {
             (celebrator.linkPhoto ? celebrator.linkPhoto : "") +
             "\n";
         }
-      }
+      } */
 
-      if (this.isForInstitutes) {
-        addresses =
-          addresses +
-          lineItem.celebrators.length +
-          " откр.: " +
-          lineItem.Female +
-          " жен. + " +
-          lineItem.Male +
-          " муж." +
-          "\n";
-      }
+      addresses =
+        addresses +
+        lineItem.celebrators.length +
+        " откр.: " +
+        lineItem.Female +
+        " жен. + " +
+        lineItem.Male +
+        " муж." +
+        "\n";
 
       addresses = addresses + "\n";
     }

@@ -104,6 +104,7 @@ import { EasterComponent } from './pages/easter/easter.component';
 import { AdminEasterComponent } from './pages/admin-easter/admin-easter.component';
 import { DobroruComponent } from './pages/dobroru/dobroru.component';
 import { AdminVeteransComponent } from './pages/admin-veterans/admin-veterans.component';
+import { SeniorDayComponent } from './pages/senior-day/senior-day.component';
 
 @NgModule({
   declarations: [
@@ -158,7 +159,8 @@ import { AdminVeteransComponent } from './pages/admin-veterans/admin-veterans.co
     EasterComponent,
     AdminEasterComponent,
     DobroruComponent,
-    AdminVeteransComponent
+    AdminVeteransComponent,
+    SeniorDayComponent
 
   ],
   imports: [

@@ -18,14 +18,16 @@
           <h1>&nbsp;Проект "Внуки по переписке: Поздравить открыткой"</h1>
         </div>
         <div fxLayoutAlign="end center" fxFlex="85">
-          <button class="navbar-link" routerLink="/orders/teacher-day" mat-button>День учителя</button>  
-          <!--   <button class="navbar-link" routerLink="/orders/new-year" mat-button>Новый год</button>  -->
 
-          <!--  <button class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
-          <button class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>-->
+          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/senior-day" mat-button>День ПЧ</button>  
+          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/teacher-day" mat-button>День учителя</button>  
+          <!--   <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/new-year" mat-button>Новый год</button>  -->
+
+          <!--  <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
+          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>-->
 <!--             <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button>  -->
-            <!--  <button class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
-    <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru" mat-button>ДОБРО РУ</button>  
+            <!--  <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
+          <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru" mat-button>ДОБРО РУ</button>  
 <!--           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/easter" mat-button>Пасха</button>  -->
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/name-day" mat-button>Именины</button>
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/birthday" mat-button>ДР</button>

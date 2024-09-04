@@ -1,0 +1,603 @@
+<!--
+============================================
+ html code to create  senior-day orders.
+===========================================
+-->
+<div fxLayout="row" class="main" style="width : 95%;">
+
+    <mat-card class="mat-elevation-z0" style="width : 100%;">
+        <div class="wrapper">
+            <div class="left" style="padding-left: 30px; padding-right: 8px;">
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-card-title> Новая заявка </mat-card-title>
+                        </td>
+                        <td>
+                            <mat-card-actions style="text-align: right; padding-right: px;">
+                                <button mat-raised-button (click)="clear()" color="accent">Очистить</button>
+                            </mat-card-actions>
+                        </td>
+                    </tr>
+                </table>
+
+
+                <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"
+                    [style]="{width: '30%'}"></p-confirmDialog>
+
+                <form [formGroup]="form">
+                    <mat-card-content>
+
+                        <div fxLayout="column" fxLayoutGap="10px">
+                            <table class="example-full-width" cellspacing="0">
+                                <tr>
+                                    <td rowspan="2">
+
+                                        <mat-card-subtitle>Дата: {{orderDate}}</mat-card-subtitle>
+                                        <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
+                                        <mat-card-subtitle>Праздник:
+                                            <span class="header">{{holiday}} - 1 октября</span>
+                                        </mat-card-subtitle>
+                                    </td>
+                                    <td rowspan="2">
+
+                                    </td>
+                                    <td align="left">
+                                        <mat-slide-toggle [formControl]="form.controls['isAccepted']">Не требует
+                                            подтверждения</mat-slide-toggle>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td align="left">
+                                        <mat-form-field>
+                                            <mat-label>Источник*</mat-label>
+                                            <mat-select [formControl]="form.controls.source">
+                                                <mat-option value="subscription">постоянные</mat-option>
+                                                <mat-option value="site">сайт фонда</mat-option>
+                                                <mat-option value="vk">вконтакте</mat-option>
+                                                <mat-option value="telegram">телеграм</mat-option>
+                                                <mat-option value="insta">инста</mat-option>
+                                                <mat-option value="other">другое</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.source.hasError('required') && form.controls.source.touched">
+                                            Обязательное поле!
+                                        </mat-error>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="example-full-width" cellspacing="0">
+
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Тип контакта*</mat-label>
+                                            <mat-select [(value)]="defaultType"
+                                                [formControl]="form.controls['contactType']"
+                                                (selectionChange)="getContacts(false)">
+                                                <mat-option *ngFor="let type of types" [value]="type">
+                                                    {{ type }}
+                                                </mat-option>
+                                            </mat-select>
+
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Email/аккаунт/номер*</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['contact']"
+                                                [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
+                                            <mat-autocomplete #auto="matAutocomplete">
+                                                <mat-option *ngFor="let option of filteredOptions | async"
+                                                    [value]="option">
+                                                    {{option}}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <mat-error class="error"
+                                            *ngIf="form.controls.contact.hasError('required') && form.controls.contact.touched">
+                                            Обязательное поле!
+                                        </mat-error>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Комментарий</mat-label>
+                                            <input type="text" matInput [formControl]="form.controls['comment']" />
+                                        </mat-form-field>
+                                    </td>
+                                    <td>
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>Количество адресов*</mat-label>
+                                            <input type="number" matInput [formControl]="form.controls['amount']" />
+                                        </mat-form-field>
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td> <mat-error class="error"
+                                            *ngIf="form.controls.amount.hasError('required') && form.controls.amount.touched">
+                                            Обязательное поле!
+                                        </mat-error>
+
+                                        <mat-error class="error" *ngIf="form.controls.amount.hasError('min') ">
+                                            Минимум 1 адрес!
+                                        </mat-error>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            <table *ngIf="client?.firstName">
+                                <tr>
+                                    <td colspan="3">
+                                        <mat-label>ФИО поздравляющего: {{ client.firstName + " " + (client.patronymic ?
+                                            client.patronymic + " ": "") + (client.lastName ? client.lastName + " ":
+                                            "") + (client.country ? client.country + " ": "") + (client.region ?
+                                            client.region + " ":
+                                            "") + (client.city ? client.city: "")}}</mat-label>
+                                        <br /> <br />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td *ngIf="client.isRestricted">
+                                        <h3 class="warning">Внимание! Ограничения!</h3>
+
+                                        <div>
+                                            Причина: {{client.causeOfRestriction }}
+
+                                        </div>
+                                        <div>
+                                            Меры: {{client.preventiveAction }}
+                                        </div>
+                                        <br />
+                                    </td>
+                                </tr>
+
+
+
+                                <tr>
+                                    <td colspan="3">
+                                        <mat-label>Адреса для коллектива:</mat-label>
+                                        <br /> <br />
+                                    </td>
+                                </tr>
+
+                                <!--                                 <tr formArrayName="institutes" *ngFor="let item of institutes.controls; index as i">
+
+                                    <td colspan="3">
+                                        <p><mat-checkbox
+                                                [formControlName]="i">{{clientInstitutes[i].name}}</mat-checkbox></p>
+                                    </td>
+
+                                </tr> -->
+
+                                <tr formArrayName="institutes" *ngFor="let item of institutes.controls; index as i">
+
+                                    <td colspan="3">
+                                        <p><mat-checkbox [formControlName]="i"
+                                                (change)="checkInstitutes()">{{clientInstitutes[i].name}}
+                                            </mat-checkbox></p>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td width="40%">
+                                        <mat-form-field>
+                                            <input type="text" matInput [formControl]="form.controls['nameOfInstitute']"
+                                                [placeholder]="'Организация*'" />
+
+                                        </mat-form-field>
+
+                                    </td>
+                                    <td width="30%">
+                                        <mat-form-field>
+                                            <mat-label>Категория*</mat-label>
+                                            <mat-select [formControl]="form.controls['categoryOfInstitute']">
+                                                <mat-option></mat-option>
+
+                                                <mat-option *ngFor="let category of categories" [value]="category">
+                                                    {{ category }}
+                                                </mat-option>
+                                            </mat-select>
+
+                                            <br />
+                                        </mat-form-field>
+                                    </td>
+                                    <td width="10%">
+                                        <button mat-button (click)="saveInstitute()"
+                                            [disabled]="!form.controls.nameOfInstitute.value || !form.controls.categoryOfInstitute.value">Сохранить</button>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <mat-hint>При необходимости добавьте новую организацию. Обязательно заполните
+                                            оба поля и нажмите "Сохранить".</mat-hint>
+                                    </td>
+                                </tr>
+
+
+
+                            </table>
+
+                        </div>
+
+                    </mat-card-content>
+
+                </form>
+            </div>
+            <div class="right" style="padding-left: 30px; padding-right: 30px;">
+                <table class="example-full-width" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-card-title> Список поздравляемых {{contactReminder}}</mat-card-title>
+                            <p style="color: rgb(255, 0, 0); font-weight: bold; ">{{errorMessage}}</p>
+                            <p style="color: rgb(101, 80, 219); font-weight: bold; ">{{successMessage}}</p>
+
+                        </td>
+                        <td width="10%">
+                            <mat-card-actions style="text-align: right; padding-right: px;">
+
+                                <button (click)="checkOrder()" mat-raised-button color="primary"
+                                    [disabled]="!form.valid" *ngIf="!hide">Сформировать</button>
+                            </mat-card-actions>
+
+                            <button mat-fab matTooltip="Скопировать" color="primary" [disabled]="lineItems.length == 0"
+                                (click)="getAddresses()" *ngIf="hide">
+                                <mat-icon>file_copy</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                    <!--                     <tr>
+                        <td colspan="2">
+                            <span *ngIf="lineItems.length > 0 && !isForInstitutes">
+                                <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
+                            </span>
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td colspan="2">
+                            <span *ngIf="lineItems.length > 0">
+                                <mat-slide-toggle [(ngModel)]="showInstruction">с памяткой</mat-slide-toggle>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+
+
+                <br /><br />
+                <dir style="width: 100%;">
+                    <dir>
+                        <mat-spinner mode="indeterminate" *ngIf="spinner" style="margin:40px auto ;"></mat-spinner>
+                    </dir>
+                </dir>
+
+                <div *ngIf="!notSaved">
+                    <section *ngIf="lineItems.length > 0 ">
+
+                        <mat-card-content *ngIf="showInstruction"
+                            style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
+
+                            <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый
+                                день,
+                                {{clientFirstName}}!</p>
+                            <p *ngIf="clientFirstName == null || ''"
+                                style="font-family: 'Times New Roman', Times, serif;">
+                                Добрый день!</p>
+
+
+                            <p
+                                style="font-weight: 600; color: rgb(255, 0, 0); font-family: 'Times New Roman', Times, serif;">
+                                Пожалуйста, подтвердите получение этого письма, ответив на него!
+                            </p>
+
+                            <p *ngIf="showInstruction && !isForInstitutes"
+                                style="font-family: 'Times New Roman', Times, serif;">
+                                Мы получили вашу заявку и очень рады вашему участию!<br />
+                                Сообщаю вам только адреса интернатов и количество поздравляемых, то есть открытки будут
+                                не именные. Сотрудники интернатов вручат открытки тем подопечным, которым будет приятно
+                                быть поздравленными с этим праздником.
+                            </p>
+
+                            <p *ngIf="showInstruction && isForInstitutes"
+                                style="font-family: 'Times New Roman', Times, serif;">
+                                Мы получили вашу заявку и очень рады вашему участию!<br />
+                                В правила поздравления были внесены изменения, поэтому сообщаю вам только адреса
+                                интернатов
+                                и количество поздравляемых, то есть открытки будут не именные.
+                            </p>
+
+                            <p style="font-family: 'Times New Roman', Times, serif;">
+                                Открытки нужно будет отправить ПРОСТОЙ бандеролью на адрес интерната через Почту России.
+                                НЕ заказной, НЕ ценной, НЕ первого класса и никакой другой регистрируемой.
+                                Потому что простую бандероль почтальон приносит в интернат, а за регистрируемыми
+                                отправлениями нужно идти на почту с доверенностью.
+                                Правда, к сожалению, простая бандероль не имеет трек номера и ее нельзя отследить.<br />
+                                То есть все открытки нужно упаковать в один почтовый пакет (или конверт), заполнить
+                                адресную
+                                часть и отнести на почту, там отправить ПРОСТУЮ бандероль через оператора.
+                                Если вес будет менее 100 г, то отправление оформят как простое письмо с доплатой за вес.
+                                Часто работники почты уговаривают отправителей на заказные или ценные бандероли,
+                                говорят,
+                                что это быстрее и надежнее, но нам такой вариант совершенно не подходит, так как такие
+                                отправления с 99% вероятностью вернутся обратно.
+
+                            </p>
+
+                            <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                                {{ holiday }} - 1 октября
+                            </h2>
+
+
+                            <p style="font-style: italic; font-family: 'Times New Roman', Times, serif;">
+                                Если какие-то адреса вам не подходят, обязательно возвращайте -
+                                заменю.<br />
+                                Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
+                                чтобы я могла их передать другому поздравляющему.
+                            </p>
+                        </mat-card-content>
+
+                        <br />
+
+
+                        <mat-card-content *ngFor="let lineItem of lineItems">
+
+                            <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+<!--                             <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment && !isForInstitutes">
+                                {{lineItem.infoComment}}
+                            </p>
+                            <p style="color: red; font-weight: bold; margin: 0;"
+                                *ngIf="lineItem.adminComment && !isForInstitutes">
+                                {{lineItem.adminComment}}</p> -->
+
+                            <p style="font-weight: bold; margin: 0;">
+                                {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.
+                            </p>
+
+<!--                             <section *ngIf="!isForInstitutes">
+                                <div *ngFor="let celebrator of lineItem.celebrators">                         
+                                    <span *ngIf="showIndexes">{{celebrator.index}}. </span>
+                                    {{celebrator.lastName}}
+                                    {{celebrator.firstName}}
+                                    {{celebrator.patronymic}}
+                                    ({{celebrator.yearBirthday}} г.р.)
+                                    {{celebrator.comment1}} -
+                                    {{celebrator.teacher}}
+                                    {{celebrator.linkPhoto}}
+                                </div>
+                            </section> -->
+                            <br />
+                        </mat-card-content>
+
+                        <mat-card-content *ngIf="showInstruction"
+                            style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%; ">
+
+                            <h3
+                                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                                Отправляйте письма правильно!</h3>
+<!--                             <ul *ngIf="!isForInstitutes">
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
+                                    (НЕ заказными).
+                                </li>
+
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Каждому адресату отправляйте отдельную открытку в отдельном конверте
+                                    или отдельную почтовую открытку без конверта.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Учтите, что по России письма идут 14-20 дней.
+                                </li>
+                            </ul> -->
+
+                            <ul>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Открытки отправляйте Почтой России только ПРОСТЫМИ бандеролями (от 100 г до 5 кг)
+                                    или
+                                    ПРОСТЫМИ письмами (до 100 г).
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Рассчитывайте, что срок доставки будет примерно 14-20 дней.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя
+                                    совершенно не обязательно.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    На конверте/пакете укажите название праздника/праздников. (Например, "День
+                                    пожилого человека").
+                                </li>
+                            </ul>
+
+                            <h3
+                                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                                Как писать поздравления?</h3>
+<!--                             <ul *ngIf="!isForInstitutes">
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Используйте обращение на "Вы" и по имени-отчеству (если отчество
+                                    указано).
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Пишите поздравления от себя лично (не от организации, не от школы, не
+                                    от фонда).
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">По возможности укажите ваш
+                                    обратный адрес (кроме случаев, когда мы просим этого не далать)*.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в
+                                    правом
+                                    нижнем
+                                    углу.
+                                </li>
+                            </ul> -->
+
+                            <ul>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Начните ваше поздравление с приветствия: "Добрый день! Поздравляю Вас..." или
+                                    "Здравствуйте! Поздравляю Вас...".
+
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Обязательно используйте обращение на "Вы".
+
+                                </li>                       
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Пишите поздравления от себя лично (не от организации, не от школы, не
+                                    от фонда).
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
+                                </li>
+
+                            </ul>
+
+                            <h3
+                                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                                Что писать не надо.</h3>
+                            <ul>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Не желайте семейного уюта, любви близких, финансового благополучия и
+                                    т.п.
+                                </li>
+                                <li *ngIf="!isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                    Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не
+                                    готовы
+                                    на 200%, что вам начнут звонить и писать в любое время.
+                                </li>
+                                <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                    Нигде в открытке (или на конверте, если каждая открытка в конверте) не указывайте
+                                    ваш
+                                    телефон, если не готовы на 200%, что вам начнут звонить и писать в любое время.
+                                </li>
+                                <li *ngIf="!isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                    Если написано, что поздравления нужно отправлять без указания обратного адреса, не
+                                    давайте
+                                    свой обратный адрес и любые другие контакты*.
+                                </li>
+                            </ul>
+
+                            <h3
+                                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                                Получили ответ?</h3>
+                            <ul>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Если получили ответ от жителя интерната, обязательно сообщите об этом
+                                    нам.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Не вступайте в переписку с ответившим до того, как это будет
+                                    согласовано с координатором.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">Если ваша открытка
+                                    вернулась,
+                                    также сообщите нам.</li>
+                            </ul>
+
+                            <h3
+                                style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                                Чего просим не делать.</h3>
+                            <ul>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Запрещены любые публикации (в соцсетях, на сайтах учебных заведений,
+                                    на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч.
+                                    фото конвертов или открыток, на которых указаны адрес и/или ФИО
+                                    подопечного).
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить
+                                    праздник других людей.
+                                </li>
+<!--                                 <li *ngIf="!isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                    Не отправляйте посылки, бандероли, заказные/ценные письма, письма
+                                    первого класса и прочие регистрируемые отправления, так как возможны
+                                    проблемы с получением подобной корреспонденции и ваше отправление
+                                    может вернуться.
+                                </li> -->
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    Не отправляйте посылки, заказные/ценные бандероли, заказные/ценные письма, письма и
+                                    бандероли
+                                    первого класса и прочие регистрируемые отправления, так как возможны
+                                    проблемы с получением подобной корреспонденции и ваше отправление
+                                    может вернуться.
+                                </li>
+                                <li style="font-family: 'Times New Roman', Times, serif;">
+                                    По указанным адресам нужно отправить открытки только один раз: не нужно
+                                    поздравлять
+                                    людей со
+                                    всеми
+                                    праздниками или писать им письма!
+                                </li>
+                            </ul>
+                            <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
+                                Нашим подопечным нужны продукты, дрова для обогрева домов, медицинская помощь.
+                                Сделайте
+                                пожертвование на
+                                <a href="https:/starikam.org/">starikam.org</a>
+                            </p>
+                            <hr />
+                            <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
+                                Огромное вам спасибо за радость для наших подопечных! <br />
+                                Будут вопросы — обращайтесь!
+                            </p>
+                            <br />
+<!--                             <p *ngIf="!isForInstitutes" style=" font-family: 'Times New Roman' , Times, serif;
+                                font-style: italic;">* - Мы
+                                просим
+                                отправлять без указания обратного адреса поздравления в психоневрологические
+                                интернаты (ПНИ)
+                                и
+                                специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы
+                                их
+                                жители не
+                                потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес,
+                                то под
+                                ним
+                                обязательно идет соответствующий комментарий:
+                                <span style="color: rgb(255, 0, 0);"> (администрация настоятельно просит не
+                                    указывать ваш
+                                    личный
+                                    адрес на отправлениях в этот
+                                    интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от
+                                    кого –
+                                    Волонтер и ваше имя)</span>.
+                                Если такого комментария нет, то можете указать свой личный адрес.
+                            </p> -->
+                        </mat-card-content>
+
+                    </section>
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+    </mat-card>
+</div>

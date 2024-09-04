@@ -142,6 +142,22 @@ export class ListComponent implements OnInit {
       }
     );
   }
+
+  generateSeniorDay() {
+    this.listService.createSeniorDayList().subscribe(
+      async (res) => {
+        let result = await res["data"];
+        console.log(result);
+        alert(result);
+      },
+      (err) => {
+        console.log(err);
+        alert("Произошла ошибка, обратитесь к администратору! " + err.message);
+      }
+    );
+  }
+
+
   /*   generateEasterList() {
     this.listService.createEasterList().subscribe(
       async (res) => {
@@ -604,6 +620,25 @@ export class ListComponent implements OnInit {
       (res) => {
         this.lists = res["data"];
         this.lists.sort((next, prev) => next.dateHoliday - prev.dateHoliday);
+        this.listLength = this.lists.length;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log(event);
+
+    this.isShowList = true;
+    //console.log(this.lists);
+  }
+
+  showSeniorDayList(event: any) {
+    this.listService.findAllSeniorDayLists().subscribe(
+      (res) => {
+        this.lists = res["data"];
+        this.lists.sort((next, prev) => next.nursingHome > prev.nursingHome ? 1 : -1);
+
         this.listLength = this.lists.length;
       },
       (err) => {
