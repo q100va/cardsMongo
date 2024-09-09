@@ -7417,7 +7417,7 @@ async function fillOrderForInstitutes(
 
 
   let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
-  // let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ПЕРВОМАЙСКИЙ"] } });
+  //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ПЕРВОМАЙСКИЙ"] } });
 
 
   console.log("activeHouse");
