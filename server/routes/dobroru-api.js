@@ -122,13 +122,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения октября 2024") {
+                if (holiday == "Дни рождения ноября 2024") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения сентября 2024") {
+                if (holiday == "Дни рождения октября 2024") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения августа 2024") {
+                if (holiday == "Дни рождения сентября 2024") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -909,6 +909,7 @@ async function searchSenior(
         "ДОЛБОТОВО", "ГЛОДНЕВО", "ГОРНЯЦКИЙ", "ДОНЕЦК", "МЕЧЕТИНСКАЯ", "БОЛЬШАЯ_ОРЛОВКА", "НОВЫЙ_ЕГОРЛЫК",
         "МАКСИМОВКА", "МАЙСКОЕ", "КАНДАБУЛАК", "ПЕТРОВКА", "ДЕВЛЕЗЕРКИНО", "НИКИТИНКА", "ЧАПАЕВСК", "ЖИГУЛЕВСК",
          "САРАТОВ_КЛОЧКОВА", "ЛАШМА", "УВАРОВО", 
+         "ТИМАШЕВСК", "ЧИСТОПОЛЬ", "ЧИТА_ТРУДА",
 
     ]; //"БИЙСК",
 

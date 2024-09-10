@@ -41,7 +41,7 @@ const listBeforeSchema = new Schema(
     uncertain: { type: Boolean, default: false },   
 
   },
-  { collection: "lists_august2024" }
+  { collection: "lists_september2024" }
  //{ collection: "lists_june2023" }
 );
 
