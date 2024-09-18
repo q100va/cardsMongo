@@ -1545,9 +1545,9 @@ router.post("/teacher-day-for-institute", checkAuth, async (req, res) => {
     let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
     let restrictedHouses;
     if (doneHouses) {
-      restrictedHouses = ["ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...doneHouses.houses];
+      restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...doneHouses.houses];
     } else {
-      restrictedHouses = ["ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР"];
+      restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР"];
     }
 
 
@@ -1704,12 +1704,23 @@ router.post("/senior-day", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
     let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
+    console.log("doneHouses");
+    console.log(doneHouses);
     let restrictedHouses = [];
-    if (doneHouses) restrictedHouses = doneHouses.houses;
+    if (doneHouses) restrictedHouses = doneHouses.houses;  //ИСПРАВИТЬ
+    console.log("restrictedHouses");
+    console.log(restrictedHouses);
+
+    let restrictedId = [];
+
+/*     let restrictedId = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId, });
+    restrictedId = restrictedId.seniorsIds;
+
+    console.log("restrictedId");
+    console.log(restrictedId); */
 
 
-
-    finalResult = await createOrderForSeniorDay(newOrder, restrictedHouses);
+    finalResult = await createOrderForSeniorDay(newOrder, restrictedHouses, restrictedId);
     console.log("finalResult");
     console.log(finalResult);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -1746,7 +1757,7 @@ router.post("/senior-day", checkAuth, async (req, res) => {
 
 
 //fill lineItems
-async function createOrderForSeniorDay(newOrder, restrictedHouses) {
+async function createOrderForSeniorDay(newOrder, restrictedHouses, restrictedId) {
   const emptyOrder = {
     userName: newOrder.userName,
     holiday: newOrder.holiday,
@@ -1781,7 +1792,7 @@ async function createOrderForSeniorDay(newOrder, restrictedHouses) {
 
   let seniorsData = await fillOrderForInstitutes(
     order_id,
-    [],
+    restrictedId,
     restrictedHouses,
     newOrder.holiday,
     newOrder.amount
@@ -1950,11 +1961,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения октября 2024") {
     period = {
-      "date1": 1,
-      "date2": 5,
+      "date1": 6,
+      "date2": 10,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 3, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -5563,6 +5574,32 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
 
     }
 
+
+    if (req.params.holiday == "seniorDay") {
+      const celebratorsSD = await SeniorDay.find({
+        absent: false,
+        // nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] }
+        nursingHome: { $in: ["РЖЕВ"] }
+      });
+      let count = celebratorsSD.length;
+      for (let celebrator of celebratorsSD) {
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "День пожилого человека 2024" }).countDocuments();
+        await SeniorDay.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
+        let updatedCelebrator = await SeniorDay.findOne({ _id: celebrator._id });
+
+        console.log(--count);
+        // console.log("result");
+        if (plusAmount != celebrator.plusAmount) {
+          console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount);
+        }
+
+
+
+
+      }
+
+    }
+
     if (req.params.holiday == "easter") {
       let housesSet = new Set();
       const celebratorsEaster = await Easter.find({ absent: false });
@@ -7284,7 +7321,7 @@ router.post("/birthdayForInstitutes/:amount", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
 
-    let restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...req.body.restrictedHouses]
+    let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...req.body.restrictedHouses]
 
     finalResult = await createOrderForInstitutes(newOrder, req.body.prohibitedId, restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -7417,8 +7454,23 @@ async function fillOrderForInstitutes(
 
 
   let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
-  //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ПЕРВОМАЙСКИЙ"] } });
-
+  //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true }); // ИСПРАВИТЬ
+  //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
+  //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
+/*   let activeHouse = await House.find({
+    isReleased: false, noAddress: false, isActive: true, nursingHome: {
+      $in: [ "СТЕПУРИНО",
+        "ЯСНАЯ_ПОЛЯНА",
+        "УЛЬЯНКОВО",
+        "СЕЛЬЦО",
+        "ДОНЕЦК",
+        "ЗОЛОТАРЕВКА",
+        "ОКТЯБРЬСКИЙ",
+        "СЛОБОДА-БЕШКИЛЬ",
+        "ТИМАШЕВСК"
+      ]
+    }
+  }); */
 
   console.log("activeHouse");
   console.log(activeHouse.length);
@@ -7461,18 +7513,19 @@ async function fillOrderForInstitutes(
 
     if (holiday == "День пожилого человека 2024") {
       count = await SeniorDay.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
+        // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
       }).countDocuments();
     }
 
 
 
     /*  console.log("house.nursingHome");
-      console.log(house.nursingHome);
+      console.log(house.nursingHome);  
   
            console.log("count");
-          console.log(count);
-       */
+          console.log(count); */
+
     if (count == amount) {
       seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, house.nursingHome, prohibitedId);
       return seniorsData;
@@ -7483,6 +7536,7 @@ async function fillOrderForInstitutes(
     }
 
     if (count < amount && count > 2) {
+    //if (count < amount && count > 0) {
       smallerHouses.push(
         {
           nursingHome: house.nursingHome,
@@ -7496,6 +7550,13 @@ async function fillOrderForInstitutes(
     seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, biggerHouse, prohibitedId);
     return seniorsData;
   }
+
+  console.log("amountInSmallerHouses");
+  console.log(amountInSmallerHouses);
+
+  console.log("amount");
+  console.log(amount);
+
   if (amountInSmallerHouses < amount) {
     return [];
   }
@@ -7508,10 +7569,14 @@ async function fillOrderForInstitutes(
   let currentAmount = amount;
   //  console.log(amount);
 
-  if (amount >= smallerHouses[0] * 2) {
+
+  console.log("smallerHouses[0]");
+  console.log(smallerHouses[0]);
+
+  if (amount >= smallerHouses[0].amount * 2) {
 
     for (let i = 0; i < smallerHouses.length; i++) {
-      let index = smallerHouses.findLastIndex(item => item.amount == currentAmount);
+      let index = smallerHouses.lastIndexOf(item => item.amount == currentAmount);
 
       if (index != -1 && index >= i) {
         let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId);
@@ -7525,7 +7590,7 @@ async function fillOrderForInstitutes(
           currentAmount -= currentAmount;
           return seniorsData;
         } else {
-          if (currentAmount - smallerHouses[i].amount >= 5) {
+          if (currentAmount - smallerHouses[i].amount >= 3) { // ИСПРАВИТЬ на 3
             let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId);
             seniorsData = [...seniorsData, ...seniors];
             currentAmount -= smallerHouses[i].amount;
@@ -7548,7 +7613,8 @@ async function fillOrderForInstitutes(
         console.log('amount2');
         console.log(amount2); */
 
-    while (amount1 > 3) {
+     while (amount1 > 3) {
+   // while (amount1 > 0) {
       let index1 = smallerHouses.findIndex(item => item.amount == amount1);
       let index2 = smallerHouses.findIndex(item => item.amount == amount2);
       if (index1 != -1 && index2 != -1 && index1 != index2) {
@@ -7654,8 +7720,8 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     seniorsData = await SeniorDay.find({
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 1 },
-      _id: { $nin: prohibitedId }
+      plusAmount: { $lt: 3 },
+      _id: { $nin: prohibitedId } // ИСПРАВИТЬ
     }).limit(amount);
 
     console.log("seniorsData");
