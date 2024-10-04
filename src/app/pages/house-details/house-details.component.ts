@@ -52,6 +52,7 @@ export class HouseDetailsComponent implements OnInit {
         this.form.controls.address.setValue(this.house.address);
         this.form.controls.region.setValue(this.house.region);
         this.form.controls.adminComment.setValue(this.house.adminComment);
+        this.form.controls.notes.setValue(this.house.notes);
         this.form.controls.infoComment.setValue(this.house.infoComment);
         this.form.controls.isActive.setValue(this.house.isActive);
         this.form.controls.noAddress.setValue(this.house.noAddress);
@@ -71,6 +72,7 @@ export class HouseDetailsComponent implements OnInit {
       address: [null, Validators.compose([Validators.required])],
       infoComment: [null],
       adminComment: [null],
+      notes: [null],
       noAddress: [false],
       isReleased: [false],
       isActive: [true],
@@ -92,6 +94,7 @@ export class HouseDetailsComponent implements OnInit {
       infoComment: this.form.controls.infoComment.value,
       adminComment: this.form.controls.adminComment.value,
       noAddress: this.form.controls.noAddress.value,
+      notes: this.form.controls.notes.value,
       isReleased: this.form.controls.isReleased.value,
       isActive: this.form.controls.isActive.value,
       dateLastUpdate: dateUpdate,

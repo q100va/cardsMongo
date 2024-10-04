@@ -16,6 +16,7 @@ let housesSchema = new Schema(
     address: { type: String, required: true },
     infoComment: { type: String },
     adminComment: { type: String },
+    notes: { type: String },
     noAddress: { type: Boolean, default: false },
     isReleased: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },

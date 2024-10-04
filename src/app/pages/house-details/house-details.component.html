@@ -44,6 +44,11 @@ html code to update
                   placeholder=" Дополнительный комментарий"  />
     
               </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['notes']"
+                  placeholder="Примечания"  />
+    
+              </mat-form-field>
                 <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
                 <br />
                 <mat-slide-toggle [formControl]="form.controls['noAddress']" >Администрация просит не указывать обратный адрес</mat-slide-toggle>

@@ -594,11 +594,11 @@ async function findSeniors() {
  //let houses = ["ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "УЛЬЯНКОВО", "КРАСНЫЙ_ХОЛМ"];
 //let houses = ["ЗОЛОТАРЕВКА"];
 //let houses = ["БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"];
+//let houses = ["УСТЬ-МОСИХА", "ЕВПАТОРИЯ"];
 
-
-// let list = await Senior.find({ nursingHome: { $in: houses }, isDisabled: false, dateExit: null, isRestricted: false, noAddress: false, isReleased: false, yearBirthday: { $lt: 1965 } });
- //let list = await Senior.find({ nursingHome: { $nin: notActiveHousesNames }, isDisabled: false, dateExit: null, isRestricted: false, noAddress: false, isReleased: false, yearBirthday: { $lt: 1965 } });
- let list = await Senior.find({ nursingHome: { $nin: notActiveHousesNames }, isDisabled: false, dateExit: null, isRestricted: false, noAddress: true, yearBirthday: { $lt: 1965 } });
+//let list = await Senior.find({ nursingHome: { $in: houses }, isDisabled: false, dateExit: null, isRestricted: false, noAddress: false, isReleased: false, yearBirthday: { $lt: 1965 } });
+ let list = await Senior.find({ nursingHome: { $nin: notActiveHousesNames }, isDisabled: false, dateExit: null, isRestricted: false, noAddress: false, isReleased: false, yearBirthday: { $lt: 1965 } });
+// let list = await Senior.find({ nursingHome: { $nin: notActiveHousesNames }, isDisabled: false, dateExit: null, isRestricted: false, noAddress: true, yearBirthday: { $lt: 1965 } });
   //console.log(list);
 
   if (list.length == 0) return "Не найдены поздравляющие, соответствующие запросу.";
@@ -657,12 +657,12 @@ async function findSeniors() {
   console.log("newList.length");
   console.log(newList.length);
   let existedList = await SeniorDay.find({absent: false});
-existedList = await checkDoubles(existedList);
+//existedList = await checkDoubles(existedList);
   console.log("existedList");
   console.log(existedList.length);
 
 
-/*   await findSeniorDayDoubles(existedList);
+  await findSeniorDayDoubles(existedList);
   await checkSeniorDayFullness(newList, existedList);
 
   existedList = await SeniorDay.find({absent: false});
@@ -683,7 +683,7 @@ existedList = await checkDoubles(existedList);
   console.log(`3- ${finalList.length} documents were inserted`);
 
   result = (finalList.length == newList.length) ? 'The list has been formed successfully ' : `${newList.length < finalList.insertedCount} record(s) from ${newList.length} weren't included in the list`
-  //console.log("3 - final" + finalList);  */
+  //console.log("3 - final" + finalList); 
   return result;
 }
 
@@ -777,6 +777,12 @@ router.post("/new-year/create", checkAuth, async (req, res) => {
 
 async function findAllNYCelebrators(houses) {
 
+/*   let activeHouses = await House.find({isActive: true});
+  for (let house of activeHouses) {
+    let amount = await Senior.find({nursingHome: house.nursingHome, isDisabled: false, isRestricted: false, dateExit: null}).estimatedDocumentCount();
+    await House.updateOne({nursingHome: house.nursingHome}, {$set :{"statistic.newYear.amount": amount}});
+  } */
+
   //throw new Error("Something bad happened");
   let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
@@ -784,6 +790,7 @@ async function findAllNYCelebrators(houses) {
   let namesOfUpdatedNursingHome = [];
   for (let home of houses) {
     namesOfUpdatedNursingHome.push(home.nursingHome);
+    await House.updateOne({nursingHome: home.nursingHome}, {$set :{"statistic.newYear.amount": 0}});
   }
   console.log(namesOfUpdatedNursingHome);
 
@@ -823,6 +830,8 @@ async function findAllNYCelebrators(houses) {
     }); */
 
   let updatedCelebrators = [];
+  
+
   for (let celebrator of list) {
 
     /*       let cloneSpecialComment = await specialComment(
@@ -1024,7 +1033,7 @@ async function createCloneCelebratorNY(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: 'Новый год 2024',
+    holyday: 'Новый год 2025',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +
@@ -2025,8 +2034,8 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check HB fullness " + req.body.nursingHome);
-   // let result = await checkAllHBFullness(req.body.nursingHome);
-    let result = await checkAllHBFullness("УСТЬ-БУЗУЛУКСКАЯ");
+    let result = await checkAllHBFullness(req.body.nursingHome);
+   // let result = await checkAllHBFullness("ВЕЛИКИЕ_ЛУКИ");
     console.log("4-check HB fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);

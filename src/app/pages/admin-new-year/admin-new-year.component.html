@@ -96,7 +96,7 @@
 
                 <ng-container matColumnDef="nursingHome">
                     <mat-header-cell *matHeaderCellDef> Краткое название </mat-header-cell>
-                    <mat-cell *matCellDef="let house"> {{ house.nursingHome }} </mat-cell>
+                    <mat-cell *matCellDef="let house"> {{ house.nursingHome }} {{house.notes}}</mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="noAddress">

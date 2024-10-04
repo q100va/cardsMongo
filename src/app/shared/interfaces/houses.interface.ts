@@ -12,6 +12,7 @@ export interface House {
   address: string;
   infoComment?: string;
   adminComment?: string;
+  notes?: string;
   noAddress: boolean;
   isReleased: boolean;
   isActive: boolean;

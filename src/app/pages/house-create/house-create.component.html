@@ -35,12 +35,17 @@ html code
           <mat-form-field>
             <input type="text" matInput [formControl]="form.controls['adminComment']"
               placeholder="Комментарий администрации"  />
-
           </mat-form-field>
+
           <mat-form-field>
             <input type="text" matInput [formControl]="form.controls['infoComment']"
               placeholder=" Дополнительный комментарий"  />
 
+          </mat-form-field>
+
+          <mat-form-field>
+            <input type="text" matInput [formControl]="form.controls['notes']"
+              placeholder="Примечания"  />
           </mat-form-field>
               <mat-slide-toggle [formControl]="form.controls['isActive']" >Интернат участвует в поздравлениях</mat-slide-toggle>
               <br />

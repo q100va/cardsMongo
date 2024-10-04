@@ -36,6 +36,7 @@ export class HouseCreateComponent implements OnInit {
       address: [null, Validators.compose([Validators.required])],
       infoComment: [null],
       adminComment: [null],
+      notes: [null],
       noAddress: [false],
       isReleased: [false],
       isActive: [true],
@@ -55,6 +56,7 @@ export class HouseCreateComponent implements OnInit {
     newHouse.address = this.form.controls.address.value;
     newHouse.infoComment = this.form.controls.infoComment.value;
     newHouse.adminComment = this.form.controls.adminComment.value;
+    newHouse.notes = this.form.controls.notes.value;
     newHouse.noAddress = this.form.controls.noAddress.value;
     newHouse.isReleased = this.form.controls.isReleased.value;
     newHouse.isActive = this.form.controls.isActive.value;

@@ -554,7 +554,7 @@ async function deletePluses(deletedOrder, full) {
             }
           }
           else {
-            if (deletedOrder.holiday == "Новый год 2024") {
+            if (deletedOrder.holiday == "Новый год 2025") {
               for (let lineItem of deletedLineItems) {
                 for (let person of lineItem.celebrators) {
 
@@ -840,7 +840,7 @@ async function restorePluses(updatedOrder) {
             }
           }
           else { //ADDED STATISTIC!!!
-            if (updatedOrder.holiday == "Новый год 2024") {
+            if (updatedOrder.holiday == "Новый год 2025") {
               for (let lineItem of updatedOrder.lineItems) {
                 for (let person of lineItem.celebrators) {
                   console.log("person");
@@ -1707,7 +1707,8 @@ router.post("/senior-day", checkAuth, async (req, res) => {
     console.log("doneHouses");
     console.log(doneHouses);
     let restrictedHouses = [];
-    if (doneHouses) restrictedHouses = doneHouses.houses;  //ИСПРАВИТЬ
+  
+   if (doneHouses) restrictedHouses = doneHouses.houses;  //ИСПРАВИТЬ
     console.log("restrictedHouses");
     console.log(restrictedHouses);
 
@@ -1961,8 +1962,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения октября 2024") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 21,
+      "date2": 25,
       "isActive": true,
       "key": 0,
       "maxPlus": 3, //PLUSES1
@@ -3282,6 +3283,9 @@ async function deleteErrorPlusNewYear(order_id, ...userName) {
 
         }
         await NewYear.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
+        if(order.institutes != []) {
+          await NewYear.updateMany({ _id: { $in: seniors_ids } }, { $inc: { forInstitute: - 1 } }, { upsert: false });
+        }
 
 
       }
@@ -3641,7 +3645,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
       data = await collectSeniorsNewYear(data, orderFilter);
 
-      if (data.counter < proportion[category]) {
+       /*  if (data.counter < proportion[category]) {
         data.maxPlus = 2;
 
         data = await collectSeniorsNewYear(data, orderFilter);
@@ -3659,7 +3663,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-      /*     if (data.counter < proportion[category]) {
+        if (data.counter < proportion[category]) {
              data.maxPlus = 5;
      
              data = await collectSeniorsNewYear(data, orderFilter);
@@ -3909,7 +3913,7 @@ async function searchSeniorNewYear(
     // filter.comment1 = {$ne: "(отд. 4)"}; //CANCEL
     // filter.comment2 = /труда/; //CANCEL
     //filter.comment1 = /верующ/; //CANCEL
-    filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
+   // filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
     //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
     //
     console.log("filter");
@@ -7453,7 +7457,7 @@ async function fillOrderForInstitutes(
   console.log(restrictedHouses);
 
 
-  let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
+let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true }); // ИСПРАВИТЬ
   //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
@@ -7469,6 +7473,22 @@ async function fillOrderForInstitutes(
         "СЛОБОДА-БЕШКИЛЬ",
         "ТИМАШЕВСК"
       ]
+    }
+  });  
+
+   let activeHouse = await House.find({
+    isReleased: false, noAddress: false, isActive: true, nursingHome: {
+      $in: [ "ДИМИТРОВГРАД"]
+    }
+  }); */
+ 
+
+  
+/* 
+
+  let activeHouse = await House.find({
+    isReleased: false, noAddress: false, isActive: true, region: {
+      $in: [ "ЛЕНИНГРАДСКАЯ", "ПСКОВСКАЯ", "НОВГОРОДСКАЯ", "МУРМАНСКАЯ"]
     }
   }); */
 
@@ -7488,7 +7508,7 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Дни рождения октября 2024") {
       count = await List.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 5 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
@@ -7513,7 +7533,14 @@ async function fillOrderForInstitutes(
 
     if (holiday == "День пожилого человека 2024") {
       count = await SeniorDay.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+        // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
+      }).countDocuments();
+    }
+
+    if (holiday == "Новый год 2025") {
+      count = await NewYear.find({
+        forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
       }).countDocuments();
     }
@@ -7720,7 +7747,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     seniorsData = await SeniorDay.find({
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 3 },
+      plusAmount: { $lt: 4 },
       _id: { $nin: prohibitedId } // ИСПРАВИТЬ
     }).limit(amount);
 
@@ -7731,6 +7758,44 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
     for (let senior of seniorsData) {
       await SeniorDay.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+    }
+  }
+
+  if (holiday == "Новый год 2025") {
+
+    seniorsData = await NewYear.find({
+      forInstitute: 0,
+      nursingHome: nursingHome,
+      absent: false,
+      plusAmount: { $lt: 1 },
+      _id: { $nin: prohibitedId } // ИСПРАВИТЬ
+    }).limit(amount);
+
+    console.log("seniorsData");
+    console.log(nursingHome);
+    console.log(seniorsData.length);
+
+
+    for (let senior of seniorsData) {
+      await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1 } }, { upsert: false });
+
+      senior = await NewYear.findOne({ _id: senior._id });
+      let newP = senior.plusAmount;
+      let p = newP - 1;
+      let c = senior.category;
+      await House.updateOne(
+        {
+          nursingHome: senior.nursingHome
+        },
+        {
+          $inc: {
+            ["statistic.newYear.plus" + p]: -1,
+            ["statistic.newYear.plus" + newP]: 1,
+            ["statistic.newYear." + c + "Plus"]: 1,
+          }
+        }
+
+      );
     }
   }
 
@@ -7760,7 +7825,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     seniorsData = await List.find({
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 5 },
+      plusAmount: { $lt: 3 },
       _id: { $nin: prohibitedId }
     }).limit(amount);
 

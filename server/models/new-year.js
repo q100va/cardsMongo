@@ -41,9 +41,10 @@ const listSchema = new Schema(
     absent: { type: Boolean, default: false },   
     secondTime: {type: Boolean, default: false},
     thirdTime: {type: Boolean, default: false},
-    forthTime:     {type: Boolean, default: false}
+    forthTime:     {type: Boolean, default: false},
+    forInstitute: { type: Number, default: 0 },
   },
-  { collection: "newYear_2024" }
+  { collection: "newYear_2025" }
 );
 
 module.exports = mongoose.model("NewYear", listSchema);
