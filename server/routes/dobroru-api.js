@@ -122,13 +122,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения ноября 2024") {
+                if (holiday == "Дни рождения декабря 2024") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения октября 2024") {
+                if (holiday == "Дни рождения ноября 2024") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения сентября 2024") {
+                if (holiday == "Дни рождения октября 2024") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -154,10 +154,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения октября 2024") {
+    if (newOrder.holiday == "Дни рождения ноября 2024") {
         period = {
-            "date1": 11,
-            "date2": 20,
+            "date1": 1,
+            "date2": 10,
             "isActive": true,
             "key": 0,
             "maxPlus": 4, //PLUSES
@@ -822,13 +822,13 @@ async function collectSeniors(data, orderFilter, holiday) {
             if (result) {
                 //console.log(result);
                 await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-                if (holiday == "Дни рождения октября 2024") {
+                if (holiday == "Дни рождения декабря 2024") {
                     await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения сентября 2024") {
+                if (holiday == "Дни рождения ноября 2024") {
                     await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения августа 2024") {
+                if (holiday == "Дни рождения октября 2024") {
                     await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
 
@@ -1002,13 +1002,13 @@ async function searchSenior(
         //console.log("filter CHECK");
         //console.log(filter);
 
-        if (holiday == "Дни рождения октября 2024") {
+        if (holiday == "Дни рождения декабря 2024") {
             celebrator = await ListNext.findOne(filter);
         }
-        if (holiday == "Дни рождения сентября 2024") {
+        if (holiday == "Дни рождения ноября 2024") {
             celebrator = await List.findOne(filter);
         }
-        if (holiday == "Дни рождения августа 2024") {
+        if (holiday == "Дни рождения октября 2024") {
             celebrator = await ListBefore.findOne(filter);
         }
 
