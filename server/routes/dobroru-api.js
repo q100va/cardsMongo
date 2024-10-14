@@ -160,7 +160,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "date2": 20,
             "isActive": true,
             "key": 0,
-            "maxPlus": 5 //PLUSES
+            "maxPlus": 5, //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }

@@ -1995,7 +1995,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 31,
       "isActive": true,
       "key": 4,
-      "maxPlus": 5,
+      "maxPlus": 4,
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -2805,7 +2805,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") ? 4 : data.maxPlus; //   || (standardFilter.category == "yangWomen") PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") ? 5: data.maxPlus; //   || (standardFilter.category == "yangWomen") PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -7509,14 +7509,14 @@ let activeHouse = await House.find({ isReleased: false, noAddress: false, isActi
         "ТИМАШЕВСК"
       ]
     }
-  });  
+  });   
 
    let activeHouse = await House.find({
     isReleased: false, noAddress: false, isActive: true, nursingHome: {
-      $in: [ "ВЫШНИЙ_ВОЛОЧЕК"]
+      $in: [ "ЯСНАЯ_ПОЛЯНА"]
     }
   }); */
- 
+
 
   
 /* 
@@ -7577,8 +7577,8 @@ let activeHouse = await House.find({ isReleased: false, noAddress: false, isActi
 
     if (holiday == "Новый год 2025") {
       count = await NewYear.find({
-        forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
-        // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
+         forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
+        // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
 
@@ -7804,7 +7804,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
       forInstitute: 0,
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 1 },
+      plusAmount: { $lt:1 },
       _id: { $nin: prohibitedId } // ИСПРАВИТЬ
     }).limit(amount);
 
