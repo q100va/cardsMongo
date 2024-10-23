@@ -222,11 +222,92 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
         console.log("req.params.userName");
         console.log(req.params.userName); */
-    const length = await Order.countDocuments(
-      { userName: req.params.userName, isAccepted: false, isDisabled: false,   } //isOverdue: false, isReturned: false,
-    )
+    const length = await Order.countDocuments({
+      $and: [
+        {
+          isDisabled: false,
+          userName: req.params.userName,
+        },
+        {
+          $or: [
+            {
+              isAccepted: false,
+              isOverdue: false,
+              isReturned: false
+            },
+            {
+              isOverdue: true,
+              holiday: {
+                $in: [
+                  "Новый год 2025",
+                  "Дни рождения ноября 2024",
+                  "Дни рождения декабря 2024",
+                  "Именины ноября 2024",
+                  "Именины декабря 2024"
+                ]
+              }
+            },
+            {
+              isReturned: true,
+              holiday: {
+                $in: [
+                  "Новый год 2025",
+                  "Дни рождения ноября 2024",
+                  "Дни рождения декабря 2024",
+                  "Именины ноября 2024",
+                  "Именины декабря 2024"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    });
 
-    Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false,  }, function (err, orders) { //isOverdue: false, isReturned: false
+    console.log("length");
+    console.log(length);
+
+    await Order.find({
+      $and: [
+        {
+          isDisabled: false,
+          userName: req.params.userName,
+        },
+        {
+          $or: [
+            {
+              isAccepted: false,
+              isOverdue: false,
+              isReturned: false
+            },
+            {
+              isOverdue: true,
+              holiday: {
+                $in: [
+                  "Новый год 2025",
+                  "Дни рождения ноября 2024",
+                  "Дни рождения декабря 2024",
+                  "Именины ноября 2024",
+                  "Именины декабря 2024"
+                ]
+              }
+            },
+            {
+              isReturned: true,
+              holiday: {
+                $in: [
+                  "Новый год 2025",
+                  "Дни рождения ноября 2024",
+                  "Дни рождения декабря 2024",
+                  "Именины ноября 2024",
+                  "Именины декабря 2024"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }, function (err, orders) {
       if (err) {
         console.log(err);
 
@@ -237,6 +318,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
         );
         res.status(500).send(readUserMongodbErrorResponse.toObject());
       } else {
+        console.log("ORDERS");
+        console.log(orders);
 
         // let correctedOrders = correctDate(orders);
         let result = {
@@ -259,7 +342,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
         //console.log(orders);
         res.json(readUserResponse.toObject());
       }
-    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });;
+    }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
   } catch (e) {
     console.log(e);
     const readUserCatchErrorResponse = new BaseResponse(
@@ -324,16 +407,115 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     let length;
+/* 
+    db.inventory.find({ $or: [{ quantity: { $lt: 20 } }, { price: 10 }] })
+    db.inventory.find({ $or: [{ quantity: { $lt: 20 } }, { price: 10 }] })
+    db.inventory.find({ price: { $ne: 1.99, $exists: true } })
+    db.inventory.find({
+      $and: [
+        { $or: [{ qty: { $lt: 10 } }, { qty: { $gt: 50 } }] },
+        { $or: [{ sale: true }, { price: { $lt: 5 } }] }
+      ]
+    })
+    db.inventory.find({ $and: [{ price: { $ne: 1.99 } }, { price: { $exists: true } }] }) */
+
+
     if (req.body.isShowAll) {
       length = await Order.countDocuments({ userName: req.body.userName, isDisabled: false });
       updatedOrders = await Order.find(
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, });//isReturned: false, isOverdue: false 
-      updatedOrders = await Order.find(
-        { isAccepted: false, userName: req.body.userName, isDisabled: false,  }//isReturned: false, isOverdue: false
-      ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+
+      length = await Order.countDocuments({
+        $and: [
+          {
+            isDisabled: false,
+            userName: req.body.userName,
+          },
+          {
+            $or: [
+              {
+                isAccepted: false,
+                isOverdue: false,
+                isReturned: false
+              },
+              {
+                isOverdue: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              },
+              {
+                isReturned: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      });
+      updatedOrders = await Order.find({
+        $and: [
+          {
+            isDisabled: false,
+            userName: req.body.userName,
+          },
+          {
+            $or: [
+              {
+                isAccepted: false,
+                isOverdue: false,
+                isReturned: false
+              },
+              {
+                isOverdue: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              },
+              {
+                isReturned: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
+
+
+
+      /*       length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, });//isReturned: false, isOverdue: false 
+            updatedOrders = await Order.find(
+              { isAccepted: false, userName: req.body.userName, isDisabled: false,  }//isReturned: false, isOverdue: false
+            ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 }); */
     }
     //let correctedOrders = correctDate(updatedOrders);
     let result = {
@@ -369,9 +551,89 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false,  });//isReturned: false, isOverdue: false
+      length = await Order.countDocuments({
+        $and: [
+          {
+            isDisabled: false,
+            userName: req.body.userName,
+          },
+          {
+            $or: [
+              {
+                isAccepted: false,
+                isOverdue: false,
+                isReturned: false
+              },
+              {
+                isOverdue: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              },
+              {
+                isReturned: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      });//isReturned: false, isOverdue: false
       updatedOrders = await Order.find(
-        { isAccepted: false, userName: req.body.userName, isDisabled: false,  }//isReturned: false, isOverdue: false
+        {
+          $and: [
+            {
+              isDisabled: false,
+              userName: req.body.userName,
+            },
+            {
+              $or: [
+                {
+                  isAccepted: false,
+                  isOverdue: false,
+                  isReturned: false
+                },
+                {
+                  isOverdue: true,
+                  holiday: {
+                    $in: [
+                      "Новый год 2025",
+                      "Дни рождения ноября 2024",
+                      "Дни рождения декабря 2024",
+                      "Именины ноября 2024",
+                      "Именины декабря 2024"
+                    ]
+                  }
+                },
+                {
+                  isReturned: true,
+                  holiday: {
+                    $in: [
+                      "Новый год 2025",
+                      "Дни рождения ноября 2024",
+                      "Дни рождения декабря 2024",
+                      "Именины ноября 2024",
+                      "Именины декабря 2024"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }//isReturned: false, isOverdue: false
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
     // let correctedOrders = correctDate(updatedOrders);
@@ -428,9 +690,89 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false,  userName: req.body.userName, isDisabled: false });//isReturned: false, isOverdue: false,
+      length = await Order.countDocuments({
+        $and: [
+          {
+            isDisabled: false,
+            userName: req.body.userName,
+          },
+          {
+            $or: [
+              {
+                isAccepted: false,
+                isOverdue: false,
+                isReturned: false
+              },
+              {
+                isOverdue: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              },
+              {
+                isReturned: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      });//isReturned: false, isOverdue: false,
       updatedOrders = await Order.find(
-        { isAccepted: false,  userName: req.body.userName, isDisabled: false }//isReturned: false, isOverdue: false,
+        {
+          $and: [
+            {
+              isDisabled: false,
+              userName: req.body.userName,
+            },
+            {
+              $or: [
+                {
+                  isAccepted: false,
+                  isOverdue: false,
+                  isReturned: false
+                },
+                {
+                  isOverdue: true,
+                  holiday: {
+                    $in: [
+                      "Новый год 2025",
+                      "Дни рождения ноября 2024",
+                      "Дни рождения декабря 2024",
+                      "Именины ноября 2024",
+                      "Именины декабря 2024"
+                    ]
+                  }
+                },
+                {
+                  isReturned: true,
+                  holiday: {
+                    $in: [
+                      "Новый год 2025",
+                      "Дни рождения ноября 2024",
+                      "Дни рождения декабря 2024",
+                      "Именины ноября 2024",
+                      "Именины декабря 2024"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }//isReturned: false, isOverdue: false,
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
     //let correctedOrders = correctDate(updatedOrders);
@@ -719,9 +1061,89 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false });//isReturned: false, isOverdue: false, 
+      length = await Order.countDocuments({
+        $and: [
+          {
+            isDisabled: false,
+            userName: req.body.userName,
+          },
+          {
+            $or: [
+              {
+                isAccepted: false,
+                isOverdue: false,
+                isReturned: false
+              },
+              {
+                isOverdue: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              },
+              {
+                isReturned: true,
+                holiday: {
+                  $in: [
+                    "Новый год 2025",
+                    "Дни рождения ноября 2024",
+                    "Дни рождения декабря 2024",
+                    "Именины ноября 2024",
+                    "Именины декабря 2024"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      });//isReturned: false, isOverdue: false, 
       updatedOrders = await Order.find(
-        { isAccepted: false, userName: req.body.userName, isDisabled: false }//isReturned: false, isOverdue: false, 
+        {
+          $and: [
+            {
+              isDisabled: false,
+              userName: req.body.userName,
+            },
+            {
+              $or: [
+                {
+                  isAccepted: false,
+                  isOverdue: false,
+                  isReturned: false
+                },
+                {
+                  isOverdue: true,
+                  holiday: {
+                    $in: [
+                      "Новый год 2025",
+                      "Дни рождения ноября 2024",
+                      "Дни рождения декабря 2024",
+                      "Именины ноября 2024",
+                      "Именины декабря 2024"
+                    ]
+                  }
+                },
+                {
+                  isReturned: true,
+                  holiday: {
+                    $in: [
+                      "Новый год 2025",
+                      "Дни рождения ноября 2024",
+                      "Дни рождения декабря 2024",
+                      "Именины ноября 2024",
+                      "Именины декабря 2024"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }//isReturned: false, isOverdue: false, 
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
     //let correctedOrders = correctDate(updatedOrders);
@@ -1707,18 +2129,18 @@ router.post("/senior-day", checkAuth, async (req, res) => {
     console.log("doneHouses");
     console.log(doneHouses);
     let restrictedHouses = [];
-  
-   if (doneHouses) restrictedHouses = doneHouses.houses;  //ИСПРАВИТЬ
+
+    if (doneHouses) restrictedHouses = doneHouses.houses;  //ИСПРАВИТЬ
     console.log("restrictedHouses");
     console.log(restrictedHouses);
 
     let restrictedId = [];
 
-/*     let restrictedId = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId, });
-    restrictedId = restrictedId.seniorsIds;
-
-    console.log("restrictedId");
-    console.log(restrictedId); */
+    /*     let restrictedId = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId, });
+        restrictedId = restrictedId.seniorsIds;
+    
+        console.log("restrictedId");
+        console.log(restrictedId); */
 
 
     finalResult = await createOrderForSeniorDay(newOrder, restrictedHouses, restrictedId);
@@ -2805,7 +3227,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen"|| (standardFilter.category == "yangWomen")) ? 5: data.maxPlus; //    PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen" || (standardFilter.category == "yangWomen")) ? 5 : data.maxPlus; //    PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -3283,7 +3705,7 @@ async function deleteErrorPlusNewYear(order_id, ...userName) {
 
         }
         await NewYear.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
-        if(order.institutes != []) {
+        if (order.institutes != []) {
           await NewYear.updateMany({ _id: { $in: seniors_ids } }, { $inc: { forInstitute: - 1 } }, { upsert: false });
         }
 
@@ -3645,29 +4067,29 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
       data = await collectSeniorsNewYear(data, orderFilter);
 
-       /*  if (data.counter < proportion[category]) {
-        data.maxPlus = 2;
+      /*  if (data.counter < proportion[category]) {
+       data.maxPlus = 2;
 
-        data = await collectSeniorsNewYear(data, orderFilter);
-      }
+       data = await collectSeniorsNewYear(data, orderFilter);
+     }
 
-      if (data.counter < proportion[category]) {
-        data.maxPlus = 3;
+     if (data.counter < proportion[category]) {
+       data.maxPlus = 3;
 
-        data = await collectSeniorsNewYear(data, orderFilter);
-      }
+       data = await collectSeniorsNewYear(data, orderFilter);
+     }
 
 
-      if (data.counter < proportion[category]) {
-        data.maxPlus = 4;
+     if (data.counter < proportion[category]) {
+       data.maxPlus = 4;
 
-        data = await collectSeniorsNewYear(data, orderFilter);
-      }
-        if (data.counter < proportion[category]) {
-             data.maxPlus = 5;
-     
-             data = await collectSeniorsNewYear(data, orderFilter);
-           }    */
+       data = await collectSeniorsNewYear(data, orderFilter);
+     }
+       if (data.counter < proportion[category]) {
+            data.maxPlus = 5;
+    
+            data = await collectSeniorsNewYear(data, orderFilter);
+          }    */
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -3913,7 +4335,7 @@ async function searchSeniorNewYear(
     // filter.comment1 = {$ne: "(отд. 4)"}; //CANCEL
     // filter.comment2 = /труда/; //CANCEL
     //filter.comment1 = /верующ/; //CANCEL
-   // filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
+    // filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
     //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
     //
     console.log("filter");
@@ -7351,16 +7773,16 @@ router.post("/birthdayForInstitutes/:amount", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
 
-  let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...req.body.restrictedHouses] //, "ЧИКОЛА"
+    let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...req.body.restrictedHouses] //, "ЧИКОЛА"
 
-/*    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
-
-   let restrictedHouses;
-   if (doneHouses) {
-     restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...doneHouses.houses];
-   } else {
-     restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР"];
-   } */
+    /*    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
+    
+       let restrictedHouses;
+       if (doneHouses) {
+         restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...doneHouses.houses];
+       } else {
+         restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР"];
+       } */
 
     finalResult = await createOrderForInstitutes(newOrder, req.body.prohibitedId, restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
@@ -7492,40 +7914,40 @@ async function fillOrderForInstitutes(
   console.log(restrictedHouses);
 
 
-let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
-//let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
+  let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
+  //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
   //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
-/*   let activeHouse = await House.find({
-    isReleased: false, noAddress: false, isActive: true, nursingHome: {
-      $in: [ "СТЕПУРИНО",
-        "ЯСНАЯ_ПОЛЯНА",
-        "УЛЬЯНКОВО",
-        "СЕЛЬЦО",
-        "ДОНЕЦК",
-        "ЗОЛОТАРЕВКА",
-        "ОКТЯБРЬСКИЙ",
-        "СЛОБОДА-БЕШКИЛЬ",
-        "ТИМАШЕВСК"
-      ]
-    }
-  });   
-
-   let activeHouse = await House.find({
-    isReleased: false, noAddress: false, isActive: true, nursingHome: {
-      $in: [ "ЯСНАЯ_ПОЛЯНА"]
-    }
-  }); */
-
-
+  /*   let activeHouse = await House.find({
+      isReleased: false, noAddress: false, isActive: true, nursingHome: {
+        $in: [ "СТЕПУРИНО",
+          "ЯСНАЯ_ПОЛЯНА",
+          "УЛЬЯНКОВО",
+          "СЕЛЬЦО",
+          "ДОНЕЦК",
+          "ЗОЛОТАРЕВКА",
+          "ОКТЯБРЬСКИЙ",
+          "СЛОБОДА-БЕШКИЛЬ",
+          "ТИМАШЕВСК"
+        ]
+      }
+    });   
   
-/* 
+     let activeHouse = await House.find({
+      isReleased: false, noAddress: false, isActive: true, nursingHome: {
+        $in: [ "ЯСНАЯ_ПОЛЯНА"]
+      }
+    }); */
 
-  let activeHouse = await House.find({
-    isReleased: false, noAddress: false, isActive: true, region: {
-      $in: [ "ЛЕНИНГРАДСКАЯ", "ПСКОВСКАЯ", "НОВГОРОДСКАЯ", "МУРМАНСКАЯ"]
-    }
-  }); */
+
+
+  /* 
+  
+    let activeHouse = await House.find({
+      isReleased: false, noAddress: false, isActive: true, region: {
+        $in: [ "ЛЕНИНГРАДСКАЯ", "ПСКОВСКАЯ", "НОВГОРОДСКАЯ", "МУРМАНСКАЯ"]
+      }
+    }); */
 
   console.log("activeHouse");
   console.log(activeHouse.length);
@@ -7577,18 +7999,18 @@ let activeHouse = await House.find({ isReleased: false, noAddress: false, isActi
 
     if (holiday == "Новый год 2025") {
       count = await NewYear.find({
-         forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
+        forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
 
 
 
-     console.log("house.nursingHome");
-      console.log(house.nursingHome);  
-  
-           console.log("count");
-          console.log(count); 
+    console.log("house.nursingHome");
+    console.log(house.nursingHome);
+
+    console.log("count");
+    console.log(count);
 
     if (count == amount) {
       seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, house.nursingHome, prohibitedId);
@@ -7600,7 +8022,7 @@ let activeHouse = await House.find({ isReleased: false, noAddress: false, isActi
     }
 
     if (count < amount && count > 2) {
-    //if (count < amount && count > 0) {
+      //if (count < amount && count > 0) {
       smallerHouses.push(
         {
           nursingHome: house.nursingHome,
@@ -7677,8 +8099,8 @@ let activeHouse = await House.find({ isReleased: false, noAddress: false, isActi
         console.log('amount2');
         console.log(amount2); */
 
-     while (amount1 > 3) {
-   // while (amount1 > 0) {
+    while (amount1 > 3) {
+      // while (amount1 > 0) {
       let index1 = smallerHouses.findIndex(item => item.amount == amount1);
       let index2 = smallerHouses.findIndex(item => item.amount == amount2);
       if (index1 != -1 && index2 != -1 && index1 != index2) {
@@ -7804,7 +8226,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
       forInstitute: 0,
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt:1 },
+      plusAmount: { $lt: 1 },
       _id: { $nin: prohibitedId } // ИСПРАВИТЬ
     }).limit(amount);
 
