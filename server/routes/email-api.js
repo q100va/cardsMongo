@@ -14,9 +14,9 @@ const Client = require("../models/client");
 const nodemailer = require('nodemailer');
 //const { google } = require('googleapis');
 const Imap = require('node-imap');
-const inspect = require('util').inspect;
-const createDOMPurify = require('dompurify');
-const { JSDOM } = require('jsdom');
+//const inspect = require('util').inspect;
+//const createDOMPurify = require('dompurify');
+//const { JSDOM } = require('jsdom');
 const quotedPrintable = require('quoted-printable');
 //const simpleParser = require('mailparser').simpleParser;
 
@@ -393,10 +393,11 @@ router.get("/fetch-email/:domain", checkAuth, async (req, res) => {
                     // console.log(Buffer.from(order.text, "base64").toString("utf8"));
                     decodedBody = Buffer.from(order.text, "base64").toString("utf8");
                 }
-                const window = new JSDOM('').window;
-                const purify = createDOMPurify(window);
-                const sanitizedBody = purify.sanitize(decodedBody);
-                const cleanBody = sanitizedBody.replace(/(<([^>]+)>)/ig, ' ');
+                //const window = new JSDOM('').window;
+                //const purify = createDOMPurify(window);
+                //const sanitizedBody = purify.sanitize(decodedBody);
+                //const cleanBody = sanitizedBody.replace(/(<([^>]+)>)/ig, ' ');
+                const cleanBody = decodedBody.replace(/(<([^>]+)>)/ig, ' ');
                 order.text = cleanBody;
             }
 
