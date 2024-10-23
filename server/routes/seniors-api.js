@@ -476,10 +476,10 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
           //newSenior.dateExit != oldList[index].dateExit ||
           newSenior.comment1 != oldList[index].comment1 ||
           newSenior.comment2 != oldList[index].comment2 ||
-          newSenior.veteran != oldList[index].veteran ||
-          newSenior.child != oldList[index].child ||
-          newSenior.linkPhoto != oldList[index].linkPhoto ||
-          newSenior.nameDay != oldList[index].nameDay ||
+          //newSenior.veteran != oldList[index].veteran ||
+          //newSenior.child != oldList[index].child ||
+          //newSenior.linkPhoto != oldList[index].linkPhoto ||
+          //newSenior.nameDay != oldList[index].nameDay ||
           newSenior.gender != oldList[index].gender
         ) {
           let difference = {

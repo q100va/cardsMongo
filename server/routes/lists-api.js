@@ -1288,7 +1288,8 @@ router.delete("/", checkAuth, async (req, res) => {
 router.get("/", checkAuth, async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
-    ListBefore.find({ absent: { $ne: true } }, function (err, lists) {
+    //ListBefore.find({ absent: { $ne: true } }, function (err, lists) {
+      List.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -1649,7 +1650,8 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
 
-    let result = await checkAllNYFullness(req.body.nursingHome);
+    //let result = await checkAllNYFullness(req.body.nursingHome);
+    let result = await checkAllNYFullness("ПОБЕДИМ");
     console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
@@ -2034,8 +2036,8 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check HB fullness " + req.body.nursingHome);
-    let result = await checkAllHBFullness(req.body.nursingHome);
-   // let result = await checkAllHBFullness("ВЕЛИКИЕ_ЛУКИ");
+    //let result = await checkAllHBFullness(req.body.nursingHome);
+    let result = await checkAllHBFullness("ВОЛГОГРАД_КРИВОРОЖСКАЯ"); //ИСПРАВИТЬ
     console.log("4-check HB fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
@@ -2050,11 +2052,11 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 10, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 11, isRestricted: false, nursingHome: house });
 
   console.log("seniors HB" + seniors.length);
-  // let fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { fullData: 1 }); 
- let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+   // let fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { fullData: 1 }); 
+let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   //let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse HB" + fullHouse.length);
   let amount = 0;
@@ -2069,16 +2071,16 @@ async function checkAllHBFullness(house) {
       console.log(celebrator);
       let newCelebrator = await List.create(celebrator);
       // let newCelebrator = await ListNext.create(celebrator);
-     //let newCelebrator = await ListBefore.create(celebrator);
+    // let newCelebrator = await ListBefore.create(celebrator);
       console.log("added:");
       console.log(newCelebrator.fullData);
     }
   }
 
 
-  fullHouse = await List.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
+ fullHouse = await List.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   // fullHouse = await ListNext.find({ nursingHome: house, absent: false }, {_id:1, fullData: 1 });
-  //fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, {_id:1, fullData: 1 });
+  // fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, {_id:1, fullData: 1 });
   for (let item of fullHouse) {
     //let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
     let seniorIndex = seniors.findIndex(senior => (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) == item.fullData);
@@ -2095,9 +2097,9 @@ async function checkAllHBFullness(house) {
       console.log(newCelebrator.fullData); */
 
       
-     await List.updateOne({ _id: item._id }, { $set: { absent: true } });
+    await List.updateOne({ _id: item._id }, { $set: { absent: true } });
       //await ListNext.updateOne({_id: item._id}, {$set: {absent: true}});
-     // await ListBefore.updateOne({_id: item._id}, {$set: {absent: true}});
+     //  await ListBefore.updateOne({_id: item._id}, {$set: {absent: true}});
       console.log("deleted:");
       console.log(item.fullData);
     }

@@ -76,9 +76,17 @@
               <mat-icon color="primary">backup</mat-icon>
               <span>Обновление</span>
             </button>
-            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToInstaOrders()">
+<!--             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToInstaOrders()">
               <mat-icon color="primary">folder_open</mat-icon>
               <span>Группа заявок</span>
+            </button> -->
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToUploadHBOrders()">
+              <mat-icon color="primary">cake</mat-icon>
+              <span>Группа заявок ДР</span>
+            </button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToUploadNYOrders()">
+              <mat-icon color="primary">celebration</mat-icon>
+              <span>Группа заявок НГ</span>
             </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToAllOrders()">
               <mat-icon color="primary">receipt</mat-icon>

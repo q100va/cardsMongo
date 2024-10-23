@@ -27,6 +27,7 @@ const RolesApi = require("./routes/role-api");
 const OrdersApi = require("./routes/orders-api");
 const DobroruApi = require("./routes/dobroru-api");
 const ListsApi = require("./routes/lists-api");
+const EmailApi = require("./routes/email-api");
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -92,6 +93,7 @@ app.use("/api/roles", RolesApi);
 app.use("/api/orders", OrdersApi);
 app.use("/api/lists", ListsApi);
 app.use("/api/dobroru", DobroruApi);
+app.use("/api/email", EmailApi);
 
 /**
  * Create and start server

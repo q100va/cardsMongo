@@ -129,6 +129,7 @@ router.put("/:id", checkAuth, async (req, res) => {
             address: req.body.address,
             email: req.body.email,
             role: req.body.role,
+            //password: hashedPassword,
           }
         })
         const createUserResponse = new BaseResponse(200, "Query successful", true);

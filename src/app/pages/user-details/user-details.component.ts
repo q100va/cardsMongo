@@ -83,12 +83,12 @@ export class UserDetailsComponent implements OnInit {
       address: [null, Validators.compose([])],
       email: [null, Validators.compose([Validators.email])],
       role: [null, Validators.compose([Validators.required])],
-/*       password: [
+/*        password: [
         null,
         Validators.compose([
           Validators.pattern("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"),
         ]),
-      ], */
+      ],  */
     });
   }
 
@@ -100,7 +100,7 @@ export class UserDetailsComponent implements OnInit {
       address: this.form.controls.address.value,
       email: this.form.controls.email.value,
       role: this.form.controls.role.value,
-      //password: this.form.controls.password.value
+     //password: this.form.controls.password.value
     };
     console.log(updatedUser);
     this.userService.updateUser(this.userId, updatedUser).subscribe(

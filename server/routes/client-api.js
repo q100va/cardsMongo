@@ -720,8 +720,8 @@ router.get("/find-contacts/:contactType", checkAuth, async (req, res) => {
   try {
     console.log("/find-contacts/:contactType/:contact");
     let contacts = await Client.find({ isDisabled: false, [req.params.contactType]: { $ne: null } }, { [req.params.contactType]: 1, _id: 1 });
-    console.log("contacts");
-    console.log(contacts);
+   // console.log("contacts");
+  //  console.log(contacts);
 
     const findAllListsResponse = new BaseResponse("200", "Query successful", { contacts: contacts });
     res.json(findAllListsResponse.toObject());

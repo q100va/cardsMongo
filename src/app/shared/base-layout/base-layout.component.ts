@@ -99,6 +99,14 @@ export class BaseLayoutComponent implements OnInit {
     this.router.navigate(["/orders/insta"]);
   }
 
+  redirectToUploadHBOrders(): void {
+    this.router.navigate(["/orders/group-orders/hb"]);
+  }
+
+  redirectToUploadNYOrders(): void {
+    this.router.navigate(["/orders/group-orders/ny"]);
+  }
+
   redirectToAllOrders(): void {
     this.router.navigate(["/orders/all"]);
   }

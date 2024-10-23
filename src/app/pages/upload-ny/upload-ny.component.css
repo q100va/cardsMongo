@@ -1,0 +1,182 @@
+/* .left-container {
+    width: 25%; 
+    height: 100%;
+}*/
+
+
+
+.viewport {   
+    height: 1000px;
+    width: inherit;
+   /*  border: 1px solid black; */
+  }
+  .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper {
+    min-width: 200px !important;
+    width: 200px !important;
+}
+  
+  .item {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 12px; 
+    height: 150px;
+    cursor: pointer;
+  }
+
+  .item-text {
+    
+/*     text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; */
+
+    margin: 0; /* Убираем внешний отступ */
+    -webkit-line-clamp: 3; /* Число отображаемых строк */
+    display: -webkit-box; /* Включаем флексбоксы */
+    -webkit-box-orient: vertical; /* Вертикальная ориентация */
+    overflow: hidden; /* Обрезаем всё за пределами блока */
+  }
+
+/* border: 1px solid #e1dede;  */
+
+
+/*    .item:hover {   
+    border: 1px solid #66bb6a9a;   
+  }  */
+
+/*    .item:not(:hover) {
+    color: #000000;
+  }
+ */
+
+
+.main {
+    margin: 10px auto;
+    width: 95%;
+    
+  }
+
+  .mat-card {
+    padding: 35px;
+  }
+  
+  .mat-card-actions {
+    text-align: center;
+  }
+  
+  .title {
+    padding: 10px;
+    color: primary;
+    text-align: left;
+  }
+  
+  .msg-error {
+    color: red;
+    padding-top: 10px !important;
+  }
+  
+  button.submit {
+    background-color: #fbc02d;
+    color: whitesmoke;  
+    width: 20%;
+    margin-left: 10%;
+  }
+  
+  button.cancel {
+    border-color: #ef5350;
+    color: #ef5350; 
+    width: 20%;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+    
+  }
+  .wrapper {
+    display: grid;
+    grid-template-columns: 25% 35% 40%;
+    gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+  }
+
+  .scroll {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    min-height: 100%;
+  
+  }
+  .left {
+    grid-column: 2 / 3;
+    grid-row: 1;
+    min-height: 100%;
+  
+  }
+  .right {
+    grid-column: 3 / 3;
+    grid-row: 1;
+    min-height: 100%;
+  }
+  
+  .bottom {
+    margin-bottom: 30px;
+  }
+
+  td {
+    padding-right: 8px;
+  }
+
+  .example-full-width {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .example-half-width {
+    width: 70%;
+  }
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .example-headers-align {
+    margin-right: 8px;
+  }  
+
+  .example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+  }
+  
+  .example-radio-button {
+    margin: 5px;
+  }
+
+  .mat-form-field + .mat-form-field,
+.mat-raised-button {
+  margin-left: 8px;
+}
+
+.header {
+  color: limegreen;
+  font-size: 1.5em;
+}
+
+.warning {
+  color: red;
+}
+
+.icon-button{
+    background: none;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+  }
+  
+  .icon-button .icon {
+    width: 28px;
+  }

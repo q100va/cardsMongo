@@ -59,6 +59,8 @@ import { AdminEasterComponent } from "./pages/admin-easter/admin-easter.componen
 import { DobroruComponent } from "./pages/dobroru/dobroru.component";
 import { AdminVeteransComponent } from "./pages/admin-veterans/admin-veterans.component";
 import { SeniorDayComponent } from "./pages/senior-day/senior-day.component";
+import { UploadHbComponent } from "./pages/upload-hb/upload-hb.component";
+import { UploadNyComponent } from "./pages/upload-ny/upload-ny.component";
 const routes: Routes = [
   {
     path: "",
@@ -214,6 +216,16 @@ const routes: Routes = [
       {
         path: "orders/insta",
         component: InstaOrdersComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "orders/group-orders/hb",
+        component: UploadHbComponent,
+        canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "orders/group-orders/ny",
+        component: UploadNyComponent,
         canActivate: [AuthGuard, RoleGuard],
       },
       {

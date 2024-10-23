@@ -105,6 +105,10 @@ import { AdminEasterComponent } from './pages/admin-easter/admin-easter.componen
 import { DobroruComponent } from './pages/dobroru/dobroru.component';
 import { AdminVeteransComponent } from './pages/admin-veterans/admin-veterans.component';
 import { SeniorDayComponent } from './pages/senior-day/senior-day.component';
+import { UploadHbComponent } from './pages/upload-hb/upload-hb.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { UploadNyComponent } from './pages/upload-ny/upload-ny.component';
 
 @NgModule({
   declarations: [
@@ -160,7 +164,9 @@ import { SeniorDayComponent } from './pages/senior-day/senior-day.component';
     AdminEasterComponent,
     DobroruComponent,
     AdminVeteransComponent,
-    SeniorDayComponent
+    SeniorDayComponent,
+    UploadHbComponent,
+    UploadNyComponent
 
   ],
   imports: [
@@ -206,7 +212,9 @@ import { SeniorDayComponent } from './pages/senior-day/senior-day.component';
     MatTooltipModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    ClipboardModule
+    ClipboardModule,
+    MatSidenavModule,
+    ScrollingModule,
   ],
   entryComponents: [
     ConfirmationDialogComponent,
