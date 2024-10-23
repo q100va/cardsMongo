@@ -330,9 +330,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false });
+      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, });//isReturned: false, isOverdue: false 
       updatedOrders = await Order.find(
-        { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
+        { isAccepted: false, userName: req.body.userName, isDisabled: false,  }//isReturned: false, isOverdue: false
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
     //let correctedOrders = correctDate(updatedOrders);
@@ -369,9 +369,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false });
+      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false,  });//isReturned: false, isOverdue: false
       updatedOrders = await Order.find(
-        { isAccepted: false, userName: req.body.userName, isDisabled: false, isReturned: false, isOverdue: false }
+        { isAccepted: false, userName: req.body.userName, isDisabled: false,  }//isReturned: false, isOverdue: false
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
     // let correctedOrders = correctDate(updatedOrders);
@@ -719,9 +719,9 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
         { userName: req.body.userName, isDisabled: false }
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     } else {
-      length = await Order.countDocuments({ isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false });
+      length = await Order.countDocuments({ isAccepted: false, userName: req.body.userName, isDisabled: false });//isReturned: false, isOverdue: false, 
       updatedOrders = await Order.find(
-        { isAccepted: false, isReturned: false, isOverdue: false, userName: req.body.userName, isDisabled: false }
+        { isAccepted: false, userName: req.body.userName, isDisabled: false }//isReturned: false, isOverdue: false, 
       ).skip(pageSize * (currentPage - 1)).limit(pageSize).sort({ dateOfOrder: -1 });
     }
     //let correctedOrders = correctDate(updatedOrders);
