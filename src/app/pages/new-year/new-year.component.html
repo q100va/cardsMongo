@@ -400,8 +400,9 @@
                                 <tr formArrayName="institutes" *ngFor="let item of institutes.controls; index as i">
 
                                     <td colspan="3">
-                                        <p><mat-checkbox
-                                                [formControlName]="i">{{clientInstitutes[i].name}}</mat-checkbox></p>
+                                        <p><mat-checkbox [formControlName]="i"
+                                            (change)="checkInstitutes()">{{clientInstitutes[i].name}}
+                                        </mat-checkbox></p>
                                     </td>
 
                                 </tr>
@@ -617,6 +618,13 @@
 
                     </mat-card-content>
 
+                    <mat-card-content *ngIf="showInstruction"
+                        style="background-color: rgba(255, 255, 0, 0.409); font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%; font-style: italic;">
+                        Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки и
+                        только один раз к указанному празднику. Письма писать не нужно!<br />Для поздравления с другими
+                        праздниками нужно получать другие адреса. Списки на поздравления мы готовим примерно за 1,5
+                        месяца до праздника.
+                    </mat-card-content>
 
 
                     <mat-card-content *ngIf="showInstruction"
@@ -636,7 +644,7 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Учтите, что по России письма идут 14-20 дней.
+                                Учтите, что по перед новым годом письма идут примерно 21-30 дней.
                             </li>
                         </ul>
 
@@ -646,15 +654,14 @@
                                 ПРОСТЫМИ письмами (до 100 г).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет примерно 14-20 дней.
+                                Рассчитывайте, что срок доставки будет примерно 21-30 дней.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя
                                 совершенно не обязательно.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                На конверте/пакете укажите название праздника/праздников, особенно это актуально для
-                                дней рождений. (Например, "дни рождения октября" или "Новый год").
+                                На конверте/пакете укажите название праздника/праздников. (Например, "Новый год").
                             </li>
                         </ul>
 

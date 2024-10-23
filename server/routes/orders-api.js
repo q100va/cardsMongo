@@ -223,10 +223,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
         console.log("req.params.userName");
         console.log(req.params.userName); */
     const length = await Order.countDocuments(
-      { userName: req.params.userName, isAccepted: false, isDisabled: false, isOverdue: false, isReturned: false }
+      { userName: req.params.userName, isAccepted: false, isDisabled: false,   } //isOverdue: false, isReturned: false,
     )
 
-    Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false, isOverdue: false, isReturned: false }, function (err, orders) {
+    Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false,  }, function (err, orders) { //isOverdue: false, isReturned: false
       if (err) {
         console.log(err);
 
@@ -1962,8 +1962,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения ноября 2024") {
     period = {
-      "date1": 1,
-      "date2": 5,
+      "date1": 26,
+      "date2": 30,
       "isActive": true,
       "key": 0,
       "maxPlus": 3, //PLUSES1
@@ -1995,7 +1995,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 31,
       "isActive": true,
       "key": 4,
-      "maxPlus": 4,
+      "maxPlus": 1,
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -2805,7 +2805,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") ? 5: data.maxPlus; //   || (standardFilter.category == "yangWomen") PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen"|| (standardFilter.category == "yangWomen")) ? 5: data.maxPlus; //    PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -7493,7 +7493,7 @@ async function fillOrderForInstitutes(
 
 
 let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $nin: restrictedHouses } });
-  //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true }); // ИСПРАВИТЬ
+//let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
   //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
 /*   let activeHouse = await House.find({
@@ -7545,7 +7545,7 @@ let activeHouse = await House.find({ isReleased: false, noAddress: false, isActi
       count = await List.find({
         nursingHome: house.nursingHome,
         //gender: "Female",
-        absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }
+        absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
@@ -7863,7 +7863,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
       //gender: "Female", 
       nursingHome: nursingHome,
       absent: false,
-      plusAmount: { $lt: 3 },
+      plusAmount: { $lt: 4 },
       _id: { $nin: prohibitedId }
     }).limit(amount);
 
