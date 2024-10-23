@@ -65,8 +65,8 @@ export class OrderListComponent implements AfterViewInit {
   correctDate(date: string) {
       let newDate = new Date(date);
       let localDate = newDate.toLocaleDateString();
-      console.log("localDate");
-      console.log(localDate);
+/*       console.log("localDate");
+      console.log(localDate); */
       return localDate;
   }
 
