@@ -24,16 +24,10 @@
           <mat-cell *matCellDef="let house"> {{ house.nursingHome }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="noAddress">
-          <mat-header-cell *matHeaderCellDef> БОА </mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.noAddress }} </mat-cell>
+        <ng-container matColumnDef="statistic.newYear.amount">
+          <mat-header-cell *matHeaderCellDef> Количество </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.statistic.newYear.amount }} </mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="isReleased">
-          <mat-header-cell *matHeaderCellDef> Специнтернат </mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.isReleased }} </mat-cell>
-        </ng-container>
-
         <ng-container matColumnDef="region">
           <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
           <mat-cell *matCellDef="let house"> {{ house.region}} </mat-cell>
@@ -46,7 +40,10 @@
 
         <ng-container matColumnDef="dateLastUpdate">
           <mat-header-cell *matHeaderCellDef> Список обновлен</mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.dateLastUpdateClone }} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color>
+            {{house.dateLastUpdateClone }}
+          </mat-cell>
+
         </ng-container>
 
         <ng-container matColumnDef="nameContact">
@@ -59,8 +56,23 @@
           <mat-cell *matCellDef="let house"> {{ house.contact}} </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="notes">
+          <mat-header-cell *matHeaderCellDef>Примечание</mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.notes}} </mat-cell>
+        </ng-container>
 
-        <!-- Edit Column -->
+        <ng-container matColumnDef="noAddress">
+          <mat-header-cell *matHeaderCellDef> БОА </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.noAddress ? "БОА" : "" }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="isReleased">
+          <mat-header-cell *matHeaderCellDef> Специнтернат </mat-header-cell>
+          <mat-cell *matCellDef="let house"> {{ house.isReleased ? "специнтернат" : ""}} </mat-cell>
+        </ng-container>
+
+
+        <!-- Edit Column 
         <ng-container matColumnDef="edit">
           <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
           <mat-cell *matCellDef="let house">
@@ -71,9 +83,9 @@
               >edit</mat-icon
             ></mat-cell
           >
-        </ng-container>
+        </ng-container>-->
 
-        <!-- Delete Column -->
+        <!-- Delete Column 
         <ng-container matColumnDef="delete">
           <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
           <mat-cell *matCellDef="let house">
@@ -81,7 +93,7 @@
               <mat-icon color="primary">delete</mat-icon>
             </button>
           </mat-cell>
-        </ng-container>
+        </ng-container>-->
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
@@ -89,10 +101,10 @@
     </mat-card-content>
     <!-- Add button to create new house in the mat-card-subtitle below -->
 
-    <mat-card-subtitle>
+    <!--     <mat-card-subtitle>
       <button mat-stroked-button color="primary" routerLink="/houses/create/new">
         Новый интернат
       </button>
-    </mat-card-subtitle>
+    </mat-card-subtitle> -->
   </mat-card>
 </div>

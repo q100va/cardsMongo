@@ -19,9 +19,9 @@ import { MatTableDataSource } from "@angular/material/table";
   styleUrls: ["./house-list.component.css"],
 })
 export class HouseListComponent implements OnInit {
-  house: House[];
+  house = [];
  
-  displayedColumns = ["isActive", "region", "nursingHome", "noAddress", "isReleased", "address", "dateLastUpdate", "nameContact", "contact", "edit", "delete"];
+  displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased"];//"isActive",, "edit", "delete"
 
   constructor(
     private dialog: MatDialog,
@@ -29,9 +29,34 @@ export class HouseListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {
+
+    function dynamicSort(properties) {
+      return function(a, b) {
+          for (let i = 0; i < properties.length; i++) {
+              let prop = properties[i];
+              if (a[prop] < b[prop]) return -1;
+              if (a[prop] > b[prop]) return 1;
+          }
+          return 0;
+      }
+  }
     this.housesService.findAllHouses().subscribe(
       (res) => {
         this.house = res["data"];
+        this.house = this.house.filter(item => item.isActive == true);
+       // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
+       this.house = this.house.sort(dynamicSort(["region", "nursingHome"]));
+        for (let house of  this.house) {
+         
+          if (new Date(house.dateLastUpdate) < new Date("2024-09-01")) {
+            console.log(new Date(house.dateLastUpdate));
+            console.log(new Date("2024-09-01"));
+            house.color = "red";
+          } else {
+            house.color = "black";
+          }
+
+        }
         console.log(this.house);
       },
       (err) => {},

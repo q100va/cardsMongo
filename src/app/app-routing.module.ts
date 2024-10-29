@@ -61,6 +61,7 @@ import { AdminVeteransComponent } from "./pages/admin-veterans/admin-veterans.co
 import { SeniorDayComponent } from "./pages/senior-day/senior-day.component";
 import { UploadHbComponent } from "./pages/upload-hb/upload-hb.component";
 import { UploadNyComponent } from "./pages/upload-ny/upload-ny.component";
+import { ManagerGuard } from "./shared/manager.guard";
 const routes: Routes = [
   {
     path: "",
@@ -80,7 +81,7 @@ const routes: Routes = [
       {
         path: "houses",
         component: HouseListComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard],//, RoleGuard
       },
       {
         path: "houses/create/new",
