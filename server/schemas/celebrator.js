@@ -48,7 +48,7 @@ const celebratorSchema = new Schema({
   husbandYearBirthday: { type: String },
   wifeLastName: { type: String },
   wifeFirstName: { type: String },
-  wifePatronymic: { type: String },
+  wifePatronymic: { type: String },  
   wifeYearBirthday: { type: String },
 
 });

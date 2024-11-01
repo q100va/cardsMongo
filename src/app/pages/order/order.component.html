@@ -542,35 +542,50 @@
                                 <mat-icon>file_copy</mat-icon>
                             </button>
                         </td>
-                        <td width="10%">
-                            <button *ngIf="isAdmin" mat-fab matTooltip="Отправить с Яндекс почты" color="white" 
-                            (click)="sendEmail('yandex')">
-                            <mat-icon svgIcon="yandex"></mat-icon>
-                            
-                            </button> <!-- [disabled]="lineItems.length == 0 "-->
+<!--                         <td width="10%">
+                            <button *ngIf="isAdmin" mat-fab matTooltip="Отправить с Яндекс почты" color="white"
+                                (click)="sendEmail('yandex')">
+                                <mat-icon svgIcon="yandex"></mat-icon>
+
+                            </button>
                         </td>
                         <td width="10%">
                             <button *ngIf="isAdmin" mat-fab matTooltip="Отправить с Google почты" color="white"
-                            (click)="sendEmail('google')">
-                            <mat-icon svgIcon="google"></mat-icon>
+                                (click)="sendEmail('google')">
+                                <mat-icon svgIcon="google"></mat-icon>
                             </button>
-                        </td>
+                        </td> -->
 
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" style="padding-bottom: 20px;">
                             <span *ngIf="lineItems.length > 0 && !isForInstitutes">
                                 <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
                             </span>
                         </td>
                     </tr>
+
+
                     <tr>
                         <td colspan="2">
                             <span *ngIf="lineItems.length > 0">
-                                <mat-slide-toggle [(ngModel)]="showInstruction">с памяткой</mat-slide-toggle>
+                                <mat-slide-toggle [(ngModel)]="showInstruction"
+                                    (change)="onSlideToggleChangeInstruction('newMember')">с памяткой для
+                                    новеньких</mat-slide-toggle>
                             </span>
                         </td>
-                    </tr>         
+
+                    </tr>
+                    <tr>
+
+                        <td colspan="2">
+                            <span *ngIf="lineItems.length > 0">
+                                <mat-slide-toggle [(ngModel)]="showInstructionForSubscribers"
+                                    (change)="onSlideToggleChangeInstruction('subscriber')">с текстом для
+                                    постоянных</mat-slide-toggle>
+                            </span>
+                        </td>
+                    </tr>
 
 
                 </table>
@@ -583,6 +598,29 @@
                 </div>
 
                 <section *ngIf="lineItems.length > 0">
+
+                    <mat-card-content *ngIf="showInstructionForSubscribers && !isForInstitutes"
+                        style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
+
+                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
+                            {{clientFirstName}}!</p>
+                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                            Добрый день!</p>
+
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            К сожалению, сроки доставки писем в настоящее время предсказать невозможно.<br />
+                            Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
+                            чем на месяц.<br />
+                            Поэтому просим вас отправлять открытки минимум за месяц до праздника или дня рождения.<br />
+                            На конверте рекомендуем сделать пометку "прошу вручить <дата>".
+                        </p>
+
+                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                            {{ holiday }}
+                        </h2>
+
+
+                    </mat-card-content>
                     <mat-card-content *ngIf="showInstruction && !isForInstitutes"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
@@ -608,17 +646,64 @@
                             проживают в домах престарелых. Иногда сразу после детдомов.
                         </p>
 
+
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
                         </h2>
 
-
-                        <p style="font-style: italic; font-family: 'Times New Roman', Times, serif;">
+                        <p
+                            style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 0.9em; line-height: 1.2m;">
                             Если какие-то адреса вам не подходят, обязательно возвращайте -
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
-                            чтобы я могла их передать другому поздравляющему.
+                            чтобы я могла их передать другому поздравляющему.<br />
+                            Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
+                            один раз к указанному празднику. Письма писать не нужно!<br />
+                            Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления
+                            мы готовим примерно за 3
+                            месяца до праздника.
                         </p>
+
+                    </mat-card-content>
+
+                    <mat-card-content *ngIf="showInstructionForSubscribers && isForInstitutes"
+                        style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
+
+                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
+                            {{clientFirstName}}!</p>
+                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                            Добрый день!</p>
+
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            К сожалению, сроки доставки простых писем и бандеролей в настоящее время предсказать
+                            невозможно.<br />
+                            Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
+                            чем на месяц.<br />
+                            Поэтому просим вас отправлять открытки минимум за месяц до праздника или дня рождения.<br />
+                            На конверте рекомендуем указать название праздника. Например, 'дни рождения декабря'.
+                        </p>
+
+                        <p style="font-family: 'Times New Roman', Times, serif;">
+                            Сообщаю вам только адреса интернатов и количество поздравляемых, то есть открытки будут не
+                            именные.<br />
+                            Открытки нужно будет отправить ПРОСТОЙ бандеролью на адрес интерната через Почту
+                            России. То есть все открытки нужно упаковать в один почтовый пакет (или конверт), заполнить
+                            адресную
+                            часть и отнести на почту, там отправить ПРОСТУЮ бандероль.
+                            Если вес будет менее 100 г, то отправление оформят как простое письмо с доплатой за
+                            вес.<br />
+                            Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
+                            ценные, первого класса), но
+                            нам такой вариант совершенно не подходит, так как такие
+                            отправления с 99% вероятностью вернутся обратно.<br />
+                        </p>
+                        <a href="https://disk.yandex.ru/i/pIc9B0o9HKXGrQ">Ссылка на полную инструкцию</a>
+                        <br /> <br />
+
+                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                            {{ holiday }}
+                        </h2>
+
                     </mat-card-content>
 
                     <mat-card-content *ngIf="showInstruction && isForInstitutes"
@@ -660,32 +745,43 @@
                             {{ holiday }}
                         </h2>
 
-
-                        <p style="font-style: italic; font-family: 'Times New Roman', Times, serif;">
+                        <p
+                            style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 0.9em; line-height: 1.2m;">
                             Если какие-то адреса вам не подходят, обязательно возвращайте -
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
-                            чтобы я могла их передать другому поздравляющему.
+                            чтобы я могла их передать другому поздравляющему.<br />
+                            Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
+                            один раз к указанному празднику. Письма писать не нужно!<br />
+                            Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления
+                            мы готовим примерно за 3
+                            месяца до праздника.
                         </p>
-                    </mat-card-content>
 
+
+                    </mat-card-content>
                     <br />
                     <mat-card-content *ngFor="let lineItem of lineItems">
 
-                        <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-                        <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment && !isForInstitutes">
+                        <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
+                            {{lineItem.address}}</p>
+                        <p style="font-style: italic; margin: 0; font-family: 'Times New Roman', Times, serif;"
+                            *ngIf="lineItem.infoComment && !isForInstitutes">
                             {{lineItem.infoComment}}
                         </p>
-                        <p style="color: red; font-weight: bold; margin: 0;"
+                        <p style="color: red; font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;"
                             *ngIf="lineItem.adminComment && !isForInstitutes">
                             {{lineItem.adminComment}}</p>
-                        <p *ngIf="isForInstitutes" style="font-weight: bold; margin: 0;">
+                        <p *ngIf="isForInstitutes"
+                            style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
                             {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
+
                         <section *ngIf="!isForInstitutes">
-                            <div *ngFor="let celebrator of lineItem.celebrators">
+                            <div *ngFor="let celebrator of lineItem.celebrators"
+                                style="font-family: 'Times New Roman', Times, serif;">
 
                                 <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
-                            {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
+                        {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                                 <span *ngIf="showIndexes">{{celebrator.index}}. </span>
                                 {{celebrator.lastName}}
                                 {{celebrator.firstName}}
@@ -700,6 +796,22 @@
                         </section>
                         <br />
                     </mat-card-content>
+
+
+                    <mat-card-content *ngIf="showInstructionForSubscribers">
+
+                        <p
+                            style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
+                            Стократно вас благодарю! <br />
+                            _________________________________________________<br />
+                            Помочь оплатить труд культорга для отделения милосердия можно <a
+                                href="https://starikam.org/campaign/poka-burlit-zhizn-toske-net-mesta/ ">здесь</a>.
+                        </p>
+
+
+                    </mat-card-content>
+
+
 
                     <mat-card-content *ngIf="showInstruction"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%; ">
@@ -718,7 +830,7 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Учтите, что по России письма идут 14-20 дней.
+                                Рассчитывайте, что срок доставки будет минимум 30 дней.
                             </li>
                         </ul>
 
@@ -728,7 +840,7 @@
                                 ПРОСТЫМИ письмами (до 100 г).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет примерно 14-20 дней.
+                                Рассчитывайте, что срок доставки будет минимум 30 дней.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя
@@ -736,7 +848,7 @@
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 На конверте/пакете укажите название праздника/праздников, особенно это актуально для
-                                дней рождений. (Например, "дни рождения октября").
+                                дней рождений. (Например, "дни рождения декабря").
                             </li>
                         </ul>
 

@@ -49,6 +49,8 @@ let housesSchema = new Schema(
         oldWomenPlus: { type: Number },
         yangMenPlus: { type: Number },
         yangWomenPlus: { type: Number },
+        forInstitute: { type: Number },
+        forNavigators: { type: Number },
 
       },
       spring: {

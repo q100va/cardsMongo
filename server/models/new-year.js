@@ -43,6 +43,7 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false},
     forthTime:     {type: Boolean, default: false},
     forInstitute: { type: Number, default: 0 },
+    forNavigators: { type: Number, default: 0 },
   },
   { collection: "newYear_2025" }
 );
