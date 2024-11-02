@@ -798,11 +798,11 @@ export class NameDayComponent implements OnInit {
         addresses =
           addresses +
           (this.showIndexes ? celebrator.index + ". " : "") +
-          celebrator.lastName +
+          (celebrator.lastName ? celebrator.lastName : "") +
           " " +
           celebrator.firstName +
           " " +
-          celebrator.patronymic +
+          (celebrator.patronymic ? celebrator.patronymic : "") +
           " (" +
           celebrator.specialComment +
           ") " +
@@ -810,7 +810,7 @@ export class NameDayComponent implements OnInit {
           " " +
           celebrator.comment1 +
           " " +
-          celebrator.linkPhoto +
+          (celebrator.linkPhoto ? celebrator.linkPhoto : "") +
           "\n";
       }
 
