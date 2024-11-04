@@ -72,15 +72,15 @@
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
                                 {{order.holiday == 'Новый год 2025' ? celebrator.yearBirthday : ''}}
-                                {{order.source != "dobroru" && (order.holiday == 'Дни рождения октября 2024' || order.holiday == 'Дни рождения ноября 2024' || order.holiday == 'Дни рождения декабря 2024') ? celebrator.fullDayBirthday : ''}}
-                                <!--                             {{(order.holiday == 'Дни рождения октября 2024' ||  order.holiday == 'Дни рождения ноября 2024' || order.holiday == 'Дни рождения мая 2024') ? '(' + (celebrator.specialComment ?
+                                {{order.source != "dobroru" && (order.holiday == 'Дни рождения ноября 2024' || order.holiday == 'Дни рождения декабря 2024' || order.holiday == 'Дни рождения января 2025') ? celebrator.fullDayBirthday : ''}}
+                                <!--                             {{(order.holiday == 'Дни рождения ноября 2024' ||  order.holiday == 'Дни рождения декабря 2024' || order.holiday == 'Дни рождения мая 2024') ? '(' + (celebrator.specialComment ?
                             celebrator.specialComment : "") + ')' : ''}} -->
-                                {{order.holiday == 'Именины ноября 2024' ? celebrator.nameDay : ''}}
+                                {{order.holiday == 'Именины декабря 2024' ? celebrator.nameDay : ''}}
                                 {{celebrator.comment1}}
                                 {{order.source != "dobroru" ? celebrator.linkPhoto: ''}}
                                 <!--                 {{celebrator._id}}             -->
                                 <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday !=
-                                    'Именины ноября 2024' && order.source != "dobroru" ? celebrator.specialComment :
+                                    'Именины декабря 2024' && order.source != "dobroru" ? celebrator.specialComment :
                                     ''}}
                                 </span>
                                 <span style="font-weight: bold; color: rgb(255, 0, 0); "

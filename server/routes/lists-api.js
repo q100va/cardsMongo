@@ -128,7 +128,10 @@ async function findAllMonthCelebrators(month) {
     console.log("filledIds");
     console.log(filledIds); */
 
-  let notActiveHouses = await House.find({ isActive: false });
+  //let notActiveHouses = await House.find({ isActive: false });
+  
+  let notActiveHouses = await House.find({ $or: [{ isActive: false }, { dateLastUpdate: { $lt: new Date("2024-9-1") } }] });
+
   let notActiveHousesNames = [];
   for (let house of notActiveHouses) {
     notActiveHousesNames.push(house.nursingHome);
@@ -149,7 +152,7 @@ async function findAllMonthCelebrators(month) {
   for (let celebrator of list) {
 
     let cloneSpecialComment = await specialComment(
-      2024 - celebrator["yearBirthday"]
+      2025 - celebrator["yearBirthday"]
     );
 
 
@@ -213,7 +216,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 11 ? 'Дни рождения ноября 2024' : 'Дни рождения декабря 2024',
+      holyday: month == 12 ? 'Дни рождения декабря 2024' : 'Дни рождения января 2025',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -239,9 +242,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 10) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 11) { finalList = await List.insertMany(newList, options); }
-  if (month == 12) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 11) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 12) { finalList = await List.insertMany(newList, options); }
+  if (month == 1) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -356,7 +359,7 @@ async function findAllMonthNameDays(month) {
   //throw new Error("Something bad happened");
   let result = [];
 
-  let notActiveHouses = await House.find({ $or: [{ isActive: false }, { dateLastUpdate: { $lt: new Date("2022-9-1") } }] });
+  let notActiveHouses = await House.find({ $or: [{ isActive: false }, { dateLastUpdate: { $lt: new Date("2024-9-1") } }] });
   let notActiveHousesNames = [];
   for (let house of notActiveHouses) {
     notActiveHousesNames.push(house.nursingHome);
@@ -384,8 +387,8 @@ async function findAllMonthNameDays(month) {
       cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
     }
     let holiday;
-    if (month == 11) holiday = 'Именины ноября 2024';
     if (month == 12) holiday = 'Именины декабря 2024';
+    if (month == 1) holiday = 'Именины января 2025';
 
     let cloneCelebrator = {
       region: celebrator.region,
@@ -435,8 +438,8 @@ async function findAllMonthNameDays(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 11) finalList = await NameDay.insertMany(newList, options);
-  if (month == 12) finalList = await NameDayNext.insertMany(newList, options);
+  if (month == 12) finalList = await NameDay.insertMany(newList, options);
+  if (month == 1) finalList = await NameDayNext.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -926,9 +929,9 @@ async function createCloneCelebrator(celebrator) {
     }
   }
   let holiday;
-  if (celebrator.monthBirthday == 10) { holiday = 'Дни рождения октября 2024' };
   if (celebrator.monthBirthday == 11) { holiday = 'Дни рождения ноября 2024' };
   if (celebrator.monthBirthday == 12) { holiday = 'Дни рождения декабря 2024' };
+  if (celebrator.monthBirthday == 1) { holiday = 'Дни рождения января 2025' };
 
   let cloneCelebrator = {
     seniorId: celebrator._id,
@@ -1289,8 +1292,8 @@ router.get("/", checkAuth, async (req, res) => {
   try {
     //List.find({region: "НОВОСИБИРСКАЯ"}, function (err, lists) {
     //ListBefore.find({ absent: { $ne: true } }, function (err, lists) {
-    //List.find({ absent: { $ne: true } }, function (err, lists) {
-    ListNext.find({ absent: { $ne: true } }, function (err, lists) {
+    List.find({ absent: { $ne: true } }, function (err, lists) {
+   //ListNext.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -2125,7 +2128,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
     // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2024", "23 февраля 2024"] });
-    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения декабря 2024"] });
+    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения января 2025"] });
     let lineItemsM = [];
     for (let order of ordersM) {
       for (let item of order.lineItems) {
@@ -2630,9 +2633,10 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
     let regionsAndHouses = await countRegionsAndHouses();
     let birthdayAmount = await countHB();
     let nameDayAmount = await countND();
+    let seniorDayAmount = await countSD();
     // let march8Amount = await countM8();
-    let easterAmount = await countEaster();
-    let may9Amount = await countMay9();
+    //let easterAmount = await countEaster();
+    //let may9Amount = await countMay9();
 
     let amount = await countVolonteers();
     //await report();
@@ -2642,12 +2646,14 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
     await amountNY();
 
     let result = {
-      housesAmount: regionsAndHouses.housesAmount - 1, //ШИПУНОВО_БОА
+      housesAmount: regionsAndHouses.housesAmount - 2, //ШИПУНОВО_БОА, ПОБЕДИМ_БОА
       regionsAmount: regionsAndHouses.regionsAmount,
       plusesHBAmount: birthdayAmount.plusesAmount,
       celebratorsHBAmount: birthdayAmount.celebratorsAmount,
       plusesNDAmount: nameDayAmount.plusesAmount,
       celebratorsNDAmount: nameDayAmount.celebratorsAmount,
+      plusesSDAmount: seniorDayAmount.plusesAmount,
+      celebratorsSDAmount: seniorDayAmount.celebratorsAmount,
       //plusesM8Amount: march8Amount.plusesAmount,
       //celebratorsM8Amount: march8Amount.celebratorsAmount,
       // plusesEasterAmount: easterAmount.plusesAmount,
@@ -2660,6 +2666,9 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
       institutesAmount: amount.institutesAmount,
 
     }
+    console.log("result");
+    console.log(result);
+
 
     const findAllListsResponse = new BaseResponse("200", "Query successful", result);
     res.json(findAllListsResponse.toObject());
@@ -2672,13 +2681,21 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
 });
 
 async function amountNY() {
-  const houses = await House.find({ isActive: true, nursingHome: {$nin: ["САРАТОВ_КЛОЧКОВА", "ДИМИТРИЕВСК"]}});
-let amountOfSeniors = 0;
-  for (let house of houses) {    
+  const houses = await House.find({ isActive: true, nursingHome: { $nin: ["САРАТОВ_КЛОЧКОВА", "ДИМИТРОВГРАД"] }, noAddress: false });
+  let amountOfSeniors = 0;
+  for (let house of houses) {
     const amount = await Senior.find({ isRestricted: false, nursingHome: house.nursingHome, dateExit: null, isDisabled: false }).countDocuments();
-    console.log("amount");
-    console.log(amount);
+
+
+    /*     console.log("amount");
+        console.log(amount); */
     amountOfSeniors += amount;
+    if (amount > 49) {
+
+      console.log("house");
+      console.log(house.nursingHome);
+
+    }
   }
   console.log("amountOfSeniors");
   console.log(amountOfSeniors);
@@ -2829,7 +2846,7 @@ async function countHB() {
     [
       {
         $match:
-          { holiday: "Дни рождения октября 2024", isDisabled: false, isOverdue: false, isReturned: false }
+          { holiday: "Дни рождения ноября 2024", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -2857,12 +2874,42 @@ async function countHB() {
 
 }
 
+async function countSD() {
+
+  let plusesAmount = await Order.aggregate(
+    [
+      {
+        $match: { holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false }
+      },
+      {
+        $group: { _id: null, sum_val: { $sum: "$amount" } }
+      }
+    ]
+  );
+  let celebratorsAmount = await SeniorDay.aggregate(
+    [
+      {
+        $match:
+          { absent: false, plusAmount: { $ne: 0 } }
+      },
+      {
+        $group: { _id: null, count: { $sum: 1 } }
+      }
+    ]
+  );
+
+  return {
+    plusesAmount: plusesAmount[0].sum_val,
+    celebratorsAmount: celebratorsAmount[0].count
+  }
+}
+
 async function countND() {
 
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "Именины октября 2024", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3026,8 +3073,9 @@ async function countVolonteers() {
   let setClients = new Set();
   let setInstitutes = new Set();
   let setSchools = new Set();
-  let ordersBirthday = await Order.find({ holiday: "Дни рождения октября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersNameDay = await Order.find({ holiday: "Именины октября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersBirthday = await Order.find({ holiday: "Дни рождения ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+   let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersMarch8 = await Order.find({ holiday: "8 марта 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersEaster = await Order.find({ holiday: "Пасха 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersMay9 = await Order.find({ holiday: "9 мая 2024", isDisabled: false, isOverdue: false, isReturned: false, });
@@ -3038,6 +3086,10 @@ async function countVolonteers() {
   for (let order of ordersNameDay) {
     setClients.add(order.contact);
   }
+  for (let order of ordersSeniorDay) {
+    setClients.add(order.contact);
+  }
+
   /*   for (let order of ordersMarch8) {
       setClients.add(order.contact);
     } 
@@ -3052,8 +3104,8 @@ async function countVolonteers() {
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения октября 2024"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2024", "9 мая 2024"
-  let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения октября 2024"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2024", "9 мая 2024"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения ноября 2024", "День пожилого человека 2024"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2024", "9 мая 2024"
+  let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения ноября 2024", "День пожилого человека 2024"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2024", "9 мая 2024"
 
 
 
@@ -3134,7 +3186,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения октября 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения ноября 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {

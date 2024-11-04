@@ -56,7 +56,7 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
             isCompleted: false
         };
 
-         console.log("newOrder.holiday");
+        console.log("newOrder.holiday");
         // console.log(req.body.dateOfOrder);
         // console.log(newOrder.dateOfOrder);
 
@@ -117,13 +117,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения декабря 2024") {
+                if (holiday == "Дни рождения января 2025") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения ноября 2024") {
+                if (holiday == "Дни рождения декабря 2024") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения октября 2024") {
+                if (holiday == "Дни рождения ноября 2024") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -149,13 +149,13 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения ноября 2024") {
+    if (newOrder.holiday == "Дни рождения декабря 2024") {
         period = {
-            "date1": 1,
-            "date2": 30,
+            "date1": 16,
+            "date2": 31,
             "isActive": true,
             "key": 0,
-            "maxPlus": 6, //PLUSES
+            "maxPlus": 2, //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }
@@ -817,19 +817,19 @@ async function collectSeniors(data, orderFilter, holiday) {
             if (result) {
                 //console.log(result);
                 await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-                if (holiday == "Дни рождения декабря 2024") {
+                if (holiday == "Дни рождения января 2025") {
                     await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения ноября 2024") {
+                if (holiday == "Дни рождения декабря 2024") {
                     await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения октября 2024") {
+                if (holiday == "Дни рождения ноября 2024") {
                     await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
 
                 data.celebratorsAmount++;
                 data.restrictedPearson.push(result.celebrator_id);
-            
+
                 data.counter++;
                 // console.log("data.proportion.oneHouse");
                 // console.log(data.proportion.oneHouse);
@@ -843,8 +843,8 @@ async function collectSeniors(data, orderFilter, holiday) {
                         data.restrictedHouses.push(result["nursingHome"]);
                     }
                 }
-                if (data.celebratorsAmount == 15 || data.celebratorsAmount == 30 ) { 
-                    data.restrictedHouses = []; 
+                if (data.celebratorsAmount == 15 || data.celebratorsAmount == 30) {
+                    data.restrictedHouses = [];
                     console.log(data.celebratorsAmount);
 
                 }
@@ -884,44 +884,263 @@ async function searchSenior(
         БАЗГИЕВОdata.maxPlus,
         data.filter */
 
-    let usingHouses = [  
-        "ЖУКОВКА", "ТУТАЕВ", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ",   
-        "РЖЕВ", "ПЕРВОМАЙСКИЙ", 
-        "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", 
-        "МАГАДАН_АРМАНСКАЯ", "ОКТЯБРЬСКИЙ", 
-        "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", 
-        "ДУБНА_ТУЛЬСКАЯ", "ТАМБОВСКИЙ_ЛЕСХОЗ", 
-        "СКОПИН", "МАРКОВА", "НОГИНСК", 
-        "ВЕРХНЕУРАЛЬСК", "РАЙЧИХИНСК", "ТАЛИЦА_УРГА", 
-        "КРАСНОЯРСК", "УГЛИЧ", "ТОЛЬЯТТИ", 
-        "ЖЕЛЕЗНОГОРСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", 
-        "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ЯРЦЕВО", 
-        "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", 
-        "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК",
-        "ЦЕЛИННОЕ", "КРЕСТЬЯНКА", "ДРУЖБА", "УСТЬ-МОСИХА",
-        "АРХАРА", "ЗАОЗЕРЬЕ", "МЫЗА", "НЯНДОМА","КАРГОПОЛЬ",
-        "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "БАЗГИЕВО", "КУДЕЕВСКИЙ",
-        "ДОЛБОТОВО", "ГЛОДНЕВО", "ГОРНЯЦКИЙ", "ДОНЕЦК", "МЕЧЕТИНСКАЯ", "БОЛЬШАЯ_ОРЛОВКА", "НОВЫЙ_ЕГОРЛЫК",
-        "МАКСИМОВКА", "МАЙСКОЕ", "КАНДАБУЛАК", "ПЕТРОВКА", "ДЕВЛЕЗЕРКИНО", "НИКИТИНКА", "ЧАПАЕВСК", "ЖИГУЛЕВСК",
-         "САРАТОВ_КЛОЧКОВА", "ЛАШМА", "УВАРОВО", 
-         "ТИМАШЕВСК", "ЧИСТОПОЛЬ", "ЧИТА_ТРУДА",
 
-    ]; //"БИЙСК",
+    let usingHousesSmaller = [
+        "АЛЕКСАНДРОВКА",
+        "АЛНАШИ",
+        "АНЦИФЕРОВО",
+        "АРМАВИР",
+        "АРХАНГЕЛЬСК_ДАЧНАЯ",
+        "БАЗГИЕВО",
+        "БЕЛЫШЕВО",
+        "БЛАГОВЕЩЕНКА",
+        "БОГОЛЮБОВО",
+        "БОЛШЕВО",
+        "БОЛЬШАЯ_ГЛУШИЦА",
+        "БЫТОШЬ",
+        "ВЕРБИЛКИ",
+        "ВОЗНЕСЕНСКОЕ",
+        "ГЛОДНЕВО",
+        "ДВИНСКОЙ",
+        "ДЕВЛЕЗЕРКИНО",
+        "ДМИТРИЕВКА",
+        "ДУБНА",
+        "ДУБОВЫЙ_УМЕТ",
+        "ЕЛЕНСКИЙ",
+        "ЕЛИЗАВЕТОВКА",
+        "ЖИТИЩИ",
+        "ЗАОЗЕРЬЕ",
+        "ИЛЬИНСКОЕ",
+        "КАБАНОВКА",
+        "КАБАНОВО",
+        "КАМЕНОЛОМНИ",
+        "КАНДАБУЛАК",
+        "КОЗЛОВО",
+        "КРАСНОБОРСК",
+        "КРЕСТЬЯНКА",
+        "КУГЕЙСКИЙ",
+        "КЫТМАНОВО",
+        "ЛЕУЗА",
+        "ЛИПИТИНО",
+        "МАГАДАН_АРМАНСКАЯ",
+        "МАЙСКОЕ",
+        "МАКСИМОВКА",
+        "МАЛАЯ_РОЩА",
+        "МАРЕВО",
+        "МАСЛЯТКА",
+        "МЕДЫНЬ",
+        "МЕЗЕНЬ",
+        "МЕЧЕТИНСКАЯ",
+        "МИХАЙЛОВКА",
+        "МОЛОДОЙ_ТУД",
+        "МОЛЬГИНО",
+        "МОСАЛЬСК",
+        "МЫЗА",
+        "НАВОЛОКИ",
+        "НИКИТИНКА",
+        "НОВАЯ_ЦЕЛИНА",
+        "НОВОСЕЛЬЕ",
+        "НОВЫЙ_ЕГОРЛЫК",
+        "НОГУШИ",
+        "ОКУЛОВКА",
+        "ОТРАДНЫЙ",
+        "ПАНКРУШИХА",
+        "ПАРФИНО",
+        "ПЕСЬ",
+        "ПЕТРОВКА",
+        "ПИХТОВКА",
+        "ПОБЕДИМ",
+        "ПОДБОРОВКА",
+        "ПРЯМУХИНО",
+        "ПУХЛЯКОВСКИЙ",
+        "РОМАНОВКА",
+        "РОСЛАВЛЬ",
+        "САВИНСКИЙ",
+        "СЕВЕРООНЕЖСК",
+        "СЕЛЫ",
+        "СЕЛЬЦО",
+        "СНЕЖНАЯ_ДОЛИНА",
+        "СТАРАЯ_ТОРОПА",
+        "СТАРОДУБ",
+        "СТАРОЕ_ШАЙГОВО",
+        "СТЕПУРИНО",
+        "СТОЛЫПИНО",
+        "СТУДЕНЕЦ",
+        "СУЗУН",
+        "СЯВА",
+        "ТАРХАНСКАЯ_ПОТЬМА",
+        "ТОМАРИ",
+        "УЛЬЯНКОВО",
+        "УСТЬ-МОСИХА",
+        "ХАТУНЬ",
+        "ЦЕЛИННОЕ",
+        "ЧАПАЕВСК",
+        "ЯГОТИНО",
+        "ЯСНАЯ_ПОЛЯНА",
+        "ЯСНОГОРСК",
+
+    ];
+
+    let usingHousesLarger = [
+        "АВДОТЬИНКА",
+        "АРХАРА",
+        "БЕРДСК",
+        "БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ",
+        "БЛАГОВЕЩЕНСК_ТЕАТРАЛЬНАЯ",
+        "БОГРАД",
+        "БОЛЬШАЯ_ОРЛОВКА",
+        "БОЛЬШОЕ_КАРПОВО",
+        "БУРЕГИ",
+        "ВАЛДАЙ",
+        "ВАХТАН",
+        "ВЕРХНЕУРАЛЬСК",
+        "ВЕРХНИЙ_УСЛОН",
+        "ВЛАДИКАВКАЗ",
+        "ВОЗНЕСЕНЬЕ",
+        "ВОЛГОДОНСК",
+        "ВОНЫШЕВО",
+        "ВЫШНИЙ_ВОЛОЧЕК",
+        "ВЯЗЬМА",
+        "ГАВРИЛОВ-ЯМ",
+        "ДОЛБОТОВО",
+        "ДОНЕЦК",
+        "ДРУЖБА",
+        "ДУБНА_ТУЛЬСКАЯ",
+        "ЕВПАТОРИЯ",
+        "ЖЕЛЕЗНОГОРСК",
+        "ЗАОВРАЖЬЕ",
+        "ЗОЛОТАРЕВКА",
+        "ЙОШКАР-ОЛА",
+        "ИРКУТСК_ЯРОСЛАВСКОГО",
+        "КАНДАЛАКША",
+        "КАРГОПОЛЬ",
+        "КАРДЫМОВО",
+        "КАШИРСКОЕ",
+        "КИРЖАЧ",
+        "КОВЫЛКИНО",
+        "КОРЯЖМА",
+        "КРАСНОЯРСК",
+        "КУГЕСИ",
+        "КУДЕЕВСКИЙ",
+        "ЛАШМА",
+        "МАРКОВА",
+        "МАЧЕХА",
+        "МЕТЕЛИ",
+        "МИХАЙЛОВ",
+        "НЕБОЛЧИ",
+        "НОВОСИБИРСК_ЖУКОВСКОГО",
+        "НОВОСЛОБОДСК",
+        "НОВОТУЛКА",
+        "НОГИНСК",
+        "НЯНДОМА",
+        "ОКТЯБРЬСКИЙ",
+        "ПАПУЛИНО",
+        "ПЕРВОМАЙСКИЙ",
+        "ПЕРЕЛОЖНИКОВО",
+        "ПЛЕСЕЦК",
+        "ПРЕОБРАЖЕНСКИЙ",
+        "РАДЮКИНО",
+        "РАЙЧИХИНСК",
+        "РЖЕВ",
+        "РОСТОВ-НА-ДОНУ",
+        "РЯЗАНЬ",
+        "САДОВЫЙ",
+        "СЕВЕРОДВИНСК",
+        "СЕМИКАРАКОРСК",
+        "СКОПИН",
+        "СЛОБОДА-БЕШКИЛЬ",
+        "СОЛИКАМСК_ДУБРАВА",
+        "СОЛИКАМСК_СЕЛА",
+        "СПАССК-ДАЛЬНИЙ",
+        "СТАРАЯ_КУПАВНА",
+        "СУХОВЕРХОВО",
+        "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ",
+        "ТАЛИЦА_УРГА",
+        "ТАМБОВСКИЙ_ЛЕСХОЗ",
+        "ТВЕРЬ_КОНЕВА",
+        "ТИМАШЕВСК",
+        "ТОЛЬЯТТИ",
+        "ТУТАЕВ",
+        "УВАРОВО",
+        "УГЛИЧ",
+        "УСТЬ-ОРДЫНСКИЙ",
+        "ХАРЬКОВКА",
+        "ХУТОР_ЛЕНИНА",
+        "ЧЕРНЫШЕВКА",
+        "ЧИСТОПОЛЬ",
+        "ЧИТА_ТРУДА",
+        "ШАХУНЬЯ",
+        "ШЕБЕКИНО",
+        "ШИПУНОВО",
+        "ЭЛЕКТРОГОРСК",
+        "ЯРЦЕВО",
+    ];
+
+    /*  let usingHouses = [
+         "ТУТАЕВ", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ",
+         "РЖЕВ", "ПЕРВОМАЙСКИЙ",
+         "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК",
+         "МАГАДАН_АРМАНСКАЯ", "ОКТЯБРЬСКИЙ",
+         "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО",
+         "ДУБНА_ТУЛЬСКАЯ", "ТАМБОВСКИЙ_ЛЕСХОЗ",
+         "СКОПИН", "МАРКОВА", "НОГИНСК",
+         "ВЕРХНЕУРАЛЬСК", "РАЙЧИХИНСК", "ТАЛИЦА_УРГА",
+         "КРАСНОЯРСК", "УГЛИЧ", "ТОЛЬЯТТИ",
+         "ЖЕЛЕЗНОГОРСК", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА",
+         "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ЯРЦЕВО",
+         "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА",
+         "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК",
+         "ЦЕЛИННОЕ", "КРЕСТЬЯНКА", "ДРУЖБА", "УСТЬ-МОСИХА",
+         "АРХАРА", "ЗАОЗЕРЬЕ", "МЫЗА", "НЯНДОМА", "КАРГОПОЛЬ",
+         "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "БАЗГИЕВО", "КУДЕЕВСКИЙ",
+         "ДОЛБОТОВО", "ГЛОДНЕВО", "ГОРНЯЦКИЙ", "ДОНЕЦК", "МЕЧЕТИНСКАЯ", "БОЛЬШАЯ_ОРЛОВКА", "НОВЫЙ_ЕГОРЛЫК",
+         "МАКСИМОВКА", "МАЙСКОЕ", "КАНДАБУЛАК", "ПЕТРОВКА", "ДЕВЛЕЗЕРКИНО", "НИКИТИНКА", "ЧАПАЕВСК", "ЖИГУЛЕВСК",
+         "САРАТОВ_КЛОЧКОВА", "ЛАШМА", "УВАРОВО",
+         "ТИМАШЕВСК", "ЧИСТОПОЛЬ", "ЧИТА_ТРУДА",
+ 
+     ]; */ //"БИЙСК","ЖУКОВКА",
+
+    let result = await searchSeniorHelper(
+        kind,
+        data,
+        holiday,
+        usingHousesSmaller
+    );
+
+    if (!result) {
+        result = await searchSeniorHelper(
+            kind,
+            data,
+            holiday,
+            usingHousesLarger
+        );
+    }
+    return result;
+
+}
+
+async function searchSeniorHelper(
+    kind,
+    data,
+    holiday,
+    usingHouses
+) {
+
 
     console.log('data.restrictedHouses');
     console.log(data.restrictedHouses);
 
     console.log('data.proportion');
     console.log(data.proportion);
-   
-        if (data.restrictedHouses.length > 0) {
-            for (let house of data.restrictedHouses) {
-                let index = usingHouses.findIndex(item => item == house);
-                if (index != -1) {
-                    usingHouses.splice(index, 1);
-                }
+
+    if (data.restrictedHouses.length > 0) {
+        for (let house of data.restrictedHouses) {
+            let index = usingHouses.findIndex(item => item == house);
+            if (index != -1) {
+                usingHouses.splice(index, 1);
             }
         }
+    }
     let standardFilter = {
         nursingHome: { $in: usingHouses },
 
@@ -940,7 +1159,7 @@ async function searchSenior(
         //plusAmount: { $lt: maxPlus },
         dateBirthday: { $gte: data.date1, $lte: data.date2 },
         absent: { $ne: true },
-        patronymic : {$ne: ""},
+        patronymic: { $ne: "" },
         //firstName: "Светлана"
     };
     standardFilter.isReleased = false;
@@ -950,9 +1169,9 @@ async function searchSenior(
     if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
     // console.log("DATA");
     //console.log(data);
-/*     if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
-        standardFilter.isReleased = false;
-    } */
+    /*     if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
+            standardFilter.isReleased = false;
+        } */
 
     /*   console.log("data.filter.addressFilter");
       console.log(data.filter.addressFilter);
@@ -972,7 +1191,7 @@ async function searchSenior(
     //console.log(maxPlus);
 
     let filter = Object.assign(standardFilter, data.filter);
-   console.log("FILTER");
+    console.log("FILTER");
     console.log(filter);
 
     let celebrator;
@@ -997,13 +1216,13 @@ async function searchSenior(
         //console.log("filter CHECK");
         //console.log(filter);
 
-        if (holiday == "Дни рождения декабря 2024") {
+        if (holiday == "Дни рождения января 2025") {
             celebrator = await ListNext.findOne(filter);
         }
-        if (holiday == "Дни рождения ноября 2024") {
+        if (holiday == "Дни рождения декабря 2024") {
             celebrator = await List.findOne(filter);
         }
-        if (holiday == "Дни рождения октября 2024") {
+        if (holiday == "Дни рождения ноября 2024") {
             celebrator = await ListBefore.findOne(filter);
         }
 

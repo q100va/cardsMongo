@@ -240,10 +240,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   "Новый год 2025",
-                  "Дни рождения ноября 2024",
                   "Дни рождения декабря 2024",
-                  "Именины ноября 2024",
-                  "Именины декабря 2024"
+                  "Дни рождения января 2025",
+                  "Именины декабря 2024",
+                  "Именины января 2025"
                 ]
               }
             },
@@ -252,10 +252,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   "Новый год 2025",
-                  "Дни рождения ноября 2024",
                   "Дни рождения декабря 2024",
-                  "Именины ноября 2024",
-                  "Именины декабря 2024"
+                  "Дни рождения января 2025",
+                  "Именины декабря 2024",
+                  "Именины января 2025"
                 ]
               }
             }
@@ -285,10 +285,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   "Новый год 2025",
-                  "Дни рождения ноября 2024",
                   "Дни рождения декабря 2024",
-                  "Именины ноября 2024",
-                  "Именины декабря 2024"
+                  "Дни рождения января 2025",
+                  "Именины декабря 2024",
+                  "Именины января 2025"
                 ]
               }
             },
@@ -297,10 +297,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   "Новый год 2025",
-                  "Дни рождения ноября 2024",
                   "Дни рождения декабря 2024",
-                  "Именины ноября 2024",
-                  "Именины декабря 2024"
+                  "Дни рождения января 2025",
+                  "Именины декабря 2024",
+                  "Именины января 2025"
                 ]
               }
             }
@@ -445,10 +445,10 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               },
@@ -457,10 +457,10 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               }
@@ -486,10 +486,10 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               },
@@ -498,10 +498,10 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               }
@@ -569,10 +569,10 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               },
@@ -581,10 +581,10 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               }
@@ -611,10 +611,10 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2025",
-                      "Дни рождения ноября 2024",
                       "Дни рождения декабря 2024",
-                      "Именины ноября 2024",
-                      "Именины декабря 2024"
+                      "Дни рождения января 2025",
+                      "Именины декабря 2024",
+                      "Именины января 2025"
                     ]
                   }
                 },
@@ -623,10 +623,10 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2025",
-                      "Дни рождения ноября 2024",
                       "Дни рождения декабря 2024",
-                      "Именины ноября 2024",
-                      "Именины декабря 2024"
+                      "Дни рождения января 2025",
+                      "Именины декабря 2024",
+                      "Именины января 2025"
                     ]
                   }
                 }
@@ -708,10 +708,10 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               },
@@ -720,10 +720,10 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               }
@@ -750,10 +750,10 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2025",
-                      "Дни рождения ноября 2024",
                       "Дни рождения декабря 2024",
-                      "Именины ноября 2024",
-                      "Именины декабря 2024"
+                      "Дни рождения января 2025",
+                      "Именины декабря 2024",
+                      "Именины января 2025"
                     ]
                   }
                 },
@@ -762,10 +762,10 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2025",
-                      "Дни рождения ноября 2024",
                       "Дни рождения декабря 2024",
-                      "Именины ноября 2024",
-                      "Именины декабря 2024"
+                      "Дни рождения января 2025",
+                      "Именины декабря 2024",
+                      "Именины января 2025"
                     ]
                   }
                 }
@@ -796,37 +796,37 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
 async function deletePluses(deletedOrder, full) {
   let deletedLineItems = full ? deletedOrder.lineItems : [deletedOrder.deleted[deletedOrder.deleted.length - 1]];
 
-  if (deletedOrder.holiday == "Дни рождения ноября 2024" || deletedOrder.holiday == "Дни рождения декабря 2024" || deletedOrder.holiday == "Дни рождения октября 2024") {
+  if (deletedOrder.holiday == "Дни рождения декабря 2024" || deletedOrder.holiday == "Дни рождения января 2025" || deletedOrder.holiday == "Дни рождения ноября 2024") {
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
     const month = await Month.findOne({ isActive: true });
     let monthNumber = month.number;
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (deletedOrder.holiday == "Дни рождения декабря 2024") {
+    if (deletedOrder.holiday == "Дни рождения января 2025") {
       monthNumber = monthNumber + 1;
     }
-    if (deletedOrder.holiday == "Дни рождения октября 2024") {
+    if (deletedOrder.holiday == "Дни рождения ноября 2024") {
       monthNumber = monthNumber - 1;
     }
     for (let lineItem of deletedLineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == monthNumber) {
 
-          if (deletedOrder.holiday == "Дни рождения декабря 2024") {
+          if (deletedOrder.holiday == "Дни рождения января 2025") {
             await ListNext.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListNext.findOne({ _id: person._id });
           }
-          if (deletedOrder.holiday == "Дни рождения ноября 2024") {
+          if (deletedOrder.holiday == "Дни рождения декабря 2024") {
             await List.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await List.findOne({ _id: person._id });
           }
-          if (deletedOrder.holiday == "Дни рождения октября 2024") {
+          if (deletedOrder.holiday == "Дни рождения ноября 2024") {
             await ListBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListBefore.findOne({ _id: person._id });
           }
 
-          /*           if (deletedOrder.holiday == "Дни рождения ноября 2024") {
+          /*           if (deletedOrder.holiday == "Дни рождения декабря 2024") {
                       period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
                       activePeriod = await Period.findOne({ isActive: true });
                       if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
@@ -866,21 +866,21 @@ async function deletePluses(deletedOrder, full) {
       }
     }
   } else {
-    if (deletedOrder.holiday == "Именины ноября 2024") {
+    if (deletedOrder.holiday == "Именины декабря 2024") {
       for (let lineItem of deletedLineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
         }
       }
     } else {
-      if (deletedOrder.holiday == "Именины декабря 2024") {
+      if (deletedOrder.holiday == "Именины января 2025") {
         for (let lineItem of deletedLineItems) {
           for (let person of lineItem.celebrators) {
             await NameDayNext.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
           }
         }
       } else {
-        if (deletedOrder.holiday == "Именины октября 2024") {
+        if (deletedOrder.holiday == "Именины ноября 2024") {
           for (let lineItem of deletedLineItems) {
             for (let person of lineItem.celebrators) {
               await NameDayBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1102,10 +1102,10 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               },
@@ -1114,10 +1114,10 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     "Новый год 2025",
-                    "Дни рождения ноября 2024",
                     "Дни рождения декабря 2024",
-                    "Именины ноября 2024",
-                    "Именины декабря 2024"
+                    "Дни рождения января 2025",
+                    "Именины декабря 2024",
+                    "Именины января 2025"
                   ]
                 }
               }
@@ -1144,10 +1144,10 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2025",
-                      "Дни рождения ноября 2024",
                       "Дни рождения декабря 2024",
-                      "Именины ноября 2024",
-                      "Именины декабря 2024"
+                      "Дни рождения января 2025",
+                      "Именины декабря 2024",
+                      "Именины января 2025"
                     ]
                   }
                 },
@@ -1156,10 +1156,10 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2025",
-                      "Дни рождения ноября 2024",
                       "Дни рождения декабря 2024",
-                      "Именины ноября 2024",
-                      "Именины декабря 2024"
+                      "Дни рождения января 2025",
+                      "Именины декабря 2024",
+                      "Именины января 2025"
                     ]
                   }
                 }
@@ -1188,7 +1188,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
 });
 
 async function restorePluses(updatedOrder) {
-  if (updatedOrder.holiday == "Дни рождения ноября 2024" || updatedOrder.holiday == "Дни рождения декабря 2024" || updatedOrder.holiday == "Дни рождения октября 2024") {
+  if (updatedOrder.holiday == "Дни рождения декабря 2024" || updatedOrder.holiday == "Дни рождения января 2025" || updatedOrder.holiday == "Дни рождения ноября 2024") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -1197,20 +1197,20 @@ async function restorePluses(updatedOrder) {
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (updatedOrder.holiday == "Дни рождения декабря 2024") {
+    if (updatedOrder.holiday == "Дни рождения января 2025") {
       monthNumber = monthNumber + 1;
     }
 
     for (let lineItem of updatedOrder.lineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == month.number) {
-          if (updatedOrder.holiday == "Дни рождения декабря 2024") {
+          if (updatedOrder.holiday == "Дни рождения января 2025") {
             await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения ноября 2024") {
+          if (updatedOrder.holiday == "Дни рождения декабря 2024") {
             await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения октября 2024") {
+          if (updatedOrder.holiday == "Дни рождения ноября 2024") {
             await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
 
@@ -1255,21 +1255,21 @@ async function restorePluses(updatedOrder) {
       }
     }
   } else {
-    if (updatedOrder.holiday == "Именины ноября 2024") {
+    if (updatedOrder.holiday == "Именины декабря 2024") {
       for (let lineItem of updatedOrder.lineItems) {
         for (let person of lineItem.celebrators) {
           await NameDay.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
         }
       }
     } else {
-      if (updatedOrder.holiday == "Именины октября 2024") {
+      if (updatedOrder.holiday == "Именины ноября 2024") {
         for (let lineItem of updatedOrder.lineItems) {
           for (let person of lineItem.celebrators) {
             await NameDayBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
         }
       } else {
-        if (updatedOrder.holiday == "Именины декабря 2024") {
+        if (updatedOrder.holiday == "Именины января 2025") {
           for (let lineItem of updatedOrder.lineItems) {
             for (let person of lineItem.celebrators) {
               await NameDayNext.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -1800,13 +1800,13 @@ async function createOrderForNameDay(order) {
 
   let createdOrder = await Order.create(order);
   for (let element of createdOrder.temporaryLineItems) {
-    if (order.holiday == "Именины ноября 2024") {
+    if (order.holiday == "Именины декабря 2024") {
       await NameDay.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
     }
-    if (order.holiday == "Именины декабря 2024") {
+    if (order.holiday == "Именины января 2025") {
       await NameDayNext.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
     }
-    if (order.holiday == "Именины октября 2024") {
+    if (order.holiday == "Именины ноября 2024") {
       await NameDayBefore.updateOne({ _id: element._id }, { $inc: { plusAmount: 1 } });
     }
   }
@@ -2400,13 +2400,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
           seniors_ids.push(person.celebrator_id);
         }
 
-        if (holiday == "Дни рождения декабря 2024") {
+        if (holiday == "Дни рождения января 2025") {
           await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения ноября 2024") {
+        if (holiday == "Дни рождения декабря 2024") {
           await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения октября 2024") {
+        if (holiday == "Дни рождения ноября 2024") {
           await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
 
@@ -2431,7 +2431,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
   //let period = await Period.findOne({ key:0 });
   let period;
-  if (newOrder.holiday == "Дни рождения ноября 2024") {
+  if (newOrder.holiday == "Дни рождения декабря 2024") {
     period = {
       "date1": 1,
       "date2": 30,
@@ -2460,7 +2460,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   }
 
 
-  if (newOrder.holiday == "Дни рождения октября 2024") {
+  if (newOrder.holiday == "Дни рождения ноября 2024") {
     period = {
       "date1": 26,
       "date2": 31,
@@ -2471,7 +2471,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "scoredPluses": 2
     }
   }
-  if (newOrder.holiday == "Дни рождения декабря 2024") {
+  if (newOrder.holiday == "Дни рождения января 2025") {
     period = {
       "date1": 1,
       "date2": 5,
@@ -3040,7 +3040,7 @@ async function fillOrder(housesForInstitutes, proportion, period, order_id, filt
 //set restrictions for searching
 
 async function collectSeniors(housesForInstitutes, data, orderFilter, holiday) {
-  if (holiday == "Дни рождения декабря 2024") {
+  if (holiday == "Дни рождения января 2025") {
     console.log('test1');
   }
   console.log('holiday1');
@@ -3158,13 +3158,13 @@ async function collectSeniors(housesForInstitutes, data, orderFilter, holiday) {
       if (result) {
         //console.log(result);
         await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-        if (holiday == "Дни рождения декабря 2024") {
+        if (holiday == "Дни рождения января 2025") {
           await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения ноября 2024") {
+        if (holiday == "Дни рождения декабря 2024") {
           await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения октября 2024") {
+        if (holiday == "Дни рождения ноября 2024") {
           await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
 
@@ -3294,13 +3294,13 @@ async function searchSenior(
     console.log("filter");
     console.log(filter);
 
-    if (holiday == "Дни рождения декабря 2024") {
+    if (holiday == "Дни рождения января 2025") {
       celebrator = await ListNext.findOne(filter);
     }
-    if (holiday == "Дни рождения ноября 2024") {
+    if (holiday == "Дни рождения декабря 2024") {
       celebrator = await List.findOne(filter);
     }
-    if (holiday == "Дни рождения октября 2024") {
+    if (holiday == "Дни рождения ноября 2024") {
       celebrator = await ListBefore.findOne(filter);
     }
 
@@ -3378,7 +3378,7 @@ function sendMessageToAdmin(text, e) { console.log(text + e); }
 // check is active period actual
 
 async function checkActivePeriod(period, month) {
-  if (month.number == 11) {
+  if (month.number == 12) {
     let today = new Date();
     let inTwoWeeks = new Date();
     let controlDate = period.secondTime ? 14 : 10;//
@@ -6039,7 +6039,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "birthday") {
       const celebratorsHB = await List.find({ absent: false });
       for (let celebrator of celebratorsHB) {
-        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения ноября 2024" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения декабря 2024" }).countDocuments();
         await List.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await List.findOne({ _id: celebrator._id });
 
@@ -6052,7 +6052,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "birthdayBefore") {
       const celebratorsHB = await ListBefore.find({ absent: false });
       for (let celebrator of celebratorsHB) {
-        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения октября 2024" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения ноября 2024" }).countDocuments();
         await ListBefore.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await ListBefore.findOne({ _id: celebrator._id });
 
@@ -6065,7 +6065,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "birthdayBefore") {
       const celebratorsHB = await ListNext.find({ absent: false });
       for (let celebrator of celebratorsHB) {
-        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения декабря 2024" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения января 2025" }).countDocuments();
         await ListNext.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await ListNext.findOne({ _id: celebrator._id });
 
@@ -6152,7 +6152,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "newYear") {
       let housesSet = new Set();
       //const celebratorsNewYear = await NewYear.find({ absent: false });
-      const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "ЯСНАЯ_ПОЛЯНА" });
+      const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "СПАССК-ДАЛЬНИЙ" });
       let count = celebratorsNewYear.length;
       for (let celebrator of celebratorsNewYear) {
         console.log(celebrator.seniorId);
@@ -6170,7 +6170,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
         housesSet.add(celebrator.nursingHome);
       }
       //let houses = Array.from(housesSet);
-      let houses = ["ЯСНАЯ_ПОЛЯНА"];
+      let houses = ["СПАССК-ДАЛЬНИЙ"];
 
 
       for (let house of houses) {
@@ -8192,7 +8192,7 @@ async function fillOrderForInstitutes(
   console.log(restrictedHouses);
 
 
-  let activeHouse = await House.find({ isReleased: false, isActive: true, noAddress: false, nursingHome: { $nin: restrictedHouses } });//
+ let activeHouse = await House.find({ isReleased: false, isActive: true, noAddress: false, nursingHome: { $nin: restrictedHouses } });//
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
   //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
@@ -8213,10 +8213,10 @@ async function fillOrderForInstitutes(
   
      let activeHouse = await House.find({
       isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
-        $in: [ "БЕРЕЗОВСКИЙ"]
+        $in: [ "ВОЗНЕСЕНЬЕ"]
       }
-    });
- */
+    });*/
+ 
 
 
   /* 
@@ -8241,7 +8241,7 @@ async function fillOrderForInstitutes(
     //console.log(house.nursingHome);
 
 
-    if (holiday == "Дни рождения ноября 2024") {
+    if (holiday == "Дни рождения декабря 2024") {
       count = await List.find({
         nursingHome: house.nursingHome,
         //gender: "Female",
@@ -8249,14 +8249,14 @@ async function fillOrderForInstitutes(
       }).countDocuments();
     }
 
-    if (holiday == "Дни рождения декабря 2024") {
+    if (holiday == "Дни рождения января 2025") {
       count = await ListNext.find({
         nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
       }).countDocuments();
     }
 
 
-    if (holiday == "Дни рождения октября 2024") {
+    if (holiday == "Дни рождения ноября 2024") {
       count = await ListBefore.find({
         nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
       }).countDocuments();
@@ -8299,8 +8299,8 @@ async function fillOrderForInstitutes(
       biggerHouse = house.nursingHome;
     }
 
-    if (count < amount && count > 2) {
-      //if (count < 40 && count > 2) {
+   if (count < amount && count > 2) {
+      // if (count < 6 && count > 2) {
       //if (count < amount && count > 0) {
       smallerHouses.push(
         {
@@ -8311,10 +8311,10 @@ async function fillOrderForInstitutes(
     }
   }
 
-  if (biggerHouse) {
+   if (biggerHouse) {
     seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, biggerHouse, prohibitedId);
     return seniorsData;
-  }
+  } 
 
   console.log("amountInSmallerHouses");
   console.log(amountInSmallerHouses);
@@ -8559,7 +8559,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
   }
 
 
-  if (holiday == "Дни рождения декабря 2024") {
+  if (holiday == "Дни рождения января 2025") {
 
     seniorsData = await ListNext.find({
       nursingHome: nursingHome,
@@ -8579,7 +8579,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
   }
 
 
-  if (holiday == "Дни рождения ноября 2024") {
+  if (holiday == "Дни рождения декабря 2024") {
 
     seniorsData = await List.find({
       //gender: "Female", 
@@ -8597,7 +8597,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if (holiday == "Дни рождения октября 2024") {
+  if (holiday == "Дни рождения ноября 2024") {
 
     seniorsData = await ListBefore.find({
       nursingHome: nursingHome,
