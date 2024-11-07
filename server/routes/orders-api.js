@@ -4340,7 +4340,8 @@ async function searchSeniorNewYear(
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
-    absent: { $ne: true }
+    absent: { $ne: true },
+    onlyForInstitute: false
   };
 
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
@@ -8213,10 +8214,10 @@ async function fillOrderForInstitutes(
   
      let activeHouse = await House.find({
       isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
-        $in: [ "ВОЗНЕСЕНЬЕ"]
+        $in: [ "КРАСНОВИШЕРСК"]
       }
-    });*/
- 
+    }); */
+
 
 
   /* 
@@ -8277,7 +8278,7 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Новый год 2025") {
       count = await NewYear.find({
-        forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }
+        forInstitute: 0, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, onlyForInstitute: true
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
@@ -8289,7 +8290,7 @@ async function fillOrderForInstitutes(
 
     console.log("count");
     console.log(count);
-
+ 
     if (count == amount) {
       seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, house.nursingHome, prohibitedId);
       return seniorsData;
@@ -8297,10 +8298,10 @@ async function fillOrderForInstitutes(
 
     if (count > amount) {
       biggerHouse = house.nursingHome;
-    }
+    } 
 
    if (count < amount && count > 2) {
-      // if (count < 6 && count > 2) {
+      // if (count <80 && count > 2) {
       //if (count < amount && count > 0) {
       smallerHouses.push(
         {
@@ -8311,10 +8312,10 @@ async function fillOrderForInstitutes(
     }
   }
 
-   if (biggerHouse) {
+  if (biggerHouse) {
     seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, biggerHouse, prohibitedId);
     return seniorsData;
-  } 
+  }   
 
   console.log("amountInSmallerHouses");
   console.log(amountInSmallerHouses);
@@ -8506,7 +8507,8 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
       nursingHome: nursingHome,
       absent: false,
       plusAmount: { $lt: 1 },
-      _id: { $nin: prohibitedId } // ИСПРАВИТЬ
+      _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+      onlyForInstitute: true
     }).limit(amount);
 
     console.log("seniorsData");

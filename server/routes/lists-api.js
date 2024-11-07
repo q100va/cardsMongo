@@ -1655,7 +1655,7 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
     console.log("0- check NY fullness " + req.body.nursingHome);
 
     //let result = await checkAllNYFullness(req.body.nursingHome);
-    let result = await checkAllNYFullness("ПОБЕДИМ");
+    let result = await checkAllNYFullness("ЯСНАЯ_ПОЛЯНА");
     console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
@@ -1760,14 +1760,14 @@ async function checkAllNYFullness(house) {
     } */
 
   await findAllNYDoubles(house);
-  //await restoreStatistic(house);
+  await restoreNYStatistic(house);
 
   return amount.toString();
 
 }
 
-async function restoreStatistic(activeHouse) {
-  console.log("activeHouse");
+async function restoreNYStatistic(activeHouse) {
+  console.log("restoreStatistic");
   console.log(activeHouse);
 
   let house = await House.findOne({ nursingHome: activeHouse });
@@ -1783,8 +1783,8 @@ async function restoreStatistic(activeHouse) {
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
 
-  /*   console.log("plus0");
-    console.log(plus0); */
+   console.log("plus0");
+    console.log(plus0); 
 
   await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus0": plus0[0]?.count ? plus0[0].count : 0 } });
 
@@ -1793,8 +1793,8 @@ async function restoreStatistic(activeHouse) {
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
 
-  /*   console.log("plus1");
-    console.log(plus1); */
+  console.log("plus1");
+    console.log(plus1); 
   await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus1": plus1[0]?.count ? plus1[0].count : 0 } });
 
   let plus2 = await NewYear.aggregate([
