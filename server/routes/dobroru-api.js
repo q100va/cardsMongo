@@ -155,7 +155,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "date2": 31,
             "isActive": true,
             "key": 0,
-            "maxPlus": 2, //PLUSES
+            "maxPlus": 3, //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }
@@ -480,14 +480,14 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     console.log("proportion");
     console.log(proportion);
 
-    console.log("newOrder.filter.maxOneHouse");
-    console.log(newOrder.filter.maxOneHouse);
+    //console.log("newOrder.filter.maxOneHouse");
+   //console.log(newOrder.filter.maxOneHouse);
 
     if (seniorsData.celebratorsAmount < newOrder.amount) {
 
         await deleteErrorPlus(order_id, newOrder.holiday);
         return {
-            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса. Требуемых адресов только ` + seniorsData.celebratorsAmount,
             success: false
 
         }
@@ -522,7 +522,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
 // create a list of seniors for the order with special dates
 
-async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId, restrictedHouses, orderFilter, holiday) {
+/* async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId, restrictedHouses, orderFilter, holiday) {
     const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
     let day1, day2, fixed;
 
@@ -627,7 +627,7 @@ async function fillOrderSpecialDate(proportion, period, order_id, filter, date1,
     //console.log(data.restrictedHouses);
     //console.log(data.restrictedPearson);
     return data;
-}
+} */
 
 
 // create a list of seniors for the order 789
@@ -667,7 +667,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
             data.maxPlus = period.maxPlus;
 
             data = await collectSeniors(data, orderFilter, holiday);
-
+/* 
             if (data.counter < proportion[category]) {
                 //if (orderFilter.date2 > orderFilter.date1 + 5) { }
                 if (period.key == 5) {
@@ -686,7 +686,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
                     }
                 }
                 data = await collectSeniors(data, orderFilter, holiday);
-            }
+            } */
 
             if (data.counter < proportion[category]) {
                 return data;
@@ -838,6 +838,11 @@ async function collectSeniors(data, orderFilter, holiday) {
                 // console.log("data.regions");
                 // console.log(data.regions);
 
+                if (data.filter.nursingHome || data.filter.region) {
+                    data.proportion.oneHouse = null;
+                    data.proportion.oneRegion = null;
+                }
+
                 if (data.proportion.oneHouse) {
                     if (data.houses[result["nursingHome"]] >= data.proportion["oneHouse"]) {
                         data.restrictedHouses.push(result["nursingHome"]);
@@ -881,7 +886,7 @@ async function searchSenior(
         data.restrictedPearson,
         data.date1,
         data.date2,
-        БАЗГИЕВОdata.maxPlus,
+        data.maxPlus,
         data.filter */
 
 
@@ -1192,7 +1197,7 @@ async function searchSeniorHelper(
 
     let filter = Object.assign(standardFilter, data.filter);
     console.log("FILTER");
-    console.log(filter);
+    console.log(filter.category);
 
     let celebrator;
     //CHANGE!!!

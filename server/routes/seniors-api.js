@@ -410,7 +410,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null,   monthBirthday : {$in: [1, 12]}}); //, comment1: "(ПСУ)", monthBirthday:3, monthBirthday:{$gt:3} ,  monthBirthday : {$in: [10, 11, 12]}
+    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null,  }); //, comment1: "(ПСУ)", monthBirthday:3, monthBirthday:{$gt:3} ,  monthBirthday : {$in: [10, 11, 12]}
 
     newList.sort(
       (prev, next) => {

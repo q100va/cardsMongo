@@ -452,7 +452,7 @@ export class ListComponent implements OnInit {
   showLessPlusNewYearList(event: any) {
     this.listService.findAllNewYearLists().subscribe(
       (res) => {
-        this.lists = res["data"].filter((item) => item.plusAmount < 3);
+        this.lists = res["data"].filter((item) => item.plusAmount < 1);
         //this.lists.sort((prev, next) => prev.dateBirthday - next.dateBirthday);
         this.listLength = this.lists.length;
         this.oldMen = this.lists.filter(
