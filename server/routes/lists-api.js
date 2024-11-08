@@ -1655,7 +1655,7 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
     console.log("0- check NY fullness " + req.body.nursingHome);
 
     //let result = await checkAllNYFullness(req.body.nursingHome);
-    let result = await checkAllNYFullness("ЯСНАЯ_ПОЛЯНА");
+    let result = await checkAllNYFullness("ЭЛЕКТРОГОРСК");
     console.log("4-check NY fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);

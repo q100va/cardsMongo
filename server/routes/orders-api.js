@@ -2433,8 +2433,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения декабря 2024") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 11,
+      "date2": 15,
       "isActive": true,
       "key": 0,
       "maxPlus": 3, //PLUSES1
@@ -8193,7 +8193,7 @@ async function fillOrderForInstitutes(
   console.log(restrictedHouses);
 
 
- let activeHouse = await House.find({ isReleased: false, isActive: true, noAddress: false, nursingHome: { $nin: restrictedHouses } });//
+let activeHouse = await House.find({ isReleased: false, isActive: true, noAddress: false, nursingHome: { $nin: restrictedHouses } });//
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
   //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
@@ -8221,12 +8221,12 @@ async function fillOrderForInstitutes(
 
 
   /* 
-  
     let activeHouse = await House.find({
       isReleased: false, noAddress: false, isActive: true, region: {
-        $in: [ "ЛЕНИНГРАДСКАЯ", "ПСКОВСКАЯ", "НОВГОРОДСКАЯ", "МУРМАНСКАЯ"]
+        $in: [ "МОСКОВСКАЯ"]
       }
     }); */
+  
 
   console.log("activeHouse");
   console.log(activeHouse.length);
