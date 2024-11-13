@@ -742,7 +742,7 @@ export class DobroruComponent implements OnInit {
             usernameList =
               usernameList.length == 0 ? user : usernameList + ", " + user;
           }
-          if (result.amount + this.form.controls.amount.value < 50) {
+          if (result.amount + this.form.controls.amount.value <= 50) {
             this.confirmationService.confirm({
               message:
                 "Пользователь с такими контактами уже получил адреса на праздник '" +
