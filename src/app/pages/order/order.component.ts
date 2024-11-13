@@ -223,10 +223,10 @@ export class OrderComponent implements OnInit {
       categoryOfInstitute: [null],
     });
 
-    this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
+/*     this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
       startWith(""),
       map((value) => this._filter(value || ""))
-    );
+    ); */
   }
   private addCheckboxes() {
     this.clientInstitutes.forEach(() =>
@@ -234,16 +234,17 @@ export class OrderComponent implements OnInit {
     );
   }
 
-  private _filter(value: string): string[] {
+/*   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    /*     console.log("value");
-    console.log(value);
-    console.log("this.options");
-    console.log(this.options); */
+
 
     let result = this.options.filter((option) => option.includes(filterValue));
     return result;
-  }
+  }  */   
+  /*     console.log("value");
+    console.log(value);
+    console.log("this.options");
+    console.log(this.options); */
 
   get institutes() {
     return this.form.get("institutes") as FormArray;
@@ -280,7 +281,7 @@ export class OrderComponent implements OnInit {
   }
 
   checkContactTimeOut() {
-    setTimeout(() => {
+  //  setTimeout(() => {
       //console.log("this.previousClient");
       //console.log(this.previousClient);
       //console.log("checkContact");
@@ -350,7 +351,7 @@ export class OrderComponent implements OnInit {
         this.isForInstitutes = false;
         this.lineItems = [];
       }
-    }, 200);
+  //  }, 200);
   }
 
   openCreateClientDialog(): void {
@@ -1146,7 +1147,7 @@ export class OrderComponent implements OnInit {
         "Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки один раз к указанному празднику. Письма писать не нужно!\n" +
         "Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления мы готовим примерно за 3 месяца до праздника.\n\n";
       bottom =
-        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет минимум 30 дней.\n\n" +
+        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет минимум 30 дней. Лучше открытки отправить, как можно раньше, а на конверте указать 'прошу вручить <дата>'.\n\n" +
         "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и ФИО получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
         "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
         "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +

@@ -184,10 +184,10 @@ export class DobroruComponent implements OnInit {
       categoryOfInstitute: [null],
     });
 
-    this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
+/*     this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
       startWith(""),
       map((value) => this._filter(value || ""))
-    );
+    ); */
   }
   private addCheckboxes() {
     this.clientInstitutes.forEach(() =>
@@ -195,17 +195,17 @@ export class DobroruComponent implements OnInit {
     );
   }
 
-  private _filter(value: string): string[] {
+/*   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
+
+
+    let result = this.options.filter((option) => option.includes(filterValue));
+    return result;
+  } */
     /*     console.log("value");
     console.log(value);
     console.log("this.options");
     console.log(this.options); */
-
-    let result = this.options.filter((option) => option.includes(filterValue));
-    return result;
-  }
-
   get institutes() {
     return this.form.get("institutes") as FormArray;
   }
@@ -241,7 +241,7 @@ export class DobroruComponent implements OnInit {
   }
 
   checkContactTimeOut() {
-    setTimeout(() => {
+  //  setTimeout(() => {
       //console.log("this.previousClient");
       //console.log(this.previousClient);
       //console.log("checkContact");
@@ -311,7 +311,7 @@ export class DobroruComponent implements OnInit {
         this.isForInstitutes = false;
         this.lineItems = [];
       }
-    }, 200);
+    //}, 200);
   }
 
   openCreateClientDialog(): void {

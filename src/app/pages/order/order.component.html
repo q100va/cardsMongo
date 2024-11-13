@@ -372,14 +372,14 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email/аккаунт/номер*</mat-label>
-                                            <input type="text" matInput [formControl]="form.controls['contact']"
-                                                [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
+                                            <input type="text" matInput [formControl]="form.controls['contact']" (blur)="checkContactTimeOut()">
+<!--                                                 [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
                                             <mat-autocomplete #auto="matAutocomplete">
                                                 <mat-option *ngFor="let option of filteredOptions | async"
                                                     [value]="option">
                                                     {{option}}
                                                 </mat-option>
-                                            </mat-autocomplete>
+                                            </mat-autocomplete> -->
                                         </mat-form-field>
                                     </td>
                                 </tr>
@@ -677,7 +677,7 @@
                             Добрый день!</p>
 
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
-                            К сожалению, сроки доставки простых писем и бандеролей в настоящее время предсказать
+                            Сроки доставки простых писем и бандеролей, к сожалению, в настоящее время предсказать
                             невозможно.<br />
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
                             чем на месяц.<br />
@@ -832,7 +832,7 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет минимум 30 дней.
+                                Рассчитывайте, что срок доставки будет минимум 30 дней. Лучше открытки отправить, как можно раньше, а на конверте указать "прошу вручить <дата>".
                             </li>
                         </ul>
 

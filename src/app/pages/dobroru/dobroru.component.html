@@ -201,14 +201,14 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email/аккаунт/номер*</mat-label>
-                                            <input type="text" matInput [formControl]="form.controls['contact']"
-                                                [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
+                                            <input type="text" matInput [formControl]="form.controls['contact']" (blur)="checkContactTimeOut()">
+<!--                                                 [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
                                             <mat-autocomplete #auto="matAutocomplete">
                                                 <mat-option *ngFor="let option of filteredOptions | async"
                                                     [value]="option">
                                                     {{option}}
                                                 </mat-option>
-                                            </mat-autocomplete>
+                                            </mat-autocomplete> -->
                                         </mat-form-field>
                                     </td>
                                 </tr>
