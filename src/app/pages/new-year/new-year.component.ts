@@ -238,7 +238,7 @@ export class NewYearComponent implements OnInit {
   }
 
   checkContactTimeOut() {
- //   setTimeout(() => {
+   setTimeout(() => {
       //console.log("this.previousClient");
       //console.log(this.previousClient);
       //console.log("checkContact");
@@ -308,7 +308,7 @@ export class NewYearComponent implements OnInit {
         this.isForInstitutes = false;
         this.lineItems = [];
       }
-   // }, 200);
+    }, 200);
   }
 
   openCreateClientDialog(): void {
