@@ -29,6 +29,7 @@ const listSchema = new Schema(
     dateNameDay: { type: Number },
     monthNameDay: { type: Number },
     plusAmount: { type: Number },
+    plusAmountNavigators: { type: Number },
     oldest: { type: Boolean, default: false },
     category: { type: String },
     noAddress: { type: Boolean },
