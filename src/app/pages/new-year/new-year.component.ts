@@ -1089,8 +1089,8 @@ export class NewYearComponent implements OnInit {
     let bottomForSubscribers =
       "Сердечно вас благодарю!\n" +
       "_________________________________________________\n" +
-      "Помочь оплатить труд культорга для отделения милосердия можно по ссылке:\n" +
-      "https://starikam.org/campaign/poka-burlit-zhizn-toske-net-mesta/ ";
+      "Поучаствовать в сборе на новогодние гостинцы можно по ссылке:\n" +
+      "https://starikam.org/ ";
 
     let addresses = "";
     console.log(this.lineItems);
