@@ -59,10 +59,10 @@
                                             <mat-select [(value)]="defaultSource" [formControl]="form.controls.source">
                                                 <mat-option value="dobroru">добро ру</mat-option>
                                                 <mat-option value="site">сайт фонда</mat-option>
-                                                <mat-option value="subscription">постоянные</mat-option>                                                
+                                                <mat-option value="subscription">постоянные</mat-option>
                                                 <mat-option value="vk">вконтакте</mat-option>
                                                 <mat-option value="telegram">телеграм</mat-option>
-                                                <mat-option value="insta">инста</mat-option>                                      
+                                                <mat-option value="insta">инста</mat-option>
                                                 <mat-option value="other">другое</mat-option>
                                             </mat-select>
                                         </mat-form-field>
@@ -77,7 +77,7 @@
 
                             </table>
 
-                           <!--  <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3> -->
+                            <!--  <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3> -->
                             <mat-accordion class="example-headers-align">
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
@@ -90,54 +90,55 @@
                                     </mat-expansion-panel-header>
 
                                     <table class="example-full-width" cellspacing="0">
-                                        <tr >
-                                            <td width="50%" >
+                                        <tr>
+                                            <td width="50%">
                                                 <div *ngIf='showFilter'>
 
-                                                <label id="example-radio-group-label">Пол</label>
-                                                <mat-radio-group class="example-radio-group" [(ngModel)]="genderFilter"
-                                                    [ngModelOptions]="{standalone: true}">
-                                                    <mat-radio-button class="example-radio-button" [value]="'any'"
-                                                        default (change)="correctProportion('any')">
-                                                        любой
-                                                    </mat-radio-button>
-                                                    <mat-radio-button class="example-radio-button" [value]="'Female'"
-                                                        (change)="correctProportion('Female')">
-                                                        женщины
-                                                    </mat-radio-button>
-                                                    <mat-radio-button class="example-radio-button" [value]="'Male'"
-                                                        (change)="correctProportion('Male')">
-                                                        мужчины
-                                                    </mat-radio-button>
+                                                    <label id="example-radio-group-label">Пол</label>
+                                                    <mat-radio-group class="example-radio-group"
+                                                        [(ngModel)]="genderFilter"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <mat-radio-button class="example-radio-button" [value]="'any'"
+                                                            default (change)="correctProportion('any')">
+                                                            любой
+                                                        </mat-radio-button>
+                                                        <mat-radio-button class="example-radio-button"
+                                                            [value]="'Female'" (change)="correctProportion('Female')">
+                                                            женщины
+                                                        </mat-radio-button>
+                                                        <mat-radio-button class="example-radio-button" [value]="'Male'"
+                                                            (change)="correctProportion('Male')">
+                                                            мужчины
+                                                        </mat-radio-button>
 
-                                                    <mat-radio-button class="example-radio-button"
-                                                        [value]="'proportion'"
-                                                        (change)="correctProportion('proportion')">
-                                                        в пропорции </mat-radio-button>
-                                                    <div class="example-container" *ngIf="useProportion">
-                                                        <mat-form-field style="width: 40%;" class="example-user-input"
-                                                            appearance="fill">
-                                                            <mat-label>ж</mat-label>
-                                                            <input matInput type="number"
-                                                                [formControl]="form.controls['femaleAmount']"
-                                                                placeholder="1" />
-                                                        </mat-form-field>
+                                                        <mat-radio-button class="example-radio-button"
+                                                            [value]="'proportion'"
+                                                            (change)="correctProportion('proportion')">
+                                                            в пропорции </mat-radio-button>
+                                                        <div class="example-container" *ngIf="useProportion">
+                                                            <mat-form-field style="width: 40%;"
+                                                                class="example-user-input" appearance="fill">
+                                                                <mat-label>ж</mat-label>
+                                                                <input matInput type="number"
+                                                                    [formControl]="form.controls['femaleAmount']"
+                                                                    placeholder="1" />
+                                                            </mat-form-field>
 
-                                                        <mat-form-field style="width: 40%;" class="example-user-input"
-                                                            appearance="fill">
-                                                            <mat-label>м</mat-label>
-                                                            <input matInput type="number"
-                                                                [formControl]="form.controls['maleAmount']"
-                                                                placeholder="1" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                    <mat-error class="error"
-                                                        *ngIf="form.controls.femaleAmount.hasError('min') || form.controls.maleAmount.hasError('min') ">
-                                                        Введите валидные данные (min 1)!
-                                                    </mat-error>
+                                                            <mat-form-field style="width: 40%;"
+                                                                class="example-user-input" appearance="fill">
+                                                                <mat-label>м</mat-label>
+                                                                <input matInput type="number"
+                                                                    [formControl]="form.controls['maleAmount']"
+                                                                    placeholder="1" />
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <mat-error class="error"
+                                                            *ngIf="form.controls.femaleAmount.hasError('min') || form.controls.maleAmount.hasError('min') ">
+                                                            Введите валидные данные (min 1)!
+                                                        </mat-error>
 
-                                                </mat-radio-group>
-                                            </div>
+                                                    </mat-radio-group>
+                                                </div>
 
                                             </td>
                                             <td>
@@ -149,7 +150,7 @@
                                                             <h4>Регион
                                                             </h4>
                                                             <mat-form-field appearance="fill">
-    
+
                                                                 <mat-select [formControl]="form.controls['region']"
                                                                     (selectionChange)="onChangeRegion()">
                                                                     <mat-option></mat-option>
@@ -161,7 +162,7 @@
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
-<!--                                                     <tr>
+                                                    <!--                                                     <tr>
                                                         <td colspan="2">
                                                             <h4>Интернат</h4>
                                                             <mat-form-field appearance="fill">
@@ -178,7 +179,7 @@
                                                             </mat-form-field>
                                                         </td>
                                                     </tr> -->
-    
+
                                                 </table>
 
                                             </td>
@@ -209,8 +210,9 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email/аккаунт/номер*</mat-label>
-                                            <input type="text" matInput [formControl]="form.controls['contact']" (blur)="checkContactTimeOut()">
-<!--                                                 [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
+                                            <input type="text" matInput [formControl]="form.controls['contact']"
+                                                (blur)="checkContactTimeOut()">
+                                            <!--                                                 [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
                                             <mat-autocomplete #auto="matAutocomplete">
                                                 <mat-option *ngFor="let option of filteredOptions | async"
                                                     [value]="option">
@@ -476,7 +478,8 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Учтите, что по России письма идут 30 дней и дольше. Рекомендуем отправить открытки в ближайшие
+                                Учтите, что по России письма идут 30 дней и дольше. Рекомендуем отправить открытки в
+                                ближайшие
                                 дни с пометкой на конверте "прошу вручить 31 декабря".
                             </li>
                         </ul>
@@ -635,7 +638,7 @@
                     </mat-card-content>
 
                     <br />
-<!--                     <mat-card-content *ngFor="let lineItem of lineItems">
+                    <!--                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
 
@@ -684,7 +687,8 @@
                                 ПРОСТЫМИ письмами (до 100 г).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет минимум 30 дней. Отправляйте открытки сразу, как только сможете.
+                                Рассчитывайте, что срок доставки будет минимум 30 дней. Отправляйте открытки сразу, как
+                                только сможете.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя
@@ -695,7 +699,7 @@
                             </li>
                         </ul>
 
-<!--                         <h3
+                        <!--                         <h3
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                             Как писать поздравления?</h3>
 
@@ -729,22 +733,22 @@
                         </ul> -->
 
                         <h3
-                        style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
-                        Как писать поздравления?</h3>
-                    <ul>
-                        <li style="font-family: 'Times New Roman', Times, serif;">
-                            Используйте обращение на "Вы" и по имени-отчеству (если отчество
-                            указано).
-                        </li>
-                        <li style="font-family: 'Times New Roman', Times, serif;">
-                            Пишите поздравления от себя лично (не от организации, не от школы, не
-                            от фонда).
-                        </li>
-                        <li style="font-family: 'Times New Roman', Times, serif;">
-                            Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
-                        </li>
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Как писать поздравления?</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Используйте обращение на "Вы" и по имени-отчеству (если отчество
+                                указано).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Пишите поздравления от себя лично (не от организации, не от школы, не
+                                от фонда).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
+                            </li>
 
-                    </ul>
+                        </ul>
 
 
                         <h3
@@ -801,6 +805,32 @@
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять
                                 людей со всеми праздниками или писать им письма!
+                            </li>
+                        </ul>
+                        <h3
+                            style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                            Дружеское напоминание.</h3>
+                        <ul>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Открытки дети могут сделать сами. Это может быть рисунок или аппликация, но на плотной
+                                бумаге.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Для поздравлений с новым годом вы можете использовать <a
+                                    href="https://youtu.be/Mt52Mb2v0uY?feature=shared">мастер-класс от нашего фонда</a>
+                                или любой другой подходящий, но придерживаться классических мотивов.
+                            </li>
+                            <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                Дети чаще всего пишут от души, но они, конечно, не понимают обстоятельств, которые
+                                сопровождают жизнь в интернате, поэтому тут обязательно нужны разъяснения взрослых.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Желательно, чтобы текст для младших школьников написал взрослый, например, на доске,
+                                чтобы не было ошибок.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                В открытки, изготовленные дошкольниками или младшими школьниками, можно вклеить
+                                распечатанные поздравления или вписать их взрослому.
                             </li>
                         </ul>
 
