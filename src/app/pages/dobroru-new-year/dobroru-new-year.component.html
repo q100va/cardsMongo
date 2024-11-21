@@ -39,7 +39,7 @@
                                             Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
                                         <mat-card-subtitle>Праздник:
-                                            <span class="header">{{holiday}} даты 11-31</span>
+                                            <span class="header">{{holiday}}</span>
                                         </mat-card-subtitle>
 
                                     </td>
@@ -71,8 +71,8 @@
 
                             </table>
 
-                         <!--    <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3> -->
-                            <mat-accordion class="example-headers-align" >
+                           <!--  <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3> -->
+                            <mat-accordion class="example-headers-align">
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title>
@@ -84,8 +84,8 @@
                                     </mat-expansion-panel-header>
 
                                     <table class="example-full-width" cellspacing="0">
-                                        <tr>
-                                            <td width="50%">
+                                        <tr >
+                                            <td width="50%" >
                                                 <div *ngIf='showFilter'>
 
                                                 <label id="example-radio-group-label">Пол</label>
@@ -131,7 +131,8 @@
                                                     </mat-error>
 
                                                 </mat-radio-group>
-                                                </div>
+                                            </div>
+
                                             </td>
                                             <td>
 
@@ -154,7 +155,7 @@
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
-                                                   <!--  <tr>
+<!--                                                     <tr>
                                                         <td colspan="2">
                                                             <h4>Интернат</h4>
                                                             <mat-form-field appearance="fill">

@@ -28,15 +28,15 @@ import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog
 //import { MessageService } from "primeng/api";
 
 @Component({
-  selector: "app-dobroru",
-  templateUrl: "./dobroru.component.html",
-  styleUrls: ["./dobroru.component.css"],
+  selector: "app-dobroru-new-year",
+  templateUrl: "./dobroru-new-year.component.html",
+  styleUrls: ["./dobroru-new-year.component.css"],
 })
-export class DobroruComponent implements OnInit {
+export class DobroruNewYearComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения декабря 2024";
+  holiday: string = "Новый год 2025";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -154,7 +154,7 @@ export class DobroruComponent implements OnInit {
           "ВЛАДИМИРСКАЯ",
           "ВОЛГОГРАДСКАЯ",
           "ВОЛОГОДСКАЯ",
-          "ВОРОНЕЖСКАЯ",
+          //"ВОРОНЕЖСКАЯ",
           "ЗАБАЙКАЛЬСКИЙ",
           "ИВАНОВСКАЯ",
           "ИРКУТСКАЯ",
@@ -190,10 +190,10 @@ export class DobroruComponent implements OnInit {
           "ТВЕРСКАЯ",
           "ТУЛЬСКАЯ",
           "ТЮМЕНСКАЯ",
-          "УДМУРТСКАЯ",
-          "УЛЬЯНОВСКАЯ",
+          //"УДМУРТСКАЯ",
+          //"УЛЬЯНОВСКАЯ",
           "ХАКАСИЯ",
-          "ХАНТЫ-МАНСИЙСКИЙ",
+          //"ХАНТЫ-МАНСИЙСКИЙ",
           "ЧЕЛЯБИНСКАЯ",
           "ЧУВАШСКАЯ",
           "ЯРОСЛАВСКАЯ",
@@ -599,7 +599,7 @@ export class DobroruComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения декабря 2024";
+    this.holiday = "Новый год 2025";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -884,7 +884,7 @@ export class DobroruComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: this.addressFilter,
+        addressFilter: "noSpecial",
         genderFilter: this.genderFilter,
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
@@ -894,7 +894,7 @@ export class DobroruComponent implements OnInit {
         date2: this.form.controls.date2.value,
         region: this.form.controls.region.value,
         nursingHome: this.form.controls.nursingHome.value,
-        maxOneHouse: 1, //this.form.controls.maxOneHouse.value,
+        maxOneHouse: this.form.controls.maxOneHouse.value,
         maxNoAddress: this.form.controls.maxNoAddress.value,
         onlyWithPicture: this.form.controls.onlyWithPicture.value,
         onlyAnniversaries: this.form.controls.onlyAnniversaries.value,
@@ -908,7 +908,7 @@ export class DobroruComponent implements OnInit {
     //console.log(newOrder);
 
     this.orderService
-      .createDobroruOrder(newOrder, prohibitedId, restrictedHouses)
+      .createDobroruNewYearOrder(newOrder, prohibitedId, restrictedHouses)
       .subscribe(
         async (res) => {
           this.spinner = false;

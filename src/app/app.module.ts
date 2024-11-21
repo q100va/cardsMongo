@@ -109,6 +109,7 @@ import { UploadHbComponent } from './pages/upload-hb/upload-hb.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { UploadNyComponent } from './pages/upload-ny/upload-ny.component';
+import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-year.component";
 
 @NgModule({
   declarations: [
@@ -166,7 +167,8 @@ import { UploadNyComponent } from './pages/upload-ny/upload-ny.component';
     AdminVeteransComponent,
     SeniorDayComponent,
     UploadHbComponent,
-    UploadNyComponent
+    UploadNyComponent,
+    DobroruNewYearComponent
 
   ],
   imports: [

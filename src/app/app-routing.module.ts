@@ -62,6 +62,7 @@ import { SeniorDayComponent } from "./pages/senior-day/senior-day.component";
 import { UploadHbComponent } from "./pages/upload-hb/upload-hb.component";
 import { UploadNyComponent } from "./pages/upload-ny/upload-ny.component";
 import { ManagerGuard } from "./shared/manager.guard";
+import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-year.component";
 const routes: Routes = [
   {
     path: "",
@@ -185,8 +186,13 @@ const routes: Routes = [
       },
 
       {
-        path: "orders/dobroru",
+        path: "orders/dobroru/happy-birthday",
         component: DobroruComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/dobroru/new-year",
+        component: DobroruNewYearComponent,
         canActivate: [AuthGuard],
       },
       {
