@@ -58,6 +58,12 @@
                                             <mat-label>Источник*</mat-label>
                                             <mat-select [(value)]="defaultSource" [formControl]="form.controls.source">
                                                 <mat-option value="dobroru">добро ру</mat-option>
+                                                <mat-option value="site">сайт фонда</mat-option>
+                                                <mat-option value="subscription">постоянные</mat-option>                                                
+                                                <mat-option value="vk">вконтакте</mat-option>
+                                                <mat-option value="telegram">телеграм</mat-option>
+                                                <mat-option value="insta">инста</mat-option>                                      
+                                                <mat-option value="other">другое</mat-option>
                                             </mat-select>
                                         </mat-form-field>
                                         <mat-error class="error"
@@ -368,7 +374,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <span *ngIf="lineItems.length > 0 && !isForInstitutes">
+                            <span *ngIf="lineItems.length > 0">
                                 <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
                             </span>
                         </td>
@@ -598,8 +604,8 @@
                         </p>
 
                         <p style="font-family: 'Times New Roman', Times, serif;">
-                            В правила поздравления были внесены изменения, поэтому сообщаю вам только адреса интернатов
-                            и количество поздравляемых, то есть открытки будут не именные.<br />
+<!--                             В правила поздравления были внесены изменения, поэтому сообщаю вам только адреса интернатов
+                            и количество поздравляемых, то есть открытки будут не именные.<br /> -->
                             Открытки нужно будет отправить ПРОСТОЙ бандеролью на адрес интерната через Почту России.
                             НЕ заказной, НЕ ценной, НЕ первого класса и никакой другой регистрируемой.
                             Потому что простую бандероль почтальон приносит в интернат, а за регистрируемыми
@@ -628,13 +634,39 @@
                     </mat-card-content>
 
                     <br />
-                    <mat-card-content *ngFor="let lineItem of lineItems">
+<!--                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
 
                         <p style="font-weight: bold; margin: 0;">
                             {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
 
+                        <br />
+                    </mat-card-content> -->
+
+                    <mat-card-content *ngFor="let lineItem of lineItems">
+
+                        <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
+                        <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment">{{lineItem.infoComment}}
+                        </p>
+                        <p style="color: red; font-weight: bold; margin: 0;" *ngIf="lineItem.adminComment">
+                            {{lineItem.adminComment}}</p>
+                        <!--                         <p style="font-weight: bold; margin: 0;">{{lineItem.celebrators.length}} открыток:
+                            {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p> -->
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+
+                            <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
+                            {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
+                            <span *ngIf="showIndexes">{{celebrator.index}}. </span>
+                            <!--     {{celebrator.lastName}} -->
+                            {{celebrator.firstName}}
+                            {{celebrator.patronymic}}
+                            <!--   {{celebrator.fullDayBirthday}} -->
+                            {{celebrator.comment1}}
+                            <!--   {{celebrator.linkPhoto}} 
+                            <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
+                            </span>-->
+                        </div>
                         <br />
                     </mat-card-content>
 
@@ -651,7 +683,7 @@
                                 ПРОСТЫМИ письмами (до 100 г).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет примерно 14-20 дней.
+                                Рассчитывайте, что срок доставки будет минимум 30 дней. Отправляйте открытки сразу, как только сможете.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя
@@ -659,11 +691,11 @@
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 На конверте/пакете укажите название праздника/праздников, особенно это актуально для
-                                дней рождений. (Например, "Дни рождения ноября").
+                                дней рождений. (Например, "Дни рождения декабря").
                             </li>
                         </ul>
 
-                        <h3
+<!--                         <h3
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                             Как писать поздравления?</h3>
 
@@ -694,7 +726,24 @@
                                 Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
                             </li>
 
-                        </ul>
+                        </ul> -->
+
+                        <h3
+                        style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
+                        Как писать поздравления?</h3>
+                    <ul>
+                        <li style="font-family: 'Times New Roman', Times, serif;">
+                            Используйте обращение на "Вы" и по имени-отчеству (если отчество
+                            указано).
+                        </li>
+                        <li style="font-family: 'Times New Roman', Times, serif;">
+                            Пишите поздравления от себя лично (не от организации, не от школы, не
+                            от фонда).
+                        </li>
+                        <li style="font-family: 'Times New Roman', Times, serif;">
+                            Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
+                        </li>
+                    </ul>
 
                         <h3
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
