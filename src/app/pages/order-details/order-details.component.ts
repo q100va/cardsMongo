@@ -10,6 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
 import { ConfirmationService } from "primeng/api";
+import { RoleService } from "src/app/services/roles.service";
 import { OrderService } from "src/app/services/order.service";
 //import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
 import { Order } from "src/app/shared/interfaces/order.interface";
@@ -31,6 +32,7 @@ export class OrderDetailsComponent implements OnInit {
   noRestricted: string;
   contact: string;
   userName: string;
+  userRole: any;
   isEdit = false;
   isNotLate = false;
   isNotOnlyOne = true;
@@ -57,10 +59,15 @@ export class OrderDetailsComponent implements OnInit {
     private resultDialog: MatDialog,
     private fb: FormBuilder,
     private cookieService: CookieService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private roleService: RoleService,
   ) {
     this.orderId = this.route.snapshot.paramMap.get("id");
     console.log(this.orderId);
+    this.roleService.findUserRole(this.cookieService.get("session_user")).subscribe((res) => {
+      this.userRole = res["data"];
+
+    });
   }
 
   ngOnInit(): void {
@@ -100,13 +107,14 @@ export class OrderDetailsComponent implements OnInit {
       (this.order.contact ? this.order.contact : "");
     console.log("this.order.holiday");
     console.log(this.order.holiday);
+    let i = 0;
 
     for (let lineItem of this.order.lineItems) {
       lineItem.Female = 0;
       lineItem.Male = 0;
       for (let celebrator of lineItem.celebrators) {
-        /*                 celebrator.index = i + 1;
-        i++; */
+                       celebrator.index = i + 1;
+        i++;
         if (celebrator.gender == "Female") lineItem.Female++;
         if (celebrator.gender == "Male") lineItem.Male++;
       }
