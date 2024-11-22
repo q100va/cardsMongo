@@ -648,7 +648,7 @@ export class DobroruNewYearComponent implements OnInit {
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
-    if (this.form.controls.amount.value > 50) {
+    if (this.form.controls.amount.value > 50 && this.form.controls.source.value == "dobroru") {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
           message:
