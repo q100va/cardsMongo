@@ -1553,7 +1553,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             }
 
             if (newOrder.filter.region ) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
-                if(newOrder.amount < 11)
+/*                 if(newOrder.amount < 11)
                  proportion.oneHouse = Math.ceil(newOrder.amount/2);
                  if(newOrder.amount >= 15)
                  proportion.oneHouse = 6;
@@ -1564,7 +1564,8 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                  if(newOrder.amount >= 40)
                  proportion.oneHouse = 9;
                  if(newOrder.amount == 50)
-                 proportion.oneHouse = 10;
+                 proportion.oneHouse = 10; */
+                 proportion.oneHouse = undefined;
      
              }
             //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
@@ -1629,7 +1630,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         }
 
         if (newOrder.filter.region ) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
-           if(newOrder.amount < 11)
+ /*           if(newOrder.amount < 11)
             proportion.oneHouse = Math.ceil(newOrder.amount/2);
             if(newOrder.amount >= 15)
             proportion.oneHouse = 6;
@@ -1640,7 +1641,8 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             if(newOrder.amount >= 40)
             proportion.oneHouse = 9;
             if(newOrder.amount == 50)
-            proportion.oneHouse = 10;
+            proportion.oneHouse = 10; */
+            proportion.oneHouse = undefined;
 
         }
         console.log("proportionSEE");
