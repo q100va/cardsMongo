@@ -75,8 +75,8 @@
 
                             </table>
 
-                            <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3>
-                            <mat-accordion class="example-headers-align" *ngIf="showFilter">
+                            <!-- <h3 class="warning" *ngIf='!showFilter'>Для коллективных заявок фильтры не применяются!</h3> -->
+                            <mat-accordion class="example-headers-align">
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
                                         <mat-panel-title matTooltip="Фильтры не работают для коллективных заявок.">
@@ -89,7 +89,8 @@
 
                                     <table class="example-full-width" cellspacing="0">
                                         <tr>
-                                            <td width="100%">
+                                            <td width="50%" >
+                                                <div *ngIf='showFilter'>
 
                                                 <label id="example-radio-group-label">Адреса</label>
                                                 <mat-radio-group class="example-radio-group" [(ngModel)]="addressFilter"
@@ -172,11 +173,13 @@
 
                                                 <br />
                                                 <br />
+                                            </div>
 
                                             </td>
+
                                             <td>
 
-                                                <h4
+                                                <h4  *ngIf="showFilter"
                                                     matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
                                                     Год рождения</h4>
                                                 <!--                                                  <p>
@@ -184,7 +187,7 @@
                                                   </p>  -->
 
                                                 <table class="example-half-width" cellspacing="0">
-                                                    <tr>
+                                                    <tr  *ngIf="showFilter">
                                                         <td>
 
                                                             <mat-form-field class="example-user-input"
@@ -207,7 +210,7 @@
 
                                                         </td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr  *ngIf="showFilter">
                                                         <td colspan="2">
                                                             <mat-error class="error"
                                                                 *ngIf="form.controls.year1.hasError('min') || form.controls.year2.hasError('min') || form.controls.year1.hasError('max') || form.controls.year2.hasError('max')">
@@ -217,7 +220,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td colspan="2">
-                                                            <h4>Регион (если не работает, введите больший диапазон дат)
+                                                            <h4>Регион 
                                                             </h4>
                                                             <mat-form-field appearance="fill">
 
@@ -232,10 +235,9 @@
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr  *ngIf="showFilter">
                                                         <td colspan="2">
-                                                            <h4>Интернат (если не работает, введите больший диапазон
-                                                                дат)</h4>
+                                                            <h4>Интернат</h4>
                                                             <mat-form-field appearance="fill">
 
                                                                 <mat-select [formControl]="form.controls['nursingHome']"
@@ -250,7 +252,7 @@
                                                             </mat-form-field>
                                                         </td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr  *ngIf="showFilter">
                                                         <td colspan="2">
                                                             <div class="example-container">
                                                                 <mat-form-field style="width: 49%;"
@@ -278,6 +280,7 @@
                                                         </td>
                                                     </tr>
                                                 </table>
+                                            </td>
                                         </tr>
                                     </table>
 
@@ -305,8 +308,9 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Email/аккаунт/номер*</mat-label>
-                                            <input type="text" matInput [formControl]="form.controls['contact']" (blur)="checkContactTimeOut()">
-<!--                                                 [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
+                                            <input type="text" matInput [formControl]="form.controls['contact']"
+                                                (blur)="checkContactTimeOut()">
+                                            <!--                                                 [matAutocomplete]="auto" (blur)="checkContactTimeOut()">
                                             <mat-autocomplete #auto="matAutocomplete">
                                                 <mat-option *ngFor="let option of filteredOptions | async"
                                                     [value]="option">
@@ -525,7 +529,8 @@
                             Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
                             чем на месяц.<br />
-                            Поэтому просим вас отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на конверте
+                            Поэтому просим вас отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на
+                            конверте
                             "вручить 31 декабря".
                         </p>
 
@@ -717,8 +722,7 @@
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
                             Сердечно вас благодарю! <br />
                             _________________________________________________<br />
-                            Сбор на новогодние гостинцы для подопечных фонда <a
-                                href="https://starikam.org/">здесь</a>.
+                            Сбор на новогодние гостинцы для подопечных фонда <a href="https://starikam.org/">здесь</a>.
                         </p>
 
 
@@ -742,7 +746,8 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на конверте
+                                Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на
+                                конверте
                                 "вручить 31 декабря".
                             </li>
                         </ul>
@@ -885,7 +890,7 @@
                             </li>
                         </ul>
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                            Поучаствуйте в сборе на новогодние подарки  
+                            Поучаствуйте в сборе на новогодние подарки
                             <a href="https://starikam.org/">starikam.org</a>
                         </p>
                         <hr />

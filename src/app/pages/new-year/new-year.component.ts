@@ -869,7 +869,7 @@ export class NewYearComponent implements OnInit {
         maleAmount: null,
         date1: null,
         date2: null,
-        region: null,
+        region: this.form.controls.region.value,
         nursingHome: null,
         maxOneHouse: null,
         maxNoAddress: null,
