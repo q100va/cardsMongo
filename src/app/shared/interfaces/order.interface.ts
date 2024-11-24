@@ -35,7 +35,9 @@ export interface Order {
     genderFilter?: string,
     femaleAmount?: number,
     maleAmount?: number,
-    region: string,
+    region?: string,
+    regions?: Array<any>;
+    spareRegions?: boolean,
     nursingHome: string,
     maxOneHouse?: number,
     maxNoAddress?: number,

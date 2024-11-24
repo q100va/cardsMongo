@@ -90,6 +90,7 @@ export class DobroruNewYearComponent implements OnInit {
   selectedInstitutes = [];
   showFilter = true;
   isForInstitutes = false;
+  showChoiceSpareRegions = false;
 
   categories = [
     "образовательное учреждение",
@@ -143,8 +144,8 @@ export class DobroruNewYearComponent implements OnInit {
       async (res) => {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
-        // this.regions = res["data"]["regions"];
-        this.regions = [
+        this.regions = res["data"]["regions"];
+        /*         this.regions = [
           "АЛТАЙСКИЙ",
           "АМУРСКАЯ",
           "АРХАНГЕЛЬСКАЯ",
@@ -154,7 +155,7 @@ export class DobroruNewYearComponent implements OnInit {
           "ВЛАДИМИРСКАЯ",
           "ВОЛГОГРАДСКАЯ",
           "ВОЛОГОДСКАЯ",
-          //"ВОРОНЕЖСКАЯ",
+          "ВОРОНЕЖСКАЯ",
           "ЗАБАЙКАЛЬСКИЙ",
           "ИВАНОВСКАЯ",
           "ИРКУТСКАЯ",
@@ -190,15 +191,15 @@ export class DobroruNewYearComponent implements OnInit {
           "ТВЕРСКАЯ",
           "ТУЛЬСКАЯ",
           "ТЮМЕНСКАЯ",
-          //"УДМУРТСКАЯ",
-          //"УЛЬЯНОВСКАЯ",
+          "УДМУРТСКАЯ",
+          "УЛЬЯНОВСКАЯ",
           "ХАКАСИЯ",
-          //"ХАНТЫ-МАНСИЙСКИЙ",
+          "ХАНТЫ-МАНСИЙСКИЙ",
           "ЧЕЛЯБИНСКАЯ",
           "ЧУВАШСКАЯ",
           "ЯРОСЛАВСКАЯ",
-        ];
-        //  this.activeRegions = res["data"]["regions"];
+        ]; */
+        // this.activeRegions = res["data"]["regions"];
       },
       (err) => {
         console.log(err);
@@ -228,6 +229,7 @@ export class DobroruNewYearComponent implements OnInit {
       date1: [null, [Validators.min(1), Validators.max(31)]],
       date2: [null, [Validators.min(1), Validators.max(31)]],
       region: [null],
+      spareRegions: [false],
       nursingHome: [null],
       maxOneHouse: [null, [Validators.min(1)]],
       maxNoAddress: [null, [Validators.min(1)]],
@@ -542,6 +544,7 @@ export class DobroruNewYearComponent implements OnInit {
     console.log(this.form.controls.nursingHome.value);
 
     if (!this.form.controls.region.value) {
+      this.showChoiceSpareRegions = false;
       console.log("no regions were chosen");
       console.log(this.form.controls.region.value);
       this.activeNursingHomes = this.nursingHomes;
@@ -549,6 +552,7 @@ export class DobroruNewYearComponent implements OnInit {
       this.activeNursingHomes = this.nursingHomes.filter(
         (item) => item.region == this.form.controls.region.value
       );
+      this.showChoiceSpareRegions = true;
 
       if (this.form.controls.nursingHome.value) {
         let activeNursingHome = this.nursingHomes.filter(
@@ -648,7 +652,10 @@ export class DobroruNewYearComponent implements OnInit {
       .map((checked, i) => (checked ? this.clientInstitutes[i] : null))
       .filter((v) => v !== null);
 
-    if (this.form.controls.amount.value > 50 && this.form.controls.source.value == "dobroru") {
+    if (
+      this.form.controls.amount.value > 50 &&
+      this.form.controls.source.value == "dobroru"
+    ) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
           message:
@@ -775,6 +782,8 @@ export class DobroruNewYearComponent implements OnInit {
   // }
   //  }
 
+  //сделать, чтобы ограничения по кол-ву было только для заявок с добро
+
   checkDoubles() {
     this.orderService.checkDoubleOrder(this.holiday, this.client._id).subscribe(
       async (res) => {
@@ -795,7 +804,11 @@ export class DobroruNewYearComponent implements OnInit {
             usernameList =
               usernameList.length == 0 ? user : usernameList + ", " + user;
           }
-          if (result.amount + this.form.controls.amount.value <= 50) {
+          if (
+            this.form.controls.source.value != "dobroru" ||
+            (result.amount + this.form.controls.amount.value <= 50 &&
+              this.form.controls.source.value == "dobroru")
+          ) {
             this.confirmationService.confirm({
               message:
                 "Пользователь с такими контактами уже получил адреса на праздник '" +
@@ -815,22 +828,27 @@ export class DobroruNewYearComponent implements OnInit {
               reject: () => (this.clicked = false),
             });
           } else {
-            this.resultDialog.open(ConfirmationDialogComponent, {
-              data: {
-                message:
-                  "Пользователь с такими контактами уже получил адреса на праздник '" +
-                  this.holiday +
-                  "' у волонтера(ов): " +
-                  usernameList +
-                  " в количестве " +
-                  result.amount +
-                  " шт. \n Оформление текущей заявки превысит лимит по акции в 50 адресов!",
-              },
-              disableClose: true,
-              width: "fit-content",
-              maxWidth: "40vw",
-            });
-            this.clicked = false;
+            if (
+              this.form.controls.source.value == "dobroru" &&
+              result.amount + this.form.controls.amount.value > 50
+            ) {
+              this.resultDialog.open(ConfirmationDialogComponent, {
+                data: {
+                  message:
+                    "Пользователь с такими контактами уже получил адреса на праздник '" +
+                    this.holiday +
+                    "' у волонтера(ов): " +
+                    usernameList +
+                    " в количестве " +
+                    result.amount +
+                    " шт. \n Оформление текущей заявки превысит лимит по акции в 50 адресов!",
+                },
+                disableClose: true,
+                width: "fit-content",
+                maxWidth: "40vw",
+              });
+              this.clicked = false;
+            }
           }
         }
       },
@@ -893,6 +911,10 @@ export class DobroruNewYearComponent implements OnInit {
         date1: this.form.controls.date1.value,
         date2: this.form.controls.date2.value,
         region: this.form.controls.region.value,
+        regions: this.form.controls.region.value
+          ? [this.form.controls.region.value]
+          : [],
+        spareRegions: this.form.controls.spareRegions.value,
         nursingHome: this.form.controls.nursingHome.value,
         maxOneHouse: this.form.controls.maxOneHouse.value,
         maxNoAddress: this.form.controls.maxNoAddress.value,
@@ -976,6 +998,10 @@ export class DobroruNewYearComponent implements OnInit {
         date1: null,
         date2: null,
         region: this.form.controls.region.value,
+        regions: this.form.controls.region.value
+          ? [this.form.controls.region.value]
+          : [],
+        spareRegions: this.form.controls.spareRegions.value,
         nursingHome: null,
         maxOneHouse: null,
         maxNoAddress: null,

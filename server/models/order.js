@@ -35,6 +35,8 @@ const orderSchema = new Schema(
       femaleAmount: { type: Number },
       maleAmount: { type: Number },
       region: { type: String },
+      regions: [String],
+      spareRegions:  { type: Boolean, default: false },
       nursingHome: { type: String },
       maxOneHouse: { type: Number },
       maxNoAddress: { type: Number },

@@ -4344,7 +4344,7 @@ async function searchSeniorNewYear(
       data.date2,
       data.maxPlus,
       data.filter */
-
+  // data.maxPlus = 3;
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
     secondTime: data.maxPlus > 1 ? true : false,
@@ -4364,8 +4364,8 @@ async function searchSeniorNewYear(
       //standardFilter.isReleased = false;
     }  */
   if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
-      standardFilter.isReleased = false;
-    }
+    standardFilter.isReleased = false;
+  }
   /*     if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
           standardFilter.isReleased = false;    
       }  */
@@ -6185,14 +6185,17 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       //const celebratorsNewYear = await NewYear.find({ absent: false });
       const celebratorsNewYear = await NewYear.find({
         absent: false,
-        nursingHome: {
-          $in: ["ВОЛГОДОНСК",
-            /*             "КАНДАЛАКША",
-                        "ЧИТА_ТРУДА",
-                        "НОВОСИБИРСК_ЖУКОВСКОГО", */
-
-          ]
-        }
+        forInstitute
+          : { $lt: 0 }
+        ,
+        /*   nursingHome: {
+           $in: ["ВОЛГОДОНСК",
+                        "КАНДАЛАКША",
+                         "ЧИТА_ТРУДА",
+                         "НОВОСИБИРСК_ЖУКОВСКОГО",
+ 
+           ]
+         } */
       });
       let count = celebratorsNewYear.length;
       for (let celebrator of celebratorsNewYear) {
@@ -8266,8 +8269,26 @@ async function fillOrderForInstitutes(
   console.log(filter.region);
 
   let activeHouse;
-  activeHouse = filter.region ? await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: filter.region }) :
-    await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });//
+  if (!filter.region) {
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });
+  }
+  if (filter.region && !filter.spareRegions) {
+    filter.region = [filter.region];
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
+
+  }
+  if (filter.region && filter.spareRegions) {
+    let spareRegions = await Region.findOne({ name: filter.region });
+    console.log("spareRegions");
+    console.log(spareRegions);
+    filter.region = [filter.region, ...spareRegions.spareRegions];
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
+
+  }
+
+  console.log("filter.region");
+  console.log(filter.region);
+
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
   //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
   //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
@@ -8284,18 +8305,22 @@ async function fillOrderForInstitutes(
          "БОГРАД", 
         ]
       }
-    });  
+    }); 
+
   let activeHouse = await House.find({
     isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
       $in: [
-       "ШАХУНЬЯ"
-       // "ЭЛЕКТРОГОРСК", 
-//"ПОБЕДИМ",
+        'ОКТЯБРЬСКИЙ',        
+        
+        
+        
+
+    
+        
 
 
       ]
-    }
-  }); */
+    } });   */
   /*         
            "ЧИТА_ТРУДА",
            "НОВОСИБИРСК_ЖУКОВСКОГО", */
@@ -8429,6 +8454,13 @@ async function fillOrderForInstitutes(
   console.log("smallerHouses[0]");
   console.log(smallerHouses[0]);
 
+  /*   for (let house of smallerHouses) {
+      let seniors = await collectSeniorsForInstitution(order_id, holiday, 3, house.nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors];
+          currentAmount -= 3;
+        
+    }
+    return seniorsData; */
   if (amount >= smallerHouses[0].amount * 2) {
 
     for (let i = 0; i < smallerHouses.length; i++) {
@@ -8462,12 +8494,12 @@ async function fillOrderForInstitutes(
     let amount1 = Math.round(amount / 2);
     let amount2 = amount - amount1;
 
-    /* 
-        console.log('amount1');
-        console.log(amount1);
-    
-        console.log('amount2');
-        console.log(amount2); */
+    /*  
+            console.log('amount1');
+            console.log(amount1);
+        
+            console.log('amount2');
+            console.log(amount2); */
 
     while (amount1 > 3) {
       // while (amount1 > 0) {

@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
 
 const regionSchema = new Schema({
     name: { type: String },
+    spareRegions: [String],
 
 },
     { collection: "regions" }

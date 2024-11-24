@@ -253,15 +253,15 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 success: false
             };
         } else {
-            if (!newOrder.filter.maxOneHouse && (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region)) proportion.oneHouse = undefined;
+            if (!newOrder.filter.maxOneHouse && (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.regions.length > 0)) proportion.oneHouse = undefined;
             //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
-            console.log("newOrder.filter.region");
-            console.log(newOrder.filter.region);
+            console.log("newOrder.filter.regions");
+            console.log(newOrder.filter.regions);
 
             console.log("proportion.oneHouse");
             console.log(proportion.oneHouse);
 
-            if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+            if (!newOrder.filter.onlyWithPicture && newOrder.filter.regions.length == 0 && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
 
         }
 
@@ -302,7 +302,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "oneRegion": Math.ceil(newOrder.amount * 0.33)
         }
 
-        if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region || newOrder.amount > 20) {
+        if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.regions.length > 0 || newOrder.amount > 20) {
             proportion.oneRegion = undefined;
         }
     }
@@ -405,7 +405,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
               }
             }
       
-            if ((newOrder.filter.onlyWithPicture || newOrder.filter.nursingHome || newOrder.filter.region) && newOrder.filter.addressFilter == 'any') {
+            if ((newOrder.filter.onlyWithPicture || newOrder.filter.nursingHome || newOrder.filter.regions.length > 0) && newOrder.filter.addressFilter == 'any') {
               proportion.allCategory = proportion.yang + proportion.oldWomen + proportion.oldMen + proportion.special;
               proportion.oldWomen = 0;
               proportion.oldMen = 0;
@@ -441,7 +441,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
         if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
         if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{ specialComment: /Юбилей/ }, { oldest: true }];
-        if (newOrder.filter.region) filter.region = newOrder.filter.region;
+        if (newOrder.filter.regions.length > 0) filter.region = { $in: newOrder.filter.regions };
         if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
         if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
         if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
@@ -477,8 +477,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
         }
     }
-    console.log("proportion");
-    console.log(proportion);
+    // console.log("proportion");
+    // console.log(proportion);
 
     //console.log("newOrder.filter.maxOneHouse");
     //console.log(newOrder.filter.maxOneHouse);
@@ -487,7 +487,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
         await deleteErrorPlus(order_id, newOrder.holiday);
         return {
-            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса. Требуемых адресов только ` + seniorsData.celebratorsAmount,
+            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
             success: false
 
         }
@@ -716,7 +716,7 @@ async function collectSeniors(data, orderFilter, holiday) {
     if (orderFilter.genderFilter != 'proportion') {
 
         if (data.filter.addressFilter != 'onlySpecial') {
-            if (data.filter.region && data.filter.addressFilter != 'forKids') {
+            if (data.filter.region.length > 0 && data.filter.addressFilter != 'forKids') {
                 searchOrders = {
                     oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen", "specialWomen", "specialMen"],
                     oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen", "specialMen", "specialWomen"],
@@ -761,7 +761,7 @@ async function collectSeniors(data, orderFilter, holiday) {
 
     if (orderFilter.genderFilter == 'proportion') {
         if (orderFilter.addressFilter != 'onlySpecial') {
-            if (data.filter.region && data.filter.addressFilter != 'forKids') {
+            if (data.filter.region.length > 0 && data.filter.addressFilter != 'forKids') {
                 searchOrders = {
                     oldWomen: ["oldWomen", "yangWomen", "specialWomen",],
                     oldMen: ["oldMen", "yangMen", "specialMen",],
@@ -838,7 +838,7 @@ async function collectSeniors(data, orderFilter, holiday) {
                 // console.log("data.regions");
                 // console.log(data.regions);
 
-                if (data.filter.nursingHome || data.filter.region) {
+                if (data.filter.nursingHome || data.filter.region.length > 0) {
                     data.proportion.oneHouse = null;
                     data.proportion.oneRegion = null;
                 }
@@ -1543,34 +1543,327 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                 success: false
             };
         } else {
+            console.log("newOrder.filter");
+            console.log(newOrder.filter);
 
-            console.log("newOrder.filter.maxOneHouse");
-            console.log(newOrder.filter.maxOneHouse);
+            console.log("proportion.oneHouse");
+            console.log(proportion.oneHouse);
 
-            if ((newOrder.filter.region || newOrder.amount > 20)) { // !newOrder.filter.maxOneHouse && newOrder.filter.nursingHome || || newOrder.filter.onlyWithPicture
+            if ((newOrder.filter.regions.length > 0 || newOrder.amount > 20)) { // !newOrder.filter.maxOneHouse && newOrder.filter.nursingHome || || newOrder.filter.onlyWithPicture
                 // proportion.oneHouse = undefined;
                 proportion.oneRegion = undefined;
             }
 
-            if (newOrder.filter.region ) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
-/*                 if(newOrder.amount < 11)
-                 proportion.oneHouse = Math.ceil(newOrder.amount/2);
-                 if(newOrder.amount >= 15)
-                 proportion.oneHouse = 6;
-                 if(newOrder.amount >= 20)
-                 proportion.oneHouse = 7;
-                 if(newOrder.amount >= 30)
-                 proportion.oneHouse = 8;
-                 if(newOrder.amount >= 40)
-                 proportion.oneHouse = 9;
-                 if(newOrder.amount == 50)
-                 proportion.oneHouse = 10; */
-                 proportion.oneHouse = undefined;
-     
-             }
+            if (newOrder.filter.regions.length > 0) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
+
+                if (newOrder.amount > 40)
+                    proportion.oneHouse = 10;
+                if (newOrder.amount <= 40)
+                    proportion.oneHouse = 8;
+                if (newOrder.amount <= 30)
+                    proportion.oneHouse = 6;
+                if (newOrder.amount <= 20)
+                    proportion.oneHouse = 5;
+                if (newOrder.amount <= 15)
+                    proportion.oneHouse = 4;
+                if (newOrder.amount <= 5)
+                    proportion.oneHouse = 3;
+
+                console.log("proportion.oneHouse newOrder.filter.regions.length > 0");
+                console.log(proportion.oneHouse);
+                console.log(newOrder.filter.regions);
+
+                //proportion.oneHouse = undefined;
+
+                let seniorsOneRegion = [];
+                let seniorsOneRegionFemale = [];
+
+                if (newOrder.filter.genderFilter == 'any') {
+                    seniorsOneRegion = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                //  secondTime: data.maxPlus > 1 ? true : false,
+                            }
+                        },
+
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+
+                    seniorsOneRegionFemale = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                gender: "Female"
+                            }
+                        },
+    
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+
+
+                }
+
+                if (newOrder.filter.genderFilter == 'Female') {
+                    seniorsOneRegion = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                gender: "Female"
+                            }
+                        },
+    
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+
+                }
+                if (newOrder.filter.genderFilter == 'Male') {
+                    seniorsOneRegion = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                gender: "Male"
+                            }
+                        },
+    
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+                }
+
+
+
+
+
+
+                /*                   let seniorsOneRegionMale =  await NewYear.aggregate(
+                                    {
+                                        $match : { region: newOrder.filter.regions, gender: "Male" }
+                                      },
+                                      [
+                                    { $group : { _id : "$nursingHome", count: { $sum: 1 } } }
+                                  ]); */
+
+
+                console.log("seniorsOneRegion");
+                console.log(seniorsOneRegion);
+                console.log("seniorsOneRegionFemale");
+                console.log(seniorsOneRegionFemale);
+
+                let foundAmount = 0;
+                if (seniorsOneRegion.length > 0) {
+
+                    for (let item of seniorsOneRegion) {
+                        foundAmount += item.count;
+                    }
+                    console.log("foundAmount");
+                    console.log(foundAmount);
+                }
+
+                console.log("foundAmount");
+                console.log(foundAmount);
+
+                if (foundAmount < newOrder.amount) {
+                    if (newOrder.filter.spareRegions) {
+                        let result = await spareRegions(newOrder.filter.regions[0], newOrder.amount, proportion.oneHouse, newOrder.filter.genderFilter);
+                        console.log("result");
+                        console.log(result);
+                        if (result.proportionOneHouse == 0) {
+                            return {
+                                result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                                success: false
+
+                            }
+                        } else {
+                            proportion.oneHouse = result.proportionOneHouse;
+                            newOrder.filter.regions = result.regions;
+                        }
+
+                    } else {
+                        return {
+                            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + foundAmount,
+                            success: false
+
+                        }
+                    }
+                } else if (newOrder.filter.genderFilter == 'any' && seniorsOneRegionFemale.findIndex(item => item.count > 0) == -1 && newOrder.filter.spareRegions) {
+                    let result = await spareRegions(newOrder.filter.regions[0], newOrder.amount, proportion.oneHouse, newOrder.filter.genderFilter);
+                    if (result.proportionOneHouse == 0) {
+                        return {
+                            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                            success: false
+
+                        }
+                    } else {
+                        proportion.oneHouse = result.proportionOneHouse;
+                        newOrder.filter.regions = result.regions;
+                    }
+                } else {
+                    console.log("proportion.oneHouse_1");
+                    console.log(proportion.oneHouse);
+
+                    let controlAmount = newOrder.amount;
+
+                    for (let homeAmount of seniorsOneRegion) {
+                        controlAmount = homeAmount.count > proportion.oneHouse ? controlAmount - proportion.oneHouse : controlAmount - homeAmount.count;
+                        if (controlAmount <= 0) break;
+                    }
+
+                    if (controlAmount > 0) {
+                        if (!newOrder.filter.spareRegions) {
+
+                            if (seniorsOneRegion.length < Math.ceil(newOrder.amount / proportion.oneHouse)) {
+                                proportion.oneHouse = Math.ceil(newOrder.amount / seniorsOneRegion.length);
+                            }
+
+                            console.log("proportion.oneHouse_2");
+                            console.log(proportion.oneHouse);
+
+                            controlAmount = newOrder.amount;
+                            for (let homeAmount of seniorsOneRegion) {
+                                controlAmount = homeAmount.count > proportion.oneHouse ? controlAmount - proportion.oneHouse : controlAmount - homeAmount.count;
+                                if (controlAmount <= 0) break;
+                            }
+                            if (controlAmount > 0) {
+                                proportion.oneHouse = proportion.oneHouse + controlAmount;
+                            }
+
+                        } else {
+                            let result = await spareRegions(newOrder.filter.regions[0], newOrder.amount, proportion.oneHouse, newOrder.filter.genderFilter);
+                            if (result.proportionOneHouse == 0) {
+                                return {
+                                    result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                                    success: false
+
+                                }
+                            } else {
+                                proportion.oneHouse = result.proportionOneHouse;
+                                newOrder.filter.regions = result.regions;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            async function spareRegions(region, amount, proportionOneHouse, genderFilter) {
+
+                let spareRegions = await Region.findOne({ name: region });
+                console.log("spareRegions");
+                console.log(spareRegions);
+
+                let regions = [region, ...spareRegions.spareRegions];
+
+                let seniorsOneRegion = [];              
+
+                if (genderFilter == 'any') {
+                    seniorsOneRegion = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                //  secondTime: data.maxPlus > 1 ? true : false,
+                            }
+                        },
+
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+                }
+
+                if (genderFilter == 'Female') {
+                    seniorsOneRegion = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                gender: "Female"
+                            }
+                        },
+    
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+
+                }
+                if (genderFilter == 'Male') {
+                    seniorsOneRegion = await NewYear.aggregate([
+                        {
+                            $match: {
+                                region: { $in: newOrder.filter.regions },
+                                absent: false,
+                                plusAmount: { $lt: 2 },
+                                onlyForInstitute: false,
+                                isReleased: false,
+                                noAddress: false,
+                                gender: "Male"
+                            }
+                        },
+    
+                        { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                    ]);
+                }
+
+                let foundAmount = 0;
+                foundAmount = seniorsOneRegion.forEach(item => {
+                    foundAmount += item.count;
+                });
+
+                if (foundAmount < amount) {
+                    proportionOneHouse = 0;
+                } else {
+                    if (seniorsOneRegion.length < Math.ceil(amount / proportionOneHouse)) {
+                        proportionOneHouse = Math.ceil(amount / seniorsOneRegion.length);
+                    }
+                    let controlAmount = amount;
+                    for (let homeAmount of seniorsOneRegion) {
+                        controlAmount = homeAmount.count > proportionOneHouse ? controlAmount - proportionOneHouse : controlAmount - homeAmount.count;
+                        if (controlAmount <= 0) break;
+                    }
+
+                    if (controlAmount > 0) {
+                        proportionOneHouse = proportionOneHouse + controlAmount;
+                    }
+
+                }
+
+                return {
+                    proportionOneHouse: proportionOneHouse,
+                    regions: regions
+                };
+            }
+
+
+
+
             //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
-            console.log("newOrder.filter.region");
-            console.log(newOrder.filter.region);
+            console.log("newOrder.filter.regions");
+            console.log(newOrder.filter.regions);
 
             console.log("proportion.oneHouse");
             console.log(proportion.oneHouse);
@@ -1578,7 +1871,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             console.log("proportionSEE");
             console.log(proportion);
 
-            //  if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+            //  if (!newOrder.filter.onlyWithPicture && newOrder.filter.regions.length == 0 && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
 
         }
 
@@ -1623,32 +1916,393 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         console.log("newOrder.filter");
         console.log(newOrder.filter);
 
-        if (newOrder.filter.region || newOrder.amount > 20) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
+        if (newOrder.filter.regions.length > 0 || newOrder.amount > 20) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
             proportion.oneRegion = undefined;
             //  proportion.oneHouse = undefined;
 
         }
 
-        if (newOrder.filter.region ) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
- /*           if(newOrder.amount < 11)
-            proportion.oneHouse = Math.ceil(newOrder.amount/2);
-            if(newOrder.amount >= 15)
-            proportion.oneHouse = 6;
-            if(newOrder.amount >= 20)
-            proportion.oneHouse = 7;
-            if(newOrder.amount >= 30)
-            proportion.oneHouse = 8;
-            if(newOrder.amount >= 40)
-            proportion.oneHouse = 9;
-            if(newOrder.amount == 50)
-            proportion.oneHouse = 10; */
-            proportion.oneHouse = undefined;
+        if (newOrder.filter.regions.length > 0) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
 
+            if (newOrder.amount > 40)
+                proportion.oneHouse = 10;
+            if (newOrder.amount <= 40)
+                proportion.oneHouse = 8;
+            if (newOrder.amount <= 30)
+                proportion.oneHouse = 6;
+            if (newOrder.amount <= 20)
+                proportion.oneHouse = 5;
+            if (newOrder.amount <= 15)
+                proportion.oneHouse = 4;
+            if (newOrder.amount <= 5)
+                proportion.oneHouse = 3;
+
+            console.log("proportion.oneHouse newOrder.filter.regions.length > 0");
+            console.log(proportion.oneHouse);
+            console.log(newOrder.filter.regions);
+
+            //proportion.oneHouse = undefined;
+
+            let seniorsOneRegion = await NewYear.aggregate([
+                {
+                    $match: {
+                        region: { $in: newOrder.filter.regions },
+                        absent: false,
+                        plusAmount: { $lt: 2 },
+                        onlyForInstitute: false,
+                        isReleased: false,
+                        noAddress: false,
+                        //  secondTime: data.maxPlus > 1 ? true : false,
+                    }
+                },
+
+                { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+            ]);
+
+            let seniorsOneRegionFemale = await NewYear.aggregate([
+                {
+                    $match: {
+                        region: { $in: newOrder.filter.regions },
+                        absent: false,
+                        plusAmount: { $lt: 2 },
+                        onlyForInstitute: false,
+                        isReleased: false,
+                        noAddress: false,
+                        gender: "Female"
+                    }
+                },
+
+                { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+            ]);
+
+            let seniorsOneRegionMale = await NewYear.aggregate(
+                [{
+                    $match: {
+                        region: { $in: newOrder.filter.regions },
+                        absent: false,
+                        plusAmount: { $lt: 2 },
+                        onlyForInstitute: false,
+                        isReleased: false,
+                        noAddress: false,
+                        gender: "Male"
+                    }
+                },
+
+                { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                ]);
+
+
+            console.log("seniorsOneRegion");
+            console.log(seniorsOneRegion);
+            console.log("seniorsOneRegionFemale");
+            console.log(seniorsOneRegionFemale);
+
+            let foundAmount = 0;
+            if (seniorsOneRegion.length > 0) {
+
+                for (let item of seniorsOneRegion) {
+                    foundAmount += item.count;
+                }
+                console.log("foundAmount");
+                console.log(foundAmount);
+            }
+            let foundFemale = 0;
+            if (seniorsOneRegionFemale.length > 0) {
+                for (let item of seniorsOneRegionFemale) {
+                    foundFemale += item.count;
+                }
+            }
+
+            console.log("foundFemale");
+            console.log(foundFemale);
+
+            let foundMale = 0;
+            if (seniorsOneRegionMale.length > 0) {
+                for (let item of seniorsOneRegionMale) {
+                    foundMale += item.count;
+                }
+            }
+
+
+
+            if (foundAmount < newOrder.amount) {
+                if (newOrder.filter.spareRegions) {
+                    let result = await spareRegionsGender(newOrder.filter.regions[0], newOrder.amount, newOrder.filter.femaleAmount, newOrder.filter.maleAmount, proportion.oneHouse);
+                    console.log("result");
+                    console.log(result);
+                    if (result.proportionOneHouse == 0) {
+                        return {
+                            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                            success: false
+
+                        }
+                    } else {
+                        proportion.oneHouse = result.proportionOneHouse;
+                        newOrder.filter.regions = result.regions;
+                    }
+
+                } else {
+                    return {
+                        result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                        success: false
+
+                    }
+                }
+            } else if (foundFemale < newOrder.filter.femaleAmount || foundMale < newOrder.filter.maleAmount) {
+                if (!newOrder.filter.spareRegions) {
+                    return {
+                        result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                        success: false
+
+                    }
+                } else {
+                    let result = await spareRegionsGender(newOrder.filter.regions[0], newOrder.amount, newOrder.filter.femaleAmount, newOrder.filter.maleAmount, proportion.oneHouse);
+                    if (result.proportionOneHouse == 0) {
+                        return {
+                            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                            success: false
+
+                        }
+                    } else {
+                        proportion.oneHouse = result.proportionOneHouse;
+                        newOrder.filter.regions = result.regions;
+                    }
+                }
+
+            } else {
+                let controlAmount = newOrder.amount;
+                let controlAmountFemale = newOrder.filter.femaleAmount;
+                let controlAmountMale = newOrder.filter.maleAmount;
+                let proportionOneHouseFemale = Math.round(newOrder.filter.femaleAmount / newOrder.amount * proportion.oneHouse);
+                let proportionOneHouseMale = proportion.oneHouse - proportionOneHouseFemale;
+
+
+                for (let homeAmount of seniorsOneRegionFemale) {
+                    controlAmountFemale = homeAmount.count > proportionOneHouseFemale ? controlAmountFemale - proportionOneHouseFemale : controlAmountFemale - homeAmount.count;
+                    if (controlAmountFemale <= 0) break;
+                }
+                for (let homeAmount of seniorsOneRegionMale) {
+                    controlAmountMale = homeAmount.count > proportionOneHouseMale ? controlAmountMale - proportionOneHouseMale : controlAmountMale - homeAmount.count;
+                    if (controlAmountMale <= 0) break;
+                }
+
+                console.log("controlAmountFemale");
+                console.log(controlAmountFemale);
+                console.log("controlAmountMale");
+                console.log(controlAmountMale);
+
+                console.log("proportion.oneHouse_0");
+                console.log(proportion.oneHouse);
+
+                if (controlAmountFemale > 0 || controlAmountMale > 0) {
+                    if (!newOrder.filter.spareRegions) {
+                        if (seniorsOneRegion.length < Math.ceil(newOrder.amount / proportion.oneHouse)) {
+                            proportion.oneHouse = Math.ceil(newOrder.amount / seniorsOneRegion.length);
+                        }
+                        let proportionOneHouseFemale = Math.round(newOrder.filter.femaleAmount / newOrder.amount * proportion.oneHouse);
+                        let proportionOneHouseMale = proportion.oneHouse - proportionOneHouseFemale;
+
+                        controlAmount = newOrder.amount;
+                        controlAmountFemale = newOrder.filter.femaleAmount;
+                        controlAmountMale = newOrder.filter.maleAmount;
+
+                        console.log("proportion.oneHouse_1");
+                        console.log(proportion.oneHouse);
+                        console.log("proportionOneHouseFemale");
+                        console.log(proportionOneHouseFemale);
+                        console.log("proportionOneHouseMale");
+                        console.log(proportionOneHouseMale);
+
+                        for (let homeAmount of seniorsOneRegionFemale) {
+                            controlAmountFemale = homeAmount.count > proportionOneHouseFemale ? controlAmountFemale - proportionOneHouseFemale : controlAmountFemale - homeAmount.count;
+                            if (controlAmountFemale <= 0) break;
+                        }
+                        for (let homeAmount of seniorsOneRegionMale) {
+                            controlAmountMale = homeAmount.count > proportionOneHouseMale ? controlAmountMale - proportionOneHouseMale : controlAmountMale - homeAmount.count;
+                            if (controlAmountMale <= 0) break;
+                        }
+
+                        console.log("controlAmountFemale");
+                        console.log(controlAmountFemale);
+                        console.log("controlAmountMale");
+                        console.log(controlAmountMale);
+
+                        proportion.oneHouse = proportion.oneHouse + (controlAmountFemale > 0 ? controlAmountFemale : 0) + (controlAmountMale > 0 ? controlAmountMale : 0);
+
+                        console.log("proportion.oneHouse_2");
+                        console.log(proportion.oneHouse);
+
+
+                    } else {
+                        let result = await spareRegionsGender(newOrder.filter.regions[0], newOrder.amount, newOrder.filter.femaleAmount, newOrder.filter.maleAmount, proportion.oneHouse);
+                        if (result.proportionOneHouse == 0) {
+                            return {
+                                result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                                success: false
+
+                            }
+                        } else {
+                            proportion.oneHouse = result.proportionOneHouse;
+                            newOrder.filter.regions = result.regions;
+                        }
+
+                    }
+                }
+            }
         }
+
+        async function spareRegionsGender(region, amount, femaleAmount, maleAmount, proportionOneHouse) {
+
+            let spareRegions = await Region.findOne({ name: region });
+            console.log("spareRegions");
+            console.log(spareRegions);
+
+            let regions = [region, ...spareRegions.spareRegions];
+
+            let seniorsOneRegion = await NewYear.aggregate([
+                {
+                    $match: {
+                        region: { $in: regions },
+                        absent: false,
+                        plusAmount: { $lt: 2 },
+                        onlyForInstitute: false,
+                        isReleased: false,
+                        noAddress: false,
+                    }
+                },
+
+                { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+            ]);
+
+            console.log("seniorsOneRegion");
+            console.log(seniorsOneRegion);
+
+            let seniorsOneRegionFemale = await NewYear.aggregate([
+                {
+                    $match: {
+                        region: { $in: regions },
+                        absent: false,
+                        plusAmount: { $lt: 2 },
+                        onlyForInstitute: false,
+                        isReleased: false,
+                        noAddress: false,
+                        gender: "Female"
+                    }
+                },
+
+                { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+            ]);
+
+            let seniorsOneRegionMale = await NewYear.aggregate(
+                [{
+                    $match: {
+                        region: { $in: regions },
+                        absent: false,
+                        plusAmount: { $lt: 2 },
+                        onlyForInstitute: false,
+                        isReleased: false,
+                        noAddress: false,
+                        gender: "Male"
+                    }
+                },
+
+                { $group: { _id: "$nursingHome", count: { $sum: 1 } } }
+                ]);
+
+            let foundAmount = 0;
+            if (seniorsOneRegion.length > 0) {
+                for (let item of seniorsOneRegion) {
+                    foundAmount += item.count;
+                }
+            }
+
+            let foundFemale = 0;
+            if (seniorsOneRegionFemale.length > 0) {
+                for (let item of seniorsOneRegionFemale) {
+                    foundFemale += item.count;
+                }
+            }
+
+            let foundMale = 0;
+            if (seniorsOneRegionMale.length > 0) {
+                for (let item of seniorsOneRegionMale) {
+                    foundMale += item.count;
+                }
+            }
+
+
+            if (foundAmount < amount || foundFemale < femaleAmount || foundMale < maleAmount) {
+                proportionOneHouse = 0;
+            } else {
+
+                if (seniorsOneRegion.length < Math.ceil(amount / proportionOneHouse)) {
+                    proportionOneHouse = Math.ceil(amount / seniorsOneRegion.length);
+                }
+
+
+                let controlAmountFemale = femaleAmount;
+                let controlAmountMale = maleAmount;
+                let proportionOneHouseFemale = Math.round(femaleAmount / newOrder.amount * proportionOneHouse);
+                let proportionOneHouseMale = proportionOneHouse - proportionOneHouseFemale;
+                console.log("proportionOneHouseFemale");
+                console.log(proportionOneHouseFemale);
+                console.log("proportionOneHouseMale");
+                console.log(proportionOneHouseMale);
+
+
+                for (let homeAmount of seniorsOneRegionFemale) {
+                    console.log("homeAmount.count");
+                    console.log(homeAmount.count);
+                    controlAmountFemale = homeAmount.count > proportionOneHouseFemale ? controlAmountFemale - proportionOneHouseFemale : controlAmountFemale - homeAmount.count;
+                    console.log("controlAmountFemale");
+                    console.log(controlAmountFemale);
+                    if (controlAmountFemale <= 0) break;
+                }
+                for (let homeAmount of seniorsOneRegionMale) {
+                    console.log("homeAmount.count");
+                    console.log(homeAmount.count);
+                    controlAmountMale = homeAmount.count > proportionOneHouseMale ? controlAmountMale - proportionOneHouseMale : controlAmountMale - homeAmount.count;
+                    console.log("controlAmountMale");
+                    console.log(controlAmountMale);
+                    if (controlAmountMale <= 0) break;
+                }
+
+                console.log("controlAmountFemale");
+                console.log(controlAmountFemale);
+                console.log("controlAmountMale");
+                console.log(controlAmountMale);
+                console.log("proportion.oneHouse_3");
+                console.log(proportionOneHouse);
+
+
+
+                if (controlAmountFemale > 0 || controlAmountMale > 0) {
+                    proportionOneHouse = proportionOneHouse + (controlAmountFemale > 0 ? controlAmountFemale : 0) + (controlAmountMale > 0 ? controlAmountMale : 0);
+                }
+
+                console.log("proportion.oneHouse_4");
+                console.log(proportionOneHouse);
+
+            }
+
+            return {
+                proportionOneHouse: proportionOneHouse,
+                regions: regions
+            };
+        }
+
+
+
+
+        //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
+        console.log("newOrder.filter.regions");
+        console.log(newOrder.filter.regions);
+
+        console.log("proportion.oneHouse");
+        console.log(proportion.oneHouse);
+
         console.log("proportionSEE");
         console.log(proportion);
-
-        //proportion.oneRegion = 14; //удалить
     }
     const emptyOrder = {
         userName: newOrder.userName,
@@ -1738,13 +2392,13 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         //console.log(order);
 
 
-        console.log("proportion");
-        console.log(proportion);
+        //  console.log("proportion");
+        //  console.log(proportion);
 
         if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
         if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
         if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{ specialComment: /Юбилей/ }, { oldest: true }];
-        if (newOrder.filter.region) filter.region = newOrder.filter.region;
+        if (newOrder.filter.regions.length > 0) filter.region = { $in: newOrder.filter.regions };
         if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
         if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
         if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
@@ -1769,26 +2423,26 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     if (seniorsData.celebratorsAmount < newOrder.amount) {
 
         await deleteErrorPlusNewYear(order_id);
-/*         if (filter.region) {
-            proportion.oneHouse = proportion.oneHouse * 2;
-            seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
-            if (seniorsData.celebratorsAmount < newOrder.amount) {
-                await deleteErrorPlusNewYear(order_id);
-                proportion.oneHouse = proportion.oneHouse * 2;
-                seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
-                if (seniorsData.celebratorsAmount < newOrder.amount) {
-                    await deleteErrorPlusNewYear(order_id);
-                    return {
-                        result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
-                        success: false
-
+        /*         if (filter.region) {
+                    proportion.oneHouse = proportion.oneHouse * 2;
+                    seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
+                    if (seniorsData.celebratorsAmount < newOrder.amount) {
+                        await deleteErrorPlusNewYear(order_id);
+                        proportion.oneHouse = proportion.oneHouse * 2;
+                        seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
+                        if (seniorsData.celebratorsAmount < newOrder.amount) {
+                            await deleteErrorPlusNewYear(order_id);
+                            return {
+                                result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+                                success: false
+        
+                            }
+                        }
                     }
                 }
-            }
-        }
- */
+         */
         return {
-            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса. Требуемых адресов только ` + seniorsData.celebratorsAmount,
+            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
             success: false
 
         }
@@ -1916,8 +2570,8 @@ async function collectSeniorsNewYear(data, orderFilter) {
     let searchOrders = {};
     //console.log("data.category");
     //console.log(data.category);
-     console.log("data.proportion.oneHouseSEE");
-   console.log(data.proportion.oneHouse);
+    //   console.log("data.proportion.oneHouseSEE");
+    //  console.log(data.proportion.oneHouse);
 
     if (orderFilter.genderFilter != 'proportion') {
 
@@ -2044,12 +2698,12 @@ async function collectSeniorsNewYear(data, orderFilter) {
                 data.celebratorsAmount++;
                 data.restrictedPearson.push(result.celebrator_id);
                 data.counter++;
-                console.log("data.proportion.oneHouse");
-                console.log(data.proportion.oneHouse);
+                //console.log("data.proportion.oneHouse");
+                //console.log(data.proportion.oneHouse);
                 if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
                 if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
-                console.log("data.regions");
-                console.log(data.regions);
+                // console.log("data.regions");
+                //  console.log(data.regions);
 
                 if (data.proportion.oneHouse) {
                     if (data.houses[result["nursingHome"]] == data.proportion["oneHouse"]) {
@@ -2102,11 +2756,11 @@ async function searchSeniorNewYear(
         onlyForInstitute: false,
         noAddress: false,
         isReleased: false,
-      
+
     };
 
-      console.log("data.restrictedHousesSEE");
-    console.log(data.restrictedHouses);
+    // console.log("data.restrictedHousesSEE");
+    //console.log(data.restrictedHouses);
 
     if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
     if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
@@ -2169,11 +2823,11 @@ async function searchSeniorNewYear(
         // filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
         //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
         //
-        console.log("filter");
-        console.log(filter);
+        // console.log("filter");
+        // console.log(filter);
         celebrator = await NewYear.findOne(filter);
         //  console.log("celebrator NewYear");
-       //  console.log(celebrator);
+        //  console.log(celebrator);
         if (celebrator) {
             //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
             //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
