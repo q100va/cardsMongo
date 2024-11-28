@@ -36,7 +36,7 @@ export class DobroruComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения декабря 2024";
+  holiday: string = "Дни рождения января 2025";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -599,7 +599,7 @@ export class DobroruComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения декабря 2024";
+    this.holiday = "Дни рождения января 2025";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;

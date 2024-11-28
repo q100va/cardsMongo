@@ -37,12 +37,12 @@ export class OrderDetailsComponent implements OnInit {
   isNotLate = false;
   isNotOnlyOne = true;
   openHolidays = [
-    "Дни рождения ноября 2024",
-    "Дни рождения января 2025",
     "Дни рождения декабря 2024",
+    "Дни рождения февраля 2025",
+    "Дни рождения января 2025",
+    "Именины февраля 2025",
+    "Именины февраля 2025",
     "Именины января 2025",
-    "Именины января 2025",
-    "Именины декабря 2024",
     "Новый год 2025",
     /* "День учителя и дошкольного работника 2024",
      "День семьи 2024",
@@ -66,7 +66,7 @@ export class OrderDetailsComponent implements OnInit {
     console.log(this.orderId);
     this.roleService.findUserRole(this.cookieService.get("session_user")).subscribe((res) => {
       this.userRole = res["data"];
-
+      console.log(this.userRole);
     });
   }
 
@@ -129,7 +129,7 @@ export class OrderDetailsComponent implements OnInit {
     if (this.order.amount == 1) {
       this.isNotOnlyOne = false;
     }
-    console.log;
+    
 
     console.log(
       "Conditions:" +
@@ -138,6 +138,9 @@ export class OrderDetailsComponent implements OnInit {
         this.isNotOnlyOne +
         this.isNotLate
     );
+
+    console.log(this.order.institutes.length > 0 );
+    console.log(this.userRole != 'dobroru' || this.userRole != 'admin');
   }
 
   editList() {

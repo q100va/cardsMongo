@@ -410,7 +410,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null,  }); //, comment1: "(ПСУ)", monthBirthday:3, monthBirthday:{$gt:3} ,  monthBirthday : {$in: [10, 11, 12]}
+    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, }); //, comment1: "(ПСУ)", monthBirthday:3, monthBirthday:{$gt:3} ,  monthBirthday : {$in: [10, 11, 12]}
 
     newList.sort(
       (prev, next) => {
@@ -634,15 +634,15 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
      // let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
-      if (senior.monthBirthday == month || senior.monthBirthday ==  1 || senior.monthBirthday == month - 1) {//month +
+      if (senior.monthBirthday == month || senior.monthBirthday ==  month +1 || senior.monthBirthday == 12) {//month - 1
         let foundSenior;
         if (senior.monthBirthday == month) {
           foundSenior = await List.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         }
-        if (senior.monthBirthday ==  1) {//month +
+        if (senior.monthBirthday ==  month +1) {//
           foundSenior = await ListNext.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         }
-        if (senior.monthBirthday == month - 1) {
+        if (senior.monthBirthday == 12) {//month - 1
           foundSenior = await ListBefore.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         }
 
@@ -653,10 +653,10 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           if (senior.monthBirthday == month) {
             resList = await List.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
           }
-          if (senior.monthBirthday == 1) {//month + 
+          if (senior.monthBirthday == month + 1) {//
             resList = await ListNext.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
           }
-          if (senior.monthBirthday == month - 1) {
+          if (senior.monthBirthday == 12) {//month - 1
             resList = await ListBefore.updateOne({ _id: foundSenior._id }, { $set: { absent: true } }, { upsert: false });
           }
 
@@ -734,9 +734,9 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
     console.log(resArrived);
 
     for (let celebrator of arrived) {
-      if (celebrator.monthBirthday == month || celebrator.monthBirthday ==  1 || celebrator.monthBirthday == month - 1) {//month +
+      if (celebrator.monthBirthday == month || celebrator.monthBirthday == month + 1 || celebrator.monthBirthday == 12) {//month - 1
         let cloneSpecialComment;
-        if (celebrator.monthBirthday == month || celebrator.monthBirthday == month - 1) {
+        if (celebrator.monthBirthday == 12) {//month || celebrator.monthBirthday == month - 1
           cloneSpecialComment = await specialComment(
             2024 - celebrator["yearBirthday"]
           );
@@ -783,14 +783,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
         let holiday;
-        if (celebrator.monthBirthday == 11) {
-          holiday = 'Дни рождения ноября 2024';
-        }
         if (celebrator.monthBirthday == 12) {
           holiday = 'Дни рождения декабря 2024';
         }
         if (celebrator.monthBirthday == 1) {
           holiday = 'Дни рождения января 2025';
+        }
+        if (celebrator.monthBirthday == 2) {
+          holiday = 'Дни рождения февраля 2025';
         }
 
         let cloneCelebrator = {
@@ -827,13 +827,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
             celebrator.monthBirthday +
             celebrator.yearBirthday,
         };
-        if (celebrator.monthBirthday == 11) {
+        if (celebrator.monthBirthday == 12) {
           await ListBefore.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 12) {
+        if (celebrator.monthBirthday == 1) {
           await List.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 1) {
+        if (celebrator.monthBirthday == 2) {
           await ListNext.create(cloneCelebrator);
         }
 

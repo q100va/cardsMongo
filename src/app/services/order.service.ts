@@ -243,6 +243,7 @@ export class OrderService {
   }
 
   createDobroruNewYearOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+    console.log(newOrder.filter);
     return this.http.post("/api/dobroru/new-year/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,

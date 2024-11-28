@@ -117,13 +117,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения января 2025") {
+                if (holiday == "Дни рождения февраля 2025") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения декабря 2024") {
+                if (holiday == "Дни рождения января 2025") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения ноября 2024") {
+                if (holiday == "Дни рождения декабря 2024") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -149,13 +149,13 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения декабря 2024") {
+    if (newOrder.holiday == "Дни рождения января 2025") {
         period = {
-            "date1": 21,
-            "date2": 31,
+            "date1": 1,
+            "date2": 15,
             "isActive": true,
             "key": 0,
-            "maxPlus": 4, //PLUSES
+            "maxPlus": 3, //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }
@@ -817,13 +817,13 @@ async function collectSeniors(data, orderFilter, holiday) {
             if (result) {
                 //console.log(result);
                 await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-                if (holiday == "Дни рождения января 2025") {
+                if (holiday == "Дни рождения февраля 2025") {
                     await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения декабря 2024") {
+                if (holiday == "Дни рождения января 2025") {
                     await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения ноября 2024") {
+                if (holiday == "Дни рождения декабря 2024") {
                     await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
 
@@ -960,7 +960,7 @@ async function searchSenior(
         "ПУХЛЯКОВСКИЙ",
         "РОМАНОВКА",
         "РОСЛАВЛЬ",
-        "САВИНСКИЙ",
+       // "САВИНСКИЙ",
         "СЕВЕРООНЕЖСК",
         "СЕЛЫ",
         "СЕЛЬЦО",
@@ -1223,13 +1223,13 @@ async function searchSeniorHelper(
         //console.log("filter CHECK");
         //console.log(filter);
 
-        if (holiday == "Дни рождения января 2025") {
+        if (holiday == "Дни рождения февраля 2025") {
             celebrator = await ListNext.findOne(filter);
         }
-        if (holiday == "Дни рождения декабря 2024") {
+        if (holiday == "Дни рождения января 2025") {
             celebrator = await List.findOne(filter);
         }
-        if (holiday == "Дни рождения ноября 2024") {
+        if (holiday == "Дни рождения декабря 2024") {
             celebrator = await ListBefore.findOne(filter);
         }
 
@@ -2487,6 +2487,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
     restrictedHouses.push("ВОРОНЕЖ_ДНЕПРОВСКИЙ");
     restrictedHouses.push("КАШИРСКОЕ");
     restrictedHouses.push("ПЕРВОМАЙСКИЙ_СОТРУДНИКИ");
+    restrictedHouses.push("САВИНСКИЙ");
 
     /*  restrictedHouses.push("СЕВЕРОДВИНСК");
     restrictedHouses.push("РЖЕВ");
