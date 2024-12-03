@@ -153,6 +153,7 @@ export class DobroruNewYearComponent implements OnInit {
     //  "КЕМЕРОВСКАЯ",
       "КУРГАНСКАЯ",
       //"РОСТОВСКАЯ",
+      "ОМСКАЯ",
       "СТАВРОПОЛЬСКИЙ",
     //  "ТВЕРСКАЯ",
       "УЛЬЯНОВСКАЯ",
