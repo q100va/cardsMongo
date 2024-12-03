@@ -46,6 +46,8 @@ const listSchema = new Schema(
     forInstitute: { type: Number, default: 0 },
     forNavigators: { type: Number, default: 0 },
     onlyForInstitute:  {type: Boolean, default: false},
+    finished: {type: Boolean, default: false},
+  
   },
   { collection: "newYear_2025" }
 );

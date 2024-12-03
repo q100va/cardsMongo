@@ -144,7 +144,21 @@ export class DobroruNewYearComponent implements OnInit {
       async (res) => {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
-        this.regions = res["data"]["regions"];
+     //   this.regions = res["data"]["regions"];
+     this.regions = [
+
+     // "ВОЛОГОДСКАЯ",
+      "ИВАНОВСКАЯ",
+    //  "КАЛМЫКИЯ",
+    //  "КЕМЕРОВСКАЯ",
+      "КУРГАНСКАЯ",
+      //"РОСТОВСКАЯ",
+      "СТАВРОПОЛЬСКИЙ",
+    //  "ТВЕРСКАЯ",
+      "УЛЬЯНОВСКАЯ",
+      //"ЧУВАШСКАЯ",
+    
+    ]; 
         /*         this.regions = [
           "АЛТАЙСКИЙ",
           "АМУРСКАЯ",
@@ -989,7 +1003,8 @@ export class DobroruNewYearComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "any",
+        //addressFilter: this.addressFilter,
+        addressFilter: "noSpecial",
         genderFilter: "any",
         year1: null,
         year2: null,
