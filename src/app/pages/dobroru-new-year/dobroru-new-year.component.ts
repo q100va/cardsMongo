@@ -147,6 +147,7 @@ export class DobroruNewYearComponent implements OnInit {
      //   this.regions = res["data"]["regions"];
      this.regions = [
       "АМУРСКАЯ",
+      "ВЛАДИМИРСКАЯ",
      // "ВОЛОГОДСКАЯ",
       "ИВАНОВСКАЯ",
     //  "КАЛМЫКИЯ",
