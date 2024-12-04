@@ -798,7 +798,7 @@ export class NameDayComponent implements OnInit {
         addresses =
           addresses +
           (this.showIndexes ? celebrator.index + ". " : "") +
-          (celebrator.lastName ? celebrator.lastName : "") +
+      /*     (celebrator.lastName ? celebrator.lastName : "") + */
           " " +
           celebrator.firstName +
           " " +
