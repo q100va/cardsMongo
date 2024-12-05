@@ -566,6 +566,7 @@ export class DobroruNewYearComponent implements OnInit {
 
     if (!this.form.controls.region.value) {
       this.showChoiceSpareRegions = false;
+      this.form.controls.spareRegions.setValue(false);
       console.log("no regions were chosen");
       console.log(this.form.controls.region.value);
       this.activeNursingHomes = this.nursingHomes;
@@ -1038,7 +1039,7 @@ export class DobroruNewYearComponent implements OnInit {
     //console.log(newOrder);
 
     this.orderService
-      .createInstitutesOrder(newOrder, prohibitedId, restrictedHouses)
+      .createInstitutesOrderDobroru(newOrder, prohibitedId, restrictedHouses)
       .subscribe(
         async (res) => {
           this.spinner = false;

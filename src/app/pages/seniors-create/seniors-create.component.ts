@@ -39,11 +39,15 @@ export class SeniorsCreateComponent implements OnInit {
       nameDay: [null],
       dateNameDay: [null],
       monthNameDay: [null],
+      dateOfSignedConsent: [null],
 
     });
   }
 
   createSenior() {
+
+    const dateUpdate = this.form.controls.dateOfSignedConsent.value ? new Date(this.form.controls.dateOfSignedConsent.value) : null;
+
     const newSenior = {} as Senior;
     newSenior.region = this.form.controls.region.value;
     newSenior.nursingHome = this.form.controls.nursingHome.value;
@@ -61,6 +65,7 @@ export class SeniorsCreateComponent implements OnInit {
     newSenior.nameDay = this.form.controls.nameDay.value;
     newSenior.dateNameDay = this.form.controls.dateNameDay.value;
     newSenior.monthNameDay = this.form.controls.monthNameDay.value;
+    newSenior.dateOfSignedConsent = dateUpdate;
 
     this.seniorsService.createSenior(newSenior).subscribe(
       (res) => {

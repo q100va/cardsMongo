@@ -73,6 +73,7 @@ export class AddListsComponent implements OnInit {
   accepted_nameDay: string;
   accepted_dateNameDay: number;
   accepted_monthNameDay: number;
+  accepted_dateOfSignedConsent : Date;
 
   allAccepted = [];
 
@@ -241,6 +242,10 @@ export class AddListsComponent implements OnInit {
   }
 
   acceptChanges(accepted, key, person) {
+   
+    console.log("accepted.dateOfSignedConsent");
+    console.log(accepted.dateOfSignedConsent);
+    
     const cloneAccepted = {
       id: accepted.id ? accepted.id : person.id,
       region: person.region,
@@ -277,6 +282,7 @@ export class AddListsComponent implements OnInit {
       monthNameDay: accepted.monthNameDay
         ? accepted.monthNameDay
         : person.monthNameDay,
+        dateOfSignedConsent: accepted.dateOfSignedConsent ? new Date(accepted.dateOfSignedConsent) : person.dateOfSignedConsent,
     };
     this.allAccepted.push(cloneAccepted);
     this.resultOfCompare.changed.splice(
@@ -304,6 +310,7 @@ export class AddListsComponent implements OnInit {
     this.accepted_nameDay = undefined;
     this.accepted_dateNameDay = undefined;
     this.accepted_monthNameDay = undefined;
+    this.accepted_dateOfSignedConsent = undefined;
   }
 
   acceptAllChanges() {

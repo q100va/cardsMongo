@@ -38,7 +38,8 @@ const listNextSchema = new Schema(
     fullData: { type: String },
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
-    uncertain: { type: Boolean, default: false },   
+    uncertain: { type: Boolean, default: false },
+    dateOfSignedConsent : {type: Date, default: null },   
 
   },
   { collection: "lists_february2025" }

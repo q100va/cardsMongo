@@ -47,6 +47,8 @@ const orderSchema = new Schema(
       onlyWithPicture: { type: Boolean, default: false },
       onlyAnniversaries: { type: Boolean, default: false },
       onlyAnniversariesAndOldest: { type: Boolean, default: false },
+      minNumberOfHouses:  { type: Boolean, default: false },
+      noNames:  { type: Boolean, default: false },
     },
     isCompleted: { type: Boolean, default: false },
     absents: [celebrator],
@@ -56,7 +58,6 @@ const orderSchema = new Schema(
     isDisabled: { type: Boolean, default: false },
     isReturned: { type: Boolean, default: false },
     isOverdue: { type: Boolean, default: false },
-
     clientId: { type: String }
   },
   { collection: "orders" }

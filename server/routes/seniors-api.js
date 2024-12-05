@@ -17,6 +17,7 @@ const ListBefore = require("../models/list-previous");
 const Order = require("../models/order");
 const NameDay = require("../models/name-day");
 const checkAuth = require("../middleware/check-auth");
+const NewYear = require("../models/new-year");
 
 // Find all seniors
 router.get("/", checkAuth, async (req, res) => {
@@ -127,6 +128,7 @@ router.post("/", checkAuth, async (req, res) => {
       isReleased: house.isReleased,
       dateEnter: house.dateLastUpdate,
       dateExit: '',
+      dateOfSignedConsent: req.body.dateOfSignedConsent,
 
     };
     Senior.create(newSenior, function (err, senior) {
@@ -244,6 +246,7 @@ router.put("/update/:id", checkAuth, async (req, res) => {
       monthNameDay: req.body.monthNameDay,
       noAddress: house.noAddress,
       isReleased: house.isReleased,
+      dateOfSignedConsent: req.body.dateOfSignedConsent,
       //dateEnter: req.body.dateEnter,
       //dateExit: req.body.dateExit, 
     });
@@ -427,6 +430,9 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
 
 
     for (let senior of newList) {
+/*       console.log("senior.dateOfSignedConsent");
+      console.log(senior.dateOfSignedConsent); */
+
       senior.isRestricted = senior.isRestricted == "false" ? false : true;
       senior.dateBirthday = +senior.dateBirthday;
       senior.monthBirthday = +senior.monthBirthday;
@@ -438,6 +444,9 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
       senior.isReleased = house.isReleased;
       //senior.dateEnter = house.dateLastUpdate;
       senior.dateExit = null;
+      senior.dateOfSignedConsent = senior.dateOfSignedConsent ? new Date(senior.dateOfSignedConsent) : null;
+      console.log("senior.dateOfSignedConsent");
+      console.log(senior.dateOfSignedConsent);
       //console.log(senior.dateExit);
       if (!senior.lastName) senior.lastName = '';
       if (!senior.patronymic) senior.patronymic = '';
@@ -480,7 +489,8 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
           //newSenior.child != oldList[index].child ||
           //newSenior.linkPhoto != oldList[index].linkPhoto ||
           //newSenior.nameDay != oldList[index].nameDay ||
-          newSenior.gender != oldList[index].gender
+          newSenior.gender != oldList[index].gender ||
+          newSenior.dateOfSignedConsent != oldList[index].dateOfSignedConsent
         ) {
           let difference = {
             key: key,
@@ -520,7 +530,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
       }
 
 
-        index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
+      index = arrived.findIndex(item => item.lastName + item.firstName == oldSenior.lastName + oldSenior.firstName);
       if (index != -1) {
         flag = true;
       } else {
@@ -538,7 +548,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
             }
           }
         }
-      } 
+      }
       // console.log("index");
       //console.log(index);
 
@@ -630,16 +640,16 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
     for (let senior of absents) {
       /*       console.log("senior");
             console.log(senior); */
-     let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
-     // let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
+      let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
+      // let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
-      if (senior.monthBirthday == month || senior.monthBirthday ==  month +1 || senior.monthBirthday == 12) {//month - 1
+      if (senior.monthBirthday == month || senior.monthBirthday == month + 1 || senior.monthBirthday == 12) {//month - 1
         let foundSenior;
         if (senior.monthBirthday == month) {
           foundSenior = await List.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         }
-        if (senior.monthBirthday ==  month +1) {//
+        if (senior.monthBirthday == month + 1) {//
           foundSenior = await ListNext.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         }
         if (senior.monthBirthday == 12) {//month - 1
@@ -692,6 +702,9 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
       }
+
+      await NewYear.updateOne({ seniorId: senior._id }, { $set: { absent: true } }, { upsert: false });
+
       if (senior.monthNameDay == month) {
         let foundSenior = await NameDay.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
         console.log("foundSenior");
@@ -826,6 +839,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
             celebrator.dateBirthday +
             celebrator.monthBirthday +
             celebrator.yearBirthday,
+            dateOfSignedConsent: celebrator.dateOfSignedConsent,
         };
         if (celebrator.monthBirthday == 12) {
           await ListBefore.create(cloneCelebrator);
@@ -839,11 +853,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
 
 
       }
+      let newCelebrator = await createCloneCelebratorNY(celebrator);
+      await NewYear.create(newCelebrator);
+
     }
 
     for (let senior of changed) {
-      console.log("senior");
-      console.log(senior);
+      console.log("changedSenior");
+      console.log(senior.dateOfSignedConsent);
 
       let resChanged = await Senior.updateOne({ _id: senior.id }, {
         $set: {
@@ -867,6 +884,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           monthNameDay: senior.monthNameDay,
           noAddress: senior.noAddress,
           isReleased: senior.isReleased,
+          dateOfSignedConsent: senior.dateOfSignedConsent,
           //dateEnter: senior.dateEnter,
           //dateExit: senior.dateExit,  
         }
@@ -874,7 +892,17 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
       console.log("resChanged");
       console.log(resChanged);
 
+      if (senior.dateOfSignedConsent != null) {
+        await NewYear.updateOne({ seniorId: senior.id }, { dateOfSignedConsent: senior.dateOfSignedConsent });
+        const fullData = senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday;
+        await List.updateOne({ fullData: fullData }, { dateOfSignedConsent: senior.dateOfSignedConsent });
+        await ListBefore.updateOne({ fullData: fullData }, { dateOfSignedConsent: senior.dateOfSignedConsent });
+        await ListNext.updateOne({ fullData: fullData }, { dateOfSignedConsent: senior.dateOfSignedConsent });
+      }
     }
+
+
+
     let updatedHouse = await House.findOne({ nursingHome: house });
     let lastDate = updatedHouse.dateLastUpdate;
     date = new Date(date);
@@ -901,6 +929,86 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
     res.status(500).send(createSeniorCatchErrorResponse.toObject());
   }
 });
+
+async function createCloneCelebratorNY(celebrator) {
+
+  let cloneFullDayBirthday = `${celebrator.dateBirthday > 9
+    ? celebrator.dateBirthday
+    : "0" + celebrator.dateBirthday}.${celebrator.monthBirthday > 9
+      ? celebrator.monthBirthday
+      : "0" + celebrator.monthBirthday}${celebrator.yearBirthday > 0 ? "." + celebrator.yearBirthday : ""}`;
+
+  let cloneCategory = '';
+  let cloneOldest = false;
+
+  if (celebrator["noAddress"]) {
+    if (celebrator.gender == "Female") {
+      cloneCategory = "specialWomen";
+    }
+    if (celebrator.gender == "Male") {
+      cloneCategory = "specialMen";
+    }
+
+  } else {
+    if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
+      cloneOldest = true;
+    }
+    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
+      cloneCategory = "oldWomen";
+    }
+    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+      cloneCategory = "oldMen";
+    }
+    if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+      if (celebrator.gender == "Female") {
+        cloneCategory = "yangWomen";
+      }
+      if (celebrator.gender == "Male") {
+        cloneCategory = "yangMen";
+      }
+    }
+  }
+
+  let cloneCelebrator = {
+    seniorId: celebrator._id,
+    region: celebrator.region,
+    nursingHome: celebrator.nursingHome,
+    lastName: celebrator.lastName,
+    firstName: celebrator.firstName,
+    patronymic: celebrator.patronymic,
+    dateBirthday: celebrator.dateBirthday,
+    monthBirthday: celebrator.monthBirthday,
+    yearBirthday: celebrator.yearBirthday,
+    gender: celebrator.gender,
+    comment1: celebrator.comment1,
+    comment2: celebrator.comment2,
+    linkPhoto: celebrator.linkPhoto,
+    nameDay: celebrator.nameDay,
+    dateNameDay: celebrator.dateNameDay,
+    monthNameDay: celebrator.monthNameDay,
+    noAddress: celebrator.noAddress,
+    isReleased: celebrator.isReleased,
+    plusAmount: 0,
+    //specialComment: cloneSpecialComment,
+    fullDayBirthday: cloneFullDayBirthday,
+    oldest: cloneOldest,
+    category: cloneCategory,
+    holyday: 'Новый год 2025',
+    fullData: celebrator.nursingHome +
+      celebrator.lastName +
+      celebrator.firstName +
+      celebrator.patronymic +
+      celebrator.dateBirthday +
+      celebrator.monthBirthday +
+      celebrator.yearBirthday,
+    dateOfSignedConsent: celebrator.dateOfSignedConsent,
+  };
+  //console.log("special - " + celebrator["specialComment"]);
+  //console.log("fullday - " + celebrator.fullDayBirthday);
+  //console.log(celebrator);
+  return cloneCelebrator;
+
+}
 
 // Add comments
 async function specialComment(age) {

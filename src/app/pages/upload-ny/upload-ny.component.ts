@@ -1208,13 +1208,13 @@ export class UploadNyComponent implements OnInit {
 
       if (!this.isForInstitutes) {
         for (let celebrator of lineItem.celebrators) {
-          console.log("celebrator");
-          console.log(celebrator.lastName);
+/*           console.log("celebrator");
+          console.log(celebrator.lastName); */
 
           addresses =
             addresses +
             (this.showIndexes ? celebrator.index + ". " : "") +
-            (celebrator.lastName ? celebrator.lastName : "") +
+      /*       (celebrator.lastName ? celebrator.lastName : "") + */
             " " +
             celebrator.firstName +
             " " +
@@ -1283,14 +1283,14 @@ export class UploadNyComponent implements OnInit {
 
       if (!this.isForInstitutes) {
         for (let celebrator of lineItem.celebrators) {
-          console.log("celebrator");
-          console.log(celebrator.lastName);
+ /*          console.log("celebrator");
+          console.log(celebrator.lastName); */
 
           addresses =
             addresses +
             "<span>" +
             (this.showIndexes ? celebrator.index + ". " : "") +
-            (celebrator.lastName ? celebrator.lastName + " " : "") +
+         /*    (celebrator.lastName ? celebrator.lastName + " " : "") + */
             celebrator.firstName +
             " " +
             (celebrator.patronymic ? celebrator.patronymic + " " : "") +

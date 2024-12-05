@@ -28,6 +28,7 @@ let seniorSchema = new Schema(
     child: {type: String, default: ""},
     teacher: {type: String, default: ""},
     key: { type: Number},
+    dateOfSignedConsent : {type: Date, default: null },
 
   }
 

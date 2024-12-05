@@ -53,13 +53,13 @@
 
             <p>
                 Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                идет адрес, потом - ФИО или несколько ФИО). Иногда в списках встречаются
+                идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. Иногда в списках встречаются
                 люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                 проживают в домах престарелых. Иногда сразу после детдомов.
             </p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения ноября 2024'">Дни рождения октября</h3>
+                *ngIf="order.holiday == 'Дни рождения декабря 2024'">Дни рождения октября</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Пасха 2024'">НОВЫЙ ГОД</h3>
 
@@ -86,7 +86,7 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения ноября 2024'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="order.holiday == 'Дни рождения декабря 2024'">{{celebrator.fullDayBirthday}}</span>
                     <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2024'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
@@ -209,7 +209,7 @@
             <p>
                 <a href="mailto: o.kustova@starikam.org">o.kustova&#64;starikam.org</a> на связи c 16-00
                 до 6-00 (МСК)<br />
-                <a href="https://starikam.org/">www.starikam.org</a> |
+                <a href="https://ng.starikam.org/">www.starikam.org</a> |
                 <a href="https://t.me/cardsforgrandma">&#64;cardsforgrandma</a>
             </p>
         </div>
@@ -219,7 +219,7 @@
             <p>Здравствуйте, {{order.clientFirstName}}!</p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения ноября 2024'">Дни рождения октября</h3>
+                *ngIf="order.holiday == 'Дни рождения декабря 2024'">Дни рождения октября</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Пасха 2024'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
                 февраля)</h3>
@@ -238,7 +238,7 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения ноября 2024'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="order.holiday == 'Дни рождения декабря 2024'">{{celebrator.fullDayBirthday}}</span>
                     <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2024'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
@@ -267,7 +267,7 @@
             <p>
                 <a href="mailto: o.kustova@starikam.org">o.kustova&#64;starikam.org</a> на связи c 16-00
                 до 6-00 (МСК)<br />
-                <a href="https://starikam.org/">www.starikam.org</a> |
+                <a href="https://ng.starikam.org/">www.starikam.org</a> |
                 <a href="https://t.me/cardsforgrandma">&#64;cardsforgrandma</a>
             </p>
         </div>

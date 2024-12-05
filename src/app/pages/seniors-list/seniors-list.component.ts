@@ -27,7 +27,7 @@ export class SeniorsListComponent implements OnInit {
   name: string;
   _id: string;
   nursingHome: string;
-  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "nameDay", "edit", "delete", "isRestricted"];
+  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "dateOfSignedConsent",  "edit", "delete", "isRestricted"]; //"nameDay",
   constructor(
     private seniorsService: SeniorsService,
     private confirmationService: ConfirmationService,

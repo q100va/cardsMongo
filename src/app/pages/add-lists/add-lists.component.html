@@ -199,7 +199,7 @@
                                 <div *ngIf="person.old.firstName!=person.new.firstName">
                                     <mat-radio-group [(ngModel)]="accepted_firstName">
                                         <span>firstName</span>
-                                        <mat-radio-button [value]="person.old.firstName" [checked]=true>{{person.old.firstName}}
+                                        <mat-radio-button [value]="person.old.firstName">{{person.old.firstName}}<!--  [checked]=true -->
                                         </mat-radio-button>
                                         <mat-radio-button [value]="person.new.firstName">{{person.new.firstName}}
                                         </mat-radio-button>
@@ -344,6 +344,7 @@
                                     </mat-radio-group>
                                 </div>
                                 <br />
+                                
                                 <div *ngIf="person.old.linkPhoto!=person.new.linkPhoto">
                                     <mat-radio-group [(ngModel)]="accepted_linkPhoto">
                                         <span>linkPhoto</span>
@@ -354,7 +355,19 @@
                                     </mat-radio-group>
                                 </div>
                                 <br />
-                                <div *ngIf="person.old.nameDay!=person.new.nameDay">
+                                {{person.old.dateOfSignedConsent}} {{person.new.dateOfSignedConsent}}
+                                <br />
+                                <div *ngIf="person.old.dateOfSignedConsent!=person.new.dateOfSignedConsent && person.new.dateOfSignedConsent != null">
+                                    <mat-radio-group [(ngModel)]="accepted_dateOfSignedConsent">
+                                        <span>dateOfSignedConsent</span>
+                                        <mat-radio-button [value]="person.old.dateOfSignedConsent">{{person.old.dateOfSignedConsent}}</mat-radio-button>
+                                        <mat-radio-button [value]="person.new.dateOfSignedConsent">{{person.new.dateOfSignedConsent}}</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                <br />
+
+
+<!--                                 <div *ngIf="person.old.nameDay!=person.new.nameDay">
                                     <mat-radio-group [(ngModel)]="accepted_nameDay">
                                         <span>nameDay</span>
                                         <mat-radio-button [value]="person.old.nameDay">{{person.old.nameDay}}</mat-radio-button>
@@ -381,10 +394,10 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                                <br />
+                                <br /> -->
         
                                 <button mat-raised-button
-                                    (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay }, person.key, person.old)">
+                                    (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay, dateOfSignedConsent: accepted_dateOfSignedConsent }, person.key, person.old)">
                                     Принять изменения
                                 </button>
         

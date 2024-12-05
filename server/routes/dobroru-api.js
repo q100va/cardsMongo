@@ -2892,7 +2892,710 @@ async function generateLineItemsNewYear(nursingHomes, order_id) {
     return lineItems;
 }
 
+////////////////////////////////////////////////////BIRTHDAY INSTITUTES
 
+router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
+    let finalResult;
+  
+    console.log(" institutes: req.body.institutes,");
+    console.log(req.body.institutes,);
+    try {
+      let newOrder = {
+        userName: req.body.userName,
+        holiday: req.body.holiday,
+        source: req.body.source,
+        amount: req.body.amount,
+        clientId: req.body.clientId,
+        clientFirstName: req.body.clientFirstName,
+        clientPatronymic: req.body.clientPatronymic,
+        clientLastName: req.body.clientLastName,
+        //email: req.body.email,
+        contactType: req.body.contactType,
+        contact: req.body.contact,
+        //institute: req.body.institute,
+        institutes: req.body.institutes,
+        isAccepted: req.body.isAccepted,
+        comment: req.body.comment,
+        orderDate: req.body.orderDate,
+        dateOfOrder: req.body.dateOfOrder,
+        temporaryLineItems: [],
+        lineItems: [],
+        filter: req.body.filter,
+        isCompleted: false
+      };
+  
+      // console.log("order.dateOfOrder");
+      // console.log(req.body.dateOfOrder);
+      // console.log(newOrder.dateOfOrder);
+  
+      let client = await Client.findOne({ _id: newOrder.clientId });
+      let index = client.coordinators.findIndex(item => item == newOrder.userName);
+      if (index == -1) {
+        await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
+      }
+  
+      let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", "ЖУКОВКА", ...req.body.restrictedHouses] //, "ЧИКОЛА"
+  
+      /*    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
+      
+         let restrictedHouses;
+         if (doneHouses) {
+           restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", ...doneHouses.houses];
+         } else {
+           restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ЧИКОЛА", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР"];
+         } */
+  
+      finalResult = await createOrderForInstitutes(newOrder, req.body.prohibitedId, restrictedHouses);
+      let text = !finalResult.success ? finalResult.result : "Query Successful";
+  
+      const newListResponse = new BaseResponse(200, text, finalResult);
+      res.json(newListResponse.toObject());
+    } catch (e) {
+      console.log(e);
+      let text = 'Обратитесь к администратору. Заявка не сформирована.';
+      if (!finalResult) {
+        let answer = await deleteErrorPlus(false, req.body.holiday, req.body.userName);
+        console.log("answer");
+        console.log(answer);
+        if (!answer) {
+          text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+        }
+  
+      } else {
+        if (finalResult && finalResult.success) {
+          text = 'Произошла ошибка, но, скорее всего заявка была сформирована и сохранена. Проверьте страницу "Мои заявки" и сообщите об ошибке администратору.'
+        }
+        if (finalResult && !finalResult.success) {
+          text = finalResult.result;
+        }
+      }
+      const newListCatchErrorResponse = new BaseResponse(
+        500,
+        text,
+        e
+      );
+      res.status(500).send(newListCatchErrorResponse.toObject());
+    }
+  });
+  
+  async function createOrderForInstitutes(newOrder, prohibitedId, restrictedHouses) {
+  
+    const emptyOrder = {
+      userName: newOrder.userName,
+      holiday: newOrder.holiday,
+      source: newOrder.source,
+      amount: newOrder.amount,
+      clientId: newOrder.clientId,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      // email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      // institute: newOrder.institute,
+      institutes: newOrder.institutes,
+      //isRestricted: newOrder.isRestricted,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
+      lineItems: [],
+      filter: newOrder.filter,
+  
+    };
+    //console.log("emptyOrder.dateOfOrder");
+    //console.log(emptyOrder.dateOfOrder);
+  
+    console.log("newOrder.filter");
+    console.log(newOrder.filter);
+  
+  
+    let order = await Order.create(emptyOrder);
+    let order_id = order._id.toString();
+  
+    //console.log("order");
+    //console.log(order);
+  
+    let seniorsData = await fillOrderForInstitutes(
+      order_id,
+      prohibitedId,
+      restrictedHouses,
+      newOrder.holiday,
+      newOrder.amount,
+      newOrder.filter,
+    );
+  
+    if (seniorsData.length < newOrder.amount) {
+  
+      await deleteErrorPlus(order_id, newOrder.holiday);
+      return {
+        result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса. Требуемых адресов только ` + seniorsData.length,
+        success: false
+  
+      }
+      /*     return {
+            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+            success: false
+      
+          } */
+    }
+    const nursingHomes = await House.find({});
+    let resultLineItems = await generateLineItems(nursingHomes, order_id);
+    // console.log("resultLineItems");
+    //console.log(resultLineItems);
+    //console.log(typeof resultLineItems);
+  
+    if (typeof resultLineItems == "string") {
+  
+      // console.log("resultLineItems222");
+      await deleteErrorPlus(order_id, newOrder.holiday);
+      return {
+        result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
+        success: false
+      };
+    }
+  
+    return {
+      result: resultLineItems,
+      success: true,
+      order_id: order_id,
+      contact: newOrder.email ? newOrder.email : newOrder.contact,
+      clientFirstName: newOrder.clientFirstName,
+      //institutes: newOrder.institutes,
+    }
+  
+  }
+  
+  async function fillOrderForInstitutes(
+    order_id,
+    prohibitedId,
+    restrictedHouses,
+    holiday,
+    amount,
+    filter
+  ) {
+  
+    console.log("fillOrderForInstitutes");
+  
+    let smallerHouses = [];
+    let biggerHouse;
+    let seniorsData = [];
+    let amountInSmallerHouses = 0;
+  
+    console.log("restrictedHouses");
+    console.log(restrictedHouses);
+  
+    console.log("filter.region");
+    console.log(filter.region);
+  
+  
+     let activeHouse;
+    if (!filter.region && filter.addressFilter == 'noSpecial') {
+      activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });
+    }
+    if (filter.region && !filter.spareRegions && filter.addressFilter == 'noSpecial') {
+      filter.region = [filter.region];
+      activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
+  
+    }
+    if (filter.region && filter.spareRegions && filter.addressFilter == 'noSpecial') {
+      let spareRegions = await Region.findOne({ name: filter.region });
+      console.log("spareRegions");
+      console.log(spareRegions);
+      filter.region = [filter.region, ...spareRegions.spareRegions];
+      activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
+  
+    }
+  
+    if (!filter.region && filter.addressFilter == 'any') {
+      activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, });
+    }
+    if (filter.region && !filter.spareRegions && filter.addressFilter == 'any') {
+      filter.region = [filter.region];
+      activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+  
+    }
+    if (filter.region && filter.spareRegions && filter.addressFilter == 'any') {
+      let spareRegions = await Region.findOne({ name: filter.region });
+      console.log("spareRegions");
+      console.log(spareRegions);
+      filter.region = [filter.region, ...spareRegions.spareRegions];
+      activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+  
+    } 
+  
+    console.log("filter.region");
+    console.log(filter.region);
+  
+    //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, region:"РОСТОВСКАЯ" }); // ИСПРАВИТЬ
+    //let activeHouse = await House.find({ isReleased: false, noAddress: true, isActive: true, nursingHome: { $nin: restrictedHouses } }); // ПНИ
+    //let activeHouse = await House.find({ isReleased: false, noAddress: false, isActive: true, nursingHome: { $in: ["ЧИСТОПОЛЬ", "ЧИТА_ТРУДА", "ЯСНОГОРСК", "ВОЗНЕСЕНЬЕ", "УЛЬЯНКОВО", "КУГЕСИ", "ВЛАДИКАВКАЗ", "ВЫСОКОВО", "СЛОБОДА-БЕШКИЛЬ", "ПЕРВОМАЙСКИЙ", "СКОПИН", "РЯЗАНЬ", "ДОНЕЦК", "ТИМАШЕВСК", "ОКТЯБРЬСКИЙ", "НОГУШИ", "МЕТЕЛИ", "ЛЕУЗА", "КУДЕЕВСКИЙ", "БАЗГИЕВО", "ВЫШНИЙ_ВОЛОЧЕК", "ЖИТИЩИ", "КОЗЛОВО", "МАСЛЯТКА", "МОЛОДОЙ_ТУД", "ПРЯМУХИНО", "РЖЕВ", "СЕЛЫ", "СТАРАЯ_ТОРОПА", "СТЕПУРИНО", "ТВЕРЬ_КОНЕВА", "ЯСНАЯ_ПОЛЯНА", "КРАСНЫЙ_ХОЛМ", "ЗОЛОТАРЕВКА", "БЫТОШЬ", "ГЛОДНЕВО", "ДОЛБОТОВО", "ЖУКОВКА", "СЕЛЬЦО", "СТАРОДУБ"] } });
+    /*   let activeHouse = await House.find({
+        isReleased: false, isActive: true,  nursingHome: {//noAddress: false,
+           $in: [ 
+        "УСТЬ-ОРДЫНСКИЙ",
+           
+           "МЕТЕЛИ",
+           "КУДЕЕВСКИЙ",
+           "НОВОСЛОБОДСК",
+          "ТОЛЬЯТТИ",
+           "БИЙСК",
+           "БОГРАД", 
+          ]
+        }
+      });    
+  
+    let activeHouse = await House.find({
+      isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
+        $in: [
+          'ПРУДНОЕ',        
+          
+          
+          
+  
+      
+          
+  
+  
+        ]
+      } });*/
+    /*         
+             "ЧИТА_ТРУДА",
+             "НОВОСИБИРСК_ЖУКОВСКОГО", */
+  
+  
+  
+  
+    /* 
+      let activeHouse = await House.find({
+        isReleased: false, noAddress: false, isActive: true, region: {
+          $in: [ "МОСКОВСКАЯ"]
+        }
+      }); */
+  
+  
+    console.log("activeHouse");
+    console.log(activeHouse.length);
+  
+    let count;
+  
+    //console.log("prohibitedId");
+    // console.log(prohibitedId);
+  
+  
+    const region = filter.region ? true : false;
+  
+    for (let house of activeHouse) {
+      //console.log(house.nursingHome);
+  
+  
+      if (holiday == "Дни рождения января 2025") {
+        count = await List.find({
+          nursingHome: house.nursingHome,
+          //gender: "Female",
+          absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+        }).countDocuments();
+      }
+  
+      if (holiday == "Дни рождения февраля 2025") {
+        count = await ListNext.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }
+        }).countDocuments();
+      }
+  
+  
+      if (holiday == "Дни рождения декабря 2024") {
+        count = await ListBefore.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+        }).countDocuments();
+      }
+  
+      if (holiday == "День учителя и дошкольного работника 2024") {
+        count = await TeacherDay.find({
+          teacher: /учителя/, nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }
+        }).countDocuments();
+      }
+  
+      if (holiday == "День пожилого человека 2024") {
+        count = await SeniorDay.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
+        }).countDocuments();
+      }
+  
+      if (holiday == "Новый год 2025" && !filter.region ) { //&& filter.addressFilter == "noSpecial"
+        count = await NewYear.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+  
+      if (holiday == "Новый год 2025" && filter.region) {// && filter.addressFilter == "noSpecial"
+        count = await NewYear.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+  
+  
+      console.log("house.nursingHome");
+      console.log(house.nursingHome);
+  
+      console.log("count");
+      console.log(count);
+  
+      if (count == amount) {
+        seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, house.nursingHome, prohibitedId, region);
+        return seniorsData;
+      }
+  
+      if (count > amount) {
+        biggerHouse = house.nursingHome;
+      }
+      // if (count > 2) {
+  
+      if (count < amount && count > 2) {
+      //if (count < 80 && count > 2) {
+        //if (count < amount && count > 0) {
+        smallerHouses.push(
+          {
+            nursingHome: house.nursingHome,
+            amount: count
+          });
+        amountInSmallerHouses += count;
+      }
+    }
+  
+    if (biggerHouse) {
+      seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, biggerHouse, prohibitedId, region);
+      return seniorsData;
+    }
+  
+    console.log("amountInSmallerHouses");
+    console.log(amountInSmallerHouses);
+  
+    console.log("amount");
+    console.log(amount);
+  
+    if (amountInSmallerHouses < amount) {
+      return [];
+    }
+  
+    smallerHouses.sort(
+      (prev, next) =>
+        next.amount - prev.amount
+    );
+  
+    let currentAmount = amount;
+    //  console.log(amount);
+  
+  
+    console.log("smallerHouses[0]");
+    console.log(smallerHouses[0]);
+  
+    /*    for (let house of smallerHouses) {
+          let seniors = await collectSeniorsForInstitution(order_id, holiday, 3, house.nursingHome, prohibitedId, region);
+              seniorsData = [...seniorsData, ...seniors];
+              currentAmount -= 3;
+              if (currentAmount == 0)     return seniorsData; 
+            
+        } */
+  
+    if (amount >= smallerHouses[0].amount * 2) {
+  
+      for (let i = 0; i < smallerHouses.length; i++) {
+        let index = smallerHouses.lastIndexOf(item => item.amount == currentAmount);
+  
+        if (index != -1 && index >= i) {
+          let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors];
+          currentAmount -= smallerHouses[index].amount;
+          return seniorsData;
+        } else {
+          if (currentAmount - smallerHouses[i].amount <= 0) {
+            let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region);
+            seniorsData = [...seniorsData, ...seniors];
+            currentAmount -= currentAmount;
+            return seniorsData;
+          } else {
+            if (currentAmount - smallerHouses[i].amount >= 3) { // ИСПРАВИТЬ на 3
+              let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region);
+              seniorsData = [...seniorsData, ...seniors];
+              currentAmount -= smallerHouses[i].amount;
+            }
+          }
+        }
+      }
+      return [];
+    } else {
+  
+      console.log("amount<");
+  
+      let amount1 = Math.round(amount / 2);
+      let amount2 = amount - amount1;
+  
+  
+      console.log('amount1');
+      console.log(amount1);
+  
+      console.log('amount2');
+      console.log(amount2);
+  
+      while (amount1 > 3) {
+        // while (amount1 > 0) {
+        let index1 = smallerHouses.findIndex(item => item.amount == amount1);
+        let index2 = smallerHouses.findIndex(item => item.amount == amount2);
+        if (index1 != -1 && index2 != -1 && index1 != index2) {
+          let seniors1 = await collectSeniorsForInstitution(order_id, holiday, amount1, smallerHouses[index1].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors1];
+          let seniors2 = await collectSeniorsForInstitution(order_id, holiday, amount2, smallerHouses[index2].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors2];
+  
+          console.log('seniorsData');
+          console.log(seniorsData.length);
+  
+          return seniorsData;
+        }
+        amount1--;
+        amount2++;
+      }
+  
+      amount1 = Math.round(amount / 3);
+      amount2 = amount1 + 1;
+      let amount3 = amount - amount1 - amount2;
+  
+      while (amount1 > 3) {
+        let index1 = smallerHouses.findIndex(item => item.amount == amount1);
+        let index2 = smallerHouses.findIndex(item => item.amount == amount2);
+        let index3 = smallerHouses.findIndex(item => item.amount == amount3);
+        if (index1 != -1 && index2 != -1 && index3 != -1 && index1 != index2 && index3 != index2) {
+          let seniors1 = await collectSeniorsForInstitution(order_id, holiday, amount1, smallerHouses[index1].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors1];
+  
+          let seniors2 = await collectSeniorsForInstitution(order_id, holiday, amount2, smallerHouses[index2].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors2];
+  
+          let seniors3 = await collectSeniorsForInstitution(order_id, holiday, amount3, smallerHouses[index3].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors3];
+  
+          return seniorsData;
+        }
+        amount1--;
+        amount2++;
+      }
+  
+      for (let i = 0; i < smallerHouses.length; i++) {
+        let index = smallerHouses.findIndex((item, idx) => item.amount == currentAmount && idx >= i);
+  
+        if (index != -1 && index >= i) {
+          let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region);
+          seniorsData = [...seniorsData, ...seniors];
+          currentAmount -= smallerHouses[index].amount;
+          return seniorsData;
+        } else {
+          if (currentAmount - smallerHouses[i].amount <= 0) {
+            let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region);
+            seniorsData = [...seniorsData, ...seniors];
+            currentAmount -= currentAmount;
+            return seniorsData;
+          } else {
+            if (currentAmount - smallerHouses[i].amount >= 3) {
+              let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region);
+              seniorsData = [...seniorsData, ...seniors];
+              currentAmount -= smallerHouses[i].amount;
+            }
+          }
+  
+        }
+      }
+      await deleteErrorPlusNewYear(order_id);
+      return [];
+    }
+  }
+  
+  
+  async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHome, prohibitedId, region) {
+  
+    console.log("amount");
+    console.log(amount);
+  
+    console.log("nursingHome");
+    console.log(nursingHome);
+  
+  
+    let seniorsData = [];
+  
+    if (holiday == "День учителя и дошкольного работника 2024") {
+  
+      seniorsData = await TeacherDay.find({
+        nursingHome: nursingHome,
+        absent: false,
+        plusAmount: { $lt: 2 },
+        _id: { $nin: prohibitedId }
+      }).limit(amount);
+  
+      console.log("seniorsData");
+      console.log(nursingHome);
+      console.log(seniorsData.length);
+  
+  
+      for (let senior of seniorsData) {
+        await TeacherDay.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      }
+    }
+  
+    if (holiday == "День пожилого человека 2024") {
+  
+      seniorsData = await SeniorDay.find({
+        nursingHome: nursingHome,
+        absent: false,
+        plusAmount: { $lt: 4 },
+        _id: { $nin: prohibitedId } // ИСПРАВИТЬ
+      }).limit(amount);
+  
+      console.log("seniorsData");
+      console.log(nursingHome);
+      console.log(seniorsData.length);
+  
+  
+      for (let senior of seniorsData) {
+        await SeniorDay.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      }
+    }
+  
+    if (holiday == "Новый год 2025") {
+      if (!region) {
+        seniorsData = await NewYear.find({
+          forInstitute: 0,
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+          finished: false,   
+          //onlyForInstitute: true
+        }).limit(amount);
+      }
+      if (region) {
+        seniorsData = await NewYear.find({
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+          //onlyForInstitute: true, 
+          forInstitute: 0,
+          finished: false
+        }).limit(amount);
+      }
+  
+  
+      console.log("seniorsData");
+      console.log(nursingHome);
+      console.log(seniorsData.length);
+  
+  
+      for (let senior of seniorsData) {
+  /*       if (contact == "@tterros") {
+          await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1, forNavigators: 1 } }, { upsert: false }); 
+        } else*/ {
+          await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1 } }, { upsert: false });
+        }
+  
+  
+        senior = await NewYear.findOne({ _id: senior._id });
+        let newP = senior.plusAmount;
+        let p = newP - 1;
+        let c = senior.category;
+        await House.updateOne(
+          {
+            nursingHome: senior.nursingHome
+          },
+          {
+            $inc: {
+              ["statistic.newYear.plus" + p]: -1,
+              ["statistic.newYear.plus" + newP]: 1,
+              ["statistic.newYear." + c + "Plus"]: 1,
+              ["statistic.newYear.forInstitute"]: 1,
+            }
+          }
+  
+        );
+        /*       if (contact == "@tterros") {
+                await House.updateOne(
+                  {
+                    nursingHome: senior.nursingHome
+                  },
+                  {
+                    $inc: {
+                      ["statistic.newYear.forNavigators"]: 1          
+                    }
+                  }
+          
+                );
+              } */
+  
+  
+      }
+    }
+  
+  
+    if (holiday == "Дни рождения февраля 2025") {
+  
+      seniorsData = await ListNext.find({
+        nursingHome: nursingHome,
+        absent: false,
+        plusAmount: { $lt: 2 },
+        _id: { $nin: prohibitedId }
+      }).limit(amount);
+  
+      console.log("seniorsData");
+      console.log(nursingHome);
+      console.log(seniorsData.length);
+  
+  
+      for (let senior of seniorsData) {
+        await ListNext.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      }
+    }
+  
+  
+    if (holiday == "Дни рождения января 2025") {
+  
+      seniorsData = await List.find({
+        //gender: "Female", 
+        nursingHome: nursingHome,
+        absent: false,
+        plusAmount: { $lt: 4 },
+        _id: { $nin: prohibitedId }
+      }).limit(amount);
+  
+      for (let senior of seniorsData) {
+        await List.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        console.log("BIRTHDAY INSTITUTES");
+        console.log(senior._id);
+  
+      }
+    }
+  
+    if (holiday == "Дни рождения декабря 2024") {
+  
+      seniorsData = await ListBefore.find({
+        nursingHome: nursingHome,
+        absent: false,
+        plusAmount: { $lt: 4 },
+        _id: { $nin: prohibitedId }
+      }).limit(amount);
+  
+      for (let senior of seniorsData) {
+        await ListBefore.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+      }
+  
+    }
+  
+    await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: seniorsData } }, { upsert: false });
+  
+    return seniorsData;
+  }
+  
 //////////////////////////////////////////////////
 
 

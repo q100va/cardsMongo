@@ -950,7 +950,7 @@ export class OrderComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "any",
+        addressFilter: "noSpecial",
         genderFilter: "any",
         year1: null,
         year2: null,

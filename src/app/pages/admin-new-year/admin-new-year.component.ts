@@ -46,7 +46,26 @@ export class AdminNewYearComponent implements OnInit {
     this.housesService.findActiveHouses().subscribe(
       (res) => {
         this.houses = res["data"];
+        //console.log(this.houses);
+/*         this.houses = this.houses.filter(
+          (item) =>
+          item.statistic.newYear.plus0 != 0 || 
+          (item.statistic.newYear.plus0 == 0 && item.statistic.newYear.plus1 == 0 && item.statistic.newYear.plus2 == 0) 
+         // || item.nursingHome == "ФИЛИППОВСКОЕ"
+       
+          //|| item.nursingHome == "АНИСИМОВО"
+          //item.statistic.newYear.plus0 == 0 && item.statistic.newYear.plus1 == 0 && item.noAddress == true && item.isReleased == false && item.statistic.newYear.forInstitute == 0
+          //item.statistic.newYear.plus0 != 0 && item.statistic.newYear.plus1 == 0 && item.statistic.newYear.forInstitute == 0 && item.noAddress == false && item.statistic.easter.amount > 200
+            //item.statistic.newYear.plus0 != 0 && item.statistic.newYear.plus1 != 0 && item.statistic.newYear.forInstitute == 0 && item.noAddress == false
+        ); */  //  && item.statistic.easter.amount < 100&&            item.statistic.easter.plus0 != 0&& item.statistic.newYear.forNavigators == 0 
+
+        for (let house of this.houses){
+          console.log('"' + house.nursingHome + '",');
+        }
+         
+
         console.log(this.houses);
+      
       },
       (err) => {
         console.log(err);

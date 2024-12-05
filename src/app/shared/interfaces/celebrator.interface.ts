@@ -43,6 +43,7 @@ export interface Celebrator {
     wifeFirstName?: string; 
     wifePatronymic?: string; 
     wifeYearBirthday?: string; 
+    dateOfSignedConsent?: Date | string,
   
 
   }

@@ -77,12 +77,12 @@
         </ng-container>
 
         <ng-container matColumnDef="dateEnter">
-          <mat-header-cell *matHeaderCellDef> Пол </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Поступил </mat-header-cell>
           <mat-cell *matCellDef="let senior"> {{ senior.dateEnter }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="dateExit">
-          <mat-header-cell *matHeaderCellDef> Пол </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Выбыл </mat-header-cell>
           <mat-cell *matCellDef="let senior"> {{ senior.dateExit }} </mat-cell>
         </ng-container>
 
@@ -102,11 +102,16 @@
           <mat-cell *matCellDef="let senior"> {{ senior.linkPhoto }} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="nameDay">
+        <ng-container matColumnDef="dateOfSignedConsent">
+          <mat-header-cell *matHeaderCellDef> Согласие </mat-header-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.dateOfSignedConsent }} </mat-cell>
+        </ng-container>
+
+<!--         <ng-container matColumnDef="nameDay">
           <mat-header-cell *matHeaderCellDef> Именины </mat-header-cell>
           <mat-cell *matCellDef="let senior"> {{ senior.nameDay }} </mat-cell>
         </ng-container>
-
+ -->
 
 
 

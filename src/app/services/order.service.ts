@@ -192,8 +192,34 @@ export class OrderService {
 
   createInstitutesOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
 
-    console.log(" api/orders/birthdayForInstitutes");
-    return this.http.post("/api/orders/birthdayForInstitutes/" + newOrder.amount, {
+    console.log(" api/orders/forInstitutes");
+    return this.http.post("/api/orders/forInstitutes/" + newOrder.amount, {
+      userName: newOrder.userName,
+      clientId: newOrder.clientId,
+      holiday: newOrder.holiday,
+      source: newOrder.source,
+      amount: newOrder.amount,
+      clientFirstName: newOrder.clientFirstName,
+      clientPatronymic: newOrder.clientPatronymic,
+      clientLastName: newOrder.clientLastName,
+      email: newOrder.email,
+      contactType: newOrder.contactType,
+      contact: newOrder.contact,
+      institute: newOrder.institute,
+      institutes: newOrder.institutes,
+      isAccepted: newOrder.isAccepted,
+      comment: newOrder.comment,
+      orderDate: newOrder.orderDate,
+      dateOfOrder: newOrder.dateOfOrder,
+      filter: newOrder.filter,
+      prohibitedId: prohibitedId,
+      restrictedHouses: restrictedHouses,
+    });
+  }
+  createInstitutesOrderDobroru(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+
+    console.log(" api/dobroru/forInstitutes");
+    return this.http.post("/api/dobroru/forInstitutes/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
       holiday: newOrder.holiday,

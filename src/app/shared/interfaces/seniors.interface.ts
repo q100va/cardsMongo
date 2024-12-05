@@ -31,5 +31,6 @@ export interface Senior {
   isDisabled?: boolean | any;
   isReleased?: boolean | any;
   dateEnter?: Date | string,
-  dateExit?: Date | string, 
+  dateExit?: Date | string,
+  dateOfSignedConsent?: Date | string,
 }

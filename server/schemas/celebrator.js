@@ -50,6 +50,7 @@ const celebratorSchema = new Schema({
   wifeFirstName: { type: String },
   wifePatronymic: { type: String },  
   wifeYearBirthday: { type: String },
+  dateOfSignedConsent : {type: Date, default: null },
 
 });
 

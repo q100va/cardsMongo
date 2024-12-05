@@ -39,6 +39,7 @@ const listBeforeSchema = new Schema(
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
     uncertain: { type: Boolean, default: false },   
+    dateOfSignedConsent : {type: Date, default: null },
 
   },
   { collection: "lists_december2024" }

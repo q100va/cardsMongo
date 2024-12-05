@@ -42,7 +42,8 @@ export class CheckListsComponent implements OnInit {
       (res) => {
         console.log(res.data);
    for (let item of res.data) {
-          if (item.isActive) {
+          if (item.isActive && new Date(item.dateLastUpdate) > new Date("2024-9-1")  
+            ) {
           this.houses.push(item.nursingHome);
           } 
         }    

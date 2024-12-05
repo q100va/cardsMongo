@@ -62,9 +62,11 @@ export class NewYearComponent implements OnInit {
   showMaxOneHouse: Boolean = true;
   addressFilter: string = "any";
   genderFilter: string = "any";
-  showIndexes: false;
-  showInstruction: false;
+  showIndexes = false;
+  showInstruction = false;
   showInstructionForSubscribers = false;
+  showListOfHouses: Boolean = true;
+  showChoiceSpareRegions = false;
   regions = [];
   nursingHomes = [];
   // activeRegions = [];
@@ -87,6 +89,8 @@ export class NewYearComponent implements OnInit {
   selectedInstitutes = [];
   showFilter = true;
   isForInstitutes = false;
+  hideAll = false;
+  isParcelAvailable = false;
 
   categories = [
     "образовательное учреждение",
@@ -171,17 +175,24 @@ export class NewYearComponent implements OnInit {
       date1: [null, [Validators.min(1), Validators.max(31)]],
       date2: [null, [Validators.min(1), Validators.max(31)]],
       region: [null],
+      spareRegions: [false],
       nursingHome: [null],
-      maxOneHouse: [null, [Validators.min(1)]],
-      maxNoAddress: [null, [Validators.min(1)]],
+      maxOneHouse: [ null,
+        [Validators.min(1)],
+      ],
+      maxNoAddress: [ null,
+        [Validators.min(1)],
+      ],
       onlyWithPicture: [false],
       onlyAnniversaries: [false],
       onlyAnniversariesAndOldest: [false],
       nameOfInstitute: [null],
       categoryOfInstitute: [null],
+      noNames: [false],
+      minNumberOfHouses: [false],
     });
 
-/*     this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
+    /*     this.filteredOptions = this.form.controls.contact.valueChanges.pipe(
       startWith(""),
       map((value) => this._filter(value || ""))
     ); */
@@ -192,7 +203,7 @@ export class NewYearComponent implements OnInit {
     );
   }
 
-/*   private _filter(value: string): string[] {
+  /*   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
   
 
@@ -238,7 +249,7 @@ export class NewYearComponent implements OnInit {
   }
 
   checkContactTimeOut() {
-   setTimeout(() => {
+    setTimeout(() => {
       //console.log("this.previousClient");
       //console.log(this.previousClient);
       //console.log("checkContact");
@@ -295,6 +306,7 @@ export class NewYearComponent implements OnInit {
             this.selectedInstitutes = [];
             this.showFilter = true;
             this.isForInstitutes = false;
+            this.isParcelAvailable = false;
             this.lineItems = [];
           }
         }
@@ -306,6 +318,7 @@ export class NewYearComponent implements OnInit {
         this.selectedInstitutes = [];
         this.showFilter = true;
         this.isForInstitutes = false;
+        this.isParcelAvailable = false;
         this.lineItems = [];
       }
     }, 200);
@@ -353,6 +366,7 @@ export class NewYearComponent implements OnInit {
             this.previousClient = this.form.controls.contact.value;
             this.lineItems = [];
             this.isForInstitutes = false;
+            this.isParcelAvailable = false;
             this.resultDialog.open(ConfirmationDialogComponent, {
               data: {
                 message: "Карточка пользователя была успешно создана.",
@@ -448,6 +462,8 @@ export class NewYearComponent implements OnInit {
       console.log(this.selectedInstitutes);
     } else {
       this.showFilter = true;
+      this.form.controls.noNames.setValue(null);
+      this.form.controls.minNumberOfHouses.setValue(null);
       console.log(this.selectedInstitutes);
     }
   }
@@ -471,6 +487,13 @@ export class NewYearComponent implements OnInit {
     }
   }
 
+  onChangeSpareRegions() {
+    this.showListOfHouses = !this.form.controls.spareRegions.value;
+    if (!this.showListOfHouses) {
+      this.form.controls.nursingHome.setValue(null);
+    }
+  }
+
   onChangeNursingHome() {
     if (!this.form.controls.nursingHome.value) {
       this.showMaxOneHouse = true;
@@ -480,8 +503,10 @@ export class NewYearComponent implements OnInit {
     } else {
       this.showMaxOneHouse = false;
       this.form.controls.maxOneHouse.setValue(null);
+      //this.form.controls.maxOneHouse.disable();
       this.showMaxNoAddress = false;
       this.form.controls.maxNoAddress.setValue(null);
+      //this.form.controls.maxNoAddress.disable();
     }
   }
 
@@ -490,6 +515,9 @@ export class NewYearComponent implements OnInit {
     console.log(this.form.controls.nursingHome.value);
 
     if (!this.form.controls.region.value) {
+      this.showChoiceSpareRegions = false;
+      this.form.controls.spareRegions.setValue(false);
+      this.showListOfHouses = true;
       console.log("no regions were chosen");
       console.log(this.form.controls.region.value);
       this.activeNursingHomes = this.nursingHomes;
@@ -497,7 +525,7 @@ export class NewYearComponent implements OnInit {
       this.activeNursingHomes = this.nursingHomes.filter(
         (item) => item.region == this.form.controls.region.value
       );
-
+      this.showChoiceSpareRegions = true;
       if (this.form.controls.nursingHome.value) {
         let activeNursingHome = this.nursingHomes.filter(
           (item) => item.nursingHome == this.form.controls.nursingHome.value
@@ -507,6 +535,26 @@ export class NewYearComponent implements OnInit {
         }
       }
       console.log(this.activeNursingHomes);
+    }
+  }
+
+  onChangeMinNumberOfHouses() {
+    if (
+      this.form.controls.minNumberOfHouses.value ||
+      this.form.controls.noNames.value
+    ) {
+      this.showMaxOneHouse = false;
+      this.showMaxNoAddress = false;
+      this.hideAll = true;
+    }
+
+    if (
+      !this.form.controls.minNumberOfHouses.value &&
+      !this.form.controls.noNames.value
+    ) {
+      this.showMaxOneHouse = true;
+      this.showMaxNoAddress = true;
+      this.hideAll = false;
     }
   }
 
@@ -612,7 +660,6 @@ export class NewYearComponent implements OnInit {
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
-
     this.options = [];
     this.fullOptions = [];
     this.clientInstitutes = [];
@@ -621,6 +668,9 @@ export class NewYearComponent implements OnInit {
     this.form.controls.contactType.setValue(this.defaultType);
     this.showFilter = true;
     this.isForInstitutes = false;
+    this.isParcelAvailable = false;
+    this.showListOfHouses = true;
+    this.hideAll = false;
 
     this.orderService.getContacts("email").subscribe(
       async (res) => {
@@ -695,12 +745,19 @@ export class NewYearComponent implements OnInit {
           });
           this.clicked = false;
         } else {
-          if (this.selectedInstitutes.length > 0) {
+          if (
+           /*  this.selectedInstitutes.length > 0 && */
+            (this.form.controls.noNames.value || this.form.controls.minNumberOfHouses.value)
+          ) {
             this.checkDoubles();
           } else {
-            if (//false
-            this.client.institutes.length > 0 ||
-              this.form.controls.amount.value > 20
+            console.log(this.selectedInstitutes.length);
+            console.log(this.client.institutes.length);
+
+            if (
+              //false
+              (this.client.institutes.length > 0 ||
+              this.form.controls.amount.value > 20) && this.selectedInstitutes.length == 0
             ) {
               this.confirmationService.confirm({
                 message: "Вы уверены, что эта заявка не для колллектива?",
@@ -799,7 +856,7 @@ export class NewYearComponent implements OnInit {
         console.log("res");
         console.log(res);
         if (!result) {
-          if (this.selectedInstitutes.length > 0) {
+          if (this.form.controls.noNames.value || this.form.controls.minNumberOfHouses.value) {
             // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
             this.fillInstitutesOrder([], []);
           } else {
@@ -820,7 +877,10 @@ export class NewYearComponent implements OnInit {
               usernameList +
               ". Вы уверены, что это не дубль?",
             accept: () => {
-              if (this.selectedInstitutes.length > 0) {
+              if (
+              this.form.controls.noNames.value ||
+                  this.form.controls.minNumberOfHouses.value
+              ) {
                 // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
                 this.fillInstitutesOrder(result.seniorsIds, []);
               } else {
@@ -861,7 +921,7 @@ export class NewYearComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "any",
+        addressFilter: "noSpecial",
         genderFilter: "any",
         year1: null,
         year2: null,
@@ -876,6 +936,8 @@ export class NewYearComponent implements OnInit {
         onlyWithPicture: false,
         onlyAnniversaries: false,
         onlyAnniversariesAndOldest: false,
+        noNames: this.form.controls.noNames.value,
+        minNumberOfHouses: this.form.controls.minNumberOfHouses.value,
       },
     };
     //console.log("newOrder");
@@ -897,14 +959,19 @@ export class NewYearComponent implements OnInit {
             //alert(res.msg);
             //console.log(res);
             this.lineItems = result;
-            this.isForInstitutes = true;
-            // let i = 0;
+            if (newOrder.filter.noNames) {
+              this.isForInstitutes = true;
+            } else {
+              this.isParcelAvailable = true;
+            }
+
+            let i = 0;
             for (let lineItem of this.lineItems) {
               lineItem.Female = 0;
               lineItem.Male = 0;
               for (let celebrator of lineItem.celebrators) {
-                /*                 celebrator.index = i + 1;
-                i++; */
+                celebrator.index = i + 1;
+                i++;
                 if (celebrator.gender == "Female") lineItem.Female++;
                 if (celebrator.gender == "Male") lineItem.Male++;
               }
@@ -987,7 +1054,15 @@ export class NewYearComponent implements OnInit {
           } else {
             //alert(res.msg);
             //console.log(res);
-            this.isForInstitutes = false;
+            if (newOrder.institutes.length > 0) {
+              this.isParcelAvailable = true;
+              this.isForInstitutes = true;
+            } else {
+                this.isForInstitutes = false;
+                this.isParcelAvailable = false;
+            }
+
+          
             this.lineItems = result;
             let i = 0;
             for (let lineItem of this.lineItems) {
@@ -1029,10 +1104,16 @@ export class NewYearComponent implements OnInit {
       "Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше, чем на месяц.\n" +
       "Поэтому просим вас отправить открытки в ноябре - начале декабря.\n";
 
-    if (!this.isForInstitutes) {
+    if (!this.isForInstitutes || this.isParcelAvailable) {
       topForSubscribers =
         topForSubscribers +
         "На конверте рекомендуем сделать пометку 'прошу вручить 31 декабря'.\nОбращаю ваше внимание, что списки поздравляемых идут без фамилий.\n\n";
+      if (this.isParcelAvailable) {
+        topForSubscribers =
+          topForSubscribers +
+          "Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью. Получателем указать интернат.\n" +
+          "Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные, ценные, первого класса), но нам такой вариант совершенно не подходит, так как такие отправления с 99% вероятностью вернутся обратно.\n\n";
+      }
     } else {
       topForSubscribers =
         topForSubscribers +
@@ -1046,7 +1127,7 @@ export class NewYearComponent implements OnInit {
     topForSubscribers = topForSubscribers + this.holiday + "\n\n";
     let top: string;
     let bottom: string;
-    if (!this.isForInstitutes) {
+    if (!this.isForInstitutes || this.isParcelAvailable) {
       top =
         "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
         "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
@@ -1057,15 +1138,27 @@ export class NewYearComponent implements OnInit {
         "Если вы не сможете отправить открытки, сообщите мне, как можно скорее, чтобы я могла их передать другому поздравляющему.\n" +
         "Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки один раз к указанному празднику. Письма писать не нужно!\n" +
         "Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления мы готовим примерно за 3 месяца до праздника.\n\n";
-      bottom =
-        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на конверте 'вручить 31 декабря'.\n\n" +
-        "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и ИО получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
-        "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
-        "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
-        "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, бандероли, заказные/ценные письма, письма первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
-        "Поучаствуйте в сборе на новогодние подарки  https://ng.starikam.org/ \n\n" +
-        "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n" +
-        "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
+      if (!this.isParcelAvailable) {
+        bottom =
+          "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на конверте 'вручить 31 декабря'.\n\n" +
+          "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и ИО получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
+          "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
+          "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
+          "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, бандероли, заказные/ценные письма, письма первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
+          "Поучаствуйте в сборе на новогодние подарки  https://ng.starikam.org/ \n\n" +
+          "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n" +
+          "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
+      } else {
+        bottom =
+          "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью. Получателем указать интернат.\n – Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на конверте 'вручить 31 декабря'.\n\n" +
+          "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и ИО получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
+          "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
+          "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
+          "Чего просим не делать.\n – Запрещены любые публикации (в соцсетях, на сайтах учебных заведений, на личных страницах и т.д.) адресов и/или ФИО наших подопечных (в т.ч. фото конвертов или открыток, на которых указаны адрес и/или ФИО подопечного).\n – Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить праздник других людей.\n – Не отправляйте посылки, заказные/ценные письма/бандероли, письма первого класса и прочие регистрируемые отправления, так как возможны проблемы с получением подобной корреспонденции и ваше отправление может вернуться.\n – По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять людей со всеми праздниками или писать им письма!\n\n" +
+          "Поучаствуйте в сборе на новогодние подарки  https://ng.starikam.org/ \n\n" +
+          "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n" +
+          "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
+      }
     } else {
       top =
         "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
@@ -1095,7 +1188,7 @@ export class NewYearComponent implements OnInit {
     let addresses = "";
     console.log(this.lineItems);
     for (let lineItem of this.lineItems) {
-      if (!this.isForInstitutes) {
+      if (!this.isForInstitutes || this.isParcelAvailable) {
         addresses =
           addresses +
           lineItem.address +
@@ -1103,25 +1196,26 @@ export class NewYearComponent implements OnInit {
           "\n" +
           (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +
           (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
-      } else {
+      }
+      if (this.isForInstitutes && !this.isParcelAvailable) {
         addresses = addresses + lineItem.address + " " + "\n";
       }
       console.log("addresses1");
       console.log(addresses);
 
-      if (!this.isForInstitutes) {
+      if (!this.isForInstitutes || this.isParcelAvailable) {
         for (let celebrator of lineItem.celebrators) {
-  /*         console.log("celebrator");
+          /*         console.log("celebrator");
           console.log(celebrator.lastName); */
 
           addresses =
             addresses +
             (this.showIndexes ? celebrator.index + ". " : "") +
-           /*  (celebrator.lastName ? celebrator.lastName :"") + */
+            /*  (celebrator.lastName ? celebrator.lastName :"") + */
             " " +
             celebrator.firstName +
             " " +
-            (celebrator.patronymic ? celebrator.patronymic: "" )+
+            (celebrator.patronymic ? celebrator.patronymic : "") +
             " " +
             (celebrator.yearBirthday ? celebrator.yearBirthday + " г.р." : "") +
             " " +
@@ -1133,7 +1227,7 @@ export class NewYearComponent implements OnInit {
             "\n";
         }
       }
-      if (this.isForInstitutes) {
+      if (this.isForInstitutes && !this.isParcelAvailable) {
         addresses =
           addresses +
           lineItem.celebrators.length +

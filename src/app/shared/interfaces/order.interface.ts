@@ -38,6 +38,8 @@ export interface Order {
     region?: string,
     regions?: Array<any>;
     spareRegions?: boolean,
+    minNumberOfHouses?: boolean,
+    noNames?: boolean,
     nursingHome: string,
     maxOneHouse?: number,
     maxNoAddress?: number,

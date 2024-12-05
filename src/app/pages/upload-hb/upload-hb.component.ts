@@ -1292,13 +1292,13 @@ export class UploadHbComponent implements OnInit {
 
       if (!this.isForInstitutes) {
         for (let celebrator of lineItem.celebrators) {
-          console.log("celebrator");
-          console.log(celebrator.lastName);
+   /*        console.log("celebrator");
+          console.log(celebrator.lastName); */
 
           addresses =
             addresses +
             (this.showIndexes ? celebrator.index + ". " : "") +
-            (celebrator.lastName ? celebrator.lastName : "") +
+            /* (celebrator.lastName ? celebrator.lastName : "") + */
             " " +
             celebrator.firstName +
             " " +

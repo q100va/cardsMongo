@@ -3227,19 +3227,19 @@ async function searchSenior(
     nursingHome: { $nin: data.restrictedHouses },  //PLUSES
     // nursingHome: { $in: housesForInstitutes },
     //firstName: "Тамара",
-/* 
-    lastName: {$in: [
-      'Михай',
-      'Мохначева',
-      'Мысина',
-      'Нахрачева',
-      'Неизвестная',
-      'Новичкова',
-      'Новоселова',
-      'Певная',
-      'Петрухина',     
-      
-    ]}, */
+    /* 
+        lastName: {$in: [
+          'Михай',
+          'Мохначева',
+          'Мысина',
+          'Нахрачева',
+          'Неизвестная',
+          'Новичкова',
+          'Новоселова',
+          'Певная',
+          'Петрухина',     
+          
+        ]}, */
 
     //nursingHome: { $in: ["ТАМБОВСКИЙ_ЛЕСХОЗ", "МОСКВА_РОТЕРТА", "ШЕБЕКИНО", "РАДЮКИНО", "САДОВЫЙ", "МАЧЕХА", "ТВЕРЬ_КОНЕВА", "ЯРЦЕВО", "СОЛИКАМСК_ДУБРАВА", "СОЛИКАМСК_СЕЛА", "СЕВЕРОДВИНСК", "КРИПЕЦКОЕ", "ЧЕРМЕНИНО", "ГАВРИЛОВ-ЯМ", "ЙОШКАР-ОЛА", "КРАСНОВИШЕРСК", "ЗЕРНОГРАД_МИРА", "ЗЕРНОГРАД_САМОХВАЛОВА", "НОВОЧЕРКАССК", "БЕРЕЗОВСКИЙ", "АЛАКУРТТИ", "ТОВАРКОВСКИЙ_ДИПИ", "КОСТРОМА_КИНЕШЕМСКОЕ", "ТОЛЬЯТТИ", "СЫЗРАНЬ_КИРОВОГРАДСКАЯ", "УСОЛЬЕ", "ДМИТРОВСКИЙ_ПОГОСТ_ОКТЯБРЬСКАЯ", "СЫЗРАНЬ_ПОЖАРСКОГО", "АНДРЕЕВСКИЙ", "ВОЛГОГРАД_ВОСТОЧНАЯ", "ПРОШКОВО", "АВДОТЬИНКА", "ИРКУТСК_ЯРОСЛАВСКОГО", "ВОРОНЕЖ_ДНЕПРОВСКИЙ","ДИМИТРОВГРАД","БЕРДСК",] }, 
     // nursingHome: { $in: ["РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", "МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ",] }, 
@@ -4058,6 +4058,8 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
+    if(newOrder.institutes.length > 0) filter.dateOfSignedConsent = {$ne: null};
+
     seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
   }
@@ -4148,7 +4150,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-      /*
+      
         if (data.counter < proportion[category]) {
           data.maxPlus = 3;
    
@@ -4161,7 +4163,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
    
           data = await collectSeniorsNewYear(data, orderFilter);
         }
-          if (data.counter < proportion[category]) {
+        /*  if (data.counter < proportion[category]) {
                data.maxPlus = 5;
        
                data = await collectSeniorsNewYear(data, orderFilter);
@@ -4422,227 +4424,227 @@ async function searchSeniorNewYear(
   //console.log(maxPlusAmount);
   //maxPlusAmount = 3;
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
-   filter.plusAmount = { $lt: plusAmount };
-/*          filter.lastName = {$in: [
-         
-          'Михай',
-'Мохначева',
-'Мысина',
-'Нахрачева',
-'Неизвестная',
-'Новичкова',
-'Новоселова',
-'Певная',
-'Петрухина',
-'Пичугина',
-'Понякова',
-'Поскрякова',
-'Пронина',
-'Птицына',
-'Пырерко',
-'Савельева',
-'Саминова',
-'Самороднова',
-'Сафонова',
-'Селиванова',
-'Семукова',
-'Сидоркина',
-'Слепцова',
-'Смоколева',
-'Степкина',
-'Сукочева',
-'Разницина',
-'Реброва',
-'Романова',
-'Сукочева',
-'Тайбарей',
-'Тайбери',
-'Татарская',
-'Терехова',
-'Трофимова',
-'Турцева',
-'Тюменева',
-'Тюнина',
-'Устинова',
-'Фанина',
-'Федотова',
-'Филаева',
-'Филимонова',
-'Филькова',
-'Фоломеева',
-'Фролова',
-'Хлебникова',
-'Ходакова',
-'Чернецова',
-'Шешенева',
-'Шишканова',
-'Щеголева',
-'Явтысая',
-'Якушкина',
-'Выучейская',
-'Майорова',
-'Букина',
-'Клочкина',
-'Сафарова',
-'Котова',
-'Грибова',
-'Таратина',
-'Самохвалова',
-'Спорыхина',
-'Груздева',
-'Венедиктова',
-'Суркова',
-'Юшина',
-'Щербакова',
-'Седова',
-'Жильцова',
-'Визигина',
-'Попкова',
-'Вотинова',
-'Шлыкова',
-'Ефимова',
-'Бучкова',
-'Лимонова',
-'Пугачева',
-'Коврякова',
-'Савина',
-'Захарова',
-'Ухоботова',
-'Суханова',
-'Бурдасова',
-'Чичиланова',
-'Аничкина',
-'Андреева',
-'Бакулина',
-'Борель',
-'Борискова',
-'Борисова',
-'Булыгина',
-'Вершина',
-'Володина',
-'Гаврилина',
-'Греднева',
-'Груздева',
-'Гусева',
-'Евсеева',
-'Еремеева',
-'Зайцева',
-'Зиновеева',
-'Карасева',
-'Карпова',
-'Конторина',
-'Копейкина',
-'Кузнецова',
-'Кырмызы',
-'МитинаПосевкина',
-'Новикова',
-'Пономарева',
-'Принцева',
-'Ильичева',
-'Симонова',
-'Шешина',
-'Юнина',
-'Тарасова',
-'Тяпнина',
-'Сметанина',
-'Силинская',
-'Малькова',
-'Сукова',
-'Заикина',
-'Дорофеева',
-'Ильина',
-'Шашахметова',
-'Воронкова',
-'Сметанкина',
-'Куприна',
-'Павлюк',
-'Тибичи',
-'Синькина',
-'Самохвалова',
-'Булычева',
-'Худи',
-'Федотова',
-'Тарбушина',
-'Радченко',
-'Кондракова',
-'Осадчая',
-'Кубарева',
-'Вокуева',
-'Ульянова',
-'Бедова',
-'Беляева',
-'Селиверстова',
-'Красникова',
-'Калинина',
-'Селезнева',
-'Шабанова',
-'Рейх',
-'Юткина',
-'Ерохина',
-'Кленова',
-'Дунаева',
-'Головичева',
-'Сюгней',
-'Юрченко',
-'Нюрова',
-'Гаврикова',
-'Тайбарей',
-'Фанина',
-'Чуранова',
-'Шигаева',
-'Морозова',
-'Дуплей',
-'Корешина',
-'Николаева',
-'Жилкина',
-'Кузьминова',
-'Канюкова',
-'Чернова',
-'Фионина',
-'Адреяшкина',
-'Ануфриева',
-'Аношина',
-'Астахова',
-'Баранова',
-'Барышникова',
-'Бирюкова',
-'Бондарчук',
-'Бузина',
-'Валей',
-'Валова',
-'Валюшкина',
-'Воробьева',
-'Выучейская',
-'Геджюшевичене',
-'Городилова',
-'Гунина',
-'Гусева',
-'Давыдова',
-'Ерзина',
-'Завойкина',
-'Захарова',
-'Ильина',
-'Ирошкина',
-'Казак',
-'Калгонова',
-'Калинкина',
-'Карушева',
-'Корнева',
-'Кочеткова',
-'Кудишина',
-'Кузина',
-'Кузнецова',
-'Курбатова',
-'Курятникова',
-'Кучеровская',
-'Лаптандер',
-'Леонтьева',
-'Макарова',
-'Малаева',
-'Миронова',
-
- 
-        ]};   */
+    filter.plusAmount = { $lt: plusAmount };
+    /*          filter.lastName = {$in: [
+             
+              'Михай',
+    'Мохначева',
+    'Мысина',
+    'Нахрачева',
+    'Неизвестная',
+    'Новичкова',
+    'Новоселова',
+    'Певная',
+    'Петрухина',
+    'Пичугина',
+    'Понякова',
+    'Поскрякова',
+    'Пронина',
+    'Птицына',
+    'Пырерко',
+    'Савельева',
+    'Саминова',
+    'Самороднова',
+    'Сафонова',
+    'Селиванова',
+    'Семукова',
+    'Сидоркина',
+    'Слепцова',
+    'Смоколева',
+    'Степкина',
+    'Сукочева',
+    'Разницина',
+    'Реброва',
+    'Романова',
+    'Сукочева',
+    'Тайбарей',
+    'Тайбери',
+    'Татарская',
+    'Терехова',
+    'Трофимова',
+    'Турцева',
+    'Тюменева',
+    'Тюнина',
+    'Устинова',
+    'Фанина',
+    'Федотова',
+    'Филаева',
+    'Филимонова',
+    'Филькова',
+    'Фоломеева',
+    'Фролова',
+    'Хлебникова',
+    'Ходакова',
+    'Чернецова',
+    'Шешенева',
+    'Шишканова',
+    'Щеголева',
+    'Явтысая',
+    'Якушкина',
+    'Выучейская',
+    'Майорова',
+    'Букина',
+    'Клочкина',
+    'Сафарова',
+    'Котова',
+    'Грибова',
+    'Таратина',
+    'Самохвалова',
+    'Спорыхина',
+    'Груздева',
+    'Венедиктова',
+    'Суркова',
+    'Юшина',
+    'Щербакова',
+    'Седова',
+    'Жильцова',
+    'Визигина',
+    'Попкова',
+    'Вотинова',
+    'Шлыкова',
+    'Ефимова',
+    'Бучкова',
+    'Лимонова',
+    'Пугачева',
+    'Коврякова',
+    'Савина',
+    'Захарова',
+    'Ухоботова',
+    'Суханова',
+    'Бурдасова',
+    'Чичиланова',
+    'Аничкина',
+    'Андреева',
+    'Бакулина',
+    'Борель',
+    'Борискова',
+    'Борисова',
+    'Булыгина',
+    'Вершина',
+    'Володина',
+    'Гаврилина',
+    'Греднева',
+    'Груздева',
+    'Гусева',
+    'Евсеева',
+    'Еремеева',
+    'Зайцева',
+    'Зиновеева',
+    'Карасева',
+    'Карпова',
+    'Конторина',
+    'Копейкина',
+    'Кузнецова',
+    'Кырмызы',
+    'МитинаПосевкина',
+    'Новикова',
+    'Пономарева',
+    'Принцева',
+    'Ильичева',
+    'Симонова',
+    'Шешина',
+    'Юнина',
+    'Тарасова',
+    'Тяпнина',
+    'Сметанина',
+    'Силинская',
+    'Малькова',
+    'Сукова',
+    'Заикина',
+    'Дорофеева',
+    'Ильина',
+    'Шашахметова',
+    'Воронкова',
+    'Сметанкина',
+    'Куприна',
+    'Павлюк',
+    'Тибичи',
+    'Синькина',
+    'Самохвалова',
+    'Булычева',
+    'Худи',
+    'Федотова',
+    'Тарбушина',
+    'Радченко',
+    'Кондракова',
+    'Осадчая',
+    'Кубарева',
+    'Вокуева',
+    'Ульянова',
+    'Бедова',
+    'Беляева',
+    'Селиверстова',
+    'Красникова',
+    'Калинина',
+    'Селезнева',
+    'Шабанова',
+    'Рейх',
+    'Юткина',
+    'Ерохина',
+    'Кленова',
+    'Дунаева',
+    'Головичева',
+    'Сюгней',
+    'Юрченко',
+    'Нюрова',
+    'Гаврикова',
+    'Тайбарей',
+    'Фанина',
+    'Чуранова',
+    'Шигаева',
+    'Морозова',
+    'Дуплей',
+    'Корешина',
+    'Николаева',
+    'Жилкина',
+    'Кузьминова',
+    'Канюкова',
+    'Чернова',
+    'Фионина',
+    'Адреяшкина',
+    'Ануфриева',
+    'Аношина',
+    'Астахова',
+    'Баранова',
+    'Барышникова',
+    'Бирюкова',
+    'Бондарчук',
+    'Бузина',
+    'Валей',
+    'Валова',
+    'Валюшкина',
+    'Воробьева',
+    'Выучейская',
+    'Геджюшевичене',
+    'Городилова',
+    'Гунина',
+    'Гусева',
+    'Давыдова',
+    'Ерзина',
+    'Завойкина',
+    'Захарова',
+    'Ильина',
+    'Ирошкина',
+    'Казак',
+    'Калгонова',
+    'Калинкина',
+    'Карушева',
+    'Корнева',
+    'Кочеткова',
+    'Кудишина',
+    'Кузина',
+    'Кузнецова',
+    'Курбатова',
+    'Курятникова',
+    'Кучеровская',
+    'Лаптандер',
+    'Леонтьева',
+    'Макарова',
+    'Малаева',
+    'Миронова',
+    
+     
+            ]};   */
     //filter.firstName = "Нэлли";
     //filter.comment1 = "(2 корп. 5 этаж)"; //CANCEL
     // filter.comment1 = {$ne: "(отд. 4)"}; //CANCEL
@@ -8291,9 +8293,9 @@ async function generateLineItemsVeterans(nursingHomes, order_id) {
   return lineItems;
 }
 
-////////////////////////////////////////////////////BIRTHDAY INSTITUTES
+//////////////////////////////////////////////////// INSTITUTES
 
-router.post("/birthdayForInstitutes/:amount", checkAuth, async (req, res) => {
+router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
   let finalResult;
 
   console.log(" institutes: req.body.institutes,");
@@ -8488,7 +8490,7 @@ async function fillOrderForInstitutes(
   console.log(filter.region);
 
 
-   let activeHouse;
+  let activeHouse;
   if (!filter.region && filter.addressFilter == 'noSpecial') {
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });
   }
@@ -8507,11 +8509,11 @@ async function fillOrderForInstitutes(
   }
 
   if (!filter.region && filter.addressFilter == 'any') {
-    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, });
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false,});
   }
   if (filter.region && !filter.spareRegions && filter.addressFilter == 'any') {
     filter.region = [filter.region];
-    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, region: { $in: filter.region } });
 
   }
   if (filter.region && filter.spareRegions && filter.addressFilter == 'any') {
@@ -8519,9 +8521,9 @@ async function fillOrderForInstitutes(
     console.log("spareRegions");
     console.log(spareRegions);
     filter.region = [filter.region, ...spareRegions.spareRegions];
-    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, region: { $in: filter.region } });
 
-  } 
+  }
 
   console.log("filter.region");
   console.log(filter.region);
@@ -8622,16 +8624,30 @@ async function fillOrderForInstitutes(
       }).countDocuments();
     }
 
-    if (holiday == "Новый год 2025" && !filter.region ) { //&& filter.addressFilter == "noSpecial"
+    if (holiday == "Новый год 2025" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
       count = await NewYear.find({
         nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true, 
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
 
-    if (holiday == "Новый год 2025" && filter.region) {// && filter.addressFilter == "noSpecial"
+    if (holiday == "Новый год 2025" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
       count = await NewYear.find({
         nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true
+        // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+      }).countDocuments();
+    }
+
+    if (holiday == "Новый год 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+      count = await NewYear.find({
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
+        // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+      }).countDocuments();
+    }
+
+    if (holiday == "Новый год 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+      count = await NewYear.find({
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
@@ -8644,7 +8660,7 @@ async function fillOrderForInstitutes(
     console.log(count);
 
     if (count == amount) {
-      seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, house.nursingHome, prohibitedId, region);
+      seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, house.nursingHome, prohibitedId, region, filter);
       return seniorsData;
     }
 
@@ -8654,7 +8670,7 @@ async function fillOrderForInstitutes(
     // if (count > 2) {
 
     if (count < amount && count > 2) {
-    //if (count < 80 && count > 2) {
+      //if (count < 80 && count > 2) {
       //if (count < amount && count > 0) {
       smallerHouses.push(
         {
@@ -8666,7 +8682,7 @@ async function fillOrderForInstitutes(
   }
 
   if (biggerHouse) {
-    seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, biggerHouse, prohibitedId, region);
+    seniorsData = await collectSeniorsForInstitution(order_id, holiday, amount, biggerHouse, prohibitedId, region, filter);
     return seniorsData;
   }
 
@@ -8706,19 +8722,19 @@ async function fillOrderForInstitutes(
       let index = smallerHouses.lastIndexOf(item => item.amount == currentAmount);
 
       if (index != -1 && index >= i) {
-        let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region);
+        let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors];
         currentAmount -= smallerHouses[index].amount;
         return seniorsData;
       } else {
         if (currentAmount - smallerHouses[i].amount <= 0) {
-          let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region);
+          let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region, filter);
           seniorsData = [...seniorsData, ...seniors];
           currentAmount -= currentAmount;
           return seniorsData;
         } else {
           if (currentAmount - smallerHouses[i].amount >= 3) { // ИСПРАВИТЬ на 3
-            let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region);
+            let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region, filter);
             seniorsData = [...seniorsData, ...seniors];
             currentAmount -= smallerHouses[i].amount;
           }
@@ -8745,9 +8761,9 @@ async function fillOrderForInstitutes(
       let index1 = smallerHouses.findIndex(item => item.amount == amount1);
       let index2 = smallerHouses.findIndex(item => item.amount == amount2);
       if (index1 != -1 && index2 != -1 && index1 != index2) {
-        let seniors1 = await collectSeniorsForInstitution(order_id, holiday, amount1, smallerHouses[index1].nursingHome, prohibitedId, region);
+        let seniors1 = await collectSeniorsForInstitution(order_id, holiday, amount1, smallerHouses[index1].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors1];
-        let seniors2 = await collectSeniorsForInstitution(order_id, holiday, amount2, smallerHouses[index2].nursingHome, prohibitedId, region);
+        let seniors2 = await collectSeniorsForInstitution(order_id, holiday, amount2, smallerHouses[index2].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors2];
 
         console.log('seniorsData');
@@ -8768,13 +8784,13 @@ async function fillOrderForInstitutes(
       let index2 = smallerHouses.findIndex(item => item.amount == amount2);
       let index3 = smallerHouses.findIndex(item => item.amount == amount3);
       if (index1 != -1 && index2 != -1 && index3 != -1 && index1 != index2 && index3 != index2) {
-        let seniors1 = await collectSeniorsForInstitution(order_id, holiday, amount1, smallerHouses[index1].nursingHome, prohibitedId, region);
+        let seniors1 = await collectSeniorsForInstitution(order_id, holiday, amount1, smallerHouses[index1].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors1];
 
-        let seniors2 = await collectSeniorsForInstitution(order_id, holiday, amount2, smallerHouses[index2].nursingHome, prohibitedId, region);
+        let seniors2 = await collectSeniorsForInstitution(order_id, holiday, amount2, smallerHouses[index2].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors2];
 
-        let seniors3 = await collectSeniorsForInstitution(order_id, holiday, amount3, smallerHouses[index3].nursingHome, prohibitedId, region);
+        let seniors3 = await collectSeniorsForInstitution(order_id, holiday, amount3, smallerHouses[index3].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors3];
 
         return seniorsData;
@@ -8787,19 +8803,19 @@ async function fillOrderForInstitutes(
       let index = smallerHouses.findIndex((item, idx) => item.amount == currentAmount && idx >= i);
 
       if (index != -1 && index >= i) {
-        let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region);
+        let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region, filter);
         seniorsData = [...seniorsData, ...seniors];
         currentAmount -= smallerHouses[index].amount;
         return seniorsData;
       } else {
         if (currentAmount - smallerHouses[i].amount <= 0) {
-          let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region);
+          let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region, filter);
           seniorsData = [...seniorsData, ...seniors];
           currentAmount -= currentAmount;
           return seniorsData;
         } else {
           if (currentAmount - smallerHouses[i].amount >= 3) {
-            let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region);
+            let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region, filter);
             seniorsData = [...seniorsData, ...seniors];
             currentAmount -= smallerHouses[i].amount;
           }
@@ -8813,7 +8829,7 @@ async function fillOrderForInstitutes(
 }
 
 
-async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHome, prohibitedId, region) {
+async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHome, prohibitedId, region, filter) {
 
   console.log("amount");
   console.log(amount);
@@ -8862,30 +8878,57 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if (holiday == "Новый год 2025") {
-    if (!region) {
-      seniorsData = await NewYear.find({
-        forInstitute: 0,
-        nursingHome: nursingHome,
-        absent: false,
-        plusAmount: { $lt: 1 },
-        _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-        finished: false,   
-        //onlyForInstitute: true
-      }).limit(amount);
+  if (holiday == "Новый год 2025" && (filter.noNames || filter.minNumberOfHouses)) {
+  
+    if (filter.noNames) {
+      if (!region) {
+        seniorsData = await NewYear.find({
+          forInstitute: 0,
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+          finished: false,
+          //onlyForInstitute: true
+        }).limit(amount);
+      }
+      if (region) {
+        seniorsData = await NewYear.find({
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+          //onlyForInstitute: true, 
+          forInstitute: 0,
+          finished: false
+        }).limit(amount);
+      }
     }
-    if (region) {
-      seniorsData = await NewYear.find({
-        nursingHome: nursingHome,
-        absent: false,
-        plusAmount: { $lt: 1 },
-        _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-        //onlyForInstitute: true, 
-        forInstitute: 0,
-        finished: false
-      }).limit(amount);
+    if (filter.minNumberOfHouses) {
+      if (!region) {
+        seniorsData = await NewYear.find({
+          dateOfSignedConsent: {$ne: null},
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 4 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+         
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
+      if (region) {
+        seniorsData = await NewYear.find({
+          dateOfSignedConsent: {$ne: null},
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 4 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+          //onlyForInstitute: true, forInstitute: 0, finished: false
+          
+         
+        }).limit(amount);
+      }
     }
-
 
     console.log("seniorsData");
     console.log(nursingHome);

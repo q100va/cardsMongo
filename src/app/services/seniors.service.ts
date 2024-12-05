@@ -53,6 +53,7 @@ export class SeniorsService {
       nameDay: updatedSenior.nameDay,
       dateNameDay: updatedSenior.dateNameDay,
       monthNameDay: updatedSenior.monthNameDay,
+      dateOfSignedConsent: updatedSenior.dateOfSignedConsent,
       //dateEnter: updatedSenior.dateEnter,
       //dateExit: updatedSenior.dateExit,
     });
@@ -78,6 +79,7 @@ export class SeniorsService {
       nameDay: newSenior.nameDay,
       dateNameDay: newSenior.dateNameDay,
       monthNameDay: newSenior.monthNameDay,
+      dateOfSignedConsent: newSenior.dateOfSignedConsent,
     });
   }
 
@@ -107,6 +109,8 @@ export class SeniorsService {
 
   applyChanges(resultOfCompare, date, house): Observable<any> {
     console.log("start applyChanges");
+    console.log(resultOfCompare.accepted);
+
     return this.http.put("/api/seniors/update-lists/", {
       absents: resultOfCompare.absents,
       arrived: resultOfCompare.arrived,

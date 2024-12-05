@@ -968,7 +968,7 @@ export class DobroruComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "any",
+        addressFilter: "noSpecial",
         genderFilter: "any",
         year1: null,
         year2: null,
@@ -992,7 +992,7 @@ export class DobroruComponent implements OnInit {
     //console.log(newOrder);
 
     this.orderService
-      .createInstitutesOrder(newOrder, prohibitedId, restrictedHouses)
+      .createInstitutesOrderDobroru(newOrder, prohibitedId, restrictedHouses)
       .subscribe(
         async (res) => {
           this.spinner = false;

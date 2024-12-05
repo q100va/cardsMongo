@@ -18,95 +18,92 @@
         <form [formGroup]="form" (ngSubmit)="saveSenior()" #userForm>
           <mat-card-content>
             <div fxLayout="column" fxLayoutGap="10px">
-            <mat-form-field>
-              <input type="text" matInput [formControl]="form.controls['region']"
-                placeholder="Регион*"  />
-              <mat-error class="error"
-                *ngIf="form.controls.region.hasError('required') && form.controls.region.touched">Обязательное
-                поле!</mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input type="text" matInput [formControl]="form.controls['nursingHome']" placeholder="Интернат*"
-                 />
-              <mat-error class="error" *ngIf="form.controls.nursingHome.hasError('required') && form.controls.nursingHome.touched">
-                Обязательное поле!</mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input type="text" matInput [formControl]="form.controls['lastName']" placeholder="Фамилия"
-                 />
-            </mat-form-field>
-            <mat-form-field>
-              <input type="text" matInput [formControl]="form.controls['firstName']"
-                placeholder="Имя*"  />
-                <mat-error class="error" *ngIf="form.controls.firstName.hasError('required') && form.controls.firstName.touched">
-                  Обязательное поле!</mat-error>
-            </mat-form-field>
-            <mat-form-field>
-              <input type="text" matInput [formControl]="form.controls['patronymic']"
-                placeholder="Отчество"  />
-            </mat-form-field>
-        
-              <mat-slide-toggle [formControl]="form.controls['isRestricted']" >Не поздравлять</mat-slide-toggle>
-  
               <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['dateBirthday']"
-                  placeholder="День рождения"  />  
+                <input type="text" matInput [formControl]="form.controls['region']" placeholder="Регион*" />
+                <mat-error class="error"
+                  *ngIf="form.controls.region.hasError('required') && form.controls.region.touched">Обязательное
+                  поле!</mat-error>
               </mat-form-field>
-  
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['nursingHome']" placeholder="Интернат*" />
+                <mat-error class="error"
+                  *ngIf="form.controls.nursingHome.hasError('required') && form.controls.nursingHome.touched">
+                  Обязательное поле!</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['lastName']" placeholder="Фамилия" />
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['firstName']" placeholder="Имя*" />
+                <mat-error class="error"
+                  *ngIf="form.controls.firstName.hasError('required') && form.controls.firstName.touched">
+                  Обязательное поле!</mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['patronymic']" placeholder="Отчество" />
+              </mat-form-field>
+
+              <mat-slide-toggle [formControl]="form.controls['isRestricted']">Не поздравлять</mat-slide-toggle>
+
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['dateBirthday']" placeholder="День рождения" />
+              </mat-form-field>
+
               <mat-form-field>
                 <input type="text" matInput [formControl]="form.controls['monthBirthday']"
-                  placeholder="Месяц рождения"  />  
-              </mat-form-field>
-  
-              <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['yearBirthday']"
-                  placeholder="Год рождения"  />  
-              </mat-form-field>
-  
-            
-                <label>
-                  <input type="radio" value="Male"  [formControl]="form.controls['gender']">
-                    <span>м</span>
-                </label>
-                <label>
-                  <input type="radio" value="Female"  [formControl]="form.controls['gender']">
-                    <span>ж</span>
-                </label>
-      
-  
-              <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['comment1']"
-                  placeholder="Комментарий1"  />  
-              </mat-form-field>
-  
-              <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['comment2']"
-                  placeholder="Комментарий2"  />  
-              </mat-form-field>
-  
-              <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['linkPhoto']"
-                  placeholder="Фото"  />  
+                  placeholder="Месяц рождения" />
               </mat-form-field>
 
               <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['nameDay']"
-                  placeholder="Именины"  />  
+                <input type="text" matInput [formControl]="form.controls['yearBirthday']" placeholder="Год рождения" />
               </mat-form-field>
 
-              
+
+              <label>
+                <input type="radio" value="Male" [formControl]="form.controls['gender']">
+                <span>м</span>
+              </label>
+              <label>
+                <input type="radio" value="Female" [formControl]="form.controls['gender']">
+                <span>ж</span>
+              </label>
+
+
               <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['dateNameDay']"
-                  placeholder="День именин"  />  
+                <input type="text" matInput [formControl]="form.controls['comment1']" placeholder="Комментарий1" />
               </mat-form-field>
 
-              
               <mat-form-field>
-                <input type="text" matInput [formControl]="form.controls['monthNameDay']"
-                  placeholder="Месяц именин"  />  
+                <input type="text" matInput [formControl]="form.controls['comment2']" placeholder="Комментарий2" />
               </mat-form-field>
 
-<!--               <mat-form-field style="width: 30%;">
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['linkPhoto']" placeholder="Фото" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['nameDay']" placeholder="Именины" />
+              </mat-form-field>
+
+
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['dateNameDay']" placeholder="День именин" />
+              </mat-form-field>
+
+
+              <mat-form-field>
+                <input type="text" matInput [formControl]="form.controls['monthNameDay']" placeholder="Месяц именин" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Дата подписания согласия</mat-label>
+                <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateLastUpdate']">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+
+              <!--               <mat-form-field style="width: 30%;">
                 <mat-label> Дата внесения в базу</mat-label>
                 <input matInput [matDatepicker]="picker1" [formControl]="form.controls['dateEnter']" >
                 <mat-hint>MM/DD/YYYY</mat-hint>
