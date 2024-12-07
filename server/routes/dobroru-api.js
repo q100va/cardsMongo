@@ -1513,8 +1513,9 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         yangMenAmount = Math.round(newOrder.amount * 0.1);
         specialWomenAmount = Math.round(newOrder.amount * 0.1);
         specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialWomenAmount;
-        oneHouse = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
-        oneHouse = oneHouse < 4 ? oneHouse : 3;
+       // oneHouse = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
+       // oneHouse = oneHouse < 4 ? oneHouse : 3;
+       oneHouse = Math.ceil(newOrder.amount/4);
 
         /*         } else {
                   specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.2)

@@ -2433,8 +2433,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения января 2025") {
     period = {
-      "date1": 1,
-      "date2": 5,
+      "date1": 6,
+      "date2": 10,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -3254,6 +3254,7 @@ async function searchSenior(
     //plusAmount: { $lt: maxPlus },
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true },
+    //dateOfSignedConsent: {$ne: null}, //PLUSES1
     //firstName: "Светлана"
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
@@ -4059,6 +4060,8 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
     if(newOrder.institutes.length > 0) filter.dateOfSignedConsent = {$ne: null};
+
+   // proportion.oneRegion = undefined;
 
     seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
@@ -6416,23 +6419,39 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     }
 
     if (req.params.holiday == "newYear") {//обязательно без ПЯТИМОРСК, ДМИТРИЕВКА
+
+
+/*       let celebrators =  await NewYear.find({ seniorId: null});
+      for (let celebrator of celebrators) {
+        
+        const senior = await Senior.findOne({
+          nursingHome: celebrator.nursingHome,
+          lastName: celebrator.lastName,
+          firstName: celebrator.firstName,
+          patronymic: celebrator.patronymic,
+        dateBirthday: celebrator.dateBirthday,
+          monthBirthday: celebrator.monthBirthday,
+          yearBirthday: celebrator.yearBirthday, *
+        });
+        console.log(senior);
+        await NewYear.updateOne({_id: celebrator._id}, { seniorId: senior._id});
+
+      } */
+
+      console.log("I AM HERE!!!");
       let housesSet = new Set();
-      const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "СОСНОВКА" });
-      /*    const celebratorsNewYear = await NewYear.find({
+       /*   const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "МЕТЕЛИ" });*/
+      const celebratorsNewYear = await NewYear.find({
          absent: false,
-         forInstitute
-           : { $lt: 0 }
-         ,
          nursingHome: {
-            $in: ["ВОЛГОДОНСК",
-                         "КАНДАЛАКША",
-                          "ЧИТА_ТРУДА",
-                          "НОВОСИБИРСК_ЖУКОВСКОГО",
-  
+            $in: ["КУГЕЙСКИЙ",
+       
             ]
           } 
-       });*/
+       });
       let count = celebratorsNewYear.length;
+    //  console.log(celebratorsNewYear);
+      console.log(count);
       for (let celebrator of celebratorsNewYear) {
         // console.log(celebrator.seniorId);
         let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2025" }).countDocuments();
@@ -8523,7 +8542,7 @@ async function fillOrderForInstitutes(
     filter.region = [filter.region, ...spareRegions.spareRegions];
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, region: { $in: filter.region } });
 
-  }
+  } 
 
   console.log("filter.region");
   console.log(filter.region);
@@ -8549,7 +8568,7 @@ async function fillOrderForInstitutes(
   let activeHouse = await House.find({
     isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
       $in: [
-        'ПРУДНОЕ',        
+        'САЛЬСК',        
         
         
         
