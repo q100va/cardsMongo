@@ -3251,9 +3251,10 @@ async function searchSenior(
     //nursingHome: { $in: ["МАГАДАН_АРМАНСКАЯ","ОКТЯБРЬСКИЙ", "РОСТОВ-НА-ДОНУ", "НОВОСИБИРСК_ЖУКОВСКОГО", "БОГРАД", "ВЛАДИКАВКАЗ", "ДУБНА_ТУЛЬСКАЯ", "БИЙСК", "КАНДАЛАКША",  "РАЙЧИХИНСК",  "СОСНОВКА", "СКОПИН", "ЖЕЛЕЗНОГОРСК", "ТОЛЬЯТТИ", "МАРКОВА", "НОГИНСК", "ВЕРХНЕУРАЛЬСК", "НОВОСИБИРСК_ЖУКОВСКОГО", "ТАЛИЦА_КРАСНОАРМЕЙСКАЯ", "ТАЛИЦА_УРГА", "КРАСНОЯРСК", "РЖЕВ", "ПЕРВОМАЙСКИЙ", "ВЯЗЬМА", "ВЫШНИЙ_ВОЛОЧЕК", ]}, //ДОБРО РУ    //uncertain: true, // DELETE
     //specialComment: {$ne: ""},
     _id: { $nin: data.restrictedPearson },
-    //plusAmount: { $lt: maxPlus },
+
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true },
+    //plusAmount: 3,
     //dateOfSignedConsent: {$ne: null}, //PLUSES1
     //firstName: "Светлана"
   };
@@ -3830,9 +3831,9 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
       let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
       if (!newOrder.filter.maxNoAddress) {
         oldWomenAmount = Math.round(newOrder.amount * 0.2);
-        oldMenAmount = Math.round(newOrder.amount * 0.3);
-        specialWomenAmount = Math.round(newOrder.amount * 0.1);
-        specialMenAmount = Math.round(newOrder.amount * 0.1);
+        oldMenAmount = Math.round(newOrder.amount * 0.2);
+        specialWomenAmount = Math.round(newOrder.amount * 0.2);
+        specialMenAmount = Math.round(newOrder.amount * 0.2);
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
 
@@ -3861,12 +3862,53 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
 
       let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
       if (!newOrder.filter.maxNoAddress) {
-        oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
-        oldMenAmount = Math.round(newOrder.amount * 0.2);
+
+
+        oldWomenAmount = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+        oldMenAmount = Math.round(newOrder.amount * 0.1);
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = Math.round(newOrder.amount * 0.1);
         specialWomenAmount = Math.round(newOrder.amount * 0.1);
         specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialWomenAmount;
+
+        if (newOrder.amount == 4) {
+          oldWomenAmount = 1;
+          oldMenAmount = 1;
+          specialWomenAmount = 1;
+          specialMenAmount = 1;
+        }
+        if (newOrder.amount == 5) {
+          oldWomenAmount = 1;
+          oldMenAmount = 1;
+          specialWomenAmount = 1;
+          specialMenAmount = 2;
+        }
+        if (newOrder.amount == 6) {
+          oldWomenAmount = 1;
+          oldMenAmount = 1;
+          specialWomenAmount = 2;
+          specialMenAmount = 2;
+        }
+        if (newOrder.amount == 7) {
+          oldWomenAmount = 2;
+          oldMenAmount = 1;
+          specialWomenAmount = 2;
+          specialMenAmount = 2;
+        }
+        if (newOrder.amount == 8) {
+          oldWomenAmount = 3;
+          oldMenAmount = 1;
+          specialWomenAmount = 2;
+          specialMenAmount = 2;
+        }
+        if (newOrder.amount == 9) {
+          oldWomenAmount = 3;
+          oldMenAmount = 1;
+          specialWomenAmount = 3;
+          specialMenAmount = 2;
+        }
+
+
 
       } else {
         specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.2)
@@ -3915,8 +3957,8 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     if (!newOrder.filter.maxNoAddress) {
       oldWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.5);
       oldMenAmount = Math.round(newOrder.filter.maleAmount * 0.5);
-      specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.2);
-      specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.2);
+      specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.4);
+      specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.4);
       yangWomenAmount = newOrder.filter.femaleAmount - oldWomenAmount - specialWomenAmount;
       yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
 
@@ -4059,9 +4101,9 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
-    if(newOrder.institutes.length > 0) filter.dateOfSignedConsent = {$ne: null};
+    if (newOrder.institutes.length > 0) filter.dateOfSignedConsent = { $ne: null };
 
-   // proportion.oneRegion = undefined;
+    // proportion.oneRegion = undefined;
 
     seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
@@ -4153,24 +4195,24 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-      
-        if (data.counter < proportion[category]) {
-          data.maxPlus = 3;
-   
-          data = await collectSeniorsNewYear(data, orderFilter);
-        }
-   
-   
-        if (data.counter < proportion[category]) {
-          data.maxPlus = 4;
-   
-          data = await collectSeniorsNewYear(data, orderFilter);
-        }
-        /*  if (data.counter < proportion[category]) {
-               data.maxPlus = 5;
-       
-               data = await collectSeniorsNewYear(data, orderFilter);
-             }    */
+
+      if (data.counter < proportion[category]) {
+        data.maxPlus = 3;
+
+        data = await collectSeniorsNewYear(data, orderFilter);
+      }
+
+
+      if (data.counter < proportion[category]) {
+        data.maxPlus = 4;
+
+        data = await collectSeniorsNewYear(data, orderFilter);
+      }
+      /*  if (data.counter < proportion[category]) {
+             data.maxPlus = 5;
+     
+             data = await collectSeniorsNewYear(data, orderFilter);
+           }    */
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -4429,217 +4471,7 @@ async function searchSeniorNewYear(
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
     /*          filter.lastName = {$in: [
-             
-              'Михай',
-    'Мохначева',
-    'Мысина',
-    'Нахрачева',
-    'Неизвестная',
-    'Новичкова',
-    'Новоселова',
-    'Певная',
-    'Петрухина',
-    'Пичугина',
-    'Понякова',
-    'Поскрякова',
-    'Пронина',
-    'Птицына',
-    'Пырерко',
-    'Савельева',
-    'Саминова',
-    'Самороднова',
-    'Сафонова',
-    'Селиванова',
-    'Семукова',
-    'Сидоркина',
-    'Слепцова',
-    'Смоколева',
-    'Степкина',
-    'Сукочева',
-    'Разницина',
-    'Реброва',
-    'Романова',
-    'Сукочева',
-    'Тайбарей',
-    'Тайбери',
-    'Татарская',
-    'Терехова',
-    'Трофимова',
-    'Турцева',
-    'Тюменева',
-    'Тюнина',
-    'Устинова',
-    'Фанина',
-    'Федотова',
-    'Филаева',
-    'Филимонова',
-    'Филькова',
-    'Фоломеева',
-    'Фролова',
-    'Хлебникова',
-    'Ходакова',
-    'Чернецова',
-    'Шешенева',
-    'Шишканова',
-    'Щеголева',
-    'Явтысая',
-    'Якушкина',
-    'Выучейская',
-    'Майорова',
-    'Букина',
-    'Клочкина',
-    'Сафарова',
-    'Котова',
-    'Грибова',
-    'Таратина',
-    'Самохвалова',
-    'Спорыхина',
-    'Груздева',
-    'Венедиктова',
-    'Суркова',
-    'Юшина',
-    'Щербакова',
-    'Седова',
-    'Жильцова',
-    'Визигина',
-    'Попкова',
-    'Вотинова',
-    'Шлыкова',
-    'Ефимова',
-    'Бучкова',
-    'Лимонова',
-    'Пугачева',
-    'Коврякова',
-    'Савина',
-    'Захарова',
-    'Ухоботова',
-    'Суханова',
-    'Бурдасова',
-    'Чичиланова',
-    'Аничкина',
-    'Андреева',
-    'Бакулина',
-    'Борель',
-    'Борискова',
-    'Борисова',
-    'Булыгина',
-    'Вершина',
-    'Володина',
-    'Гаврилина',
-    'Греднева',
-    'Груздева',
-    'Гусева',
-    'Евсеева',
-    'Еремеева',
-    'Зайцева',
-    'Зиновеева',
-    'Карасева',
-    'Карпова',
-    'Конторина',
-    'Копейкина',
-    'Кузнецова',
-    'Кырмызы',
-    'МитинаПосевкина',
-    'Новикова',
-    'Пономарева',
-    'Принцева',
-    'Ильичева',
-    'Симонова',
-    'Шешина',
-    'Юнина',
-    'Тарасова',
-    'Тяпнина',
-    'Сметанина',
-    'Силинская',
-    'Малькова',
-    'Сукова',
-    'Заикина',
-    'Дорофеева',
-    'Ильина',
-    'Шашахметова',
-    'Воронкова',
-    'Сметанкина',
-    'Куприна',
-    'Павлюк',
-    'Тибичи',
-    'Синькина',
-    'Самохвалова',
-    'Булычева',
-    'Худи',
-    'Федотова',
-    'Тарбушина',
-    'Радченко',
-    'Кондракова',
-    'Осадчая',
-    'Кубарева',
-    'Вокуева',
-    'Ульянова',
-    'Бедова',
-    'Беляева',
-    'Селиверстова',
-    'Красникова',
-    'Калинина',
-    'Селезнева',
-    'Шабанова',
-    'Рейх',
-    'Юткина',
-    'Ерохина',
-    'Кленова',
-    'Дунаева',
-    'Головичева',
-    'Сюгней',
-    'Юрченко',
-    'Нюрова',
-    'Гаврикова',
-    'Тайбарей',
-    'Фанина',
-    'Чуранова',
-    'Шигаева',
-    'Морозова',
-    'Дуплей',
-    'Корешина',
-    'Николаева',
-    'Жилкина',
-    'Кузьминова',
-    'Канюкова',
-    'Чернова',
-    'Фионина',
-    'Адреяшкина',
-    'Ануфриева',
-    'Аношина',
-    'Астахова',
-    'Баранова',
-    'Барышникова',
-    'Бирюкова',
-    'Бондарчук',
-    'Бузина',
-    'Валей',
-    'Валова',
-    'Валюшкина',
-    'Воробьева',
-    'Выучейская',
-    'Геджюшевичене',
-    'Городилова',
-    'Гунина',
-    'Гусева',
-    'Давыдова',
-    'Ерзина',
-    'Завойкина',
-    'Захарова',
-    'Ильина',
-    'Ирошкина',
-    'Казак',
-    'Калгонова',
-    'Калинкина',
-    'Карушева',
-    'Корнева',
-    'Кочеткова',
-    'Кудишина',
-    'Кузина',
-    'Кузнецова',
-    'Курбатова',
-    'Курятникова',
-    'Кучеровская',
+   
     'Лаптандер',
     'Леонтьева',
     'Макарова',
@@ -6421,36 +6253,36 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "newYear") {//обязательно без ПЯТИМОРСК, ДМИТРИЕВКА
 
 
-/*       let celebrators =  await NewYear.find({ seniorId: null});
-      for (let celebrator of celebrators) {
-        
-        const senior = await Senior.findOne({
-          nursingHome: celebrator.nursingHome,
-          lastName: celebrator.lastName,
-          firstName: celebrator.firstName,
-          patronymic: celebrator.patronymic,
-        dateBirthday: celebrator.dateBirthday,
-          monthBirthday: celebrator.monthBirthday,
-          yearBirthday: celebrator.yearBirthday, *
-        });
-        console.log(senior);
-        await NewYear.updateOne({_id: celebrator._id}, { seniorId: senior._id});
-
-      } */
+      /*       let celebrators =  await NewYear.find({ seniorId: null});
+            for (let celebrator of celebrators) {
+              
+              const senior = await Senior.findOne({
+                nursingHome: celebrator.nursingHome,
+                lastName: celebrator.lastName,
+                firstName: celebrator.firstName,
+                patronymic: celebrator.patronymic,
+              dateBirthday: celebrator.dateBirthday,
+                monthBirthday: celebrator.monthBirthday,
+                yearBirthday: celebrator.yearBirthday, *
+              });
+              console.log(senior);
+              await NewYear.updateOne({_id: celebrator._id}, { seniorId: senior._id});
+      
+            } */
 
       console.log("I AM HERE!!!");
       let housesSet = new Set();
-       /*   const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "МЕТЕЛИ" });*/
+      /*   const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "МЕТЕЛИ" });*/
       const celebratorsNewYear = await NewYear.find({
-         absent: false,
-         nursingHome: {
-            $in: ["КУГЕЙСКИЙ",
-       
-            ]
-          } 
-       });
+        absent: false,
+        nursingHome: {
+          $in: ["ДРУЖБА",
+
+          ]
+        }
+      });
       let count = celebratorsNewYear.length;
-    //  console.log(celebratorsNewYear);
+      //  console.log(celebratorsNewYear);
       console.log(count);
       for (let celebrator of celebratorsNewYear) {
         // console.log(celebrator.seniorId);
@@ -8528,7 +8360,7 @@ async function fillOrderForInstitutes(
   }
 
   if (!filter.region && filter.addressFilter == 'any') {
-    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false,});
+    activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, });
   }
   if (filter.region && !filter.spareRegions && filter.addressFilter == 'any') {
     filter.region = [filter.region];
@@ -8542,7 +8374,7 @@ async function fillOrderForInstitutes(
     filter.region = [filter.region, ...spareRegions.spareRegions];
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, region: { $in: filter.region } });
 
-  } 
+  }
 
   console.log("filter.region");
   console.log(filter.region);
@@ -8898,7 +8730,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
   }
 
   if (holiday == "Новый год 2025" && (filter.noNames || filter.minNumberOfHouses)) {
-  
+
     if (filter.noNames) {
       if (!region) {
         seniorsData = await NewYear.find({
@@ -8926,25 +8758,25 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     if (filter.minNumberOfHouses) {
       if (!region) {
         seniorsData = await NewYear.find({
-          dateOfSignedConsent: {$ne: null},
+          dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
           absent: false,
           plusAmount: { $lt: 4 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-         
+
           // forInstitute: 0,onlyForInstitute: true, finished: false,
         }).limit(amount);
       }
       if (region) {
         seniorsData = await NewYear.find({
-          dateOfSignedConsent: {$ne: null},
+          dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
           absent: false,
           plusAmount: { $lt: 4 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           //onlyForInstitute: true, forInstitute: 0, finished: false
-          
-         
+
+
         }).limit(amount);
       }
     }
