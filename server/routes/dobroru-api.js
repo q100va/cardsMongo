@@ -3226,14 +3226,14 @@ router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
   
       if (holiday == "Новый год 2025" && !filter.region ) { //&& filter.addressFilter == "noSpecial"
         count = await NewYear.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true, 
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, secondTime: true//forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
   
       if (holiday == "Новый год 2025" && filter.region) {// && filter.addressFilter == "noSpecial"
         count = await NewYear.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, secondTime: true//forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
@@ -3467,24 +3467,26 @@ router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
     if (holiday == "Новый год 2025") {
       if (!region) {
         seniorsData = await NewYear.find({
-          forInstitute: 0,
+          //forInstitute: 0,
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 1 },
+          plusAmount: { $lt: 2 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-          finished: false,   
-          //onlyForInstitute: true
+          //finished: false,   
+          //onlyForInstitute: true,
+          secondTime: true
         }).limit(amount);
       }
       if (region) {
         seniorsData = await NewYear.find({
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 1 },
+          plusAmount: { $lt: 2 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           //onlyForInstitute: true, 
-          forInstitute: 0,
-          finished: false
+         // forInstitute: 0,
+          //finished: false,
+          secondTime: true
         }).limit(amount);
       }
   
