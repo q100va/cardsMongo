@@ -3874,36 +3874,48 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         if (newOrder.amount == 4) {
           oldWomenAmount = 1;
           oldMenAmount = 1;
+          yangWomenAmount = 0;
+          yangMenAmount = 0;
           specialWomenAmount = 1;
           specialMenAmount = 1;
         }
         if (newOrder.amount == 5) {
           oldWomenAmount = 1;
           oldMenAmount = 1;
+          yangWomenAmount = 0;
+          yangMenAmount = 0;
           specialWomenAmount = 1;
           specialMenAmount = 2;
         }
         if (newOrder.amount == 6) {
           oldWomenAmount = 1;
           oldMenAmount = 1;
+          yangWomenAmount = 0;
+          yangMenAmount = 0;
           specialWomenAmount = 2;
           specialMenAmount = 2;
         }
         if (newOrder.amount == 7) {
           oldWomenAmount = 2;
           oldMenAmount = 1;
+          yangWomenAmount = 0;
+          yangMenAmount = 0;
           specialWomenAmount = 2;
           specialMenAmount = 2;
         }
         if (newOrder.amount == 8) {
           oldWomenAmount = 3;
           oldMenAmount = 1;
+          yangWomenAmount = 0;
+          yangMenAmount = 0;
           specialWomenAmount = 2;
           specialMenAmount = 2;
         }
         if (newOrder.amount == 9) {
           oldWomenAmount = 3;
           oldMenAmount = 1;
+          yangWomenAmount = 0;
+          yangMenAmount = 0;
           specialWomenAmount = 3;
           specialMenAmount = 2;
         }
@@ -4196,7 +4208,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
         data = await collectSeniorsNewYear(data, orderFilter);
       }
 
-      if (data.counter < proportion[category]) {
+      /*    if (data.counter < proportion[category]) {
         data.maxPlus = 3;
 
         data = await collectSeniorsNewYear(data, orderFilter);
@@ -4208,7 +4220,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-      /*  if (data.counter < proportion[category]) {
+    if (data.counter < proportion[category]) {
              data.maxPlus = 5;
      
              data = await collectSeniorsNewYear(data, orderFilter);
