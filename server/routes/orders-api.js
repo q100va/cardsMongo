@@ -3254,7 +3254,7 @@ async function searchSenior(
 
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true },
-    //plusAmount: 3,
+   // plusAmount: 3,
     //dateOfSignedConsent: {$ne: null}, //PLUSES1
     //firstName: "Светлана"
   };
@@ -4208,7 +4208,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
         data = await collectSeniorsNewYear(data, orderFilter);
       }
 
-      /*    if (data.counter < proportion[category]) {
+        if (data.counter < proportion[category]) {
         data.maxPlus = 3;
 
         data = await collectSeniorsNewYear(data, orderFilter);
@@ -4220,7 +4220,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-    if (data.counter < proportion[category]) {
+     /* if (data.counter < proportion[category]) {
              data.maxPlus = 5;
      
              data = await collectSeniorsNewYear(data, orderFilter);
@@ -8352,7 +8352,6 @@ async function fillOrderForInstitutes(
   console.log("filter.region");
   console.log(filter.region);
 
-
   let activeHouse;
   if (!filter.region && filter.addressFilter == 'noSpecial') {
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });
@@ -8386,7 +8385,7 @@ async function fillOrderForInstitutes(
     filter.region = [filter.region, ...spareRegions.spareRegions];
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, region: { $in: filter.region } });
 
-  }
+  } 
 
   console.log("filter.region");
   console.log(filter.region);
@@ -8407,12 +8406,12 @@ async function fillOrderForInstitutes(
          "БОГРАД", 
         ]
       }
-    });    
+    });   
 
   let activeHouse = await House.find({
     isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
       $in: [
-        'САЛЬСК',        
+        'ИНСАР',        
         
         
         
@@ -8422,7 +8421,7 @@ async function fillOrderForInstitutes(
 
 
       ]
-    } });*/
+    } }); */
   /*         
            "ЧИТА_ТРУДА",
            "НОВОСИБИРСК_ЖУКОВСКОГО", */
@@ -8489,14 +8488,14 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Новый год 2025" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
       count = await NewYear.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true, 
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true, 
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
 
     if (holiday == "Новый год 2025" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
       count = await NewYear.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
@@ -8749,7 +8748,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           forInstitute: 0,
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 1 },
+          plusAmount: { $lt: 2 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           finished: false,
           //onlyForInstitute: true
@@ -8759,7 +8758,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         seniorsData = await NewYear.find({
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 1 },
+          plusAmount: { $lt: 2 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           //onlyForInstitute: true, 
           forInstitute: 0,
