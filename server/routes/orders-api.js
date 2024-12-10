@@ -4113,7 +4113,11 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
-    if (newOrder.institutes.length > 0) filter.dateOfSignedConsent = { $ne: null };
+    if (newOrder.institutes.length > 0) {
+      filter.dateOfSignedConsent = { $ne: null };
+    } else {
+      filter.dateOfSignedConsent =  null; 
+    };
 
     // proportion.oneRegion = undefined;
 
@@ -4427,7 +4431,8 @@ async function searchSeniorNewYear(
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true },
-    onlyForInstitute: false
+    finished: false,
+    //onlyForInstitute: false
   };
 
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
@@ -4482,6 +4487,9 @@ async function searchSeniorNewYear(
   //maxPlusAmount = 3;
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
+/*     filter.monthBirthday = 1;
+    filter.dateBirthday = {$lt: 11, $gt: 0};  */
+  
     /*          filter.lastName = {$in: [
    
     'Лаптандер',
@@ -6262,7 +6270,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       }
     }
 
-    if (req.params.holiday == "newYear") {//обязательно без ПЯТИМОРСК, ДМИТРИЕВКА
+    if (req.params.holiday == "newYear") {//обязательно без ДМИТРИЕВКА ПЯТИМОРСК
 
 
       /*       let celebrators =  await NewYear.find({ seniorId: null});
@@ -6284,15 +6292,26 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
 
       console.log("I AM HERE!!!");
       let housesSet = new Set();
-      /*   const celebratorsNewYear = await NewYear.find({ absent: false, nursingHome: "МЕТЕЛИ" });*/
-      const celebratorsNewYear = await NewYear.find({
+      const celebratorsNewYear = await NewYear.find({ absent: false });
+/*       const celebratorsNewYear = await NewYear.find({
         absent: false,
         nursingHome: {
-          $in: ["ДРУЖБА",
+          $in: [
+            "ТВЕРЬ_КОНЕВА",
+            "МАСЛЯТКА",
+            "СУЗУН",
+            "СЯВА",
+            "РАДЮКИНО",
+            "НОВОСЛОБОДСК",
+            "МЕДЫНЬ",
+            "ИЛЬИНСКОЕ",
+
+
+
 
           ]
         }
-      });
+      }); */
       let count = celebratorsNewYear.length;
       //  console.log(celebratorsNewYear);
       console.log(count);
@@ -8488,14 +8507,14 @@ async function fillOrderForInstitutes(
 
     if (holiday == "Новый год 2025" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
       count = await NewYear.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true, 
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, dateOfSignedConsent:  null //onlyForInstitute: true, 
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
 
     if (holiday == "Новый год 2025" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
       count = await NewYear.find({
-        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false//onlyForInstitute: true
+        nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, dateOfSignedConsent:  null //onlyForInstitute: true
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
       }).countDocuments();
     }
@@ -8750,7 +8769,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           absent: false,
           plusAmount: { $lt: 2 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-          finished: false,
+          finished: false, dateOfSignedConsent:  null,
           //onlyForInstitute: true
         }).limit(amount);
       }
@@ -8762,7 +8781,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           //onlyForInstitute: true, 
           forInstitute: 0,
-          finished: false
+          finished: false, dateOfSignedConsent:  null,
         }).limit(amount);
       }
     }
