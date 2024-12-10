@@ -1188,7 +1188,7 @@ export class NewYearComponent implements OnInit {
     let addresses = "";
     console.log(this.lineItems);
     for (let lineItem of this.lineItems) {
-      if (!this.isForInstitutes || this.isParcelAvailable) {
+/*       if (!this.isForInstitutes || this.isParcelAvailable) { */
         addresses =
           addresses +
           lineItem.address +
@@ -1196,10 +1196,10 @@ export class NewYearComponent implements OnInit {
           "\n" +
           (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +
           (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
-      }
-      if (this.isForInstitutes && !this.isParcelAvailable) {
+/*       } */
+/*       if (this.isForInstitutes && !this.isParcelAvailable) {
         addresses = addresses + lineItem.address + " " + "\n";
-      }
+      } */
       console.log("addresses1");
       console.log(addresses);
 
