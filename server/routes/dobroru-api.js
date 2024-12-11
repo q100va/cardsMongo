@@ -152,7 +152,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.holiday == "Дни рождения января 2025") {
         period = {
             "date1": 1,
-            "date2": 15,
+            "date2": 31,
             "isActive": true,
             "key": 0,
             "maxPlus": 3, //PLUSES
@@ -253,7 +253,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 success: false
             };
         } else {
-            if (!newOrder.filter.maxOneHouse && (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.regions.length > 0)) proportion.oneHouse = undefined;
+            if (!newOrder.filter.maxOneHouse && (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || (newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]))) proportion.oneHouse = undefined;
             //if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture ) proportion.oneHouse = undefined;
             console.log("newOrder.filter.regions");
             console.log(newOrder.filter.regions);
@@ -261,7 +261,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             console.log("proportion.oneHouse");
             console.log(proportion.oneHouse);
 
-            if (!newOrder.filter.onlyWithPicture && newOrder.filter.regions.length == 0 && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+            if (!newOrder.filter.onlyWithPicture && (newOrder.filter.regions.length == 0 || !newOrder.filter.regions[0]) && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
 
         }
 
@@ -302,7 +302,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "oneRegion": Math.ceil(newOrder.amount * 0.33)
         }
 
-        if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.regions.length > 0 || newOrder.amount > 20) {
+        if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || (newOrder.filter.regions.length > 0 && newOrder.filter.regions[0])  || newOrder.amount > 20) {
             proportion.oneRegion = undefined;
         }
     }
@@ -441,7 +441,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
         if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
         if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{ specialComment: /Юбилей/ }, { oldest: true }];
-        if (newOrder.filter.regions.length > 0) filter.region = { $in: newOrder.filter.regions };
+        if (newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]) filter.region = { $in: newOrder.filter.regions };
         if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
         if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
         if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
@@ -716,7 +716,7 @@ async function collectSeniors(data, orderFilter, holiday) {
     if (orderFilter.genderFilter != 'proportion') {
 
         if (data.filter.addressFilter != 'onlySpecial') {
-            if (data.filter.region.length > 0 && data.filter.addressFilter != 'forKids') {
+            if (data.filter.region && data.filter.addressFilter != 'forKids') {
                 searchOrders = {
                     oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen", "specialWomen", "specialMen"],
                     oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen", "specialMen", "specialWomen"],
@@ -761,7 +761,7 @@ async function collectSeniors(data, orderFilter, holiday) {
 
     if (orderFilter.genderFilter == 'proportion') {
         if (orderFilter.addressFilter != 'onlySpecial') {
-            if (data.filter.region.length > 0 && data.filter.addressFilter != 'forKids') {
+            if (data.filter.region && data.filter.addressFilter != 'forKids') {
                 searchOrders = {
                     oldWomen: ["oldWomen", "yangWomen", "specialWomen",],
                     oldMen: ["oldMen", "yangMen", "specialMen",],
@@ -838,7 +838,7 @@ async function collectSeniors(data, orderFilter, holiday) {
                 // console.log("data.regions");
                 // console.log(data.regions);
 
-                if (data.filter.nursingHome || data.filter.region.length > 0) {
+                if (data.filter.nursingHome || data.filter.region) {
                     data.proportion.oneHouse = null;
                     data.proportion.oneRegion = null;
                 }
@@ -984,7 +984,11 @@ async function searchSenior(
         "ЯСНАЯ_ПОЛЯНА",
         "ЯСНОГОРСК",
         "ГРЯЗОВЕЦ",
-        "СНЕЖНЫЙ"
+        "СНЕЖНЫЙ",
+        "КЛЕМЕНТЬЕВО",
+        "ОВЧАГИНО",
+        "ЯСНАЯ_ПОЛЯНА",
+        "РАХМАНОВО"
 
     ];
 
@@ -1199,7 +1203,7 @@ async function searchSeniorHelper(
 
     let filter = Object.assign(standardFilter, data.filter);
     console.log("FILTER");
-    console.log(filter.category);
+    console.log(filter);
 
     let celebrator;
     //CHANGE!!!
@@ -1233,8 +1237,7 @@ async function searchSeniorHelper(
             celebrator = await ListBefore.findOne(filter);
         }
 
-
-        // console.log("celebrator List");
+ console.log("celebrator List");
         console.log(celebrator);
         if (celebrator) {
             //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
@@ -1550,12 +1553,12 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
             console.log("proportion.oneHouse");
             console.log(proportion.oneHouse);
 
-            if ((newOrder.filter.regions.length > 0 || newOrder.amount > 20)) { // !newOrder.filter.maxOneHouse && newOrder.filter.nursingHome || || newOrder.filter.onlyWithPicture
+            if (((newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]) || newOrder.amount > 20)) { // !newOrder.filter.maxOneHouse && newOrder.filter.nursingHome || || newOrder.filter.onlyWithPicture
                 // proportion.oneHouse = undefined;
                 proportion.oneRegion = undefined;
             }
 
-            if (newOrder.filter.regions.length > 0) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
+            if (newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
 
                 if (newOrder.amount > 40)
                     proportion.oneHouse = 10;
@@ -1917,13 +1920,13 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         console.log("newOrder.filter");
         console.log(newOrder.filter);
 
-        if (newOrder.filter.regions.length > 0 || newOrder.amount > 20) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
+        if ((newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]) || newOrder.amount > 20) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
             proportion.oneRegion = undefined;
             //  proportion.oneHouse = undefined;
 
         }
 
-        if (newOrder.filter.regions.length > 0) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
+        if (newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]) { //newOrder.filter.nursingHome ||  newOrder.filter.onlyWithPicture ||
 
             if (newOrder.amount > 40)
                 proportion.oneHouse = 10;
@@ -2399,7 +2402,10 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
         if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
         if (newOrder.filter.onlyAnniversaries) filter.specialComment = /Юбилей/;
         if (newOrder.filter.onlyAnniversariesAndOldest) filter.$or = [{ specialComment: /Юбилей/ }, { oldest: true }];
-        if (newOrder.filter.regions.length > 0) filter.region = { $in: newOrder.filter.regions };
+
+           console.log("newOrder.filter.regions.length");
+          console.log(newOrder.filter.regions.length);
+        if (newOrder.filter.regions.length > 0 && newOrder.filter.regions[0]) filter.region = { $in: newOrder.filter.regions };
         if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
         if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
         if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
