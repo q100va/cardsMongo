@@ -2433,8 +2433,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения января 2025") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 11,
+      "date2": 15,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -3254,8 +3254,8 @@ async function searchSenior(
 
     dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true },
-   // plusAmount: 3,
-    //dateOfSignedConsent: {$ne: null}, //PLUSES1
+  //plusAmount: 4,
+   //dateOfSignedConsent: {$ne: null}, //PLUSES1
     //firstName: "Светлана"
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
@@ -4487,8 +4487,8 @@ async function searchSeniorNewYear(
   //maxPlusAmount = 3;
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
-/*     filter.monthBirthday = 1;
-    filter.dateBirthday = {$lt: 11, $gt: 0};  */
+/*       filter.monthBirthday = 1;
+    filter.dateBirthday = {$lt: 32, $gt: 0};  *///HB+NY
   
     /*          filter.lastName = {$in: [
    
@@ -8371,7 +8371,7 @@ async function fillOrderForInstitutes(
   console.log("filter.region");
   console.log(filter.region);
 
-  let activeHouse;
+    let activeHouse;
   if (!filter.region && filter.addressFilter == 'noSpecial') {
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });
   }
@@ -8425,22 +8425,14 @@ async function fillOrderForInstitutes(
          "БОГРАД", 
         ]
       }
-    });   
+    });  
 
   let activeHouse = await House.find({
     isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
       $in: [
-        'ИНСАР',        
-        
-        
-        
-
-    
-        
-
-
+        'МОСКВА_РОТЕРТА',  
       ]
-    } }); */
+    } });  */
   /*         
            "ЧИТА_ТРУДА",
            "НОВОСИБИРСК_ЖУКОВСКОГО", */
