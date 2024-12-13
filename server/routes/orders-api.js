@@ -4135,7 +4135,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
       filter.dateOfSignedConsent = null;
     };
 
-    proportion.oneRegion = undefined;
+   // proportion.oneRegion = undefined;
 
     seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
