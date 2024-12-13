@@ -111,7 +111,7 @@
                                     <table class="example-full-width" cellspacing="0">
                                         <tr>
                                             <td width="50%">
-                                                <div *ngIf='showFilter'>
+                                                <div *ngIf="!form.controls['minNumberOfHouses'].value">
 
                                                 <label id="example-radio-group-label">Адреса</label>
                                                 <mat-radio-group class="example-radio-group" [(ngModel)]="addressFilter"
@@ -188,7 +188,7 @@
                                                 </mat-radio-group>
 
                                                 <br />
-
+<!-- 
                                                 <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
                                                     Только с фото</mat-slide-toggle>
 
@@ -204,17 +204,17 @@
                                                 <mat-slide-toggle
                                                     [formControl]="form.controls['onlyAnniversariesAndOldest']"
                                                     (change)="onSlideToggleChange('onlyAnniversariesAndOldest')">
-                                                    Только юбиляры и 80+</mat-slide-toggle>
+                                                    Только юбиляры и 80+</mat-slide-toggle> -->
                                                 </div>
                                             </td>
                                             <td>
 
-                                                <h4  *ngIf="showFilter"
+                                                <h4  *ngIf="!form.controls['minNumberOfHouses'].value"
                                                     matTooltip="Можно указать только одно значение: до или после которого должны быть даты.">
                                                     Даты</h4>
 
                                                 <table class="example-full-width" cellspacing="0">
-                                                    <tr  *ngIf="showFilter">
+                                                    <tr  *ngIf="!form.controls['minNumberOfHouses'].value">
                                                         <td>
 
                                                             <mat-form-field class="example-user-input"
@@ -246,15 +246,15 @@
                                                     </tr>
                                                 </table>
 
-                                                <h4  *ngIf="showFilter"
+                                                <!-- <h4  *ngIf="showFilter"
                                                     matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
-                                                    Год рождения</h4>
+                                                    Год рождения</h4> -->
                                                 <!--                                                  <p>
                                                     <span matBadge="i" matBadgeOverlap="false" matTooltip="Info about the action">Год рождения</span>
                                                   </p>  -->
 
                                                 <table class="example-half-width" cellspacing="0">
-                                                    <tr  *ngIf="showFilter">
+<!--                                                     <tr  *ngIf="showFilter">
                                                         <td>
 
                                                             <mat-form-field class="example-user-input"
@@ -284,10 +284,10 @@
                                                                 {{"Введите валидные данные (1900-" + actualYear + ")!"}}
                                                             </mat-error>
                                                         </td>
-                                                    </tr>
+                                                    </tr> -->
                                                     <tr>
                                                         <td colspan="2">
-                                                            <h4>Регион <span  *ngIf="showFilter">(если не работает, введите больший диапазон дат)</span>
+                                                            <h4>Регион <span  *ngIf="!form.controls['minNumberOfHouses'].value">(если не работает, введите больший диапазон дат)</span>
                                                             </h4>
                                                             <mat-form-field appearance="fill">
 
@@ -322,8 +322,8 @@
                                                     </tr>
                                                     <tr  >
                                                         <td colspan="2" >
-                                                            <div class="example-container" *ngIf="showFilter">
-                                                                <mat-form-field style="width: 49%;"
+                                                            <div class="example-container" *ngIf="!form.controls['minNumberOfHouses'].value">
+                                                                <mat-form-field style="width: 39%;"
                                                                     class="example-user-input" appearance="fill"
                                                                     *ngIf="showMaxOneHouse">
                                                                     <mat-label>max из 1 дома</mat-label>
@@ -332,7 +332,7 @@
                                                                         placeholder="1" />
                                                                 </mat-form-field>
 
-                                                                <mat-form-field style="width: 49%;"
+                                                                <mat-form-field style="width: 39%;"
                                                                     class="example-user-input" appearance="fill"
                                                                     *ngIf="showMaxNoAddress">
                                                                     <mat-label>max БОА</mat-label>
@@ -573,7 +573,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="padding-bottom: 20px;">
-                            <span *ngIf="lineItems.length > 0 && !isForInstitutes">
+                            <span *ngIf="lineItems.length > 0">
                                 <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
                             </span>
                         </td>
@@ -621,17 +621,21 @@
                         <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
 
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
-                            Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
+ <!--            Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
-                            чем на месяц.<br />
-                            Поэтому просим вас отправлять открытки минимум за месяц до праздника или дня рождения.<br />
-                            На конверте рекомендуем сделать пометку "прошу вручить <дата>".<br />
-                            Обращаю ваше внимание, что списки поздравляемых идут без фамилий.
+                            чем на месяц. На конверте рекомендуем сделать пометку "прошу вручить <дата>".<br /><br /> -->
+                            
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">           
+                            Просим вас отправлять открытки минимум за месяц до праздника или дня рождения.<br /> 
+                            Для определения сроков отправки ориентируйтесь на даты, указанные в заголовке.  <br />                        
+                            Обращаю ваше внимание, что списки поздравляемых идут без фамилий и без точных дат (теперь мы получаем только такие данные).<br /> 
+                            Не переживайте:<br />
+                            - в интернате точно найдут поздравляемого и вручат ему открытку;<br />
+                            - открытки и конверты без фамилии, а только с именем и отчеством на почте принимают и доставляют.<br />
                         </p>
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
-                            {{ holiday }}
+                            {{isForInstitutes ? holiday : holidayTitle }}
                         </h2>
                     </mat-card-content>
                     
@@ -652,17 +656,18 @@
                         <p style="font-family: 'Times New Roman', Times, serif;">
                             Мы получили вашу заявку и очень рады вашему участию!
                         </p>
-
+<!--                         Иногда в списках встречаются
+                        люди, которых к престарелым совсем не относятся. Это инвалиды, которые
+                        проживают в домах престарелых. Иногда сразу после детдомов. -->
+                        
                         <p style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. Иногда в списках встречаются
-                            люди, которых к престарелым совсем не относятся. Это инвалиды, которые
-                            проживают в домах престарелых. Иногда сразу после детдомов.
+                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. 
                         </p>
 
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
-                            {{ holiday }}
+                            {{isForInstitutes ? holiday : holidayTitle }}
                         </h2>
 
                         <p
@@ -689,15 +694,11 @@
                             Добрый день!</p>
 
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
-                            Сроки доставки простых писем и бандеролей, к сожалению, в настоящее время предсказать
-                            невозможно.<br />
-                            Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
-                            чем на месяц.<br />
-                            Поэтому просим вас отправлять открытки минимум за месяц до праздника или дня рождения.<br />
+                            Рассчитывайте, что срок доставки будет минимум 30 дней.<br />
                             
                         </p>
 
-                        <p style="font-family: 'Times New Roman', Times, serif;">
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
                             Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, 'дни рождения января'.
                             Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
@@ -707,8 +708,11 @@
                   <!--       <a href="https://disk.yandex.ru/i/pIc9B0o9HKXGrQ">Ссылка на полную инструкцию</a> -->
                         <br /> <br />
 
-                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                        <h2 *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
+                        </h2>
+                        <h2 *ngIf="!isForInstitutes" style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                            {{ holidayTitle }}
                         </h2>
 
                     </mat-card-content>
@@ -793,12 +797,12 @@
                                <!--  {{celebrator.lastName}} -->
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
-                                {{celebrator.fullDayBirthday}}
+                        <!--         {{celebrator.fullDayBirthday}} -->
                                 {{celebrator.comment1}}
-                                {{celebrator.linkPhoto}}
-                                <span style="font-weight: bold; color: rgb(175, 19, 175); ">
+                        <!--         {{celebrator.linkPhoto}} -->
+               <!--                  <span style="font-weight: bold; color: rgb(175, 19, 175); ">
                                     {{celebrator.specialComment}}
-                                </span>
+                                </span> -->
                             </div>
             <!--             </section> -->
                         <br />
@@ -809,7 +813,7 @@
 
                         <p
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
-                            Стократно вас благодарю! <br />
+                            Огромное вам спасибо! <br />
                             _________________________________________________<br />
                             Сбор на новогодние гостинцы для подопечных фонда <a
                                 href="https://ng.starikam.org/">здесь</a>.
@@ -834,14 +838,17 @@
 
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Каждому адресату отправляйте отдельную открытку в отдельном конверте
-                                или отдельную почтовую открытку без конверта. На конверте можно указать "прошу вручить <дата рождения>".
+                                или отдельную почтовую открытку без конверта.
                             </li>
                             <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
                                 бандеролью. Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, "дни рождения января".
                             </li>
-                            <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет минимум 30 дней. Лучше открытки отправить, как можно раньше.
+                            <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="isForInstitutes">
+                                Рассчитывайте, что срок доставки будет минимум 30 дней.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="!isForInstitutes">
+                                Рассчитывайте, что срок доставки будет минимум 30 дней. Для определения сроков отправки ориентируйтесь на даты, указанные в заголовке.
                             </li>
                         </ul>
 

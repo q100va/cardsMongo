@@ -42,8 +42,9 @@ export class OrderListComponent implements AfterViewInit {
     private messageService: MessageService,
     private resultDialog: MatDialog
   ) {
-    this.userName = this.cookieService.get("session_user");
-   // this.userName = "dripman";
+   this.userName = this.cookieService.get("session_user");
+   //this.userName = "Ludikmila";
+   //this.userName = "Verun";
   }
  @ViewChild("paginator") paginator: MatPaginator;
   displayedColumns = [

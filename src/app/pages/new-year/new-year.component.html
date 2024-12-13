@@ -184,16 +184,16 @@
                                             <td>
 
                                                 <!-- *ngIf="showFilter" -->
-                                                <h4 *ngIf='!hideAll'
+             <!--                                    <h4 *ngIf='!hideAll'
                                                     matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
-                                                    Год рождения</h4>
+                                                    Год рождения</h4> -->
                                                 <!--                                                  <p>
                                                     <span matBadge="i" matBadgeOverlap="false" matTooltip="Info about the action">Год рождения</span>
                                                   </p>  -->
 
                                                 <table class="example-half-width" cellspacing="0">
-
-                                                    <tr *ngIf='!hideAll'><!-- *ngIf="showFilter" -->
+<!-- 
+                                                    <tr *ngIf='!hideAll'>
                                                         <td>
 
                                                             <mat-form-field class="example-user-input"
@@ -217,16 +217,16 @@
                                                         </td>
                                                     </tr>
 
-                                                    <tr *ngIf='!hideAll'><!-- *ngIf="showFilter" -->
+                                                    <tr *ngIf='!hideAll'>
                                                         <td colspan="2">
                                                             <mat-error class="error"
                                                                 *ngIf="form.controls.year1.hasError('min') || form.controls.year2.hasError('min') || form.controls.year1.hasError('max') || form.controls.year2.hasError('max')">
                                                                 {{"Введите валидные данные (1900-" + actualYear + ")!"}}
                                                             </mat-error>
                                                         </td>
-                                                    </tr>
+                                                    </tr> -->
                                                     <tr>
-                                                        <td colspan="2">
+                                                        <td >
                                                             <h4>Регион
                                                             </h4>
                                                             <mat-form-field appearance="fill">
@@ -248,7 +248,7 @@
 
                                                     </tr>
                                                     <tr *ngIf='!hideAll'><!-- *ngIf="showFilter" -->
-                                                        <td colspan="2">
+                                                        <td >
                                                             <h4>Интернат</h4>
                                                             <mat-form-field appearance="fill">
 
@@ -266,9 +266,9 @@
                                                         </td>
                                                     </tr>
                                                     <tr><!-- *ngIf="showFilter" -->
-                                                        <td colspan="2">
+                                                        <td >
                                                             <div class="example-container" *ngIf='!hideAll'>
-                                                                <mat-form-field style="width: 49%;"
+                                                                <mat-form-field style="width: 39%;"
                                                                     *ngIf="showMaxOneHouse" class="example-user-input"
                                                                     appearance="fill">
                                                                     <mat-label>max из 1 дома</mat-label>
@@ -277,7 +277,7 @@
                                                                         placeholder="1" />
                                                                 </mat-form-field>
 
-                                                                <mat-form-field style="width: 49%;"
+                                                                <mat-form-field style="width: 39%;"
                                                                     *ngIf="showMaxNoAddress" class="example-user-input"
                                                                     appearance="fill">
                                                                     <mat-label>max БОА</mat-label>
@@ -507,7 +507,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="padding-bottom: 20px;">
-                            <span *ngIf="lineItems.length > 0 && !isForInstitutes">
+                            <span *ngIf="lineItems.length > 0">
                                 <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
                             </span>
                         </td>
@@ -779,9 +779,9 @@
                         <p
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
                             Преогромное вам спасибо!!! <br />
-    <!--                         _________________________________________________<br />
+                        _________________________________________________<br />
                             Сбор на новогодние гостинцы для подопечных фонда <a
-                                href="https://ng.starikam.org/">здесь</a>. -->
+                                href="https://ng.starikam.org/">здесь</a>. 
                         </p>
 
 
