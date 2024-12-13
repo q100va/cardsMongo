@@ -641,7 +641,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
       /*       console.log("senior");
             console.log(senior); */
       let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { dateExit: date } }, { upsert: false });
-      // let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
+      //let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
       if (senior.monthBirthday == month || senior.monthBirthday == month + 1 || senior.monthBirthday == 12) {//month - 1
@@ -850,10 +850,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
         if (celebrator.monthBirthday == 2) {
           await ListNext.create(cloneCelebrator);
         }
-
-
       }
-      let newCelebrator = await createCloneCelebratorNY(celebrator);
+
+      let senior = await Senior.findOne(celebrator)
+      let newCelebrator = await createCloneCelebratorNY(senior);
+
+    /*   console.log("newCelebrator");
+      console.log(newCelebrator.seniorId); */
+
       await NewYear.create(newCelebrator);
 
     }
@@ -864,6 +868,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
 
       let resChanged = await Senior.updateOne({ _id: senior.id }, {
         $set: {
+          //seniorId: senior._id,
           region: senior.region,
           nursingHome: senior.nursingHome,
           lastName: senior.lastName,

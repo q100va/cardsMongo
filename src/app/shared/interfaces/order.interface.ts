@@ -40,6 +40,7 @@ export interface Order {
     spareRegions?: boolean,
     minNumberOfHouses?: boolean,
     noNames?: boolean,
+    onlyWithConcent?: boolean,
     nursingHome: string,
     maxOneHouse?: number,
     maxNoAddress?: number,

@@ -1663,22 +1663,31 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
 
     //   let result = await checkAllNYFullness(req.body.nursingHome);
 
-    //let houses = await House.find({dateLastUpdate: { $gt: new Date("2024-9-1") }} )
+    let houses = await House.find({dateLastUpdate: { $gt: new Date("2024-9-1") }} )
 
-    let houses = ["МЫЗА",
-      /*           "ЗЕРНОГРАД_САМОХВАЛОВА",
-           "ЗЕРНОГРАД_МИРА",
-             
-             "ХВОЙНЫЙ", 
-             "АНДРЕЕВСКИЙ",
-             "ВЫШНИЙ_ВОЛОЧЕК",
+/*     let houses = [
+      "ТВЕРЬ_КОНЕВА",
+      "МАСЛЯТКА",
+      "СУЗУН",
+      "СЯВА",
+      "РАДЮКИНО",
+      "НОВОСЛОБОДСК",
+      "МЕДЫНЬ",
+      "ИЛЬИНСКОЕ",
+            
+             "СТАРОЕ_ШАЙГОВО", 
+             "БИЙСК",
              "КАНДАЛАКША",
-             "КОВЫЛКИНО" */
+             "КАРДЫМОВО",
+             "СЫЗРАНЬ_ПОЖАРСКОГО",
+             "КУГЕЙСКИЙ",
+             "ПЕРВОМАЙСКИЙ",
+             "КУГЕСИ"  
 
-    ];
+    ]; */
     for (let house of houses) {
-      //await checkAllNYFullness(house.nursingHome);
-      await checkAllNYFullness(house);
+      await checkAllNYFullness(house.nursingHome);
+      //await checkAllNYFullness(house);
     }
 
 
@@ -2670,10 +2679,10 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
 
     //  let amount = await countVolonteers();
     //await report();
-    //await reportListOfHouses();
+    await reportListOfHouses();
     //await reportSources();
     //await overdue();
-    await amountNY();
+   // await amountNY();
     // await spareRegions();
 
     let result = {
@@ -2859,16 +2868,12 @@ async function report() {
     // console.log(region.name + " + " + amountOfSeniors);
 
   }
-
-
-
   // const amountOfSeniors = await Senior.find({ region: region.name, })
-
 }
 
 async function reportListOfHouses() {
   console.log("reportListOfHouses ");
-  const regions = [
+/*   const regions = [
     "АМУРСКАЯ",
     "АРХАНГЕЛЬСКАЯ",
     "БАШКОРТОСТАН",
@@ -2896,11 +2901,13 @@ async function reportListOfHouses() {
     "ТУЛЬСКАЯ",
     "ТЮМЕНСКАЯ",
 
-  ]
+  ] */
+
+  const regions = await Region.find({});
 
 
   for (let region of regions) {
-    const listOfHouses = await House.find({ isActive: true, region: region });
+    const listOfHouses = await House.find({ isActive: true, region: region.name });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
 

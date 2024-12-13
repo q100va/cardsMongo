@@ -737,8 +737,12 @@ export class UploadHbComponent implements OnInit {
       ? "Здравствуйте, " + this.clientFirstName + "!\n\n"
       : "Добрый день!\n\n";
 
-    const subscribersTopText =
-      "Просим вас отправлять открытки минимум за месяц до праздника или дня рождения.На конверте рекомендуем делать пометку 'прошу вручить + дата'.\nОбращаю ваше внимание, что списки поздравляемых идут без фамилий.\n\n" + this.holiday + "\n\n";
+    /* const subscribersTopText =
+      "Просим вас отправлять открытки минимум за месяц до праздника или дня рождения.На конверте рекомендуем делать пометку 'прошу вручить + дата'.\nОбращаю ваше внимание, что списки поздравляемых идут без фамилий.\n\n" + this.holiday + "\n\n"; */
+
+      const subscribersTopText =
+      "Просим вас отправить открытки в ближайшие дни. На конверте рекомендуем сделать пометку 'прошу вручить + дата'.\nОбращаю ваше внимание, что списки поздравляемых идут без фамилий.\n\n" + this.holiday + "\n\n";
+
     const subscribersBottomText =
     "Спасибо вам огромнейшее!\n_________________________________________________\nПоучаствовать в сборе на новогодние гостинцы можно по ссылке:\nhttps://ng.starikam.org/\n\n";
     const addressesText = this.formAddressLines();
@@ -760,12 +764,21 @@ export class UploadHbComponent implements OnInit {
     const greetingHtml = this.clientFirstName
       ? "<div>Здравствуйте, " + this.clientFirstName + "!</div><br>"
       : "<div>Добрый день!</div><br>";
-    const subscribersTopHtml =
+/*     const subscribersTopHtml =
     "<p style='font-style: italic;'>" + 
     "Просим вас отправлять открытки минимум за месяц до праздника или дня рождения.На конверте рекомендуем делать пометку 'прошу вручить + дата'.<br />Обращаю ваше внимание, что списки поздравляемых идут без фамилий." +
       "</p>" + "<p style='font-weight: bold;'>" +
       this.holiday +
-      "</p>";
+      "</p>"; */
+
+      const subscribersTopHtml =
+      "<p style='font-style: italic;'>" + 
+      "Просим вас отправить открытки в ближайшие дни. На конверте рекомендуем сделать пометку 'прошу вручить + дата'.<br />Обращаю ваше внимание, что списки поздравляемых идут без фамилий." +
+        "</p>" + "<p style='font-weight: bold;'>" +
+        this.holiday +
+        "</p>";
+
+
     const subscribersBottomHtml =
     "<div>Спасибо вам огромнейшее!<br>___________________________________________________________<br>Поучаствовать в сборе на новогодние гостинцы можно по ссылке:<br><a href = 'https://ng.starikam.org/'>Давайте дарить тепло и радость уже сейчас!</a></div><br>";
     const addressesHtml = this.formAddressLinesForHtml();
@@ -1374,7 +1387,7 @@ export class UploadHbComponent implements OnInit {
             addresses +
             "<span>" +
             (this.showIndexes ? celebrator.index + ". " : "") +
-            (celebrator.lastName ? celebrator.lastName + " " : "") +
+        /*     (celebrator.lastName ? celebrator.lastName + " " : "") + */
             celebrator.firstName +
             " " +
             (celebrator.patronymic ? celebrator.patronymic + " " : "") +

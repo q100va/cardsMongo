@@ -49,6 +49,7 @@ const orderSchema = new Schema(
       onlyAnniversariesAndOldest: { type: Boolean, default: false },
       minNumberOfHouses:  { type: Boolean, default: false },
       noNames:  { type: Boolean, default: false },
+      onlyWithConcent:  { type: Boolean, default: false },
     },
     isCompleted: { type: Boolean, default: false },
     absents: [celebrator],

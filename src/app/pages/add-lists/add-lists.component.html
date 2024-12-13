@@ -355,7 +355,7 @@
                                     </mat-radio-group>
                                 </div>
                                 <br />
-                                {{person.old.dateOfSignedConsent}} {{person.new.dateOfSignedConsent}}
+                               <!--  {{person.old.dateOfSignedConsent}} {{person.new.dateOfSignedConsent}} -->
                                 <br />
                                 <div *ngIf="person.old.dateOfSignedConsent!=person.new.dateOfSignedConsent && person.new.dateOfSignedConsent != null">
                                     <mat-radio-group [(ngModel)]="accepted_dateOfSignedConsent">

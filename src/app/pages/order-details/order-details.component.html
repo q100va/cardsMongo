@@ -51,10 +51,10 @@
 
 
                         <p style="font-weight: bold; margin: 0; ">{{lineItem.address}}</p>
-                    <p *ngIf="order.institutes.length > 0 && (userRole != 'dobroru' && userRole != 'admin')" style="font-weight: bold; margin: 0;">
+   <!--                  <p *ngIf="order.institutes.length > 0 && (userRole != 'dobroru' && userRole != 'admin')" style="font-weight: bold; margin: 0;">
                             {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
 
-                        <section *ngIf="order.institutes.length == 0 || userRole == 'dobroru' || userRole == 'admin'">
+                        <section *ngIf="order.institutes.length == 0 || userRole == 'dobroru' || userRole == 'admin'"> -->
                             <p style="font-style: italic; margin: 0;">{{lineItem.infoComment ? lineItem.infoComment :
                                 ""}}
                             </p>
@@ -71,13 +71,13 @@
                   <!--   {{userRole != 'dobroru' ? celebrator.lastName : ''}} -->
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
-                           {{order.holiday == 'Новый год 2025' ? celebrator.yearBirthday : ''}} 
-                                {{order.source != "dobroru" && (order.holiday == 'Дни рождения декабря 2024' || order.holiday == 'Дни рождения января 2025' || order.holiday == 'Дни рождения февраля 2025') ? celebrator.fullDayBirthday : ''}}
+                        <!--    {{order.holiday == 'Новый год 2025' ? celebrator.yearBirthday : ''}}  -->
+                    <!--             {{order.source != "dobroru" && (order.holiday == 'Новый год 2025' || order.holiday == 'Дни рождения декабря 2024' || order.holiday == 'Дни рождения января 2025' || order.holiday == 'Дни рождения февраля 2025') ? celebrator.fullDayBirthday : ''}} -->
                                 <!--                             {{(order.holiday == 'Дни рождения декабря 2024' ||  order.holiday == 'Дни рождения января 2025' || order.holiday == 'Дни рождения мая 2024') ? '(' + (celebrator.specialComment ?
                             celebrator.specialComment : "") + ')' : ''}} -->
                                 {{order.holiday == 'Именины января 2025' ? celebrator.nameDay : ''}}
                                 {{celebrator.comment1}}
-                        {{userRole != 'dobroru' ? celebrator.linkPhoto: ''}} 
+                    <!--     {{userRole != 'dobroru' ? celebrator.linkPhoto: ''}}  -->
                                 <!--                 {{celebrator._id}}             -->
                                 <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday !=
                                     'Именины января 2025' && userRole != 'dobroru' ? celebrator.specialComment :
@@ -99,7 +99,7 @@
                             </span>
 
                             </div>
-                        </section>
+      <!--                   </section> -->
 
                         <br />
                     </mat-card-content>

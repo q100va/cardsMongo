@@ -99,9 +99,11 @@ export class SeniorsDetailsComponent implements OnInit {
   }
 
   saveSenior(): void {
-
+    console.log("this.form.controls.dateOfSignedConsent.value");
+    console.log(this.form.controls.dateOfSignedConsent.value);
     const dateUpdate = this.form.controls.dateOfSignedConsent.value ? new Date(this.form.controls.dateOfSignedConsent.value) : null;
-
+    console.log("dateUpdate");
+    console.log(dateUpdate);
     const updatedSenior: Senior = {
       region: this.form.controls.region.value,
       nursingHome: this.form.controls.nursingHome.value,

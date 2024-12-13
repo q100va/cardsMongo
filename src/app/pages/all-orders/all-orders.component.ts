@@ -41,6 +41,7 @@ export class AllOrdersComponent implements AfterViewInit {
     private router: Router
   ) {
     this.userName = this.cookieService.get("session_user");
+    //this.userName = "VasilisaFiva";
   }
   @ViewChild("paginator") paginator: MatPaginator;
   displayedColumns = [
