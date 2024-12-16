@@ -155,7 +155,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "date2": 31,
             "isActive": true,
             "key": 0,
-            "maxPlus": 2, //PLUSES
+            "maxPlus": 3, //PLUSES
             "secondTime": false,
             "scoredPluses": 2
         }
@@ -997,7 +997,10 @@ async function searchSenior(
         "ЛЕВОКУМСКОЕ",
         "САРАНСК",
         "АТАМАНОВКА",
-        "УЛАН-УДЭ"
+        "УЛАН-УДЭ",
+        "МУРМАНСК_СТАРОСТИНА",
+        "ВЯЗНИКИ",
+        "КОСТРОМА_МАЛЫШКОВСКАЯ"
 
     ];
 

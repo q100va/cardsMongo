@@ -39,7 +39,7 @@
                                             Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
                                         <mat-card-subtitle>Праздник:
-                                            <span class="header">{{holiday}} даты 1-15</span>
+                                            <span class="header">{{holiday}} даты 16-31</span>
                                         </mat-card-subtitle>
 
                                     </td>
@@ -56,7 +56,7 @@
                                     <td align="left">
                                         <mat-form-field>
                                             <mat-label>Источник*</mat-label>
-                                            <mat-select [(value)]="defaultSource" [formControl]="form.controls.source">
+                                            <mat-select (value)="defaultSource" [formControl]="form.controls.source">
                                                 <mat-option value="dobroru">добро ру</mat-option>
                                                 <mat-option value="site">сайт фонда</mat-option>
                                                 <mat-option value="subscription">постоянные</mat-option>

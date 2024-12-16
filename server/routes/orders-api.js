@@ -2437,7 +2437,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 15,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 3, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -3302,7 +3302,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen") ? 5 : data.maxPlus; //  || (standardFilter.category == "yangWomen") PLUSES1
+  let maxPlusAmount = standardFilter.oldest  ? 4 : data.maxPlus; //|| (standardFilter.category == "oldWomen") || (standardFilter.category == "oldMen")  || (standardFilter.category == "yangWomen") PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
@@ -4129,13 +4129,14 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     }
 
 
-    if (newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) {
+    if ((newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) || newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      filter.dateOfSignedConsent = null;
+      filter.dateOfSignedConsent = null; //РУЧНАЯ
+     // filter.lastName = "Чернов";
     };
 
-   // proportion.oneRegion = undefined;
+    proportion.oneRegion = undefined; //РУЧНАЯ
 
     seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
@@ -4228,19 +4229,19 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
         data = await collectSeniorsNewYear(data, orderFilter);
       }
 
-      if (data.counter < proportion[category]) {
+    if (data.counter < proportion[category]) { //РУЧНАЯ
         data.maxPlus = 3;
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-
+ /* 
 
       if (data.counter < proportion[category]) {
         data.maxPlus = 4;
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-      /* if (data.counter < proportion[category]) {
+       if (data.counter < proportion[category]) {
               data.maxPlus = 5;
       
               data = await collectSeniorsNewYear(data, orderFilter);
@@ -6312,8 +6313,8 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
         absent: false,
         nursingHome: {
           $in: [
-            "ЮРГА",
-            "САЛЬСК",
+            "СЫЗРАНЬ_ПОЖАРСКОГО",
+/*             "САЛЬСК",
             "ЯСНАЯ",
             "ТАРА",
             "САМОЛЮБОВО",
@@ -6321,7 +6322,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
             "МУРМАНСК_СТАРОСТИНА",
             "ДАЛЬНЕГОРСК",
             "ЗЕЛЕНЫЙ"
-
+ */
 
 
 
