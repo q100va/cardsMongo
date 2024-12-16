@@ -800,9 +800,9 @@ export class OrderComponent implements OnInit {
               //false
               /* this.client.institutes.length > 0 ||
               this.form.controls.amount.value > 20 */
-              (this.client.institutes.length > 0 ||
+             (this.client.institutes.length > 0 ||
                 this.form.controls.amount.value > 20) &&
-              this.selectedInstitutes.length == 0
+              this.selectedInstitutes.length == 0 
             ) {
               this.confirmationService.confirm({
                 message: "Вы уверены, что эта заявка не для колллектива?",
@@ -1145,7 +1145,7 @@ export class OrderComponent implements OnInit {
     }
 
     if (this.holiday == "Дни рождения января 2025") {
-      this.holidayTitle = "Дни рождения 11-15 января 2025";
+      this.holidayTitle = "Дни рождения 16-20 января 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
