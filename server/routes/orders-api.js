@@ -2437,7 +2437,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 20,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 3, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -3302,7 +3302,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") ? 3 : data.maxPlus; // || (standardFilter.category == "oldMen")  || (standardFilter.category == "yangWomen") PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen") ? 4 : data.maxPlus; // || (standardFilter.category == "oldMen")  || (standardFilter.category == "yangWomen") PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
