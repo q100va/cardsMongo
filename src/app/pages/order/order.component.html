@@ -45,7 +45,7 @@
                                                     <mat-icon>navigate_before</mat-icon>
                                                 </button>
                                             </span>
-                                            <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}} (21-25 число по умолчанию)</span>
+                                            <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}} (26-31 число по умолчанию)</span>
                                             <span class="header" *ngIf="isNextMonth">{{holiday}} (1-5 число по умолчанию)</span>
                                             <span class="header" *ngIf="isBeforeMonth">{{holiday}} (26-30 число по умолчанию)</span>
                                             <span>
@@ -616,10 +616,10 @@
                     <mat-card-content *ngIf="showInstructionForSubscribers && !isForInstitutes"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
-                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
+                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Приветствую вас,
                             {{clientFirstName}}!</p>
                         <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
-                            Добрый день!</p>
+                            Приветствую вас!</p>
 
  <!--            Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
@@ -777,7 +777,7 @@
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
                             {{lineItem.address}}</p>
                         <p style="font-style: italic; margin: 0; font-family: 'Times New Roman', Times, serif;"
-                            *ngIf="lineItem.infoComments">
+                            *ngIf="lineItem.infoComment">
                             {{lineItem.infoComment}}
                         </p>
                         <p style="color: red; font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;"
@@ -813,7 +813,7 @@
 
                         <p
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
-                            Огромное вам спасибо! <br />
+                            Благодарю вас многократно! <br />
                             _________________________________________________<br />
                             Сбор на новогодние гостинцы для подопечных фонда <a
                                 href="https://ng.starikam.org/">здесь</a>.

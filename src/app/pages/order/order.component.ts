@@ -1282,9 +1282,9 @@ export class OrderComponent implements OnInit {
   getAddresses() {
     let greeting: string;
     if (this.clientFirstName) {
-      greeting = "Добрый день, " + this.clientFirstName + "!\n\n";
+      greeting = "Приветствую вас, " + this.clientFirstName + "!\n\n";
     } else {
-      greeting = "Добрый день!\n\n";
+      greeting = "Приветствую вас!\n\n";
     }
     let topForSubscribers = "";
 
@@ -1374,7 +1374,7 @@ export class OrderComponent implements OnInit {
         "Огромное вам спасибо за радость для наших подопечных!\nБудут вопросы — обращайтесь!\n\n";
     } */
     let bottomForSubscribers =
-      "Огромное вам спасибо!\n" +
+      "Благодарю вас многократно!\n" +
       "_________________________________________________\n" +
       "Поучаствовать в сборе на новогодние гостинцы можно по ссылке:\n" +
       "https://ng.starikam.org/ ";
