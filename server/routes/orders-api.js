@@ -2473,11 +2473,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   }
   if (newOrder.holiday == "Дни рождения февраля 2025") {
     period = {
-      "date1": 1,
-      "date2": 5,
+      "date1": 6,
+      "date2": 10,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3,  //PLUSES
+      "maxPlus": 2,  //PLUSES
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2806,7 +2806,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      filter.dateOfSignedConsent = null;
+    //  filter.dateOfSignedConsent = null;
     };
 
     if (newOrder.filter.date1 || newOrder.filter.date2) {
@@ -3303,7 +3303,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen")) ? 4 : data.maxPlus; // || (standardFilter.category == "specialWomen") || (standardFilter.category == "oldMen")   PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen")) ? 3 : data.maxPlus; // || (standardFilter.category == "specialWomen") || (standardFilter.category == "oldMen")   PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
