@@ -1145,7 +1145,7 @@ export class OrderComponent implements OnInit {
     }
 
     if (this.holiday == "Дни рождения января 2025") {
-      this.holidayTitle = "Дни рождения 21-25 января 2025";
+      this.holidayTitle = "Дни рождения 26-31 января 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
