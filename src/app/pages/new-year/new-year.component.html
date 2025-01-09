@@ -297,15 +297,17 @@
                                                                 [formControl]="form.controls['minNumberOfHouses']">с
                                                                 минимальным количеством интернатов</mat-checkbox>
 
-                                                                <mat-checkbox *ngIf="!form.controls.noNames.value"
-                                                                [disabled]="showFilter"
-                                                                (change)="onChangeMinNumberOfHouses()"
+                                                             <!-- *ngIf="!form.controls.noNames.value"  [disabled]="showFilter" (change)="onChangeMinNumberOfHouses()"-->   
+                                                             
+                                                             <mat-checkbox 
+                                                               
+                                                                
                                                                 [formControl]="form.controls['onlyWithConcent']">только с согласиями</mat-checkbox>
 
-                                                            <!-- <mat-checkbox [disabled]="showFilter"
+                                                         <mat-checkbox [disabled]="showFilter"
                                                                 (change)="onChangeMinNumberOfHouses()"
                                                                 [formControl]="form.controls['noNames']">без имен и
-                                                                отчеств</mat-checkbox> -->
+                                                                отчеств</mat-checkbox> 
                                                         </td>
                                                     </tr>
                                                 </table>

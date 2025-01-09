@@ -216,7 +216,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 1 ? 'Дни рождения января 2025' : 'Дни рождения февраля 2025',
+      holyday: month == 2 ? 'Дни рождения февраля 2025' : 'Дни рождения марта 2025',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -243,9 +243,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 12) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 1) { finalList = await List.insertMany(newList, options); }
-  if (month == 2) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 1) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 2) { finalList = await List.insertMany(newList, options); }
+  if (month == 3) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -388,8 +388,8 @@ async function findAllMonthNameDays(month) {
       cloneSpecialComment = celebrator.monthBirthday == celebrator.monthNameDay ? 'ДР ' + cloneFullDayBirthday : celebrator.yearBirthday + ' г.р.';
     }
     let holiday;
-    if (month == 1) holiday = 'Именины января 2025';
     if (month == 2) holiday = 'Именины февраля 2025';
+    if (month == 3) holiday = 'Именины марта 2025';
 
     let cloneCelebrator = {
       region: celebrator.region,
@@ -440,8 +440,8 @@ async function findAllMonthNameDays(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 1) finalList = await NameDay.insertMany(newList, options);
-  if (month == 2) finalList = await NameDayNext.insertMany(newList, options);
+  if (month == 2) finalList = await NameDay.insertMany(newList, options);
+  if (month == 3) finalList = await NameDayNext.insertMany(newList, options);
 
   //console.log(finalList);
 
@@ -933,9 +933,9 @@ async function createCloneCelebrator(celebrator) {
     }
   }
   let holiday;
-  if (celebrator.monthBirthday == 12) { holiday = 'Дни рождения декабря 2024' };
   if (celebrator.monthBirthday == 1) { holiday = 'Дни рождения января 2025' };
   if (celebrator.monthBirthday == 2) { holiday = 'Дни рождения февраля 2025' };
+  if (celebrator.monthBirthday == 3) { holiday = 'Дни рождения марта 2025' };
 
   let cloneCelebrator = {
     seniorId: celebrator._id,
@@ -1049,7 +1049,7 @@ async function createCloneCelebratorNY(celebrator) {
       celebrator.dateBirthday +
       celebrator.monthBirthday +
       celebrator.yearBirthday,
-      dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    dateOfSignedConsent: celebrator.dateOfSignedConsent,
   };
   //console.log("special - " + celebrator["specialComment"]);
   //console.log("fullday - " + celebrator.fullDayBirthday);
@@ -1253,7 +1253,7 @@ function createCloneCelebratorGender(celebrator) {
       celebrator.dateBirthday +
       celebrator.monthBirthday +
       celebrator.yearBirthday,
-      dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    dateOfSignedConsent: celebrator.dateOfSignedConsent,
   };
   //console.log("special - " + celebrator["specialComment"]);
   //console.log("fullday - " + celebrator.fullDayBirthday);
@@ -1663,35 +1663,38 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
 
     //   let result = await checkAllNYFullness(req.body.nursingHome);
 
-    let houses = await House.find({dateLastUpdate: { $gt: new Date("2024-9-1") }} )
+    //   let houses = await House.find({dateLastUpdate: { $gt: new Date("2024-9-1") }} )
 
-/*     let houses = [
-      "ТВЕРЬ_КОНЕВА",
-      "МАСЛЯТКА",
-      "СУЗУН",
-      "СЯВА",
-      "РАДЮКИНО",
-      "НОВОСЛОБОДСК",
-      "МЕДЫНЬ",
-      "ИЛЬИНСКОЕ",
-            
-             "СТАРОЕ_ШАЙГОВО", 
-             "БИЙСК",
-             "КАНДАЛАКША",
-             "КАРДЫМОВО",
-             "СЫЗРАНЬ_ПОЖАРСКОГО",
-             "КУГЕЙСКИЙ",
-             "ПЕРВОМАЙСКИЙ",
-             "КУГЕСИ"  
+    /*     let houses = [
+          "ТВЕРЬ_КОНЕВА",
+          "МАСЛЯТКА",
+          "СУЗУН",
+          "СЯВА",
+          "РАДЮКИНО",
+          "НОВОСЛОБОДСК",
+          "МЕДЫНЬ",
+          "ИЛЬИНСКОЕ",
+                
+                 "СТАРОЕ_ШАЙГОВО", 
+                 "БИЙСК",
+                 "КАНДАЛАКША",
+                 "КАРДЫМОВО",
+                 "СЫЗРАНЬ_ПОЖАРСКОГО",
+                 "КУГЕЙСКИЙ",
+                 "ПЕРВОМАЙСКИЙ",
+                 "КУГЕСИ"  
+    
+        ]; */
+    /*     for (let house of houses) {
+          await checkAllNYFullness(house.nursingHome);
+          //await checkAllNYFullness(house);
+        } */
 
-    ]; */
-    for (let house of houses) {
-      await checkAllNYFullness(house.nursingHome);
-      //await checkAllNYFullness(house);
-    }
+
+    //let result = await checkAllNYFullness("СЛАВГОРОД");
 
 
-    // let result = await checkAllNYFullness("ПЛЕСЕЦК");
+    await makeDoubtAvailable();
 
     let result = "ok";
     console.log("4-check NY fullness " + result);
@@ -1706,6 +1709,18 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
   }
 });
 
+
+async function makeDoubtAvailable() {
+  let doubt = await Order.find({ isDisabled: false, isOverdue: false, isReturned: false, isAccepted: false, holiday: "Новый год 2025" });
+  for (let order of doubt) {
+    for (let house of order.lineItems) {
+      for (let celebrator of house.celebrators) {
+        let result = await NewYear.updateOne({ _id: celebrator.celebrator_id, plusAmount: 1, absent: false }, { $set: { secondTime: true, finished: false } });
+        console.log(result);
+      }
+    }
+  }
+}
 
 
 async function checkAllNYFullness(house) {
@@ -2094,12 +2109,12 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 1, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 2, isRestricted: false, nursingHome: house });
 
   console.log("seniors HB" + seniors.length);
   // let fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { fullData: 1 }); 
-  let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
-  //  let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+  // let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+  let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse HB" + fullHouse.length);
   let amount = 0;
   for (let senior of seniors) {
@@ -2111,8 +2126,8 @@ async function checkAllHBFullness(house) {
       let celebrator = await createCloneCelebrator(senior);
 
       console.log(celebrator);
-      let newCelebrator = await List.create(celebrator);
-      //let newCelebrator = await ListNext.create(celebrator);
+      // let newCelebrator = await List.create(celebrator);
+      let newCelebrator = await ListNext.create(celebrator);
       // let newCelebrator = await ListBefore.create(celebrator);
       console.log("added:");
       console.log(newCelebrator.fullData);
@@ -2120,8 +2135,8 @@ async function checkAllHBFullness(house) {
   }
 
 
-  fullHouse = await List.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
-  //fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
+  // fullHouse = await List.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
+  fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   // fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, {_id:1, fullData: 1 });
   for (let item of fullHouse) {
     //let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
@@ -2139,8 +2154,8 @@ async function checkAllHBFullness(house) {
       console.log(newCelebrator.fullData); */
 
 
-      await List.updateOne({ _id: item._id }, { $set: { absent: true } });
-      // await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
+      //await List.updateOne({ _id: item._id }, { $set: { absent: true } });
+      await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
       //  await ListBefore.updateOne({_id: item._id}, {$set: {absent: true}});
       console.log("deleted:");
       console.log(item.fullData);
@@ -2166,7 +2181,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
     // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2024", "23 февраля 2024"] });
-    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения февраля 2025"] });
+    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения марта 2025"] });
     let lineItemsM = [];
     for (let order of ordersM) {
       for (let item of order.lineItems) {
@@ -2480,7 +2495,7 @@ async function createCloneCelebrator9May(celebrator) {
       celebrator.dateBirthday +
       celebrator.monthBirthday +
       celebrator.yearBirthday,
-      dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    dateOfSignedConsent: celebrator.dateOfSignedConsent,
   };
 
   //console.log("special - " + celebrator["specialComment"]);
@@ -2669,41 +2684,44 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
   try {
 
     console.log("start");
-    /* let regionsAndHouses = await countRegionsAndHouses();
+    let regionsAndHouses = await countRegionsAndHouses();
     let birthdayAmount = await countHB();
     let nameDayAmount = await countND();
-    let seniorDayAmount = await countSD(); */
+    let newYearAmount = await countNY();
+    //let seniorDayAmount = await countSD(); 
     // let march8Amount = await countM8();
     //let easterAmount = await countEaster();
     //let may9Amount = await countMay9();
 
-    //  let amount = await countVolonteers();
+    let amount = await countVolonteers();
     //await report();
-    await reportListOfHouses();
+    //await reportListOfHouses();
     //await reportSources();
     //await overdue();
-   // await amountNY();
+    // await amountNY();
     // await spareRegions();
 
     let result = {
-      /*       housesAmount: regionsAndHouses.housesAmount - 2, //ШИПУНОВО_БОА, ПОБЕДИМ_БОА
-            regionsAmount: regionsAndHouses.regionsAmount,
-            plusesHBAmount: birthdayAmount.plusesAmount,
-            celebratorsHBAmount: birthdayAmount.celebratorsAmount,
-            plusesNDAmount: nameDayAmount.plusesAmount,
-            celebratorsNDAmount: nameDayAmount.celebratorsAmount,
-            plusesSDAmount: seniorDayAmount.plusesAmount,
-            celebratorsSDAmount: seniorDayAmount.celebratorsAmount, */
+      housesAmount: regionsAndHouses.housesAmount - 3, //ШИПУНОВО_БОА, ПОБЕДИМ_БОА, ПЕРВОМАЙСКИЙ_СОТРУДНИКИ
+      regionsAmount: regionsAndHouses.regionsAmount,
+      plusesHBAmount: birthdayAmount.plusesAmount,
+      celebratorsHBAmount: birthdayAmount.celebratorsAmount,
+      plusesNDAmount: nameDayAmount.plusesAmount,
+      celebratorsNDAmount: nameDayAmount.celebratorsAmount,
+      plusesNYAmount: newYearAmount.plusesAmount,
+      celebratorsNYAmount: newYearAmount.celebratorsAmount,
+      // plusesSDAmount: seniorDayAmount.plusesAmount,
+      // celebratorsSDAmount: seniorDayAmount.celebratorsAmount, 
       //plusesM8Amount: march8Amount.plusesAmount,
       //celebratorsM8Amount: march8Amount.celebratorsAmount,
       // plusesEasterAmount: easterAmount.plusesAmount,
       //celebratorsEasterAmount: easterAmount.celebratorsAmount,
       // plusesMay9Amount: may9Amount.plusesAmount,
       // celebratorsMay9Amount: may9Amount.celebratorsAmount,
-      /* 
-            volunteersAmount: amount.volunteersAmount,
-            schoolsAmount: amount.schoolsAmount,
-            institutesAmount: amount.institutesAmount, */
+
+      volunteersAmount: amount.volunteersAmount,
+      schoolsAmount: amount.schoolsAmount,
+      institutesAmount: amount.institutesAmount,
 
     }
     console.log("result");
@@ -2873,35 +2891,35 @@ async function report() {
 
 async function reportListOfHouses() {
   console.log("reportListOfHouses ");
-/*   const regions = [
-    "АМУРСКАЯ",
-    "АРХАНГЕЛЬСКАЯ",
-    "БАШКОРТОСТАН",
-    "БЕЛГОРОДСКАЯ",
-    "БРЯНСКАЯ",
-    "ВЛАДИМИРСКАЯ",
-    "ВОЛГОГРАДСКАЯ",
-    "ВОЛОГОДСКАЯ",
-    "ВОРОНЕЖСКАЯ",
-    "ИРКУТСКАЯ",
-    "КРАСНОДАРСКИЙ",
-    "КУРСКАЯ",
-    "НОВОСИБИРСКАЯ",
-    "ПЕНЗЕНСКАЯ",
-    "ПЕРМСКИЙ",
-    "РОСТОВСКАЯ",
-    "САМАРСКАЯ",
-    "САХАЛИНСКАЯ",
-    "СВЕРДЛОВСКАЯ",
-    "СМОЛЕНСКАЯ",
-    "СТАВРОПОЛЬСКИЙ",
-    "ТАМБОВСКАЯ",
-    "ТАТАРСТАН",
-    "ТВЕРСКАЯ",
-    "ТУЛЬСКАЯ",
-    "ТЮМЕНСКАЯ",
-
-  ] */
+  /*   const regions = [
+      "АМУРСКАЯ",
+      "АРХАНГЕЛЬСКАЯ",
+      "БАШКОРТОСТАН",
+      "БЕЛГОРОДСКАЯ",
+      "БРЯНСКАЯ",
+      "ВЛАДИМИРСКАЯ",
+      "ВОЛГОГРАДСКАЯ",
+      "ВОЛОГОДСКАЯ",
+      "ВОРОНЕЖСКАЯ",
+      "ИРКУТСКАЯ",
+      "КРАСНОДАРСКИЙ",
+      "КУРСКАЯ",
+      "НОВОСИБИРСКАЯ",
+      "ПЕНЗЕНСКАЯ",
+      "ПЕРМСКИЙ",
+      "РОСТОВСКАЯ",
+      "САМАРСКАЯ",
+      "САХАЛИНСКАЯ",
+      "СВЕРДЛОВСКАЯ",
+      "СМОЛЕНСКАЯ",
+      "СТАВРОПОЛЬСКИЙ",
+      "ТАМБОВСКАЯ",
+      "ТАТАРСТАН",
+      "ТВЕРСКАЯ",
+      "ТУЛЬСКАЯ",
+      "ТЮМЕНСКАЯ",
+  
+    ] */
 
   const regions = await Region.find({});
 
@@ -2912,7 +2930,8 @@ async function reportListOfHouses() {
     // console.log(listOfHouses);
 
     for (let house of listOfHouses) {
-      console.log(house.region + " + " + house.nursingHome + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes);
+      const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
+      console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes);
     }
     // console.log(region.name + " + " + amountOfSeniors);
 
@@ -2993,13 +3012,27 @@ async function countHB() {
     [
       {
         $match:
-          { holiday: "Дни рождения декабря 2024", isDisabled: false, isOverdue: false, isReturned: false }
+          { holiday: "Дни рождения ноября 2024", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
       }
     ]
   );
+
+  let orders = await Order.find({ holiday: "Дни рождения ноября 2024", isDisabled: false, isOverdue: false, isReturned: false });
+  let celebrators = new Set();
+  for (let order of orders) {
+    for (let lineItem of order.lineItems) {
+      for (let celebrator of lineItem.celebrators) {
+       celebrators.add(celebrator.celebrator_id);
+       //celebrators.add(celebrator.lastName);
+      }
+    }
+  }
+  console.log("celebrators.size");
+  console.log(celebrators.size);
+
 
   let celebratorsAmount = await ListBefore.aggregate(
     [
@@ -3056,14 +3089,58 @@ async function countND() {
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "Именины декабря 2024", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
       }
     ]
   );
+  let orders = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false });
+  let celebrators = new Set();
+  for (let order of orders) {
+    for (let lineItem of order.lineItems) {
+      for (let celebrator of lineItem.celebrators) {
+       // celebrators.add(celebrator.celebrator_id);
+       celebrators.add(celebrator.lastName);
+      }
+    }
+  }
+  console.log("celebrators.size");
+  console.log(celebrators.size);
+
+
   let celebratorsAmount = await NameDayBefore.aggregate(
+    [
+      {
+        $match:
+          { absent: false, plusAmount: { $ne: 0 } }
+      },
+      {
+        $group: { _id: null, count: { $sum: 1 } }
+      }
+    ]
+  );
+
+  return {
+    plusesAmount: plusesAmount[0].sum_val,
+    celebratorsAmount: celebratorsAmount[0].count
+  }
+}
+
+async function countNY() {
+
+  let plusesAmount = await Order.aggregate(
+    [
+      {
+        $match: { holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false }
+      },
+      {
+        $group: { _id: null, sum_val: { $sum: "$amount" } }
+      }
+    ]
+  );
+  let celebratorsAmount = await NewYear.aggregate(
     [
       {
         $match:
@@ -3221,9 +3298,10 @@ async function countVolonteers() {
   let setClients = new Set();
   let setInstitutes = new Set();
   let setSchools = new Set();
-  let ordersBirthday = await Order.find({ holiday: "Дни рождения декабря 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersNameDay = await Order.find({ holiday: "Именины декабря 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersBirthday = await Order.find({ holiday: "Дни рождения ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  //let ordersNY = await Order.find({ holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false, });
+  //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersMarch8 = await Order.find({ holiday: "8 марта 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersEaster = await Order.find({ holiday: "Пасха 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersMay9 = await Order.find({ holiday: "9 мая 2024", isDisabled: false, isOverdue: false, isReturned: false, });
@@ -3234,26 +3312,33 @@ async function countVolonteers() {
   for (let order of ordersNameDay) {
     setClients.add(order.contact);
   }
-  for (let order of ordersSeniorDay) {
-    setClients.add(order.contact);
-  }
-
-  /*   for (let order of ordersMarch8) {
+  /*
+    for (let order of ordersNY) {
       setClients.add(order.contact);
-    } 
-
-  for (let order of ordersEaster) {
-    setClients.add(order.contact);
-  }
-
-  for (let order of ordersMay9) {
-    setClients.add(order.contact);
-  }*/
+    }
+  
+  
+  
+    for (let order of ordersSeniorDay) {
+      setClients.add(order.contact);
+    }
+  
+       for (let order of ordersMarch8) {
+        setClients.add(order.contact);
+      } 
+  
+    for (let order of ordersEaster) {
+      setClients.add(order.contact);
+    }
+  
+    for (let order of ordersMay9) {
+      setClients.add(order.contact);
+    }*/
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения декабря 2024", "День пожилого человека 2024"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2024", "9 мая 2024"
-  let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения декабря 2024", "День пожилого человека 2024"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2024", "9 мая 2024"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения ноября 2024"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2024", "9 мая 2024"
+  let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения ноября 2024"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2024", "9 мая 2024"
 
 
 
@@ -3334,7 +3419,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения декабря 2024", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения января 2025", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
@@ -3970,7 +4055,7 @@ async function createCloneEasterCelebrator(celebrator) {
       celebrator.dateBirthday +
       celebrator.monthBirthday +
       celebrator.yearBirthday,
-      dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    dateOfSignedConsent: celebrator.dateOfSignedConsent,
   };
   //console.log("special - " + celebrator["specialComment"]);
   //console.log("fullday - " + celebrator.fullDayBirthday);
@@ -4557,7 +4642,7 @@ async function createCloneVeteransCelebrator(celebrator) {
       celebrator.dateBirthday +
       celebrator.monthBirthday +
       celebrator.yearBirthday,
-      dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    dateOfSignedConsent: celebrator.dateOfSignedConsent,
   };
 
   console.log(cloneCelebrator.seniorId);

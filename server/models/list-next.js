@@ -42,7 +42,7 @@ const listNextSchema = new Schema(
     dateOfSignedConsent : {type: Date, default: null },   
 
   },
-  { collection: "lists_february2025" }
+  { collection: "lists_march2025" }
  //{ collection: "lists_june2023" }
 );
 

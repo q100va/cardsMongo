@@ -39,7 +39,7 @@
                                             Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
                                         <mat-card-subtitle>Праздник:
-                                            <span class="header">{{holiday}} даты 16-31</span>
+                                            <span class="header">{{holiday}} даты 11-20</span>
                                         </mat-card-subtitle>
 
                                     </td>
@@ -196,7 +196,7 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Тип контакта*</mat-label>
-                                            <mat-select [(value)]="defaultType"
+                                            <mat-select (value) ="defaultType"
                                                 [formControl]="form.controls['contactType']"
                                                 (selectionChange)="getContacts(false)">
                                                 <mat-option *ngFor="let type of types" [value]="type">

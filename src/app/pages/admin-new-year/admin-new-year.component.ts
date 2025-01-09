@@ -47,7 +47,7 @@ export class AdminNewYearComponent implements OnInit {
       (res) => {
          this.houses = res["data"];
         //console.log(this.houses);
-        this.houses = this.houses.filter(
+/*         this.houses = this.houses.filter(
           (item) => item.statistic.newYear.plus0 != 0
           // || (item.statistic.newYear.plus0 == 0 && item.statistic.newYear.plus1 == 0 && item.statistic.newYear.plus2 == 0)
           // || item.nursingHome == "ФИЛИППОВСКОЕ"
@@ -57,7 +57,7 @@ export class AdminNewYearComponent implements OnInit {
           //item.statistic.newYear.plus0 != 0 && item.statistic.newYear.plus1 == 0 && item.statistic.newYear.forInstitute == 0 && item.noAddress == false && item.statistic.easter.amount > 200
           //item.statistic.newYear.plus0 != 0 && item.statistic.newYear.plus1 != 0 && item.statistic.newYear.forInstitute == 0 && item.noAddress == false
           //  && item.statistic.easter.amount < 100&&            item.statistic.easter.plus0 != 0&& item.statistic.newYear.forNavigators == 0
-        );
+        ); */
         
         /* 
         for (let house of this.houses){

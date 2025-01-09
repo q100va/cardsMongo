@@ -754,9 +754,9 @@ export class NewYearComponent implements OnInit {
             console.log(this.client.institutes.length);
 
             if (
-              
-                            (this.client.institutes.length > 0 ||
-              this.form.controls.amount.value > 20) && this.selectedInstitutes.length == 0 
+              false
+                         /*    (this.client.institutes.length > 0 ||
+              this.form.controls.amount.value > 20) && this.selectedInstitutes.length == 0  */
             ) {
               this.confirmationService.confirm({
                 message: "Вы уверены, что эта заявка не для колллектива?",
