@@ -151,8 +151,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     let period;
     if (newOrder.holiday == "Дни рождения февраля 2025") {
         period = {
-            "date1": 6,
-            "date2": 20,
+            "date1": 11,
+            "date2": 25,
             "isActive": true,
             "key": 0,
             "maxPlus": 2, //PLUSES
@@ -1000,7 +1000,16 @@ async function searchSenior(
         "УЛАН-УДЭ",
         "МУРМАНСК_СТАРОСТИНА",
         "ВЯЗНИКИ",
-        "КОСТРОМА_МАЛЫШКОВСКАЯ"
+        "КОСТРОМА_МАЛЫШКОВСКАЯ",
+        "СОСНОВКА",       
+        "ПЕНЗА",
+        "ТАВРИЧЕСКОЕ",
+        "ТАГАНРОГ",
+        "БИЙСК",
+        "БЛАГОВЕЩЕНСК_ЧАЙКОВСКОГО",
+        "ПОБЕДА",
+        "ИНСАР"
+
 
     ];
 
