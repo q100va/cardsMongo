@@ -20,20 +20,22 @@
         <div fxLayoutAlign="end center" fxFlex="85">
 
 
- <!--          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/new-year" mat-button>Новый год</button> -->
+          <!--          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/new-year" mat-button>Новый год</button> -->
 
           <!--     <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/senior-day" mat-button>День ПЧ</button>  
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/teacher-day" mat-button>День учителя</button>
          
-          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>-->
+         -->
           <!--             <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button>  -->
           <!--  <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
+          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>
+          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
 
-           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
-          <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/happy-birthday" mat-button>ДНИ РОЖДЕНИЯ</button>
-  <!--         <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/new-year" mat-button>НОВЫЙ ГОД</button> -->
+          <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/happy-birthday"
+            mat-button>ДНИ РОЖДЕНИЯ</button>
+          <!--         <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/new-year" mat-button>НОВЫЙ ГОД</button> -->
           <!--           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/easter" mat-button>Пасха</button>  -->
-<!--           <button *ngIf="isAdmin" class="navbar-link" routerLink="/orders/name-day" mat-button>Именины</button> -->
+          <!--           <button *ngIf="isAdmin" class="navbar-link" routerLink="/orders/name-day" mat-button>Именины</button> -->
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/birthday" mat-button>ДР</button>
           <button class="navbar-link" routerLink="/orders/find/{{userName}}" mat-button>Мои заявки</button>
         </div>
@@ -58,7 +60,7 @@
               <mat-icon color="primary">list</mat-icon>
               <span>Списки НГ</span>
             </button>
-           <button *ngIf="isAdmin" mat-menu-item (click)="redirectToSpringLists()">
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToSpringLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки 23 и 8</span>
             </button>
@@ -78,7 +80,7 @@
               <mat-icon color="primary">backup</mat-icon>
               <span>Обновление</span>
             </button>
-<!--             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToInstaOrders()">
+            <!--             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToInstaOrders()">
               <mat-icon color="primary">folder_open</mat-icon>
               <span>Группа заявок</span>
             </button> -->
