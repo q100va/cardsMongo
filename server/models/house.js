@@ -67,6 +67,8 @@ let housesSchema = new Schema(
         yangMen: { type: Number },
         yangWomen: { type: Number },
         amount: { type: Number },
+        amount23: { type: Number },
+        amount8: { type: Number },
         specialMenPlus: { type: Number },
         specialWomenPlus: { type: Number },
         oldMenPlus: { type: Number },

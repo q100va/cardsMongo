@@ -43,13 +43,13 @@ export class OrderDetailsComponent implements OnInit {
     "Именины марта 2025",
     "Именины марта 2025",
     "Именины февраля 2025",
-    "Новый год 2025",
-    /* "День учителя и дошкольного работника 2024",
+    "8 марта 2025",
+    "23 февраля 2025",
+
+    /*"Новый год 2025",
+     "День учителя и дошкольного работника 2024",
      "День семьи 2024",
-   
-    "8 марта 2024",
-    "23 февраля 2024",
-    "Пасха 2024",
+     "Пасха 2024",
     "9 мая 2024" */
   ];
   constructor(
@@ -60,14 +60,16 @@ export class OrderDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private cookieService: CookieService,
     private confirmationService: ConfirmationService,
-    private roleService: RoleService,
+    private roleService: RoleService
   ) {
     this.orderId = this.route.snapshot.paramMap.get("id");
     console.log(this.orderId);
-    this.roleService.findUserRole(this.cookieService.get("session_user")).subscribe((res) => {
-      this.userRole = res["data"];
-      console.log(this.userRole);
-    });
+    this.roleService
+      .findUserRole(this.cookieService.get("session_user"))
+      .subscribe((res) => {
+        this.userRole = res["data"];
+        console.log(this.userRole);
+      });
   }
 
   ngOnInit(): void {
@@ -97,7 +99,9 @@ export class OrderDetailsComponent implements OnInit {
       " " +
       (this.order.clientFirstName ? this.order.clientFirstName : "") +
       " " +
-      (this.order.clientPatronymic ? this.order.clientPatronymic : "") + " " + institutes;
+      (this.order.clientPatronymic ? this.order.clientPatronymic : "") +
+      " " +
+      institutes;
 
     this.contact =
       (this.order.email ? this.order.email : "") +
@@ -113,7 +117,7 @@ export class OrderDetailsComponent implements OnInit {
       lineItem.Female = 0;
       lineItem.Male = 0;
       for (let celebrator of lineItem.celebrators) {
-                       celebrator.index = i + 1;
+        celebrator.index = i + 1;
         i++;
         if (celebrator.gender == "Female") lineItem.Female++;
         if (celebrator.gender == "Male") lineItem.Male++;
@@ -129,7 +133,6 @@ export class OrderDetailsComponent implements OnInit {
     if (this.order.amount == 1) {
       this.isNotOnlyOne = false;
     }
-    
 
     console.log(
       "Conditions:" +
@@ -139,8 +142,8 @@ export class OrderDetailsComponent implements OnInit {
         this.isNotLate
     );
 
-    console.log(this.order.institutes.length > 0 );
-    console.log(this.userRole != 'dobroru' || this.userRole != 'admin');
+    console.log(this.order.institutes.length > 0);
+    console.log(this.userRole != "dobroru" || this.userRole != "admin");
   }
 
   editList() {

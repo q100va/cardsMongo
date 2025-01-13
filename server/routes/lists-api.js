@@ -1233,7 +1233,7 @@ function createCloneCelebratorGender(celebrator) {
     yearBirthday: celebrator.yearBirthday,
     gender: celebrator.gender,
     comment1: celebrator.comment1,
-    comment2: celebrator.veteran ? celebrator.veteran : celebrator.comment2,
+    comment2: celebrator.veteran && celebrator.gender == "Male"  ? celebrator.veteran : celebrator.comment2,
     linkPhoto: celebrator.linkPhoto,
     nameDay: celebrator.nameDay,
     dateNameDay: celebrator.dateNameDay,
@@ -1245,7 +1245,7 @@ function createCloneCelebratorGender(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: celebrator.gender == "Male" ? '23 февраля 2024' : '8 марта 2024',
+    holyday: celebrator.gender == "Male" ? '23 февраля 2025' : '8 марта 2025',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +
@@ -1254,6 +1254,7 @@ function createCloneCelebratorGender(celebrator) {
       celebrator.monthBirthday +
       celebrator.yearBirthday,
     dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    
   };
   //console.log("special - " + celebrator["specialComment"]);
   //console.log("fullday - " + celebrator.fullDayBirthday);
@@ -2180,7 +2181,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     }
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
-    // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2024", "23 февраля 2024"] });
+    // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2025", "23 февраля 2025"] });
     let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения марта 2025"] });
     let lineItemsM = [];
     for (let order of ordersM) {
@@ -3163,7 +3164,7 @@ async function countM8() {
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "8 марта 2024", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "8 марта 2025", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3302,7 +3303,7 @@ async function countVolonteers() {
   let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersNY = await Order.find({ holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  //let ordersMarch8 = await Order.find({ holiday: "8 марта 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  //let ordersMarch8 = await Order.find({ holiday: "8 марта 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersEaster = await Order.find({ holiday: "Пасха 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersMay9 = await Order.find({ holiday: "9 мая 2024", isDisabled: false, isOverdue: false, isReturned: false, });
 

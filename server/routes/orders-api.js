@@ -240,7 +240,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   //"Новый год 2025",
-                 // "Дни рождения января 2025",
+                  // "Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -252,8 +252,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isReturned: true,
               holiday: {
                 $in: [
-                // "Новый год 2025",
-                // "Дни рождения января 2025",
+                  // "Новый год 2025",
+                  // "Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -286,8 +286,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isOverdue: true,
               holiday: {
                 $in: [
-                 //"Новый год 2025",
-                 //"Дни рождения января 2025",
+                  //"Новый год 2025",
+                  //"Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -950,7 +950,7 @@ async function deletePluses(deletedOrder, full) {
                 }
               }
             } else {
-              if (deletedOrder.holiday == "8 марта 2024") {
+              if (deletedOrder.holiday == "8 марта 2025") {
                 for (let lineItem of deletedLineItems) {
                   for (let person of lineItem.celebrators) {
 
@@ -976,7 +976,7 @@ async function deletePluses(deletedOrder, full) {
                   }
                 }
               } else {
-                if (deletedOrder.holiday == "23 февраля 2024") {
+                if (deletedOrder.holiday == "23 февраля 2025") {
                   for (let lineItem of deletedLineItems) {
                     for (let person of lineItem.celebrators) {
 
@@ -1344,7 +1344,7 @@ async function restorePluses(updatedOrder) {
                 }
               }
             } else {
-              if (updatedOrder.holiday == "8 марта 2024") {
+              if (updatedOrder.holiday == "8 марта 2025") {
                 for (let lineItem of updatedOrder.lineItems) {
                   for (let person of lineItem.celebrators) {
                     await March8.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -1374,7 +1374,7 @@ async function restorePluses(updatedOrder) {
                   }
                 }
               } else {
-                if (updatedOrder.holiday == "23 февраля 2024") {
+                if (updatedOrder.holiday == "23 февраля 2025") {
                   for (let lineItem of updatedOrder.lineItems) {
                     for (let person of lineItem.celebrators) {
                       await February23.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -2437,11 +2437,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения февраля 2025") {
     period = {
-      "date1": 6,
+      "date1": 11,
       "date2": 15,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 1, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2810,7 +2810,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-    //  filter.dateOfSignedConsent = null;
+      //  filter.dateOfSignedConsent = null;
     };
 
     if (newOrder.filter.date1 || newOrder.filter.date2) {
@@ -3279,7 +3279,7 @@ async function searchSenior(
   // console.log("DATA");
   //console.log(data);
   if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
-   standardFilter.isReleased = false;
+    standardFilter.isReleased = false;
   }
 
   /*   console.log("data.filter.addressFilter");
@@ -4138,7 +4138,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
       filter.dateOfSignedConsent = null; //РУЧНАЯ
-     //filter.lastName = "Чернов";
+      //filter.lastName = "Чернов";
     };
 
     proportion.oneRegion = undefined; //РУЧНАЯ
@@ -4234,23 +4234,23 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
         data = await collectSeniorsNewYear(data, orderFilter);
       }
 
-    if (data.counter < proportion[category]) { //РУЧНАЯ
+      if (data.counter < proportion[category]) { //РУЧНАЯ
         data.maxPlus = 3;
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
- /* 
-
-      if (data.counter < proportion[category]) {
-        data.maxPlus = 4;
-
-        data = await collectSeniorsNewYear(data, orderFilter);
-      }
-       if (data.counter < proportion[category]) {
-              data.maxPlus = 5;
-      
-              data = await collectSeniorsNewYear(data, orderFilter);
-            }    */
+      /* 
+     
+           if (data.counter < proportion[category]) {
+             data.maxPlus = 4;
+     
+             data = await collectSeniorsNewYear(data, orderFilter);
+           }
+            if (data.counter < proportion[category]) {
+                   data.maxPlus = 5;
+           
+                   data = await collectSeniorsNewYear(data, orderFilter);
+                 }    */
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -4683,7 +4683,7 @@ async function deleteErrorPlusSpring(order_id, ...userName) {
         for (let person of order.temporaryLineItems) {
           seniors_ids.push(person.celebrator_id);
         }
-        if (order.holiday == "23 февраля 2024") {
+        if (order.holiday == "23 февраля 2025") {
 
           for (let id of seniors_ids) {
             let senior = await February23.findOne({ _id: id });
@@ -4708,7 +4708,7 @@ async function deleteErrorPlusSpring(order_id, ...userName) {
 
           await February23.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (order.holiday == "8 марта 2024") {
+        if (order.holiday == "8 марта 2025") {
 
           for (let id of seniors_ids) {
             let senior = await March8.findOne({ _id: id });
@@ -4938,7 +4938,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.filter.addressFilter == 'forKids') filter.yearBirthday = { $lte: 1963 };
     if (newOrder.filter.year1 || newOrder.filter.year2) {
       if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
-      if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2022, $gte: newOrder.filter.year1 };
+      if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 2025, $gte: newOrder.filter.year1 };
       /*       if (newOrder.filter.year1 > 1958 && newOrder.filter.addressFilter != 'onlySpecial') {
               proportion.yang = proportion.yang + proportion.oldWomen + proportion.oldMen;
               proportion.oldWomen = 0;
@@ -4946,6 +4946,13 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
+
+    if (newOrder.filter.onlyWithConcent) {
+      filter.dateOfSignedConsent = { $ne: null };
+    } else {
+      //  filter.dateOfSignedConsent = null;
+    };
+
     seniorsData = await fillOrderSpring(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
 
   }
@@ -5025,7 +5032,7 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
 
     if (proportion[category]) {
 
-      data.maxPlus = 3;// PLUSES
+      data.maxPlus = 1;// PLUSES
 
       data = await collectSeniorsSpring(data, orderFilter);
 
@@ -5133,7 +5140,7 @@ async function collectSeniorsSpring(data, orderFilter) {
 
 
 
-        if (data.holiday == "23 февраля 2024") {
+        if (data.holiday == "23 февраля 2025") {
           await February23.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
           let senior = await February23.findOne({ _id: result.celebrator_id });
           let newP = senior.plusAmount;
@@ -5154,7 +5161,7 @@ async function collectSeniorsSpring(data, orderFilter) {
           );
 
         }
-        if (data.holiday == "8 марта 2024") {
+        if (data.holiday == "8 марта 2025") {
           await March8.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
 
           let senior = await March8.findOne({ _id: result.celebrator_id });
@@ -5263,23 +5270,23 @@ async function searchSeniorSpring(
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
-  let houses = [
-
-    "КРЕСТЬЯНКА",
-    "БОЛЬШАЯ_ГЛУШИЦА",
-    "РОМАНОВКА",
-    "СТОЛЫПИНО",
-    "МЕЗЕНЬ",
-    "ЦЕЛИННОЕ",
-    "УСТЬ-МОСИХА",
-    "МОЛЬГИНО",
-    "ЖУКОВКА",
-    "МАЙСКОЕ",
-    "ЛАШМА",
-    "НОВЫЙ_ЕГОРЛЫК",
-
-
-  ]
+  /*   let houses = [
+  
+      "КРЕСТЬЯНКА",
+      "БОЛЬШАЯ_ГЛУШИЦА",
+      "РОМАНОВКА",
+      "СТОЛЫПИНО",
+      "МЕЗЕНЬ",
+      "ЦЕЛИННОЕ",
+      "УСТЬ-МОСИХА",
+      "МОЛЬГИНО",
+      "ЖУКОВКА",
+      "МАЙСКОЕ",
+      "ЛАШМА",
+      "НОВЫЙ_ЕГОРЛЫК",
+  
+  
+    ] */
 
   for (let plusAmount = 1; plusAmount <= maxPlusAmount; plusAmount++) {
     filter.plusAmount = { $lt: plusAmount };
@@ -5293,12 +5300,12 @@ async function searchSeniorSpring(
     // console.log(data.holiday);
 
 
-    if (data.holiday == "23 февраля 2024") {
+    if (data.holiday == "23 февраля 2025") {
       //console.log("celebrator23");
       //console.log(celebrator);
       celebrator = await February23.findOne(filter);
     }
-    if (data.holiday == "8 марта 2024") {
+    if (data.holiday == "8 марта 2025") {
       celebrator = await March8.findOne(filter);
     }
 
@@ -6319,15 +6326,15 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
         nursingHome: {
           $in: [
             "СЫЗРАНЬ_ПОЖАРСКОГО",
-/*             "САЛЬСК",
-            "ЯСНАЯ",
-            "ТАРА",
-            "САМОЛЮБОВО",
-            "БЕЛОГОРСК",
-            "МУРМАНСК_СТАРОСТИНА",
-            "ДАЛЬНЕГОРСК",
-            "ЗЕЛЕНЫЙ"
- */
+            /*             "САЛЬСК",
+                        "ЯСНАЯ",
+                        "ТАРА",
+                        "САМОЛЮБОВО",
+                        "БЕЛОГОРСК",
+                        "МУРМАНСК_СТАРОСТИНА",
+                        "ДАЛЬНЕГОРСК",
+                        "ЗЕЛЕНЫЙ"
+             */
 
 
 
@@ -8409,7 +8416,7 @@ async function fillOrderForInstitutes(
     filter.region = [filter.region, ...spareRegions.spareRegions];
     activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
 
-  } 
+  }
 
   /*   if (!filter.region && filter.addressFilter == 'any') {
       activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, noAddress: false, });
@@ -8546,20 +8553,20 @@ async function fillOrderForInstitutes(
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
       }).countDocuments();
     }
- /*     if (holiday == "Новый год 2025" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
-          count = await NewYear.find({
-            nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, //dateOfSignedConsent:  null //onlyForInstitute: true, 
-            // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
-          }).countDocuments();
-        }
-    
-        if (holiday == "Новый год 2025" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
-          count = await NewYear.find({
-            nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, //dateOfSignedConsent:  null //onlyForInstitute: true
-            // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 } // ИСПРАВИТЬ 
-          }).countDocuments();
-        }
-      */
+    /*     if (holiday == "Новый год 2025" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
+             count = await NewYear.find({
+               nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, //dateOfSignedConsent:  null //onlyForInstitute: true, 
+               // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+             }).countDocuments();
+           }
+       
+           if (holiday == "Новый год 2025" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
+             count = await NewYear.find({
+               nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, //dateOfSignedConsent:  null //onlyForInstitute: true
+               // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 } // ИСПРАВИТЬ 
+             }).countDocuments();
+           }
+         */
 
     if (filter.onlyWithConcent) {
       if (holiday == "Новый год 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
@@ -8587,6 +8594,68 @@ async function fillOrderForInstitutes(
       if (holiday == "Новый год 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await NewYear.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+    }
+
+    if (filter.onlyWithConcent) {
+      if (holiday == "23 февраля 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await February23.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "23 февраля 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await February23.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+    } else {
+      if (holiday == "23 февраля 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await February23.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "23 февраля 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await February23.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+    }
+
+    if (filter.onlyWithConcent) {
+      if (holiday == "8 марта 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await March8.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "8 марта 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await March8.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+    } else {
+      if (holiday == "8 марта 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await March8.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "8 марта 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await March8.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
@@ -8820,30 +8889,30 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
   if (holiday == "Новый год 2025" && (filter.noNames || filter.minNumberOfHouses)) {
 
-/*          if (filter.noNames) {
-          if (!region) {
-            seniorsData = await NewYear.find({
-              forInstitute: 0,
-              nursingHome: nursingHome,
-              absent: false,
-              plusAmount: { $lt: 3 },
-              _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-              finished: false, //dateOfSignedConsent: null,
-              //onlyForInstitute: true
-            }).limit(amount);
-          }
-          if (region) {
-            seniorsData = await NewYear.find({
-              nursingHome: nursingHome,
-              absent: false,
-              plusAmount: { $lt: 3 },
-              _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
-              //onlyForInstitute: true, 
-              forInstitute: 0,
-              finished: false, dateOfSignedConsent: null,
-            }).limit(amount);
-          }
-        }  */
+    /*          if (filter.noNames) {
+              if (!region) {
+                seniorsData = await NewYear.find({
+                  forInstitute: 0,
+                  nursingHome: nursingHome,
+                  absent: false,
+                  plusAmount: { $lt: 3 },
+                  _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                  finished: false, //dateOfSignedConsent: null,
+                  //onlyForInstitute: true
+                }).limit(amount);
+              }
+              if (region) {
+                seniorsData = await NewYear.find({
+                  nursingHome: nursingHome,
+                  absent: false,
+                  plusAmount: { $lt: 3 },
+                  _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                  //onlyForInstitute: true, 
+                  forInstitute: 0,
+                  finished: false, dateOfSignedConsent: null,
+                }).limit(amount);
+              }
+            }  */
 
 
     if (filter.minNumberOfHouses && filter.onlyWithConcent) {
@@ -8946,6 +9015,169 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
     }
   }
+
+  if ((holiday == "23 февраля 2025" || holiday == "8 марта 2025") && (filter.noNames || filter.minNumberOfHouses)) {
+
+    /*          if (filter.noNames) {
+              if (!region) {
+                seniorsData = await NewYear.find({
+                  forInstitute: 0,
+                  nursingHome: nursingHome,
+                  absent: false,
+                  plusAmount: { $lt: 3 },
+                  _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                  finished: false, //dateOfSignedConsent: null,
+                  //onlyForInstitute: true
+                }).limit(amount);
+              }
+              if (region) {
+                seniorsData = await NewYear.find({
+                  nursingHome: nursingHome,
+                  absent: false,
+                  plusAmount: { $lt: 3 },
+                  _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                  //onlyForInstitute: true, 
+                  forInstitute: 0,
+                  finished: false, dateOfSignedConsent: null,
+                }).limit(amount);
+              }
+            }  */
+
+
+    if (filter.minNumberOfHouses && filter.onlyWithConcent) {
+      /*   if (!region) { */
+
+      if (holiday == "23 февраля 2025") {
+        seniorsData = await February23.find({
+          dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 16 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
+      if (holiday == "8 марта 2025") {
+        seniorsData = await March8.find({
+          dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
+
+      /*          }
+               if (region) {
+                 seniorsData = await NewYear.find({
+                   dateOfSignedConsent: { $ne: null },
+                   nursingHome: nursingHome,
+                   absent: false,
+                   plusAmount: { $lt: 6 },
+                   _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                   //onlyForInstitute: true, forInstitute: 0, finished: false
+         
+         
+                 }).limit(amount);
+               } */
+    }
+
+    if (filter.minNumberOfHouses && !filter.onlyWithConcent) {
+      /*  if (!region) { */
+
+      if (holiday == "23 февраля 2025") {
+        seniorsData = await February23.find({
+          //dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
+
+      if (holiday == "8 марта 2025") {
+        seniorsData = await March8.find({
+          //dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
+      /*       }
+            if (region) {
+              seniorsData = await NewYear.find({
+                //dateOfSignedConsent: { $ne: null },
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 2 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //onlyForInstitute: true, forInstitute: 0, finished: false
+      
+      
+              }).limit(amount);
+            } */
+    }
+
+    console.log("seniorsData");
+    console.log(nursingHome);
+    console.log(seniorsData.length);
+
+
+    for (let senior of seniorsData) {
+      /*       if (contact == "@tterros") {
+              await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1, forNavigators: 1 } }, { upsert: false }); 
+            } else*/
+
+      if (holiday == "23 февраля 2025") {
+        await February23.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        senior = await February23.findOne({ _id: senior._id });
+      }
+      if (holiday == "8 марта 2025") {
+        await March8.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        senior = await March8.findOne({ _id: senior._id });
+      }      
+      let newP = senior.plusAmount;
+      let p = newP - 1;
+      let c = senior.category;
+      await House.updateOne(
+        {
+          nursingHome: senior.nursingHome
+        },
+        {
+          $inc: {
+            ["statistic.spring.plus" + p]: -1,
+            ["statistic.spring.plus" + newP]: 1,
+            ["statistic.spring." + c + "Plus"]: 1,
+          
+          }
+        }
+      );
+      /*       if (contact == "@tterros") {
+              await House.updateOne(
+                {
+                  nursingHome: senior.nursingHome
+                },
+                {
+                  $inc: {
+                    ["statistic.newYear.forNavigators"]: 1          
+                  }
+                }
+        
+              );
+            } */
+
+
+    }
+  }
+
 
 
   if (holiday == "Дни рождения марта 2025") {

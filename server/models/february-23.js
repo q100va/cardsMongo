@@ -40,10 +40,11 @@ const listSchema = new Schema(
     holyday: { type: String }, 
     absent: { type: Boolean, default: false },   
     secondTime: {type: Boolean, default: false},
-    thirdTime: {type: Boolean, default: false}
+    thirdTime: {type: Boolean, default: false},
+    dateOfSignedConsent : {type: Date, default: null },
 
   },
-  { collection: "february_23_2024" }
+  { collection: "february_23_2025" }
 );
 
 module.exports = mongoose.model("February23", listSchema);
