@@ -239,7 +239,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isOverdue: true,
               holiday: {
                 $in: [
-                 // "Новый год 2025",
+                  //"Новый год 2025",
+                 // "Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -251,7 +252,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isReturned: true,
               holiday: {
                 $in: [
-                //  "Новый год 2025",
+                // "Новый год 2025",
+                // "Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -284,7 +286,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isOverdue: true,
               holiday: {
                 $in: [
-                //  "Новый год 2025",
+                 //"Новый год 2025",
+                 //"Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -296,7 +299,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isReturned: true,
               holiday: {
                 $in: [
-                 // "Новый год 2025",
+                  //"Новый год 2025",
+                  //"Дни рождения января 2025",
                   "Дни рождения февраля 2025",
                   "Дни рождения марта 2025",
                   "Именины февраля 2025",
@@ -2434,7 +2438,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения февраля 2025") {
     period = {
       "date1": 6,
-      "date2": 10,
+      "date2": 15,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -3303,7 +3307,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen")) ? 2 : data.maxPlus; // || (standardFilter.category == "specialWomen") || (standardFilter.category == "oldMen")   PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen")) ? 3 : data.maxPlus; // || (standardFilter.category == "specialWomen") || (standardFilter.category == "oldMen")   PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;

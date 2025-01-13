@@ -9,6 +9,7 @@ import { Observable } from "rxjs";
 import { Role } from "../shared/interfaces/role.interface";
 import { Router } from "@angular/router";
 import { CookieService } from "ngx-cookie-service";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -25,12 +26,44 @@ export class SigninService {
   ) {}
 
   getToken() {
-   // console.log("this.token");
-   // console.log(this.token);
+    // console.log("this.token");
+    // console.log(this.token);
     return this.token;
   }
 
-  async logIn(userName, password): Promise<string> {
+  logIn(userName: string, password: string) {
+    return this.http
+      .post("/api/session/signin", {
+        userName: userName,
+        password: password,
+      })
+      .pipe(
+        map((res) => {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          this.cookieService.set("session_user", res["data"].user.userName, 1);
+          // Need to be able to send lastName and firstName to home page to display in menu.
+
+          sessionStorage.setItem(
+            "name",
+            `${res["data"].user.firstName} ${res["data"].user.lastName}`
+          );
+          this.token = res["data"].token;
+
+          const expiresInDuration = res["data"].expiresIn;
+          this.setAuthTimer(expiresInDuration);
+          const now = new Date();
+          const expirationDate = new Date(
+            now.getTime() + expiresInDuration * 1000
+          );
+          console.log(expirationDate);
+          this.saveAuthData(this.token, expirationDate);
+          
+          return "Success";
+        })
+      );
+  }
+
+  /* async logIn(userName, password): Promise<any> {
     this.http
       .post("/api/session/signin", {
         userName: userName,
@@ -69,16 +102,19 @@ export class SigninService {
             }
           }
           this.result = "Success";
+          
         },
         (err) => {
           console.log("error");
           console.log(err.error.msg);
           // this.errorMessage = err.error.msg;
           this.result = err.error.msg;
-        }
+         
+        },
+        () =>  {return this.result;}
       );
-      return this.result;
-  }
+     
+  } */
 
   autoAuthUser() {
     const authInformation = this.getAuthData();
@@ -96,7 +132,6 @@ export class SigninService {
 
   logout() {
     this.token = null;
-
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
     this.router.navigate(["/session/signin"]);
