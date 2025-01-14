@@ -110,6 +110,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { UploadNyComponent } from './pages/upload-ny/upload-ny.component';
 import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-year.component";
+import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-february23.component";
+import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
 
 @NgModule({
   declarations: [
@@ -168,7 +170,9 @@ import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-ye
     SeniorDayComponent,
     UploadHbComponent,
     UploadNyComponent,
-    DobroruNewYearComponent
+    DobroruNewYearComponent,
+    DobroruFebruary23Component,
+    DobroruMarch8Component,
 
   ],
   imports: [

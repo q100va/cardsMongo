@@ -4634,6 +4634,9 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
 
+    console.log("req.body.restrictedHouses");
+    console.log(req.body.restrictedHouses);
+
     finalResult = await createOrderSpring(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 

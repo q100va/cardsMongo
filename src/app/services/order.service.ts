@@ -190,7 +190,7 @@ export class OrderService {
     });
   }
 
-  createInstitutesOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createInstitutesOrder(newOrder: Order, prohibitedId, restrictedHouses): Observable<any> {
 
     console.log(" api/orders/forInstitutes");
     return this.http.post("/api/orders/forInstitutes/" + newOrder.amount, {
@@ -344,7 +344,9 @@ export class OrderService {
     });
   }
 
-  createOrderSpring(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createOrderSpring(newOrder: Order, prohibitedId, restrictedHouses): Observable<any> {
+    console.log("restrictedHouses");
+    console.log(restrictedHouses);    
     return this.http.post("/api/orders/spring/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,

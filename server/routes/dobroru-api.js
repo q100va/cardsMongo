@@ -1106,6 +1106,9 @@ async function searchSenior(
         "ШИПУНОВО",
         "ЭЛЕКТРОГОРСК",
         "ЯРЦЕВО",
+        "БИЙСК",
+        "ЖУКОВКА",
+
     ];
 
     /*  let usingHouses = [
@@ -1130,8 +1133,7 @@ async function searchSenior(
          "САРАТОВ_КЛОЧКОВА", "ЛАШМА", "УВАРОВО",
          "ТИМАШЕВСК", "ЧИСТОПОЛЬ", "ЧИТА_ТРУДА",
  
-     ]; */ //"БИЙСК","ЖУКОВКА",
-
+     ]; */ //
     let result = await searchSeniorHelper(
         kind,
         data,

@@ -63,6 +63,8 @@ import { UploadHbComponent } from "./pages/upload-hb/upload-hb.component";
 import { UploadNyComponent } from "./pages/upload-ny/upload-ny.component";
 import { ManagerGuard } from "./shared/manager.guard";
 import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-year.component";
+import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-february23.component";
+import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
 const routes: Routes = [
   {
     path: "",
@@ -193,6 +195,16 @@ const routes: Routes = [
       {
         path: "orders/dobroru/new-year",
         component: DobroruNewYearComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/dobroru/february-23",
+        component: DobroruFebruary23Component,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: "orders/dobroru/march-8",
+        component: DobroruMarch8Component,
         canActivate: [AuthGuard],
       },
       {
