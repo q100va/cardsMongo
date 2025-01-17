@@ -3025,7 +3025,7 @@ async function fillOrder(housesForInstitutes, proportion, period, order_id, filt
       if (data.counter < proportion[category]) {
         //if (orderFilter.date2 > orderFilter.date1 + 5) { }
         if (period.key == 5) {
-          data.maxPlus = period.maxPlus + 1;
+        //  data.maxPlus = period.maxPlus + 1;
           data.date1 = period.date1;
           data.date2 = period.date2;
         } else {
@@ -3034,7 +3034,7 @@ async function fillOrder(housesForInstitutes, proportion, period, order_id, filt
             data.date1 = period.date2 + 1;
             data.date2 = period.date2 + 1;
           } else {
-            data.maxPlus = period.key == 4 ? period.maxPlus + 1 : period.maxPlus;
+           // data.maxPlus = period.key == 4 ? period.maxPlus + 1 : period.maxPlus;
             data.date1 = period.date1 + 5;
             data.date2 = period.date2 + 5;
           }
@@ -3242,7 +3242,7 @@ async function searchSenior(
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },  //PLUSES
     // nursingHome: { $in: housesForInstitutes },
-    //firstName: "Тамара",
+    //firstName: "Нина",
     /* 
         lastName: {$in: [
           'Михай',
@@ -3307,7 +3307,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen") || (standardFilter.category == "oldMen") ||  (standardFilter.category == "yangMen")) ? 3 : data.maxPlus; // || (standardFilter.category == "specialWomen")    PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen") || (standardFilter.category == "oldMen") ||  (standardFilter.category == "yangMen")) ? 4 : data.maxPlus; // || (standardFilter.category == "specialWomen")    PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
