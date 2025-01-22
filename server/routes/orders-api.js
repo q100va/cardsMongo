@@ -2441,7 +2441,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 29,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 3, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -3279,7 +3279,7 @@ async function searchSenior(
   // console.log("DATA");
   //console.log(data);
   if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
-   // standardFilter.isReleased = false;
+    //standardFilter.isReleased = false;
   }
 
   /*   console.log("data.filter.addressFilter");
