@@ -2437,8 +2437,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения февраля 2025") {
     period = {
-      "date1": 6,
-      "date2": 20,
+      "date1": 21,
+      "date2": 29,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -3279,7 +3279,7 @@ async function searchSenior(
   // console.log("DATA");
   //console.log(data);
   if ((data.proportion.amount > 12 || data.proportion.amount < 5) && (!data.filter.nursingHome)) {
-    standardFilter.isReleased = false;
+   // standardFilter.isReleased = false;
   }
 
   /*   console.log("data.filter.addressFilter");
