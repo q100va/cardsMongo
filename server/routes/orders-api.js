@@ -5135,7 +5135,7 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
           console.log("data.filter");
     console.log(data.filter);
 
-      if (!data.filter.dateOfSignedConsent.$ne) {
+      if (!data.filter.dateOfSignedConsent?.$ne) {
         data.maxPlus = 2;
       }
 
