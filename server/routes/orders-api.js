@@ -5130,7 +5130,14 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
 
     if (proportion[category]) {
 
-      data.maxPlus = 1;// PLUSES
+      data.maxPlus = 1;// PLUSES1
+
+          console.log("data.filter");
+    console.log(data.filter);
+
+      if (!data.filter.dateOfSignedConsent.$ne) {
+        data.maxPlus = 2;
+      }
 
       data = await collectSeniorsSpring(data, orderFilter);
 
@@ -5171,6 +5178,9 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
 //set restrictions for searching
 
 async function collectSeniorsSpring(data, orderFilter) {
+
+    console.log("data.maxPlus");
+ console.log(data.maxPlus);
 
   let searchOrders = {};
 
