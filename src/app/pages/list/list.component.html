@@ -24,15 +24,15 @@
         <button class="submit" (click)=" generateNextBirthday()" mat-raised-button>Сформировать список ДР следующего
             месяца</button>
         <br /><br /><br />
-        <button class="submit" (click)="generateNameDay(2)" mat-raised-button>Сформировать список именин</button>
+        <button class="submit" (click)="generateNameDay(3)" mat-raised-button>Сформировать список именин</button>
         <button class="submit" (click)="showNameDayList($event)" mat-raised-button>Показать список именин</button>
-        <button class="submit" (click)="generateNameDay(3)" mat-raised-button>Сформировать список именин следующего
+        <button class="submit" (click)="generateNameDay(4)" mat-raised-button>Сформировать список именин следующего
             месяца</button>
         <br /><br /><br />
 
         <!--         <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
         <br /><br /><br /> -->
-        <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Отчет за ноябрь 2024</button>
+        <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Отчет за январь 2025</button>
         <br /><br /><br />
         <!--         <button class="submit" (click)="correctOrdersDates($event)" mat-raised-button>Скорректировать даты в заявках</button>
         <br /><br /><br /> -->
@@ -208,10 +208,10 @@
 
     <mat-card-content *ngIf="isShowAmountOfVolunteers">
         <p>в проекте принимают участие {{amountOfHouses}} интернатов из {{amountOfRegions}} регионов </p>
-        <p>с ДР октября поздравили {{celebratorsHBAmount}} чел., отправили {{plusesHBAmount}} откр. </p>
+        <p>с ДР января поздравили {{celebratorsHBAmount}} чел., отправили {{plusesHBAmount}} откр. </p><!-- 
         <p>с Именинами октября поздравили {{celebratorsNDAmount}} чел., отправили {{plusesNDAmount}} откр. </p>
                 <p>с Пасхой поздравили {{celebratorsEasterAmount}} чел., отправили  {{plusesEasterAmount}} откр. </p>
-               <p>с 9 мая поздравили {{celebratorsMay9Amount}} чел., отправили  {{plusesMay9Amount}} откр. </p> 
+               <p>с 9 мая поздравили {{celebratorsMay9Amount}} чел., отправили  {{plusesMay9Amount}} откр. </p>  -->
         <p>в поздравлениях приняли участие {{volunteersAmount}} поздравляющих, в т.ч. {{schoolsAmount}} образовательных
             учреждения и {{institutesAmount}} организаций
         </p>

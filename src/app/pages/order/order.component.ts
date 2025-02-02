@@ -54,7 +54,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения февраля 2025";
+  holiday: string = "Дни рождения марта 2025";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -509,10 +509,10 @@ export class OrderComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения февраля 2025";
+      this.holiday = "Дни рождения марта 2025";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения марта 2025";
+      this.holiday = "Дни рождения апреля 2025";
     }
   }
 
@@ -526,10 +526,10 @@ export class OrderComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения февраля 2025";
+      this.holiday = "Дни рождения марта 2025";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения января 2025";
+      this.holiday = "Дни рождения февраля 2025";
     }
   }
 
@@ -689,7 +689,7 @@ export class OrderComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
     this.showInstructionForSubscribers = false;
-    this.holiday = "Дни рождения февраля 2025";
+    this.holiday = "Дни рождения марта 2025";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -1103,49 +1103,8 @@ export class OrderComponent implements OnInit {
         onlyWithConcent: this.form.controls.onlyWithConcent.value,
       },
     };
-    if (this.holiday == "Дни рождения января 2025") {
-      this.holidayTitle = "Дни рождения 26-31 января 2025";
-      if (this.form.controls.date1.value && this.form.controls.date2.value) {
-        this.holidayTitle =
-          "Дни рождения " +
-          this.form.controls.date1.value +
-          "-" +
-          this.form.controls.date2.value +
-          " января 2025";
-      }
-      if (this.form.controls.date1.value && !this.form.controls.date2.value) {
-        this.holidayTitle =
-          "Дни рождения " +
-          this.form.controls.date1.value +
-          "-" +
-          "31 января 2025";
-      }
-      if (
-        !this.form.controls.date1.value &&
-        this.form.controls.date2.value &&
-        this.form.controls.date2.value > 26
-      ) {
-        this.holidayTitle =
-          "Дни рождения 26" +
-          "-" +
-          this.form.controls.date2.value +
-          " января 2025";
-      }
-      if (
-        !this.form.controls.date1.value &&
-        this.form.controls.date2.value &&
-        this.form.controls.date2.value <= 26
-      ) {
-        this.holidayTitle =
-          "Дни рождения 1" +
-          "-" +
-          this.form.controls.date2.value +
-          " января 2025";
-      }
-    }
-
     if (this.holiday == "Дни рождения февраля 2025") {
-      this.holidayTitle = "Дни рождения 21-29 февраля 2025";
+      this.holidayTitle = "Дни рождения 26-29 февраля 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
@@ -1164,10 +1123,10 @@ export class OrderComponent implements OnInit {
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value > 11
+        this.form.controls.date2.value > 26
       ) {
         this.holidayTitle =
-          "Дни рождения 11" +
+          "Дни рождения 26" +
           "-" +
           this.form.controls.date2.value +
           " февраля 2025";
@@ -1175,7 +1134,7 @@ export class OrderComponent implements OnInit {
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value <= 11
+        this.form.controls.date2.value <= 26
       ) {
         this.holidayTitle =
           "Дни рождения 1" +
@@ -1205,13 +1164,54 @@ export class OrderComponent implements OnInit {
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value > 1
+        this.form.controls.date2.value > 11
+      ) {
+        this.holidayTitle =
+          "Дни рождения 11" +
+          "-" +
+          this.form.controls.date2.value +
+          " марта 2025";
+      }
+      if (
+        !this.form.controls.date1.value &&
+        this.form.controls.date2.value &&
+        this.form.controls.date2.value <= 11
       ) {
         this.holidayTitle =
           "Дни рождения 1" +
           "-" +
           this.form.controls.date2.value +
           " марта 2025";
+      }
+    }
+
+    if (this.holiday == "Дни рождения апреля 2025") {
+      this.holidayTitle = "Дни рождения 1-5 апреля 2025";
+      if (this.form.controls.date1.value && this.form.controls.date2.value) {
+        this.holidayTitle =
+          "Дни рождения " +
+          this.form.controls.date1.value +
+          "-" +
+          this.form.controls.date2.value +
+          " апреля 2025";
+      }
+      if (this.form.controls.date1.value && !this.form.controls.date2.value) {
+        this.holidayTitle =
+          "Дни рождения " +
+          this.form.controls.date1.value +
+          "-" +
+          "30 апреля 2025";
+      }
+      if (
+        !this.form.controls.date1.value &&
+        this.form.controls.date2.value &&
+        this.form.controls.date2.value > 1
+      ) {
+        this.holidayTitle =
+          "Дни рождения 1" +
+          "-" +
+          this.form.controls.date2.value +
+          " апреля 2025";
       }
       if (
         !this.form.controls.date1.value &&
@@ -1222,7 +1222,7 @@ export class OrderComponent implements OnInit {
           "Дни рождения 1" +
           "-" +
           this.form.controls.date2.value +
-          " марта 2025";
+          " апреля 2025";
       }
     }
 
@@ -1309,7 +1309,7 @@ export class OrderComponent implements OnInit {
         "Ссылка на полную инструкцию: https://disk.yandex.ru/i/pIc9B0o9HKXGrQ \n\n"; */
       topForSubscribers =
         "Рассчитывайте, что срок доставки будет минимум 30 дней.\n" +
-        "Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью. Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, 'дни рождения февраля'.\n" +
+        "Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью. Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, 'Дни рождения марта'.\n" +
         "Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные, ценные, первого класса), но нам такой вариант совершенно не подходит, так как такие отправления с 99% вероятностью вернутся обратно.\n\n";
     }
 
