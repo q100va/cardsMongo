@@ -48,6 +48,7 @@ export class AdminSpringComponent implements OnInit {
     this.housesService.findActiveHouses().subscribe(
       (res) => {
         this.houses = res["data"];
+        this.houses = this.houses.filter(item => item.statistic.spring.amount8 > 100 && item.statistic.spring.amount8 < 131 && item.isReleased == false);   
         console.log(this.houses);
       },
       (err) => {
