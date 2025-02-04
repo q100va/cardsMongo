@@ -21,7 +21,7 @@ import { MatTableDataSource } from "@angular/material/table";
 export class HouseListComponent implements OnInit {
   house = [];
  
-  displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased", "edit", "delete"];//"isActive",
+  displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased"];//"isActive",, "edit", "delete"
 
   constructor(
     private dialog: MatDialog,
