@@ -159,6 +159,10 @@
                                                                     </mat-option>
                                                                 </mat-select>
                                                             </mat-form-field>
+                                                            <mat-checkbox [disabled]="!showChoiceSpareRegions"
+                                                                [formControl]="form.controls['spareRegions']">включая
+                                                                ближайшие регионы</mat-checkbox>
+
                                                         </td>
                                                     </tr>
                                                     <!--  <tr>

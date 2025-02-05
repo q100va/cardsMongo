@@ -90,6 +90,7 @@ export class DobroruComponent implements OnInit {
   selectedInstitutes = [];
   showFilter = true;
   isForInstitutes = false;
+  showChoiceSpareRegions = false;
 
   categories = [
     "образовательное учреждение",
@@ -228,6 +229,7 @@ export class DobroruComponent implements OnInit {
       date1: [null, [Validators.min(1), Validators.max(31)]],
       date2: [null, [Validators.min(1), Validators.max(31)]],
       region: [null],
+      spareRegions: [false],
       nursingHome: [null],
       maxOneHouse: [null, [Validators.min(1)]],
       maxNoAddress: [null, [Validators.min(1)]],
@@ -542,6 +544,8 @@ export class DobroruComponent implements OnInit {
     console.log(this.form.controls.nursingHome.value);
 
     if (!this.form.controls.region.value) {
+      this.showChoiceSpareRegions = false;
+      this.form.controls.spareRegions.setValue(false);
       console.log("no regions were chosen");
       console.log(this.form.controls.region.value);
       this.activeNursingHomes = this.nursingHomes;
@@ -549,7 +553,7 @@ export class DobroruComponent implements OnInit {
       this.activeNursingHomes = this.nursingHomes.filter(
         (item) => item.region == this.form.controls.region.value
       );
-
+      this.showChoiceSpareRegions = true;
       if (this.form.controls.nursingHome.value) {
         let activeNursingHome = this.nursingHomes.filter(
           (item) => item.nursingHome == this.form.controls.nursingHome.value
@@ -891,9 +895,12 @@ export class DobroruComponent implements OnInit {
         femaleAmount: this.form.controls.femaleAmount.value,
         maleAmount: this.form.controls.maleAmount.value,
         date1: this.form.controls.date1.value,
-        date2: this.form.controls.date2.value,
+        date2: this.form.controls.date2.value,    
         region: this.form.controls.region.value,
-        regions: [this.form.controls.region.value],
+        regions: this.form.controls.region.value
+          ? [this.form.controls.region.value]
+          : [],
+        spareRegions: this.form.controls.spareRegions.value,
         nursingHome: this.form.controls.nursingHome.value,
         maxOneHouse: 1, //this.form.controls.maxOneHouse.value,
         maxNoAddress: this.form.controls.maxNoAddress.value,
@@ -977,7 +984,10 @@ export class DobroruComponent implements OnInit {
         date1: null,
         date2: null,
         region: this.form.controls.region.value,
-        //regions: this.form.controls.region.value ? [this.form.controls.region.value] : [],
+        regions: this.form.controls.region.value
+          ? [this.form.controls.region.value]
+          : [],
+        spareRegions: this.form.controls.spareRegions.value,
         nursingHome: null,
         maxOneHouse: null,
         maxNoAddress: null,

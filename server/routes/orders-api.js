@@ -5039,6 +5039,19 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
 
     if (newOrder.filter.onlyWithPicture) filter.linkPhoto = { $ne: null };
     if (newOrder.filter.region) filter.region = newOrder.filter.region;
+    if (newOrder.filter.regions?.length > 0 && newOrder.filter.regions[0]) {
+      console.log("newOrder.filter.regions");
+      console.log(newOrder.filter.regions);
+      filter.region = { $in: newOrder.filter.regions };
+      if (newOrder.filter.spareRegions) {
+          let spareRegions = await Region.findOne({ name: newOrder.filter.regions[0] });
+          console.log("spareRegions");
+          console.log(spareRegions);
+          let filterRegions = [...newOrder.filter.regions, ...spareRegions.spareRegions];
+          filter.region = { $in: filterRegions };
+      }
+      proportion.oneHouse = undefined;
+  }
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
 
     if (newOrder.filter.addressFilter == 'noReleased' || newOrder.filter.addressFilter == 'onlySpecial' || newOrder.filter.addressFilter == 'forKids') filter.isReleased = false;
@@ -5355,6 +5368,7 @@ async function searchSeniorSpring(
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
     //firstName: "Надежда",
+    //lastName: "Артамонова",
     // secondTime: data.maxPlus > 1 ? true : false,
     // thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
