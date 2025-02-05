@@ -4767,6 +4767,7 @@ async function deleteErrorPlusSpring(order_id, ...userName) {
 // Create order
 async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
 
+
   let proportion = {};
 
   if (newOrder.filter.genderFilter != 'proportion') {
@@ -5155,6 +5156,11 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
     if (proportion[category]) {
 
       data.maxPlus = 1;// PLUSES1
+      
+      if (orderFilter.onlyWithConcent) {
+        data.maxPlus = 2;
+      }
+    
 
           console.log("data.filter");
     console.log(data.filter);
