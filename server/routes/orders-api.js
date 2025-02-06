@@ -3318,7 +3318,7 @@ async function searchSenior(
   //CHANGE!!!
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen") || (standardFilter.category == "oldMen") ||  (standardFilter.category == "yangMen")) ? 4 : data.maxPlus; // || (standardFilter.category == "specialWomen")    PLUSES1
+  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen") || (standardFilter.category == "oldMen") ||  (standardFilter.category == "yangMen")) ? 3 : data.maxPlus; // || (standardFilter.category == "specialWomen")    PLUSES1
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
