@@ -2558,11 +2558,16 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         oldMenAmount = Math.round(newOrder.amount * 0.2);
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = Math.round(newOrder.amount * 0.1);
+        if(newOrder.amount == 5) {
+          //yangWomenAmount = 0;
+          yangMenAmount = 0;
+        }
 
         // specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount;
 
         specialMenAmount = Math.round(newOrder.amount * 0.1);
         specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
+
 
       } else {
         specialWomenAmount = Math.ceil(newOrder.filter.maxNoAddress * 0.5)
