@@ -1233,7 +1233,7 @@ function createCloneCelebratorGender(celebrator) {
     yearBirthday: celebrator.yearBirthday,
     gender: celebrator.gender,
     comment1: celebrator.comment1,
-    comment2: celebrator.veteran && celebrator.gender == "Male"  ? celebrator.veteran : celebrator.comment2,
+    comment2: celebrator.veteran && celebrator.gender == "Male" ? celebrator.veteran : celebrator.comment2,
     linkPhoto: celebrator.linkPhoto,
     nameDay: celebrator.nameDay,
     dateNameDay: celebrator.dateNameDay,
@@ -1254,7 +1254,7 @@ function createCloneCelebratorGender(celebrator) {
       celebrator.monthBirthday +
       celebrator.yearBirthday,
     dateOfSignedConsent: celebrator.dateOfSignedConsent,
-    
+
   };
   //console.log("special - " + celebrator["specialComment"]);
   //console.log("fullday - " + celebrator.fullDayBirthday);
@@ -2707,10 +2707,10 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
       regionsAmount: regionsAndHouses.regionsAmount,
       plusesHBAmount: birthdayAmount.plusesAmount,
       celebratorsHBAmount: birthdayAmount.celebratorsAmount,
-     // plusesNDAmount: nameDayAmount.plusesAmount,
-     // celebratorsNDAmount: nameDayAmount.celebratorsAmount,
-     // plusesNYAmount: newYearAmount.plusesAmount,
-     // celebratorsNYAmount: newYearAmount.celebratorsAmount,
+      // plusesNDAmount: nameDayAmount.plusesAmount,
+      // celebratorsNDAmount: nameDayAmount.celebratorsAmount,
+      // plusesNYAmount: newYearAmount.plusesAmount,
+      // celebratorsNYAmount: newYearAmount.celebratorsAmount,
       // plusesSDAmount: seniorDayAmount.plusesAmount,
       // celebratorsSDAmount: seniorDayAmount.celebratorsAmount, 
       //plusesM8Amount: march8Amount.plusesAmount,
@@ -2923,21 +2923,31 @@ async function reportListOfHouses() {
     ] */
 
   const regions = await Region.find({});
+  let march8 = 0;
+  let feb23 = 0;
+
 
 
   for (let region of regions) {
-    const listOfHouses = await House.find({ isActive: true, region: region.name });
+    //const listOfHouses = await House.find({ isActive: true, region: region.name, noAddress: true, isReleased: false });
+    const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false, isReleased: false, dateLastUpdate: { $gt: new Date("2023-08-31"), $lt: new Date("2024-09-01") } });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
 
     for (let house of listOfHouses) {
-      const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
-      console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes);
+      /*       const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
+            console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes); */
+
+      const amountOfMen = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" }).count();
+      const amountOfWomen = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" }).count();
+      console.log(house.region + " + " + house.nursingHome + " + " + house.address + " + " + amountOfMen + " + " + amountOfWomen);
+      feb23 = feb23 + amountOfMen;
+      march8 = march8 + amountOfWomen;
     }
     // console.log(region.name + " + " + amountOfSeniors);
 
   }
-
+  console.log(feb23 + " + " + march8);
 
 
 
@@ -3026,8 +3036,8 @@ async function countHB() {
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
-       celebrators.add(celebrator.celebrator_id);
-       //celebrators.add(celebrator.lastName);
+        celebrators.add(celebrator.celebrator_id);
+        //celebrators.add(celebrator.lastName);
       }
     }
   }
@@ -3102,8 +3112,8 @@ async function countND() {
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
-       // celebrators.add(celebrator.celebrator_id);
-       celebrators.add(celebrator.lastName);
+        // celebrators.add(celebrator.celebrator_id);
+        celebrators.add(celebrator.lastName);
       }
     }
   }
@@ -3300,7 +3310,7 @@ async function countVolonteers() {
   let setInstitutes = new Set();
   let setSchools = new Set();
   let ordersBirthday = await Order.find({ holiday: "Дни рождения февраля 2025", isDisabled: false, isOverdue: false, isReturned: false, });
- // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
+  // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersNY = await Order.find({ holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersMarch8 = await Order.find({ holiday: "8 марта 2025", isDisabled: false, isOverdue: false, isReturned: false, });
@@ -3559,83 +3569,83 @@ async function checkAllSpringFullness(nursingHouse, holiday) {
   if (index != -1 && holiday == "february23") {
     return { amountAdded: null, amountDeleted: null };
   } */
-//let houses = [ 'СЛАВГОРОД', 'ШИПУНОВО', 'ШИПУНОВО_БОА', 'ПАНКРУШИХА' ];
-//let houses = [ 'САВИНСКИЙ', 'РАЙЧИХИНСК', 'БЛАГОВЕЩЕНСК_ТЕАТРАЛЬНАЯ', 'БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ' ];
+  //let houses = [ 'СЛАВГОРОД', 'ШИПУНОВО', 'ШИПУНОВО_БОА', 'ПАНКРУШИХА' ];
+  //let houses = [ 'САВИНСКИЙ', 'РАЙЧИХИНСК', 'БЛАГОВЕЩЕНСК_ТЕАТРАЛЬНАЯ', 'БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ' ];
 
-let seniorsWithConsents = await Senior.find({dateExit: null, dateOfSignedConsent: { '$ne': null }});
-let housesSet = new Set();
-for (let senior of seniorsWithConsents) {
-  housesSet.add(senior.nursingHome);
-}
-let houses = Array.from(housesSet);
-
-//let houses = await House.find({isActive: true});
-
-//holiday = "february23";
-holiday = "march8";
-
-for (let oneHouse of houses) {
-  let house = await House.findOne({ nursingHome: oneHouse });
-  console.log("house.nursingHome " + house.nursingHome);
-
-  await findAllSpringDoubles(house.nursingHome, holiday);
-  let Holiday
-  if (holiday == "february23") {
-    Holiday = require("../models/february-23");
-  } else {
-    Holiday = require("../models/march-8");
-  }
-  let seniors;
-  if (holiday == "february23") {
-    seniors = await Senior.find({ isReleased: false, isDisabled: false, dateExit: null, isRestricted: false, gender: "Male", nursingHome: house.nursingHome, dateOfSignedConsent: {$ne: null} });
-  } else {
-    seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house.nursingHome, gender: "Female", dateOfSignedConsent: {$ne: null} });
-  }
-
-
-  console.log("seniors " + seniors.length);
-  let fullHouse = await Holiday.find({ nursingHome: house.nursingHome, absent: false, dateOfSignedConsent: {$ne: null} }, { fullData: 1 }); //
-
-  for (let senior of seniors) {
-    senior.fullData = senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday;
-  }
-
-  console.log("fullHouse " + fullHouse.length);
-  let amount = 0;
-  for (let senior of seniors) {
-
-    let seniorIndex = fullHouse.findIndex(item => item.fullData == senior.fullData);
-    //console.log("seniorIndex " + seniorIndex);
-    if (seniorIndex == -1) {
-      amount++;
-      let celebrator = await createCloneCelebrator(senior);
-      let newCelebrator = await Holiday.create(celebrator);
-      console.log("added");
-      console.log(newCelebrator.fullData);
+  /*   let seniorsWithConsents = await Senior.find({ dateExit: null, dateOfSignedConsent: { '$ne': null } });
+    let housesSet = new Set();
+    for (let senior of seniorsWithConsents) {
+      housesSet.add(senior.nursingHome);
     }
-  }
-  console.log("All added");
-  console.log(amount);
+    let houses = Array.from(housesSet);
+   */
+  let houses = await House.find({ isActive: true, noAddress: true});
 
-  fullHouse = await Holiday.find({ nursingHome: house.nursingHome, absent: false, dateOfSignedConsent: {$ne: null} }, { fullData: 1, });
-  let count = 0;
-  for (let celebrator of fullHouse) {
-    let celebratorIndex = seniors.findIndex(item => item.fullData == celebrator.fullData);
-    if (celebratorIndex == -1) {
+ //holiday = "february23";
+ holiday = "march8";
 
-      await Holiday.updateOne({ fullData: celebrator.fullData }, { $set: { absent: true } });
-      count++;
-      console.log("deleted");
-      console.log(celebrator.fullData);
+  for (let oneHouse of houses) {
+    let house = await House.findOne({ nursingHome: oneHouse.nursingHome });
+    console.log("house.nursingHome " + house.nursingHome);
 
+    await findAllSpringDoubles(house.nursingHome, holiday);
+    let Holiday
+    if (holiday == "february23") {
+      Holiday = require("../models/february-23");
+    } else {
+      Holiday = require("../models/march-8");
     }
-  }
-  console.log("All deleted");
-  console.log(count);
+    let seniors;
+    if (holiday == "february23") {
+      seniors = await Senior.find({ isReleased: false, isDisabled: false, dateExit: null, isRestricted: false, gender: "Male", nursingHome: house.nursingHome });//, dateOfSignedConsent: { $ne: null }
+    } else {
+      seniors = await Senior.find({ isDisabled: false, dateExit: null, isRestricted: false, nursingHome: house.nursingHome, gender: "Female" });//, dateOfSignedConsent: { $ne: null }
+    }
 
-  await findAllNYDoubles(house.nursingHome, holiday);
-  await restoreStatistic(house.nursingHome, holiday);
-}
+
+    console.log("seniors " + seniors.length);
+    let fullHouse = await Holiday.find({ nursingHome: house.nursingHome, absent: false }, { fullData: 1 }); //, dateOfSignedConsent: { $ne: null }
+
+    for (let senior of seniors) {
+      senior.fullData = senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday;
+    }
+
+    console.log("fullHouse " + fullHouse.length);
+    let amount = 0;
+    for (let senior of seniors) {
+
+      let seniorIndex = fullHouse.findIndex(item => item.fullData == senior.fullData);
+      //console.log("seniorIndex " + seniorIndex);
+      if (seniorIndex == -1) {
+        amount++;
+        let celebrator = await createCloneCelebrator(senior);
+        let newCelebrator = await Holiday.create(celebrator);
+        console.log("added");
+        console.log(newCelebrator.fullData);
+      }
+    }
+    console.log("All added");
+    console.log(amount);
+
+    fullHouse = await Holiday.find({ nursingHome: house.nursingHome, absent: false,  }, { fullData: 1, });//dateOfSignedConsent: { $ne: null }
+    let count = 0;
+    for (let celebrator of fullHouse) {
+      let celebratorIndex = seniors.findIndex(item => item.fullData == celebrator.fullData);
+      if (celebratorIndex == -1) {
+
+        await Holiday.updateOne({ fullData: celebrator.fullData }, { $set: { absent: true } });
+        count++;
+        console.log("deleted");
+        console.log(celebrator.fullData);
+
+      }
+    }
+    console.log("All deleted");
+    console.log(count);
+
+    await findAllNYDoubles(house.nursingHome, holiday);
+    await restoreStatistic(house.nursingHome, holiday);
+  }
 
 
   return true;

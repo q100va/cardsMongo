@@ -2448,7 +2448,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения марта 2025") {
     period = {
       "date1": 6,
-      "date2": 10,
+      "date2": 15,
       "isActive": true,
       "key": 0,
       "maxPlus": 3, //PLUSES1
@@ -2491,7 +2491,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 5,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2,  //PLUSES1
+      "maxPlus": 3,  //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -3353,7 +3353,7 @@ async function searchSenior(
 
 
     // console.log("celebrator List");
-    //console.log(celebrator);
+  //  console.log(celebrator);
     if (celebrator) {
       //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
       //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
