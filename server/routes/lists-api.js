@@ -2928,25 +2928,98 @@ async function reportListOfHouses() {
 
 
 
-  for (let region of regions) {
-    //const listOfHouses = await House.find({ isActive: true, region: region.name, noAddress: true, isReleased: false });
-    const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false, isReleased: false, dateLastUpdate: { $gt: new Date("2023-08-31"), $lt: new Date("2024-09-01") } });
+   for (let region of regions) { 
+    const listOfHouses = await House.find({ isActive: true, region: region.name, noAddress: false, isReleased: false, nursingHome: {$nin: [
+      ' АРХАНГЕЛЬСК_ДАЧНАЯ ',
+' ПАПУЛИНО ',
+' КАШИРСКОЕ ',
+' ВОРОНЕЖ_ДНЕПРОВСКИЙ ',
+' ВЕРБИЛКИ ',
+' ХАТУНЬ ',
+' ЛИПИТИНО ',
+' ДУБНА ',
+' МАРЕВО ',
+' СТЕПУРИНО ',
+' ЖИТИЩИ ',
+' ЕКАТЕРИНБУРГ ',
+' АЛЕКСАНДРОВКА ',
+' ЕЛИЗАВЕТОВКА ',
+' КАМЕНОЛОМНИ ',
+' МЕЧЕТИНСКАЯ ',
+' ТУТАЕВ ',
+' ЧИКОЛА ',
+'БИЙСК',
+'МАРКОВА',
+'РАДЮКИНО',
+'КОСТРОМА_МАЛЫШКОВСКАЯ',
+'НОГИНСК',
+'НОВОСИБИРСК_ЖУКОВСКОГО',
+'ТВЕРЬ_КОНЕВА',
+'КАРДЫМОВО',
+'СО_ВЕЛИКИЕ_ЛУКИ',
+'РОСТОВ-НА-ДОНУ',
+'ТАГАНРОГ',
+'ПЕРВОМАЙСКИЙ',
+'ГАВРИЛОВ-ЯМ',
+'БОГРАД',
+'ПЛЕСЕЦК',
+'ВОЗНЕСЕНЬЕ',
+'ЕВПАТОРИЯ',
+'ЧИТА_ТРУДА',
+'ТИМАШЕВСК',
+'ПУЧЕЖ',
+'УЛЬЯНОВСК',
+'ИНОЗЕМЦЕВО',
+'ПЕНЗА',
+'МУРМАНСК_СТАРОСТИНА',
+
+    ]} });
+    //const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false, isReleased: false, dateLastUpdate: { $gt: new Date("2023-08-31"), $lt: new Date("2024-09-01") } });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
 
+/*     holiday = "february23";
+    //holiday = "march8";
+        let Holiday
+       if (holiday == "february23") {
+         Holiday = require("../models/february-23");
+       } else {
+         Holiday = require("../models/march-8");
+       }
+    */
+/*        let seniorsNoPluses1 = await February23.find({ absent: false, plusAmount: 0, noAddress: false});
+       let seniorsNoPluses2 = await March8.find({ absent: false, plusAmount: 0, noAddress: false});
+       let housesSet = new Set();
+       for (let senior of seniorsNoPluses1) {
+         housesSet.add(senior.nursingHome);
+       }
+       for (let senior of seniorsNoPluses2) {
+        housesSet.add(senior.nursingHome);
+      }
+       let listOfHouses = Array.from(housesSet);
+       console.log('listOfHouses');
+       console.log(listOfHouses); */
+     //let houses = await House.find({ isActive: true, noAddress: false});
+
     for (let house of listOfHouses) {
-      /*       const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
+     // house = await House.findOne({nursingHome: house});
+     /*  console.log('house');
+       console.log(house);
+            const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
             console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes); */
 
-      const amountOfMen = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" }).count();
-      const amountOfWomen = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" }).count();
-      console.log(house.region + " + " + house.nursingHome + " + " + house.address + " + " + amountOfMen + " + " + amountOfWomen);
+/*             const amountOfMen = await February23.find({ nursingHome: house.nursingHome, absent: false, plusAmount: 0, noAddress: false }).count();
+            const amountOfWomen = await March8.find({ nursingHome: house.nursingHome, absent: false, plusAmount: 0, noAddress: false }).count(); */
+
+    const amountOfMen = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" }).count();
+      const amountOfWomen = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" }).count(); 
+      console.log(house.region + "+" + house.nursingHome + "+" + house.address + "+" + amountOfMen + "+" + amountOfWomen);
       feb23 = feb23 + amountOfMen;
       march8 = march8 + amountOfWomen;
     }
     // console.log(region.name + " + " + amountOfSeniors);
 
-  }
+   } 
   console.log(feb23 + " + " + march8);
 
 
