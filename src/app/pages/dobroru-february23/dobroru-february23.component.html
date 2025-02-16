@@ -56,7 +56,7 @@
                                     <td align="left">
                                         <mat-form-field>
                                             <mat-label>Источник*</mat-label>
-                                            <mat-select [(value)]="defaultSource" [formControl]="form.controls.source">
+                                            <mat-select [value]="defaultSource" [formControl]="form.controls.source">
                                                 <mat-option value="dobroru">добро ру</mat-option>
                                                 <mat-option value="site">сайт фонда</mat-option>
                                                 <mat-option value="subscription">постоянные</mat-option>
@@ -218,7 +218,7 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Тип контакта*</mat-label>
-                                            <mat-select [(value)]="defaultType"
+                                            <mat-select [value]="defaultType"
                                                 [formControl]="form.controls['contactType']"
                                                 (selectionChange)="getContacts(false)">
                                                 <mat-option *ngFor="let type of types" [value]="type">
@@ -650,8 +650,7 @@
                                 ПРОСТЫМИ письмами (до 100 г).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Рассчитывайте, что срок доставки будет примерно 30 дней. Отправляйте открытки сразу, как
-                                только сможете.
+                                Постарайтесь отправить открытки в ближайшие дни.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя

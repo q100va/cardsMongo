@@ -35,7 +35,7 @@
                         <button matPrefix mat-icon-button (click)="searchClient(valueToSearch)" color="primary">
                             <mat-icon style="font-size: 20px;">search</mat-icon>
                         </button>
-                        <input appearance="fill" matInput type="text" [(ngModel)]="valueToSearch"
+                        <input appearance="fill" matInput type="text" [ngModel]="valueToSearch"
                             (change)="isShowFound = false" (keydown.enter)="searchClient(valueToSearch)">
 
                         <button *ngIf="valueToSearch" matSuffix mat-icon-button (click)="clearSearch($event)"
