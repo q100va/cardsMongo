@@ -3322,8 +3322,15 @@ async function searchSenior(
   let celebrator;
   //CHANGE!!!
   //let maxPlusAmount = 3;  
-  //let maxPlusAmount = 3;  
-  let maxPlusAmount = standardFilter.oldest || (standardFilter.category == "oldWomen" || (standardFilter.category == "yangWomen") || (standardFilter.category == "oldMen") ||  (standardFilter.category == "yangMen")) ? 3 : data.maxPlus; // || (standardFilter.category == "specialWomen")    PLUSES1
+  //let maxPlusAmount = 3; 
+  let maxPlusAmount = data.maxPlus;
+  if(standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen"){
+    maxPlusAmount = 4;
+  }
+  if(standardFilter.category == "oldMen" ||  standardFilter.category == "yangMen" || standardFilter.category == "specialWomen" ){
+    maxPlusAmount = 3;
+  }
+
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
     // filter.specialComment = /Юбилей/;
