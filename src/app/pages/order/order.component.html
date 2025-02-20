@@ -45,9 +45,9 @@
                                                     <mat-icon>navigate_before</mat-icon>
                                                 </button>
                                             </span>
-                                            <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}} (21-25 число по умолчанию)</span>
+                                            <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}} (1-5 число по умолчанию)</span>
                                             <span class="header" *ngIf="isNextMonth">{{holiday}} (1-5 число по умолчанию)</span>
-                                            <span class="header" *ngIf="isBeforeMonth">{{holiday}} (24-29 число по умолчанию)</span>
+                                            <span class="header" *ngIf="isBeforeMonth">{{holiday}} (21-25 число по умолчанию)</span>
                                             <span>
                                                 <button [disabled]="isNextMonth" mat-icon-button
                                                     matTooltip="Следующий месяц" color="primary" (click)=goNext($event)>
@@ -701,7 +701,7 @@
 
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
-                            Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, 'Дни рождения марта'.
+                            Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, 'Дни рождения апреля'.
                             Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
                             ценные, первого класса), но нам такой вариант совершенно не подходит,
                             так как такие отправления с 99% вероятностью вернутся обратно.
@@ -843,7 +843,7 @@
                             </li>
                             <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
-                                бандеролью. Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, "Дни рождения марта".
+                                бандеролью. Получателем указать интернат. На конверте рекомендуем указать название праздника. Например, "Дни рождения апреля".
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="isForInstitutes">
                                 Рассчитывайте, что срок доставки будет примерно 30 дней.

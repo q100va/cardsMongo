@@ -73,7 +73,7 @@ export class AddListsComponent implements OnInit {
   accepted_nameDay: string;
   accepted_dateNameDay: number;
   accepted_monthNameDay: number;
-  accepted_dateOfSignedConsent : Date;
+  accepted_dateOfSignedConsent: Date;
 
   allAccepted = [];
 
@@ -159,11 +159,35 @@ export class AddListsComponent implements OnInit {
     this.isStart = true;
 
     //this.compareLists(this.arrayOfLists[this.index], this.arrayOfLists[this.index][0].nursingHome);
+
+    for (let list of this.arrayOfLists) {
+      for (let senior of list) {
+        senior.isRestricted = false;
+        if (!senior.patronymic) {
+          senior.comment1 = "(отчество не указано)";
+        } else if (
+          senior.patronymic.endsWith("ич") ||
+          senior.patronymic.endsWith("оглы") ||
+          senior.patronymic.endsWith("Оглы")
+        ) {
+          senior.gender = "Male";
+        } else if (
+          senior.patronymic.endsWith("на") ||
+          senior.patronymic.endsWith("кызы") ||
+          senior.patronymic.endsWith("Кызы")
+        ) {
+          senior.gender = "Female";
+        }
+      }
+    }
+    console.log("this.arrayOfLists");
+    console.log(this.arrayOfLists);
   }
 
   compareLists(arrayOfLists, nursingHome) {
     //alert("WORKS");
-
+    console.log("WORKS");
+    console.log(arrayOfLists);
     this.seniorsService
       .compareListsBackend(arrayOfLists, nursingHome)
       .subscribe(
@@ -242,10 +266,9 @@ export class AddListsComponent implements OnInit {
   }
 
   acceptChanges(accepted, key, person) {
-   
     console.log("accepted.dateOfSignedConsent");
     console.log(accepted.dateOfSignedConsent);
-    
+
     const cloneAccepted = {
       id: accepted.id ? accepted.id : person.id,
       region: person.region,
@@ -282,7 +305,9 @@ export class AddListsComponent implements OnInit {
       monthNameDay: accepted.monthNameDay
         ? accepted.monthNameDay
         : person.monthNameDay,
-        dateOfSignedConsent: accepted.dateOfSignedConsent ? new Date(accepted.dateOfSignedConsent) : person.dateOfSignedConsent,
+      dateOfSignedConsent: accepted.dateOfSignedConsent
+        ? new Date(accepted.dateOfSignedConsent)
+        : person.dateOfSignedConsent,
     };
     this.allAccepted.push(cloneAccepted);
     this.resultOfCompare.changed.splice(
