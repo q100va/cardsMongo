@@ -243,6 +243,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
+                  "23 февраля 2025",
+                  "8 марта 2025"
       /*             "Именины февраля 2025",
                   "Именины марта 2025" */
                 ]
@@ -256,6 +258,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
+                  "23 февраля 2025",
+                  "8 марта 2025"
           /*         "Именины февраля 2025",
                   "Именины марта 2025" */
                 ]
@@ -290,6 +294,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
+                  "23 февраля 2025",
+                  "8 марта 2025"
             /*       "Именины февраля 2025",
                   "Именины марта 2025" */
                 ]
@@ -303,6 +309,8 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
+                  "23 февраля 2025",
+                  "8 марта 2025"
           /*         "Именины февраля 2025",
                   "Именины марта 2025" */
                 ]
@@ -2353,8 +2361,8 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
       isCompleted: false
     };
 
-    // console.log("order.dateOfOrder");
-    // console.log(req.body.dateOfOrder);
+     console.log("newOrder.filter");
+     console.log(newOrder.filter);
     // console.log(newOrder.dateOfOrder);
 
     let client = await Client.findOne({ _id: newOrder.clientId });
@@ -2822,10 +2830,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
           }
         } */
 
-    if (newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) {
+    if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      //  filter.dateOfSignedConsent = null;
+      filter.dateOfSignedConsent = null;
     };
 
     if (newOrder.filter.date1 || newOrder.filter.date2) {

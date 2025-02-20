@@ -1021,7 +1021,10 @@ async function searchSenior(
         "БИЙСК",
         "БЛАГОВЕЩЕНСК_ЧАЙКОВСКОГО",
         "ПОБЕДА",
-        "ИНСАР"
+        "ИНСАР",
+        "МАРЕВО",
+        "МОНТАЖНЫЙ",
+        "ПЛАСТУН"
 
 
     ];
@@ -1207,6 +1210,7 @@ async function searchSeniorHelper(
         dateBirthday: { $gte: data.date1, $lte: data.date2 },
         absent: { $ne: true },
         patronymic: { $ne: "" },
+        dateOfSignedConsent: null,
         //firstName: "Светлана"
     };
     standardFilter.isReleased = false;
