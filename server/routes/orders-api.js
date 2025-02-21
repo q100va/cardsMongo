@@ -8922,6 +8922,37 @@ async function fillOrderForInstitutes(
       }
     }
 
+    if (filter.onlyWithConcent) {
+      if (holiday == "Пасха 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await Easter.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "Пасха 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await Easter.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+    } else {
+      if (holiday == "Пасха 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await Easter.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "Пасха 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await Easter.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+    }
+
 
     console.log("house.nursingHome");
     console.log(house.nursingHome);
