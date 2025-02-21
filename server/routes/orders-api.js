@@ -244,9 +244,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
                   "23 февраля 2025",
-                  "8 марта 2025"
-      /*             "Именины февраля 2025",
-                  "Именины марта 2025" */
+                  "8 марта 2025",
+                  "Пасха 2025",
+                  /*             "Именины февраля 2025",
+                              "Именины марта 2025" */
                 ]
               }
             },
@@ -259,9 +260,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
                   "23 февраля 2025",
-                  "8 марта 2025"
-          /*         "Именины февраля 2025",
-                  "Именины марта 2025" */
+                  "8 марта 2025",
+                  "Пасха 2025",
+                  /*         "Именины февраля 2025",
+                          "Именины марта 2025" */
                 ]
               }
             }
@@ -295,9 +297,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
                   "23 февраля 2025",
-                  "8 марта 2025"
-            /*       "Именины февраля 2025",
-                  "Именины марта 2025" */
+                  "8 марта 2025",
+                  "Пасха 2025",
+                  /*       "Именины февраля 2025",
+                        "Именины марта 2025" */
                 ]
               }
             },
@@ -310,9 +313,10 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
                   "23 февраля 2025",
-                  "8 марта 2025"
-          /*         "Именины февраля 2025",
-                  "Именины марта 2025" */
+                  "8 марта 2025",
+                  "Пасха 2025",
+                  /*         "Именины февраля 2025",
+                          "Именины марта 2025" */
                 ]
               }
             }
@@ -456,11 +460,12 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "Именины февраля 2025",
-                    "Именины марта 2025"
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
                   ]
                 }
               },
@@ -468,11 +473,12 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "Именины февраля 2025",
-                    "Именины марта 2025"
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
                   ]
                 }
               }
@@ -497,11 +503,12 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "Именины февраля 2025",
-                    "Именины марта 2025"
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
                   ]
                 }
               },
@@ -509,11 +516,12 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "Именины февраля 2025",
-                    "Именины марта 2025"
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
                   ]
                 }
               }
@@ -580,12 +588,15 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                   // "Новый год 2025",
+                    // "Новый год 2025",
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-              /*       "Именины февраля 2025",
-                    "Именины марта 2025" */
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
+                    /*       "Именины февраля 2025",
+                          "Именины марта 2025" */
                   ]
                 }
               },
@@ -593,12 +604,15 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                   // "Новый год 2025",
+                    // "Новый год 2025",
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-          /*           "Именины февраля 2025",
-                    "Именины марта 2025" */
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
+                    /*           "Именины февраля 2025",
+                              "Именины марта 2025" */
                   ]
                 }
               }
@@ -624,12 +638,15 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   isOverdue: true,
                   holiday: {
                     $in: [
-                   //   "Новый год 2025",
-                   "Дни рождения марта 2025",
+                      //   "Новый год 2025",
+                      "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-           /*            "Именины февраля 2025",
-                      "Именины марта 2025" */
+                      "23 февраля 2025",
+                      "8 марта 2025",
+                      "Пасха 2025",
+                      /*            "Именины февраля 2025",
+                                 "Именины марта 2025" */
                     ]
                   }
                 },
@@ -637,12 +654,15 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   isReturned: true,
                   holiday: {
                     $in: [
-                   //   "Новый год 2025",
-                   "Дни рождения марта 2025",
+                      //   "Новый год 2025",
+                      "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-          /*             "Именины февраля 2025",
-                      "Именины марта 2025" */
+                      "23 февраля 2025",
+                      "8 марта 2025",
+                      "Пасха 2025",
+                      /*             "Именины февраля 2025",
+                                  "Именины марта 2025" */
                     ]
                   }
                 }
@@ -723,12 +743,15 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                   // "Новый год 2025",
-                   "Дни рождения марта 2025",
+                    // "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-          /*           "Именины февраля 2025",
-                    "Именины марта 2025" */
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
+                    /*           "Именины февраля 2025",
+                              "Именины марта 2025" */
                   ]
                 }
               },
@@ -736,12 +759,15 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                   // "Новый год 2025",
-                   "Дни рождения марта 2025",
+                    // "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-            /*         "Именины февраля 2025",
-                    "Именины марта 2025" */
+                    "23 февраля 2025",
+                    "8 марта 2025",
+                    "Пасха 2025",
+                    /*         "Именины февраля 2025",
+                            "Именины марта 2025" */
                   ]
                 }
               }
@@ -767,12 +793,15 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   isOverdue: true,
                   holiday: {
                     $in: [
-                     // "Новый год 2025",
-                     "Дни рождения марта 2025",
+                      // "Новый год 2025",
+                      "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-             /*          "Именины февраля 2025",
-                      "Именины марта 2025" */
+                      "23 февраля 2025",
+                      "8 марта 2025",
+                      "Пасха 2025",
+                      /*          "Именины февраля 2025",
+                               "Именины марта 2025" */
                     ]
                   }
                 },
@@ -780,12 +809,15 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   isReturned: true,
                   holiday: {
                     $in: [
-                     // "Новый год 2025",
-                     "Дни рождения марта 2025",
+                      // "Новый год 2025",
+                      "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-        /*               "Именины февраля 2025",
-                      "Именины марта 2025" */
+                      "23 февраля 2025",
+                      "8 марта 2025",
+                      "Пасха 2025",
+                      /*               "Именины февраля 2025",
+                                    "Именины марта 2025" */
                     ]
                   }
                 }
@@ -1033,7 +1065,7 @@ async function deletePluses(deletedOrder, full) {
                         }
                       }
                     } else {
-                      if (deletedOrder.holiday == "Пасха 2024") {
+                      if (deletedOrder.holiday == "Пасха 2025") {
                         for (let lineItem of deletedLineItems) {
                           for (let person of lineItem.celebrators) {
 
@@ -1121,12 +1153,12 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                  //  "Новый год 2025",
-                  "Дни рождения марта 2025",
+                    //  "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-            /*         "Именины февраля 2025",
-                    "Именины марта 2025" */
+                    /*         "Именины февраля 2025",
+                            "Именины марта 2025" */
                   ]
                 }
               },
@@ -1134,12 +1166,12 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                   // "Новый год 2025",
-                   "Дни рождения марта 2025",
+                    // "Новый год 2025",
+                    "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-             /*        "Именины февраля 2025",
-                    "Именины марта 2025" */
+                    /*        "Именины февраля 2025",
+                           "Именины марта 2025" */
                   ]
                 }
               }
@@ -1436,7 +1468,7 @@ async function restorePluses(updatedOrder) {
                         }
                       }
                     } else {
-                      if (updatedOrder.holiday == "Пасха 2024") {
+                      if (updatedOrder.holiday == "Пасха 2025") {
                         for (let lineItem of updatedOrder.lineItems) {
                           for (let person of lineItem.celebrators) {
                             console.log("person");
@@ -2361,8 +2393,8 @@ router.post("/birthday/:amount", checkAuth, async (req, res) => {
       isCompleted: false
     };
 
-     console.log("newOrder.filter");
-     console.log(newOrder.filter);
+    console.log("newOrder.filter");
+    console.log(newOrder.filter);
     // console.log(newOrder.dateOfOrder);
 
     let client = await Client.findOne({ _id: newOrder.clientId });
@@ -2566,7 +2598,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         oldMenAmount = Math.round(newOrder.amount * 0.2);
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = Math.round(newOrder.amount * 0.1);
-        if(newOrder.amount == 5) {
+        if (newOrder.amount == 5) {
           //yangWomenAmount = 0;
           yangMenAmount = 0;
         }
@@ -3048,7 +3080,7 @@ async function fillOrder(housesForInstitutes, proportion, period, order_id, filt
       if (data.counter < proportion[category]) {
         //if (orderFilter.date2 > orderFilter.date1 + 5) { }
         if (period.key == 5) {
-        //  data.maxPlus = period.maxPlus + 1;
+          //  data.maxPlus = period.maxPlus + 1;
           data.date1 = period.date1;
           data.date2 = period.date2;
         } else {
@@ -3057,7 +3089,7 @@ async function fillOrder(housesForInstitutes, proportion, period, order_id, filt
             data.date1 = period.date2 + 1;
             data.date2 = period.date2 + 1;
           } else {
-           // data.maxPlus = period.key == 4 ? period.maxPlus + 1 : period.maxPlus;
+            // data.maxPlus = period.key == 4 ? period.maxPlus + 1 : period.maxPlus;
             data.date1 = period.date1 + 5;
             data.date2 = period.date2 + 5;
           }
@@ -3260,11 +3292,11 @@ async function searchSenior(
       data.filter */
 
 
-      //data.restrictedHouses= [];
+  //data.restrictedHouses= [];
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },  //PLUSES
-   // nursingHome: { $in: ["БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ"] },//, , , "СЫЗРАНЬ_КИРОВОГРАДСКАЯ""ЕЛАТЬМА""ГРЯЗОВЕЦ"
+    // nursingHome: { $in: ["БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ"] },//, , , "СЫЗРАНЬ_КИРОВОГРАДСКАЯ""ЕЛАТЬМА""ГРЯЗОВЕЦ"
     // nursingHome: { $in: housesForInstitutes },    
     //firstName: "Нина",
     /* 
@@ -3332,12 +3364,12 @@ async function searchSenior(
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3; 
   let maxPlusAmount = data.maxPlus; //PLUSES1
-   if(standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen"){
+  if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
     maxPlusAmount = 4;
   }
-  if(standardFilter.category == "oldMen" ||  standardFilter.category == "yangMen"  ){//|| standardFilter.category == "specialWomen"
+  if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
     maxPlusAmount = 3;
-  } 
+  }
 
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
@@ -3368,7 +3400,7 @@ async function searchSenior(
 
 
     // console.log("celebrator List");
-  //  console.log(celebrator);
+    //  console.log(celebrator);
     if (celebrator) {
       //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
       //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
@@ -4677,7 +4709,9 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
     console.log(e);
     let text = 'Обратитесь к администратору. Заявка не сформирована.';
     if (!finalResult) {
-      let answer = await deleteErrorPlusSpring(false, req.body.userName);
+      let answer;
+      if (newOrder.holiday == "23 февраля 2025" || newOrder.holiday == "8 марта 2025") { answer = await deleteErrorPlusSpring(false, req.body.userName) };
+      if (newOrder.holiday == "Пасха 2025") { answer = await deleteErrorPlusEaster(false, req.body.userName) };
       console.log("answer");
       console.log(answer);
       if (!answer) {
@@ -4834,54 +4868,113 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
         yangMenAmount = Math.round(newOrder.amount * 0.1);
         specialWomenAmount = Math.round(newOrder.amount * 0.1);
         specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialWomenAmount;
+        if (newOrder.holiday != "Пасха 2025") {
+          if (newOrder.amount == 4) {
+            oldWomenAmount = 1;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 1;
+            specialMenAmount = 1;
+          }
+          if (newOrder.amount == 5) {
+            oldWomenAmount = 1;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 1;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 6) {
+            oldWomenAmount = 1;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 2;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 7) {
+            oldWomenAmount = 2;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 2;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 8) {
+            oldWomenAmount = 3;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 2;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 9) {
+            oldWomenAmount = 3;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 3;
+            specialMenAmount = 2;
+          }
+        }
 
-        if (newOrder.amount == 4) {
-          oldWomenAmount = 1;
-          oldMenAmount = 1;
-          yangWomenAmount = 0;
-          yangMenAmount = 0;
-          specialWomenAmount = 1;
-          specialMenAmount = 1;
-        }
-        if (newOrder.amount == 5) {
-          oldWomenAmount = 1;
-          oldMenAmount = 1;
-          yangWomenAmount = 0;
-          yangMenAmount = 0;
-          specialWomenAmount = 1;
-          specialMenAmount = 2;
-        }
-        if (newOrder.amount == 6) {
-          oldWomenAmount = 1;
-          oldMenAmount = 1;
-          yangWomenAmount = 0;
-          yangMenAmount = 0;
-          specialWomenAmount = 2;
-          specialMenAmount = 2;
-        }
-        if (newOrder.amount == 7) {
-          oldWomenAmount = 2;
-          oldMenAmount = 1;
-          yangWomenAmount = 0;
-          yangMenAmount = 0;
-          specialWomenAmount = 2;
-          specialMenAmount = 2;
-        }
-        if (newOrder.amount == 8) {
-          oldWomenAmount = 3;
-          oldMenAmount = 1;
-          yangWomenAmount = 0;
-          yangMenAmount = 0;
-          specialWomenAmount = 2;
-          specialMenAmount = 2;
-        }
-        if (newOrder.amount == 9) {
-          oldWomenAmount = 3;
-          oldMenAmount = 1;
-          yangWomenAmount = 0;
-          yangMenAmount = 0;
-          specialWomenAmount = 3;
-          specialMenAmount = 2;
+        if (newOrder.holiday == "Пасха 2025") {
+          oldWomenAmount = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+          oldMenAmount = Math.round(newOrder.amount * 0.2);
+          yangWomenAmount = Math.round(newOrder.amount * 0.1);
+          yangMenAmount = Math.round(newOrder.amount * 0.1);
+          specialWomenAmount = Math.round(newOrder.amount * 0.1);
+          specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialWomenAmount;
+
+          if (newOrder.amount == 4) {
+            oldWomenAmount = 1;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 1;
+            specialMenAmount = 1;
+          }
+          if (newOrder.amount == 5) {
+            oldWomenAmount = 1;
+            oldMenAmount = 2;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 1;
+            specialMenAmount = 1;
+          }
+          if (newOrder.amount == 6) {
+            oldWomenAmount = 2;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 1;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 7) {
+            oldWomenAmount = 2;
+            oldMenAmount = 2;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 1;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 8) {
+            oldWomenAmount = 3;
+            oldMenAmount = 1;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 2;
+            specialMenAmount = 2;
+          }
+          if (newOrder.amount == 9) {
+            oldWomenAmount = 3;
+            oldMenAmount = 2;
+            yangWomenAmount = 0;
+            yangMenAmount = 0;
+            specialWomenAmount = 2;
+            specialMenAmount = 2;
+          }
         }
 
 
@@ -5065,14 +5158,14 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
       console.log(newOrder.filter.regions);
       filter.region = { $in: newOrder.filter.regions };
       if (newOrder.filter.spareRegions) {
-          let spareRegions = await Region.findOne({ name: newOrder.filter.regions[0] });
-          console.log("spareRegions");
-          console.log(spareRegions);
-          let filterRegions = [...newOrder.filter.regions, ...spareRegions.spareRegions];
-          filter.region = { $in: filterRegions };
+        let spareRegions = await Region.findOne({ name: newOrder.filter.regions[0] });
+        console.log("spareRegions");
+        console.log(spareRegions);
+        let filterRegions = [...newOrder.filter.regions, ...spareRegions.spareRegions];
+        filter.region = { $in: filterRegions };
       }
       proportion.oneHouse = undefined;
-  }
+    }
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
 
     if (newOrder.filter.addressFilter == 'noReleased' || newOrder.filter.addressFilter == 'onlySpecial' || newOrder.filter.addressFilter == 'forKids') filter.isReleased = false;
@@ -5093,7 +5186,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      //  filter.dateOfSignedConsent = null;
+      filter.dateOfSignedConsent = null;
     };
 
     seniorsData = await fillOrderSpring(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
@@ -5102,7 +5195,10 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
 
   if (seniorsData.celebratorsAmount < newOrder.amount) {
 
-    await deleteErrorPlusSpring(order_id);
+    if (newOrder.holiday == "23 февраля 2025" || newOrder.holiday == "8 марта 2025") { await deleteErrorPlusSpring(order_id); };
+    if (newOrder.holiday == "Пасха 2025") { await deleteErrorPlusEaster(order_id) };
+
+
     return {
       result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
       success: false
@@ -5120,7 +5216,9 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
   if (typeof resultLineItems == "string") {
 
     // console.log("resultLineItems222");
-    await deleteErrorPlusSpring(order_id);
+    if (newOrder.holiday == "23 февраля 2025" || newOrder.holiday == "8 марта 2025") { await deleteErrorPlusSpring(order_id); };
+    if (newOrder.holiday == "Пасха 2025") { await deleteErrorPlusEaster(order_id) };
+
     return {
       result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
       success: false
@@ -5176,18 +5274,18 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
     if (proportion[category]) {
 
       data.maxPlus = 1;// PLUSES1
-      
+
       if (orderFilter.onlyWithConcent) {
         data.maxPlus = 2;
       }
-    
 
-          console.log("data.filter");
-    console.log(data.filter);
 
-/*       if (!data.filter.dateOfSignedConsent?.$ne) {
-        data.maxPlus = 2;
-      } */
+      console.log("data.filter");
+      console.log(data.filter);
+
+      /*       if (!data.filter.dateOfSignedConsent?.$ne) {
+              data.maxPlus = 2;
+            } */
 
       data = await collectSeniorsSpring(data, orderFilter);
 
@@ -5229,8 +5327,8 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
 
 async function collectSeniorsSpring(data, orderFilter) {
 
-    console.log("data.maxPlus");
- console.log(data.maxPlus);
+  console.log("data.maxPlus");
+  console.log(data.maxPlus);
 
   let searchOrders = {};
 
@@ -5466,6 +5564,10 @@ async function searchSeniorSpring(
     }
     if (data.holiday == "8 марта 2025") {
       celebrator = await March8.findOne(filter);
+    }
+
+    if (data.holiday == "Пасха 2025") {
+      celebrator = await Easter.findOne(filter);
     }
 
     // console.log("celebrator");
@@ -6414,7 +6516,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       const celebratorsEaster = await Easter.find({ absent: false });
       for (let celebrator of celebratorsEaster) {
         /*         console.log(celebrator.seniorId);
-                let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Пасха 2024" }).countDocuments();
+                let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Пасха 2025" }).countDocuments();
                 await Easter.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
                 let updatedCelebrator = await Easter.findOne({ seniorId: celebrator.seniorId });
         
@@ -9175,7 +9277,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if ((holiday == "23 февраля 2025" || holiday == "8 марта 2025") && (filter.noNames || filter.minNumberOfHouses)) {
+  if ((holiday == "23 февраля 2025" || holiday == "8 марта 2025" || holiday == "Пасха 2025") && (filter.noNames || filter.minNumberOfHouses)) {
 
     /*          if (filter.noNames) {
               if (!region) {
@@ -9228,6 +9330,17 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           // forInstitute: 0,onlyForInstitute: true, finished: false,
         }).limit(amount);
       }
+      if (holiday == "Пасха 2025") {
+        seniorsData = await Easter.find({
+          dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
 
       /*          }
                if (region) {
@@ -9270,6 +9383,18 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           // forInstitute: 0,onlyForInstitute: true, finished: false,
         }).limit(amount);
       }
+
+      if (holiday == "Пасха 2025") {
+        seniorsData = await Easter.find({
+          //dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
       /*       }
             if (region) {
               seniorsData = await NewYear.find({
@@ -9302,20 +9427,25 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
       if (holiday == "8 марта 2025") {
         await March8.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         senior = await March8.findOne({ _id: senior._id });
-      }      
+      }
+      if (holiday == "Easter 2025") {
+        await Easter.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        senior = await Easter.findOne({ _id: senior._id });
+      }
       let newP = senior.plusAmount;
       let p = newP - 1;
       let c = senior.category;
+      let h = (holiday == "Easter 2025") ? "easter" : "spring"
       await House.updateOne(
         {
           nursingHome: senior.nursingHome
         },
         {
           $inc: {
-            ["statistic.spring.plus" + p]: -1,
-            ["statistic.spring.plus" + newP]: 1,
-            ["statistic.spring." + c + "Plus"]: 1,
-          
+            ["statistic." + h + ".plus" + p]: -1,
+            ["statistic." + h + ".plus" + newP]: 1,
+            ["statistic." + h + "." + c + "Plus"]: 1,
+
           }
         }
       );

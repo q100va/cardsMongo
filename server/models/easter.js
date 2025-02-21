@@ -43,8 +43,9 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false},
     forthTime:     {type: Boolean, default: false},
     noName: { type: Boolean, default: false },  
+    dateOfSignedConsent : {type: Date, default: null },
   },
-  { collection: "Easter_2024" }
+  { collection: "Easter_2025" }
 );
 
 module.exports = mongoose.model("Easter", listSchema);

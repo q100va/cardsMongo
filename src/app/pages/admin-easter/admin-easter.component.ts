@@ -48,10 +48,10 @@ export class AdminEasterComponent implements OnInit {
       (res) => {
         this.houses = res["data"];
         this.houses = this.houses.filter(
-          (item) =>
-            item.statistic.easter.amount >
+          (item) => item.isActive == true
+           /*  item.statistic.easter.amount >
               item.statistic.easter.plus1 + item.statistic.easter.plus2 &&
-            new Date(item.dateLastUpdate) > new Date(2024, 0, 1) 
+            new Date(item.dateLastUpdate) > new Date(2024, 0, 1)  */
         ); // && item.noAddress == false && item.statistic.easter.amount < 100&&            item.statistic.easter.plus0 != 0
         console.log(new Date(2024, 0, 1));
         console.log(this.houses);
