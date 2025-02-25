@@ -2488,7 +2488,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения апреля 2025") {
     period = {
       "date1": 1,
-      "date2": 5,
+      "date2": 10,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -2516,11 +2516,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
   if (newOrder.holiday == "Дни рождения марта 2025") {
     period = {
-      "date1": 21,
+      "date1": 1,
       "date2": 31,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2,
+      "maxPlus": 2,//PLUSES1
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -2540,7 +2540,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     console.log(period);
   }
   if (newOrder.filter.onlyWithConcent) {
-    period.maxPlus = 6;
+    period.maxPlus = 4;
   }
 
 
@@ -2550,10 +2550,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.amount > 50) {
       let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
       if (!newOrder.filter.maxNoAddress) {
-        oldWomenAmount = Math.round(newOrder.amount * 0.3);
-        oldMenAmount = Math.round(newOrder.amount * 0.2);
-        specialWomenAmount = Math.round(newOrder.amount * 0.1);
-        specialMenAmount = Math.round(newOrder.amount * 0.1);
+        oldWomenAmount = Math.round(newOrder.amount * 0.2);
+        oldMenAmount = Math.round(newOrder.amount * 0.1);
+        specialWomenAmount = Math.round(newOrder.amount * 0.2);
+        specialMenAmount = Math.round(newOrder.amount * 0.2);
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
 
@@ -2595,7 +2595,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
       if (!newOrder.filter.maxNoAddress) {
         oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
-        oldMenAmount = Math.round(newOrder.amount * 0.2);
+        oldMenAmount = Math.round(newOrder.amount * 0.1);
         yangWomenAmount = Math.round(newOrder.amount * 0.1);
         yangMenAmount = Math.round(newOrder.amount * 0.1);
         if (newOrder.amount == 5) {
@@ -2605,7 +2605,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
         // specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount;
 
-        specialMenAmount = Math.round(newOrder.amount * 0.1);
+        specialMenAmount = Math.round(newOrder.amount * 0.2);
         specialWomenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialMenAmount;
 
 
@@ -2661,8 +2661,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (!newOrder.filter.maxNoAddress) {
       oldWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.5);
       oldMenAmount = Math.round(newOrder.filter.maleAmount * 0.5);
-      specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.2);
-      specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.2);
+      specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.3);
+      specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.3);
       yangWomenAmount = newOrder.filter.femaleAmount - oldWomenAmount - specialWomenAmount;
       yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
 
@@ -3364,12 +3364,12 @@ async function searchSenior(
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3; 
   let maxPlusAmount = data.maxPlus; //PLUSES1
-  if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
+/*   if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
     maxPlusAmount = 4;
   }
   if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
     maxPlusAmount = 3;
-  }
+  } */
 
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
@@ -5276,7 +5276,7 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
       data.maxPlus = 1;// PLUSES1
 
       if (orderFilter.onlyWithConcent) {
-        data.maxPlus = 2;
+        data.maxPlus = 3;
       }
 
 
