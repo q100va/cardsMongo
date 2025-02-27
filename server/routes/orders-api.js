@@ -2520,7 +2520,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 31,
       "isActive": true,
       "key": 0,
-      "maxPlus": 4,//PLUSES1
+      "maxPlus": 3,//PLUSES1
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -3364,12 +3364,15 @@ async function searchSenior(
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3; 
   let maxPlusAmount = data.maxPlus; //PLUSES1
-/*   if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
+  if (holiday == "Дни рождения марта 2025") {
+   if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
     maxPlusAmount = 4;
   }
   if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-    maxPlusAmount = 3;
-  } */
+    maxPlusAmount = 4;
+  } 
+}
+  
 
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
   if (!standardFilter.oldest) {
