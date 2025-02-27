@@ -112,6 +112,7 @@ import { UploadNyComponent } from './pages/upload-ny/upload-ny.component';
 import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-year.component";
 import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-february23.component";
 import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
+import { ReportsComponent } from './pages/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -173,6 +174,7 @@ import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.co
     DobroruNewYearComponent,
     DobroruFebruary23Component,
     DobroruMarch8Component,
+    ReportsComponent,
 
   ],
   imports: [

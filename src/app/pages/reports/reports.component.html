@@ -1,0 +1,46 @@
+<mat-card class="mat-elevation-z0" style="width : 90%;">
+    <mat-card-title> Статистика и отчеты </mat-card-title>
+    <mat-card-content>
+        <br />
+        <h4>Статистика</h4>
+
+        <mat-table [dataSource]="statistic" class="mat-elevation-z4">
+
+            <ng-container matColumnDef="indicator">
+                <mat-header-cell *matHeaderCellDef> Показатель </mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="holiday1">
+                <mat-header-cell *matHeaderCellDef> ДР марта 2025 </mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount1 }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="holiday2">
+                <mat-header-cell *matHeaderCellDef> 8 марта 2025</mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount2}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="holiday3">
+                <mat-header-cell *matHeaderCellDef> ДР апреля 2025 </mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount3 }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="holiday4">
+                <mat-header-cell *matHeaderCellDef> ДР мая 2025 </mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount4}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </mat-table>
+
+        <br /> <br />
+        <h4>Отчет за февраль 2025 пользователя: {{name}}</h4>
+        <br />
+        <p>Всего обработано заявок - {{orderAmount}}*, роздано адресов - {{celebratorsAmount}}*.</p>
+        <p>* - неподтвержденные и возвращенные заявки не вычитались.</p>
+        <br />
+
+    </mat-card-content>
+
+</mat-card>

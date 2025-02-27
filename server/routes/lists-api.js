@@ -4134,8 +4134,8 @@ router.post("/easter/create", checkAuth, async (req, res) => {
   try {
     const houses = req.body.list;
     console.log("0- inside Create list API");
-   // let result = await findAllEasterCelebrators(houses);
-   let result = await countAmount();
+    // let result = await findAllEasterCelebrators(houses);
+    let result = await countAmount();
 
     console.log("4-inside Create list API " + result);
     //const newList = newList1.slice();
@@ -4152,31 +4152,31 @@ router.post("/easter/create", checkAuth, async (req, res) => {
 async function countAmount() {
   //let namesOfUpdatedNursingHome = await House.find({ isActive: true }, { nursingHome: 1, _id: 0 });
   // console.log(houses);
-   let listHouses = await House.find({isDisabled: false, isActive: true});
+  let listHouses = await House.find({ isDisabled: false, isActive: true });
   let namesOfUpdatedNursingHome = [];
   for (let home of listHouses) {
-    const senior = await Senior.findOne({nursingHome: home.nursingHome, isDisabled: false, isRestricted: false, dateExit: null, dateOfSignedConsent: {$ne:null}});
-    if(senior){
+    const senior = await Senior.findOne({ nursingHome: home.nursingHome, isDisabled: false, isRestricted: false, dateExit: null, dateOfSignedConsent: { $ne: null } });
+    if (senior) {
       namesOfUpdatedNursingHome.push(senior.nursingHome);
     }
   }
 
   namesOfUpdatedNursingHome = ['ПОРЕЧЬЕ-РЫБНОЕ', 'ОВЧАГИНО']
-   
+
   for (let house of namesOfUpdatedNursingHome) {
 
-      await restoreEasterStatistic(house);
+    await restoreEasterStatistic(house);
 
-/* 
-    let amount = await Senior.aggregate([
-      { $match: { nursingHome: house, dateExit: null, isRestricted: false } },
-      { $group: { _id: null, count: { $sum: 1 } } }
-    ]);
-    console.log(house);
-    console.log(amount[0].count);
-
-    let update = await House.updateOne({ nursingHome: house }, { $set: { "statistic.easter.amount": amount[0].count } });
-    console.log(update); */
+    /* 
+        let amount = await Senior.aggregate([
+          { $match: { nursingHome: house, dateExit: null, isRestricted: false } },
+          { $group: { _id: null, count: { $sum: 1 } } }
+        ]);
+        console.log(house);
+        console.log(amount[0].count);
+    
+        let update = await House.updateOne({ nursingHome: house }, { $set: { "statistic.easter.amount": amount[0].count } });
+        console.log(update); */
   }
 
   return true;
@@ -4215,7 +4215,7 @@ async function findAllEasterCelebrators(houses) {
 
   let list = await Senior.find(
     {
-      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, _id: {$nin: restrictedId} // dateOfSignedConsent: { $ne: null }, 
+      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, _id: { $nin: restrictedId } // dateOfSignedConsent: { $ne: null }, 
     }
   );
   console.log(list.length);
@@ -5209,6 +5209,165 @@ async function restoreVeteransStatistic(activeHouse) {
 }
 
 
+///////statistic
+
+router.get("/statistic", checkAuth, async (req, res) => {
+  try {
+    let statistic = [
+      {
+        name: "всего поздравляемых",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "из них жители ПНИ",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "поздравлено 4 и более раз",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "из них жителей ПНИ поздравлено 4 и более раз",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "поздравлено 3 раза",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "из них жителей ПНИ поздравлено 3 раза",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "поздравлено 2 раза",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "из них жителей ПНИ поздравлено 2 раза",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "поздравлено 1 раз",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "из них жителей ПНИ поздравлено 1 раз",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "не поздравлено ни разу",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+      {
+        name: "из них жителей ПНИ не поздравлено ни разу",
+        amount1: 0, //ДР марта 2025
+        amount2: 0, //8 марта 2025
+        amount3: 0, //ДР апреля 2025
+        amount4: 0, //ДР мая 2025
+      },
+
+    ]
+
+    const holidays = [ListBefore, March8, List, ListNext];
+
+    for (let i = 0; i < holidays.length; i++) {
+      statistic[0]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false });
+      statistic[1]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true });
+      statistic[2]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: { $gte: 4 } });
+      statistic[3]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: { $gte: 4 } });
+      statistic[4]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: 3 });
+      statistic[5]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 3 });
+      statistic[6]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: 2 });
+      statistic[7]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 2 });
+      statistic[8]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: 1 });
+      statistic[9]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 1 });
+      statistic[10]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: 0 });
+      statistic[11]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 0 });
+    }
+
+    statistic[2].amount2 = 10667;
+    statistic[4].amount2 = 0;
+    statistic[6].amount2 = 0;
+    statistic[8].amount2 = 0;
+    statistic[10].amount2 = 0;
+
+    console.log('statistic');
+    console.log(statistic);
+
+    const newListResponse = new BaseResponse(200, "Query Successful", statistic);
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
+
+
+///report
+
+router.get("/report/:userName", checkAuth, async (req, res) => {
+  try {
+    const userName = req.params.userName;
+    let orderAmount = await Order.countDocuments({userName: userName, isDisabled: false, dateOfOrder: {$gt: new Date("2025-01-31"), $lt: new Date("2025-03-01")}});
+    let celebratorsAmount = await Order.aggregate(
+      [
+        {
+          $match: {userName: userName, isDisabled: false, dateOfOrder: {$gt: new Date("2025-01-31"), $lt: new Date("2025-03-01")}}
+        },
+        {
+          $group: { _id: null, sum_val: { $sum: "$amount" } }
+        }
+      ]
+    );
+    celebratorsAmount = celebratorsAmount[0].sum_val;
+/* 
+    console.log('celebratorsAmount');
+    console.log(celebratorsAmount[0]); */
+
+    const newListResponse = new BaseResponse(200, "Query Successful", { orderAmount: orderAmount, celebratorsAmount: celebratorsAmount });
+    res.json(newListResponse.toObject());
+
+  } catch (e) {
+    console.log(e);
+    const newListCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e);
+    res.status(500).send(newListCatchErrorResponse.toObject());
+  }
+});
 
 
 module.exports = router;

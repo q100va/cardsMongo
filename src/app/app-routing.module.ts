@@ -65,6 +65,7 @@ import { ManagerGuard } from "./shared/manager.guard";
 import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-year.component";
 import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-february23.component";
 import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
+import { ReportsComponent } from "./pages/reports/reports.component";
 const routes: Routes = [
   {
     path: "",
@@ -301,6 +302,11 @@ const routes: Routes = [
         path: "lists/admin-veterans",
         component: AdminVeteransComponent,
         canActivate: [AuthGuard, RoleGuard],
+      },
+      {
+        path: "reports",
+        component: ReportsComponent,
+        canActivate: [AuthGuard],//, RoleGuard
       },
 
     ],

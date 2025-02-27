@@ -218,5 +218,13 @@ export class ListService {
     return this.http.post("/api/clients/update-and-delete-clients/" + id, {client: client, ids: idsToDelete});
   }
 
+  statistic(): Observable<any> {
+    return this.http.get("/api/lists/statistic/");
+  }
+
+  report(userName): Observable<any> {
+    return this.http.get("/api/lists/report/" + userName);
+  }
+
 
 }
