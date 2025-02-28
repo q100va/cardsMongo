@@ -3372,6 +3372,14 @@ async function searchSenior(
     maxPlusAmount = 4;
   } 
 }
+if (holiday == "Дни рождения апреля 2025") {
+  if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
+   maxPlusAmount = 3;
+ }
+ if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
+   maxPlusAmount = 3;
+ } 
+}
   
 
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
