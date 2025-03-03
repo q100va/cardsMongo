@@ -1423,7 +1423,7 @@ export class OrderComponent implements OnInit {
     let addresses = "";
     console.log(this.lineItems);
     for (let lineItem of this.lineItems) {
-      if (!this.isForInstitutes) {
+   /*    if (!this.isForInstitutes) { */
         addresses =
           addresses +
           lineItem.address +
@@ -1431,9 +1431,9 @@ export class OrderComponent implements OnInit {
           "\n" +
           (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +
           (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
-      } else {
+ /*      } else {
         addresses = addresses + lineItem.address + " " + "\n";
-      }
+      } */
       console.log("addresses1");
       console.log(addresses);
 
