@@ -165,7 +165,7 @@ const routes: Routes = [
       {
         path: "seniors/update-lists",
         component: AddListsComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard],//RoleGuard
       },
       {
         path: "roles/create/new",

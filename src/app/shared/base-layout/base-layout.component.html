@@ -81,7 +81,7 @@
               <mat-icon color="primary">bug_report</mat-icon>
               <span>Проверка списка</span>
             </button>
-            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToUpdateLists()">
+            <button *ngIf="isAdmin || isManager" mat-menu-item (click)="redirectToUpdateLists()">
               <mat-icon color="primary">backup</mat-icon>
               <span>Обновление</span>
             </button>
