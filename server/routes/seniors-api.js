@@ -413,7 +413,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, }); //, ,monthBirthday:4,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, }); //, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
 
     newList.sort(
       (prev, next) => {
@@ -468,6 +468,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     let key = 0;
     for (let newSenior of newList) {
       let index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday + newSenior.yearBirthday));
+    // let index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic));
       // console.log("index");
       // console.log(index);
       if (index == -1) {
@@ -475,14 +476,41 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
         key++;
         arrived.push(newSenior);
       } else {
-        //await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment1: newSenior.comment1}});
+       // await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment1: newSenior.comment1}});
+/*        await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment1: newSenior.comment1,
+        dateBirthday: newSenior.dateBirthday,
+        monthBirthday: newSenior.monthBirthday,
+        yearBirthday: newSenior.yearBirthday,
+        
+
+      }}); */
+
+      if(newSenior.comment1 != oldList[index].comment1 && oldList[index].comment1 == ''){
+        await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment1: newSenior.comment1}});
+        oldList[index].comment1 = newSenior.comment1;
+      }
+      if(newSenior.comment2 != oldList[index].comment2 && oldList[index].comment2 == ''){
+        await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment2: newSenior.comment2}});
+        oldList[index].comment2 = newSenior.comment2;
+      }
+      if(newSenior.comment1 != oldList[index].comment1 && newSenior.comment1 == ''){
+        newSenior.comment1 = oldList[index].comment1;
+      }
+      if(newSenior.comment2 != oldList[index].comment2 && newSenior.comment2 == ''){
+        newSenior.comment2 = oldList[index].comment2;
+      }
+      if(newSenior.dateOfSignedConsent != oldList[index].dateOfSignedConsent && !newSenior.dateOfSignedConsent){
+        newSenior.dateOfSignedConsent = oldList[index].dateOfSignedConsent;
+      }
+
+
         if (
-          newSenior.isRestricted != oldList[index].isRestricted ||
-          newSenior.dateNameDay != oldList[index].dateNameDay ||
-          newSenior.monthNameDay != oldList[index].monthNameDay ||
-          newSenior.isDisabled != oldList[index].isDisabled ||
-          newSenior.noAddress != oldList[index].noAddress ||
-          newSenior.isReleased != oldList[index].isReleased ||
+         // newSenior.isRestricted != oldList[index].isRestricted ||
+        //  newSenior.dateNameDay != oldList[index].dateNameDay ||
+        //  newSenior.monthNameDay != oldList[index].monthNameDay ||
+        //  newSenior.isDisabled != oldList[index].isDisabled ||
+        //  newSenior.noAddress != oldList[index].noAddress ||
+        //  newSenior.isReleased != oldList[index].isReleased ||
           //senior.dateEnter = house.dateLastUpdate;
           //newSenior.dateExit != oldList[index].dateExit ||
           newSenior.comment1 != oldList[index].comment1 ||
@@ -507,7 +535,8 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     }
 
     for (let oldSenior of oldList) {
-      if (newList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday)) == -1) {
+     if (newList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday)) == -1) {
+     // if (newList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday)) == -1) {
         oldSenior.key = key;
         key++;
         absents.push(oldSenior);

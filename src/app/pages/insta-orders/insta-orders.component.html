@@ -59,9 +59,9 @@
             </p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения февраля 2025'">Дни рождения октября</h3>
+                *ngIf="order.holiday == 'Дни рождения марта 2025'">Дни рождения октября</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Пасха 2024'">НОВЫЙ ГОД</h3>
+                *ngIf="order.holiday == 'Пасха 2025'">НОВЫЙ ГОД</h3>
 
             <p style="font-style: italic">
                 Если какие-то адреса вам не подходят, обязательно возвращайте -
@@ -86,8 +86,8 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения февраля 2025'">{{celebrator.fullDayBirthday}}</span>
-                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2024'">-
+                    <span *ngIf="order.holiday == 'Дни рождения марта 2025'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2025'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
@@ -219,9 +219,9 @@
             <p>Здравствуйте, {{order.clientFirstName}}!</p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения февраля 2025'">Дни рождения октября</h3>
+                *ngIf="order.holiday == 'Дни рождения марта 2025'">Дни рождения октября</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Пасха 2024'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
+                *ngIf="order.holiday == 'Пасха 2025'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
                 февраля)</h3>
 
             <mat-card-content *ngFor="let lineItem of lineItems"
@@ -238,8 +238,8 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения февраля 2025'">{{celebrator.fullDayBirthday}}</span>
-                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2024'">-
+                    <span *ngIf="order.holiday == 'Дни рождения марта 2025'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2025'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
                     {{celebrator.linkPhoto}}
