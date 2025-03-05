@@ -236,7 +236,7 @@
                                     </mat-radio-group>
                                 </div>
                              
-                               <!--  <div *ngIf="person.old.yearBirthday!=person.new.yearBirthday">
+                             <div *ngIf="person.old.yearBirthday!=person.new.yearBirthday">
                                     <mat-radio-group [(ngModel)]="accepted_yearBirthday">
                                         <span>yearBirthday</span>
                                         <mat-radio-button [value]="person.old.yearBirthday">{{person.old.yearBirthday}}
@@ -245,8 +245,8 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                                <br />
-                                <div *ngIf="person.old.isDisabled!=person.new.isDisabled">
+                               <!--          <br />
+                           <div *ngIf="person.old.isDisabled!=person.new.isDisabled">
                                     <mat-radio-group [(ngModel)]="accepted_isDisabled">
                                         <span>isDisabled</span>
                                         <mat-radio-button [value]="person.old.isDisabled">{{person.old.isDisabled}}
