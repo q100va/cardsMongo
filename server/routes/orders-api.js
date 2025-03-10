@@ -5178,7 +5178,8 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
       proportion.oneHouse = undefined;
     }
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
-
+    if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
+    if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
     if (newOrder.filter.addressFilter == 'noReleased' || newOrder.filter.addressFilter == 'onlySpecial' || newOrder.filter.addressFilter == 'forKids') filter.isReleased = false;
     if (newOrder.filter.addressFilter == 'noSpecial' || newOrder.filter.addressFilter == 'forKids') filter.noAddress = false;
     if (newOrder.filter.addressFilter == 'onlySpecial') filter.noAddress = true;
