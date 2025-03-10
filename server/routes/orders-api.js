@@ -5287,7 +5287,7 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
       data.maxPlus = 1;// PLUSES1
 
       if (orderFilter.onlyWithConcent) {
-        data.maxPlus = 3;
+        data.maxPlus = 1;
       }
 
 
@@ -5449,8 +5449,27 @@ async function collectSeniorsSpring(data, orderFilter) {
 
           );
         }
+        if (data.holiday == "Пасха 2025") {
+          await Easter.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
 
+          let senior = await Easter.findOne({ _id: result.celebrator_id });
+          let newP = senior.plusAmount;
+          let p = newP - 1;
+          let c = senior.category;
+          await House.updateOne(
+            {
+              nursingHome: senior.nursingHome
+            },
+            {
+              $inc: {
+                ["statistic.easter.plus" + p]: -1,
+                ["statistic.easter.plus" + newP]: 1,
+                ["statistic.easter." + c + "Plus"]: 1,
+              }
+            }
 
+          );
+        }
 
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
@@ -6526,13 +6545,13 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       let housesSet = new Set();
       const celebratorsEaster = await Easter.find({ absent: false });
       for (let celebrator of celebratorsEaster) {
-        /*         console.log(celebrator.seniorId);
+              console.log(celebrator.seniorId);
                 let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Пасха 2025" }).countDocuments();
                 await Easter.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
                 let updatedCelebrator = await Easter.findOne({ seniorId: celebrator.seniorId });
         
                 console.log("result");
-                console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount); */
+                console.log(updatedCelebrator.fullData + " " + updatedCelebrator.plusAmount); 
         housesSet.add(celebrator.nursingHome);
       }
       let houses = Array.from(housesSet);
@@ -9470,14 +9489,14 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         await March8.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         senior = await March8.findOne({ _id: senior._id });
       }
-      if (holiday == "Easter 2025") {
+      if (holiday == "Пасха 2025") {
         await Easter.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         senior = await Easter.findOne({ _id: senior._id });
       }
       let newP = senior.plusAmount;
       let p = newP - 1;
       let c = senior.category;
-      let h = (holiday == "Easter 2025") ? "easter" : "spring"
+      let h = (holiday == "Пасха 2025") ? "easter" : "spring"
       await House.updateOne(
         {
           nursingHome: senior.nursingHome
