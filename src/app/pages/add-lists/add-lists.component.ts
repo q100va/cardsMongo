@@ -231,6 +231,9 @@ export class AddListsComponent implements OnInit {
         ) {
           senior.gender = "Female";
         }
+        if(senior.patronymic)senior.patronymic = senior.patronymic.replaceAll('ё', 'е');
+        if(senior.lastName)senior.lastName = senior.lastName.replaceAll('ё', 'е');
+        if(senior.firstName)senior.firstName = senior.firstName.replaceAll('ё', 'е');
       }
     }
     console.log("this.arrayOfLists");
