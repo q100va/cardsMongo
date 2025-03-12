@@ -98,12 +98,12 @@ export class SeniorsService {
     return this.http.post("/api/seniors/add-many/", { seniors: seniors });
   } */
 
-  compareListsBackend(arrayOfNewSeniors:  Array<Senior> , house: House): Observable<any> {
-
+  compareListsBackend(arrayOfNewSeniors:  Array<Senior> , house: House, months: Array<{id: number, name: string}>): Observable<any> {
     console.log("start compareListsBackend");
     return this.http.put("/api/seniors/compare-lists/", {    
       seniors: arrayOfNewSeniors,
       house: house,
+      months: months,
     });
   }
 

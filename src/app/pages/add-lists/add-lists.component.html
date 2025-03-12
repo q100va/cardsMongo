@@ -18,7 +18,7 @@
                             
                         </td>
                         <td>
-                            <mat-form-field appearance="fill">
+<!--                             <mat-form-field appearance="fill">
                                 <mat-label>Enter a date range</mat-label>
                                 <mat-date-range-input [rangePicker]="picker">
                                     <input matInput matStartDate placeholder="Start date" [(ngModel)]="startDate">
@@ -35,9 +35,28 @@
                             <button [disabled]="!isShowEmail" mat-raised-button style="margin-left: 30 px;"
                                 (click)="copyEmail()">
                                 Показать список
-                            </button>
+                            </button> -->
                         </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <br />
+                                <p>Если вы обновляете список именнинников определенного месяца или нескольких, ниже выберите месяц или несколько.</p>
+                                <p>Если вы обновляете полный список, ничего не выбирайте.</p>
+                                <br />
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Месяцы</mat-label>
+                                    <mat-select [(ngModel)]="chosenMonths" multiple>
+                                      <mat-option *ngFor="let month of months" [value]="months.id">{{month.name}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+
+
+
+                            </td>
+                            <td>
+                                <mat-spinner *ngIf="waiting"></mat-spinner>
+                            </td>
+                        </tr>             
                 </table>
             </mat-card-actions>
         
@@ -407,7 +426,7 @@
         
                 </table>
                 <mat-card-actions>
-                    <button mat-raised-button (click)="acceptAllChanges()" [disabled]="!dateOfList">
+                    <button mat-raised-button (click)="acceptAllChanges()" [disabled]="!dateOfList || waiting">
                         Обновить БД
                     </button>
                 </mat-card-actions>

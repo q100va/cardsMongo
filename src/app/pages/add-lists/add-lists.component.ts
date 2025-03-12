@@ -34,6 +34,59 @@ export class AddListsComponent implements OnInit {
   file_second: File;
   arrayOfFamilies: Array<any> = [];
 
+  months = [
+    {
+      id: 1,
+      name: "январь"
+    },
+    {
+      id: 2,
+      name: "февраль"
+    },
+    {
+      id: 3,
+      name: "март"
+    },
+    {
+      id: 4,
+      name: "апрель"
+    },
+    {
+      id: 5,
+      name: "май"
+    },
+    {
+      id: 6,
+      name: "июнь"
+    },
+    {
+      id: 7,
+      name: "июль"
+    },
+    {
+      id: 8,
+      name: "август"
+    },
+    {
+      id: 9,
+      name: "сентябрь"
+    },
+    {
+      id: 10,
+      name: "октябрь"
+    },
+    {
+      id: 11,
+      name: "ноябрь"
+    },
+    {
+      id: 12,
+      name: "декабрь"
+    },
+  ];
+  chosenMonths = [];
+  waiting = false;
+
   /*     accepted_lastName: string ="";
     accepted_firstName: string ="";
     accepted_patronymic: string ="";
@@ -189,7 +242,7 @@ export class AddListsComponent implements OnInit {
     console.log("WORKS");
     console.log(arrayOfLists);
     this.seniorsService
-      .compareListsBackend(arrayOfLists, nursingHome)
+      .compareListsBackend(arrayOfLists, nursingHome, this.chosenMonths)
       .subscribe(
         async (res) => {
           this.resultOfCompare = await res["data"];
@@ -268,7 +321,6 @@ export class AddListsComponent implements OnInit {
   acceptChanges(accepted, key, person) {
     console.log("accepted.dateOfSignedConsent");
     console.log(accepted.dateOfSignedConsent);
-
     const cloneAccepted = {
       id: accepted.id ? accepted.id : person.id,
       region: person.region,
@@ -339,6 +391,7 @@ export class AddListsComponent implements OnInit {
   }
 
   acceptAllChanges() {
+    this.waiting = true;
     this.resultOfCompare.accepted = this.allAccepted;
 
     this.seniorsService
@@ -352,7 +405,7 @@ export class AddListsComponent implements OnInit {
           alert(res.data);
           this.index++;
           if (this.index == this.arrayOfLists.length) {
-            alert("it was the last list");
+            alert("Это был последний лист.");
             this.isShowList = false;
           } else {
             this.dateOfList = null;
@@ -361,6 +414,7 @@ export class AddListsComponent implements OnInit {
               this.arrayOfLists[this.index][0].nursingHome
             );
           }
+          this.waiting = false;
         },
         (err) => {
           console.log(err);

@@ -413,8 +413,13 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     console.log("start compare-lists API");
     let newList = req.body.seniors;
     let house = await House.findOne({ nursingHome: req.body.house });
-    let oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, }); //, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
-
+    let months = req.body.months;
+    let oldList;
+    if (months.length > 0) {
+      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, monthBirthday : {$in: months},}); //, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+    } else {
+      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, }); //, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+    }
     newList.sort(
       (prev, next) => {
         if (prev.lastName < next.lastName) return -1;
