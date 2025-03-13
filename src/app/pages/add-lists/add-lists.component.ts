@@ -37,51 +37,51 @@ export class AddListsComponent implements OnInit {
   months = [
     {
       id: 1,
-      name: "январь"
+      name: "январь",
     },
     {
       id: 2,
-      name: "февраль"
+      name: "февраль",
     },
     {
       id: 3,
-      name: "март"
+      name: "март",
     },
     {
       id: 4,
-      name: "апрель"
+      name: "апрель",
     },
     {
       id: 5,
-      name: "май"
+      name: "май",
     },
     {
       id: 6,
-      name: "июнь"
+      name: "июнь",
     },
     {
       id: 7,
-      name: "июль"
+      name: "июль",
     },
     {
       id: 8,
-      name: "август"
+      name: "август",
     },
     {
       id: 9,
-      name: "сентябрь"
+      name: "сентябрь",
     },
     {
       id: 10,
-      name: "октябрь"
+      name: "октябрь",
     },
     {
       id: 11,
-      name: "ноябрь"
+      name: "ноябрь",
     },
     {
       id: 12,
-      name: "декабрь"
+      name: "декабрь",
     },
   ];
   chosenMonths = [];
@@ -215,7 +215,28 @@ export class AddListsComponent implements OnInit {
 
     for (let list of this.arrayOfLists) {
       for (let senior of list) {
+
         senior.isRestricted = false;
+
+        if (senior.patronymic) {          
+          senior.patronymic = senior.patronymic.toLowerCase();
+          senior.patronymic =
+            senior.patronymic[0].toUpperCase() + senior.patronymic.substring(1);
+            senior.patronymic = senior.patronymic.replaceAll("ё", "е");
+        }
+        if (senior.lastName) {         
+          senior.lastName = senior.lastName.toLowerCase();
+          senior.lastName =
+            senior.lastName[0].toUpperCase() + senior.lastName.substring(1);
+            senior.lastName = senior.lastName.replaceAll("ё", "е");
+        }
+        if (senior.firstName) {          
+          senior.firstName = senior.firstName.toLowerCase();
+          senior.firstName =
+            senior.firstName[0].toUpperCase() + senior.firstName.substring(1);
+            senior.firstName = senior.firstName.replaceAll("ё", "е");
+        }
+
         if (!senior.patronymic) {
           senior.comment1 = "(отчество не указано)";
         } else if (
@@ -231,9 +252,6 @@ export class AddListsComponent implements OnInit {
         ) {
           senior.gender = "Female";
         }
-        if(senior.patronymic)senior.patronymic = senior.patronymic.replaceAll('ё', 'е');
-        if(senior.lastName)senior.lastName = senior.lastName.replaceAll('ё', 'е');
-        if(senior.firstName)senior.firstName = senior.firstName.replaceAll('ё', 'е');
       }
     }
     console.log("this.arrayOfLists");
