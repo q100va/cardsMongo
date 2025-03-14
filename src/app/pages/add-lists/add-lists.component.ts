@@ -214,6 +214,11 @@ export class AddListsComponent implements OnInit {
     //this.compareLists(this.arrayOfLists[this.index], this.arrayOfLists[this.index][0].nursingHome);
 
     for (let list of this.arrayOfLists) {
+      let index: number;
+      while (index != -1){
+        index = list.findIndex(item => !item.lastName && !item.firstName && !item.patronymic);
+        if(index != -1)list.splice(index, 1); 
+      }
       for (let senior of list) {
 
         senior.isRestricted = false;
