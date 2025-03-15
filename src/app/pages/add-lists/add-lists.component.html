@@ -1,11 +1,11 @@
 <mat-tab-group animationDuration="0ms">
     <mat-tab label="Обновление списков">
-        <mat-card class="mat-elevation-z0">          
-        
+        <mat-card class="mat-elevation-z0">
+
             <br />
-        
+
             <mat-card-actions>
-        
+
                 <table>
                     <tr>
                         <td>
@@ -15,10 +15,10 @@
                                 (click)="compareLists(arrayOfLists[index], arrayOfLists[index][0].nursingHome)">
                                 СТАРТ
                             </button>
-                            
+
                         </td>
                         <td>
-<!--                             <mat-form-field appearance="fill">
+                            <!--                             <mat-form-field appearance="fill">
                                 <mat-label>Enter a date range</mat-label>
                                 <mat-date-range-input [rangePicker]="picker">
                                     <input matInput matStartDate placeholder="Start date" [(ngModel)]="startDate">
@@ -37,89 +37,91 @@
                                 Показать список
                             </button> -->
                         </td>
-                        <tr>
-                            <td>
-                                <br />
-                                <p>Если вы обновляете список именнинников определенного месяца или нескольких, ниже выберите месяц или несколько.</p>
-                                <p>Если вы обновляете полный список, ничего не выбирайте.</p>
-                                <br />
-                                <mat-form-field appearance="fill">
-                                    <mat-label>Месяцы</mat-label>
-                                    <mat-select [(ngModel)]="chosenMonths" multiple>
-                                      <mat-option *ngFor="let month of months" [value]="month.id">{{month.name}}</mat-option>
-                                    </mat-select>
-                                  </mat-form-field>
+                    <tr>
+                        <td>
+                            <br />
+                            <p>Если вы обновляете список именнинников определенного месяца или нескольких, ниже выберите
+                                месяц или несколько.</p>
+                            <p>Если вы обновляете полный список, ничего не выбирайте.</p>
+                            <br />
+                            <mat-form-field appearance="fill">
+                                <mat-label>Месяцы</mat-label>
+                                <mat-select [(ngModel)]="chosenMonths" multiple>
+                                    <mat-option *ngFor="let month of months"
+                                        [value]="month.id">{{month.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
 
 
 
-                            </td>
-                            <td>
-                                <mat-spinner *ngIf="waiting"></mat-spinner>
-                            </td>
-                        </tr>             
+                        </td>
+                        <td>
+                            <mat-spinner *ngIf="waiting"></mat-spinner>
+                        </td>
+                    </tr>
                 </table>
             </mat-card-actions>
-        
+
             <mat-card-content *ngIf="isShowEmail">
                 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 list">
-        
+
                     <!-- Checkbox Column -->
                     <ng-container matColumnDef="check">
                         <th mat-header-cell *matHeaderCellDef>
-        
+
                         </th>
                         <td mat-cell *matCellDef="let row">
-                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                                [checked]="selection.isSelected(row)">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
                             </mat-checkbox>
                         </td>
                     </ng-container>
-        
+
                     <!-- Position Column -->
                     <ng-container matColumnDef="region">
                         <th mat-header-cell *matHeaderCellDef> Регион </th>
                         <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.region}} </td>
                     </ng-container>
-        
+
                     <!-- Name Column -->
                     <ng-container matColumnDef="nursingHome">
                         <th mat-header-cell *matHeaderCellDef> Интернат </th>
                         <td mat-cell *matCellDef="let element"> {{element.nursingHome}} </td>
                     </ng-container>
-        
+
                     <!-- Weight Column -->
                     <ng-container matColumnDef="dateLastUpdateClone">
                         <th mat-header-cell *matHeaderCellDef> Дата </th>
                         <td mat-cell *matCellDef="let element"> {{element.dateLastUpdateClone}} </td>
                     </ng-container>
-        
+
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="nameContact">
                         <th mat-header-cell *matHeaderCellDef> Контактное лицо </th>
                         <td mat-cell *matCellDef="let element"> {{element.nameContact}} </td>
                     </ng-container>
-        
+
                     <ng-container matColumnDef="contact">
                         <th mat-header-cell *matHeaderCellDef> Контакт </th>
                         <td mat-cell *matCellDef="let element"> {{element.contact}} </td>
                     </ng-container>
-        
+
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
                     </tr>
-        
-        
+
+
                 </table>
             </mat-card-content>
-        
+
             <mat-card-content *ngFor="let email of arrayOfEmails">
-        
+
                 <p>{{email}}</p>
-        
+
             </mat-card-content>
-        
-        
-        
+
+
+
             <mat-card-content *ngIf="isShowList">
                 <h3>Интернат: {{arrayOfLists[index][0].region}} {{arrayOfLists[index][0].nursingHome}}</h3>
                 <mat-form-field appearance="fill">
@@ -129,65 +131,66 @@
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
-        
+
                 <br /> <br /> <br />
                 <table style="width: 100%;" cellspacing="0">
                     <tr>
                         <td>
                             <h4>Выбывшие</h4>
-        
+
                             <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromAbsents">
-                                <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.absents"
-                                    [value]="person.key">
+                                <mat-radio-button class="example-radio-button"
+                                    *ngFor="let person of resultOfCompare.absents" [value]="person.key">
                                     {{person.lastName}} {{person.firstName}} {{person.patronymic}}
                                     {{person.dateBirthday}}.{{person.monthBirthday}}.{{person.yearBirthday}}
                                 </mat-radio-button>
                             </mat-radio-group>
-        
+
                         </td>
                         <td>
                             <h4>Поступившие</h4>
                             <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromArrived">
-                                <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.arrived"
-                                    [value]="person.key">
+                                <mat-radio-button class="example-radio-button"
+                                    *ngFor="let person of resultOfCompare.arrived" [value]="person.key">
                                     {{person.lastName}} {{person.firstName}} {{person.patronymic}}
                                     {{person.dateBirthday}}.{{person.monthBirthday}}.{{person.yearBirthday}}
                                 </mat-radio-button>
                             </mat-radio-group>
-        
+
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2"><button mat-raised-button (click)="moveToChanged(movedFromAbsents, movedFromArrived)">
+                        <td colspan="2"><button mat-raised-button
+                                (click)="moveToChanged(movedFromAbsents, movedFromArrived)">
                                 Переместить в измененные
                             </button> </td>
                     </tr>
-        
+
                     <tr>
                         <td>
                             <h4>Сомнительные старый список</h4>
-        
+
                             <mat-radio-group class="example-radio-group" [(ngModel)]="movedFromDoubtful">
-                                <mat-radio-button class="example-radio-button" *ngFor="let person of resultOfCompare.doubtful"
-                                    [value]="person.key">
-                                    {{person.old.lastName}} {{person.old.firstName}} {{person.old.patronymic}} 
+                                <mat-radio-button class="example-radio-button"
+                                    *ngFor="let person of resultOfCompare.doubtful" [value]="person.key">
+                                    {{person.old.lastName}} {{person.old.firstName}} {{person.old.patronymic}}
                                     {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}
-        
+
                                 </mat-radio-button>
                             </mat-radio-group>
-        
+
                         </td>
                         <td>
                             <h4>Сомнительные новый список</h4>
-        
+
                             <div *ngFor="let person of resultOfCompare.doubtful">
-                                {{person.new.lastName}} {{person.new.firstName}} {{person.new.patronymic}} 
+                                {{person.new.lastName}} {{person.new.firstName}} {{person.new.patronymic}}
                                 {{person.new.dateBirthday}}.{{person.new.monthBirthday}}.{{person.new.yearBirthday}}
-        
+
                             </div>
                         </td>
                     </tr>
-        
+
                     <tr>
                         <td><button mat-raised-button (click)="moveToChangedFromDoubtful(movedFromDoubtful)">
                                 Переместить в измененные
@@ -196,14 +199,16 @@
                                 Переместить в выбывшие/прибывшие
                             </button> </td>
                     </tr>
-        
+
                     <tr>
                         <td colspan="2">
                             <h4>Измененные старый/новый списки</h4>
                             <div *ngFor="let person of resultOfCompare.changed">
-        
+
                                 <p>ID: {{person.old._id}} {{person.old.lastName}} {{person.old.firstName}}
-                                    {{person.old.patronymic}} {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}</p>
+                                    {{person.old.patronymic}}
+                                    {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}
+                                </p>
                                 <br />
                                 <div *ngIf="person.old.lastName!=person.new.lastName">
                                     <mat-radio-group [(ngModel)]="accepted_lastName">
@@ -214,17 +219,18 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                          
+
                                 <div *ngIf="person.old.firstName!=person.new.firstName">
                                     <mat-radio-group [(ngModel)]="accepted_firstName">
                                         <span>firstName</span>
-                                        <mat-radio-button [value]="person.old.firstName">{{person.old.firstName}}<!--  [checked]=true -->
+                                        <mat-radio-button
+                                            [value]="person.old.firstName">{{person.old.firstName}}<!--  [checked]=true -->
                                         </mat-radio-button>
                                         <mat-radio-button [value]="person.new.firstName">{{person.new.firstName}}
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                               
+
                                 <div *ngIf="person.old.patronymic!=person.new.patronymic">
                                     <mat-radio-group [(ngModel)]="accepted_patronymic">
                                         <span>patronymic</span>
@@ -234,7 +240,7 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                              
+
                                 <div *ngIf="person.old.dateBirthday!=person.new.dateBirthday">
                                     <mat-radio-group [(ngModel)]="accepted_dateBirthday">
                                         <span>dateBirthday</span>
@@ -244,18 +250,20 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                                
+
                                 <div *ngIf="person.old.monthBirthday!=person.new.monthBirthday">
                                     <mat-radio-group [(ngModel)]="accepted_monthBirthday">
                                         <span>monthBirthday</span>
-                                        <mat-radio-button [value]="person.old.monthBirthday">{{person.old.monthBirthday}}
+                                        <mat-radio-button
+                                            [value]="person.old.monthBirthday">{{person.old.monthBirthday}}
                                         </mat-radio-button>
-                                        <mat-radio-button [value]="person.new.monthBirthday">{{person.new.monthBirthday}}
+                                        <mat-radio-button
+                                            [value]="person.new.monthBirthday">{{person.new.monthBirthday}}
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                             
-                             <div *ngIf="person.old.yearBirthday!=person.new.yearBirthday">
+
+                                <div *ngIf="person.old.yearBirthday!=person.new.yearBirthday">
                                     <mat-radio-group [(ngModel)]="accepted_yearBirthday">
                                         <span>yearBirthday</span>
                                         <mat-radio-button [value]="person.old.yearBirthday">{{person.old.yearBirthday}}
@@ -264,7 +272,7 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                               <!--          <br />
+                                <!--          <br />
                            <div *ngIf="person.old.isDisabled!=person.new.isDisabled">
                                     <mat-radio-group [(ngModel)]="accepted_isDisabled">
                                         <span>isDisabled</span>
@@ -318,11 +326,13 @@
                                 <div *ngIf="person.old.gender!=person.new.gender">
                                     <mat-radio-group [(ngModel)]="accepted_gender">
                                         <span>gender</span>
-                                        <mat-radio-button [value]="person.old.gender">{{person.old.gender}}</mat-radio-button>
-                                        <mat-radio-button [value]="person.new.gender">{{person.new.gender}}</mat-radio-button>
+                                        <mat-radio-button
+                                            [value]="person.old.gender">{{person.old.gender}}</mat-radio-button>
+                                        <mat-radio-button
+                                            [value]="person.new.gender">{{person.new.gender}}</mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                                
+
                                 <div *ngIf="person.old.comment1!=person.new.comment1">
                                     <mat-radio-group [(ngModel)]="accepted_comment1">
                                         <span>comment1</span>
@@ -332,7 +342,7 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                               
+
                                 <div *ngIf="person.old.comment2!=person.new.comment2">
                                     <mat-radio-group [(ngModel)]="accepted_comment2">
                                         <span>comment2</span>
@@ -342,8 +352,8 @@
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
-                           
-<!--                                 <div *ngIf="person.old.veteran!=person.new.veteran">
+
+                                <!--                                 <div *ngIf="person.old.veteran!=person.new.veteran">
                                     <mat-radio-group [(ngModel)]="accepted_veteran">
                                         <span>veteran</span>
                                         <mat-radio-button [value]="person.old.veteran">{{person.old.veteran}}
@@ -374,19 +384,22 @@
                                     </mat-radio-group>
                                 </div>
                                 <br /> -->
-                               <!--  {{person.old.dateOfSignedConsent}} {{person.new.dateOfSignedConsent}} -->
-                             
-                                <div *ngIf="person.old.dateOfSignedConsent!=person.new.dateOfSignedConsent && person.new.dateOfSignedConsent != null">
+                                <!--  {{person.old.dateOfSignedConsent}} {{person.new.dateOfSignedConsent}} -->
+
+                                <div
+                                    *ngIf="person.old.dateOfSignedConsent!=person.new.dateOfSignedConsent && person.new.dateOfSignedConsent != null">
                                     <mat-radio-group [(ngModel)]="accepted_dateOfSignedConsent">
                                         <span>dateOfSignedConsent</span>
-                                        <mat-radio-button [value]="person.old.dateOfSignedConsent">{{person.old.dateOfSignedConsent}}</mat-radio-button>
-                                        <mat-radio-button [value]="person.new.dateOfSignedConsent">{{person.new.dateOfSignedConsent}}</mat-radio-button>
+                                        <mat-radio-button
+                                            [value]="person.old.dateOfSignedConsent">{{person.old.dateOfSignedConsent}}</mat-radio-button>
+                                        <mat-radio-button
+                                            [value]="person.new.dateOfSignedConsent">{{person.new.dateOfSignedConsent}}</mat-radio-button>
                                     </mat-radio-group>
                                 </div>
                                 <br />
 
 
-<!--                                 <div *ngIf="person.old.nameDay!=person.new.nameDay">
+                                <!--                                 <div *ngIf="person.old.nameDay!=person.new.nameDay">
                                     <mat-radio-group [(ngModel)]="accepted_nameDay">
                                         <span>nameDay</span>
                                         <mat-radio-button [value]="person.old.nameDay">{{person.old.nameDay}}</mat-radio-button>
@@ -414,26 +427,54 @@
                                     </mat-radio-group>
                                 </div>
                                 <br /> -->
-        
+
                                 <button mat-raised-button
                                     (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay, dateOfSignedConsent: accepted_dateOfSignedConsent }, person.key, person.old)">
                                     Принять изменения
                                 </button>
-        
+
                             </div>
                         </td>
+
                     </tr>
-        
+                    <tr>
+                        <td colspan="2">
+                          
+                            <div *ngIf="duplicateChanged.length > 0">
+                                Прошу вас уточнить данные по жителям, перечисленным ниже: возникли расхождения с
+                                предыдущим списком.
+                            </div>
+                            <div *ngFor="let person of duplicateChanged">
+                                <li>
+                                    {{person.old.lastName}} {{person.old.firstName}} {{person.old.patronymic}}
+                                    {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}
+                                    или
+                                    {{person.new.lastName != person.old.lastName ? person.new.lastName : ''}}
+                                    {{person.new.firstName != person.old.firstName || person.new.patronymic !=
+                                    person.old.patronymic ? person.new.firstName : ''}}
+                                    {{person.new.firstName != person.old.firstName || person.new.patronymic !=
+                                    person.old.patronymic ? person.new.patronymic : ''}}
+                                    {{ person.new.dateBirthday != person.old.dateBirthday || person.new.monthBirthday !=
+                                    person.old.monthBirthday || person.new.yearBirthday != person.old.yearBirthday && person.new.yearBirthday && person.old.yearBirthday?
+                                    person.new.dateBirthday + '.' + person.new.monthBirthday + '.' +
+                                    (person.new.yearBirthday !=0 ? person.new.yearBirthday : person.old.yearBirthday) : ''}}
+                                </li>
+                            </div> 
+                        </td>
+
+                    </tr>
+
                 </table>
+
                 <mat-card-actions>
                     <button mat-raised-button (click)="acceptAllChanges()" [disabled]="!dateOfList || waiting">
                         Обновить БД
                     </button>
                 </mat-card-actions>
             </mat-card-content>
-        
+
         </mat-card>
-        
+
         <!-- <mat-list *ngFor="let person of resultOfCompare.absents">
             <mat-list-item> {{person.lastName}} {{person.firstName}} {{person.patronymic}}
                 {{person.fullDayBirthday}} {{person.comment1}}
@@ -444,18 +485,17 @@
 
     </mat-tab>
     <mat-tab label="День семьи">
-        <mat-card class="mat-elevation-z0">    
-        
+        <mat-card class="mat-elevation-z0">
+
             <br />
-        
+
             <mat-card-actions>
                 <input type="file" (change)="uploadFile($event)">
                 <!-- accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" -->
-                <button [disabled]="!isStartUpload" mat-raised-button
-                    (click)="prepareLists(arrayOfFamilies)">
+                <button [disabled]="!isStartUpload" mat-raised-button (click)="prepareLists(arrayOfFamilies)">
                     СТАРТ
                 </button>
-       
+
             </mat-card-actions>
 
             <mat-card-content *ngIf="isShowFamiliesList">
@@ -463,22 +503,23 @@
                 <mat-list *ngFor="let family of addedFamilies">
 
                     <mat-list-item>{{family.husbandLastName}} {{family.husbandFirstName}} {{family.husbandPatronymic}}
-                        {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}}  {{family.nursingHome}} </mat-list-item>
-        
+                        {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}}
+                        {{family.nursingHome}} </mat-list-item>
+
                 </mat-list>
                 <br />
                 <h2>НЕ НАЙДЕНЫ</h2>
                 <mat-list *ngFor="let family of notFoundFamilies">
 
                     <mat-list-item>{{family.husbandLastName}} {{family.husbandFirstName}} {{family.husbandPatronymic}}
-                        {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}}  {{family.nursingHome}} </mat-list-item>
-        
+                        {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}}
+                        {{family.nursingHome}} </mat-list-item>
+
                 </mat-list>
             </mat-card-content>
 
 
-        </mat-card>      
+        </mat-card>
     </mat-tab>
-  
-  </mat-tab-group>
 
+</mat-tab-group>

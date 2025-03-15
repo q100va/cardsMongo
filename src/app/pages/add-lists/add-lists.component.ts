@@ -33,6 +33,7 @@ export class AddListsComponent implements OnInit {
 
   file_second: File;
   arrayOfFamilies: Array<any> = [];
+  duplicateChanged: Array<any> = [];
 
   months = [
     {
@@ -275,6 +276,7 @@ export class AddListsComponent implements OnInit {
           console.log(this.resultOfCompare);
           this.isShowList = true;
           this.isStart = false;
+          this.duplicateChanged = [...this.resultOfCompare.changed];
         },
         (err) => {
           console.log(err);
@@ -297,6 +299,7 @@ export class AddListsComponent implements OnInit {
       ),
     };
     this.resultOfCompare.changed.push(difference);
+    this.duplicateChanged.push(difference);
     this.resultOfCompare.absents.splice(
       this.resultOfCompare.absents.findIndex(
         (item) => item.key == movedFromAbsentsKey
@@ -313,6 +316,11 @@ export class AddListsComponent implements OnInit {
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
     this.resultOfCompare.changed.push(
+      this.resultOfCompare.doubtful.find(
+        (item) => item.key == movedFromDoubtful
+      )
+    );
+    this.duplicateChanged.push(
       this.resultOfCompare.doubtful.find(
         (item) => item.key == movedFromDoubtful
       )
