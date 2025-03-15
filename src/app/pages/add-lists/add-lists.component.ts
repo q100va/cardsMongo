@@ -245,6 +245,20 @@ export class AddListsComponent implements OnInit {
 
         if (!senior.patronymic) {
           senior.comment1 = "(отчество не указано)";
+          if (
+            senior.lastName.endsWith("ов") ||
+            senior.lastName.endsWith("ев") ||
+            senior.lastName.endsWith("ин") 
+          ) {
+            senior.gender = "Male";
+          } else if (
+            senior.lastName.endsWith("ова") ||
+            senior.lastName.endsWith("ева") ||
+            senior.lastName.endsWith("ина") 
+          ) {
+            senior.gender = "Female";
+          }
+
         } else if (
           senior.patronymic.endsWith("ич") ||
           senior.patronymic.endsWith("оглы") ||

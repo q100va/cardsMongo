@@ -109,7 +109,7 @@
               <mat-icon color="primary">mail</mat-icon>
               <span>Поздравляющие</span>
             </button>
-            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToSeniors()">
+            <button *ngIf="isAdmin || isManager" mat-menu-item (click)="redirectToSeniors()">
               <mat-icon color="primary">group</mat-icon>
               <span>Поздравляемые</span>
             </button>
