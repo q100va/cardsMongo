@@ -15,6 +15,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ConfirmationService } from "primeng/api";
 import { MessageService } from "primeng/api";
 import { SeniorsService } from "src/app/services/seniors.service";
+import { OrderService } from "src/app/services/order.service";
 
 @Component({
   selector: "app-seniors-list",
@@ -27,16 +28,38 @@ export class SeniorsListComponent implements OnInit {
   name: string;
   _id: string;
   nursingHome: string;
-  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "dateOfSignedConsent",  "edit", "delete", "isRestricted"]; //"nameDay",
+  nursingHomes = [];
+  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "dateOfSignedConsent",  "isRestricted"]; //"nameDay", "edit", "delete",
   constructor(
     private seniorsService: SeniorsService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private orderService: OrderService,
   ) {
 
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.orderService.getNursingHomes().subscribe(
+      async (res) => {
+        this.nursingHomes = res["data"]["nursingHomes"];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  onChangeNursingHome(event){
+    this.seniorsService.findSeniorsFromOneHome(event.value).subscribe(
+      (res) => {
+        this.seniors = res["data"];
+        this.length = this.seniors.length;
+      },
+      (err) => {},
+      () => {}
+    );
+  }
 
   formList(nursingHome){
     this.seniorsService.findSeniorsFromOneHome(nursingHome).subscribe(

@@ -15,15 +15,30 @@
     <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
     <p-toast position="center"></p-toast>
     <br /><br />
-    <mat-label>Интернат</mat-label>
+   <!--  <mat-label>Интернат</mat-label>
     <input matInput type="text"
-    [(ngModel)]="nursingHome" placeholder="НОГИНСК"/>
-    <br />
+    [(ngModel)]="nursingHome" placeholder="НОГИНСК"/> -->
     <mat-card-actions>
+<h4>Интернат</h4>
+<mat-form-field appearance="fill">
+  <mat-select
+      (selectionChange)="onChangeNursingHome($event)">
+      <mat-option></mat-option>
+      <mat-option
+          *ngFor="let nursingHome of nursingHomes"
+          [value]="nursingHome.nursingHome">
+          {{ nursingHome.nursingHome }}
+      </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+<!--     <br />
+
       <button mat-raised-button
           (click)="formList(nursingHome)">
           Сформировать
-      </button>
+      </button> -->
 
   </mat-card-actions>
 
@@ -31,7 +46,7 @@
     
     <mat-card-content *ngIf="seniors">
 
-      <h1>{{ seniors[0].region }} {{ seniors[0].nursingHome }} {{ length }}</h1>
+      <h1>{{ seniors[0].region }} {{ seniors[0].nursingHome }}</h1>
       <mat-table [dataSource]="seniors" class="mat-elevation-z4">
 
         <ng-container matColumnDef="region">
@@ -61,7 +76,7 @@
 
         <ng-container matColumnDef="isRestricted">
           <mat-header-cell *matHeaderCellDef> Не поздравлять </mat-header-cell>
-          <mat-cell *matCellDef="let senior"> {{ senior.isRestricted }} </mat-cell>
+          <mat-cell *matCellDef="let senior"> {{ senior.isRestricted ? "не поздравлять" : "" }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="DOB">
@@ -137,8 +152,8 @@
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </mat-table>
     </mat-card-content>
-    <mat-card-subtitle>
+<!--     <mat-card-subtitle>
       <button mat-stroked-button color="primary" routerLink="/seniors/create/new">Add New Senior</button>
-    </mat-card-subtitle>
+    </mat-card-subtitle> -->
   </mat-card>
 </div>
