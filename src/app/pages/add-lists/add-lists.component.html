@@ -203,15 +203,17 @@
                     <tr>
                         <td colspan="2">
                             <h4>Измененные старый/новый списки</h4>
-                            <div *ngFor="let person of resultOfCompare.changed">
+                            <div *ngFor="let person of resultOfCompare.changed; let i = index">
 
                                 <p>ID: {{person.old._id}} {{person.old.lastName}} {{person.old.firstName}}
                                     {{person.old.patronymic}}
                                     {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}
                                 </p>
+                                <p> {{accepted[i].id}} - index {{i}}</p>
                                 <br />
                                 <div *ngIf="person.old.lastName!=person.new.lastName">
-                                    <mat-radio-group [(ngModel)]="accepted_lastName">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_lastName"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].lastName">
                                         <span>lastName</span>
                                         <mat-radio-button [value]="person.old.lastName">{{person.old.lastName}}
                                         </mat-radio-button>
@@ -221,7 +223,8 @@
                                 </div>
 
                                 <div *ngIf="person.old.firstName!=person.new.firstName">
-                                    <mat-radio-group [(ngModel)]="accepted_firstName">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_firstName"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].firstName">
                                         <span>firstName</span>
                                         <mat-radio-button
                                             [value]="person.old.firstName">{{person.old.firstName}}<!--  [checked]=true -->
@@ -232,17 +235,21 @@
                                 </div>
 
                                 <div *ngIf="person.old.patronymic!=person.new.patronymic">
-                                    <mat-radio-group [(ngModel)]="accepted_patronymic">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_patronymic"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].patronymic">
                                         <span>patronymic</span>
                                         <mat-radio-button [value]="person.old.patronymic">{{person.old.patronymic}}
                                         </mat-radio-button>
                                         <mat-radio-button [value]="person.new.patronymic">{{person.new.patronymic}}
                                         </mat-radio-button>
                                     </mat-radio-group>
+                                    {{accepted[i].patronymic}}
+
                                 </div>
 
                                 <div *ngIf="person.old.dateBirthday!=person.new.dateBirthday">
-                                    <mat-radio-group [(ngModel)]="accepted_dateBirthday">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_dateBirthday"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].dateBirthday">
                                         <span>dateBirthday</span>
                                         <mat-radio-button [value]="person.old.dateBirthday">{{person.old.dateBirthday}}
                                         </mat-radio-button>
@@ -252,7 +259,8 @@
                                 </div>
 
                                 <div *ngIf="person.old.monthBirthday!=person.new.monthBirthday">
-                                    <mat-radio-group [(ngModel)]="accepted_monthBirthday">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_monthBirthday"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].monthBirthday">
                                         <span>monthBirthday</span>
                                         <mat-radio-button
                                             [value]="person.old.monthBirthday">{{person.old.monthBirthday}}
@@ -264,7 +272,8 @@
                                 </div>
 
                                 <div *ngIf="person.old.yearBirthday!=person.new.yearBirthday">
-                                    <mat-radio-group [(ngModel)]="accepted_yearBirthday">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_yearBirthday"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].yearBirthday">
                                         <span>yearBirthday</span>
                                         <mat-radio-button [value]="person.old.yearBirthday">{{person.old.yearBirthday}}
                                         </mat-radio-button>
@@ -324,7 +333,8 @@
                                 </div>
                                 <br /> -->
                                 <div *ngIf="person.old.gender!=person.new.gender">
-                                    <mat-radio-group [(ngModel)]="accepted_gender">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_gender"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].gender">
                                         <span>gender</span>
                                         <mat-radio-button
                                             [value]="person.old.gender">{{person.old.gender}}</mat-radio-button>
@@ -334,7 +344,8 @@
                                 </div>
 
                                 <div *ngIf="person.old.comment1!=person.new.comment1">
-                                    <mat-radio-group [(ngModel)]="accepted_comment1">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_comment1"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].comment1">
                                         <span>comment1</span>
                                         <mat-radio-button [value]="person.old.comment1">{{person.old.comment1}}
                                         </mat-radio-button>
@@ -344,7 +355,8 @@
                                 </div>
 
                                 <div *ngIf="person.old.comment2!=person.new.comment2">
-                                    <mat-radio-group [(ngModel)]="accepted_comment2">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_comment2"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].comment2">
                                         <span>comment2</span>
                                         <mat-radio-button [value]="person.old.comment2">{{person.old.comment2}}
                                         </mat-radio-button>
@@ -388,7 +400,8 @@
 
                                 <div
                                     *ngIf="person.old.dateOfSignedConsent!=person.new.dateOfSignedConsent && person.new.dateOfSignedConsent != null">
-                                    <mat-radio-group [(ngModel)]="accepted_dateOfSignedConsent">
+                                    <!-- <mat-radio-group [(ngModel)]="accepted_dateOfSignedConsent"> -->
+                                    <mat-radio-group [(ngModel)]="accepted[i].dateOfSignedConsent">
                                         <span>dateOfSignedConsent</span>
                                         <mat-radio-button
                                             [value]="person.old.dateOfSignedConsent">{{person.old.dateOfSignedConsent}}</mat-radio-button>
@@ -428,8 +441,8 @@
                                 </div>
                                 <br /> -->
 
-                                <button mat-raised-button
-                                    (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay, dateOfSignedConsent: accepted_dateOfSignedConsent }, person.key, person.old)">
+                                <button mat-raised-button (click)="acceptChanges(accepted[i], person.key, person.old)">
+                                     <!--  (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay, dateOfSignedConsent: accepted_dateOfSignedConsent }, person.key, person.old)"> -->
                                     Принять изменения
                                 </button>
 
@@ -439,7 +452,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                          
+
                             <div *ngIf="duplicateChanged.length > 0">
                                 Прошу вас уточнить данные по жителям, перечисленным ниже: возникли расхождения с
                                 предыдущим списком.
@@ -455,11 +468,13 @@
                                     {{person.new.firstName != person.old.firstName || person.new.patronymic !=
                                     person.old.patronymic ? person.new.patronymic : ''}}
                                     {{ person.new.dateBirthday != person.old.dateBirthday || person.new.monthBirthday !=
-                                    person.old.monthBirthday || person.new.yearBirthday != person.old.yearBirthday && person.new.yearBirthday && person.old.yearBirthday?
+                                    person.old.monthBirthday || person.new.yearBirthday != person.old.yearBirthday &&
+                                    person.new.yearBirthday && person.old.yearBirthday?
                                     person.new.dateBirthday + '.' + person.new.monthBirthday + '.' +
-                                    (person.new.yearBirthday !=0 ? person.new.yearBirthday : person.old.yearBirthday) : ''}}
+                                    (person.new.yearBirthday !=0 ? person.new.yearBirthday : person.old.yearBirthday) :
+                                    ''}}
                                 </li>
-                            </div> 
+                            </div>
                         </td>
 
                     </tr>

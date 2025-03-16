@@ -107,7 +107,7 @@ export class AddListsComponent implements OnInit {
     accepted_dateNameDay: number = 0;
     accepted_monthNameDay: number = 0; */
 
-  accepted_lastName: string;
+/*   accepted_lastName: string;
   accepted_firstName: string;
   accepted_patronymic: string;
   accepted_dateBirthday: number;
@@ -127,7 +127,8 @@ export class AddListsComponent implements OnInit {
   accepted_nameDay: string;
   accepted_dateNameDay: number;
   accepted_monthNameDay: number;
-  accepted_dateOfSignedConsent: Date;
+  accepted_dateOfSignedConsent: Date; */
+  accepted = [];
 
   allAccepted = [];
 
@@ -216,31 +217,32 @@ export class AddListsComponent implements OnInit {
 
     for (let list of this.arrayOfLists) {
       let index: number;
-      while (index != -1){
-        index = list.findIndex(item => !item.lastName && !item.firstName && !item.patronymic);
-        if(index != -1)list.splice(index, 1); 
+      while (index != -1) {
+        index = list.findIndex(
+          (item) => !item.lastName && !item.firstName && !item.patronymic
+        );
+        if (index != -1) list.splice(index, 1);
       }
       for (let senior of list) {
-
         senior.isRestricted = false;
 
-        if (senior.patronymic) {          
+        if (senior.patronymic) {
           senior.patronymic = senior.patronymic.toLowerCase();
           senior.patronymic =
             senior.patronymic[0].toUpperCase() + senior.patronymic.substring(1);
-            senior.patronymic = senior.patronymic.replaceAll("ё", "е");
+          senior.patronymic = senior.patronymic.replaceAll("ё", "е");
         }
-        if (senior.lastName) {         
+        if (senior.lastName) {
           senior.lastName = senior.lastName.toLowerCase();
           senior.lastName =
             senior.lastName[0].toUpperCase() + senior.lastName.substring(1);
-            senior.lastName = senior.lastName.replaceAll("ё", "е");
+          senior.lastName = senior.lastName.replaceAll("ё", "е");
         }
-        if (senior.firstName) {          
+        if (senior.firstName) {
           senior.firstName = senior.firstName.toLowerCase();
           senior.firstName =
             senior.firstName[0].toUpperCase() + senior.firstName.substring(1);
-            senior.firstName = senior.firstName.replaceAll("ё", "е");
+          senior.firstName = senior.firstName.replaceAll("ё", "е");
         }
 
         if (!senior.patronymic) {
@@ -248,17 +250,16 @@ export class AddListsComponent implements OnInit {
           if (
             senior.lastName.endsWith("ов") ||
             senior.lastName.endsWith("ев") ||
-            senior.lastName.endsWith("ин") 
+            senior.lastName.endsWith("ин")
           ) {
             senior.gender = "Male";
           } else if (
             senior.lastName.endsWith("ова") ||
             senior.lastName.endsWith("ева") ||
-            senior.lastName.endsWith("ина") 
+            senior.lastName.endsWith("ина")
           ) {
             senior.gender = "Female";
           }
-
         } else if (
           senior.patronymic.endsWith("ич") ||
           senior.patronymic.endsWith("оглы") ||
@@ -291,6 +292,35 @@ export class AddListsComponent implements OnInit {
           this.isShowList = true;
           this.isStart = false;
           this.duplicateChanged = [...this.resultOfCompare.changed];
+          for (let person of this.resultOfCompare.changed) {
+            this.accepted.push({
+              id: person.old._id,
+              region: person.old.region,
+              nursingHome: person.old.nursingHome,
+              lastName: undefined,
+              firstName: undefined,
+              patronymic: undefined,
+              dateBirthday: undefined,
+              monthBirthday: undefined,
+              yearBirthday: undefined,
+              isDisabled: undefined,
+              isRestricted: undefined,
+              noAddress: undefined,
+              isReleased: undefined,
+              dateExit: undefined,
+              gender: undefined,
+              comment1: undefined,
+              comment2: undefined,
+              veteran: undefined,
+              child: undefined,
+              linkPhoto: undefined,
+              nameDay: undefined,
+              monthNameDay: undefined,
+              dateOfSignedConsent: undefined,
+            });
+          }
+          console.log("this.accepted");
+          console.log(this.accepted);
         },
         (err) => {
           console.log(err);
@@ -326,18 +356,45 @@ export class AddListsComponent implements OnInit {
       ),
       1
     );
+
+    this.accepted.push({
+      id: difference.old._id,
+      region: difference.old.region,
+      nursingHome: difference.old.nursingHome,
+      lastName: undefined,
+      firstName: undefined,
+      patronymic: undefined,
+      dateBirthday: undefined,
+      monthBirthday: undefined,
+      yearBirthday: undefined,
+      isDisabled: undefined,
+      isRestricted: undefined,
+      noAddress: undefined,
+      isReleased: undefined,
+      dateExit: undefined,
+      gender: undefined,
+      comment1: undefined,
+      comment2: undefined,
+      veteran: undefined,
+      child: undefined,
+      linkPhoto: undefined,
+      nameDay: undefined,
+      monthNameDay: undefined,
+      dateOfSignedConsent: undefined,
+    });
+
+    console.log("this.accepted");
+    console.log(this.accepted);
   }
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
+    const changed = this.resultOfCompare.doubtful.find(
+        (item) => item.key == movedFromDoubtful
+      )
     this.resultOfCompare.changed.push(
-      this.resultOfCompare.doubtful.find(
-        (item) => item.key == movedFromDoubtful
-      )
+      changed
     );
-    this.duplicateChanged.push(
-      this.resultOfCompare.doubtful.find(
-        (item) => item.key == movedFromDoubtful
-      )
+    this.duplicateChanged.push(changed
     );
     this.resultOfCompare.doubtful.splice(
       this.resultOfCompare.doubtful.findIndex(
@@ -345,6 +402,35 @@ export class AddListsComponent implements OnInit {
       ),
       1
     );
+
+    this.accepted.push({
+      id: changed.old._id,
+      region: changed.old.region,
+      nursingHome: changed.old.nursingHome,
+      lastName: undefined,
+      firstName: undefined,
+      patronymic: undefined,
+      dateBirthday: undefined,
+      monthBirthday: undefined,
+      yearBirthday: undefined,
+      isDisabled: undefined,
+      isRestricted: undefined,
+      noAddress: undefined,
+      isReleased: undefined,
+      dateExit: undefined,
+      gender: undefined,
+      comment1: undefined,
+      comment2: undefined,
+      veteran: undefined,
+      child: undefined,
+      linkPhoto: undefined,
+      nameDay: undefined,
+      monthNameDay: undefined,
+      dateOfSignedConsent: undefined,
+    });
+
+    console.log("this.accepted");
+    console.log(this.accepted);
   }
 
   moveToAbsentsArrived(movedFromDoubtful) {
@@ -367,10 +453,15 @@ export class AddListsComponent implements OnInit {
   }
 
   acceptChanges(accepted, key, person) {
-    console.log("accepted.dateOfSignedConsent");
-    console.log(accepted.dateOfSignedConsent);
+/*     console.log("accepted.dateOfSignedConsent");
+    console.log(accepted.dateOfSignedConsent); */
+
+    console.log("person");
+    console.log(person._id);
+    console.log("accepted.id");
+    console.log(accepted.id);
     const cloneAccepted = {
-      id: accepted.id ? accepted.id : person.id,
+      id: accepted.id ? accepted.id : person._id,
       region: person.region,
       nursingHome: person.nursingHome,
       lastName: accepted.lastName ? accepted.lastName : person.lastName,
@@ -414,7 +505,17 @@ export class AddListsComponent implements OnInit {
       this.resultOfCompare.changed.findIndex((item) => item.key == key),
       1
     );
+    console.log("cloneAccepted.id");
+    console.log(cloneAccepted.id);
 
+    let index = this.accepted.findIndex((item) => item.id == cloneAccepted.id)
+    console.log("index");
+    console.log(index);
+
+    this.accepted.splice(index,1);
+    console.log("this.accepted");
+    console.log(this.accepted);
+/* 
     this.accepted_lastName = undefined;
     this.accepted_firstName = undefined;
     this.accepted_patronymic = undefined;
@@ -435,7 +536,7 @@ export class AddListsComponent implements OnInit {
     this.accepted_nameDay = undefined;
     this.accepted_dateNameDay = undefined;
     this.accepted_monthNameDay = undefined;
-    this.accepted_dateOfSignedConsent = undefined;
+    this.accepted_dateOfSignedConsent = undefined; */
   }
 
   acceptAllChanges() {
