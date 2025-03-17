@@ -243,9 +243,11 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
-                  "23 февраля 2025",
-                  "8 марта 2025",
-                  "Пасха 2025",
+                 // "23 февраля 2025",
+                 // "8 марта 2025",
+                  "Пасха 2025",  "9 мая 2025"
+                  "9 мая 2025"
+
                   /*             "Именины февраля 2025",
                               "Именины марта 2025" */
                 ]
@@ -259,9 +261,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
-                  "23 февраля 2025",
-                  "8 марта 2025",
-                  "Пасха 2025",
+          /*         "23 февраля 2025",
+                  "8 марта 2025", */
+                  "Пасха 2025",  "9 мая 2025"
                   /*         "Именины февраля 2025",
                           "Именины марта 2025" */
                 ]
@@ -296,9 +298,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
-                  "23 февраля 2025",
-                  "8 марта 2025",
-                  "Пасха 2025",
+            /*       "23 февраля 2025",
+                  "8 марта 2025", */
+                  "Пасха 2025",  "9 мая 2025"
                   /*       "Именины февраля 2025",
                         "Именины марта 2025" */
                 ]
@@ -312,9 +314,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения марта 2025",
                   "Дни рождения апреля 2025",
                   "Дни рождения мая 2025",
-                  "23 февраля 2025",
-                  "8 марта 2025",
-                  "Пасха 2025",
+              /*     "23 февраля 2025",
+                  "8 марта 2025", */
+                  "Пасха 2025",  "9 мая 2025"
                   /*         "Именины февраля 2025",
                           "Именины марта 2025" */
                 ]
@@ -463,9 +465,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                 /*    "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                   ]
                 }
               },
@@ -476,9 +478,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                  /*   "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                   ]
                 }
               }
@@ -506,9 +508,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                  /*   "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                   ]
                 }
               },
@@ -519,9 +521,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                /*     "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                   ]
                 }
               }
@@ -592,9 +594,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                 /*    "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                     /*       "Именины февраля 2025",
                           "Именины марта 2025" */
                   ]
@@ -608,9 +610,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+        /*             "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                     /*           "Именины февраля 2025",
                               "Именины марта 2025" */
                   ]
@@ -642,9 +644,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                       "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-                      "23 февраля 2025",
-                      "8 марта 2025",
-                      "Пасха 2025",
+                /*       "23 февраля 2025",
+                      "8 марта 2025", */
+                      "Пасха 2025",  "9 мая 2025"
                       /*            "Именины февраля 2025",
                                  "Именины марта 2025" */
                     ]
@@ -658,9 +660,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                       "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-                      "23 февраля 2025",
-                      "8 марта 2025",
-                      "Пасха 2025",
+                  /*     "23 февраля 2025",
+                      "8 марта 2025", */
+                      "Пасха 2025",  "9 мая 2025"
                       /*             "Именины февраля 2025",
                                   "Именины марта 2025" */
                     ]
@@ -747,9 +749,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                  /*   "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                     /*           "Именины февраля 2025",
                               "Именины марта 2025" */
                   ]
@@ -763,9 +765,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                     "Дни рождения марта 2025",
                     "Дни рождения апреля 2025",
                     "Дни рождения мая 2025",
-                    "23 февраля 2025",
-                    "8 марта 2025",
-                    "Пасха 2025",
+                  /*   "23 февраля 2025",
+                    "8 марта 2025", */
+                    "Пасха 2025",  "9 мая 2025"
                     /*         "Именины февраля 2025",
                             "Именины марта 2025" */
                   ]
@@ -797,9 +799,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                       "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-                      "23 февраля 2025",
-                      "8 марта 2025",
-                      "Пасха 2025",
+                   /*    "23 февраля 2025",
+                      "8 марта 2025", */
+                      "Пасха 2025",  "9 мая 2025"
                       /*          "Именины февраля 2025",
                                "Именины марта 2025" */
                     ]
@@ -813,9 +815,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                       "Дни рождения марта 2025",
                       "Дни рождения апреля 2025",
                       "Дни рождения мая 2025",
-                      "23 февраля 2025",
-                      "8 марта 2025",
-                      "Пасха 2025",
+                    /*   "23 февраля 2025",
+                      "8 марта 2025", */
+                      "Пасха 2025",  "9 мая 2025"
                       /*               "Именины февраля 2025",
                                     "Именины марта 2025" */
                     ]
@@ -1050,7 +1052,7 @@ async function deletePluses(deletedOrder, full) {
                     }
                   }
                 } else {
-                  if (deletedOrder.holiday == "9 мая 2024") {
+                  if (deletedOrder.holiday == "9 мая 2025") {
                     for (let lineItem of deletedLineItems) {
                       for (let person of lineItem.celebrators) {
                         await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
@@ -1453,7 +1455,7 @@ async function restorePluses(updatedOrder) {
                     }
                   }
                 } else {
-                  if (updatedOrder.holiday == "9 мая 2024") {
+                  if (updatedOrder.holiday == "9 мая 2025") {
                     for (let lineItem of updatedOrder.lineItems) {
                       for (let person of lineItem.celebrators) {
                         await May9.updateOne({ _id: person._id }, { $inc: { plusAmount: +1 } }, { upsert: false });
@@ -6572,7 +6574,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       for (let celebrator of celebratorsMay9) {
 
         /*         console.log(celebrator.seniorId);
-                let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "9 мая 2024" }).countDocuments();
+                let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "9 мая 2025" }).countDocuments();
                 await May9.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
                 let updatedCelebrator = await May9.findOne({ seniorId: celebrator.seniorId });
                 console.log("result");
@@ -8103,7 +8105,7 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
   console.log("proportion.oneHouse");
   console.log(proportion.oneHouse);
 
-  if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome /* && newOrder.amount < 21 */) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+  if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome /* && newOrder.amount < 21 */) proportion.oneRegion = undefined; //Math.ceil(newOrder.amount * 0.33);
   console.log("proportion.oneRegion");
   console.log(proportion.oneRegion);
 
@@ -8189,6 +8191,12 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
+
+    if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
+      filter.dateOfSignedConsent = { $ne: null };
+    } else {
+      filter.dateOfSignedConsent = null;
+    };
 
     console.log("veterans2");
     seniorsData = await fillOrderVeterans(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
@@ -8409,8 +8417,8 @@ async function searchSeniorVeterans(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 3;
-  if (kind == 'veterans') { maxPlusAmount = 4; }
+  let maxPlusAmount = 1;
+  if (kind == 'veterans') { maxPlusAmount = 1; }
 
 
   //let maxPlusAmount = data.maxPlus;  
@@ -8422,7 +8430,7 @@ async function searchSeniorVeterans(
     filter.plusAmount = { $lt: plusAmount };
     //  filter.comment1 = "(1 корп. 2 этаж)"; //CANCEL
     //filter.comment1 = "(2 корп.)"; //CANCEL
-    filter.noName = true; //ОРГАНИЗАЦИИ
+   // filter.noName = true; //ОРГАНИЗАЦИИ
     //filter.nursingHome = {$in: [ "ТАЛИЦА_УРГА", "МАЙСКОЕ", "СЕЛЬЦО", "ЭЛЕКТРОГОРСК", "КОЗЛОВО", "ВЫСОКОВО", "СТАРАЯ_КУПАВНА", "ТОМАРИ", "МЫЗА", "ПУХЛЯКОВСКИЙ", "ЖУКОВКА", "КИРЖАЧ",  "ЯРЦЕВО", "НОВОСЕЛЬЕ", "КАБАНОВКА", "ВИЛЕНКА",
     //"ПРЕОБРАЖЕНСКИЙ", "ВОЛГОДОНСК",  "ХАРЬКОВКА", "ВЕРХНЕУРАЛЬСК"]};
     console.log("filter");

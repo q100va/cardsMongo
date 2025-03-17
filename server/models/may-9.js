@@ -35,10 +35,11 @@ const listSchema = new Schema(
     absent: { type: Boolean, default: false },   
     secondTime: {type: Boolean, default: false},
     thirdTime: {type: Boolean, default: false},
-    seniorId: { type: String },
+    seniorId: { type: String },    
+    dateOfSignedConsent : {type: Date, default: null },
 
   },
-  { collection: "may_9_2024" }
+  { collection: "may_9_2025" }
 );
 
 module.exports = mongoose.model("May9", listSchema);

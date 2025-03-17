@@ -741,7 +741,7 @@ export class ListComponent implements OnInit {
   }
 
   generate9mayList() {
-    this.listService.create9mayList().subscribe(
+    this.listService.createVeteransList([]).subscribe(
       async (res) => {
         let result = await res["data"];
         console.log(result);
