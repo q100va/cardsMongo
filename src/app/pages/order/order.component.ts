@@ -798,12 +798,11 @@ export class OrderComponent implements OnInit {
             this.checkDoubles();
           } else {
             if (
-              false
-              /* this.client.institutes.length > 0 ||
+                     /* this.client.institutes.length > 0 ||
               this.form.controls.amount.value > 20 */
-              /*  (this.client.institutes.length > 0 ||
+             (this.client.institutes.length > 0 ||
                 this.form.controls.amount.value > 20) &&
-              this.selectedInstitutes.length == 0  */
+              this.selectedInstitutes.length == 0  
             ) {
               this.confirmationService.confirm({
                 message: "Вы уверены, что эта заявка не для колллектива?",
@@ -1154,7 +1153,7 @@ export class OrderComponent implements OnInit {
     }
 
     if (this.holiday == "Дни рождения апреля 2025") {
-      this.holidayTitle = "Дни рождения 16-20 апреля 2025";
+      this.holidayTitle = "Дни рождения 21-25 апреля 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +

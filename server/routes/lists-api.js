@@ -5262,93 +5262,106 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "всего поздравляемых",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+       // amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "из них жители ПНИ",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "поздравлено 4 и более раз",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "поздравлено 3 раза",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "поздравлено 2 раза",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+       // amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "поздравлено 1 раз",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "не поздравлено ни разу",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
         amount1: 0, //ДР марта 2025
-        amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2025
         amount3: 0, //ДР апреля 2025
         amount4: 0, //ДР мая 2025
+        amount5: 0, //Пасха 2025
       },
 
     ]
 
-    const holidays = [ListBefore, March8, List, ListNext];
+    const holidays = [ListBefore, March8, List, ListNext, Easter];
 
     for (let i = 0; i < holidays.length; i++) {
+      if(i!=1){
       statistic[0]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false });
       statistic[1]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true });
       statistic[2]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: { $gte: 4 } });
@@ -5360,14 +5373,14 @@ router.get("/statistic", checkAuth, async (req, res) => {
       statistic[8]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: 1 });
       statistic[9]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 1 });
       statistic[10]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: 0 });
-      statistic[11]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 0 });
+      statistic[11]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 0 });}
     }
 
-    statistic[2].amount2 = 10667;
+/*     statistic[2].amount2 = 10667;
     statistic[4].amount2 = 0;
     statistic[6].amount2 = 0;
     statistic[8].amount2 = 0;
-    statistic[10].amount2 = 0;
+    statistic[10].amount2 = 0; */
 
     console.log('statistic');
     console.log(statistic);

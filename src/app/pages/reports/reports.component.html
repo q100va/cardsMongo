@@ -16,10 +16,11 @@
                 <mat-cell *matCellDef="let item"> {{ item.amount1 }} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="holiday2">
+ <!--            <ng-container matColumnDef="holiday2">
                 <mat-header-cell *matHeaderCellDef> 8 марта 2025</mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount2}} </mat-cell>
             </ng-container>
+ -->
 
             <ng-container matColumnDef="holiday3">
                 <mat-header-cell *matHeaderCellDef> ДР апреля 2025 </mat-header-cell>
@@ -29,6 +30,11 @@
                 <mat-header-cell *matHeaderCellDef> ДР мая 2025 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount4}} </mat-cell>
             </ng-container>
+            <ng-container matColumnDef="holiday2">
+                <mat-header-cell *matHeaderCellDef> Пасха 2025</mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount5}} </mat-cell>
+            </ng-container>
+
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
