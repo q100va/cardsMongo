@@ -209,7 +209,7 @@
                                     {{person.old.patronymic}}
                                     {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}
                                 </p>
-                                <p> {{accepted[i].id}} - index {{i}}</p>
+                             <!--    <p> {{accepted[i].id}} - index {{i}}</p> -->
                                 <br />
                                 <div *ngIf="person.old.lastName!=person.new.lastName">
                                     <!-- <mat-radio-group [(ngModel)]="accepted_lastName"> -->
@@ -242,9 +242,9 @@
                                         </mat-radio-button>
                                         <mat-radio-button [value]="person.new.patronymic">{{person.new.patronymic}}
                                         </mat-radio-button>
-                                    </mat-radio-group>
+                                    </mat-radio-group><!-- 
                                     {{accepted[i].patronymic}}
-
+ -->
                                 </div>
 
                                 <div *ngIf="person.old.dateBirthday!=person.new.dateBirthday">
