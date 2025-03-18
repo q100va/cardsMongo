@@ -280,6 +280,7 @@ export class AddListsComponent implements OnInit {
   }
 
   compareLists(arrayOfLists, nursingHome) {
+    this.accepted = [];
     //alert("WORKS");
     console.log("WORKS");
     console.log(arrayOfLists);
