@@ -107,7 +107,7 @@ export class AddListsComponent implements OnInit {
     accepted_dateNameDay: number = 0;
     accepted_monthNameDay: number = 0; */
 
-/*   accepted_lastName: string;
+  /*   accepted_lastName: string;
   accepted_firstName: string;
   accepted_patronymic: string;
   accepted_dateBirthday: number;
@@ -389,13 +389,10 @@ export class AddListsComponent implements OnInit {
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
     const changed = this.resultOfCompare.doubtful.find(
-        (item) => item.key == movedFromDoubtful
-      )
-    this.resultOfCompare.changed.push(
-      changed
+      (item) => item.key == movedFromDoubtful
     );
-    this.duplicateChanged.push(changed
-    );
+    this.resultOfCompare.changed.push(changed);
+    this.duplicateChanged.push(changed);
     this.resultOfCompare.doubtful.splice(
       this.resultOfCompare.doubtful.findIndex(
         (item) => item.key == movedFromDoubtful
@@ -453,7 +450,7 @@ export class AddListsComponent implements OnInit {
   }
 
   acceptChanges(accepted, key, person) {
-/*     console.log("accepted.dateOfSignedConsent");
+    /*     console.log("accepted.dateOfSignedConsent");
     console.log(accepted.dateOfSignedConsent); */
 
     console.log("person");
@@ -508,14 +505,14 @@ export class AddListsComponent implements OnInit {
     console.log("cloneAccepted.id");
     console.log(cloneAccepted.id);
 
-    let index = this.accepted.findIndex((item) => item.id == cloneAccepted.id)
+    let index = this.accepted.findIndex((item) => item.id == cloneAccepted.id);
     console.log("index");
     console.log(index);
 
-    this.accepted.splice(index,1);
+    this.accepted.splice(index, 1);
     console.log("this.accepted");
     console.log(this.accepted);
-/* 
+    /* 
     this.accepted_lastName = undefined;
     this.accepted_firstName = undefined;
     this.accepted_patronymic = undefined;
@@ -540,6 +537,7 @@ export class AddListsComponent implements OnInit {
   }
 
   acceptAllChanges() {
+    console.log("acceptAllChanges");
     this.waiting = true;
     this.resultOfCompare.accepted = this.allAccepted;
 
@@ -553,19 +551,26 @@ export class AddListsComponent implements OnInit {
         async (res) => {
           alert(res.data);
           this.index++;
+          this.waiting = false;
           if (this.index == this.arrayOfLists.length) {
             alert("Это был последний лист.");
             this.isShowList = false;
           } else {
             this.dateOfList = null;
-            this.compareLists(
-              this.arrayOfLists[this.index],
-              this.arrayOfLists[this.index][0].nursingHome
-            );
+            if (this.arrayOfLists[this.index][0]?.nursingHome) {
+              this.compareLists(
+                this.arrayOfLists[this.index],
+                this.arrayOfLists[this.index][0].nursingHome
+              );
+            } else {
+              alert(
+                "Невозможно продолжить обновление! Возможно загруженный файл содержит строки без названия интерната."
+              );
+            }
           }
-          this.waiting = false;
         },
         (err) => {
+          this.waiting = false;
           console.log(err);
           alert(
             "Произошла ошибка, обратитесь к администратору! " + err.message

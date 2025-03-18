@@ -123,7 +123,7 @@
 
 
             <mat-card-content *ngIf="isShowList">
-                <h3>Интернат: {{arrayOfLists[index][0].region}} {{arrayOfLists[index][0].nursingHome}}</h3>
+                <h3>Интернат: {{arrayOfLists[index][0]?.region}} {{arrayOfLists[index][0]?.nursingHome}}</h3>
                 <mat-form-field appearance="fill">
                     <mat-label>Дата списка</mat-label>
                     <input matInput [matDatepicker]="picker" [(ngModel)]="dateOfList">
