@@ -160,10 +160,13 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2"><button mat-raised-button
+                        <td colspan="2">
+
+                            <button mat-raised-button [disabled]="!(movedFromAbsents>=0 && movedFromArrived>=0)"
                                 (click)="moveToChanged(movedFromAbsents, movedFromArrived)">
                                 Переместить в измененные
-                            </button> </td>
+                            </button>
+                        </td>
                     </tr>
 
                     <tr>
@@ -192,10 +195,11 @@
                     </tr>
 
                     <tr>
-                        <td><button mat-raised-button (click)="moveToChangedFromDoubtful(movedFromDoubtful)">
+                        <td>
+                            <button mat-raised-button (click)="moveToChangedFromDoubtful(movedFromDoubtful)" [disabled]="!(movedFromDoubtful>=0)">
                                 Переместить в измененные
                             </button> </td>
-                        <td><button mat-raised-button (click)="moveToAbsentsArrived(movedFromDoubtful)">
+                        <td><button mat-raised-button (click)="moveToAbsentsArrived(movedFromDoubtful)" [disabled]="!(movedFromDoubtful>=0)">
                                 Переместить в выбывшие/прибывшие
                             </button> </td>
                     </tr>
@@ -209,7 +213,7 @@
                                     {{person.old.patronymic}}
                                     {{person.old.dateBirthday}}.{{person.old.monthBirthday}}.{{person.old.yearBirthday}}
                                 </p>
-                             <!--    <p> {{accepted[i].id}} - index {{i}}</p> -->
+                                <!--    <p> {{accepted[i].id}} - index {{i}}</p> -->
                                 <br />
                                 <div *ngIf="person.old.lastName!=person.new.lastName">
                                     <!-- <mat-radio-group [(ngModel)]="accepted_lastName"> -->
@@ -441,8 +445,18 @@
                                 </div>
                                 <br /> -->
 
-                                <button mat-raised-button (click)="acceptChanges(accepted[i], person.key, person.old)">
-                                     <!--  (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay, dateOfSignedConsent: accepted_dateOfSignedConsent }, person.key, person.old)"> -->
+                                <button mat-raised-button (click)="acceptChanges(accepted[i], person.key, person.old)"
+                                [disabled]="person.old.lastName!=person.new.lastName && accepted[i].lastName == undefined ||
+                                person.old.firstName!=person.new.firstName && accepted[i].firstName == undefined ||
+                                person.old.patronymic!=person.new.patronymic && accepted[i].patronymic == undefined ||
+                                person.old.dateBirthday!=person.new.dateBirthday && accepted[i].dateBirthday == undefined ||
+                                person.old.monthBirthday!=person.new.monthBirthday && accepted[i].monthBirthday == undefined ||
+                                person.old.gender!=person.new.gender && accepted[i].gender == undefined ||
+                                person.old.comment1!=person.new.comment1 && accepted[i].comment1 == undefined ||
+                                person.old.comment2!=person.new.comment2 && accepted[i].comment2 == undefined ||
+                                person.old.dateOfSignedConsent!=person.new.dateOfSignedConsent && person.new.dateOfSignedConsent != null && accepted[i].dateOfSignedConsent == undefined
+                                ">
+                                    <!--  (click)="acceptChanges({     id : person.old._id, lastName: accepted_lastName, firstName: accepted_firstName, patronymic: accepted_patronymic, dateBirthday: accepted_dateBirthday, monthBirthday: accepted_monthBirthday, yearBirthday: accepted_yearBirthday,isDisabled: accepted_isDisabled,isRestricted: accepted_isRestricted,noAddress: accepted_noAddress,isReleased: accepted_isReleased,dateExit: accepted_dateExit,gender: accepted_gender,comment1: accepted_comment1,comment2: accepted_comment2, veteran: accepted_veteran, child: accepted_child, linkPhoto: accepted_linkPhoto,nameDay: accepted_nameDay,dateNameDay: accepted_dateNameDay, monthNameDay: accepted_monthNameDay, dateOfSignedConsent: accepted_dateOfSignedConsent }, person.key, person.old)"> -->
                                     Принять изменения
                                 </button>
 
@@ -482,7 +496,7 @@
                 </table>
 
                 <mat-card-actions>
-                    <button mat-raised-button (click)="acceptAllChanges()" [disabled]="!dateOfList || waiting">
+                    <button mat-raised-button (click)="acceptAllChanges()" [disabled]="(!dateOfList || waiting) || accepted.length > 0 || this.resultOfCompare.doubtful.length > 0">
                         Обновить БД
                     </button>
                 </mat-card-actions>

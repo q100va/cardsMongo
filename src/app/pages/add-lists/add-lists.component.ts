@@ -386,6 +386,8 @@ export class AddListsComponent implements OnInit {
 
     console.log("this.accepted");
     console.log(this.accepted);
+    this.movedFromAbsents=undefined;
+    this.movedFromArrived=undefined;
   }
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
@@ -429,6 +431,7 @@ export class AddListsComponent implements OnInit {
 
     console.log("this.accepted");
     console.log(this.accepted);
+    this.movedFromDoubtful = undefined;
   }
 
   moveToAbsentsArrived(movedFromDoubtful) {
@@ -448,6 +451,7 @@ export class AddListsComponent implements OnInit {
       ),
       1
     );
+    this.movedFromDoubtful = undefined;
   }
 
   acceptChanges(accepted, key, person) {
