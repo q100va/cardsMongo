@@ -113,6 +113,7 @@ import { DobroruNewYearComponent } from "./pages/dobroru-new-year/dobroru-new-ye
 import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-february23.component";
 import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
 import { ReportsComponent } from './pages/reports/reports.component';
+import { DobroruMay9Component } from './pages/dobroru-may9/dobroru-may9.component';
 
 @NgModule({
   declarations: [
@@ -175,6 +176,7 @@ import { ReportsComponent } from './pages/reports/reports.component';
     DobroruFebruary23Component,
     DobroruMarch8Component,
     ReportsComponent,
+    DobroruMay9Component,
 
   ],
   imports: [

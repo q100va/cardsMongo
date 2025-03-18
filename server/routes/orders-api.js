@@ -4737,6 +4737,7 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
       let answer;
       if (newOrder.holiday == "23 февраля 2025" || newOrder.holiday == "8 марта 2025") { answer = await deleteErrorPlusSpring(false, req.body.userName) };
       if (newOrder.holiday == "Пасха 2025") { answer = await deleteErrorPlusEaster(false, req.body.userName) };
+      if (newOrder.holiday == "9 мая 2025") { answer = await deleteErrorPlusVeterans(false, req.body.userName) };
       console.log("answer");
       console.log(answer);
       if (!answer) {
@@ -5223,6 +5224,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
 
     if (newOrder.holiday == "23 февраля 2025" || newOrder.holiday == "8 марта 2025") { await deleteErrorPlusSpring(order_id); };
     if (newOrder.holiday == "Пасха 2025") { await deleteErrorPlusEaster(order_id) };
+    if (newOrder.holiday == "9 мая 2025") { await deleteErrorPlusVeterans(order_id) };
 
 
     return {
@@ -5244,6 +5246,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
     // console.log("resultLineItems222");
     if (newOrder.holiday == "23 февраля 2025" || newOrder.holiday == "8 марта 2025") { await deleteErrorPlusSpring(order_id); };
     if (newOrder.holiday == "Пасха 2025") { await deleteErrorPlusEaster(order_id) };
+    if (newOrder.holiday == "9 мая 2025") { await deleteErrorPlusVeterans(order_id) };
 
     return {
       result: `Обратитесь к администратору. Заявка не сформирована. Не найден адрес для ${resultLineItems}.`,
@@ -5486,6 +5489,30 @@ async function collectSeniorsSpring(data, orderFilter) {
           );
         }
 
+        if (data.holiday == "9 мая 2025") {
+          await May9.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+
+
+          //TODO: May9 statistic
+/*           let senior = await May9.findOne({ _id: result.celebrator_id });
+          let newP = senior.plusAmount;
+          let p = newP - 1;
+          let c = senior.category;
+          await House.updateOne(
+            {
+              nursingHome: senior.nursingHome
+            },
+            {
+              $inc: {
+                ["statistic.easter.plus" + p]: -1,
+                ["statistic.easter.plus" + newP]: 1,
+                ["statistic.easter." + c + "Plus"]: 1,
+              }
+            }
+
+          ); */
+        }
+
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
@@ -5613,6 +5640,10 @@ async function searchSeniorSpring(
 
     if (data.holiday == "Пасха 2025") {
       celebrator = await Easter.findOne(filter);
+    }
+
+    if (data.holiday == "9 мая 2025") {     
+      celebrator = await May9.findOne(filter);
     }
 
     // console.log("celebrator");
@@ -8974,6 +9005,37 @@ async function fillOrderForInstitutes(
     }
 
     if (filter.onlyWithConcent) {
+      if (holiday == "9 мая 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await May9.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "9 мая 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await MMay9arch8.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+    } else {
+      if (holiday == "9 мая 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+        count = await May9.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+
+      if (holiday == "9 мая 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+        count = await May9.find({
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
+          // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+        }).countDocuments();
+      }
+    }
+
+    if (filter.onlyWithConcent) {
       if (holiday == "Пасха 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await Easter.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
@@ -9359,7 +9421,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if ((holiday == "23 февраля 2025" || holiday == "8 марта 2025" || holiday == "Пасха 2025") && (filter.noNames || filter.minNumberOfHouses)) {
+  if ((holiday == "23 февраля 2025" || holiday == "8 марта 2025" || holiday == "Пасха 2025" || holiday == "9 мая 2025") && (filter.noNames || filter.minNumberOfHouses)) {
 
     /*          if (filter.noNames) {
               if (!region) {
@@ -9423,6 +9485,17 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           // forInstitute: 0,onlyForInstitute: true, finished: false,
         }).limit(amount);
       }
+      if (holiday == "9 мая 2025") {
+        seniorsData = await May9.find({
+          dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
 
       /*          }
                if (region) {
@@ -9477,6 +9550,17 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           // forInstitute: 0,onlyForInstitute: true, finished: false,
         }).limit(amount);
       }
+      if (holiday == "9 мая 2025") {
+        seniorsData = await May9.find({
+          //dateOfSignedConsent: { $ne: null },
+          nursingHome: nursingHome,
+          absent: false,
+          plusAmount: { $lt: 1 },
+          _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+
+          // forInstitute: 0,onlyForInstitute: true, finished: false,
+        }).limit(amount);
+      }
       /*       }
             if (region) {
               seniorsData = await NewYear.find({
@@ -9514,10 +9598,17 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         await Easter.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         senior = await Easter.findOne({ _id: senior._id });
       }
+      if (holiday == "9 мая 2025") {
+        await May9.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+        senior = await May9.findOne({ _id: senior._id });
+      }
+
+       if(holiday != "9 мая 2025") {
       let newP = senior.plusAmount;
       let p = newP - 1;
       let c = senior.category;
-      let h = (holiday == "Пасха 2025") ? "easter" : "spring"
+      let h = (holiday == "Пасха 2025") ? "easter" : "spring";
+     
       await House.updateOne(
         {
           nursingHome: senior.nursingHome
@@ -9530,7 +9621,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
           }
         }
-      );
+      );}
       /*       if (contact == "@tterros") {
               await House.updateOne(
                 {

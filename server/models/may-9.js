@@ -37,6 +37,7 @@ const listSchema = new Schema(
     thirdTime: {type: Boolean, default: false},
     seniorId: { type: String },    
     dateOfSignedConsent : {type: Date, default: null },
+    category:  { type: String }, 
 
   },
   { collection: "may_9_2025" }
