@@ -8094,7 +8094,7 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
 
 
-  let veterans = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
+  let veterans = Math.round(newOrder.amount * 0.1) > 0 ? Math.round(newOrder.amount * 0.1) : 1;
   let children = newOrder.amount - veterans;
 
   proportion = {
