@@ -3029,7 +3029,7 @@ async function fillOrderSpecialDate(housesForInstitutes, proportion, period, ord
     if (proportion[category]) {
       data = await collectSeniors(housesForInstitutes, data, orderFilter, holiday);
       if (data.counter < proportion[category]) {
-        if (data.proportion.amount > 300) {
+        if (data.proportion.amount > 200) {
           data.maxPlus = data.maxPlus + 1;
           data = await collectSeniors(housesForInstitutes, data, orderFilter, holiday);
           if (data.counter < proportion[category]) {
