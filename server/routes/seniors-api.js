@@ -518,7 +518,7 @@ if (index == -1) {
   }
   if (house.nursingHome == "ПОБЕДА" || house.nursingHome == "РОСТОВ-НА-ДОНУ") {
     let comment1 = newSenior.comment1.replace(/\(/g, '');
-    comment1 = comment1.replaceAll(/\)/g, '');
+    comment1 = comment1.replace(/\)/g, '');
     if (!oldList[index].comment1.includes(comment1)) {
       await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
     }
