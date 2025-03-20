@@ -259,6 +259,9 @@ export class AddListsComponent implements OnInit {
             senior.lastName.endsWith("ина")
           ) {
             senior.gender = "Female";
+          } else {
+            senior.gender = "Male";
+            //alert('Необходимо уточнить пол: ' + senior.lastName + ' ' + senior.firstName);
           }
         } else if (
           senior.patronymic.endsWith("ич") ||
@@ -272,7 +275,11 @@ export class AddListsComponent implements OnInit {
           senior.patronymic.endsWith("Кызы")
         ) {
           senior.gender = "Female";
+        } else {
+          senior.gender = "Male";
+          //alert('Необходимо уточнить пол: ' + senior.lastName + ' ' + senior.firstName + ' ' + senior.patronymic);
         }
+
       }
     }
     console.log("this.arrayOfLists");
@@ -546,7 +553,7 @@ export class AddListsComponent implements OnInit {
     this.waiting = true;
     this.resultOfCompare.accepted = this.allAccepted;
 
-    this.seniorsService
+/*     this.seniorsService
       .applyChanges(
         this.resultOfCompare,
         this.dateOfList,
@@ -554,7 +561,7 @@ export class AddListsComponent implements OnInit {
       )
       .subscribe(
         async (res) => {
-          alert(res.data);
+          alert(res.data);  */
           this.index++;
           this.waiting = false;
           if (this.index == this.arrayOfLists.length) {
@@ -573,7 +580,7 @@ export class AddListsComponent implements OnInit {
               );
             }
           }
-        },
+    /* ,   }
         (err) => {
           this.waiting = false;
           console.log(err);
@@ -582,7 +589,7 @@ export class AddListsComponent implements OnInit {
           );
           //stop = true;
         }
-      );
+      );  */
   }
 
   showEmail(startDate: Date, endDate: Date) {

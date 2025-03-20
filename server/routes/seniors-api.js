@@ -516,8 +516,10 @@ if (index == -1) {
   if (newSenior.dateOfSignedConsent != oldList[index].dateOfSignedConsent && !newSenior.dateOfSignedConsent) {
     newSenior.dateOfSignedConsent = oldList[index].dateOfSignedConsent;
   }
-  if (house.nursingHome == "ПОБЕДА") {
-    if (!oldList[index].comment1.includes(newSenior.comment1)) {
+  if (house.nursingHome == "ПОБЕДА" || house.nursingHome == "РОСТОВ-НА-ДОНУ") {
+    let comment1 = newSenior.comment1.replaceAll('(', '');
+    comment1 = comment1.replaceAll(')', '');
+    if (!oldList[index].comment1.includes(comment1)) {
       await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
     }
   }

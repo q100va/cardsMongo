@@ -298,7 +298,7 @@
                                                                 Введите валидные данные (min 1)!
                                                             </mat-error>
 
-                                                         <!--    <mat-checkbox *ngIf="!form.controls.noNames.value"
+                                                            <!--    <mat-checkbox *ngIf="!form.controls.noNames.value"
                                                                 [disabled]="showFilter"
                                                                 (change)="onChangeMinNumberOfHouses()"
                                                                 [formControl]="form.controls['minNumberOfHouses']">с
@@ -570,7 +570,7 @@
                             Огромное вам спасибо за отклик!<br />
                             Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.<br />
                             Открытки нужно отправить примерно за 30 дней до праздника.<br />
-                            
+
                         </p>
 
                         <!--  <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
@@ -633,23 +633,23 @@
                         <p style="font-family: 'Times New Roman', Times, serif;">
                             Мы получили вашу заявку и очень рады вашему участию!
                         </p>
-
+                        <!-- 
                         <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. <!-- Иногда в списках
+                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны.
+                        </p>-->
+ <!-- Иногда в списках
                             встречаются
                             люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                             проживают в домах престарелых. Иногда сразу после детдомов. -->
-                        </p>
-
-                        <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
+                       <!--  <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ФИО или несколько ФИО). <!-- Иногда в списках
+                            идет адрес, потом - ФИО или несколько ФИО).
+                        </p> -->
+                        <!-- Иногда в списках
                             встречаются
                             люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                             проживают в домах престарелых. Иногда сразу после детдомов. -->
-                        </p>
-
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
                         </h2>
@@ -661,6 +661,17 @@
                             чтобы я могла их передать другому поздравляющему.<br />
                             С 9 мая мы поздравляем всех жителей интернатов.
                         </p>
+                        <p *ngIf="!onlyWithConcent"
+                        style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
+                        text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                        Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
+                    </p>
+
+                    <p *ngIf="onlyWithConcent"
+                        style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                        text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                        Сначала идет адрес, потом - ФИО или несколько ФИО.
+                    </p>
 
                     </mat-card-content>
 
@@ -761,7 +772,6 @@
 
                     </mat-card-content>
 
-                    <br />
                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
@@ -794,13 +804,13 @@
                                 <span *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">
                                     {{celebrator.linkPhoto}} </span>
                                 <span *ngIf="form.controls.source.value == 'subscription'">
-                                     - 
+                                    -
                                     {{celebrator.veteran}}
                                     {{celebrator.child}}
 
                                 </span>
 
-                            <!--     onlyWithConcent && celebrator.dateOfSignedConsent &&  -->
+                                <!--     onlyWithConcent && celebrator.dateOfSignedConsent &&  -->
                             </div>
                         </section>
                         <br />

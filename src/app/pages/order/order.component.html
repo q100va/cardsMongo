@@ -45,7 +45,8 @@
                                                     <mat-icon>navigate_before</mat-icon>
                                                 </button>
                                             </span>
-                                            <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}} (21-25
+                                            <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}}
+                                                (21-25
                                                 число по умолчанию)</span>
                                             <span class="header" *ngIf="isNextMonth">{{holiday}} (1-5 число по
                                                 умолчанию)</span>
@@ -682,7 +683,7 @@
                         люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                         проживают в домах престарелых. Иногда сразу после детдомов. -->
 
-                        <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
+                        <!--                 <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
                             идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны.
                         </p>
@@ -691,7 +692,7 @@
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
                             идет адрес, потом - ФИО или несколько ФИО).
                         </p>
-
+ -->
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{isForInstitutes ? holiday : holidayTitle }}
@@ -710,6 +711,18 @@
                             Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления
                             мы готовим примерно за 3
                             месяца до праздника. -->
+                        <p *ngIf="!onlyWithConcent"
+                            style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
+                            text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                            Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
+                        </p>
+
+                        <p *ngIf="onlyWithConcent"
+                            style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                            text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                            Сначала идет адрес, потом - ФИО или несколько ФИО.
+                        </p>
+
                     </mat-card-content>
 
                     <mat-card-content *ngIf="showInstructionForSubscribers && isForInstitutes"
@@ -747,7 +760,6 @@
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holidayTitle }}
                         </h2>
-
                     </mat-card-content>
 
                     <!--                  <mat-card-content *ngIf="showInstruction && isForInstitutes"
@@ -804,7 +816,7 @@
 
 
                     </mat-card-content>-->
-                    <br />
+               
                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">

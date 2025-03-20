@@ -629,23 +629,19 @@
                         <p style="font-family: 'Times New Roman', Times, serif;">
                             Мы получили вашу заявку и очень рады вашему участию!
                         </p>
-
+<!-- 
                         <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. <!-- Иногда в списках
-                            встречаются
-                            люди, которых к престарелым совсем не относятся. Это инвалиды, которые
-                            проживают в домах престарелых. Иногда сразу после детдомов. -->
+                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. 
                         </p>
 
                         <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ФИО или несколько ФИО). <!-- Иногда в списках
-                            встречаются
-                            люди, которых к престарелым совсем не относятся. Это инвалиды, которые
-                            проживают в домах престарелых. Иногда сразу после детдомов. -->
+                            идет адрес, потом - ФИО или несколько ФИО).Иногда в списках
+                            встречаются люди, которых к престарелым совсем не относятся. Это инвалиды, которые
+                            проживают в домах престарелых. Иногда сразу после детдомов.
                         </p>
-
+ -->
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
                         </h2>
@@ -663,6 +659,17 @@
                             'Уважаемая(ый) ...! Поздравляю Вас с наступившей весной и праздником Пасхи, если Вы
                             отмечаете! Желаю....'
                         </p>
+                        <p *ngIf="!onlyWithConcent"
+                        style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
+                        text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                        Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
+                    </p>
+
+                    <p *ngIf="onlyWithConcent"
+                        style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                        text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                        Сначала идет адрес, потом - ФИО или несколько ФИО.
+                    </p>
 
                     </mat-card-content>
 
@@ -768,7 +775,6 @@
 
                     </mat-card-content>
 
-                    <br />
                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
