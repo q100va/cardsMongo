@@ -8,7 +8,7 @@ import { CookieService } from "ngx-cookie-service";
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit {
-  displayedColumns = ['indicator', 'holiday1', 'holiday3', 'holiday4', 'holiday5', 'holiday6',];//, 'holiday2'
+  displayedColumns = ['indicator',  'holiday3', 'holiday4', 'holiday5', 'holiday6',];//, 'holiday1','holiday2'
   statistic = [];
   userName;
   name;

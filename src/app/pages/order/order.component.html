@@ -39,11 +39,16 @@
                                             Дата: {{orderDate}}</mat-card-subtitle>
                                         <mat-card-subtitle>Координатор: {{userName}} </mat-card-subtitle>
                                         <mat-card-subtitle>Праздник: <span>
-                                                <button [disabled]="isBeforeMonth" mat-icon-button
+                                              <!--   <button [disabled]="isBeforeMonth" mat-icon-button
                                                     matTooltip="Предыдущий месяц" color="primary"
                                                     (click)=goBack($event)>
                                                     <mat-icon>navigate_before</mat-icon>
-                                                </button>
+                                                </button> -->
+                                                <button [disabled]="isBeforeMonth || !isNextMonth" mat-icon-button
+                                                matTooltip="Предыдущий месяц" color="primary"
+                                                (click)=goBack($event)>
+                                                <mat-icon>navigate_before</mat-icon>
+                                            </button>
                                             </span>
                                             <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}}
                                                 (21-25
