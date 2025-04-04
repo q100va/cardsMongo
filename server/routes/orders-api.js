@@ -2532,7 +2532,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 10,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3,  //PLUSES1
+      "maxPlus": 2,  //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -3378,7 +3378,7 @@ async function searchSenior(
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3; 
   let maxPlusAmount = data.maxPlus; //PLUSES1
-  if (holiday == "Дни рождения марта 2025") {
+  if (holiday == "Дни рождения мая 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 1;
     }
@@ -5563,6 +5563,7 @@ async function searchSeniorSpring(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
+    yearBirthday:  { $gt: 0, $lte: 1945 },
     //firstName: "Надежда",
     //lastName: "Артамонова",
     // secondTime: data.maxPlus > 1 ? true : false,
