@@ -3309,8 +3309,8 @@ async function searchSenior(
   //data.restrictedHouses= [];
 
   let standardFilter = {
-    nursingHome: { $nin: data.restrictedHouses },  //PLUSES
-    // nursingHome: { $in: ["БЛАГОВЕЩЕНСК_ЗЕЙСКАЯ"] },//, , , "СЫЗРАНЬ_КИРОВОГРАДСКАЯ""ЕЛАТЬМА""ГРЯЗОВЕЦ"
+ nursingHome: { $nin: data.restrictedHouses },  //PLUSES
+   //  nursingHome: { $in: ["ЗЕЛЕНЫЙ"] },//, , , "СЫЗРАНЬ_КИРОВОГРАДСКАЯ""ЕЛАТЬМА""ГРЯЗОВЕЦ"
     // nursingHome: { $in: housesForInstitutes },    
     //firstName: "Нина",
     /* 
@@ -4879,7 +4879,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.2)
+        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.4)
       }
       if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
     } else {
@@ -5021,7 +5021,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.2)
+        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.4)
       }
     }
 
@@ -5039,7 +5039,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
       console.log("proportion.oneHouse");
       console.log(proportion.oneHouse);
 
-      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
+      if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = undefined; //Math.ceil(newOrder.amount * 0.33);
 
     }
 
@@ -5076,7 +5076,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
       "yangWomen": yangWomenAmount,
       "yangMen": yangMenAmount,
       "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.2),
-      "oneRegion": Math.ceil(newOrder.amount * 0.33)
+      "oneRegion": undefined//Math.ceil(newOrder.amount * 0.33)
     }
 
     if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region || newOrder.amount > 20) {
