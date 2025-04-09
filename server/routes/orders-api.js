@@ -5573,6 +5573,9 @@ async function searchSeniorSpring(
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true }
   };
+  if (data.holiday == "9 мая 2025") standardFilter.yearBirthday =  { $gt: 0, $lte: 1945 };
+
+
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
   if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") {
