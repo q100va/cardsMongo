@@ -5228,7 +5228,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
 
 
     return {
-      result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,
+      result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.` + seniorsData.celebratorsAmount,
       success: false
 
     }
@@ -5563,7 +5563,7 @@ async function searchSeniorSpring(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-    yearBirthday:  { $gt: 0, $lte: 1945 },
+   // yearBirthday:  { $gt: 0, $lte: 1945 },
     //firstName: "Надежда",
     //lastName: "Артамонова",
     // secondTime: data.maxPlus > 1 ? true : false,
