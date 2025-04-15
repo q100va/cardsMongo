@@ -2488,8 +2488,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения мая 2025") {
     period = {
-      "date1": 16,
-      "date2": 20,
+      "date1": 21,
+      "date2": 25,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -8464,8 +8464,8 @@ async function searchSeniorVeterans(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 1;
-  if (kind == 'veterans') { maxPlusAmount = 1; }
+  let maxPlusAmount = 2; //PLUSES1
+  if (kind == 'veterans') { maxPlusAmount = 2; }
 
 
   //let maxPlusAmount = data.maxPlus;  
