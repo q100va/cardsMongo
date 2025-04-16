@@ -8464,8 +8464,8 @@ async function searchSeniorVeterans(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 2; //PLUSES1
-  if (kind == 'veterans') { maxPlusAmount = 2; }
+  let maxPlusAmount = 1; //PLUSES1
+  if (kind == 'veterans') { maxPlusAmount = 1; }
 
 
   //let maxPlusAmount = data.maxPlus;  
