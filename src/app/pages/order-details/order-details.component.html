@@ -42,8 +42,9 @@
                 <mat-card fxFlex class="mat-elevation-z8 list-container">
                     <section *ngIf="!order.isOverdue && !order.isReturned && isNotOnlyOne && isNotLate"
                         style="text-align: right;">
-                        <button *ngIf="(!isEdit && order.institutes.length == 0) || (!isEdit && (userRole != 'dobroru' || userRole != 'admin'))" mat-raised-button (click)="editList()"
-                            color="accent">Редактировать</button>
+                        <button
+                            *ngIf="(!isEdit && order.institutes.length == 0) || (!isEdit && (userRole != 'dobroru' || userRole != 'admin'))"
+                            mat-raised-button (click)="editList()" color="accent">Редактировать</button>
                         <button *ngIf="isEdit" mat-raised-button (click)="viewList()" color="primary">К
                             просмотру</button>
                     </section>
@@ -51,33 +52,34 @@
 
 
                         <p style="font-weight: bold; margin: 0; ">{{lineItem.address}}</p>
-   <!--                  <p *ngIf="order.institutes.length > 0 && (userRole != 'dobroru' && userRole != 'admin')" style="font-weight: bold; margin: 0;">
+                        <!--                  <p *ngIf="order.institutes.length > 0 && (userRole != 'dobroru' && userRole != 'admin')" style="font-weight: bold; margin: 0;">
                             {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
 
                         <section *ngIf="order.institutes.length == 0 || userRole == 'dobroru' || userRole == 'admin'"> -->
-                            <p style="font-style: italic; margin: 0;">{{lineItem.infoComment ? lineItem.infoComment :
-                                ""}}
-                            </p>
-                            <p style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment ?
-                                lineItem.adminComment : ""}}</p>
+                        <p *ngIf="lineItem.infoComment" style="font-style: italic; margin: 0;">{{lineItem.infoComment ? lineItem.infoComment :
+                            ""}}
+                        </p>
+                        <p *ngIf="lineItem.adminComment" style="color: red; font-weight: bold; margin: 0;">{{lineItem.adminComment ?
+                            lineItem.adminComment : ""}}</p>
 
-                            <div *ngFor="let celebrator of lineItem.celebrators">
-                                <button mat-icon-button style="color: red;" *ngIf="isEdit && isNotOnlyOne"
-                                    (click)="deleteDestination(celebrator._id)">
-                                    <mat-icon> cancel</mat-icon>
-                                </button>
-                                <span *ngIf = "order.holiday != 'День семьи 2024'">
-                                  <!--   <span >{{celebrator.index}}. </span> -->
-                  <!--   {{userRole != 'dobroru' ? celebrator.lastName : ''}} -->
+                        <div *ngFor="let celebrator of lineItem.celebrators">
+                            <button mat-icon-button style="color: red;" *ngIf="isEdit && isNotOnlyOne"
+                                (click)="deleteDestination(celebrator._id)">
+                                <mat-icon> cancel</mat-icon>
+                            </button>
+                            <span *ngIf="order.holiday != 'День семьи 2024'">
+                                <!--   <span >{{celebrator.index}}. </span> -->
+                                <!--   {{userRole != 'dobroru' ? celebrator.lastName : ''}} -->
+                                <span>{{celebrator.index}}. </span>
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
-                        <!--    {{order.holiday == 'Новый год 2025' ? celebrator.yearBirthday : ''}}  -->
-                    <!--             {{order.source != "dobroru" && (order.holiday == 'Новый год 2025' || order.holiday == 'Дни рождения апреля 2025' || order.holiday == 'Дни рождения мая 2025' || order.holiday == 'Дни рождения июня 2025') ? celebrator.fullDayBirthday : ''}} -->
+                                <!--    {{order.holiday == 'Новый год 2025' ? celebrator.yearBirthday : ''}}  -->
+                                <!--             {{order.source != "dobroru" && (order.holiday == 'Новый год 2025' || order.holiday == 'Дни рождения апреля 2025' || order.holiday == 'Дни рождения мая 2025' || order.holiday == 'Дни рождения июня 2025') ? celebrator.fullDayBirthday : ''}} -->
                                 <!--                             {{(order.holiday == 'Дни рождения апреля 2025' ||  order.holiday == 'Дни рождения мая 2025' || order.holiday == 'Дни рождения мая 2024') ? '(' + (celebrator.specialComment ?
                             celebrator.specialComment : "") + ')' : ''}} -->
                                 {{order.holiday == 'Именины февраля 2025' ? celebrator.nameDay : ''}}
                                 {{celebrator.comment1}}
-                    <!--     {{userRole != 'dobroru' ? celebrator.linkPhoto: ''}}  -->
+                                <!--     {{userRole != 'dobroru' ? celebrator.linkPhoto: ''}}  -->
                                 <!--                 {{celebrator._id}}             -->
                                 <!-- <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{ order.holiday !=
                                     'Именины февраля 2025' && userRole != 'dobroru' ? celebrator.specialComment :
@@ -89,17 +91,18 @@
                                 </span>
                             </span>
 
-                            <span *ngIf = "order.holiday == 'День семьи 2024'">
-                 
-                                    {{celebrator.husbandLastName}} {{celebrator.husbandFirstName}}
-                                    {{celebrator.husbandPatronymic}} ({{celebrator.husbandYearBirthday}}) и {{celebrator.wifeLastName}}
-                                    {{celebrator.wifeFirstName}}
-                                    {{celebrator.wifePatronymic}} ({{celebrator.wifeYearBirthday}}) {{celebrator.comment1}}                           
+                            <span *ngIf="order.holiday == 'День семьи 2024'">
+
+                                {{celebrator.husbandLastName}} {{celebrator.husbandFirstName}}
+                                {{celebrator.husbandPatronymic}} ({{celebrator.husbandYearBirthday}}) и
+                                {{celebrator.wifeLastName}}
+                                {{celebrator.wifeFirstName}}
+                                {{celebrator.wifePatronymic}} ({{celebrator.wifeYearBirthday}}) {{celebrator.comment1}}
 
                             </span>
 
-                            </div>
-      <!--                   </section> -->
+                        </div>
+                        <!--                   </section> -->
 
                         <br />
                     </mat-card-content>
