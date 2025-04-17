@@ -41,11 +41,6 @@ export class SeniorsDetailsComponent implements OnInit {
     this.seniorsService.findSeniorById(this.seniorId).subscribe(
       (res) => {
         this.senior = res["data"];
-      },
-      (err) => {
-        console.log(err);
-      },
-      () => {
         this.form.controls.region.setValue(this.senior.region);
         this.form.controls.nursingHome.setValue(this.senior.nursingHome);
         this.form.controls.lastName.setValue(this.senior.lastName);
@@ -62,18 +57,24 @@ export class SeniorsDetailsComponent implements OnInit {
         this.form.controls.nameDay.setValue(this.senior.nameDay);
         this.form.controls.dateNameDay.setValue(this.senior.dateNameDay);
         this.form.controls.monthNameDay.setValue(this.senior.monthNameDay);
-        this.form.controls.dateOfSignedConsent.setValue(this.senior.dateOfSignedConsent);
-      }
+        this.form.controls.dateOfSignedConsent.setValue(
+          this.senior.dateOfSignedConsent
+        );
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {}
     );
 
-    this.seniorsService.findAllSeniors().subscribe(
+    /*     this.seniorsService.findAllSeniors().subscribe(
       (res) => {
         this.senior = res["data"];
       },
       (err) => {
         console.log(err);
       }
-    );
+    ); */
   }
 
   ngOnInit(): void {
@@ -87,7 +88,7 @@ export class SeniorsDetailsComponent implements OnInit {
       dateBirthday: [null, Validators.compose([])],
       monthBirthday: [null, Validators.compose([])],
       yearBirthday: [null, Validators.compose([])],
-      gender: ['', Validators.compose([Validators.required])],
+      gender: ["", Validators.compose([Validators.required])],
       comment1: [null, Validators.compose([])],
       comment2: [null, Validators.compose([])],
       linkPhoto: [null, Validators.compose([])],
@@ -101,7 +102,9 @@ export class SeniorsDetailsComponent implements OnInit {
   saveSenior(): void {
     console.log("this.form.controls.dateOfSignedConsent.value");
     console.log(this.form.controls.dateOfSignedConsent.value);
-    const dateUpdate = this.form.controls.dateOfSignedConsent.value ? new Date(this.form.controls.dateOfSignedConsent.value) : null;
+    const dateUpdate = this.form.controls.dateOfSignedConsent.value
+      ? new Date(this.form.controls.dateOfSignedConsent.value)
+      : null;
     console.log("dateUpdate");
     console.log(dateUpdate);
     const updatedSenior: Senior = {
@@ -122,7 +125,6 @@ export class SeniorsDetailsComponent implements OnInit {
       dateNameDay: this.form.controls.dateNameDay.value,
       monthNameDay: this.form.controls.monthNameDay.value,
       dateOfSignedConsent: dateUpdate,
-
     };
     this.seniorsService.updateSenior(this.seniorId, updatedSenior).subscribe(
       (res) => {
@@ -137,13 +139,13 @@ export class SeniorsDetailsComponent implements OnInit {
       },
       () => {
         //alert("Seniors information is updated.");
-        this.resultDialog.open(ConfirmationDialogComponent, {
+        /*         this.resultDialog.open(ConfirmationDialogComponent, {
           data: {
             message: "Seniors information has been updated successfully.",
           },
           disableClose: true,
           width: "fit-content",
-        });
+        }); */
       }
     );
   }
