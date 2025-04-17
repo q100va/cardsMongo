@@ -16,6 +16,8 @@ import { ConfirmationService } from "primeng/api";
 import { MessageService } from "primeng/api";
 import { SeniorsService } from "src/app/services/seniors.service";
 import { OrderService } from "src/app/services/order.service";
+import { ActivatedRoute } from "@angular/router";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-seniors-list",
@@ -29,14 +31,23 @@ export class SeniorsListComponent implements OnInit {
   _id: string;
   nursingHome: string;
   nursingHomes = [];
-  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "dateOfSignedConsent",  "isRestricted"]; //"nameDay", "edit", "delete",
+  value: string;
+  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "dateOfSignedConsent",  "isRestricted", "edit", "delete",]; //"nameDay"
+  selectedHome = new FormControl('');
   constructor(
     private seniorsService: SeniorsService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private orderService: OrderService,
+    private route: ActivatedRoute,
   ) {
 
+    this.route.queryParams.subscribe((params) => {
+      console.log(params);
+      this.selectedHome.setValue(params.nursingHome);
+      this.formList(params.nursingHome);
+
+    });
   }
 
   ngOnInit(): void {
@@ -51,6 +62,7 @@ export class SeniorsListComponent implements OnInit {
   }
 
   onChangeNursingHome(event){
+    this.nursingHome = event.value;
     this.seniorsService.findSeniorsFromOneHome(event.value).subscribe(
       (res) => {
         this.seniors = res["data"];

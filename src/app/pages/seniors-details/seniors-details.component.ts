@@ -126,7 +126,11 @@ export class SeniorsDetailsComponent implements OnInit {
     };
     this.seniorsService.updateSenior(this.seniorId, updatedSenior).subscribe(
       (res) => {
-        this.router.navigate(["/seniors"]);
+        //this.router.navigate(["/seniors"]);
+
+        this.router.navigate(["/seniors"], {
+          queryParams: { nursingHome: updatedSenior.nursingHome },
+        });
       },
       (err) => {
         console.log(err);

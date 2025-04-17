@@ -21,7 +21,7 @@
     <mat-card-actions>
 <h4>Интернат</h4>
 <mat-form-field appearance="fill">
-  <mat-select
+  <mat-select [formControl]="selectedHome"
       (selectionChange)="onChangeNursingHome($event)">
       <mat-option></mat-option>
       <mat-option
@@ -152,8 +152,8 @@
         <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
       </mat-table>
     </mat-card-content>
-<!--     <mat-card-subtitle>
+    <mat-card-subtitle>
       <button mat-stroked-button color="primary" routerLink="/seniors/create/new">Add New Senior</button>
-    </mat-card-subtitle> -->
+    </mat-card-subtitle>
   </mat-card>
 </div>
