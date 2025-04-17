@@ -32,21 +32,36 @@ export class SeniorsListComponent implements OnInit {
   nursingHome: string;
   nursingHomes = [];
   value: string;
-  displayedColumns = ["lastName", "firstName", "patronymic", "DOB", "gender", "dateEnter", "dateExit", "comment1", "comment2", "linkPhoto", "dateOfSignedConsent",  "isRestricted", "edit", "delete",]; //"nameDay"
-  selectedHome = new FormControl('');
+  displayedColumns = [
+    "lastName",
+    "firstName",
+    "patronymic",
+    "DOB",
+    "gender",
+    "dateEnter",
+    "dateExit",
+    "comment1",
+    "comment2",
+    "linkPhoto",
+    "dateOfSignedConsent",
+    "isRestricted",
+    "edit",
+    "delete",
+  ]; //"nameDay"
+  selectedHome = new FormControl("");
   constructor(
     private seniorsService: SeniorsService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private orderService: OrderService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
-
     this.route.queryParams.subscribe((params) => {
-      console.log(params);
-      this.selectedHome.setValue(params.nursingHome);
-      this.formList(params.nursingHome);
-
+      if (params.nursingHome) {
+        console.log(params);
+        this.selectedHome.setValue(params.nursingHome);
+        this.formList(params.nursingHome);
+      }
     });
   }
 
@@ -61,7 +76,7 @@ export class SeniorsListComponent implements OnInit {
     );
   }
 
-  onChangeNursingHome(event){
+  onChangeNursingHome(event) {
     this.nursingHome = event.value;
     this.seniorsService.findSeniorsFromOneHome(event.value).subscribe(
       (res) => {
@@ -73,7 +88,7 @@ export class SeniorsListComponent implements OnInit {
     );
   }
 
-  formList(nursingHome){
+  formList(nursingHome) {
     this.seniorsService.findSeniorsFromOneHome(nursingHome).subscribe(
       (res) => {
         this.seniors = res["data"];
@@ -94,14 +109,16 @@ export class SeniorsListComponent implements OnInit {
           this.seniorsService.deleteSenior(_id).subscribe(
             (res) => {
               //this.user = res.data;
-              this.seniorsService.findSeniorsFromOneHome(this.nursingHome).subscribe(
-                (res) => {
-                  this.seniors = res["data"];
-                  this.length = this.seniors.length;
-                },
-                (err) => {},
-                () => {}
-              );
+              this.seniorsService
+                .findSeniorsFromOneHome(this.nursingHome)
+                .subscribe(
+                  (res) => {
+                    this.seniors = res["data"];
+                    this.length = this.seniors.length;
+                  },
+                  (err) => {},
+                  () => {}
+                );
             },
             (err) => {
               console.log(err);
@@ -109,7 +126,11 @@ export class SeniorsListComponent implements OnInit {
             () => {
               //this._id = this.user._id;
               // PrimeNG Toast message sender
-              this.messageService.add({ severity: "warn", summary: "bcrs", detail: "Service deleted successfully" });
+              this.messageService.add({
+                severity: "warn",
+                summary: "bcrs",
+                detail: "Service deleted successfully",
+              });
             }
           );
         }
