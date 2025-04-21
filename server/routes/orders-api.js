@@ -8468,6 +8468,9 @@ async function searchSeniorVeterans(
   // let maxPlusAmount = 3;  
   let maxPlusAmount = 1; //PLUSES1
   if (kind == 'veterans') { maxPlusAmount = 1; }
+  if (filter.dateOfSignedConsent['$ne'] == null) {
+    maxPlusAmount = 2;
+  }
 
 
   //let maxPlusAmount = data.maxPlus;  
