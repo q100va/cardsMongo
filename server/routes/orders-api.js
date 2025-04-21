@@ -2489,7 +2489,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения мая 2025") {
     period = {
       "date1": 21,
-      "date2": 25,
+      "date2": 31,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -8125,11 +8125,12 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
   let proportion = {};
 
-  //let veterans = 4;  //ВЕТЕРАНЫ
+
 
 
 
   let veterans = Math.round(newOrder.amount * 0.1) > 0 ? Math.round(newOrder.amount * 0.1) : 1;
+  //veterans = 8;  //ВЕТЕРАНЫ
   let children = newOrder.amount - veterans;
 
   proportion = {
@@ -8435,6 +8436,7 @@ async function searchSeniorVeterans(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },//CHANGE
+    //noAddress: false,
     //secondTime: data.maxPlus > 1 ? true : false,
     //thirdTime: data.maxPlus === 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
