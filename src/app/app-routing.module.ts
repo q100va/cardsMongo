@@ -136,17 +136,17 @@ const routes: Routes = [
       {
         path: "seniors",
         component: SeniorsListComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard ],//RoleGuard
       },
       {
         path: "seniors/create/new",
         component: SeniorsCreateComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard],//RoleGuard
       },
       {
         path: "seniors/update/:id",
         component: SeniorsDetailsComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard],//RoleGuard
       },
       {
         path: "roles",
