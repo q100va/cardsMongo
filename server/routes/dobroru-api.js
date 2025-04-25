@@ -501,11 +501,15 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         period.maxPlus++;
         seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
         if (seniorsData.celebratorsAmount < newOrder.amount) {
-            await deleteErrorPlus(order_id, newOrder.holiday);
-            return {
-                result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
-                success: false
-            };
+            period.maxPlus++;
+            seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
+            if (seniorsData.celebratorsAmount < newOrder.amount) {
+                await deleteErrorPlus(order_id, newOrder.holiday);
+                return {
+                    result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+                    success: false
+                };
+            }
         }
     }
 
