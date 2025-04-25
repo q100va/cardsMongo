@@ -21,7 +21,7 @@ import { MatTableDataSource } from "@angular/material/table";
 export class HouseListComponent implements OnInit {
   house = [];
  
-  displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased"];//"isActive",, "edit", "delete"
+  displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased", "edit", "delete"];//"isActive",
 
   constructor(
     private dialog: MatDialog,
@@ -63,6 +63,8 @@ export class HouseListComponent implements OnInit {
       () => {}
     );
   }
+
+//644526, Омская обл., Омский р-н, п. 2. Андреевский, ул. Центральная, д. 2. 8, Пушкинский ДИ (психоневрологический)
 
   ngOnInit(): void {}
 
