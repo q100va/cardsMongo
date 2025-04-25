@@ -155,7 +155,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "date2": 30,
             "isActive": true,
             "key": 0,
-            "maxPlus": 3, //PLUSES1
+            "maxPlus": 5, //PLUSES1
             "secondTime": false,
             "scoredPluses": 2
         }
@@ -497,12 +497,12 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     //console.log("newOrder.filter.maxOneHouse");
     //console.log(newOrder.filter.maxOneHouse);
 
-    if (seniorsData.celebratorsAmount < newOrder.amount) {
+/*     if (seniorsData.celebratorsAmount < newOrder.amount) {
         period.maxPlus++;
         seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
         if (seniorsData.celebratorsAmount < newOrder.amount) {
             period.maxPlus++;
-            seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
+            seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday); */
             if (seniorsData.celebratorsAmount < newOrder.amount) {
                 await deleteErrorPlus(order_id, newOrder.holiday);
                 return {
@@ -510,8 +510,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                     success: false
                 };
             }
-        }
-    }
+/*         }
+    } */
 
 
     let resultLineItems = await generateLineItems(nursingHomes, order_id);
