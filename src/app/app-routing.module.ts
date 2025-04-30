@@ -91,12 +91,12 @@ const routes: Routes = [
       {
         path: "houses/create/new",
         component: HouseCreateComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard]
       },
       {
         path: "houses/update/:id",
         component: HouseDetailsComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard, ManagerGuard],
       },
       {
         path: "users",
