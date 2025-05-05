@@ -8872,7 +8872,7 @@ async function fillOrderForInstitutes(
         }).countDocuments();
       } else {
         count = await ListNext.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 6 }, _id: { $nin: prohibitedId }
         }).countDocuments();
       }
     }
@@ -9664,7 +9664,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
       seniorsData = await ListNext.find({
         nursingHome: nursingHome,
         absent: false,
-        plusAmount: { $lt: 2 },
+        plusAmount: { $lt: 6 },
         _id: { $nin: prohibitedId }
       }).limit(amount);
     }
