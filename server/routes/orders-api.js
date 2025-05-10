@@ -2529,7 +2529,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения июня 2025") {
     period = {
       "date1": 16,
-      "date2": 25,
+      "date2": 30,
       "isActive": true,
       "key": 0,
       "maxPlus": 2,  //PLUSES1
@@ -3380,10 +3380,10 @@ async function searchSenior(
   let maxPlusAmount = data.maxPlus; //PLUSES1
   if (holiday == "Дни рождения июня 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 1;
+      maxPlusAmount = data.maxPlus + 2;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus + 1;
+      maxPlusAmount = data.maxPlus + 2;
     }
   }
   if (holiday == "Дни рождения мая 2025") {
@@ -8556,7 +8556,7 @@ async function generateLineItemsVeterans(nursingHomes, order_id) {
   return lineItems;
 }
 
-//////////////////////////////////////////////////// INSTITUTES
+//////////////////////////////////////////////////// INSTITUTES PLUS1///////////////////////////////////////
 
 router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
   let finalResult;
@@ -8863,6 +8863,7 @@ async function fillOrderForInstitutes(
     }
 
     if (holiday == "Дни рождения июня 2025") {
+      console.log("count = await ListNext.find");
       if (filter.onlyWithConcent) {
         count = await ListNext.find({
           nursingHome: house.nursingHome,
@@ -8871,6 +8872,7 @@ async function fillOrderForInstitutes(
           dateOfSignedConsent: { $ne: null },
         }).countDocuments();
       } else {
+        //console.log("count = await ListNext.find");
         count = await ListNext.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 6 }, _id: { $nin: prohibitedId }
         }).countDocuments();
