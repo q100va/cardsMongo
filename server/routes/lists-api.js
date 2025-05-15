@@ -3164,8 +3164,8 @@ async function reportListOfHouses() {
             ]
           }
         }); */
-    // const listOfHouses = await House.find({ isActive: false, region: region.name, dateLastUpdate: { $gt: new Date("2023-08-31"), $lt: new Date("2024-09-01") } });
-    const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false });
+     const listOfHouses = await House.find({ isActive: true, region: region.name, dateLastUpdate: { $gt: new Date("2024-08-31"), $lt: new Date("2024-11-01") } });
+    //const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
 
@@ -5654,11 +5654,11 @@ router.get("/statistic", checkAuth, async (req, res) => {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-02-28"), $lt: new Date("2025-04-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-03-31"), $lt: new Date("2025-05-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-02-28"), $lt: new Date("2025-04-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-03-31"), $lt: new Date("2025-05-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }

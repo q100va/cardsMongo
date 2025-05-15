@@ -86,6 +86,14 @@ export class OrderDetailsComponent implements OnInit {
   findOrder(res) {
     console.log(res["data"]);
     this.order = res["data"];
+/*     let index = 0;
+    for (let lineItem of this.order.lineItems) {  
+      for (let celebrator of lineItem.celebrators) {
+        celebrator.index = index + 1;
+        index++;
+      }
+    } */
+
     this.needAccepting = !this.order.isAccepted
       ? "Требует подтверждения"
       : "Не требует подтверждения";

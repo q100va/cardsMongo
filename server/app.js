@@ -48,6 +48,7 @@ app.use("/", express.static(path.join(__dirname, "../dist/bcrs")));
 const port = process.env.PORT || 3000; // server port
 
 // TODO: This line will need to be replaced with your actual database connection string
+//console.log(process.env);
 
 const conn = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cardsmongo.1f6wa.mongodb.net/CardsMongo?retryWrites=true&w=majority`;
 

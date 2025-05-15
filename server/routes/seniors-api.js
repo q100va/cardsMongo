@@ -479,7 +479,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
       let index;
       if (newSenior.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА") {
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday));
-      } else if (newSenior.nursingHome == "СЛАВГОРОД") {
+      } else if (newSenior.nursingHome == "ИСАКОГОРКА") {//СЛАВГОРОД  
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic));
 
       } else {
@@ -531,7 +531,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
             newSenior.yearBirthday = oldList[index].yearBirthday;
           }
         }
-        if (house.nursingHome == "СЛАВГОРОД") {
+        if (house.nursingHome == "ИСАКОГОРКА") {//СЛАВГОРОД
           if (oldList[index].yearBirthday != newSenior.yearBirthday && oldList[index].yearBirthday == 0) {
             oldList[index].yearBirthday = newSenior.yearBirthday;
             await Senior.updateOne({ _id: oldList[index]._id }, { $set: { yearBirthday: newSenior.yearBirthday } });

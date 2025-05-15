@@ -85,6 +85,12 @@
                                     'Именины февраля 2025' && userRole != 'dobroru' ? celebrator.specialComment :
                                     ''}}
                                 </span>  -->
+                                <span *ngIf="order.source == 'subscription'">
+                                    -
+                                    {{celebrator.veteran}}
+                                    {{celebrator.child}}
+
+                                </span>
                                 <span style="font-weight: bold; color: rgb(255, 0, 0); "
                                     *ngIf="celebrator.absentComment">
                                     {{ celebrator.absentComment}}
