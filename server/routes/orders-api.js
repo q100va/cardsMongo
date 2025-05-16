@@ -3380,10 +3380,10 @@ async function searchSenior(
   let maxPlusAmount = data.maxPlus; //PLUSES1
   if (holiday == "Дни рождения июня 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 4;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 4;
     }
   }
   if (holiday == "Дни рождения мая 2025") {
