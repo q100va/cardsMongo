@@ -54,7 +54,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения мая 2025";
+  holiday: string = "Дни рождения июня 2025";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -510,10 +510,10 @@ export class OrderComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения мая 2025";
+      this.holiday = "Дни рождения июня 2025";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения июня 2025";
+      this.holiday = "Дни рождения июля 2025";
     }
   }
 
@@ -527,10 +527,10 @@ export class OrderComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения мая 2025";
+      this.holiday = "Дни рождения июня 2025";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения апреля 2025";
+      this.holiday = "Дни рождения мая 2025";
     }
   }
 
@@ -690,7 +690,7 @@ export class OrderComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
     this.showInstructionForSubscribers = false;
-    this.holiday = "Дни рождения мая 2025";
+    this.holiday = "Дни рождения июня 2025";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -1111,47 +1111,6 @@ export class OrderComponent implements OnInit {
     console.log("newOrder.filter.onlyWithConcent");
     console.log(newOrder.filter.onlyWithConcent);
 
-    if (this.holiday == "Дни рождения апреля 2025") {
-      this.holidayTitle = "Дни рождения 26-30 апреля 2025";
-      if (this.form.controls.date1.value && this.form.controls.date2.value) {
-        this.holidayTitle =
-          "Дни рождения " +
-          this.form.controls.date1.value +
-          "-" +
-          this.form.controls.date2.value +
-          " апреля 2025";
-      }
-      if (this.form.controls.date1.value && !this.form.controls.date2.value) {
-        this.holidayTitle =
-          "Дни рождения " +
-          this.form.controls.date1.value +
-          "-" +
-          "30 апреля 2025";
-      }
-      if (
-        !this.form.controls.date1.value &&
-        this.form.controls.date2.value &&
-        this.form.controls.date2.value > 25
-      ) {
-        this.holidayTitle =
-          "Дни рождения 21" +
-          "-" +
-          this.form.controls.date2.value +
-          " апреля 2025";
-      }
-      if (
-        !this.form.controls.date1.value &&
-        this.form.controls.date2.value &&
-        this.form.controls.date2.value <= 25
-      ) {
-        this.holidayTitle =
-          "Дни рождения 16" +
-          "-" +
-          this.form.controls.date2.value +
-          " апреля 2025";
-      }
-    }
-
     if (this.holiday == "Дни рождения мая 2025") {
       this.holidayTitle = "Дни рождения 26-31 мая 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
@@ -1167,7 +1126,7 @@ export class OrderComponent implements OnInit {
           "Дни рождения " +
           this.form.controls.date1.value +
           "-" +
-          "31 мая 2025";
+          "30 мая 2025";
       }
       if (
         !this.form.controls.date1.value &&
@@ -1175,7 +1134,7 @@ export class OrderComponent implements OnInit {
         this.form.controls.date2.value > 25
       ) {
         this.holidayTitle =
-          "Дни рождения 21" +
+          "Дни рождения 26" +
           "-" +
           this.form.controls.date2.value +
           " мая 2025";
@@ -1186,7 +1145,7 @@ export class OrderComponent implements OnInit {
         this.form.controls.date2.value <= 25
       ) {
         this.holidayTitle =
-          "Дни рождения 1" +
+          "Дни рождения 20" +
           "-" +
           this.form.controls.date2.value +
           " мая 2025";
@@ -1194,7 +1153,7 @@ export class OrderComponent implements OnInit {
     }
 
     if (this.holiday == "Дни рождения июня 2025") {
-      this.holidayTitle = "Дни рождения 21-25 июня 2025";
+      this.holidayTitle = "Дни рождения 26-30 июня 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
@@ -1208,23 +1167,64 @@ export class OrderComponent implements OnInit {
           "Дни рождения " +
           this.form.controls.date1.value +
           "-" +
-          "30 июня 2025";
+          "31 июня 2025";
       }
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value > 25
+        this.form.controls.date2.value >= 30
       ) {
         this.holidayTitle =
-          "Дни рождения 16" + "-" + this.form.controls.date2.value + " июня 2025";
+          "Дни рождения 26" +
+          "-" +
+          this.form.controls.date2.value +
+          " июня 2025";
       }
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value <= 25
+        this.form.controls.date2.value < 30
       ) {
         this.holidayTitle =
-          "Дни рождения 1" + "-" + this.form.controls.date2.value + " июня 2025";
+          "Дни рождения 1" +
+          "-" +
+          this.form.controls.date2.value +
+          " июня 2025";
+      }
+    }
+
+    if (this.holiday == "Дни рождения июля 2025") {
+      this.holidayTitle = "Дни рождения 1-5 июля 2025";
+      if (this.form.controls.date1.value && this.form.controls.date2.value) {
+        this.holidayTitle =
+          "Дни рождения " +
+          this.form.controls.date1.value +
+          "-" +
+          this.form.controls.date2.value +
+          " июля 2025";
+      }
+      if (this.form.controls.date1.value && !this.form.controls.date2.value) {
+        this.holidayTitle =
+          "Дни рождения " +
+          this.form.controls.date1.value +
+          "-" +
+          "31 июля 2025";
+      }
+      if (
+        !this.form.controls.date1.value &&
+        this.form.controls.date2.value &&
+        this.form.controls.date2.value > 5
+      ) {
+        this.holidayTitle =
+          "Дни рождения 1" + "-" + this.form.controls.date2.value + " июля 2025";
+      }
+      if (
+        !this.form.controls.date1.value &&
+        this.form.controls.date2.value &&
+        this.form.controls.date2.value <= 5
+      ) {
+        this.holidayTitle =
+          "Дни рождения 1" + "-" + this.form.controls.date2.value + " июля 2025";
       }
     }
 

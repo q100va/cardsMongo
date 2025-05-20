@@ -216,7 +216,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 5 ? 'Дни рождения мая 2025' : 'Дни рождения июня 2025',
+      holyday: month == 5 ? 'Дни рождения июня 2025' : 'Дни рождения июля 2025',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -243,9 +243,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 4) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 5) { finalList = await List.insertMany(newList, options); }
-  if (month == 6) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 5) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 6) { finalList = await List.insertMany(newList, options); }
+  if (month == 7) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -933,9 +933,9 @@ async function createCloneCelebrator(celebrator) {
     }
   }
   let holiday;
-  if (celebrator.monthBirthday == 4) { holiday = 'Дни рождения апреля 2025' };
   if (celebrator.monthBirthday == 5) { holiday = 'Дни рождения мая 2025' };
   if (celebrator.monthBirthday == 6) { holiday = 'Дни рождения июня 2025' };
+  if (celebrator.monthBirthday == 7) { holiday = 'Дни рождения июля 2025' };
 
   let cloneCelebrator = {
     seniorId: celebrator._id,
@@ -2182,7 +2182,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
     // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2025", "23 февраля 2025"] });
-    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения июня 2025"] });
+    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения июля 2025"] });
     let lineItemsM = [];
     for (let order of ordersM) {
       for (let item of order.lineItems) {
@@ -3287,7 +3287,7 @@ async function countHB() {
     [
       {
         $match:
-          { holiday: "Дни рождения апреля 2025", isDisabled: false, isOverdue: false, isReturned: false }
+          { holiday: "Дни рождения мая 2025", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3295,7 +3295,7 @@ async function countHB() {
     ]
   );
 
-  let orders = await Order.find({ holiday: "Дни рождения апреля 2025", isDisabled: false, isOverdue: false, isReturned: false });
+  let orders = await Order.find({ holiday: "Дни рождения мая 2025", isDisabled: false, isOverdue: false, isReturned: false });
   let celebrators = new Set();
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
@@ -3603,7 +3603,7 @@ async function countVolonteers() {
   let setClients = new Set();
   let setInstitutes = new Set();
   let setSchools = new Set();
-  let ordersBirthday = await Order.find({ holiday: "Дни рождения апреля 2025", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersBirthday = await Order.find({ holiday: "Дни рождения мая 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersNY = await Order.find({ holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
@@ -3648,13 +3648,13 @@ async function countVolonteers() {
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения апреля 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения апреля 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения мая 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения мая 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
   
    */
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения апреля 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения апреля 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения мая 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения мая 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
 
 
   for (let order of ordersInstitutes) {
@@ -3736,7 +3736,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения апреля 2025", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения мая 2025", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
