@@ -369,7 +369,7 @@ router.put("/update/:id", checkAuth, async (req, res) => {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: 'ДР мая 2024',
+      holyday: 'ДР июня 2024',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -477,7 +477,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     let key = 0;
     for (let newSenior of newList) {
       let index;
-      if (newSenior.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА") {
+      if (newSenior.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА" || house.nursingHome == "ВОЛГОГРАД_КРИВОРОЖСКАЯ") {
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday));
       } else if (newSenior.nursingHome == "ИСАКОГОРКА") {//СЛАВГОРОД  
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic));
@@ -526,7 +526,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
             await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
           }
         }
-        if (house.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА") {
+        if (house.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА" || house.nursingHome == "ВОЛГОГРАД_КРИВОРОЖСКАЯ") {
           if (oldList[index].yearBirthday != newSenior.yearBirthday && newSenior.yearBirthday == 0) {
             newSenior.yearBirthday = oldList[index].yearBirthday;
           }
@@ -1000,14 +1000,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
         let holiday;
-        if (celebrator.monthBirthday == 5) {
-          holiday = 'Дни рождения мая 2025';
-        }
         if (celebrator.monthBirthday == 6) {
           holiday = 'Дни рождения июня 2025';
         }
         if (celebrator.monthBirthday == 7) {
           holiday = 'Дни рождения июля 2025';
+        }
+        if (celebrator.monthBirthday == 8) {
+          holiday = 'Дни рождения августа 2025';
         }
 
         let cloneCelebrator = {
@@ -1045,13 +1045,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
             celebrator.yearBirthday,
           dateOfSignedConsent: celebrator.dateOfSignedConsent,
         };
-        if (celebrator.monthBirthday == 5) {
+        if (celebrator.monthBirthday == 6) {
           await ListBefore.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 6) {
+        if (celebrator.monthBirthday == 7) {
           await List.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 7) {
+        if (celebrator.monthBirthday == 8) {
           await ListNext.create(cloneCelebrator);
         }
       }
