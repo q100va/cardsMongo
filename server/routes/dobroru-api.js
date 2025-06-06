@@ -149,7 +149,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения августа 2025") {
+    if (newOrder.holiday == "Дни рождения июля 2025") {
         period = {
             "date1": 1,
             "date2": 31,
@@ -1257,7 +1257,7 @@ async function searchSeniorHelper(
     //CHANGE!!!
     //let maxPlusAmount = 3;  
     //let maxPlusAmount = 3;  
-    let maxPlusAmount = standardFilter.oldest ? 4 : data.maxPlus;
+    let maxPlusAmount = standardFilter.oldest ? 7 : data.maxPlus;
     // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
     if (!standardFilter.oldest) {
         // filter.specialComment = /Юбилей/;
