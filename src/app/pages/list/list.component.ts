@@ -826,7 +826,7 @@ export class ListComponent implements OnInit {
     this.listService.findAllFamilyDayLists().subscribe(
       (res) => {
         this.lists = res["data"];
-        // this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
+         this.lists.sort((prev, next) => prev.nursingHome.localeCompare(next.nursingHome));
         this.listLength = this.lists.length;
       },
       (err) => {

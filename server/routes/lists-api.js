@@ -2639,7 +2639,54 @@ async function checkCouple(family) {
 router.get("/family-day", checkAuth, async (req, res) => {
   try {
 
-    FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
+   let list = await Order.find({ isDisabled: false, holiday: "День семьи 2024" });
+   let families = [];
+   for(let order of list) {
+      for (let item of order.lineItems) {
+        for (let family of item.celebrators) {
+          family.fullData = family.nursingHome + family.husbandLastName+family.wifeLastName;
+          families.push(family);
+        }
+      }
+   }
+
+   let tempArray = [];
+   let duplicates = [];
+   for (let family of families) {
+     tempArray.push(family.fullData);
+   }
+   //console.log(tempArray);
+   tempArray.sort();
+   //console.log(tempArray);
+   for (let i = 0; i < tempArray.length - 1; i++) {
+     if (tempArray[i + 1] == tempArray[i]) {
+       duplicates.push(tempArray[i]);
+     }
+   }
+   //console.log(duplicates);
+   if (duplicates.length > 0) {
+     console.log("There are duplicates! They were deleted from the list.");
+     console.log(duplicates);
+ 
+     for (let duplicate of duplicates) {
+/*       let flag = true;
+      while(flag) {
+
+      } */
+       let index = families.findIndex(item => item.fullData == duplicate);
+       if (index > -1) {
+        families.splice(index, 1);
+       }
+     }
+   } else { console.log("There are not duplicates!"); }
+   const findAllListsResponse = new BaseResponse("200", "Query successful", families);
+   res.json(findAllListsResponse.toObject());
+   
+ 
+   //console.log(array);
+ 
+
+/*     FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
       if (err) {
         console.log(err);
         const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
@@ -2649,7 +2696,7 @@ router.get("/family-day", checkAuth, async (req, res) => {
         const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
         res.json(findAllListsResponse.toObject());
       }
-    });
+    }); */
   } catch (e) {
     console.log(e);
     const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);

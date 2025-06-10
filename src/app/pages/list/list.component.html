@@ -30,8 +30,8 @@
             месяца</button>
         <br /><br /><br /> -->
 
-        <!--         <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей</button>
-        <br /><br /><br /> -->
+             <button class="submit" (click)="showFamilyDayList($event)" mat-raised-button>Показать список семей 2024</button>
+        <br /><br /><br />
         <button class="submit" (click)="showAmountOfVolunteers($event)" mat-raised-button>Отчет за апрель 2025</button>
         <br /><br /><br />
         <!--         <button class="submit" (click)="correctOrdersDates($event)" mat-raised-button>Скорректировать даты в заявках</button>
@@ -94,6 +94,7 @@
             запросу</button>
 
         <br /><br /><br />
+
         <!-- 
          <button class="submit" (click)="addSearchArray()" mat-raised-button>Добавить строку поиска</button>
 
@@ -197,9 +198,9 @@
 
         <mat-list *ngFor="let family of lists">
 
-            <mat-list-item>{{family.plusAmount}} {{family.husbandLastName}} {{family.husbandFirstName}}
-                {{family.husbandPatronymic}}
-                {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}} {{family.nursingHome}}
+            <mat-list-item><!-- {{family.plusAmount}} --> {{family.nursingHome}}+{{family.husbandLastName}} {{family.husbandFirstName}}
+                {{family.husbandPatronymic}} и 
+                {{family.wifeLastName}} {{family.wifeFirstName}} {{family.wifePatronymic}}
             </mat-list-item>
 
         </mat-list>
