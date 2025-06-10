@@ -798,11 +798,11 @@ export class OrderComponent implements OnInit {
             this.checkDoubles();
           } else {
             if (
-                     /* this.client.institutes.length > 0 ||
+              /* this.client.institutes.length > 0 ||
               this.form.controls.amount.value > 20 */
-             (this.client.institutes.length > 0 ||
+              (this.client.institutes.length > 0 ||
                 this.form.controls.amount.value > 20) &&
-              this.selectedInstitutes.length == 0  
+              this.selectedInstitutes.length == 0
             ) {
               this.confirmationService.confirm({
                 message: "Вы уверены, что эта заявка не для колллектива?",
@@ -836,21 +836,36 @@ export class OrderComponent implements OnInit {
       });
       this.clicked = false;
       console.log("ERROR");
-    } */
-    if (
+    } 
+      console.log(this.form.controls.onlyWithConcent);
+    console.log(!this.form.controls.onlyWithConcent);
+    console.log(
       (this.form.controls.date1.value != null &&
         this.form.controls.date2.value != null &&
         this.form.controls.date2.value - this.form.controls.date1.value < 4) ||
-      (this.form.controls.date1.value != null &&
-        this.form.controls.date2.value == null &&
-        31 - this.form.controls.date1.value < 4) ||
-      (this.form.controls.date1.value == null &&
+        (this.form.controls.date1.value != null &&
+          this.form.controls.date2.value == null &&
+          31 - this.form.controls.date1.value < 4) ||
+        (this.form.controls.date1.value == null &&
+          this.form.controls.date2.value != null &&
+          this.form.controls.date2.value - 1 < 4)
+    );*/
+
+    if (
+      !this.form.controls.onlyWithConcent.value &&
+      ((this.form.controls.date1.value != null &&
         this.form.controls.date2.value != null &&
-        this.form.controls.date2.value - 1 < 4)
+        this.form.controls.date2.value - this.form.controls.date1.value < 4) ||
+        (this.form.controls.date1.value != null &&
+          this.form.controls.date2.value == null &&
+          31 - this.form.controls.date1.value < 4) ||
+        (this.form.controls.date1.value == null &&
+          this.form.controls.date2.value != null &&
+          this.form.controls.date2.value - 1 < 4))
     ) {
       this.resultDialog.open(ConfirmationDialogComponent, {
         data: {
-          message: "Выберите дата с более широким диапазоном, например, 11-15",
+          message: "Выберите даты с более широким диапазоном, например, 11-15",
         },
         disableClose: true,
         width: "fit-content",
@@ -1216,7 +1231,10 @@ export class OrderComponent implements OnInit {
         this.form.controls.date2.value > 5
       ) {
         this.holidayTitle =
-          "Дни рождения 1" + "-" + this.form.controls.date2.value + " августа 2025";
+          "Дни рождения 1" +
+          "-" +
+          this.form.controls.date2.value +
+          " августа 2025";
       }
       if (
         !this.form.controls.date1.value &&
@@ -1224,7 +1242,10 @@ export class OrderComponent implements OnInit {
         this.form.controls.date2.value <= 5
       ) {
         this.holidayTitle =
-          "Дни рождения 1" + "-" + this.form.controls.date2.value + " августа 2025";
+          "Дни рождения 1" +
+          "-" +
+          this.form.controls.date2.value +
+          " августа 2025";
       }
     }
 
@@ -1422,15 +1443,15 @@ export class OrderComponent implements OnInit {
     let addresses = "";
     console.log(this.lineItems);
     for (let lineItem of this.lineItems) {
-   /*    if (!this.isForInstitutes) { */
-        addresses =
-          addresses +
-          lineItem.address +
-          " " +
-          "\n" +
-          (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +
-          (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
- /*      } else {
+      /*    if (!this.isForInstitutes) { */
+      addresses =
+        addresses +
+        lineItem.address +
+        " " +
+        "\n" +
+        (lineItem.infoComment ? lineItem.infoComment + "\n" : "") +
+        (lineItem.adminComment ? lineItem.adminComment + "\n" : "");
+      /*      } else {
         addresses = addresses + lineItem.address + " " + "\n";
       } */
       console.log("addresses1");
