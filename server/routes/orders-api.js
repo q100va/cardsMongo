@@ -2541,7 +2541,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     console.log(period);
   }
   if (newOrder.filter.onlyWithConcent) {
-    period.maxPlus = 4;
+    period.maxPlus = 5;
   }
 
 
@@ -3392,6 +3392,10 @@ async function searchSenior(
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" ) {//|| standardFilter.category == "specialWomen"
       maxPlusAmount = data.maxPlus;
+    }
+
+    if (filter.dateOfSignedConsent == { '$ne': null }) {
+      maxPlusAmount = 5;
     }
   } 
 
