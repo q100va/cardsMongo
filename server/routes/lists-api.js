@@ -5412,26 +5412,26 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+      //  amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
-      {
+     {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
         amount3: '-', //ДР июля 2025
         amount4: '-', //ДР августа 2025
-        amount5: '-', //Пасха 2025
-        amount6: 0, //9 мая 2025
-      },
+     //   amount5: '-', //Пасха 2025
+      //  amount6: 0, //9 мая 2025
+      }, 
       {
         name: "из них жители ПНИ",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025          
-        amount6: 0, //9 мая 2025
+     //   amount5: 0, //Пасха 2025          
+      //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5439,17 +5439,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2025
         amount3: '-', //ДР июля 2025
         amount4: '-', //ДР августа 2025
-        amount5: '-', //Пасха 2025
-        amount6: 0, //9 мая 2025
-      },
+     //   amount5: '-', //Пасха 2025
+      //  amount6: 0, //9 мая 2025
+      }, 
       {
         name: "ПОЗДРАВЛЕНО 4 и более раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+      //  amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5459,15 +5459,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+       // amount5: 0, //Пасха 2025
+       // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5477,15 +5477,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "ПОЗДРАВЛЕНО 3 раза",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+       // amount5: 0, //Пасха 2025
+       // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5495,17 +5495,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+       // amount5: 0, //Пасха 2025
+        //amount6: 0, //9 мая 2025
       },
-      {
+       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
@@ -5513,15 +5513,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "ПОЗДРАВЛЕНО 2 раза",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+      //  amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5531,15 +5531,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
         amount1: 0, //ДР июня 2025
         // amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+       // amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5549,17 +5549,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "ПОЗДРАВЛЕНО 1 раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+      //  amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
-      {
+       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
@@ -5567,15 +5567,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+       // amount5: 0, //Пасха 2025
+       // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5585,17 +5585,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "НЕ ПОЗДРАВЛЕНО ни разу",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+      //  amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
-      {
+       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
@@ -5603,15 +5603,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      },
+      }, 
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-        amount5: 0, //Пасха 2025
-        amount6: 0, //9 мая 2025
+      //  amount5: 0, //Пасха 2025
+      //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5624,11 +5624,11 @@ router.get("/statistic", checkAuth, async (req, res) => {
       },
 
     ]
-
-    const holidays = [ListBefore, March8, List, ListNext, Easter, May9];
+ 
+    const holidays = [ListBefore,March8, List, ListNext, Easter, May9];//
 
     for (let i = 0; i < holidays.length; i++) {
-      if (i != 1) {
+      if (i != 1 && i != 4 && i != 5) { //1 - March8, 4 - Easter, 5 - May9
         statistic[0]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false });
         statistic[2]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true });
         statistic[4]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: { $gte: 4 } });
@@ -5643,7 +5643,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         statistic[22]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 0 });
       }
     }
-
+/* 
     statistic[1]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], });
     statistic[3]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true });
     statistic[5]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: { $gte: 4 } });
@@ -5656,7 +5656,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
     statistic[19]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 1 });
     statistic[21]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 0 });
     statistic[23]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 0 });
-
+ */
 
 
     /*     statistic[2].amount2 = 10667;
@@ -5665,12 +5665,12 @@ router.get("/statistic", checkAuth, async (req, res) => {
         statistic[8].amount2 = 0;
         statistic[10].amount2 = 0; */
 
-    statistic[0].amount6 = 25745 + 620;
+  //  statistic[0].amount6 = 25745 + 620;
 
     //Навигаторы взяли 30000+1500+2500= 34000
 
 
-    statistic[20].amount6 = statistic[20].amount6 - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
+/*     statistic[20].amount6 = statistic[20].amount6 - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
     statistic[21].amount6 = statistic[21].amount6 - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
     statistic[16]['amount6'] = statistic[16]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 })-8525+5457-146+9078;
     statistic[17]['amount6'] = statistic[17]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
@@ -5681,9 +5681,11 @@ router.get("/statistic", checkAuth, async (req, res) => {
     statistic[4]['amount6'] = statistic[4]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 });
     statistic[5]['amount6'] = statistic[5]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 });
 
-
+ */
     console.log('statistic');
     console.log(statistic);
+
+    statistic = statistic.filter(item => item.name != 'в т.ч. ветеранов и детей войны' && item.name != 'в т.ч. ветеранов и детей войны из ПНИ');
 
     const newListResponse = new BaseResponse(200, "Query Successful", statistic);
     res.json(newListResponse.toObject());
