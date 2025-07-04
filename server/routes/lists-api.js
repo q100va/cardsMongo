@@ -5405,6 +5405,7 @@ async function restoreVeteransStatistic(activeHouse) {
 
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
+   // await seniorsVolunteers();
     let statistic = [
       {
         name: "ВСЕГО ПОЗДРАВЛЯЕМЫХ",
@@ -5698,16 +5699,21 @@ router.get("/statistic", checkAuth, async (req, res) => {
 });
 
 
+/* async function seniorsVolunteers() {
+  let orders = await Order.find({ isDisabled: false, "li" });
+} */
+
+
 ///report
 
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-04-30"), $lt: new Date("2025-06-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-05-31"), $lt: new Date("2025-07-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-04-30"), $lt: new Date("2025-06-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-05-31"), $lt: new Date("2025-07-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
