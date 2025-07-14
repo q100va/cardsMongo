@@ -2639,64 +2639,64 @@ async function checkCouple(family) {
 router.get("/family-day", checkAuth, async (req, res) => {
   try {
 
-   let list = await Order.find({ isDisabled: false, holiday: "День семьи 2024" });
-   let families = [];
-   for(let order of list) {
+    let list = await Order.find({ isDisabled: false, holiday: "День семьи 2024" });
+    let families = [];
+    for (let order of list) {
       for (let item of order.lineItems) {
         for (let family of item.celebrators) {
-          family.fullData = family.nursingHome + family.husbandLastName+family.wifeLastName;
+          family.fullData = family.nursingHome + family.husbandLastName + family.wifeLastName;
           families.push(family);
         }
       }
-   }
+    }
 
-   let tempArray = [];
-   let duplicates = [];
-   for (let family of families) {
-     tempArray.push(family.fullData);
-   }
-   //console.log(tempArray);
-   tempArray.sort();
-   //console.log(tempArray);
-   for (let i = 0; i < tempArray.length - 1; i++) {
-     if (tempArray[i + 1] == tempArray[i]) {
-       duplicates.push(tempArray[i]);
-     }
-   }
-   //console.log(duplicates);
-   if (duplicates.length > 0) {
-     console.log("There are duplicates! They were deleted from the list.");
-     console.log(duplicates);
- 
-     for (let duplicate of duplicates) {
-/*       let flag = true;
-      while(flag) {
-
-      } */
-       let index = families.findIndex(item => item.fullData == duplicate);
-       if (index > -1) {
-        families.splice(index, 1);
-       }
-     }
-   } else { console.log("There are not duplicates!"); }
-   const findAllListsResponse = new BaseResponse("200", "Query successful", families);
-   res.json(findAllListsResponse.toObject());
-   
- 
-   //console.log(array);
- 
-
-/*     FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
-      if (err) {
-        console.log(err);
-        const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
-        res.status(500).send(findAllListsMongodbErrorResponse.toObject());
-      } else {
-        console.log(lists);
-        const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
-        res.json(findAllListsResponse.toObject());
+    let tempArray = [];
+    let duplicates = [];
+    for (let family of families) {
+      tempArray.push(family.fullData);
+    }
+    //console.log(tempArray);
+    tempArray.sort();
+    //console.log(tempArray);
+    for (let i = 0; i < tempArray.length - 1; i++) {
+      if (tempArray[i + 1] == tempArray[i]) {
+        duplicates.push(tempArray[i]);
       }
-    }); */
+    }
+    //console.log(duplicates);
+    if (duplicates.length > 0) {
+      console.log("There are duplicates! They were deleted from the list.");
+      console.log(duplicates);
+
+      for (let duplicate of duplicates) {
+        /*       let flag = true;
+              while(flag) {
+        
+              } */
+        let index = families.findIndex(item => item.fullData == duplicate);
+        if (index > -1) {
+          families.splice(index, 1);
+        }
+      }
+    } else { console.log("There are not duplicates!"); }
+    const findAllListsResponse = new BaseResponse("200", "Query successful", families);
+    res.json(findAllListsResponse.toObject());
+
+
+    //console.log(array);
+
+
+    /*     FamilyDay.find({ absent: { $ne: true } }, function (err, lists) {
+          if (err) {
+            console.log(err);
+            const findAllListsMongodbErrorResponse = new BaseResponse("500", "internal server error", err);
+            res.status(500).send(findAllListsMongodbErrorResponse.toObject());
+          } else {
+            console.log(lists);
+            const findAllListsResponse = new BaseResponse("200", "Query successful", lists);
+            res.json(findAllListsResponse.toObject());
+          }
+        }); */
   } catch (e) {
     console.log(e);
     const findAllListsCatchErrorResponse = new BaseResponse("500", "Internal server error", e.message);
@@ -3211,7 +3211,7 @@ async function reportListOfHouses() {
             ]
           }
         }); */
-     const listOfHouses = await House.find({ isActive: true, region: region.name, dateLastUpdate: { $gt: new Date("2024-08-31"), $lt: new Date("2024-11-01") } });
+    const listOfHouses = await House.find({ isActive: true, region: region.name, dateLastUpdate: { $gt: new Date("2024-08-31"), $lt: new Date("2024-11-01") } });
     //const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
@@ -5234,12 +5234,12 @@ router.post("/veterans/check-fullness", checkAuth, async (req, res) => {
 
     console.log("0- check NY fullness " + req.body.nursingHome);
 
- /*    let housesSet = new Set();
-    const celebratorsMay9 = await May9.find({ absent: false });
-    for (let celebrator of celebratorsMay9) {
-      housesSet.add(celebrator.nursingHome);
-    }
-    let houses = Array.from(housesSet); */
+    /*    let housesSet = new Set();
+       const celebratorsMay9 = await May9.find({ absent: false });
+       for (let celebrator of celebratorsMay9) {
+         housesSet.add(celebrator.nursingHome);
+       }
+       let houses = Array.from(housesSet); */
 
     let houses = await House.find({ isDisabled: false, isActive: true, isReleased: false });
 
@@ -5405,7 +5405,9 @@ async function restoreVeteransStatistic(activeHouse) {
 
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
-   // await seniorsVolunteers();
+    // await seniorsVolunteers();
+    await quarta();
+
     let statistic = [
       {
         name: "ВСЕГО ПОЗДРАВЛЯЕМЫХ",
@@ -5413,26 +5415,26 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-      //  amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        //  amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
-     {
+      {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
         amount3: '-', //ДР июля 2025
         amount4: '-', //ДР августа 2025
-     //   amount5: '-', //Пасха 2025
-      //  amount6: 0, //9 мая 2025
-      }, 
+        //   amount5: '-', //Пасха 2025
+        //  amount6: 0, //9 мая 2025
+      },
       {
         name: "из них жители ПНИ",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-     //   amount5: 0, //Пасха 2025          
-      //  amount6: 0, //9 мая 2025
+        //   amount5: 0, //Пасха 2025          
+        //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5440,17 +5442,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2025
         amount3: '-', //ДР июля 2025
         amount4: '-', //ДР августа 2025
-     //   amount5: '-', //Пасха 2025
-      //  amount6: 0, //9 мая 2025
-      }, 
+        //   amount5: '-', //Пасха 2025
+        //  amount6: 0, //9 мая 2025
+      },
       {
         name: "ПОЗДРАВЛЕНО 4 и более раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-      //  amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        //  amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5460,15 +5462,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-       // amount5: 0, //Пасха 2025
-       // amount6: 0, //9 мая 2025
+        // amount5: 0, //Пасха 2025
+        // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5478,15 +5480,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "ПОЗДРАВЛЕНО 3 раза",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-       // amount5: 0, //Пасха 2025
-       // amount6: 0, //9 мая 2025
+        // amount5: 0, //Пасха 2025
+        // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5496,17 +5498,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-       // amount5: 0, //Пасха 2025
+        // amount5: 0, //Пасха 2025
         //amount6: 0, //9 мая 2025
       },
-       {
+      {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
@@ -5514,15 +5516,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "ПОЗДРАВЛЕНО 2 раза",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-      //  amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        //  amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5532,15 +5534,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
         amount1: 0, //ДР июня 2025
         // amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-       // amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        // amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5550,17 +5552,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "ПОЗДРАВЛЕНО 1 раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-      //  amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        //  amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
-       {
+      {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
@@ -5568,15 +5570,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-       // amount5: 0, //Пасха 2025
-       // amount6: 0, //9 мая 2025
+        // amount5: 0, //Пасха 2025
+        // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5586,17 +5588,17 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "НЕ ПОЗДРАВЛЕНО ни разу",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-      //  amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        //  amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
-       {
+      {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР июня 2025
         // amount2: -, //8 марта 2025
@@ -5604,15 +5606,15 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР августа 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
-      }, 
+      },
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
         amount1: 0, //ДР июня 2025
         //amount2: 0, //8 марта 2025
         amount3: 0, //ДР июля 2025
         amount4: 0, //ДР августа 2025
-      //  amount5: 0, //Пасха 2025
-      //  amount6: 0, //9 мая 2025
+        //  amount5: 0, //Пасха 2025
+        //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5625,8 +5627,8 @@ router.get("/statistic", checkAuth, async (req, res) => {
       },
 
     ]
- 
-    const holidays = [ListBefore,March8, List, ListNext, Easter, May9];//
+
+    const holidays = [ListBefore, March8, List, ListNext, Easter, May9];//
 
     for (let i = 0; i < holidays.length; i++) {
       if (i != 1 && i != 4 && i != 5) { //1 - March8, 4 - Easter, 5 - May9
@@ -5644,20 +5646,20 @@ router.get("/statistic", checkAuth, async (req, res) => {
         statistic[22]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 0 });
       }
     }
-/* 
-    statistic[1]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], });
-    statistic[3]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true });
-    statistic[5]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: { $gte: 4 } });
-    statistic[7]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: { $gte: 4 } });
-    statistic[9]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 3 });
-    statistic[11]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 3 });
-    statistic[13]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 2 });
-    statistic[15]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 2 });
-    statistic[17]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 1 });
-    statistic[19]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 1 });
-    statistic[21]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 0 });
-    statistic[23]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 0 });
- */
+    /* 
+        statistic[1]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], });
+        statistic[3]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true });
+        statistic[5]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: { $gte: 4 } });
+        statistic[7]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: { $gte: 4 } });
+        statistic[9]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 3 });
+        statistic[11]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 3 });
+        statistic[13]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 2 });
+        statistic[15]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 2 });
+        statistic[17]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 1 });
+        statistic[19]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 1 });
+        statistic[21]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 0 });
+        statistic[23]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 0 });
+     */
 
 
     /*     statistic[2].amount2 = 10667;
@@ -5666,23 +5668,23 @@ router.get("/statistic", checkAuth, async (req, res) => {
         statistic[8].amount2 = 0;
         statistic[10].amount2 = 0; */
 
-  //  statistic[0].amount6 = 25745 + 620;
+    //  statistic[0].amount6 = 25745 + 620;
 
     //Навигаторы взяли 30000+1500+2500= 34000
 
 
-/*     statistic[20].amount6 = statistic[20].amount6 - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
-    statistic[21].amount6 = statistic[21].amount6 - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
-    statistic[16]['amount6'] = statistic[16]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 })-8525+5457-146+9078;
-    statistic[17]['amount6'] = statistic[17]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
-    statistic[12]['amount6'] = statistic[12]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 })+8525;
-    statistic[13]['amount6'] = statistic[13]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 });
-    statistic[8]['amount6'] = statistic[8]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 });
-    statistic[9]['amount6'] = statistic[9]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 });
-    statistic[4]['amount6'] = statistic[4]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 });
-    statistic[5]['amount6'] = statistic[5]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 });
-
- */
+    /*     statistic[20].amount6 = statistic[20].amount6 - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
+        statistic[21].amount6 = statistic[21].amount6 - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
+        statistic[16]['amount6'] = statistic[16]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 })-8525+5457-146+9078;
+        statistic[17]['amount6'] = statistic[17]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
+        statistic[12]['amount6'] = statistic[12]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 })+8525;
+        statistic[13]['amount6'] = statistic[13]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 });
+        statistic[8]['amount6'] = statistic[8]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 });
+        statistic[9]['amount6'] = statistic[9]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 });
+        statistic[4]['amount6'] = statistic[4]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 });
+        statistic[5]['amount6'] = statistic[5]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 });
+    
+     */
     console.log('statistic');
     console.log(statistic);
 
@@ -5702,6 +5704,43 @@ router.get("/statistic", checkAuth, async (req, res) => {
 /* async function seniorsVolunteers() {
   let orders = await Order.find({ isDisabled: false, "li" });
 } */
+
+async function quarta() {
+  let orders = await Order.find({
+    isDisabled: false, isOverdue: false, isReturned: false,
+    dateOfOrder: { $gt: new Date("2025-03-31"), $lt: new Date("2025-07-01") },
+    $or: [{ "holiday": 'Дни рождения апреля 2025' },
+    { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения июня 2025' },
+    { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },]
+  });
+  let celebrators = [];
+  let regions = [];
+  let houses = [];
+  let amount = 0;
+  for (let order of orders) {
+    for (let item of order.lineItems) {
+      for (let celebrator of item.celebrators) {
+        celebrators.push(celebrator.lastName + celebrator.firstName + celebrator.patronymic + celebrator.nursingHome + celebrator.fullDayBirthday);
+      houses.push(celebrator.nursingHome);
+      regions.push(celebrator.region);
+      }
+    }
+    amount = amount + order.amount;
+  }
+
+  let c = new Set(celebrators);
+  let h = new Set(houses);
+  let r = new Set(regions);
+  console.log("celebrators");
+  console.log(c.size);
+  console.log("houses");
+  console.log(h.size);
+  console.log("regions");
+  console.log(r);
+  console.log(r.size);
+  console.log("amount");
+  console.log(amount);
+}
 
 
 ///report
