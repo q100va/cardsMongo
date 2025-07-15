@@ -117,13 +117,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения августа 2025") {
+                if (holiday == "Дни рождения сентября 2025") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения июля 2025") {
+                if (holiday == "Дни рождения августа 2025") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения июня 2025") {
+                if (holiday == "Дни рождения июля 2025") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -149,7 +149,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
-    if (newOrder.holiday == "Дни рождения августа 2025") {
+    if (newOrder.holiday == "Дни рождения сентября 2025") {
         period = {
             "date1": 1,
             "date2": 31,
@@ -837,13 +837,13 @@ async function collectSeniors(data, orderFilter, holiday) {
             if (result) {
                 //console.log(result);
                 await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-                if (holiday == "Дни рождения августа 2025") {
+                if (holiday == "Дни рождения сентября 2025") {
                     await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения июля 2025") {
+                if (holiday == "Дни рождения августа 2025") {
                     await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения июня 2025") {
+                if (holiday == "Дни рождения июля 2025") {
                     await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
 
@@ -1281,13 +1281,13 @@ async function searchSeniorHelper(
         //console.log("filter CHECK");
         //console.log(filter);
 
-        if (holiday == "Дни рождения августа 2025") {
+        if (holiday == "Дни рождения сентября 2025") {
             celebrator = await ListNext.findOne(filter);
         }
-        if (holiday == "Дни рождения июля 2025") {
+        if (holiday == "Дни рождения августа 2025") {
             celebrator = await List.findOne(filter);
         }
-        if (holiday == "Дни рождения июня 2025") {
+        if (holiday == "Дни рождения июля 2025") {
             celebrator = await ListBefore.findOne(filter);
         }
 
@@ -3250,7 +3250,7 @@ async function fillOrderForInstitutes(
         //console.log(house.nursingHome);
 
 
-        if (holiday == "Дни рождения июля 2025") {
+        if (holiday == "Дни рождения августа 2025") {
             count = await List.find({
                 nursingHome: house.nursingHome,
                 //gender: "Female",
@@ -3258,14 +3258,14 @@ async function fillOrderForInstitutes(
             }).countDocuments();
         }
 
-        if (holiday == "Дни рождения августа 2025") {
+        if (holiday == "Дни рождения сентября 2025") {
             count = await ListNext.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 7 }, _id: { $nin: prohibitedId }
             }).countDocuments();
         }
 
 
-        if (holiday == "Дни рождения июня 2025") {
+        if (holiday == "Дни рождения июля 2025") {
             count = await ListBefore.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
             }).countDocuments();
@@ -3601,7 +3601,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
 
 
-    if (holiday == "Дни рождения августа 2025") {
+    if (holiday == "Дни рождения сентября 2025") {
 
         seniorsData = await ListNext.find({
             nursingHome: nursingHome,
@@ -3621,7 +3621,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
 
 
-    if (holiday == "Дни рождения июля 2025") {
+    if (holiday == "Дни рождения августа 2025") {
 
         seniorsData = await List.find({
             //gender: "Female", 
@@ -3639,7 +3639,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         }
     }
 
-    if (holiday == "Дни рождения июня 2025") {
+    if (holiday == "Дни рождения июля 2025") {
 
         seniorsData = await ListBefore.find({
             nursingHome: nursingHome,

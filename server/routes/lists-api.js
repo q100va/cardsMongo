@@ -216,7 +216,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 7 ? 'Дни рождения июля 2025' : 'Дни рождения августа 2025',
+      holyday: month == 7 ? 'Дни рождения августа 2025' : 'Дни рождения сентября 2025',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -243,9 +243,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 6) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 7) { finalList = await List.insertMany(newList, options); }
-  if (month == 8) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 7) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 8) { finalList = await List.insertMany(newList, options); }
+  if (month == 9) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -933,9 +933,9 @@ async function createCloneCelebrator(celebrator) {
     }
   }
   let holiday;
-  if (celebrator.monthBirthday == 6) { holiday = 'Дни рождения июня 2025' };
   if (celebrator.monthBirthday == 7) { holiday = 'Дни рождения июля 2025' };
   if (celebrator.monthBirthday == 8) { holiday = 'Дни рождения августа 2025' };
+  if (celebrator.monthBirthday == 9) { holiday = 'Дни рождения сентября 2025' };
 
   let cloneCelebrator = {
     seniorId: celebrator._id,
@@ -2182,7 +2182,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
     // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2025", "23 февраля 2025"] });
-    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения августа 2025"] });
+    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения сентября 2025"] });
     let lineItemsM = [];
     for (let order of ordersM) {
       for (let item of order.lineItems) {
@@ -3334,7 +3334,7 @@ async function countHB() {
     [
       {
         $match:
-          { holiday: "Дни рождения июня 2025", isDisabled: false, isOverdue: false, isReturned: false }
+          { holiday: "Дни рождения июля 2025", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3342,7 +3342,7 @@ async function countHB() {
     ]
   );
 
-  let orders = await Order.find({ holiday: "Дни рождения июня 2025", isDisabled: false, isOverdue: false, isReturned: false });
+  let orders = await Order.find({ holiday: "Дни рождения июля 2025", isDisabled: false, isOverdue: false, isReturned: false });
   let celebrators = new Set();
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
@@ -3650,7 +3650,7 @@ async function countVolonteers() {
   let setClients = new Set();
   let setInstitutes = new Set();
   let setSchools = new Set();
-  let ordersBirthday = await Order.find({ holiday: "Дни рождения июня 2025", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersBirthday = await Order.find({ holiday: "Дни рождения июля 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersNY = await Order.find({ holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
@@ -3695,13 +3695,13 @@ async function countVolonteers() {
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения июня 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения июня 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения июля 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения июля 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
   
    */
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения июня 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения июня 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения июля 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения июля 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
 
 
   for (let order of ordersInstitutes) {
@@ -3783,7 +3783,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения июня 2025", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения июля 2025", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
@@ -5411,217 +5411,217 @@ router.get("/statistic", checkAuth, async (req, res) => {
     let statistic = [
       {
         name: "ВСЕГО ПОЗДРАВЛЯЕМЫХ",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         // amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         //   amount5: '-', //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "из них жители ПНИ",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //   amount5: 0, //Пасха 2025          
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         //   amount5: '-', //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "ПОЗДРАВЛЕНО 4 и более раз",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "ПОЗДРАВЛЕНО 3 раза",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         // amount5: 0, //Пасха 2025
         //amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "ПОЗДРАВЛЕНО 2 раза",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         // amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         // amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "ПОЗДРАВЛЕНО 1 раз",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "НЕ ПОЗДРАВЛЕНО ни разу",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
-        amount1: 0, //ДР июня 2025
+        amount1: 0, //ДР июля 2025
         //amount2: 0, //8 марта 2025
-        amount3: 0, //ДР июля 2025
-        amount4: 0, //ДР августа 2025
+        amount3: 0, //ДР августа 2025
+        amount4: 0, //ДР сентября 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР июня 2025
+        amount1: '-', //ДР июля 2025
         // amount2: -, //8 марта 2025
-        amount3: '-', //ДР июля 2025
-        amount4: '-', //ДР августа 2025
+        amount3: '-', //ДР августа 2025
+        amount4: '-', //ДР сентября 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
       },
@@ -5710,7 +5710,7 @@ async function quarta() {
     isDisabled: false, isOverdue: false, isReturned: false,
     dateOfOrder: { $gt: new Date("2025-03-31"), $lt: new Date("2025-07-01") },
     $or: [{ "holiday": 'Дни рождения апреля 2025' },
-    { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения июня 2025' },
+    { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения июля 2025' },
     { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },]
   });
   let celebrators = [];
@@ -5748,11 +5748,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-05-31"), $lt: new Date("2025-07-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-06-30"), $lt: new Date("2025-08-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-05-31"), $lt: new Date("2025-07-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-06-30"), $lt: new Date("2025-08-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
