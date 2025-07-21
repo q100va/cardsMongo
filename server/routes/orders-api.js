@@ -3309,8 +3309,8 @@ async function searchSenior(
   //data.restrictedHouses= [];
 
   let standardFilter = {
- nursingHome: { $nin: data.restrictedHouses },  //PLUSES
-   //  nursingHome: { $in: ["ЗЕЛЕНЫЙ"] },//, , , "СЫЗРАНЬ_КИРОВОГРАДСКАЯ""ЕЛАТЬМА""ГРЯЗОВЕЦ"
+    nursingHome: { $nin: data.restrictedHouses },  //PLUSES
+    //  nursingHome: { $in: ["ЗЕЛЕНЫЙ"] },//, , , "СЫЗРАНЬ_КИРОВОГРАДСКАЯ""ЕЛАТЬМА""ГРЯЗОВЕЦ"
     // nursingHome: { $in: housesForInstitutes },    
     //firstName: "Нина",
     /* 
@@ -3390,14 +3390,18 @@ async function searchSenior(
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
       maxPlusAmount = 3;
     }
-    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" ) {//|| standardFilter.category == "specialWomen"
+    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
       maxPlusAmount = 3;
     }
 
     if (filter.dateOfSignedConsent == { '$ne': null }) {
       maxPlusAmount = 5;
     }
-  } 
+
+    if (filter.region == "ПЕРМСКИЙ") {
+      maxPlusAmount = 4;
+    }
+  }
 
 
   // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
@@ -5498,23 +5502,23 @@ async function collectSeniorsSpring(data, orderFilter) {
 
 
           //TODO: May9 statistic
-/*           let senior = await May9.findOne({ _id: result.celebrator_id });
-          let newP = senior.plusAmount;
-          let p = newP - 1;
-          let c = senior.category;
-          await House.updateOne(
-            {
-              nursingHome: senior.nursingHome
-            },
-            {
-              $inc: {
-                ["statistic.easter.plus" + p]: -1,
-                ["statistic.easter.plus" + newP]: 1,
-                ["statistic.easter." + c + "Plus"]: 1,
-              }
-            }
-
-          ); */
+          /*           let senior = await May9.findOne({ _id: result.celebrator_id });
+                    let newP = senior.plusAmount;
+                    let p = newP - 1;
+                    let c = senior.category;
+                    await House.updateOne(
+                      {
+                        nursingHome: senior.nursingHome
+                      },
+                      {
+                        $inc: {
+                          ["statistic.easter.plus" + p]: -1,
+                          ["statistic.easter.plus" + newP]: 1,
+                          ["statistic.easter." + c + "Plus"]: 1,
+                        }
+                      }
+          
+                    ); */
         }
 
         data.celebratorsAmount++;
@@ -5567,7 +5571,7 @@ async function searchSeniorSpring(
 
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-   // yearBirthday:  { $gt: 0, $lte: 1945 },
+    // yearBirthday:  { $gt: 0, $lte: 1945 },
     //firstName: "Надежда",
     //lastName: "Артамонова",
     // secondTime: data.maxPlus > 1 ? true : false,
@@ -5577,7 +5581,7 @@ async function searchSeniorSpring(
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true }
   };
-  if (data.holiday == "9 мая 2025") standardFilter.yearBirthday =  { $gt: 0, $lte: 1945 };
+  if (data.holiday == "9 мая 2025") standardFilter.yearBirthday = { $gt: 0, $lte: 1945 };
 
 
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
@@ -5650,7 +5654,7 @@ async function searchSeniorSpring(
       celebrator = await Easter.findOne(filter);
     }
 
-    if (data.holiday == "9 мая 2025") {     
+    if (data.holiday == "9 мая 2025") {
       celebrator = await May9.findOne(filter);
     }
 
@@ -9618,25 +9622,26 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         senior = await May9.findOne({ _id: senior._id });
       }
 
-       if(holiday != "9 мая 2025") {
-      let newP = senior.plusAmount;
-      let p = newP - 1;
-      let c = senior.category;
-      let h = (holiday == "Пасха 2025") ? "easter" : "spring";
-     
-      await House.updateOne(
-        {
-          nursingHome: senior.nursingHome
-        },
-        {
-          $inc: {
-            ["statistic." + h + ".plus" + p]: -1,
-            ["statistic." + h + ".plus" + newP]: 1,
-            ["statistic." + h + "." + c + "Plus"]: 1,
+      if (holiday != "9 мая 2025") {
+        let newP = senior.plusAmount;
+        let p = newP - 1;
+        let c = senior.category;
+        let h = (holiday == "Пасха 2025") ? "easter" : "spring";
 
+        await House.updateOne(
+          {
+            nursingHome: senior.nursingHome
+          },
+          {
+            $inc: {
+              ["statistic." + h + ".plus" + p]: -1,
+              ["statistic." + h + ".plus" + newP]: 1,
+              ["statistic." + h + "." + c + "Plus"]: 1,
+
+            }
           }
-        }
-      );}
+        );
+      }
       /*       if (contact == "@tterros") {
               await House.updateOne(
                 {
