@@ -1310,9 +1310,9 @@ export class OrderComponent implements OnInit {
   getAddresses() {
     let greeting: string;
     if (this.clientFirstName) {
-      greeting = "Приветствую вас, " + this.clientFirstName + "!\n\n";
+      greeting = "Здравствуйте, " + this.clientFirstName + "!\n\n";
     } else {
-      greeting = "Приветствую вас!\n\n";
+      greeting = "Здравствуйте!\n\n";
     }
     let topForSubscribers = "";
 
