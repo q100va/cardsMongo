@@ -1000,14 +1000,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
         let holiday;
-        if (celebrator.monthBirthday == 7) {
-          holiday = 'Дни рождения июля 2025';
-        }
         if (celebrator.monthBirthday == 8) {
           holiday = 'Дни рождения августа 2025';
         }
         if (celebrator.monthBirthday == 9) {
           holiday = 'Дни рождения сентября 2025';
+        }
+        if (celebrator.monthBirthday == 10) {
+          holiday = 'Дни рождения октября 2025';
         }
 
         let cloneCelebrator = {
@@ -1045,13 +1045,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
             celebrator.yearBirthday,
           dateOfSignedConsent: celebrator.dateOfSignedConsent,
         };
-        if (celebrator.monthBirthday == 7) {
+        if (celebrator.monthBirthday == 8) {
           await ListBefore.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 8) {
+        if (celebrator.monthBirthday == 9) {
           await List.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 9) {
+        if (celebrator.monthBirthday == 10) {
           await ListNext.create(cloneCelebrator);
         }
       }
