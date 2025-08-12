@@ -3627,7 +3627,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
             //gender: "Female", 
             nursingHome: nursingHome,
             absent: false,
-            plusAmount: { $lt: 4 },
+            plusAmount: { $lt: 7 },
             _id: { $nin: prohibitedId }
         }).limit(amount);
 
@@ -3644,7 +3644,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         seniorsData = await ListBefore.find({
             nursingHome: nursingHome,
             absent: false,
-            plusAmount: { $lt: 4 },
+            plusAmount: { $lt: 7 },
             _id: { $nin: prohibitedId }
         }).limit(amount);
 
