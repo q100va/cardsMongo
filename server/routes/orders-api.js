@@ -3388,10 +3388,10 @@ async function searchSenior(
   }
   if (holiday == "Дни рождения сентября 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus+1;
+      maxPlusAmount = data.maxPlus+2;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus+1;
+      maxPlusAmount = data.maxPlus+2;
     }
 
     if (filter.dateOfSignedConsent == { '$ne': null }) {
