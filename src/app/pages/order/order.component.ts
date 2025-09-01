@@ -1127,7 +1127,7 @@ export class OrderComponent implements OnInit {
     console.log(newOrder.filter.onlyWithConcent);
 
     if (this.holiday == "Дни рождения сентября 2025") {
-      this.holidayTitle = "Дни рождения 26-31 сентября 2025";
+      this.holidayTitle = "Дни рождения 26-30 сентября 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
@@ -1182,7 +1182,7 @@ export class OrderComponent implements OnInit {
           "Дни рождения " +
           this.form.controls.date1.value +
           "-" +
-          "30 октября 2025";
+          "31 октября 2025";
       }
       if (
         !this.form.controls.date1.value &&
