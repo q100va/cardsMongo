@@ -1000,14 +1000,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
         let holiday;
-        if (celebrator.monthBirthday == 8) {
-          holiday = 'Дни рождения августа 2025';
-        }
         if (celebrator.monthBirthday == 9) {
           holiday = 'Дни рождения сентября 2025';
         }
         if (celebrator.monthBirthday == 10) {
           holiday = 'Дни рождения октября 2025';
+        }
+        if (celebrator.monthBirthday == 11) {
+          holiday = 'Дни рождения ноября 2025';
         }
 
         let cloneCelebrator = {
