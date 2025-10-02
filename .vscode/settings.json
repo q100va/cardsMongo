@@ -1,3 +1,6 @@
 {
-    "search.useIgnoreFiles": false
+    "search.useIgnoreFiles": false,
+    "bitoAI.codeCompletion.enableAutoCompletion": true,
+    "bitoAI.codeCompletion.enableCommentToCode": true,
+    "bitoAI.openInExtendedWindow.enableExtendedWindow": "Open in separate tab"
 }
