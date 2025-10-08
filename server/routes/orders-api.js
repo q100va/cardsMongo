@@ -2489,7 +2489,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения ноября 2025") {
     period = {
       "date1": 1,
-      "date2": 10,
+      "date2": 15,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -3388,7 +3388,7 @@ async function searchSenior(
   }
   if (holiday == "Дни рождения ноября 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus+2;
+      maxPlusAmount = data.maxPlus+3;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
       maxPlusAmount = data.maxPlus+2;
