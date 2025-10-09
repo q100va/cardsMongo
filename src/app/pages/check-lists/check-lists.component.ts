@@ -38,7 +38,7 @@ export class CheckListsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.houseService.findAllHouses().subscribe(
+    this.houseService.findAllHouses(true).subscribe(
       (res) => {
         console.log(res.data);
     for (let item of res.data) {

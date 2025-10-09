@@ -20,17 +20,10 @@ import { MatTableDataSource } from "@angular/material/table";
 })
 export class HouseListComponent implements OnInit {
   house = [];
+  onlyActive = true;
  
   displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased", "edit", "delete"];//"isActive",
-
-  constructor(
-    private dialog: MatDialog,
-    private housesService: HousesService,
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService
-  ) {
-
-    function dynamicSort(properties) {
+     dynamicSort(properties) {
       return function(a, b) {
           for (let i = 0; i < properties.length; i++) {
               let prop = properties[i];
@@ -40,12 +33,20 @@ export class HouseListComponent implements OnInit {
           return 0;
       }
   }
-    this.housesService.findAllHouses().subscribe(
+  constructor(
+    private dialog: MatDialog,
+    private housesService: HousesService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) {
+
+
+    this.housesService.findAllHouses(this.onlyActive).subscribe(
       (res) => {
         this.house = res["data"];
-        this.house = this.house.filter(item => item.isActive == true);
+       // this.house = this.house.filter(item => item.isActive == true);
        // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
-       this.house = this.house.sort(dynamicSort(["region", "nursingHome"]));
+       this.house = this.house.sort(this.dynamicSort(["region", "nursingHome"]));
         for (let house of  this.house) {
          
           if (new Date(house.dateLastUpdate) < new Date("2024-09-01")) {
@@ -59,7 +60,7 @@ export class HouseListComponent implements OnInit {
         }
         console.log(this.house);
       },
-      (err) => {},
+      (err) => {  console.log(err);},
       () => {}
     );
   }
@@ -67,6 +68,32 @@ export class HouseListComponent implements OnInit {
 //644526, Омская обл., Омский р-н, п. 2. Андреевский, ул. Центральная, д. 2. 8, Пушкинский ДИ (психоневрологический)
 
   ngOnInit(): void {}
+
+  onToggleChange(event){
+     console.log(event);
+        this.housesService.findAllHouses(event.checked).subscribe(
+      (res) => {
+        this.house = res["data"];
+       // this.house = this.house.filter(item => item.isActive == true);
+       // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
+       this.house = this.house.sort(this.dynamicSort(["region", "nursingHome"]));
+        for (let house of  this.house) {
+         
+          if (new Date(house.dateLastUpdate) < new Date("2024-09-01")) {
+/*             console.log(new Date(house.dateLastUpdate));
+            console.log(new Date("2024-09-01")); */
+            house.color = "red";
+          } else {
+            house.color = "black";
+          }
+
+        }
+        console.log(this.house);
+      },
+      (err) => {},
+      () => {}
+    );
+  }
 
   //Delete task function
   deleteHouse(qId: string) {
@@ -80,7 +107,7 @@ export class HouseListComponent implements OnInit {
             (res) => {
               console.log(res);
               //this.house = res["data"];
-              this.housesService.findAllHouses().subscribe(
+              this.housesService.findAllHouses(this.onlyActive).subscribe(
                 (res) => {
                   this.house = res["data"];
                 },

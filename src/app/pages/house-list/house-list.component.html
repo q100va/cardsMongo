@@ -8,7 +8,9 @@
 <div fxLayout="column">
   <mat-card>
     <mat-card-title>Список интернатов</mat-card-title>
-    <br /><br />
+    <br />
+     <mat-slide-toggle [(ngModel)]="onlyActive" (change) ="onToggleChange($event)">Только активные</mat-slide-toggle>
+     <br />
     <p-toast position="center"></p-toast>
     <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
     <mat-card-content *ngIf="house">
@@ -21,21 +23,22 @@
 
         <ng-container matColumnDef="nursingHome">
           <mat-header-cell *matHeaderCellDef> Краткое название </mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.nursingHome }} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.nursingHome }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="statistic.newYear.amount">
           <mat-header-cell *matHeaderCellDef> Количество </mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.statistic.newYear.amount }} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.statistic.newYear.amount }} </mat-cell>
         </ng-container>
+        
         <ng-container matColumnDef="region">
           <mat-header-cell *matHeaderCellDef> Регион </mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.region}} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.region}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="address">
           <mat-header-cell *matHeaderCellDef> Почтовый адрес</mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.address}} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.address}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="dateLastUpdate">
@@ -48,17 +51,17 @@
 
         <ng-container matColumnDef="nameContact">
           <mat-header-cell *matHeaderCellDef>Контактное лицо</mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.nameContact}} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.nameContact}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="contact">
           <mat-header-cell *matHeaderCellDef>Контакт</mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.contact}} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.contact}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="notes">
           <mat-header-cell *matHeaderCellDef>Примечание</mat-header-cell>
-          <mat-cell *matCellDef="let house"> {{ house.notes}} </mat-cell>
+          <mat-cell *matCellDef="let house" [style.color]=house.color> {{ house.notes}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="noAddress">

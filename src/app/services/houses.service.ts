@@ -14,8 +14,10 @@ import { House } from "../shared/interfaces/houses.interface";
 export class HousesService {
   constructor(private http: HttpClient) {}
 
-  findAllHouses(): Observable<any> {
-    return this.http.get("/api/houses");
+  findAllHouses(onlyActive): Observable<any> {
+    console.log('onlyActive', onlyActive);
+    const status = onlyActive ? 'onlyActive' : 'all'
+    return this.http.get("/api/houses/lists/" + status);
   }
 
   findActiveHouses(): Observable<any> {

@@ -206,12 +206,9 @@ router.post("/email", checkAuth, async (req, res) => {
 });
 
 // Find all 
-router.get("/", checkAuth, async (req, res) => {
+/* router.get("/", checkAuth, async (req, res) => {
   try {
-    House.find({} /* )
-      .where("isDisabled")
-      .equals(false)
-      .exec(  */ , function (err, houses) {
+    House.find({} , function (err, houses) {
         if (err) {
           console.log(err);
           res.status(500).send({
@@ -223,6 +220,37 @@ router.get("/", checkAuth, async (req, res) => {
           res.json(findAllResponse.toObject());
         }
       });
+  } catch (e) {
+    console.log(e);
+    const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(findAllCatchErrorResponse.toObject());
+  }
+}); */
+
+router.get("/lists/onlyActive", checkAuth, async (req, res) => { 
+  try {
+     console.log("houses/lists/onlyActive");
+    let houses = await House.find({ isActive: true, isDisabled: false });     
+    const findAllResponse = new BaseResponse(200, "Query successful", houses);
+    res.json(findAllResponse.toObject());
+
+
+  } catch (e) {
+    console.log(e);
+    const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(findAllCatchErrorResponse.toObject());
+  }
+});
+
+router.get("/lists/all", checkAuth, async (req, res) => { 
+  try {
+     console.log("houses/lists/all");
+    let houses = await House.find({ isDisabled: false  });  
+     
+    const findAllResponse = new BaseResponse(200, "Query successful", houses);
+    res.json(findAllResponse.toObject());
+
+
   } catch (e) {
     console.log(e);
     const findAllCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
