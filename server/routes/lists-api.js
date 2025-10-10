@@ -5422,6 +5422,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5431,6 +5432,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         //   amount5: '-', //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "из них жители ПНИ",
@@ -5440,6 +5442,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //   amount5: 0, //Пасха 2025          
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5449,6 +5452,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         //   amount5: '-', //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 4 и более раз",
@@ -5458,6 +5462,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5467,6 +5472,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
@@ -5476,6 +5482,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5485,6 +5492,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 3 раза",
@@ -5494,6 +5502,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5503,6 +5512,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
@@ -5512,6 +5522,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         // amount5: 0, //Пасха 2025
         //amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5521,6 +5532,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 2 раза",
@@ -5530,6 +5542,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5539,6 +5552,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
@@ -5548,6 +5562,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         // amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5557,6 +5572,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 1 раз",
@@ -5566,6 +5582,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5575,6 +5592,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
@@ -5584,6 +5602,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5593,6 +5612,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "НЕ ПОЗДРАВЛЕНО ни разу",
@@ -5602,6 +5622,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
@@ -5611,6 +5632,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
@@ -5620,6 +5642,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: 0, //ДР декабря 2025
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
+        amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
@@ -5629,11 +5652,12 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР декабря 2025
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
+        amount7: '-', //Новый год 2026
       },
 
     ]
 
-    const holidays = [ListBefore, March8, List, ListNext, Easter, May9];//
+    const holidays = [ListBefore, March8, List, ListNext, Easter, May9, NewYear];//
 
     for (let i = 0; i < holidays.length; i++) {
       if (i != 1 && i != 4 && i != 5) { //1 - March8, 4 - Easter, 5 - May9

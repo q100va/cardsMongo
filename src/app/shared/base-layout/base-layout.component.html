@@ -62,7 +62,7 @@
               <mat-icon color="primary">list</mat-icon>
               <span>Списки</span>
             </button>
-            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToNYLists()">
+            <button *ngIf="isAdmin  || isManager" mat-menu-item (click)="redirectToNYLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки НГ</span>
             </button>

@@ -24,7 +24,7 @@ export class AdminNewYearComponent implements OnInit {
     "statistic1",
     "statistic2",
     "statistic3",
-    "check",
+  //  "check",
 
     "dateLastUpdate",
 
