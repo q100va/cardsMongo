@@ -1204,7 +1204,7 @@ async function createCloneCelebratorNY(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: 'Новый год 2025',
+    holyday: 'Новый год 2026',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +

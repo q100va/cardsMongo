@@ -79,7 +79,7 @@
                             <mat-accordion class="example-headers-align">
                                 <mat-expansion-panel>
                                     <mat-expansion-panel-header>
-                                        <mat-panel-title ><!-- matTooltip="Фильтры не работают для коллективных заявок." -->
+                                        <mat-panel-title><!-- matTooltip="Фильтры не работают для коллективных заявок." -->
                                             Фильтры
                                         </mat-panel-title>
                                         <mat-panel-description>
@@ -172,10 +172,10 @@
 
                                                     <br />
 
-                                                    <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
+                                                    <!--                                                     <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
                                                         Только с фото</mat-slide-toggle>
 
-                                                    <br />
+                                                    <br /> -->
                                                     <br />
                                                 </div>
 
@@ -184,7 +184,7 @@
                                             <td>
 
                                                 <!-- *ngIf="showFilter" -->
-             <!--                                    <h4 *ngIf='!hideAll'
+                                                <!--                                    <h4 *ngIf='!hideAll'
                                                     matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
                                                     Год рождения</h4> -->
                                                 <!--                                                  <p>
@@ -192,7 +192,7 @@
                                                   </p>  -->
 
                                                 <table class="example-half-width" cellspacing="0">
-<!-- 
+                                                    <!-- 
                                                     <tr *ngIf='!hideAll'>
                                                         <td>
 
@@ -226,7 +226,7 @@
                                                         </td>
                                                     </tr> -->
                                                     <tr>
-                                                        <td >
+                                                        <td>
                                                             <h4>Регион
                                                             </h4>
                                                             <mat-form-field appearance="fill">
@@ -248,7 +248,7 @@
 
                                                     </tr>
                                                     <tr *ngIf='!hideAll'><!-- *ngIf="showFilter" -->
-                                                        <td >
+                                                        <td>
                                                             <h4>Интернат</h4>
                                                             <mat-form-field appearance="fill">
 
@@ -266,7 +266,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr><!-- *ngIf="showFilter" -->
-                                                        <td >
+                                                        <td>
                                                             <div class="example-container" *ngIf='!hideAll'>
                                                                 <mat-form-field style="width: 39%;"
                                                                     *ngIf="showMaxOneHouse" class="example-user-input"
@@ -297,17 +297,16 @@
                                                                 [formControl]="form.controls['minNumberOfHouses']">с
                                                                 минимальным количеством интернатов</mat-checkbox>
 
-                                                             <!-- *ngIf="!form.controls.noNames.value"  [disabled]="showFilter" (change)="onChangeMinNumberOfHouses()"-->   
-                                                             
-                                                             <mat-checkbox 
-                                                               
-                                                                
-                                                                [formControl]="form.controls['onlyWithConcent']">только с согласиями</mat-checkbox>
+                                                            <!-- *ngIf="!form.controls.noNames.value"  [disabled]="showFilter" (change)="onChangeMinNumberOfHouses()"-->
 
-                                                         <mat-checkbox [disabled]="showFilter"
+                                                            <mat-checkbox
+                                                                [formControl]="form.controls['onlyWithConcent']">только
+                                                                с согласиями</mat-checkbox>
+
+                                                            <!-- <mat-checkbox [disabled]="showFilter"
                                                                 (change)="onChangeMinNumberOfHouses()"
                                                                 [formControl]="form.controls['noNames']">без имен и
-                                                                отчеств</mat-checkbox> 
+                                                                отчеств</mat-checkbox>  -->
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -326,7 +325,7 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Тип контакта*</mat-label>
-                                            <mat-select (value) ="defaultType"
+                                            <mat-select (value)="defaultType"
                                                 [formControl]="form.controls['contactType']"
                                                 (selectionChange)="getContacts(false)">
                                                 <mat-option *ngFor="let type of types" [value]="type">
@@ -551,32 +550,39 @@
                     <mat-card-content *ngIf="showInstructionForSubscribers && (!isForInstitutes || isParcelAvailable)"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
-                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Здравствуйте,
+                        <p *ngIf="clientFirstName && clientFirstName != 'Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">Здравствуйте,
                             {{clientFirstName}}!</p>
-                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                        <p *ngIf="!clientFirstName || clientFirstName == 'Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
 
-                        <!--                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Спасибо за вашу заявку!<br />
                             Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
-                            Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
-                            чем на месяц.<br />
-                            Поэтому просим вас отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на
-                            конверте
-                            "вручить 31 декабря".<br />
-                            Обращаю ваше внимание, что списки поздравляемых идут без фамилий.
+                            Поэтому просим вас отправить открытки в конце октября - начале ноября.<br />
+                            Укажите, пожалуйста, на конверте "прошу вручить 31 декабря".<br />
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором.<br />
+                            Не отправляйте подарки, сувениры, гостинцы, РЕГИСТРИРУЕМЫЕ письма, бандероли, посылки.
+
+                            <!-- Обращаю ваше внимание, что списки поздравляемых идут без фамилий. -->
+                        </p>
+
+                        <!--     <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Вы нас очень выручаете!!!<br />
+                            Открытки нужно отправить в ближайшие дни.<br />
                         </p> -->
 
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
-                            Вы нас очень выручаете!!!<br />
-                            Открытки нужно отправить в ближайшие дни.<br />    
-                        </p>
-
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;" *ngIf="!isParcelAvailable">            
-                            Обращаю ваше внимание, что списки поздравляемых идут без фамилий и года рождения (теперь мы получаем только такие данные). <br />
+                        <!--  <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
+                            *ngIf="!isParcelAvailable">
+                            Обращаю ваше внимание, что списки поздравляемых идут без фамилий и года рождения (теперь мы
+                            получаем только такие данные). <br />
                             Не переживайте:<br />
                             - в интернате точно найдут поздравляемого и вручат ему открытку.<br />
-                            - открытки и конверты без фамилии, а только с именем и отчеством на почте принимают и доставляют.<br />
-                        </p>
+                            - открытки и конверты без фамилии, а только с именем и отчеством на почте принимают и
+                            доставляют.<br />
+                        </p> -->
 
                         <p *ngIf="isParcelAvailable"
                             style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
@@ -597,9 +603,9 @@
                     <mat-card-content *ngIf="showInstruction && (!isForInstitutes || isParcelAvailable)"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
-                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
+                        <p *ngIf="clientFirstName && clientFirstName !='Волонтер'" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
                             {{clientFirstName}}!</p>
-                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                        <p *ngIf="!clientFirstName || clientFirstName == 'Волонтер'" style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
 
 
@@ -612,13 +618,13 @@
                             Мы получили вашу заявку и очень рады вашему участию!
                         </p>
 
-                        <p style="font-family: 'Times New Roman', Times, serif;">
+                   <!--      <p style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. <!-- Иногда в списках
+                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. --> <!-- Иногда в списках
                             встречаются
                             люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                             проживают в домах престарелых. Иногда сразу после детдомов. -->
-                        </p>
+                    <!--     </p> -->
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
@@ -629,11 +635,21 @@
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
                             чтобы я могла их передать другому поздравляющему.
-                            Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
+                  <!--           Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
                             один раз к указанному празднику. Письма писать не нужно!<br />
                             Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления
                             мы готовим примерно за 3
-                            месяца до праздника.
+                            месяца до праздника. -->
+                        </p>
+
+                               <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
+                            text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                            Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
+                        </p>
+
+                        <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                            text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                            Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
 
                     </mat-card-content>
@@ -646,7 +662,7 @@
                         <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
 
-<!--                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                        <!--                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Сроки доставки простых писем и бандеролей, к сожалению, в настоящее время предсказать
                             невозможно.<br />
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
@@ -654,13 +670,32 @@
                             Поэтому просим вас отправить открытки в ноябре - начале декабря.<br />
                             На конверте рекомендуем указать название праздника. Например, 'Новый год'.
                         </p> -->
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                  <!--       <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Вы нас очень выручаете!!!<br />
                             Открытки нужно отправить в ближайшие дни.<br />
                             Обращаю ваше внимание, что списки поздравляемых идут без фамилий.
+                        </p> -->
+
+                        
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Спасибо за вашу заявку!<br />                    
+                             Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
+                            Поэтому просим вас отправить открытки в конце октября - начале ноября.<br />
+                            Укажите, пожалуйста, на конверте "прошу вручить 31 декабря".<br />
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором.<br />
+                            Не отправляйте подарки, сувениры, гостинцы, РЕГИСТРИРУЕМЫЕ письма, бандероли, посылки.
                         </p>
 
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
+                            Получателем указать интернат. 
+                            Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
+                            ценные, первого класса), но нам такой вариант совершенно не подходит,
+                            так как такие отправления с 99% вероятностью вернутся обратно.
+                        </p>
 
+<!-- 
                         <p style="font-family: 'Times New Roman', Times, serif;">
                             Сообщаю вам только адреса интернатов и количество поздравляемых, то есть открытки будут не
                             именные.<br />
@@ -676,7 +711,7 @@
                             отправления с 99% вероятностью вернутся обратно.<br />
                         </p>
                         <a href="https://disk.yandex.ru/i/pIc9B0o9HKXGrQ">Ссылка на полную инструкцию</a>
-                        <br /> <br />
+                        <br /> <br /> -->
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
@@ -685,7 +720,7 @@
                     </mat-card-content>
 
 
-                    <mat-card-content *ngIf="showInstruction && isForInstitutes && !isParcelAvailable"
+<!--                     <mat-card-content *ngIf="showInstruction && isForInstitutes && !isParcelAvailable"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
                         <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Здравствуйте,
@@ -739,7 +774,7 @@
 
                     </mat-card-content>
 
-                    <br />
+                    <br /> -->
                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
@@ -761,12 +796,17 @@
                                 <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                             {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                                 <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-                                <!--  {{celebrator.lastName}} -->
+                                <span
+                                    *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">{{celebrator.lastName}}</span>
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
-                             <!--    <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span> -->
+                                <span
+                                    *ngIf="celebrator.yearBirthday > 0 && onlyWithConcent && celebrator.dateOfSignedConsent">-
+                                    {{celebrator.yearBirthday}} г.р.</span>
                                 {{celebrator.comment1}}
-                              <!--   {{celebrator.linkPhoto}} -->
+                                <span
+                                    *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">{{celebrator.linkPhoto}}</span>
+
                                 <span style="font-weight: bold; color: rgb(175, 19, 175); ">
                                     {{celebrator.specialComment}}
                                 </span>
@@ -780,10 +820,10 @@
 
                         <p
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
-                            Многократно благодарим вас!!! <br />
-                        _________________________________________________<br />
+                            Многократно благодарим вас за доброе сердце и отзывчивость!!!! <br />
+                            _________________________________________________<br />
                             Помогите обеспечить горячей едой пожилых людей <a
-                                href="https://starikam.org/campaign/lyudyam-nuzhna-goryachaya-eda/">здесь</a>. 
+                                href="https://starikam.org/campaign/lyudyam-nuzhna-goryachaya-eda/">starikam.org</a>.
                         </p>
 
 
@@ -812,13 +852,13 @@
                                 бандеролью. Получателем указать интернат.
                             </li>
 
-<!--                             <li style="font-family: 'Times New Roman', Times, serif;">
+                            <!--                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на
                                 конверте
                                 "вручить 31 декабря".
                             </li> -->
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Постарайтесь отправить открытки в самые ближайшие дни.
+                                Постарайтесь отправить открытки в конце октября-начале ноября с пометкой 'прошу вручить 31 декабря'
                             </li>
                         </ul>
 
@@ -828,7 +868,7 @@
                                 ПРОСТЫМИ письмами (до 100 г).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Постарайтесь отправить открытки в самые ближайшие дни.
+                                Постарайтесь отправить открытки в конце октября-начале ноября с пометкой 'прошу вручить 31 декабря'.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 В графе "кому" указывайте название интерната (учреждения). Указывать ФИО получателя
@@ -858,7 +898,7 @@
                                 обратный адрес (кроме случаев, когда мы просим этого не делать)*.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Адрес и ИО получателя на конверте или почтовой открытке укажите обязательно в правом
+                                Адрес и данные получателя на конверте или почтовой открытке укажите обязательно в правом
                                 нижнем
                                 углу.
                             </li>
@@ -971,12 +1011,12 @@
                             </li>
                         </ul>
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                             Помогите обеспечить горячей едой пожилых людей
+                            Помогите обеспечить горячей едой пожилых людей
                             <a href="https://starikam.org/campaign/lyudyam-nuzhna-goryachaya-eda/">starikam.org</a>
                         </p>
                         <hr />
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                            Примите нашу искреннюю благодарность за помощь! <br />
+                            От всего сердца благодарим вас за помощь! <br />
                             Будут вопросы — обращайтесь!
                         </p>
                         <br />

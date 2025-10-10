@@ -50,7 +50,7 @@ const listSchema = new Schema(
     dateOfSignedConsent : {type: Date, default: null },
   
   },
-  { collection: "newYear_2025" }
+  { collection: "newYear_2026" }
 );
 
 module.exports = mongoose.model("NewYear", listSchema);

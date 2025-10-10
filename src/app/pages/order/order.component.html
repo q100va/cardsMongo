@@ -43,7 +43,7 @@
                                                     matTooltip="Предыдущий месяц" color="primary"
                                                     (click)=goBack($event)>
                                                     <mat-icon>navigate_before</mat-icon>
-                                                </button> 
+                                                </button>
                                                 <!-- <button [disabled]="isBeforeMonth || !isNextMonth" mat-icon-button
                                                 matTooltip="Предыдущий месяц" color="primary"
                                                 (click)=goBack($event)>
@@ -632,7 +632,7 @@
                     <mat-card-content *ngIf="showInstructionForSubscribers && !isForInstitutes"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
-                        <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Приветствую
+                        <p *ngIf="clientFirstName && clientFirstName != 'Волонтер'" style="font-family: 'Times New Roman', Times, serif;">Приветствую
                             вас,
                             {{clientFirstName}}!</p>
                         <p *ngIf="!clientFirstName || clientFirstName == 'Волонтер'"
@@ -645,7 +645,7 @@
 
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Спасибо за вашу заявку!<br />
-                        <!--     Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.<br /> -->
+                            <!--     Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.<br /> -->
                             Открытки нужно отправить примерно за месяц до праздника или дня рождения.
                             <span *ngIf="!onlyWithConcent"> Для определения сроков отправки ориентируйтесь на даты,
                                 указанные в заголовке.</span><br />
@@ -670,12 +670,12 @@
                     <mat-card-content *ngIf="showInstruction"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
-                        <p *ngIf="clientFirstName && clientFirstName !='Волонтер'" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
+                        <p *ngIf="clientFirstName && clientFirstName !='Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">Добрый день,
                             {{clientFirstName}}!</p>
-                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                        <p *ngIf="!clientFirstName || clientFirstName == 'Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
-
-
                         <p
                             style="font-weight: 600; color: rgb(255, 0, 0); font-family: 'Times New Roman', Times, serif;">
                             Пожалуйста, подтвердите получение этого письма, ответив на него!
@@ -716,14 +716,12 @@
                             Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления
                             мы готовим примерно за 3
                             месяца до праздника. -->
-                        <p *ngIf="!onlyWithConcent"
-                            style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
+                        <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
                             text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
                         </p>
 
-                        <p *ngIf="onlyWithConcent"
-                            style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                        <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
                             text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
@@ -821,7 +819,7 @@
 
 
                     </mat-card-content>-->
-               
+
                     <mat-card-content *ngFor="let lineItem of lineItems">
 
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
@@ -867,10 +865,10 @@
 
                         <p
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
-                            Многократно благодарим вас! <br />
+                            От всего сердца благодарим вас! <br />
                             _________________________________________________<br />
                             Помогите обеспечить горячей едой одиноких пожилых людей, <a
-                                href="https://starikam.org/campaign/lyudyam-nuzhna-goryachaya-eda/">здесь</a>.
+                                href="https://starikam.org/campaign/lyudyam-nuzhna-goryachaya-eda/">starikam.org</a>.
                         </p>
 
 
@@ -1058,7 +1056,7 @@
                         </p>
                         <hr />
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                            Примите нашу искреннюю благодарность за помощь! <br />
+                            От всего сердца благодарим вас за помощь! <br />
                             Будут вопросы — обращайтесь!
                         </p>
                         <br />

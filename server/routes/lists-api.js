@@ -784,14 +784,16 @@ router.post("/new-year/create", checkAuth, async (req, res) => {
 
 async function findAllNYCelebrators(houses) {
 
-  /*   let activeHouses = await House.find({isActive: true});
+/*     let activeHouses = await House.find({isActive: true});
     for (let house of activeHouses) {
-      let amount = await Senior.find({nursingHome: house.nursingHome, isDisabled: false, isRestricted: false, dateExit: null}).estimatedDocumentCount();
+      let amount = await Senior.find({nursingHome: house.nursingHome, isDisabled: false, isRestricted: false, dateExit: null}).count();
+       console.log('AMOUNT', amount);
+       console.log('nursingHome', house.nursingHome);
       await House.updateOne({nursingHome: house.nursingHome}, {$set :{"statistic.newYear.amount": amount}});
-    } */
+    }   */
 
-  //throw new Error("Something bad happened");
-  let result = [];
+ //throw new Error("Something bad happened");
+ let result = [];
   console.log("1- inside findAllMonthCelebrators newList");
 
   let namesOfUpdatedNursingHome = [];
@@ -841,9 +843,9 @@ async function findAllNYCelebrators(houses) {
 
   for (let celebrator of list) {
 
-    /*       let cloneSpecialComment = await specialComment(
-            2022 - celebrator["yearBirthday"]
-          ); */
+   //      let cloneSpecialComment = await specialComment(
+         //   2022 - celebrator["yearBirthday"]
+        //  );
 
     let cloneCelebrator = await createCloneCelebratorNY(celebrator);
 
@@ -892,7 +894,7 @@ async function findAllNYCelebrators(houses) {
   //console.log("3 - final" + finalList); 
 
   return result;
-  //return true;
+//return true;
 }
 async function createCloneCelebrator(celebrator) {
 
@@ -998,16 +1000,16 @@ async function createCloneCelebratorNY(celebrator) {
     }
 
   } else {
-    if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
+    if (celebrator.yearBirthday < 1943 && celebrator.yearBirthday > 0) {
       cloneOldest = true;
     }
-    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
+    if (celebrator.yearBirthday < 1960 && celebrator.gender == "Female") {
       cloneCategory = "oldWomen";
     }
-    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+    if (celebrator.yearBirthday < 1960 && celebrator.gender == "Male") {
       cloneCategory = "oldMen";
     }
-    if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+    if (celebrator.yearBirthday > 1959 || !celebrator.yearBirthday) {
       if (celebrator.gender == "Female") {
         cloneCategory = "yangWomen";
       }
@@ -1041,7 +1043,7 @@ async function createCloneCelebratorNY(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: 'Новый год 2025',
+    holyday: 'Новый год 2026',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +
@@ -1712,7 +1714,7 @@ router.post("/new-year/check-fullness", checkAuth, async (req, res) => {
 
 
 async function makeDoubtAvailable() {
-  let doubt = await Order.find({ isDisabled: false, isOverdue: false, isReturned: false, isAccepted: false, holiday: "Новый год 2025" });
+  let doubt = await Order.find({ isDisabled: false, isOverdue: false, isReturned: false, isAccepted: false, holiday: "Новый год 2026" });
   for (let order of doubt) {
     for (let house of order.lineItems) {
       for (let celebrator of house.celebrators) {
@@ -3455,7 +3457,7 @@ async function countNY() {
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "Новый год 2026", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3652,7 +3654,7 @@ async function countVolonteers() {
   let setSchools = new Set();
   let ordersBirthday = await Order.find({ holiday: "Дни рождения октября 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  //let ordersNY = await Order.find({ holiday: "Новый год 2025", isDisabled: false, isOverdue: false, isReturned: false, });
+  //let ordersNY = await Order.find({ holiday: "Новый год 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersFebruary23 = await Order.find({ holiday: "23 февраля 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   let ordersMarch8 = await Order.find({ holiday: "8 марта 2025", isDisabled: false, isOverdue: false, isReturned: false, });

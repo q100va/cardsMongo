@@ -239,7 +239,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isOverdue: true,
               holiday: {
                 $in: [
-                  //"Новый год 2025",
+                  //"Новый год 2026",
                   "Дни рождения октября 2025",
                   "Дни рождения ноября 2025",
                   "Дни рождения декабря 2025",
@@ -256,7 +256,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isReturned: true,
               holiday: {
                 $in: [
-                  // "Новый год 2025",
+                  // "Новый год 2026",
                   "Дни рождения октября 2025",
                   "Дни рождения ноября 2025",
                   "Дни рождения декабря 2025",
@@ -293,7 +293,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isOverdue: true,
               holiday: {
                 $in: [
-                  //"Новый год 2025",
+                  //"Новый год 2026",
                   "Дни рождения октября 2025",
                   "Дни рождения ноября 2025",
                   "Дни рождения декабря 2025",
@@ -309,7 +309,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               isReturned: true,
               holiday: {
                 $in: [
-                  //"Новый год 2025",
+                  //"Новый год 2026",
                   "Дни рождения октября 2025",
                   "Дни рождения ноября 2025",
                   "Дни рождения декабря 2025",
@@ -589,7 +589,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    // "Новый год 2025",
+                    // "Новый год 2026",
                     "Дни рождения октября 2025",
                     "Дни рождения ноября 2025",
                     "Дни рождения декабря 2025",
@@ -605,7 +605,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    // "Новый год 2025",
+                    // "Новый год 2026",
                     "Дни рождения октября 2025",
                     "Дни рождения ноября 2025",
                     "Дни рождения декабря 2025",
@@ -639,7 +639,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   isOverdue: true,
                   holiday: {
                     $in: [
-                      //   "Новый год 2025",
+                      //   "Новый год 2026",
                       "Дни рождения октября 2025",
                       "Дни рождения ноября 2025",
                       "Дни рождения декабря 2025",
@@ -655,7 +655,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   isReturned: true,
                   holiday: {
                     $in: [
-                      //   "Новый год 2025",
+                      //   "Новый год 2026",
                       "Дни рождения октября 2025",
                       "Дни рождения ноября 2025",
                       "Дни рождения декабря 2025",
@@ -744,7 +744,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    // "Новый год 2025",
+                    // "Новый год 2026",
                     "Дни рождения октября 2025",
                     "Дни рождения ноября 2025",
                     "Дни рождения декабря 2025",
@@ -760,7 +760,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    // "Новый год 2025",
+                    // "Новый год 2026",
                     "Дни рождения октября 2025",
                     "Дни рождения ноября 2025",
                     "Дни рождения декабря 2025",
@@ -794,7 +794,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   isOverdue: true,
                   holiday: {
                     $in: [
-                      // "Новый год 2025",
+                      // "Новый год 2026",
                       "Дни рождения октября 2025",
                       "Дни рождения ноября 2025",
                       "Дни рождения декабря 2025",
@@ -810,7 +810,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   isReturned: true,
                   holiday: {
                     $in: [
-                      // "Новый год 2025",
+                      // "Новый год 2026",
                       "Дни рождения октября 2025",
                       "Дни рождения ноября 2025",
                       "Дни рождения декабря 2025",
@@ -949,7 +949,7 @@ async function deletePluses(deletedOrder, full) {
             }
           }
           else {
-            if (deletedOrder.holiday == "Новый год 2025") {
+            if (deletedOrder.holiday == "Новый год 2026") {
               for (let lineItem of deletedLineItems) {
                 for (let person of lineItem.celebrators) {
 
@@ -1154,7 +1154,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    //  "Новый год 2025",
+                    //  "Новый год 2026",
                     "Дни рождения октября 2025",
                     "Дни рождения ноября 2025",
                     "Дни рождения декабря 2025",
@@ -1167,7 +1167,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    // "Новый год 2025",
+                    // "Новый год 2026",
                     "Дни рождения октября 2025",
                     "Дни рождения ноября 2025",
                     "Дни рождения декабря 2025",
@@ -1198,7 +1198,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                   isOverdue: true,
                   holiday: {
                     $in: [
-                      "Новый год 2025",
+                      "Новый год 2026",
                       "Дни рождения ноября 2025",
                       "Дни рождения декабря 2025",
                       "Именины февраля 2025",
@@ -1210,7 +1210,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                   isReturned: true,
                   holiday: {
                     $in: [
-                      "Новый год 2025",
+                      "Новый год 2026",
                       "Дни рождения ноября 2025",
                       "Дни рождения декабря 2025",
                       "Именины февраля 2025",
@@ -1340,7 +1340,7 @@ async function restorePluses(updatedOrder) {
             }
           }
           else { //ADDED STATISTIC!!!
-            if (updatedOrder.holiday == "Новый год 2025") {
+            if (updatedOrder.holiday == "Новый год 2026") {
               for (let lineItem of updatedOrder.lineItems) {
                 for (let person of lineItem.celebrators) {
                   console.log("person");
@@ -4332,7 +4332,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
       data = await collectSeniorsNewYear(data, orderFilter);
 
-      if (data.counter < proportion[category]) {
+     /*   if (data.counter < proportion[category]) {
         data.maxPlus = 2;
 
         data = await collectSeniorsNewYear(data, orderFilter);
@@ -4343,7 +4343,7 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
         data = await collectSeniorsNewYear(data, orderFilter);
       }
-      /* 
+     
      
            if (data.counter < proportion[category]) {
              data.maxPlus = 4;
@@ -6703,12 +6703,12 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       console.log(count);
       for (let celebrator of celebratorsNewYear) {
         // console.log(celebrator.seniorId);
-        let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2025" }).countDocuments();
-        let forInstitute = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2025", institutes: { $ne: [] } }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026" }).countDocuments();
+        let forInstitute = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026", institutes: { $ne: [] } }).countDocuments();
         // console.log("forInstitute");
         //console.log(forInstitute);
 
-        //let forNavigators = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2025", contact: { $in: ["@tterros"] } }).countDocuments();
+        //let forNavigators = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026", contact: { $in: ["@tterros"] } }).countDocuments();
         await NewYear.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount, forInstitute: forInstitute, } });//forNavigators: forNavigators
         let updatedCelebrator = await NewYear.findOne({ seniorId: celebrator.seniorId });
         console.log(--count);
@@ -8923,14 +8923,14 @@ async function fillOrderForInstitutes(
         // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 } // ИСПРАВИТЬ
       }).countDocuments();
     }
-    /*     if (holiday == "Новый год 2025" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
+    /*     if (holiday == "Новый год 2026" && !filter.region && filter.noNames) { //&& filter.addressFilter == "noSpecial"
              count = await NewYear.find({
                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, //dateOfSignedConsent:  null //onlyForInstitute: true, 
                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
              }).countDocuments();
            }
        
-           if (holiday == "Новый год 2025" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
+           if (holiday == "Новый год 2026" && filter.region && filter.noNames) {// && filter.addressFilter == "noSpecial"
              count = await NewYear.find({
                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }, forInstitute: 0, finished: false, //dateOfSignedConsent:  null //onlyForInstitute: true
                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 } // ИСПРАВИТЬ 
@@ -8939,14 +8939,14 @@ async function fillOrderForInstitutes(
          */
 
     if (filter.onlyWithConcent) {
-      if (holiday == "Новый год 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+      if (holiday == "Новый год 2026" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await NewYear.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 6 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
 
-      if (holiday == "Новый год 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+      if (holiday == "Новый год 2026" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await NewYear.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 6 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
@@ -8954,14 +8954,14 @@ async function fillOrderForInstitutes(
       }
 
     } else {
-      if (holiday == "Новый год 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+      if (holiday == "Новый год 2026" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await NewYear.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
 
-      if (holiday == "Новый год 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+      if (holiday == "Новый год 2026" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await NewYear.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
@@ -9319,7 +9319,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if (holiday == "Новый год 2025" && (filter.noNames || filter.minNumberOfHouses)) {
+  if (holiday == "Новый год 2026" && (filter.noNames || filter.minNumberOfHouses)) {
 
     /*          if (filter.noNames) {
               if (!region) {

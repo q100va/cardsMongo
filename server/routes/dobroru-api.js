@@ -3294,14 +3294,14 @@ async function fillOrderForInstitutes(
             }).countDocuments();
         }
 
-        if (holiday == "Новый год 2025" && !filter.region) { //&& filter.addressFilter == "noSpecial"
+        if (holiday == "Новый год 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
             count = await NewYear.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, secondTime: true//forInstitute: 0, finished: falseonlyForInstitute: true, 
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
 
-        if (holiday == "Новый год 2025" && filter.region) {// && filter.addressFilter == "noSpecial"
+        if (holiday == "Новый год 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
             count = await NewYear.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, secondTime: true//forInstitute: 0, finished: falseonlyForInstitute: true
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
@@ -3534,7 +3534,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         }
     }
 
-    if (holiday == "Новый год 2025") {
+    if (holiday == "Новый год 2026") {
         if (!region) {
             seniorsData = await NewYear.find({
                 //forInstitute: 0,
