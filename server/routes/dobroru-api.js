@@ -497,21 +497,21 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     //console.log("newOrder.filter.maxOneHouse");
     //console.log(newOrder.filter.maxOneHouse);
 
-/*     if (seniorsData.celebratorsAmount < newOrder.amount) {
-        period.maxPlus++;
-        seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
-        if (seniorsData.celebratorsAmount < newOrder.amount) {
+    /*     if (seniorsData.celebratorsAmount < newOrder.amount) {
             period.maxPlus++;
-            seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday); */
+            seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
             if (seniorsData.celebratorsAmount < newOrder.amount) {
-                await deleteErrorPlus(order_id, newOrder.holiday);
-                return {
-                    result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
-                    success: false
-                };
-            }
-/*         }
-    } */
+                period.maxPlus++;
+                seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday); */
+    if (seniorsData.celebratorsAmount < newOrder.amount) {
+        await deleteErrorPlus(order_id, newOrder.holiday);
+        return {
+            result: `Обратитесь к администратору. Заявка не сформирована. Недостаточно адресов для вашего запроса.`,// Требуемых адресов только ` + seniorsData.celebratorsAmount,
+            success: false
+        };
+    }
+    /*         }
+        } */
 
 
     let resultLineItems = await generateLineItems(nursingHomes, order_id);
@@ -2487,6 +2487,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                   } */
             if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
         }
+        newOrder.filter.dateOfSignedConsent = null;
         seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
     }
@@ -3080,7 +3081,7 @@ async function createOrderForInstitutes(newOrder, prohibitedId, restrictedHouses
     console.log("newOrder.filter");
     console.log(newOrder.filter);
 
-
+    newOrder.filter.dateOfSignedConsent = null;
     let order = await Order.create(emptyOrder);
     let order_id = order._id.toString();
 
