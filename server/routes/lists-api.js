@@ -2096,8 +2096,8 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
   try {
 
     console.log("0- check HB fullness " + req.body.nursingHome);
-    let result = await checkAllHBFullness(req.body.nursingHome);
-    //let result = await checkAllHBFullness("ГРЯЗОВЕЦ"); //ИСПРАВИТЬ
+    //let result = await checkAllHBFullness(req.body.nursingHome);
+    let result = await checkAllHBFullness("УЛАН-УДЭ_ЛЕСНАЯ"); //ИСПРАВИТЬ
     console.log("4-check HB fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
@@ -2112,12 +2112,12 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
 
-  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 11, isRestricted: false, nursingHome: house });
+  let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 12, isRestricted: false, nursingHome: house });
 
   console.log("seniors HB" + seniors.length);
   //let fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { fullData: 1 });
-  let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
-  // let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+  //let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
+  let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   console.log("fullHouse HB" + fullHouse.length);
   let amount = 0;
   for (let senior of seniors) {
@@ -2129,8 +2129,8 @@ async function checkAllHBFullness(house) {
       let celebrator = await createCloneCelebrator(senior);
 
       console.log(celebrator);
-      let newCelebrator = await List.create(celebrator);
-      //let newCelebrator = await ListNext.create(celebrator);
+      //let newCelebrator = await List.create(celebrator);
+      let newCelebrator = await ListNext.create(celebrator);
       //let newCelebrator = await ListBefore.create(celebrator);
       console.log("added:");
       console.log(newCelebrator.fullData);
@@ -2138,8 +2138,8 @@ async function checkAllHBFullness(house) {
   }
 
 
-  fullHouse = await List.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
-  // fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
+  //fullHouse = await List.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
+  fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   // fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   for (let item of fullHouse) {
     //let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
@@ -2151,14 +2151,14 @@ async function checkAllHBFullness(house) {
       let celebrator = await createCloneCelebrator(senior);
 
       console.log(celebrator);
-      let newCelebrator = await List.create(celebrator);
-      // let newCelebrator = await ListNext.create(celebrator);
+     // let newCelebrator = await List.create(celebrator);
+       let newCelebrator = await ListNext.create(celebrator);
       // let newCelebrator = await ListBefore.create(celebrator);
       console.log(newCelebrator.fullData); */
 
 
-      await List.updateOne({ _id: item._id }, { $set: { absent: true } });
-      // await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
+    //  await List.updateOne({ _id: item._id }, { $set: { absent: true } });
+      await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
       //await ListBefore.updateOne({ _id: item._id }, { $set: { absent: true } });
       console.log("deleted:");
       console.log(item.fullData);
@@ -5777,11 +5777,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-08-31"), $lt: new Date("2025-10-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-09-30"), $lt: new Date("2025-11-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-08-31"), $lt: new Date("2025-10-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-09-30"), $lt: new Date("2025-11-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
