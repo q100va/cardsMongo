@@ -1273,7 +1273,7 @@ async function searchSeniorHelper(
     //CHANGE!!!
     //let maxPlusAmount = 3;  
     //let maxPlusAmount = 3;  
-    let maxPlusAmount = standardFilter.oldest ? 7 : data.maxPlus;
+    //let maxPlusAmount = standardFilter.oldest ? 7 : data.maxPlus;
     // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
     if (!standardFilter.oldest) {
         // filter.specialComment = /Юбилей/;
@@ -2016,7 +2016,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                     $match: {
                         region: { $in: newOrder.filter.regions },
                         absent: false,
-                        plusAmount: { $lt: 2 },
+                        plusAmount: { $lt: 1 },
                         onlyForInstitute: false,
                         isReleased: false,
                         noAddress: false,
@@ -2032,7 +2032,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                     $match: {
                         region: { $in: newOrder.filter.regions },
                         absent: false,
-                        plusAmount: { $lt: 2 },
+                        plusAmount: { $lt: 1 },
                         onlyForInstitute: false,
                         isReleased: false,
                         noAddress: false,
@@ -2048,7 +2048,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                     $match: {
                         region: { $in: newOrder.filter.regions },
                         absent: false,
-                        plusAmount: { $lt: 2 },
+                        plusAmount: { $lt: 1 },
                         onlyForInstitute: false,
                         isReleased: false,
                         noAddress: false,
@@ -2232,7 +2232,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                     $match: {
                         region: { $in: regions },
                         absent: false,
-                        plusAmount: { $lt: 2 },
+                        plusAmount: { $lt: 1 },
                         onlyForInstitute: false,
                         isReleased: false,
                         noAddress: false,
@@ -2250,7 +2250,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                     $match: {
                         region: { $in: regions },
                         absent: false,
-                        plusAmount: { $lt: 2 },
+                        plusAmount: { $lt: 1 },
                         onlyForInstitute: false,
                         isReleased: false,
                         noAddress: false,
@@ -2266,7 +2266,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                     $match: {
                         region: { $in: regions },
                         absent: false,
-                        plusAmount: { $lt: 2 },
+                        plusAmount: { $lt: 1 },
                         onlyForInstitute: false,
                         isReleased: false,
                         noAddress: false,
@@ -2599,12 +2599,12 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
             data.maxPlus = 1;
 
             data = await collectSeniorsNewYear(data, orderFilter);
-
+/* 
             if (data.counter < proportion[category]) {
                 data.maxPlus = 2;
 
                 data = await collectSeniorsNewYear(data, orderFilter);
-            }
+            } */
 
 
             /*
@@ -3297,14 +3297,14 @@ async function fillOrderForInstitutes(
 
         if (holiday == "Новый год 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
             count = await NewYear.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, secondTime: true//forInstitute: 0, finished: falseonlyForInstitute: true, 
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
 
         if (holiday == "Новый год 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
             count = await NewYear.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, secondTime: true//forInstitute: 0, finished: falseonlyForInstitute: true
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
@@ -3541,23 +3541,23 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                 //forInstitute: 0,
                 nursingHome: nursingHome,
                 absent: false,
-                plusAmount: { $lt: 2 },
+                plusAmount: { $lt: 1 },
                 _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
                 //finished: false,   
                 //onlyForInstitute: true,
-                secondTime: true
+                //secondTime: true
             }).limit(amount);
         }
         if (region) {
             seniorsData = await NewYear.find({
                 nursingHome: nursingHome,
                 absent: false,
-                plusAmount: { $lt: 2 },
+                plusAmount: { $lt: 1 },
                 _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
                 //onlyForInstitute: true, 
                 // forInstitute: 0,
                 //finished: false,
-                secondTime: true
+               // secondTime: true
             }).limit(amount);
         }
 
