@@ -1273,7 +1273,7 @@ async function searchSeniorHelper(
     //CHANGE!!!
     //let maxPlusAmount = 3;  
     //let maxPlusAmount = 3;  
-    //let maxPlusAmount = standardFilter.oldest ? 7 : data.maxPlus;
+    let maxPlusAmount = standardFilter.oldest ? 7 : data.maxPlus;
     // let maxPlusAmount = standardFilter.oldWomen ? 4 : data.maxPlus;
     if (!standardFilter.oldest) {
         // filter.specialComment = /Юбилей/;
