@@ -1086,7 +1086,7 @@ async function searchSenior(
         "БУРЕГИ",
         "ВАЛДАЙ",
         "ВАХТАН",
-        "ВЕРХНЕУРАЛЬСК",
+       // "ВЕРХНЕУРАЛЬСК",
         "ВЕРХНИЙ_УСЛОН",
         "ВЛАДИКАВКАЗ",
         "ВОЗНЕСЕНЬЕ",
@@ -3287,7 +3287,7 @@ async function fillOrderForInstitutes(
             count = await List.find({
                 nursingHome: house.nursingHome,
                 //gender: "Female",
-                absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+                absent: false, plusAmount: { $lt: 7 }, _id: { $nin: prohibitedId }
             }).countDocuments();
         }
 
@@ -3300,7 +3300,7 @@ async function fillOrderForInstitutes(
 
         if (holiday == "Дни рождения ноября 2025") {
             count = await ListBefore.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 4 }, _id: { $nin: prohibitedId }
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt:7 }, _id: { $nin: prohibitedId }
             }).countDocuments();
         }
 
@@ -3404,18 +3404,21 @@ async function fillOrderForInstitutes(
                 let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region);
                 seniorsData = [...seniorsData, ...seniors];
                 currentAmount -= smallerHouses[index].amount;
+                smallerHouses.splice(index,1);
                 return seniorsData;
             } else {
                 if (currentAmount - smallerHouses[i].amount <= 0) {
                     let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region);
                     seniorsData = [...seniorsData, ...seniors];
                     currentAmount -= currentAmount;
+                    smallerHouses.splice(i,1);
                     return seniorsData;
                 } else {
                     if (currentAmount - smallerHouses[i].amount >= 3) { // ИСПРАВИТЬ на 3
                         let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region);
                         seniorsData = [...seniorsData, ...seniors];
                         currentAmount -= smallerHouses[i].amount;
+                        smallerHouses.splice(i,1);
                     }
                 }
             }
