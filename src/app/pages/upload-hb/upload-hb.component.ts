@@ -46,7 +46,7 @@ export class UploadHbComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения ноября 2025";
+  holiday: string = "Дни рождения декабря 2025";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -487,10 +487,10 @@ export class UploadHbComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения ноября 2025";
+      this.holiday = "Дни рождения декабря 2025";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения ноября 2025";
+      this.holiday = "Дни рождения декабря 2025";
     }
   }
 
@@ -504,10 +504,10 @@ export class UploadHbComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения ноября 2025";
+      this.holiday = "Дни рождения декабря 2025";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения октября 2025";
+      this.holiday = "Дни рождения ноября 2025";
     }
   }
 
@@ -656,7 +656,7 @@ export class UploadHbComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения ноября 2025";
+    this.holiday = "Дни рождения декабря 2025";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
