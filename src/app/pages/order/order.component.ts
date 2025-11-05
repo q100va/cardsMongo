@@ -1127,7 +1127,7 @@ export class OrderComponent implements OnInit {
     console.log(newOrder.filter.onlyWithConcent);
 
     if (this.holiday == "Дни рождения ноября 2025") {
-      this.holidayTitle = "Дни рождения 26-31 ноября 2025";
+      this.holidayTitle = "Дни рождения 26-30 ноября 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
@@ -1141,7 +1141,7 @@ export class OrderComponent implements OnInit {
           "Дни рождения " +
           this.form.controls.date1.value +
           "-" +
-          "31 ноября 2025";
+          "30 ноября 2025";
       }
       if (
         !this.form.controls.date1.value &&
@@ -1168,7 +1168,7 @@ export class OrderComponent implements OnInit {
     }
 
     if (this.holiday == "Дни рождения декабря 2025") {
-      this.holidayTitle = "Дни рождения 26-30 декабря 2025";
+      this.holidayTitle = "Дни рождения 6-10 декабря 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
           "Дни рождения " +
@@ -1182,15 +1182,15 @@ export class OrderComponent implements OnInit {
           "Дни рождения " +
           this.form.controls.date1.value +
           "-" +
-          "30 декабря 2025";
+          "31 декабря 2025";
       }
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value >= 26
+        this.form.controls.date2.value >= 10
       ) {
         this.holidayTitle =
-          "Дни рождения 30" +
+          "Дни рождения 1" +
           "-" +
           this.form.controls.date2.value +
           " декабря 2025";
@@ -1198,10 +1198,10 @@ export class OrderComponent implements OnInit {
       if (
         !this.form.controls.date1.value &&
         this.form.controls.date2.value &&
-        this.form.controls.date2.value < 26
+        this.form.controls.date2.value < 10
       ) {
         this.holidayTitle =
-          "Дни рождения 21" +
+          "Дни рождения 1" +
           "-" +
           this.form.controls.date2.value +
           " декабря 2025";
