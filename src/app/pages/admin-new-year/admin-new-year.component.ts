@@ -19,7 +19,7 @@ import { RoleService } from "src/app/services/roles.service";
 export class AdminNewYearComponent implements OnInit {
   houses: House[];
   selection = new SelectionModel<House>(true, []);
-   isAdmin: boolean;
+  isAdmin: boolean;
   isManager: boolean;
   isDobroru: boolean;
 
@@ -57,6 +57,21 @@ export class AdminNewYearComponent implements OnInit {
         this.isManager = userRole === "manager" ? true : false;
         this.isDobroru = userRole === "dobroru" ? true : false;
       });
+    if (!this.isAdmin)
+      this.displayedColumns = [
+        "nursingHome",
+        "amount",
+        "statistic1",
+        "statistic2",
+        "statistic3",
+
+        "dateLastUpdate",
+
+        "noAddress",
+        "isReleased",
+        "region",
+        "isActive",
+      ];
     console.log("constructor");
     this.housesService.findActiveHouses().subscribe(
       (res) => {
