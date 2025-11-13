@@ -21,7 +21,7 @@
         <mat-card-content>
             <mat-table [dataSource]="houses" class="mat-elevation-z4">
 
-                <ng-container matColumnDef="check" *ngIf="isAdmin">
+                <ng-container matColumnDef="check">
                     <mat-header-cell *matHeaderCellDef> Выбрать </mat-header-cell>
                     <mat-cell *matCellDef="let row">
                         <mat-checkbox (click)="$event.stopPropagation()"
