@@ -2760,7 +2760,7 @@ router.get("/amountOfVolunteers", checkAuth, async (req, res) => {
     //await report();
     await reportListOfHouses();
     //await reportSources();
-    //await overdue();
+    await overdue();
     // await amountNY();
     // await spareRegions();
 
@@ -3258,7 +3258,7 @@ async function reportListOfHouses() {
       /*  console.log('house');
         console.log(house);*/
       const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
-      console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes);
+      console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.dateLastUpdateClone + " + " + house.address +  " + " + house.notes);
 
       /*             const amountOfMen = await February23.find({ nursingHome: house.nursingHome, absent: false, plusAmount: 0, noAddress: false }).count();
                   const amountOfWomen = await March8.find({ nursingHome: house.nursingHome, absent: false, plusAmount: 0, noAddress: false }).count(); */
@@ -3272,7 +3272,7 @@ async function reportListOfHouses() {
     // console.log(region.name + " + " + amountOfSeniors);
 
   }
-  console.log(feb23 + " + " + march8);
+ // console.log(feb23 + " + " + march8);
 
 
 
@@ -3283,11 +3283,11 @@ async function reportListOfHouses() {
 }
 
 async function overdue() {
-  const houses = await House.find({ isActive: true, dateLastUpdate: { $lt: new Date('2024-09-01') } });
+  const houses = await House.find({ isActive: true, dateLastUpdate: { $lt: new Date('2025-10-01') } });
 
 
   for (let house of houses) {
-    console.log(house.region + " + " + house.nursingHome + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.notes);
+    console.log(house.region + " + " + house.nursingHome + " + " + house.address + " + " + house.dateLastUpdateClone + " + " + house.nameContact + " + "+ house.contact + " + "+ house.notes);
   }
   // console.log(region.name + " + " + amountOfSeniors);
 
