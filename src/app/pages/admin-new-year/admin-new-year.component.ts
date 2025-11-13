@@ -8,6 +8,8 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { ListService } from "src/app/services/list.service";
 import { MatTableDataSource } from "@angular/material/table";
 import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/confirmation-dialog.component";
+import { CookieService } from "ngx-cookie-service";
+import { RoleService } from "src/app/services/roles.service";
 
 @Component({
   selector: "app-admin-new-year",
@@ -17,6 +19,9 @@ import { ConfirmationDialogComponent } from "src/app/shared/confirmation-dialog/
 export class AdminNewYearComponent implements OnInit {
   houses: House[];
   selection = new SelectionModel<House>(true, []);
+   isAdmin: boolean;
+  isManager: boolean;
+  isDobroru: boolean;
 
   displayedColumns = [
     "nursingHome",
@@ -40,14 +45,24 @@ export class AdminNewYearComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private resultDialog: MatDialog,
-    private listService: ListService
+    private listService: ListService,
+    private cookieService: CookieService,
+    private roleService: RoleService
   ) {
+    this.roleService
+      .findUserRole(this.cookieService.get("session_user"))
+      .subscribe((res) => {
+        const userRole = res["data"];
+        this.isAdmin = userRole === "admin" ? true : false;
+        this.isManager = userRole === "manager" ? true : false;
+        this.isDobroru = userRole === "dobroru" ? true : false;
+      });
     console.log("constructor");
     this.housesService.findActiveHouses().subscribe(
       (res) => {
-         this.houses = res["data"];
+        this.houses = res["data"];
         //console.log(this.houses);
-/*         this.houses = this.houses.filter(
+        /*         this.houses = this.houses.filter(
           (item) => item.statistic.newYear.plus0 != 0
           // || (item.statistic.newYear.plus0 == 0 && item.statistic.newYear.plus1 == 0 && item.statistic.newYear.plus2 == 0)
           // || item.nursingHome == "ФИЛИППОВСКОЕ"
@@ -58,7 +73,7 @@ export class AdminNewYearComponent implements OnInit {
           //item.statistic.newYear.plus0 != 0 && item.statistic.newYear.plus1 != 0 && item.statistic.newYear.forInstitute == 0 && item.noAddress == false
           //  && item.statistic.easter.amount < 100&&            item.statistic.easter.plus0 != 0&& item.statistic.newYear.forNavigators == 0
         ); */
-        
+
         /* 
         for (let house of this.houses){
           console.log('"' + house.nursingHome + '",');
