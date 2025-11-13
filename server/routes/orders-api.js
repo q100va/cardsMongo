@@ -8944,14 +8944,14 @@ async function fillOrderForInstitutes(
     if (filter.onlyWithConcent) {
       if (holiday == "Новый год 2026" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await NewYear.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 6 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
 
       if (holiday == "Новый год 2026" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await NewYear.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 6 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
@@ -8959,14 +8959,14 @@ async function fillOrderForInstitutes(
     } else {
       if (holiday == "Новый год 2026" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await NewYear.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
 
       if (holiday == "Новый год 2026" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await NewYear.find({
-          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
+          nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
