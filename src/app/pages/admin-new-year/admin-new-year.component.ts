@@ -57,7 +57,22 @@ export class AdminNewYearComponent implements OnInit {
         this.isManager = userRole === "manager" ? true : false;
         this.isDobroru = userRole === "dobroru" ? true : false;
       });
-    if (!this.isAdmin)
+    if (this.isAdmin)
+      this.displayedColumns = [
+        "nursingHome",
+        "amount",
+        "statistic1",
+        "statistic2",
+        "statistic3",
+        "check",
+        "dateLastUpdate",
+
+        "noAddress",
+        "isReleased",
+        "region",
+        "isActive",
+      ];
+    else {
       this.displayedColumns = [
         "nursingHome",
         "amount",
@@ -72,6 +87,7 @@ export class AdminNewYearComponent implements OnInit {
         "region",
         "isActive",
       ];
+    }
     console.log("constructor");
     this.housesService.findActiveHouses().subscribe(
       (res) => {
