@@ -477,9 +477,9 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     let key = 0;
     for (let newSenior of newList) {
       let index;
-      if (newSenior.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА" || house.nursingHome == "ВОЛГОГРАД_КРИВОРОЖСКАЯ") {
+      if (newSenior.nursingHome == "") {//ТАРХАНСКАЯ_ПОТЬМА ВОЛГОГРАД_КРИВОРОЖСКАЯ
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday));
-      } else if (newSenior.nursingHome == "ИСАКОГОРКА" || house.nursingHome == "УЛАН-УДЭ_ЛЕСНАЯ") {//СЛАВГОРОД  
+      } else if (house.nursingHome == "") {//СЛАВГОРОД   ИСАКОГОРКА
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic));
 
       } else {
@@ -519,20 +519,20 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
         if (newSenior.dateOfSignedConsent != oldList[index].dateOfSignedConsent && !newSenior.dateOfSignedConsent) {
           newSenior.dateOfSignedConsent = oldList[index].dateOfSignedConsent;
         }
-        if (house.nursingHome == "ПОБЕДА" || house.nursingHome == "РОСТОВ-НА-ДОНУ") {
+   /*   if (house.nursingHome == "ПОБЕДА" || house.nursingHome == "РОСТОВ-НА-ДОНУ") {
           let comment1 = newSenior.comment1.replace(/\(/g, '');
           comment1 = comment1.replace(/\)/g, '');
           if (!oldList[index].comment1.includes(comment1)) {
             await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
           }
-        }
+        }   
         if (house.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА" || house.nursingHome == "ВОЛГОГРАД_КРИВОРОЖСКАЯ") {
           if (oldList[index].yearBirthday != newSenior.yearBirthday && newSenior.yearBirthday == 0) {
             newSenior.yearBirthday = oldList[index].yearBirthday;
           }
         }
-        if (house.nursingHome == "ИСАКОГОРКА" || house.nursingHome == "УЛАН-УДЭ_ЛЕСНАЯ") {//СЛАВГОРОД
-          console.log("УЛАН-УДЭ_ЛЕСНАЯ");
+        if ( house.nursingHome == "ИСАКОГОРКА") {//СЛАВГОРОД УЛАН-УДЭ_ЛЕСНАЯ
+          //console.log("УЛАН-УДЭ_ЛЕСНАЯ");house.nursingHome == "ИСАКОГОРКА" ||
 
           // if (oldList[index].yearBirthday != newSenior.yearBirthday && oldList[index].yearBirthday == 0) {
           oldList[index].yearBirthday = newSenior.yearBirthday;
@@ -548,7 +548,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
           //   }
           oldList[index].comment1 = newSenior.comment1;
           await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
-        }
+        } */
 
 
         //replace all ё on е
@@ -688,7 +688,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
           //  newSenior.isReleased != oldList[index].isReleased ||
           //senior.dateEnter = house.dateLastUpdate;
           //newSenior.dateExit != oldList[index].dateExit ||
-          (newSenior.comment1 != oldList[index].comment1 && house.nursingHome != "ПОБЕДА") ||
+          (newSenior.comment1 != oldList[index].comment1 ) ||//&& house.nursingHome != "ПОБЕДА"
           newSenior.comment2 != oldList[index].comment2 ||
           //newSenior.veteran != oldList[index].veteran ||
           //newSenior.child != oldList[index].child ||
