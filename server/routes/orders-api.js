@@ -1593,6 +1593,7 @@ router.get("/get/nursingHomes/", checkAuth, async (req, res) => {
         for (let house of nursingHomes) {
           setRegions.add(house.region);
         }
+        setRegions.add("ЕВРОПЕЙСКАЯ");
         let regions = Array.from(setRegions);
         regions.sort();
 
