@@ -67,6 +67,7 @@ import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-f
 import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
 import { ReportsComponent } from "./pages/reports/reports.component";
 import { DobroruMay9Component } from "./pages/dobroru-may9/dobroru-may9.component";
+import { DobroruGuard } from "./shared/dobro.guard";
 const routes: Routes = [
   {
     path: "",
@@ -292,7 +293,7 @@ const routes: Routes = [
       {
         path: "lists/admin-new-year",
         component: AdminNewYearComponent,
-        canActivate: [AuthGuard, ManagerGuard], //, RoleGuard
+        canActivate: [AuthGuard, ManagerGuard, DobroruGuard], //, RoleGuard
       },
       {
         path: "lists/admin-spring",
