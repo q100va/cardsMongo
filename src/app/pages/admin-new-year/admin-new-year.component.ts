@@ -23,7 +23,18 @@ export class AdminNewYearComponent implements OnInit {
   isManager: boolean;
   isDobroru: boolean;
 
-  displayedColumns: string[];
+  displayedColumns = [
+    "nursingHome",
+    "amount",
+    "statistic1",
+    "statistic2",
+    "statistic3",
+    "dateLastUpdate",
+    "noAddress",
+    "isReleased",
+    "region",
+    "isActive",
+  ];
 
   constructor(
     private dialog: MatDialog,
@@ -35,15 +46,16 @@ export class AdminNewYearComponent implements OnInit {
     private cookieService: CookieService,
     private roleService: RoleService
   ) {
-    this.roleService
+    const userRole = this.cookieService.get("session_role");
+
+    /*         this.roleService
       .findUserRole(this.cookieService.get("session_user"))
-      .subscribe((res) => {        
-        const userRole = res["data"];
-        this.isAdmin = userRole === "admin" ? true : false;
-        this.isManager = userRole === "manager" ? true : false;
-        this.isDobroru = userRole === "dobroru" ? true : false;
-      });
-    if (this.isAdmin)
+      .subscribe((res) => {
+        const userRole = res["data"]; */
+    this.isAdmin = userRole == "admin";
+    this.isManager = userRole == "manager";
+    this.isDobroru = userRole == "dobroru";
+    if (this.isAdmin) {
       this.displayedColumns = [
         "check",
         "nursingHome",
@@ -57,23 +69,9 @@ export class AdminNewYearComponent implements OnInit {
         "region",
         "isActive",
       ];
-    else {
-      this.displayedColumns = [
-        "nursingHome",
-        "amount",
-        "statistic1",
-        "statistic2",
-        "statistic3",
-
-        "dateLastUpdate",
-
-        "noAddress",
-        "isReleased",
-        "region",
-        "isActive",
-      ];
     }
-    console.log("constructor");
+
+    // });
     this.housesService.findActiveHouses().subscribe(
       (res) => {
         this.houses = res["data"];

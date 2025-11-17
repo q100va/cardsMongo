@@ -42,7 +42,7 @@ export class SigninService {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           this.cookieService.set("session_user", res["data"].user.userName, 1);
           // Need to be able to send lastName and firstName to home page to display in menu.
-
+          this.cookieService.set("session_role", res["data"].user.role, 1);
           sessionStorage.setItem(
             "name",
             `${res["data"].user.firstName} ${res["data"].user.lastName}`
@@ -57,7 +57,7 @@ export class SigninService {
           );
           console.log(expirationDate);
           this.saveAuthData(this.token, expirationDate);
-          
+
           return "Success";
         })
       );
