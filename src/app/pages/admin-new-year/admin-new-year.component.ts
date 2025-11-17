@@ -19,25 +19,11 @@ import { RoleService } from "src/app/services/roles.service";
 export class AdminNewYearComponent implements OnInit {
   houses: House[];
   selection = new SelectionModel<House>(true, []);
-  isAdmin: boolean;
+  isAdmin: boolean = false;
   isManager: boolean;
   isDobroru: boolean;
 
-  displayedColumns = [
-    "nursingHome",
-    "amount",
-    "statistic1",
-    "statistic2",
-    "statistic3",
-    "check",
-
-    "dateLastUpdate",
-
-    "noAddress",
-    "isReleased",
-    "region",
-    "isActive",
-  ];
+  displayedColumns: string[];
 
   constructor(
     private dialog: MatDialog,
