@@ -16,7 +16,7 @@ export class DobroruGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.roleService.findUserRole(this.cookieService.get("session_user")).pipe(
       map((res) => {
-        console.log(res);
+        console.log("DobroruGuard", res);
 
         if (res["data"] === "dobroru" || res["data"] === "manager" || res["data"] === "admin") {
           return true;

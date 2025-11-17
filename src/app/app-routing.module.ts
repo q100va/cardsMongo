@@ -293,7 +293,7 @@ const routes: Routes = [
       {
         path: "lists/admin-new-year",
         component: AdminNewYearComponent,
-        canActivate: [AuthGuard, ManagerGuard, DobroruGuard], //, RoleGuard
+        canActivate: [DobroruGuard], //, RoleGuard, AuthGuard, ManagerGuard, 
       },
       {
         path: "lists/admin-spring",

@@ -51,7 +51,7 @@ export class AdminNewYearComponent implements OnInit {
   ) {
     this.roleService
       .findUserRole(this.cookieService.get("session_user"))
-      .subscribe((res) => {
+      .subscribe((res) => {        
         const userRole = res["data"];
         this.isAdmin = userRole === "admin" ? true : false;
         this.isManager = userRole === "manager" ? true : false;
