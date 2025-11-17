@@ -59,14 +59,13 @@ export class AdminNewYearComponent implements OnInit {
       });
     if (this.isAdmin)
       this.displayedColumns = [
+        "check",
         "nursingHome",
         "amount",
         "statistic1",
         "statistic2",
         "statistic3",
-        "check",
         "dateLastUpdate",
-
         "noAddress",
         "isReleased",
         "region",
