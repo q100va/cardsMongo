@@ -12,7 +12,7 @@
         <p-toast position="center"></p-toast>
         <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
-        <mat-card-subtitle >
+        <mat-card-subtitle>
             <button *ngIf="isAdmin" mat-stroked-button color="primary" (click)="generateNewYearList()">
                 Добавить списки
             </button>
@@ -33,7 +33,11 @@
                 <ng-container matColumnDef="amount">
                     <mat-header-cell *matHeaderCellDef> Кол-во </mat-header-cell>
                     <mat-cell *matCellDef="let house">
-                        {{house.statistic.newYear.amount }}<br />
+                        {{house.statistic.newYear.amount
+                        }} {{(house.statistic.newYear.plus0+house.statistic.newYear.plus1+house.statistic.newYear.plus2
+                        !=house.statistic.newYear.amount) ? 'в списке НГ: ' +
+                        (house.statistic.newYear.plus0+house.statistic.newYear.plus1+house.statistic.newYear.plus2) :
+                        ''}}<br />
 
                     </mat-cell>
                 </ng-container>
