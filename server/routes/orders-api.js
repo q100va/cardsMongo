@@ -952,10 +952,9 @@ async function deletePluses(deletedOrder, full) {
             if (deletedOrder.holiday == "Новый год 2026") {
               for (let lineItem of deletedLineItems) {
                 for (let person of lineItem.celebrators) {
-
-
                   let senior = await NewYear.findOne({ _id: person._id });
                   let p = senior.plusAmount;
+                  console.log("oldData", p);
                   let newP = p - 1;
                   let c = senior.category;
                   await House.updateOne(
@@ -971,31 +970,36 @@ async function deletePluses(deletedOrder, full) {
                     }
 
                   );
+                  await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
+                  senior = await NewYear.findOne({ _id: person._id });
+                  console.log("newData", senior.plusAmount);
+                  // if (deletedOrder.institutes.length == 0) await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
 
-                  if (deletedOrder.institutes.length == 0) await NewYear.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
-                  if (deletedOrder.institutes.length > 0 && deletedOrder.contact != "@tterros") {
-                    await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: -1, forInstitute: -1 } }, { upsert: false });
-                    await House.updateOne(
-                      {
-                        nursingHome: senior.nursingHome
-                      },
-                      {
-                        $inc: { ["statistic.newYear.forInstitute"]: -1 }
-                      });
-                  }
-                  if (deletedOrder.contact == "@tterros") {
-                    await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: -1, forInstitute: -1, forNavigators: -1 } }, { upsert: false });
-                    await House.updateOne(
-                      {
-                        nursingHome: senior.nursingHome
-                      },
-                      {
-                        $inc: {
-                          ["statistic.newYear.forInstitute"]: -1,
-                          ["statistic.newYear.forNavigators"]: -1
-                        }
-                      });
-                  }
+
+                  /* if (deletedOrder.institutes.length > 0 && deletedOrder.contact != "@tterros") {
+                   await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: -1,} }, { upsert: false });// forInstitute: -1 
+                   await House.updateOne(
+                     {
+                       nursingHome: senior.nursingHome
+                     },
+                    {
+                       $inc: { ["statistic.newYear.forInstitute"]: -1 }
+                     } 
+                    );
+                 }*/
+                  /*                   if (deletedOrder.contact == "@tterros") {
+                                      await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: -1, forInstitute: -1, forNavigators: -1 } }, { upsert: false });
+                                      await House.updateOne(
+                                        {
+                                          nursingHome: senior.nursingHome
+                                        },
+                                        {
+                                          $inc: {
+                                            ["statistic.newYear.forInstitute"]: -1,
+                                            ["statistic.newYear.forNavigators"]: -1
+                                          }
+                                        });
+                                    } */
                 }
               }
             } else {
@@ -3381,37 +3385,37 @@ async function searchSenior(
   let maxPlusAmount = data.maxPlus; //PLUSES1
   if (holiday == "Дни рождения января 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus+1;
+      maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus+1;
+      maxPlusAmount = data.maxPlus + 1;
     }
   }
   if (holiday == "Дни рождения декабря 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen") {
-      maxPlusAmount = data.maxPlus+3;
+      maxPlusAmount = data.maxPlus + 3;
     }
     if (standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus+2;
+      maxPlusAmount = data.maxPlus + 2;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus+2;
+      maxPlusAmount = data.maxPlus + 2;
     }
 
     if (filter.dateOfSignedConsent == { '$ne': null }) {
       maxPlusAmount = 5;
     }
 
-/*     if (filter.region == "ПЕРМСКИЙ") {
-      maxPlusAmount = 4;
-    } */
+    /*     if (filter.region == "ПЕРМСКИЙ") {
+          maxPlusAmount = 4;
+        } */
   }
-    if (holiday == "Дни рождения ноября 2025") {
+  if (holiday == "Дни рождения ноября 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus+3;
+      maxPlusAmount = data.maxPlus + 3;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus+2;
+      maxPlusAmount = data.maxPlus + 2;
     }
   }
 
@@ -4332,33 +4336,36 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
     if (proportion[category]) {
 
-      data.maxPlus = 1;
+      data.maxPlus = 1;      
 
       data = await collectSeniorsNewYear(data, orderFilter);
 
-     /*   if (data.counter < proportion[category]) {
-        data.maxPlus = 2;
+      console.log('filter', filter);
+        console.log('orderFilter', orderFilter);
 
-        data = await collectSeniorsNewYear(data, orderFilter);
-      }
-
-      if (data.counter < proportion[category]) { //РУЧНАЯ
-        data.maxPlus = 3;
-
-        data = await collectSeniorsNewYear(data, orderFilter);
-      }
-     
-     
-           if (data.counter < proportion[category]) {
-             data.maxPlus = 4;
-     
-             data = await collectSeniorsNewYear(data, orderFilter);
-           }
+       if (data.counter < proportion[category] &&  orderFilter.onlyWithConcent) {
+        console.log('PLUSESNY 2');
+         data.maxPlus = 2; 
+         data = await collectSeniorsNewYear(data, orderFilter);
+       } /* 
+ 
+       if (data.counter < proportion[category]) { //РУЧНАЯ
+         data.maxPlus = 3;
+ 
+         data = await collectSeniorsNewYear(data, orderFilter);
+       }
+      
+      
             if (data.counter < proportion[category]) {
-                   data.maxPlus = 5;
-           
-                   data = await collectSeniorsNewYear(data, orderFilter);
-                 }    */
+              data.maxPlus = 4;
+      
+              data = await collectSeniorsNewYear(data, orderFilter);
+            }
+             if (data.counter < proportion[category]) {
+                    data.maxPlus = 5;
+            
+                    data = await collectSeniorsNewYear(data, orderFilter);
+                  }    */
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -4553,7 +4560,7 @@ async function searchSeniorNewYear(
   // data.maxPlus = 3;
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-    secondTime: data.maxPlus > 1 ? true : false,
+    //secondTime: data.maxPlus > 1 ? true : false,
     // secondTime: true,
     thirdTime: data.maxPlus > 2 ? true : false,
     forthTime: data.maxPlus > 3 ? true : false,
@@ -6684,23 +6691,19 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       //  const celebratorsNewYear = await NewYear.find({ absent: false });
       const celebratorsNewYear = await NewYear.find({
         absent: false,
-        nursingHome: {
-          $in: [
-            "СЫЗРАНЬ_ПОЖАРСКОГО",
-            /*             "САЛЬСК",
-                        "ЯСНАЯ",
-                        "ТАРА",
-                        "САМОЛЮБОВО",
-                        "БЕЛОГОРСК",
-                        "МУРМАНСК_СТАРОСТИНА",
-                        "ДАЛЬНЕГОРСК",
-                        "ЗЕЛЕНЫЙ"
-             */
-
-
-
-          ]
-        }
+        /*   nursingHome: {
+           $in: [
+             "СЫЗРАНЬ_ПОЖАРСКОГО",
+                        "САЛЬСК",
+                         "ЯСНАЯ",
+                         "ТАРА",
+                         "САМОЛЮБОВО",
+                         "БЕЛОГОРСК",
+                         "МУРМАНСК_СТАРОСТИНА",
+                         "ДАЛЬНЕГОРСК",
+                         "ЗЕЛЕНЫЙ"
+           ]
+         } */
       });
       let count = celebratorsNewYear.length;
       //  console.log(celebratorsNewYear);
@@ -6708,12 +6711,12 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       for (let celebrator of celebratorsNewYear) {
         // console.log(celebrator.seniorId);
         let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026" }).countDocuments();
-        let forInstitute = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026", institutes: { $ne: [] } }).countDocuments();
+        // let forInstitute = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026", institutes: { $ne: [] } }).countDocuments();
         // console.log("forInstitute");
         //console.log(forInstitute);
 
         //let forNavigators = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Новый год 2026", contact: { $in: ["@tterros"] } }).countDocuments();
-        await NewYear.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount, forInstitute: forInstitute, } });//forNavigators: forNavigators
+        await NewYear.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount, } });//forNavigators: forNavigators, forInstitute: forInstitute,
         let updatedCelebrator = await NewYear.findOne({ seniorId: celebrator.seniorId });
         console.log(--count);
         // console.log("result");
