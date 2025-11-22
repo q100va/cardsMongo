@@ -64,7 +64,8 @@ export class DobroruNewYearComponent implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "any";
+  //noAddressFilter: string = "onlyWithAddress";
+  addressFilter: string = "noSpecial";
   genderFilter: string = "any";
   showIndexes: false;
   showInstruction: false;
@@ -249,7 +250,7 @@ export class DobroruNewYearComponent implements OnInit {
       source: [this.defaultSource, Validators.compose([Validators.required])],
       comment: [null],
       femaleAmount: [null, [Validators.min(1)]],
-      maleAmount: [null, [Validators.min(1)]],
+      maleAmount: [null, [Validators.min(1)]],      
       year1: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
       year2: [null, [Validators.min(1900), Validators.max(this.actualYear)]],
       date1: [null, [Validators.min(1), Validators.max(31)]],
@@ -527,8 +528,10 @@ export class DobroruNewYearComponent implements OnInit {
 
     if (this.selectedInstitutes.length > 0) {
       this.showFilter = false;
+      this.isForInstitutes = true;
     } else {
       this.showFilter = true;
+      this.isForInstitutes = false;
     }
   }
 
@@ -542,7 +545,7 @@ export class DobroruNewYearComponent implements OnInit {
     }
   }
 
-  correctMaxNoAddress(addressValue: string) {
+  /*  correctMaxNoAddress(addressValue: string) {
     if (addressValue == "any" || addressValue == "noReleased") {
       this.showMaxNoAddress = true;
     } else {
@@ -551,7 +554,7 @@ export class DobroruNewYearComponent implements OnInit {
     }
   }
 
-  onChangeNursingHome() {
+ onChangeNursingHome() {
     if (!this.form.controls.nursingHome.value) {
       this.showMaxOneHouse = true;
       if (this.addressFilter == "any" || "noReleased") {
@@ -563,7 +566,7 @@ export class DobroruNewYearComponent implements OnInit {
       this.showMaxNoAddress = false;
       this.form.controls.maxNoAddress.setValue(null);
     }
-  }
+  } */
 
   onChangeRegion() {
     console.log(this.form.controls.region.value);
@@ -620,7 +623,7 @@ export class DobroruNewYearComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.addressFilter = "any";
+    this.addressFilter = "noSpecial";
     this.genderFilter = "any";
 
     this.clicked = false;
@@ -1016,8 +1019,8 @@ export class DobroruNewYearComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        //addressFilter: this.addressFilter,
-        addressFilter: "noSpecial",
+        addressFilter: this.addressFilter,
+        //addressFilter: "noSpecial",
         genderFilter: "any",
         year1: null,
         year2: null,

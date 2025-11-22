@@ -314,6 +314,7 @@ export class OrderListComponent implements AfterViewInit {
               }
             );
         },
+        reject: () => (this.waiting = false),
       });
     } else {
       this.orderService
@@ -419,6 +420,7 @@ export class OrderListComponent implements AfterViewInit {
             }
           );
       },
+      reject: () => (this.waiting = false),
     });
   }
 

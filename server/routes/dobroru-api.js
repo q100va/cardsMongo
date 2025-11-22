@@ -160,7 +160,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "scoredPluses": 2
         }
     }
-        if (newOrder.holiday == "Дни рождения ноября 2025") {
+    if (newOrder.holiday == "Дни рождения ноября 2025") {
         period = {
             "date1": 1,
             "date2": 31,
@@ -171,7 +171,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "scoredPluses": 2
         }
     }
-        if (newOrder.holiday == "Дни рождения января 2026") {
+    if (newOrder.holiday == "Дни рождения января 2026") {
         period = {
             "date1": 1,
             "date2": 31,
@@ -1086,7 +1086,7 @@ async function searchSenior(
         "БУРЕГИ",
         "ВАЛДАЙ",
         "ВАХТАН",
-       // "ВЕРХНЕУРАЛЬСК",
+        // "ВЕРХНЕУРАЛЬСК",
         "ВЕРХНИЙ_УСЛОН",
         "ВЛАДИКАВКАЗ",
         "ВОЗНЕСЕНЬЕ",
@@ -2621,12 +2621,12 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
             data.maxPlus = 1;
 
             data = await collectSeniorsNewYear(data, orderFilter);
-/* 
-            if (data.counter < proportion[category]) {
-                data.maxPlus = 2;
-
-                data = await collectSeniorsNewYear(data, orderFilter);
-            } */
+            /* 
+                        if (data.counter < proportion[category]) {
+                            data.maxPlus = 2;
+            
+                            data = await collectSeniorsNewYear(data, orderFilter);
+                        } */
 
 
             /*
@@ -3109,15 +3109,44 @@ async function createOrderForInstitutes(newOrder, prohibitedId, restrictedHouses
 
     //console.log("order");
     //console.log(order);
+    let seniorsData;
 
-    let seniorsData = await fillOrderForInstitutes(
-        order_id,
-        prohibitedId,
-        restrictedHouses,
-        newOrder.holiday,
-        newOrder.amount,
-        newOrder.filter,
-    );
+    if (newOrder.filter.addressFilter == 'both') {
+        const amount = Math.round(newOrder.amount / 2);
+
+        newOrder.filter.addressFilter = 'noSpecial';
+        const seniorsData1 = await fillOrderForInstitutes(
+            order_id,
+            prohibitedId,
+            restrictedHouses,
+            newOrder.holiday,
+            amount,
+            newOrder.filter,
+        );
+        newOrder.filter.addressFilter = 'onlySpecial';
+        const seniorsData2 = await fillOrderForInstitutes(
+            order_id,
+            prohibitedId,
+            restrictedHouses,
+            newOrder.holiday,
+            newOrder.amount - amount,
+            newOrder.filter,
+        );
+
+        seniorsData = [...seniorsData1, ...seniorsData2];
+
+    } else {
+        seniorsData = await fillOrderForInstitutes(
+            order_id,
+            prohibitedId,
+            restrictedHouses,
+            newOrder.holiday,
+            newOrder.amount,
+            newOrder.filter,
+        );
+    }
+
+
 
     if (seniorsData.length < newOrder.amount) {
 
@@ -3198,25 +3227,44 @@ async function fillOrderForInstitutes(
         console.log(spareRegions);
         filter.region = [filter.region, ...spareRegions.spareRegions];
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
-
     }
 
-    if (!filter.region && filter.addressFilter == 'any') {
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, });
+    const specialHouses = ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ'];
+
+    if (!filter.region && filter.addressFilter == 'onlySpecial') {
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, });
     }
-    if (filter.region && !filter.spareRegions && filter.addressFilter == 'any') {
+    if (filter.region && !filter.spareRegions && filter.addressFilter == 'onlySpecial') {
         filter.region = [filter.region];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, region: { $in: filter.region } });
 
     }
-    if (filter.region && filter.spareRegions && filter.addressFilter == 'any') {
+    if (filter.region && filter.spareRegions && filter.addressFilter == 'onlySpecial') {
         let spareRegions = await Region.findOne({ name: filter.region });
         console.log("spareRegions");
         console.log(spareRegions);
         filter.region = [filter.region, ...spareRegions.spareRegions];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
-
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, region: { $in: filter.region } });
     }
+
+
+
+    /*     if (!filter.region && filter.addressFilter == 'any') {
+            activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, });
+        }
+        if (filter.region && !filter.spareRegions && filter.addressFilter == 'any') {
+            filter.region = [filter.region];
+            activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+    
+        }
+        if (filter.region && filter.spareRegions && filter.addressFilter == 'any') {
+            let spareRegions = await Region.findOne({ name: filter.region });
+            console.log("spareRegions");
+            console.log(spareRegions);
+            filter.region = [filter.region, ...spareRegions.spareRegions];
+            activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isReleased: false, region: { $in: filter.region } });
+    
+        } */
 
     console.log("filter.region");
     console.log(filter.region);
@@ -3227,8 +3275,7 @@ async function fillOrderForInstitutes(
     /*   let activeHouse = await House.find({
         isReleased: false, isActive: true,  nursingHome: {//noAddress: false,
            $in: [ 
-        "УСТЬ-ОРДЫНСКИЙ",
-           
+        "УСТЬ-ОРДЫНСКИЙ",           
            "МЕТЕЛИ",
            "КУДЕЕВСКИЙ",
            "НОВОСЛОБОДСК",
@@ -3242,23 +3289,12 @@ async function fillOrderForInstitutes(
     let activeHouse = await House.find({
       isReleased: false, isActive: true, nursingHome: {//noAddress: false, 
         $in: [
-          'ПРУДНОЕ',        
-          
-          
-          
-  
-      
-          
-  
-  
+          'ПРУДНОЕ',   
         ]
       } });*/
     /*         
              "ЧИТА_ТРУДА",
              "НОВОСИБИРСК_ЖУКОВСКОГО", */
-
-
-
 
     /* 
       let activeHouse = await House.find({
@@ -3300,7 +3336,7 @@ async function fillOrderForInstitutes(
 
         if (holiday == "Дни рождения ноября 2025") {
             count = await ListBefore.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt:7 }, _id: { $nin: prohibitedId }
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 7 }, _id: { $nin: prohibitedId }
             }).countDocuments();
         }
 
@@ -3404,21 +3440,21 @@ async function fillOrderForInstitutes(
                 let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[index].amount, smallerHouses[index].nursingHome, prohibitedId, region);
                 seniorsData = [...seniorsData, ...seniors];
                 currentAmount -= smallerHouses[index].amount;
-                smallerHouses.splice(index,1);
+                smallerHouses.splice(index, 1);
                 return seniorsData;
             } else {
                 if (currentAmount - smallerHouses[i].amount <= 0) {
                     let seniors = await collectSeniorsForInstitution(order_id, holiday, currentAmount, smallerHouses[i].nursingHome, prohibitedId, region);
                     seniorsData = [...seniorsData, ...seniors];
                     currentAmount -= currentAmount;
-                    smallerHouses.splice(i,1);
+                    smallerHouses.splice(i, 1);
                     return seniorsData;
                 } else {
                     if (currentAmount - smallerHouses[i].amount >= 3) { // ИСПРАВИТЬ на 3
                         let seniors = await collectSeniorsForInstitution(order_id, holiday, smallerHouses[i].amount, smallerHouses[i].nursingHome, prohibitedId, region);
                         seniorsData = [...seniorsData, ...seniors];
                         currentAmount -= smallerHouses[i].amount;
-                        smallerHouses.splice(i,1);
+                        smallerHouses.splice(i, 1);
                     }
                 }
             }
@@ -3582,7 +3618,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                 //onlyForInstitute: true, 
                 // forInstitute: 0,
                 //finished: false,
-               // secondTime: true
+                // secondTime: true
             }).limit(amount);
         }
 
