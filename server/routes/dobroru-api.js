@@ -3229,7 +3229,19 @@ async function fillOrderForInstitutes(
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
     }
 
-    const specialHouses = ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ'];
+    const specialHouses = ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ',
+        'ВЫСОКОЕ',
+        'ЯСТРЕБОВО',
+        'ЗАРЕЧНЫЙ',
+        'ЛЕТКА',
+        'ЧЕРЕМУХОВКА',
+        'БРИГАДИРОВКА',
+        'УСТЬ-КЯХТА',
+        'ЛЕСНОЕ',
+        'ОБОЯНЬ',
+        'БОГУЧАР',
+        'ЯБЛОЧНОЕ',
+    ];
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, });
