@@ -3241,6 +3241,7 @@ async function fillOrderForInstitutes(
         'ОБОЯНЬ',
         'БОГУЧАР',
         'ЯБЛОЧНОЕ',
+        'НИЖНИЙ_НОВГОРОД',
     ];
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
