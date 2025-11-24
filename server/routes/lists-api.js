@@ -1886,8 +1886,8 @@ async function restoreNYStatistic(activeHouse) {
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
 
-   // console.log("plus0");
-   // console.log(plus0);
+    console.log("plus0");
+    console.log(plus0);
 
     await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus0": plus0[0]?.count ? plus0[0].count : 0 } });
 
@@ -1896,8 +1896,8 @@ async function restoreNYStatistic(activeHouse) {
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
 
-   // console.log("plus1");
-   // console.log(plus1);
+   console.log("plus1");
+    console.log(plus1);
     await House.updateOne({ _id: house._id }, { $set: { "statistic.newYear.plus1": plus1[0]?.count ? plus1[0].count : 0 } });
 
     let plus2 = await NewYear.aggregate([
@@ -2167,7 +2167,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 });
 
 async function checkAllHBFullness(house) {
-  const nursingHome = await House.findOne({ nursingHome: house, dateLastUpdate: { $lt: new Date("2025-6-30") } });
+  const nursingHome = await House.findOne({ isActive: true, nursingHome: house, });//dateLastUpdate: { $gt: new Date("2025-06-30") } 
   if (!nursingHome) return '-1';
 
   let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: 12, isRestricted: false, nursingHome: house });//, { dateLastUpdate: { $lt: new Date("2025-6-1") } }
@@ -2188,7 +2188,7 @@ async function checkAllHBFullness(house) {
 
       console.log(celebrator);
       let newCelebrator = await List.create(celebrator);
-      //let newCelebrator = await ListNext.create(celebrator);
+     // let newCelebrator = await ListNext.create(celebrator);
       //let newCelebrator = await ListBefore.create(celebrator);
       console.log("added:");
       console.log(newCelebrator.fullData);
@@ -2215,8 +2215,8 @@ async function checkAllHBFullness(house) {
       console.log(newCelebrator.fullData); */
 
 
-      await List.updateOne({ _id: item._id }, { $set: { absent: true } });
-      //   await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
+     await List.updateOne({ _id: item._id }, { $set: { absent: true } });
+       //  await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
       //await ListBefore.updateOne({ _id: item._id }, { $set: { absent: true } });
       console.log("deleted:");
       console.log(item.fullData);
@@ -5835,11 +5835,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-09-30"), $lt: new Date("2025-11-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-10-31"), $lt: new Date("2025-12-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-09-30"), $lt: new Date("2025-11-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-10-31"), $lt: new Date("2025-12-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
