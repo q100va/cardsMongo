@@ -3242,6 +3242,10 @@ async function fillOrderForInstitutes(
         'БОГУЧАР',
         'ЯБЛОЧНОЕ',
         'НИЖНИЙ_НОВГОРОД',
+        'СОСНОВАЯ_РОЩА',
+        'БЛАГОВЕЩЕНСК',
+        'ОКТЯБРЬСКИЙ_КОМСОМОЛЬСКАЯ',
+        'ГРАЙВОРОН'
     ];
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
