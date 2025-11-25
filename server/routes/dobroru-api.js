@@ -3231,9 +3231,7 @@ async function fillOrderForInstitutes(
     const specialHouses = ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ',
         'ВЫСОКОЕ',
         'ЯСТРЕБОВО',
-        'ЗАРЕЧНЫЙ',
-        'ЛЕТКА',
-        'ЧЕРЕМУХОВКА',
+        'ЗАРЕЧНЫЙ',       
         'БРИГАДИРОВКА',
         'УСТЬ-КЯХТА',
         'ЛЕСНОЕ',
@@ -3246,7 +3244,8 @@ async function fillOrderForInstitutes(
         'ОКТЯБРЬСКИЙ_КОМСОМОЛЬСКАЯ',
         'ГРАЙВОРОН',
         'ТИНСКОЙ', 'КРАСНАЯ_ГЛИНКА', 'БОРИСОВКА',  'НИКОЛО-ВАРВАРИНКА'
-    ];//'ГАТЧИНА',
+    ];//'ГАТЧИНА', 'ЛЕТКА',  'ЧЕРЕМУХОВКА',
+      
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, });
