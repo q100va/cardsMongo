@@ -8,7 +8,7 @@ const express = require("express");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Order = require("../models/order");
-const Proportion = require("../models/proportion");
+const Senior = require("../models/senior");
 const List = require("../models/list");
 const ListNext = require("../models/list-next");
 const ListBefore = require("../models/list-previous");
@@ -2543,8 +2543,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
 
     }
 
-    //НАВИГАТОРЫ
-
+  
     let resultLineItems = await generateLineItemsNewYear(nursingHomes, order_id);
     // console.log("resultLineItems");
     // console.log(resultLineItems);
@@ -3246,8 +3245,8 @@ async function fillOrderForInstitutes(
         'БЛАГОВЕЩЕНСК',
         'ОКТЯБРЬСКИЙ_КОМСОМОЛЬСКАЯ',
         'ГРАЙВОРОН',
-        'ТИНСКОЙ', 'КРАСНАЯ_ГЛИНКА', 'БОРИСОВКА', 'ГАТЧИНА', 'НИКОЛО-ВАРВАРИНКА'
-    ];
+        'ТИНСКОЙ', 'КРАСНАЯ_ГЛИНКА', 'БОРИСОВКА',  'НИКОЛО-ВАРВАРИНКА'
+    ];//'ГАТЧИНА',
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, });
@@ -3748,6 +3747,40 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
     return seniorsData;
 }
+
+
+  //НАВИГАТОРЫ
+
+  router.get("/forNavigators", checkAuth, async (req, res) => {
+    try {
+        const houses = await House.find({
+            isActive: true,
+            isReleased: false,
+            isDisabled: false
+        });
+        houses.forEach(async (h) => {
+             const count = await Senior.countDocuments(
+                {
+                    nursingHome: h.nursingHome,
+                    isRestricted: false,
+                    dateOfExit: null,
+                    isDisabled: false
+                }
+            );
+            console.log(`${h.region} + ${h.nursingHome} + ${h.address} + ${h.adminComment ? 'ПНИ' : ''} + ${count}`);
+        });
+        const newListResponse = new BaseResponse(200, true);
+        res.json(newListResponse.toObject());
+    } catch (e) {
+        console.log(e);
+        const newListCatchErrorResponse = new BaseResponse(
+            500,
+            e
+        );
+        res.status(500).send(newListCatchErrorResponse.toObject());
+    }
+});
+
 
 //////////////////////////////////////////////////
 
