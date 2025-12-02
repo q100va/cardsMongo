@@ -496,7 +496,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         }
 
         console.log("newOrder.filter");
-    console.log(newOrder.filter);
+        console.log(newOrder.filter);
 
         if (newOrder.filter.date1 || newOrder.filter.date2) {
             isOutDate = true;
@@ -515,13 +515,15 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             }
 
             if (newOrder.filter.date1 && newOrder.filter.date2) {
-                period.day1 = newOrder.filter.date1;
-                period.day2 = newOrder.filter.date2;
+                day1 = newOrder.filter.date1;
+                day2 = newOrder.filter.date2;
                 //filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: newOrder.filter.date1 };
             }
+            period.date1 = day1;
+            period.date2 = day2;
 
-                 console.log("PERIOD");
-    console.log(period);
+            console.log("PERIOD");
+            console.log(period);
 
             seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
             //seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
@@ -764,7 +766,7 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
 async function collectSeniors(data, orderFilter, holiday) {
 
     //console.log('holiday1');
-   // console.log(holiday);
+    // console.log(holiday);
 
 
     /* let test = await List.findOne({dateBirthday: 1});*/
@@ -1241,11 +1243,11 @@ async function searchSeniorHelper(
 ) {
 
 
-//    console.log('data.restrictedHouses');
-  //  console.log(data.restrictedHouses);
+    //    console.log('data.restrictedHouses');
+    //  console.log(data.restrictedHouses);
 
- //   console.log('data.proportion');
-  //  console.log(data.proportion);
+    //   console.log('data.proportion');
+    //  console.log(data.proportion);
 
     if (data.restrictedHouses.length > 0) {
         for (let house of data.restrictedHouses) {
@@ -1281,7 +1283,7 @@ async function searchSeniorHelper(
     standardFilter.noAddress = false;
 
     console.log("DATES");
-    console.log(standardFilter.dateBirthday,  );
+    console.log(standardFilter.dateBirthday,);
 
     //if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
     if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
@@ -1309,8 +1311,8 @@ async function searchSeniorHelper(
     //console.log(maxPlus);
 
     let filter = Object.assign(standardFilter, data.filter);
-   // console.log("FILTER");
-   // console.log(filter);
+    // console.log("FILTER");
+    // console.log(filter);
 
     let celebrator;
     //CHANGE!!!
@@ -1344,8 +1346,8 @@ async function searchSeniorHelper(
             celebrator = await ListBefore.findOne(filter);
         }
 
-       // console.log("celebrator List");
-       // console.log(celebrator);
+        // console.log("celebrator List");
+        // console.log(celebrator);
         if (celebrator) {
             //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
             //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
