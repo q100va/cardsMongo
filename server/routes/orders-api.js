@@ -6691,19 +6691,11 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       //  const celebratorsNewYear = await NewYear.find({ absent: false });
       const celebratorsNewYear = await NewYear.find({
         absent: false,
-        /*   nursingHome: {
+          nursingHome: {
            $in: [
-             "СЫЗРАНЬ_ПОЖАРСКОГО",
-                        "САЛЬСК",
-                         "ЯСНАЯ",
-                         "ТАРА",
-                         "САМОЛЮБОВО",
-                         "БЕЛОГОРСК",
-                         "МУРМАНСК_СТАРОСТИНА",
-                         "ДАЛЬНЕГОРСК",
-                         "ЗЕЛЕНЫЙ"
-           ]
-         } */
+             "ВИШЕНКИ",
+                               ]
+         }
       });
       let count = celebratorsNewYear.length;
       //  console.log(celebratorsNewYear);
@@ -9360,7 +9352,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 6 },
+          plusAmount: { $lt: 1 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
 
           // forInstitute: 0,onlyForInstitute: true, finished: false,
@@ -9371,7 +9363,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 6 },
+          plusAmount: { $lt: 1 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           //onlyForInstitute: true, forInstitute: 0, finished: false
 
@@ -9386,7 +9378,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           //dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 2 },
+          plusAmount: { $lt: 1 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
 
           // forInstitute: 0,onlyForInstitute: true, finished: false,
@@ -9397,7 +9389,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           //dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
           absent: false,
-          plusAmount: { $lt: 2 },
+          plusAmount: { $lt: 1 },
           _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
           //onlyForInstitute: true, forInstitute: 0, finished: false
 
