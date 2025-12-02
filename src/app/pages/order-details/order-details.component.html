@@ -71,12 +71,13 @@
                                 <!--   <span >{{celebrator.index}}. </span> -->
                                 <!--   {{userRole != 'dobroru' ? celebrator.lastName : ''}} -->
                                 <span>{{celebrator.index}}. </span>
+                                {{celebrator.lastName}}
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
                                 <!--    {{order.holiday == 'Новый год 2026' ? celebrator.yearBirthday : ''}}  -->
-                                <!--             {{order.source != "dobroru" && (order.holiday == 'Новый год 2026' || order.holiday == 'Дни рождения ноября 2025' || order.holiday == 'Дни рождения декабря 2025' || order.holiday == 'Дни рождения января 2026') ? celebrator.fullDayBirthday : ''}} -->
-                                <!--                             {{(order.holiday == 'Дни рождения ноября 2025' ||  order.holiday == 'Дни рождения декабря 2025' || order.holiday == 'Дни рождения июня 2024') ? '(' + (celebrator.specialComment ?
-                            celebrator.specialComment : "") + ')' : ''}} -->
+                                {{(order.holiday == 'Дни рождения ноября 2025' || order.holiday == 'Дни рождения декабря 2025' || order.holiday == 'Дни рождения января 2026') ? celebrator.fullDayBirthday : ''}} 
+                                {{(order.holiday == 'Дни рождения ноября 2025' ||  order.holiday == 'Дни рождения декабря 2025' || order.holiday == 'Дни рождения июня 2024') ?  (celebrator.specialComment ?
+                            celebrator.specialComment : "")  : ''}}
                                 {{order.holiday == 'Именины февраля 2025' ? celebrator.nameDay : ''}}
                                 {{celebrator.comment1}}
                                 <!--     {{userRole != 'dobroru' ? celebrator.linkPhoto: ''}}  -->
@@ -85,12 +86,12 @@
                                     'Именины февраля 2025' && userRole != 'dobroru' ? celebrator.specialComment :
                                     ''}}
                                 </span>  -->
-                                <span *ngIf="order.source == 'subscription'">
+                          <!--       <span *ngIf="order.source == 'subscription'">
                                     -
                                     {{celebrator.veteran}}
                                     {{celebrator.child}}
 
-                                </span>
+                                </span> -->
                                 <span style="font-weight: bold; color: rgb(255, 0, 0); "
                                     *ngIf="celebrator.absentComment">
                                     {{ celebrator.absentComment}}
