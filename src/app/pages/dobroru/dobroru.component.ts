@@ -64,7 +64,7 @@ export class DobroruComponent implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "any";
+  addressFilter: string = "noSpecial";
   genderFilter: string = "any";
   showIndexes: false;
   showInstruction: false;
@@ -145,7 +145,7 @@ export class DobroruComponent implements OnInit {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
         this.regions = res["data"]["regions"];
-      /*   this.regions = [
+        /*   this.regions = [
           "АЛТАЙСКИЙ",
           "АМУРСКАЯ",
           "АРХАНГЕЛЬСКАЯ",
@@ -532,7 +532,7 @@ export class DobroruComponent implements OnInit {
     }
   }
 
-  onChangeNursingHome() {
+  /*   onChangeNursingHome() {
     if (!this.form.controls.nursingHome.value) {
       this.showMaxOneHouse = true;
       if (this.addressFilter == "any" || "noReleased") {
@@ -544,7 +544,7 @@ export class DobroruComponent implements OnInit {
       this.showMaxNoAddress = false;
       this.form.controls.maxNoAddress.setValue(null);
     }
-  }
+  } */
 
   onChangeRegion() {
     console.log(this.form.controls.region.value);
@@ -600,7 +600,7 @@ export class DobroruComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.addressFilter = "any";
+    this.addressFilter = "noSpecial";
     this.genderFilter = "any";
 
     this.clicked = false;
@@ -898,7 +898,7 @@ export class DobroruComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: this.addressFilter,
+        addressFilter: "noSpecial",
         genderFilter: this.genderFilter,
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
@@ -985,7 +985,7 @@ export class DobroruComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "noSpecial",
+        addressFilter: this.addressFilter,
         genderFilter: "any",
         year1: null,
         year2: null,
