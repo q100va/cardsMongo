@@ -1255,9 +1255,11 @@ export class NewYearComponent implements OnInit {
           addresses =
             addresses +
             (this.showIndexes ? celebrator.index + ". " : "") +
-            (this.onlyWithConcent && celebrator.dateOfSignedConsent
+            /* (this.onlyWithConcent && celebrator.dateOfSignedConsent
               ? celebrator.lastName + " "
-              : "") +
+              : "") + */
+            celebrator.lastName +
+            " " +
             celebrator.firstName +
             " " +
             (celebrator.patronymic ? celebrator.patronymic : "") +
