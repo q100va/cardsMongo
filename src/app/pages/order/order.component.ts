@@ -1126,7 +1126,9 @@ export class OrderComponent implements OnInit {
     console.log("newOrder.filter.onlyWithConcent");
     console.log(newOrder.filter.onlyWithConcent);
 
-    if (this.holiday == "Дни рождения ноября 2025") {
+    this.holidayTitle = this.holiday;
+
+   /*  if (this.holiday == "Дни рождения ноября 2025") {
       this.holidayTitle = "Дни рождения 26-30 ноября 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
@@ -1247,7 +1249,7 @@ export class OrderComponent implements OnInit {
           this.form.controls.date2.value +
           " января 2026";
       }
-    }
+    } */
 
     //console.log("newOrder");
     console.log(newOrder.dateOfOrder);
@@ -1309,7 +1311,7 @@ export class OrderComponent implements OnInit {
 
   getAddresses() {
     let greeting: string;
-    if (this.clientFirstName && this.clientFirstName != 'Волонтер') {
+    if (this.clientFirstName && this.clientFirstName != "Волонтер") {
       greeting = "Добрый день, " + this.clientFirstName + "!\n\n";
     } else {
       greeting = "Добрый день!\n\n";
@@ -1324,12 +1326,12 @@ export class OrderComponent implements OnInit {
       if (this.onlyWithConcent) {
         topForSubscribers =
           "Спасибо за вашу заявку!\n\n" +
-/*           "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
+          /*           "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
           "Открытки нужно отправить примерно за месяц до праздника или дня рождения.\n\n";
       } else {
         topForSubscribers =
           "Спасибо за вашу заявку!\n\n" +
-  /*         "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
+          /*         "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
           "Открытки нужно отправить примерно за месяц до праздника или дня рождения.\n" +
           "Для определения сроков отправки ориентируйтесь на даты, указанные в заголовке.\n\n";
       } /* \n" +
@@ -1350,7 +1352,7 @@ export class OrderComponent implements OnInit {
         "Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные, ценные, первого класса), но нам такой вариант совершенно не подходит, так как такие отправления с 99% вероятностью вернутся обратно.\n" +
         "Ссылка на полную инструкцию: https://disk.yandex.ru/i/pIc9B0o9HKXGrQ \n\n"; */
       topForSubscribers =
-   /*      "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
+        /*      "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
         "Рассчитывайте, что срок доставки будет примерно 30 дней.\n" +
         "Обязательно сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в переписку без предварительного согласования с координатором.\n" +
         "Не отправляйте подарки, сувениры или гостинцы.\n" +
@@ -1378,7 +1380,8 @@ export class OrderComponent implements OnInit {
       top =
         "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
         "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
-        "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны.\n\n" +
+       /*  "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны.\n\n" + */
+        "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО).\n\n" +
         (this.isForInstitutes ? this.holiday : this.holidayTitle) +
         "\n" +
         "Если какие-то адреса вам не подходят, обязательно возвращайте - заменю.\n" +
@@ -1386,13 +1389,13 @@ export class OrderComponent implements OnInit {
     }
 
     if (!this.isForInstitutes) {
-      if (this.onlyWithConcent) {
+    /*   if (this.onlyWithConcent) { */
         bottom =
           "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет примерно 30 дней.\n\n";
-      } else {
+    /*   } else {
         bottom =
           "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет примерно 30 дней. Для определения сроков отправки ориентируйтесь на даты, указанные в заголовке.\n\n";
-      }
+      } */
       bottom =
         bottom +
         "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и данные получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
@@ -1465,26 +1468,31 @@ export class OrderComponent implements OnInit {
         addresses =
           addresses +
           (this.showIndexes ? celebrator.index + ". " : "") +
-          (this.onlyWithConcent && celebrator.dateOfSignedConsent
+          /* (this.onlyWithConcent && celebrator.dateOfSignedConsent
             ? celebrator.lastName + " "
-            : "") +
+            : "") + */
+
+          celebrator.lastName +
+          " " +
           celebrator.firstName +
           " " +
           celebrator.patronymic +
           " " +
-          (this.onlyWithConcent && celebrator.dateOfSignedConsent
+          /* (this.onlyWithConcent && celebrator.dateOfSignedConsent
             ? celebrator.fullDayBirthday + " "
-            : "") +
+            : "") + */
+          celebrator.fullDayBirthday +
+          " " +
           (celebrator.comment1 ? celebrator.comment1 : "") +
           " " +
-          (celebrator.linkPhoto &&
+          (celebrator.linkPhoto /* &&
           this.onlyWithConcent &&
-          celebrator.dateOfSignedConsent
+          celebrator.dateOfSignedConsent */
             ? celebrator.linkPhoto + " "
             : "") +
-          (celebrator.specialComment &&
+          (celebrator.specialComment /* &&
           this.onlyWithConcent &&
-          celebrator.dateOfSignedConsent
+          celebrator.dateOfSignedConsent */
             ? celebrator.specialComment
             : "") +
           "\n";

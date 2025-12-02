@@ -51,7 +51,7 @@
                                             </button> -->
                                             </span>
                                             <span class="header" *ngIf="!isNextMonth && !isBeforeMonth">{{holiday}}
-                                                (21-25
+                                                (26-31
                                                 число по умолчанию)</span>
                                             <span class="header" *ngIf="isNextMonth">{{holiday}} (1-5 число по
                                                 умолчанию)</span>
@@ -202,23 +202,26 @@
 
                                                     <br />
 
-                                                    <!--                                                 <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
-                                                    Только с фото</mat-slide-toggle>
+                                                    <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
+                                                        Только с фото</mat-slide-toggle>
 
-                                                <br />
-                                                <br /> -->
+                                                    <br />
+                                                    <br />
 
-                                                    <mat-slide-toggle *ngIf="form.controls.onlyWithConcent.value,"
+                                                    <!--                      <mat-slide-toggle *ngIf="form.controls.onlyWithConcent.value,"
                                                         [formControl]="form.controls['onlyAnniversaries']"
+                                                        (change)="onSlideToggleChange('onlyAnniversaries')">
+                                                        Только юбиляры</mat-slide-toggle> -->
+                                                    <mat-slide-toggle [formControl]="form.controls['onlyAnniversaries']"
                                                         (change)="onSlideToggleChange('onlyAnniversaries')">
                                                         Только юбиляры</mat-slide-toggle>
 
                                                     <br />
 
-                                                    <!--<mat-slide-toggle
-                                                    [formControl]="form.controls['onlyAnniversariesAndOldest']"
-                                                    (change)="onSlideToggleChange('onlyAnniversariesAndOldest')">
-                                                    Только юбиляры и 80+</mat-slide-toggle> -->
+                                                    <mat-slide-toggle
+                                                        [formControl]="form.controls['onlyAnniversariesAndOldest']"
+                                                        (change)="onSlideToggleChange('onlyAnniversariesAndOldest')">
+                                                        Только юбиляры и 80+</mat-slide-toggle>
                                                 </div>
                                             </td>
                                             <td>
@@ -260,15 +263,15 @@
                                                     </tr>
                                                 </table>
 
-                                                <!-- <h4  *ngIf="showFilter"
+                                                <h4 *ngIf="showFilter"
                                                     matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
-                                                    Год рождения</h4> -->
-                                                <!--                                                  <p>
+                                                    Год рождения</h4>
+                                                <!--   <p>
                                                     <span matBadge="i" matBadgeOverlap="false" matTooltip="Info about the action">Год рождения</span>
                                                   </p>  -->
 
                                                 <table class="example-half-width" cellspacing="0">
-                                                    <!--                                                     <tr  *ngIf="showFilter">
+                                                    <tr *ngIf="showFilter">
                                                         <td>
 
                                                             <mat-form-field class="example-user-input"
@@ -291,14 +294,14 @@
 
                                                         </td>
                                                     </tr>
-                                                    <tr  *ngIf="showFilter">
+                                                    <tr *ngIf="showFilter">
                                                         <td colspan="2">
                                                             <mat-error class="error"
                                                                 *ngIf="form.controls.year1.hasError('min') || form.controls.year2.hasError('min') || form.controls.year1.hasError('max') || form.controls.year2.hasError('max')">
                                                                 {{"Введите валидные данные (1900-" + actualYear + ")!"}}
                                                             </mat-error>
                                                         </td>
-                                                    </tr> -->
+                                                    </tr>
                                                     <tr>
                                                         <td colspan="2">
                                                             <h4>Регион <span
@@ -632,7 +635,8 @@
                     <mat-card-content *ngIf="showInstructionForSubscribers && !isForInstitutes"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
-                        <p *ngIf="clientFirstName && clientFirstName != 'Волонтер'" style="font-family: 'Times New Roman', Times, serif;">Приветствую
+                        <p *ngIf="clientFirstName && clientFirstName != 'Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">Приветствую
                             вас,
                             {{clientFirstName}}!</p>
                         <p *ngIf="!clientFirstName || clientFirstName == 'Волонтер'"
@@ -684,7 +688,7 @@
                         <p style="font-family: 'Times New Roman', Times, serif;">
                             Мы получили вашу заявку и очень рады вашему участию!
                         </p>
-                        <!--                         Иногда в списках встречаются
+                        <!--  Иногда в списках встречаются
                         люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                         проживают в домах престарелых. Иногда сразу после детдомов. -->
 
@@ -716,12 +720,17 @@
                             Для поздравления с другими праздниками нужно получать другие адреса. Списки на поздравления
                             мы готовим примерно за 3
                             месяца до праздника. -->
-                        <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
+                        <!--        <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
                             text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
-                        </p>
+                        </p> 
 
                         <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                            text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                            Сначала идет адрес, потом - ФИО или несколько ФИО.
+                        </p>-->
+
+                        <p style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
                             text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
@@ -747,7 +756,7 @@
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
                             Получателем указать интернат. На конверте рекомендуем указать название праздника. Например,
-                            'Дни рождения апреля'.
+                            'Дни рождения января'.
                             Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
                             ценные, первого класса), но нам такой вариант совершенно не подходит,
                             так как такие отправления с 99% вероятностью вернутся обратно.
@@ -842,11 +851,12 @@
                             <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                         {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                             <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-                            <span
-                                *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">{{celebrator.lastName}}</span>
+                            <!--  <span
+                                *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">{{celebrator.lastName}}</span> -->
+                            {{celebrator.lastName}}
                             {{celebrator.firstName}}
                             {{celebrator.patronymic}}
-                            <span
+                            <!--   <span
                                 *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">{{celebrator.fullDayBirthday}}</span>
                             {{celebrator.comment1}}
                             <span
@@ -854,7 +864,16 @@
                             <span *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent"
                                 style="font-weight: bold; color: rgb(175, 19, 175); ">
                                 {{celebrator.specialComment}}
+                            </span> -->
+
+                            {{celebrator.fullDayBirthday}}
+                            {{celebrator.comment1}}
+                            {{celebrator.linkPhoto}}
+                            <span style="font-weight: bold; color: rgb(175, 19, 175); ">
+                                {{celebrator.specialComment}}
                             </span>
+
+
                         </div>
                         <!--             </section> -->
                         <br />
@@ -895,15 +914,15 @@
                             <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
                                 бандеролью. Получателем указать интернат. На конверте рекомендуем указать название
-                                праздника. Например, "Дни рождения апреля".
+                                праздника. Например, "Дни рождения января".
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="isForInstitutes">
                                 Рассчитывайте, что срок доставки будет примерно 30 дней.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="!isForInstitutes">
-                                Рассчитывайте, что срок доставки будет примерно 30 дней. <span
+                                Рассчитывайте, что срок доставки будет примерно 30 дней. <!-- <span
                                     *ngIf="!onlyWithConcent">Для определения сроков отправки
-                                    ориентируйтесь на даты, указанные в заголовке.</span>
+                                    ориентируйтесь на даты, указанные в заголовке.</span> -->
                             </li>
                         </ul>
 
