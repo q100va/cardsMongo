@@ -145,7 +145,51 @@
                                                 <table class="example-full-width" cellspacing="0">
 
                                                     <tr>
-                                                        <td colspan="2">
+                                                        <td>
+                                                            <div *ngIf='showFilter'>
+
+                                                                <h4
+                                                                    matTooltip="Можно указать только одно значение: до или после которого должны быть даты.">
+                                                                    Даты (1-5 число по умолчанию)</h4>
+
+                                                                <table class="example-full-width" cellspacing="0">
+                                                                    <tr>
+                                                                        <td>
+
+                                                                            <mat-form-field class="example-user-input"
+                                                                                appearance="fill">
+                                                                                <mat-label>с</mat-label>
+                                                                                <input matInput type="number"
+                                                                                    [formControl]="form.controls['date1']"
+                                                                                    placeholder="6" />
+                                                                            </mat-form-field>
+                                                                        </td>
+                                                                        <td>
+
+                                                                            <mat-form-field class="example-user-input"
+                                                                                appearance="fill">
+                                                                                <mat-label>по</mat-label>
+                                                                                <input matInput type="number"
+                                                                                    [formControl]="form.controls['date2']"
+                                                                                    placeholder="15" />
+                                                                            </mat-form-field>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td colspan="2">
+                                                                            <mat-error class="error"
+                                                                                *ngIf="form.controls.date1.hasError('min') || form.controls.date2.hasError('min') || form.controls.date1.hasError('max') || form.controls.date2.hasError('max')">
+                                                                                Введите валидные данные (1-31)!
+                                                                            </mat-error>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td>
                                                             <h4>Регион
                                                             </h4>
                                                             <mat-form-field appearance="fill">
@@ -200,7 +244,7 @@
                                     <td>
                                         <mat-form-field appearance="fill">
                                             <mat-label>Тип контакта*</mat-label>
-                                            <mat-select (value) ="defaultType"
+                                            <mat-select (value)="defaultType"
                                                 [formControl]="form.controls['contactType']"
                                                 (selectionChange)="getContacts(false)">
                                                 <mat-option *ngFor="let type of types" [value]="type">
@@ -372,7 +416,7 @@
 
                         </td>
                         <td width="10%">
- <!--                            <button mat-fab matTooltip="Скопировать" color="primary" [disabled]="lineItems.length == 0"
+                            <!--                            <button mat-fab matTooltip="Скопировать" color="primary" [disabled]="lineItems.length == 0"
                                 (click)="getAddresses()">
                                 <mat-icon>file_copy</mat-icon>
                             </button> -->
@@ -478,7 +522,8 @@
                         </ol>
 
                         <p style="font-family: 'Times New Roman', Times, serif;">
-                            Высылаю вам адреса для поздравления жителей домов престарелых (адрес общий для всех поздравляемых, список которых следует за адресом).
+                            Высылаю вам адреса для поздравления жителей домов престарелых (адрес общий для всех
+                            поздравляемых, список которых следует за адресом).
                         </p>
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
@@ -505,10 +550,10 @@
                             <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                             {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                             <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-                            <!--     {{celebrator.lastName}} -->
+                            {{celebrator.lastName}}
                             {{celebrator.firstName}}
                             {{celebrator.patronymic}}
-                            <!--   {{celebrator.fullDayBirthday}} -->
+                            {{celebrator.fullDayBirthday}}
                             {{celebrator.comment1}}
                             <!--   {{celebrator.linkPhoto}} 
                             <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
@@ -870,7 +915,8 @@
                             Дружеское напоминание.</h3>
                         <ul>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Открытки дети могут сделать сами. Это может быть рисунок или аппликация, но аккуратные и на плотной
+                                Открытки дети могут сделать сами. Это может быть рисунок или аппликация, но аккуратные и
+                                на плотной
                                 бумаге.
                             </li>
                             <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">

@@ -174,7 +174,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.holiday == "Дни рождения января 2026") {
         period = {
             "date1": 1,
-            "date2": 31,
+            "date2": 5,
             "isActive": true,
             "key": 0,
             "maxPlus": 7, //PLUSES1
@@ -495,20 +495,36 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
         }
 
+        console.log("newOrder.filter");
+    console.log(newOrder.filter);
+
         if (newOrder.filter.date1 || newOrder.filter.date2) {
             isOutDate = true;
-            /*       if(!newOrder.filter.date1) {
-                    let day1 = (newOrder.filter.date2-6)<0 ? 1 : newOrder.filter.date2-6;
-                    filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: day1 };
-                  }
-                  if(!newOrder.filter.date2) {
-                    let day2 = (newOrder.filter.date1+6)<0 ? 1 : newOrder.filter.date1+6;
-                    filter.dateBirthday = { $lte: day2, $gte: newOrder.filter.date1 };
-                  } */
+            let day1, day2;
+            if (!newOrder.filter.date1) {
+                day1 = (newOrder.filter.date2 - 6) < 0 ? 1 : newOrder.filter.date2 - 6;
+                day2 = newOrder.filter.date2;
+                // filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: day1 };
+                // period.day1 = day1;
+            }
+            if (!newOrder.filter.date2) {
+                day2 = (newOrder.filter.date1 + 6) < 0 ? 1 : newOrder.filter.date1 + 6;
+                day1 = newOrder.filter.date1
+                //  period.day2 = day2;
+                //filter.dateBirthday = { $lte: day2, $gte: newOrder.filter.date1 };
+            }
 
-            //if(newOrder.filter.date1 && newOrder.filter.date2) filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: newOrder.filter.date1 };
+            if (newOrder.filter.date1 && newOrder.filter.date2) {
+                period.day1 = newOrder.filter.date1;
+                period.day2 = newOrder.filter.date2;
+                //filter.dateBirthday = { $lte: newOrder.filter.date2, $gte: newOrder.filter.date1 };
+            }
 
-            seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
+                 console.log("PERIOD");
+    console.log(period);
+
+            seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
+            //seniorsData = await fillOrderSpecialDate(proportion, period, order_id, filter, newOrder.filter.date1, newOrder.filter.date2, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
         } else {
             seniorsData = await fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
         }
@@ -567,7 +583,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 /* async function fillOrderSpecialDate(proportion, period, order_id, filter, date1, date2, prohibitedId, restrictedHouses, orderFilter, holiday) {
     const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
     let day1, day2, fixed;
-
+ 
     if (!date1) {
         date1 = 1;
         fixed = 'date2';
@@ -579,7 +595,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (date1 && date2) {
         fixed = false;
     }
-
+ 
     //console.log("filter");
     //console.log(filter);
     //ДОБРО РУ
@@ -594,7 +610,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 day2 = day1 + 5 < 31 ? day1 + 5 : 31;
             }
         }
-
+ 
         if (fixed == 'date2') {
             if (date2 > period.date2) {
                 day1 = period.date1;
@@ -604,7 +620,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 day1 = day2 - 5 > 0 ? day2 - 5 : 1;
             }
         }
-
+ 
         if (fixed == false) {
             if (date2 - date1 < 6) {
                 day1 = date1;
@@ -619,18 +635,18 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
                 }
             }
         }
-
+ 
     } else {
         day1 = date1;
         day2 = date2;
         console.log("else");
-
+ 
     }
-
+ 
     filter.dateBirthday = { $lte: day2, $gte: day1 };
     console.log("filter.dateBirthday");
     console.log(filter.dateBirthday);
-
+ 
     let data = {
         houses: {},
         restrictedHouses: [...restrictedHouses],
@@ -643,21 +659,21 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         order_id: order_id,
         //temporaryLineItems: [],
     }
-
+ 
     console.log(data.maxPlus);
     if (proportion.oneRegion) {
         data.regions = {};
         data.restrictedRegions = [];
     }
-
+ 
     for (let category of categories) {
-
+ 
         data.category = category;
         data.proportion = proportion;
         data.counter = 0;
         //console.log(category);
         //console.log(proportion[category]);
-
+ 
         if (proportion[category]) {
             data = await collectSeniors(data, orderFilter, holiday);
             if (data.counter < proportion[category]) {
@@ -665,7 +681,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             }
         }
     }
-
+ 
     //console.log(data.restrictedHouses);
     //console.log(data.restrictedPearson);
     return data;
@@ -675,6 +691,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 // create a list of seniors for the order 789
 
 async function fillOrder(proportion, period, order_id, filter, prohibitedId, restrictedHouses, orderFilter, holiday) {
+
+
     const categories = ["oldWomen", "oldMen", "yangWomen", "yangMen", "specialWomen", "specialMen",]; // "specialOnly", "allCategory"
 
     let data = {
@@ -745,13 +763,13 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
 
 async function collectSeniors(data, orderFilter, holiday) {
 
-    console.log('holiday1');
-    console.log(holiday);
+    //console.log('holiday1');
+   // console.log(holiday);
 
 
     /* let test = await List.findOne({dateBirthday: 1});*/
-    console.log('data.filter.addressFilter');
-    console.log(data.filter);
+    console.log('data - collectSeniors');
+    console.log(data);
 
     let searchOrders = {};
 
@@ -921,8 +939,8 @@ async function searchSenior(
       orderFilter */
 ) {
 
-    console.log('holiday2');
-    console.log(holiday);
+    console.log('data');
+    console.log(data);
 
     /*  data.restrictedHouses,
         data.restrictedPearson,
@@ -1223,11 +1241,11 @@ async function searchSeniorHelper(
 ) {
 
 
-    console.log('data.restrictedHouses');
-    console.log(data.restrictedHouses);
+//    console.log('data.restrictedHouses');
+  //  console.log(data.restrictedHouses);
 
-    console.log('data.proportion');
-    console.log(data.proportion);
+ //   console.log('data.proportion');
+  //  console.log(data.proportion);
 
     if (data.restrictedHouses.length > 0) {
         for (let house of data.restrictedHouses) {
@@ -1262,6 +1280,9 @@ async function searchSeniorHelper(
     standardFilter.isReleased = false;
     standardFilter.noAddress = false;
 
+    console.log("DATES");
+    console.log(standardFilter.dateBirthday,  );
+
     //if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };
     if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
     // console.log("DATA");
@@ -1288,8 +1309,8 @@ async function searchSeniorHelper(
     //console.log(maxPlus);
 
     let filter = Object.assign(standardFilter, data.filter);
-    console.log("FILTER");
-    console.log(filter);
+   // console.log("FILTER");
+   // console.log(filter);
 
     let celebrator;
     //CHANGE!!!
@@ -1323,8 +1344,8 @@ async function searchSeniorHelper(
             celebrator = await ListBefore.findOne(filter);
         }
 
-        console.log("celebrator List");
-        console.log(celebrator);
+       // console.log("celebrator List");
+       // console.log(celebrator);
         if (celebrator) {
             //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
             //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
@@ -2543,7 +2564,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
 
     }
 
-  
+
     let resultLineItems = await generateLineItemsNewYear(nursingHomes, order_id);
     // console.log("resultLineItems");
     // console.log(resultLineItems);
@@ -3231,19 +3252,19 @@ async function fillOrderForInstitutes(
     const specialHouses = ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ',
         'ВЫСОКОЕ',
         'ЯСТРЕБОВО',
-        'ЗАРЕЧНЫЙ',       
+        'ЗАРЕЧНЫЙ',
         'БРИГАДИРОВКА',
         'УСТЬ-КЯХТА',
-        'ЛЕСНОЕ',             
+        'ЛЕСНОЕ',
         'ЯБЛОЧНОЕ',
         'НИЖНИЙ_НОВГОРОД',
         'СОСНОВАЯ_РОЩА',
         'БЛАГОВЕЩЕНСК',
         'ОКТЯБРЬСКИЙ_КОМСОМОЛЬСКАЯ',
         'ГРАЙВОРОН',
-        'ТИНСКОЙ', 'КРАСНАЯ_ГЛИНКА', 'БОРИСОВКА', 'ГАТЧИНА', 
+        'ТИНСКОЙ', 'КРАСНАЯ_ГЛИНКА', 'БОРИСОВКА', 'ГАТЧИНА',
     ];//'ЛЕТКА',  'ЧЕРЕМУХОВКА','БОГУЧАР', 'НИКОЛО-ВАРВАРИНКА' 'ОБОЯНЬ',  
-      
+
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, });
@@ -3746,21 +3767,78 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 }
 
 
-  //НАВИГАТОРЫ
+//НАВИГАТОРЫ
 
-  router.get("/forNavigators", checkAuth, async (req, res) => {
+router.get("/forNavigators", checkAuth, async (req, res) => {
     try {
         const houses = await House.find({
+            nursingHome: {
+                $nin: [
+                    /*                  'БОГУЧАР',
+                                     'БОЛЬШАЯ_МУРТА',
+                                     'НИКОЛО-ВАРВАРЬИНКА',
+                                     'ЖИТИЩИ',
+                                     'МИХАЙЛОВКА_ТЮМЕНСКАЯ',
+                                     'ЛЕСНОЙ',
+                                     'КУРСК',
+                                     'ПЕТРОПАВЛОВКА_1',
+                                     'СКОРОДНОЕ',
+                                     'ОБЪЯЧЕВО',
+                                     'ТУЛУН',
+                                     'ЧЕЛЯБИНСК_ХОХРЯКОВА',
+                                     'КУНИБ',
+                                     'МЕНЗЕЛИНСК'
+                 
+                                     'ИЛОВКА', */
+                    /*                     'ЛАКИНСК',
+                                        'ВОЛГОГРАД_СТРОИТЕЛЬНАЯ',
+                                        'ЛИПОВКА',
+                                        'БОРИСОГЛЕБСК',
+                                        'ЕМВА',
+                                        'МЕДВЕДОВСКАЯ',
+                                        'ЩИГРЫ',
+                                        'ПЕКТУБАЕВО',
+                                        'БОЛЬШОЙ_КАРЛЫГАН',
+                                        'АЛЕШЕНКА',
+                                        'БОР_КОММУНИСТИЧЕСКАЯ',
+                                        'ВЕЛИКИЙ_НОВГОРОД_БЕРЕГОВАЯ',
+                                        'БОЛОТНОЕ',
+                                        'НОВОСИБИРСК_ПОРЯДКОВЫЙ',
+                                        'НОВОУЛЬЯНОВСК',
+                                        'БЕЛОЕ_ОЗЕРО',
+                                        'БОЯДЫ',
+                                        'ВИШЕНКИ',
+                                        'ДУГИНО',
+                                        'ИЗДЕШКОВО',
+                                        'ЕРШИЧИ',
+                                        'ВАРАКСИНО',
+                                        'ВОРГА',
+                                        'ДРЮЦК',
+                                        'СУФЛЯНОВО',
+                                        'СЕЛЕЗНИ',
+                                        'ЦЕНТРАЛЬНАЯ_УСАДЬБА',
+                                        'НИКОЛЬСКОЕ',
+                                        'СОБИНКА',
+                                        'ВОЛОГДА',
+                                        'РУБЦОВО',
+                                        'ЯНИКОЙ', 
+                                        'РАДУЖНЫЙ'*/
+
+                ]
+            },
             isActive: true,
             isReleased: false,
-            isDisabled: false
+            isDisabled: false,
+            //  "statistic.newYear.plus0": { $ne: 0 },
+            //  "statistic.newYear.plus1": { $ne: 0 },
+            //  noAddress: false
         });
         houses.forEach(async (h) => {
-             const count = await Senior.countDocuments(
+            const count = await Senior.countDocuments(
                 {
                     nursingHome: h.nursingHome,
                     isRestricted: false,
-                    dateOfExit: null,
+                    dateExit: null,
                     isDisabled: false
                 }
             );
