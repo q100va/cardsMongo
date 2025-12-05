@@ -955,9 +955,9 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
     console.log(resArrived);
 
     for (let celebrator of arrived) {
-      if (celebrator.monthBirthday == month || celebrator.monthBirthday == 1 || celebrator.monthBirthday == month - 1) {//month + 1 
+      if (celebrator.monthBirthday == month || celebrator.monthBirthday == month + 1 || celebrator.monthBirthday == 12) {// month - 1
         let cloneSpecialComment;
-        if (celebrator.monthBirthday == month || celebrator.monthBirthday == month - 1) {//month 
+        if ( celebrator.monthBirthday == 12) {//month celebrator.monthBirthday == month ||
           cloneSpecialComment = await specialComment(
             2025 - celebrator["yearBirthday"]
           );
@@ -985,16 +985,16 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
 
         } else {
-          if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
+          if (celebrator.yearBirthday < 1943 && celebrator.yearBirthday > 0) {
             cloneOldest = true;
           }
-          if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
+          if (celebrator.yearBirthday < 1960 && celebrator.gender == "Female") {
             cloneCategory = "oldWomen";
           }
-          if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+          if (celebrator.yearBirthday < 1960 && celebrator.gender == "Male") {
             cloneCategory = "oldMen";
           }
-          if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+          if (celebrator.yearBirthday > 1959 || !celebrator.yearBirthday) {
             if (celebrator.gender == "Female") {
               cloneCategory = "yangWomen";
             }
@@ -1004,14 +1004,14 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
           }
         }
         let holiday;
-        if (celebrator.monthBirthday == 11) {
-          holiday = 'Дни рождения ноября 2025';
-        }
         if (celebrator.monthBirthday == 12) {
           holiday = 'Дни рождения декабря 2025';
         }
         if (celebrator.monthBirthday == 1) {
           holiday = 'Дни рождения января 2026';
+        }
+        if (celebrator.monthBirthday == 2) {
+          holiday = 'Дни рождения февраля 2026';
         }
 
         let cloneCelebrator = {
@@ -1049,13 +1049,13 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
             celebrator.yearBirthday,
           dateOfSignedConsent: celebrator.dateOfSignedConsent,
         };
-        if (celebrator.monthBirthday == 11) {
+        if (celebrator.monthBirthday == 12) {
           await ListBefore.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 12) {
+        if (celebrator.monthBirthday == 1) {
           await List.create(cloneCelebrator);
         }
-        if (celebrator.monthBirthday == 1) {
+        if (celebrator.monthBirthday == 2) {
           await ListNext.create(cloneCelebrator);
         }
       }
@@ -1165,16 +1165,16 @@ async function createCloneCelebratorNY(celebrator) {
     }
 
   } else {
-    if (celebrator.yearBirthday < 1942 && celebrator.yearBirthday > 0) {
+    if (celebrator.yearBirthday < 1943 && celebrator.yearBirthday > 0) {
       cloneOldest = true;
     }
-    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Female") {
+    if (celebrator.yearBirthday < 1960 && celebrator.gender == "Female") {
       cloneCategory = "oldWomen";
     }
-    if (celebrator.yearBirthday < 1959 && celebrator.gender == "Male") {
+    if (celebrator.yearBirthday < 1960 && celebrator.gender == "Male") {
       cloneCategory = "oldMen";
     }
-    if (celebrator.yearBirthday > 1958 || !celebrator.yearBirthday) {
+    if (celebrator.yearBirthday > 1959 || !celebrator.yearBirthday) {
       if (celebrator.gender == "Female") {
         cloneCategory = "yangWomen";
       }

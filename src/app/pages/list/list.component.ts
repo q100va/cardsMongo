@@ -1143,4 +1143,15 @@ export class ListComponent implements OnInit {
       }
     );
   }
+
+  forNavigators() {
+    this.orderService.forNavigators().subscribe(
+      (res) => {
+        alert("сформировано");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 }

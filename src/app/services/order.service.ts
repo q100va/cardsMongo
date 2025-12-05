@@ -518,6 +518,10 @@ export class OrderService {
     return this.http.get("/api/orders/get/nursingHomes/");
   }
 
+    forNavigators(): Observable<any> {
+    return this.http.get("/api/dobroru/forNavigators");
+  }
+
   //////////////////////////////////////////////////////
 
   findNursingHomes(): Observable<any> {

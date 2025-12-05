@@ -37,9 +37,9 @@ export class OrderDetailsComponent implements OnInit {
   isNotLate = false;
   isNotOnlyOne = true;
   openHolidays = [
-    "Дни рождения ноября 2025",
-    "Дни рождения января 2026",
     "Дни рождения декабря 2025",
+    "Дни рождения февраля 2026",
+    "Дни рождения января 2026",
 /*     "Именины марта 2025",
     "Именины марта 2025",
     "Именины февраля 2025", 
