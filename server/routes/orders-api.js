@@ -2497,7 +2497,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 5,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3, //PLUSES1
+      "maxPlus": 2, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2526,7 +2526,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 31,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3,//PLUSES1
+      "maxPlus": 2,//PLUSES1
       "secondTime": true,
       "scoredPluses": 2
     }
@@ -3393,13 +3393,13 @@ async function searchSenior(
   }
   if (holiday == "Дни рождения января 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen") {
-      maxPlusAmount = data.maxPlus + 3;
+      maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 1;
     }
 
     if (filter.dateOfSignedConsent == { '$ne': null }) {
@@ -3412,10 +3412,10 @@ async function searchSenior(
   }
   if (holiday == "Дни рождения декабря 2025") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 3;
+      maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 1;
     }
   }
 
