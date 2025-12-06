@@ -4336,18 +4336,18 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
 
     if (proportion[category]) {
 
-      data.maxPlus = 1;      
+      data.maxPlus = 1;
 
       data = await collectSeniorsNewYear(data, orderFilter);
 
-      console.log('filter', filter);
-        console.log('orderFilter', orderFilter);
+      //  console.log('filter', filter);
+      //  console.log('orderFilter', orderFilter);
 
-       if (data.counter < proportion[category] &&  orderFilter.onlyWithConcent) {
+      if (data.counter < proportion[category] /* &&  orderFilter.onlyWithConcent */) {
         console.log('PLUSESNY 2');
-         data.maxPlus = 2; 
-         data = await collectSeniorsNewYear(data, orderFilter);
-       } /* 
+        data.maxPlus = 2;
+        data = await collectSeniorsNewYear(data, orderFilter);
+      } /* 
  
        if (data.counter < proportion[category]) { //РУЧНАЯ
          data.maxPlus = 3;
@@ -4366,6 +4366,9 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
             
                     data = await collectSeniorsNewYear(data, orderFilter);
                   }    */
+
+      console.log('data');
+      console.log(data);
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -4513,8 +4516,8 @@ async function collectSeniorsNewYear(data, orderFilter) {
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
-        console.log("data.proportion.oneHouse");
-        console.log(data.proportion.oneHouse);
+        //  console.log("data.proportion.oneHouse");
+        // console.log(data.proportion.oneHouse);
         if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
         if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
         console.log("data.regions");
@@ -4560,10 +4563,11 @@ async function searchSeniorNewYear(
   // data.maxPlus = 3;
   let standardFilter = {
     nursingHome: { $nin: data.restrictedHouses },
-    //secondTime: data.maxPlus > 1 ? true : false,
+    firstTime: true,
+    secondTime: data.maxPlus > 1 ? true : false,
     // secondTime: true,
-    thirdTime: data.maxPlus > 2 ? true : false,
-    forthTime: data.maxPlus > 3 ? true : false,
+    //  thirdTime: data.maxPlus > 2 ? true : false,
+    // forthTime: data.maxPlus > 3 ? true : false,
     _id: { $nin: data.restrictedPearson },
     //plusAmount: { $lt: maxPlus },
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
@@ -4644,8 +4648,8 @@ async function searchSeniorNewYear(
     // filter.nursingHome = { $in: ["ВЕРХНЕУРАЛЬСК", "ВАЛДАЙ", "ЯГОТИНО", "БЕРДСК", "САВИНСКИЙ", "ДУБНА_ТУЛЬСКАЯ", "ДУБНА", "КАНДАЛАКША", "САДОВЫЙ", "ЯГОТМОЛОДОЙ_ТУДИНО", "КРАСНОЯРСК", "СОЛИКАМСК_ДУБРАВА", "ЧЕРНЫШЕВКА",] }
     //filter.region = {$in: ["АРХАНГЕЛЬСКАЯ", "МОСКОВСКАЯ", "МОРДОВИЯ", ]};
     //
-    console.log("filter");
-    console.log(filter);
+    // console.log("filter");
+    //console.log(filter);
     celebrator = await NewYear.findOne(filter);
     //  console.log("celebrator NewYear");
     // console.log(celebrator);
@@ -6066,8 +6070,8 @@ async function collectSeniorsMay9(data) {
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
-        console.log("data.proportion.oneHouse");
-        console.log(data.proportion.oneHouse);
+        // console.log("data.proportion.oneHouse");
+        // console.log(data.proportion.oneHouse);
         if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
         if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
         console.log("data.regions");
@@ -6691,11 +6695,11 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       //  const celebratorsNewYear = await NewYear.find({ absent: false });
       const celebratorsNewYear = await NewYear.find({
         absent: false,
-          nursingHome: {
-           $in: [
-             "ВИШЕНКИ",
-                               ]
-         }
+        nursingHome: {
+          $in: [
+            "ВИШЕНКИ",
+          ]
+        }
       });
       let count = celebratorsNewYear.length;
       //  console.log(celebratorsNewYear);
@@ -7845,8 +7849,8 @@ async function collectSeniorsEaster(data, orderFilter) {
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
-        console.log("data.proportion.oneHouse");
-        console.log(data.proportion.oneHouse);
+        //  console.log("data.proportion.oneHouse");
+        //  console.log(data.proportion.oneHouse);
         if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
         if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
         console.log("data.regions");
@@ -8407,8 +8411,8 @@ async function collectSeniorsVeterans(data) {
         data.celebratorsAmount++;
         data.restrictedPearson.push(result.celebrator_id);
         data.counter++;
-        console.log("data.proportion.oneHouse");
-        console.log(data.proportion.oneHouse);
+        //  console.log("data.proportion.oneHouse");
+        //  console.log(data.proportion.oneHouse);
         if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
         if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
         console.log("data.regions");
