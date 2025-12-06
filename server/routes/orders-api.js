@@ -2871,7 +2871,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      filter.dateOfSignedConsent = null;
+     // filter.dateOfSignedConsent = null;
     };
 
     if (newOrder.filter.date1 || newOrder.filter.date2) {
@@ -4249,7 +4249,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     if ((newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) || newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      filter.dateOfSignedConsent = null; //РУЧНАЯ
+    //  filter.dateOfSignedConsent = null; //РУЧНАЯ
       //filter.lastName = "Чернов";
     };
 
@@ -5244,7 +5244,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      filter.dateOfSignedConsent = null;
+    //  filter.dateOfSignedConsent = null;
     };
 
     seniorsData = await fillOrderSpring(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
@@ -8262,7 +8262,7 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
     if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-      filter.dateOfSignedConsent = null;
+     // filter.dateOfSignedConsent = null;
     };
 
     console.log("veterans2");
