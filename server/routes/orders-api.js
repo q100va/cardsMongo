@@ -2493,8 +2493,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения января 2026") {
     period = {
-      "date1": 1,
-      "date2": 5,
+      "date1": 11,
+      "date2": 15,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -4090,6 +4090,9 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
       if (!newOrder.filter.onlyWithPicture && !newOrder.filter.region && !newOrder.filter.nursingHome && newOrder.amount < 21) proportion.oneRegion = Math.ceil(newOrder.amount * 0.33);
 
     }
+
+/*     proportion.oneRegion = 3;
+    proportion.oneHouse = 1; */
 
   }
 
