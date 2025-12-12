@@ -825,10 +825,10 @@ async function collectSeniors(data, orderFilter, holiday) {
         if (orderFilter.addressFilter != 'onlySpecial') {
             if (data.filter.region && data.filter.addressFilter != 'forKids') {
                 searchOrders = {
-                    oldWomen: ["oldWomen", "yangWomen", "specialWomen",],
-                    oldMen: ["oldMen", "yangMen", "specialMen",],
-                    yangWomen: ["yangWomen", "oldWomen", "specialWomen"],
-                    yangMen: ["yangMen", "oldMen", "specialMen",],
+                    oldWomen: ["oldWomen", "yangWomen"],
+                    oldMen: ["oldMen", "yangMen"],
+                    yangWomen: ["yangWomen", "oldWomen"],
+                    yangMen: ["yangMen", "oldMen"],
                     specialWomen: ["specialWomen", "yangWomen", "oldWomen",],
                     specialMen: ["specialMen", "yangMen", "oldMen",],
                 }
@@ -895,11 +895,9 @@ async function collectSeniors(data, orderFilter, holiday) {
                 data.counter++;
                 // console.log("data.proportion.oneHouse");
                 // console.log(data.proportion.oneHouse);
-                if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
+               /*  if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
                 if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
-                // console.log("data.regions");
-                // console.log(data.regions);
-
+          
                 if (data.filter.nursingHome || data.filter.region) {
                     data.proportion.oneHouse = null;
                     data.proportion.oneRegion = null;
@@ -919,7 +917,7 @@ async function collectSeniors(data, orderFilter, holiday) {
                     if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
                         data.restrictedRegions.push(result["region"]);
                     }
-                }
+                } */
 
             } else {
                 break outer1;
@@ -951,7 +949,10 @@ async function searchSenior(
         data.maxPlus,
         data.filter */
 
+//TODO: выбирать из БД за исключением некоторых
 
+let usingHouses = await House.find({isReleased: false, isActive: true, isDisabled: false, isForSchool: true});
+usingHouses = usingHouses.map(h=>h.nursingHome);
     let usingHousesSmaller = [
         "ВЕЛИКИЕ_ЛУКИ",
         "СТАРОБАИШЕВО",
@@ -1236,17 +1237,18 @@ async function searchSenior(
         kind,
         data,
         holiday,
-        usingHousesSmaller
+        usingHouses
+       // usingHousesSmaller
     );
 
-    if (!result) {
+/*     if (!result) {
         result = await searchSeniorHelper(
             kind,
             data,
             holiday,
             usingHousesLarger
         );
-    }
+    } */
     return result;
 
 }
@@ -1296,7 +1298,7 @@ async function searchSeniorHelper(
         //firstName: "Светлана"
     };
     standardFilter.isReleased = false;
-    standardFilter.noAddress = false;
+    //standardFilter.noAddress = false;
 
     console.log("DATES");
     console.log(standardFilter.dateBirthday,);
@@ -1327,8 +1329,8 @@ async function searchSeniorHelper(
     //console.log(maxPlus);
 
     let filter = Object.assign(standardFilter, data.filter);
-    // console.log("FILTER");
-    // console.log(filter);
+     console.log("FILTER");
+    console.log(filter);
 
     let celebrator;
     //CHANGE!!!
@@ -1367,6 +1369,9 @@ async function searchSeniorHelper(
         if (celebrator) {
             //await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
             //await List.updateOne({ _id: celebrator._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+
+            console.log("celebrator CHECK");
+            console.log(celebrator);
             celebrator.celebrator_id = celebrator._id.toString();
             return celebrator;
         }
@@ -3066,7 +3071,7 @@ router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
             await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
         }
 
-        let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "АРМАВИР", "ЖУКОВКА", ...req.body.restrictedHouses] //, "ЧИКОЛА"
+        let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "ЖУКОВКА", ...req.body.restrictedHouses] //, "ЧИКОЛА", "АРМАВИР"
 
         /*    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
         

@@ -20,6 +20,7 @@ let housesSchema = new Schema(
     noAddress: { type: Boolean, default: false },
     isReleased: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
+    isForSchool: { type: Boolean, default: false },
     dateLastUpdate: { type: Date },
     dateLastUpdateClone: { type: String },
     nameContact: { type: String },

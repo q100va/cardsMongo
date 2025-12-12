@@ -64,7 +64,7 @@ export class DobroruComponent implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "noSpecial";
+  addressFilter: string = "noReleased";
   genderFilter: string = "any";
   showIndexes: false;
   showInstruction: false;
@@ -600,7 +600,7 @@ export class DobroruComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.addressFilter = "noSpecial";
+    this.addressFilter = "noReleased";
     this.genderFilter = "any";
 
     this.clicked = false;
@@ -898,7 +898,7 @@ export class DobroruComponent implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "noSpecial",
+        addressFilter: "noReleased",
         genderFilter: this.genderFilter,
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
