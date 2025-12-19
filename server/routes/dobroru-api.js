@@ -3413,14 +3413,14 @@ async function fillOrderForInstitutes(
 
         if (holiday == "Новый год 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
             count = await NewYear.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
 
         if (holiday == "Новый год 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
             count = await NewYear.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
@@ -3660,7 +3660,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                 //forInstitute: 0,
                 nursingHome: nursingHome,
                 absent: false,
-                plusAmount: { $lt: 1 },
+                plusAmount: { $lt: 2 },
                 _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
                 //finished: false,   
                 //onlyForInstitute: true,
@@ -3671,7 +3671,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
             seniorsData = await NewYear.find({
                 nursingHome: nursingHome,
                 absent: false,
-                plusAmount: { $lt: 1 },
+                plusAmount: { $lt: 2 },
                 _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
                 //onlyForInstitute: true, 
                 // forInstitute: 0,
