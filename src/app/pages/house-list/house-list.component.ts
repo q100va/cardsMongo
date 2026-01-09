@@ -49,9 +49,9 @@ export class HouseListComponent implements OnInit {
        this.house = this.house.sort(this.dynamicSort(["region", "nursingHome"]));
         for (let house of  this.house) {
          
-          if (new Date(house.dateLastUpdate) < new Date("2024-09-01")) {
-            console.log(new Date(house.dateLastUpdate));
-            console.log(new Date("2024-09-01"));
+          if (new Date(house.dateLastUpdate) < new Date("2025-09-01")) {
+     /*        console.log(new Date(house.dateLastUpdate));
+            console.log(new Date("2024-09-01")); */
             house.color = "red";
           } else {
             house.color = "black";
@@ -79,7 +79,7 @@ export class HouseListComponent implements OnInit {
        this.house = this.house.sort(this.dynamicSort(["region", "nursingHome"]));
         for (let house of  this.house) {
          
-          if (new Date(house.dateLastUpdate) < new Date("2024-09-01")) {
+          if (new Date(house.dateLastUpdate) < new Date("2025-09-01")) {
 /*             console.log(new Date(house.dateLastUpdate));
             console.log(new Date("2024-09-01")); */
             house.color = "red";

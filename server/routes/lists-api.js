@@ -2102,8 +2102,9 @@ router.post("/birthday/check-doubles", checkAuth, async (req, res) => {
 });
 
 async function findAllHBDoubles(house) {
+    const Model = ListNext;
   // let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
-  let fullHouse = await List.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
+  let fullHouse = await Model.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
   let fullDataHouse = [];
   /*   console.log("fullHouse");
     console.log(fullHouse); */
@@ -2135,10 +2136,10 @@ async function findAllHBDoubles(house) {
     }
     for (let i = 0; i < someHouses.length; i++) {
       if (i == 0) {
-        await List.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
+        await Model.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
         // await ListNext.updateOne({ _id: someHouses[i]._id }, { $set: { plusAmount: plusAmount } })
       } else {
-        await List.deleteOne({ _id: someHouses[i]._id });
+        await Model.deleteOne({ _id: someHouses[i]._id });
         // await ListNext.deleteOne({ _id: someHouses[i]._id });
       }
     }
@@ -2154,7 +2155,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
     console.log("0- check HB fullness " + req.body.nursingHome);
     let result = await checkAllHBFullness(req.body.nursingHome);
     //let result = await checkAllHBFullness("УЛАН-УДЭ_ЛЕСНАЯ"); //ИСПРАВИТЬ
-    console.log("4-check HB fullness " + result);
+  //  console.log("4-check HB fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
     res.json(newListResponse.toObject());
@@ -2168,7 +2169,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
   const Model = ListNext;
-  const month = 1;
+  const month = 2;
   const nursingHome = await House.findOne({ isActive: true, nursingHome: house, dateLastUpdate: { $gt: new Date("2025-08-31") } });// noAddress: false
   if (!nursingHome) {
     // await Model.updateMany({ nursingHome: house }, { $set: { absent: true } });
@@ -2182,11 +2183,11 @@ async function checkAllHBFullness(house) {
    */
   let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: month, isRestricted: false, nursingHome: house });//, { dateLastUpdate: { $lt: new Date("2025-6-1") } }
 
-  console.log("seniors HB" + seniors.length);
+ // console.log("seniors HB" + seniors.length);
   //let fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { fullData: 1 });
   let fullHouse = await Model.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   //let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
-  console.log("fullHouse HB" + fullHouse.length);
+ // console.log("fullHouse HB" + fullHouse.length);
   let amount = 0;
   for (let senior of seniors) {
     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
@@ -2196,25 +2197,31 @@ async function checkAllHBFullness(house) {
       amount++;
       let celebrator = await createCloneCelebrator(senior);
 
-      console.log(celebrator);
+      //console.log(celebrator);
       let newCelebrator = await Model.create(celebrator);
       // let newCelebrator = await ListNext.create(celebrator);
       //let newCelebrator = await ListBefore.create(celebrator);
-      console.log("added:");
-      console.log(newCelebrator.fullData);
+    //  console.log("added:");
+    //  console.log(newCelebrator.fullData);
     }
   }
 
 
-  fullHouse = await Model.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1, yearBirthday:1 });
+  fullHouse = await Model.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1, yearBirthday:1,dateBirthday:1, fullDayBirthday:1, plusAmount:1  });
   // fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   // fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   for (let item of fullHouse) {
+    if(nursingHome.noAddress == true &&  item.gender == 'Male' && item.category != 'specialMen') console.log("NOADDRESS", item);
 
     const age = 2026 - item.yearBirthday;
     const sc = await specialComment(age);
     await Model.updateOne({ _id: item._id }, { $set: { specialComment: sc } });
 
+
+/*     if(item.plusAmount == 0 && item.dateBirthday < 11) {
+      const newDate = "11" + item.fullDayBirthday.slice(2);
+      await Model.updateOne({ _id: item._id }, { $set: { dateBirthday: 11, fullDayBirthday: newDate } });      
+    } */
 
     //let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
     let seniorIndex = seniors.findIndex(senior => (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) == item.fullData);
@@ -2234,8 +2241,8 @@ async function checkAllHBFullness(house) {
       await Model.updateOne({ _id: item._id }, { $set: { absent: true } });
       //  await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
       //await ListBefore.updateOne({ _id: item._id }, { $set: { absent: true } });
-      console.log("deleted:");
-      console.log(item.fullData);
+     // console.log("deleted:");
+     // console.log(item.fullData);
     }
   }
 
@@ -3345,7 +3352,7 @@ async function reportListOfHouses() {
 }
 
 async function overdue() {
-  const houses = await House.find({ isActive: true, dateLastUpdate: { $lt: new Date('2025-10-01') } });
+  const houses = await House.find({ isActive: true, dateLastUpdate: { $lt: new Date('2025-08-31') } });
 
 
   for (let house of houses) {
@@ -5851,11 +5858,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-10-31"), $lt: new Date("2025-12-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-11-30"), $lt: new Date("2026-01-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-10-31"), $lt: new Date("2025-12-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-11-30"), $lt: new Date("2026-01-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
