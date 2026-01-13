@@ -1205,16 +1205,16 @@ function createCloneCelebratorGender(celebrator) {
     }
 
   } else {
-    if (celebrator.yearBirthday < 1943 && celebrator.yearBirthday > 0) {
+    if (celebrator.yearBirthday < 1944 && celebrator.yearBirthday > 0) {
       cloneOldest = true;
     }
-    if (celebrator.yearBirthday < 1960 && celebrator.gender == "Female") {
+    if (celebrator.yearBirthday < 1961 && celebrator.gender == "Female") {
       cloneCategory = "oldWomen";
     }
-    if (celebrator.yearBirthday < 1960 && celebrator.gender == "Male") {
+    if (celebrator.yearBirthday < 1961 && celebrator.gender == "Male") {
       cloneCategory = "oldMen";
     }
-    if (celebrator.yearBirthday > 1959 || !celebrator.yearBirthday) {
+    if (celebrator.yearBirthday > 1960 || !celebrator.yearBirthday) {
       if (celebrator.gender == "Female") {
         cloneCategory = "yangWomen";
       }
@@ -1248,7 +1248,7 @@ function createCloneCelebratorGender(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: celebrator.gender == "Male" ? '23 февраля 2025' : '8 марта 2025',
+    holyday: celebrator.gender == "Male" ? '23 февраля 2026' : '8 марта 2026',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +
@@ -1257,6 +1257,8 @@ function createCloneCelebratorGender(celebrator) {
       celebrator.monthBirthday +
       celebrator.yearBirthday,
     dateOfSignedConsent: celebrator.dateOfSignedConsent,
+    firstTime: true,
+    secondTime: false
 
   };
   //console.log("special - " + celebrator["specialComment"]);
@@ -2102,7 +2104,7 @@ router.post("/birthday/check-doubles", checkAuth, async (req, res) => {
 });
 
 async function findAllHBDoubles(house) {
-    const Model = ListNext;
+  const Model = ListNext;
   // let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
   let fullHouse = await Model.find({ nursingHome: house, absent: false }, { fullData: 1, plusAmount: 1 });
   let fullDataHouse = [];
@@ -2155,7 +2157,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
     console.log("0- check HB fullness " + req.body.nursingHome);
     let result = await checkAllHBFullness(req.body.nursingHome);
     //let result = await checkAllHBFullness("УЛАН-УДЭ_ЛЕСНАЯ"); //ИСПРАВИТЬ
-  //  console.log("4-check HB fullness " + result);
+    //  console.log("4-check HB fullness " + result);
     //const newList = newList1.slice();
     const newListResponse = new BaseResponse(200, "Query Successful", result);
     res.json(newListResponse.toObject());
@@ -2183,11 +2185,11 @@ async function checkAllHBFullness(house) {
    */
   let seniors = await Senior.find({ isDisabled: false, dateExit: null, monthBirthday: month, isRestricted: false, nursingHome: house });//, { dateLastUpdate: { $lt: new Date("2025-6-1") } }
 
- // console.log("seniors HB" + seniors.length);
+  // console.log("seniors HB" + seniors.length);
   //let fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { fullData: 1 });
   let fullHouse = await Model.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
   //let fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { fullData: 1 }); //
- // console.log("fullHouse HB" + fullHouse.length);
+  // console.log("fullHouse HB" + fullHouse.length);
   let amount = 0;
   for (let senior of seniors) {
     let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
@@ -2201,27 +2203,27 @@ async function checkAllHBFullness(house) {
       let newCelebrator = await Model.create(celebrator);
       // let newCelebrator = await ListNext.create(celebrator);
       //let newCelebrator = await ListBefore.create(celebrator);
-    //  console.log("added:");
-    //  console.log(newCelebrator.fullData);
+      //  console.log("added:");
+      //  console.log(newCelebrator.fullData);
     }
   }
 
 
-  fullHouse = await Model.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1, yearBirthday:1,dateBirthday:1, fullDayBirthday:1, plusAmount:1  });
+  fullHouse = await Model.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1, yearBirthday: 1, dateBirthday: 1, fullDayBirthday: 1, plusAmount: 1 });
   // fullHouse = await ListNext.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   // fullHouse = await ListBefore.find({ nursingHome: house, absent: false }, { _id: 1, fullData: 1 });
   for (let item of fullHouse) {
-    if(nursingHome.noAddress == true &&  item.gender == 'Male' && item.category != 'specialMen') console.log("NOADDRESS", item);
+    if (nursingHome.noAddress == true && item.gender == 'Male' && item.category != 'specialMen') console.log("NOADDRESS", item);
 
     const age = 2026 - item.yearBirthday;
     const sc = await specialComment(age);
     await Model.updateOne({ _id: item._id }, { $set: { specialComment: sc } });
 
 
-/*     if(item.plusAmount == 0 && item.dateBirthday < 11) {
-      const newDate = "11" + item.fullDayBirthday.slice(2);
-      await Model.updateOne({ _id: item._id }, { $set: { dateBirthday: 11, fullDayBirthday: newDate } });      
-    } */
+    /*     if(item.plusAmount == 0 && item.dateBirthday < 11) {
+          const newDate = "11" + item.fullDayBirthday.slice(2);
+          await Model.updateOne({ _id: item._id }, { $set: { dateBirthday: 11, fullDayBirthday: newDate } });      
+        } */
 
     //let fullData = (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday);
     let seniorIndex = seniors.findIndex(senior => (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) == item.fullData);
@@ -2241,8 +2243,8 @@ async function checkAllHBFullness(house) {
       await Model.updateOne({ _id: item._id }, { $set: { absent: true } });
       //  await ListNext.updateOne({ _id: item._id }, { $set: { absent: true } });
       //await ListBefore.updateOne({ _id: item._id }, { $set: { absent: true } });
-     // console.log("deleted:");
-     // console.log(item.fullData);
+      // console.log("deleted:");
+      // console.log(item.fullData);
     }
   }
 
@@ -2264,7 +2266,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     }
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
-    // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2025", "23 февраля 2025"] });
+    // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2026", "23 февраля 2026"] });
     let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения февраля 2026"] });
     let lineItemsM = [];
     for (let order of ordersM) {
@@ -3568,7 +3570,7 @@ async function countF23() {
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "23 февраля 2025", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "23 февраля 2026", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3598,7 +3600,7 @@ async function countM8() {
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "8 марта 2025", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "8 марта 2026", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3737,8 +3739,8 @@ async function countVolonteers() {
   // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersNY = await Order.find({ holiday: "Новый год 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
-  //let ordersFebruary23 = await Order.find({ holiday: "23 февраля 2025", isDisabled: false, isOverdue: false, isReturned: false, });
-  let ordersMarch8 = await Order.find({ holiday: "8 марта 2025", isDisabled: false, isOverdue: false, isReturned: false, });
+  //let ordersFebruary23 = await Order.find({ holiday: "23 февраля 2026", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersMarch8 = await Order.find({ holiday: "8 марта 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersEaster = await Order.find({ holiday: "Пасха 2025", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersMay9 = await Order.find({ holiday: "9 мая 2025", isDisabled: false, isOverdue: false, isReturned: false, });
 
@@ -3783,8 +3785,8 @@ async function countVolonteers() {
   
    */
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения декабря 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2025", "Дни рождения декабря 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения декабря 2025"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения декабря 2025"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
 
 
   for (let order of ordersInstitutes) {
@@ -3830,7 +3832,7 @@ async function countAmountSeniors() {
   let amount = 0;
   let set = new Set();
   // let orders = await Order.find({ isDisabled: false, isOverdue: false, isReturned: false, dateOfOrder: { $gt: new Date('2022-09-01'), $lt: new Date('2023-10-01') } });   //.project({ _id: 0, email: 1, contact: 1,  });
-  //let orders = await Order.find({ holiday: { $in: ["8 марта 2025"] }, isDisabled: false, isOverdue: false, isReturned: false, });
+  //let orders = await Order.find({ holiday: { $in: ["8 марта 2026"] }, isDisabled: false, isOverdue: false, isReturned: false, });
   let orders = await Order.find({ holiday: { $in: ["День учителя и дошкольного работника 2024"] }, isDisabled: false, isOverdue: false, isReturned: false, });
 
   for (let order of orders) {
@@ -5492,13 +5494,14 @@ async function restoreVeteransStatistic(activeHouse) {
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
     // await seniorsVolunteers();
-    // await quarta();
+   // await quarta();
+   // await year_eberdnikova();
 
     let statistic = [
       {
         name: "ВСЕГО ПОЗДРАВЛЯЕМЫХ",
         amount1: 0, //ДР декабря 2025
-        // amount2: 0, //8 марта 2025
+        // amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //  amount5: 0, //Пасха 2025
@@ -5508,7 +5511,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         //   amount5: '-', //Пасха 2025
@@ -5518,7 +5521,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "из них жители ПНИ",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //   amount5: 0, //Пасха 2025          
@@ -5528,7 +5531,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         //   amount5: '-', //Пасха 2025
@@ -5538,7 +5541,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "ПОЗДРАВЛЕНО 4 и более раз",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //  amount5: 0, //Пасха 2025
@@ -5548,7 +5551,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5558,7 +5561,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         // amount5: 0, //Пасха 2025
@@ -5568,7 +5571,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5578,7 +5581,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "ПОЗДРАВЛЕНО 3 раза",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         // amount5: 0, //Пасха 2025
@@ -5588,7 +5591,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5598,7 +5601,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         // amount5: 0, //Пасха 2025
@@ -5608,7 +5611,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5618,7 +5621,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "ПОЗДРАВЛЕНО 2 раза",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //  amount5: 0, //Пасха 2025
@@ -5628,7 +5631,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5638,7 +5641,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
         amount1: 0, //ДР декабря 2025
-        // amount2: 0, //8 марта 2025
+        // amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         // amount5: 0, //Пасха 2025
@@ -5648,7 +5651,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5658,7 +5661,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "ПОЗДРАВЛЕНО 1 раз",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //  amount5: 0, //Пасха 2025
@@ -5668,7 +5671,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5678,7 +5681,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         // amount5: 0, //Пасха 2025
@@ -5688,7 +5691,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5698,7 +5701,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "НЕ ПОЗДРАВЛЕНО ни разу",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //  amount5: 0, //Пасха 2025
@@ -5708,7 +5711,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5718,7 +5721,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
         amount1: 0, //ДР декабря 2025
-        //amount2: 0, //8 марта 2025
+        //amount2: 0, //8 марта 2026
         amount3: 0, //ДР января 2026
         amount4: 0, //ДР февраля 2026
         //  amount5: 0, //Пасха 2025
@@ -5728,7 +5731,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР декабря 2025
-        // amount2: -, //8 марта 2025
+        // amount2: -, //8 марта 2026
         amount3: '-', //ДР января 2026
         amount4: '-', //ДР февраля 2026
         amount5: '-', //Пасха 2025
@@ -5815,41 +5818,136 @@ router.get("/statistic", checkAuth, async (req, res) => {
   let orders = await Order.find({ isDisabled: false, "li" });
 } */
 
+  async function year_eberdnikova() {
+    let orders = await Order.find({
+    isDisabled: false, //isOverdue: false, isReturned: false,
+    dateOfOrder: { $gt: new Date("2024-12-31"), $lt: new Date("2026-01-01") },
+    userName:"eberdnikova"
+    /*     $or: [{ "holiday": 'Дни рождения апреля 2025' },
+        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения декабря 2025' },
+        { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },] */
+  });
+ // let celebrators = [];
+  let participators = [];
+ // let regions = [];
+//  let houses = [];
+  //let amount = 0;
+  let amountOfOrders = orders.length;
+  let amountOfSchoolsOrders = 0;
+  let institutes = [];
+  let schools = [];
+   let count = orders.length;
+  for (let order of orders) {
+    participators.push(order.clientId);
+    if (order.institutes.length) {
+      amountOfSchoolsOrders++;
+   /*     for (let inst of order.institutes) {
+        institutes.push(inst._id);
+
+       if (inst.category == 'образовательное учреждение') {
+          schools.push(inst._id);          
+        } 
+
+      }*/
+    }
+/*     for (let item of order.lineItems) {
+      for (let celebrator of item.celebrators) {
+        celebrators.push(celebrator.lastName + celebrator.firstName + celebrator.patronymic + celebrator.nursingHome + celebrator.fullDayBirthday);
+        houses.push(celebrator.nursingHome);
+        regions.push(celebrator.region);
+
+      }
+    }
+    amount = amount + order.amount; */
+   
+    console.log(count--);
+  }
+
+/*   let c = new Set(celebrators);
+  let h = new Set(houses);
+  let r = new Set(regions); */
+  let p = new Set(participators);
+  let i = new Set(institutes);
+  let s = new Set(schools);
+/*   console.log("amount");
+  console.log(amount);
+  console.log("celebrators");
+  console.log(c.size); */
+  console.log("amountOfOrders");
+  console.log(amountOfOrders);
+  console.log("participators");
+  console.log(p.size);
+  console.log("institutes");
+  console.log(i.size);
+  console.log("schools");
+  console.log(s.size);
+/*   console.log("regions");
+  console.log(r);
+  console.log(r.size);
+  console.log("houses");
+  console.log(h.size); */
+
+  }
+
 async function quarta() {
   let orders = await Order.find({
     isDisabled: false, isOverdue: false, isReturned: false,
-    dateOfOrder: { $gt: new Date("2025-03-31"), $lt: new Date("2025-07-01") },
-    $or: [{ "holiday": 'Дни рождения апреля 2025' },
-    { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения декабря 2025' },
-    { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },]
+    dateOfOrder: { $gt: new Date("2024-12-31"), $lt: new Date("2026-01-01") },
+    /*     $or: [{ "holiday": 'Дни рождения апреля 2025' },
+        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения декабря 2025' },
+        { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },] */
   });
   let celebrators = [];
+  let participators = [];
   let regions = [];
   let houses = [];
   let amount = 0;
+  let institutes = [];
+  let schools = [];
+   let count = orders.length;
   for (let order of orders) {
+    participators.push(order.clientId);
+    if (order.institutes.length) {
+      for (let inst of order.institutes) {
+        institutes.push(inst._id);
+        if (inst.category == 'образовательное учреждение') schools.push(inst._id);
+      }
+    }
     for (let item of order.lineItems) {
       for (let celebrator of item.celebrators) {
         celebrators.push(celebrator.lastName + celebrator.firstName + celebrator.patronymic + celebrator.nursingHome + celebrator.fullDayBirthday);
         houses.push(celebrator.nursingHome);
         regions.push(celebrator.region);
+
       }
     }
     amount = amount + order.amount;
+   
+    console.log(count--);
   }
 
   let c = new Set(celebrators);
   let h = new Set(houses);
   let r = new Set(regions);
+  let p = new Set(participators);
+  let i = new Set(institutes);
+  let s = new Set(schools);
+  console.log("amount");
+  console.log(amount);
   console.log("celebrators");
   console.log(c.size);
-  console.log("houses");
-  console.log(h.size);
+  console.log("participators");
+  console.log(p.size);
+  console.log("institutes");
+  console.log(i.size);
+  console.log("schools");
+  console.log(s.size);
   console.log("regions");
   console.log(r);
   console.log(r.size);
-  console.log("amount");
-  console.log(amount);
+  console.log("houses");
+  console.log(h.size);
+
 }
 
 

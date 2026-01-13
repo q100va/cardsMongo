@@ -44,7 +44,7 @@ const listSchema = new Schema(
     dateOfSignedConsent : {type: Date, default: null },
 
   },
-  { collection: "february_23_2025" }
+  { collection: "february_23_2026" }
 );
 
 module.exports = mongoose.model("February23", listSchema);

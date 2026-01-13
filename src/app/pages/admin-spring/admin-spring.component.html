@@ -13,11 +13,11 @@
         <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 
         <mat-card-subtitle>
-            <button mat-stroked-button color="primary" (click)="generateFebruary23List()">
+            <button *ngIf="isAdmin"  mat-stroked-button color="primary" (click)="generateFebruary23List()">
                 Добавить списки 23 февраля
             </button>
 
-            <button mat-stroked-button color="primary" (click)="generateMarch8List()">
+            <button *ngIf="isAdmin"  mat-stroked-button color="primary" (click)="generateMarch8List()">
                 Добавить списки 8 марта
             </button>
         </mat-card-subtitle>
@@ -51,9 +51,9 @@
                         {{"plus0" + " : " + house.statistic.spring.plus0 }}<br />
                         {{"plus1" + " : " + house.statistic.spring.plus1 }}<br />
                         {{"plus2" + " : " + house.statistic.spring.plus2 }}<br />
-                   {{"plus3" + " : " + house.statistic.spring.plus3 }}<br />
+<!--                    {{"plus3" + " : " + house.statistic.spring.plus3 }}<br />
                         {{"plus4" + " : " + house.statistic.spring.plus4 }}<br /> 
-                        {{"plus5" + " : " + house.statistic.spring.plus5 }}<br /> 
+                        {{"plus5" + " : " + house.statistic.spring.plus5 }}<br />  -->
                     </mat-cell>
                 </ng-container>
 

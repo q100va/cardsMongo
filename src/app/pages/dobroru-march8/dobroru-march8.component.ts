@@ -34,7 +34,7 @@ export class DobroruMarch8Component implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "8 марта 2025";
+  holiday: string = "8 марта 2026";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -628,7 +628,7 @@ export class DobroruMarch8Component implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "8 марта 2025";
+    this.holiday = "8 марта 2026";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;

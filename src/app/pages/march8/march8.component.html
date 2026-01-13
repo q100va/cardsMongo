@@ -170,30 +170,30 @@
 
                                                     </mat-radio-group>
 
-                                                    <br /> 
+                                                    <br /> -->
 
                                                     <mat-slide-toggle [formControl]="form.controls['onlyWithPicture']">
                                                         Только с фото</mat-slide-toggle>
 
-                                                    <br />-->
+                                                    <br />
                                                     <br />
                                                 </div>
 
                                             </td>
 
                                             <td>
-
-                                                <!-- *ngIf="showFilter" -->
-                                                <!--                                    <h4 *ngIf='!hideAll'
+                                                
+                                               <!--  <h4 *ngIf='!hideAll'
                                                     matTooltip="Можно указать только одно значение: до или после которого должен быть год рождения.">
                                                     Год рождения</h4> -->
-                                                <!--                                                  <p>
-                                                    <span matBadge="i" matBadgeOverlap="false" matTooltip="Info about the action">Год рождения</span>
-                                                  </p>  -->
+                                                <!--  <p>
+                                                    <span matBadge="i" matBadgeOverlap="false"
+                                                        matTooltip="Info about the action">Год рождения</span>
+                                                </p> -->
 
                                                 <table class="example-half-width" cellspacing="0">
-                                                    <!-- 
-                                                    <tr *ngIf='!hideAll'>
+
+                                                   <!--  <tr *ngIf='!hideAll'>
                                                         <td>
 
                                                             <mat-form-field class="example-user-input"
@@ -547,18 +547,23 @@
 
                 <section *ngIf="lineItems.length > 0">
 
-                    <mat-card-content *ngIf="showInstructionForSubscribers && (!isForInstitutes || isParcelAvailable)"
+                    <mat-card-content *ngIf="showInstructionForSubscribers && !isForInstitutes"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
                         <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Здравствуйте,
                             {{clientFirstName}}!</p>
-                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                        <p *ngIf="clientFirstName == null || clientFirstName == '' || clientFirstName == 'Волонтер'" style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
 
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             <!-- Сроки доставки писем в настоящее время, к сожалению, предсказать невозможно.<br />
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
                             чем на месяц.<br /> -->
+                            <!--   Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.<br /> -->
+                            Открытки просим вас отправить в ближайшие дни.<br />                            
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором.<br />
+                            Не отправляйте подарки, сувениры, гостинцы, регистрируемые письма, бандероли, посылки.
 
                         </p>
 
@@ -567,34 +572,24 @@
                             Открытки нужно отправить в ближайшие дни.<br />    
                         </p> -->
 
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
+                        <!--            <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
                             *ngIf="!isParcelAvailable">
-                            <!--   Обращаю ваше внимание, что списки поздравляемых идут без фамилий и года рождения (теперь мы получаем только такие данные). <br />
+                            Обращаю ваше внимание, что списки поздравляемых идут без фамилий и года рождения (теперь мы
+                            получаем только такие данные). <br />
                             Не переживайте:<br />
                             - в интернате точно найдут поздравляемого и вручат ему открытку.<br />
-                            - открытки и конверты без фамилии, а только с именем и отчеством на почте принимают и доставляют.<br /> -->
-                            Спасибо за вашу заявку!<br />
-                  <!--           Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.<br /> -->
-                            Открытки нужно отправить в ближайшие дни.<br />
-                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
-                                переписку без предварительного согласования</strong> с координатором.<br />
-                            Не отправляйте подарки, сувениры, гостинцы, регистрируемые письма, бандероли, посылки.
-                        </p>
+                            - открытки и конверты без фамилии, а только с именем и отчеством на почте принимают и
+                            доставляют.<br />
+                        </p> -->
 
-                        <p *ngIf="isParcelAvailable"
+                       <!--  <p *ngIf="isParcelAvailable"
                             style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
-                            Спасибо за вашу заявку!<br />
-                          <!--   Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.<br /> -->
-                            Открытки нужно отправить в ближайшие дни.<br />
-                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
-                                переписку без предварительного согласования</strong> с координатором.<br />
-                            Не отправляйте подарки, сувениры или гостинцы.<br />
                             Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
                             Получателем указать интернат.
                             Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
                             ценные, первого класса), но нам такой вариант совершенно не подходит,
                             так как такие отправления с 99% вероятностью вернутся обратно.
-                        </p>
+                        </p> -->
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
@@ -603,12 +598,13 @@
                     </mat-card-content>
 
 
-                    <mat-card-content *ngIf="showInstruction && (!isForInstitutes || isParcelAvailable)"
+                    <mat-card-content *ngIf="showInstruction"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
                         <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
                             {{clientFirstName}}!</p>
-                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                        <p *ngIf="clientFirstName == null || clientFirstName == '' || clientFirstName == 'Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
 
 
@@ -621,13 +617,13 @@
                             Мы получили вашу заявку и очень рады вашему участию!
                         </p>
 
-                        <p style="font-family: 'Times New Roman', Times, serif;">
+                        <!--  <p style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
-                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. <!-- Иногда в списках
-                            встречаются
+                            идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны. --><!-- Иногда в списках
+                             встречаются
                             люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                             проживают в домах престарелых. Иногда сразу после детдомов. -->
-                        </p>
+                        <!--  </p> -->
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
@@ -638,19 +634,40 @@
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
                             чтобы я могла их передать другому поздравляющему.
-                            Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
-                            один раз к указанному празднику. Письма писать не нужно!
+                            <!-- Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
+                            один раз к указанному празднику. Письма писать не нужно! -->
+                        </p>
+                        <p style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
+                            text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
+                            Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
 
                     </mat-card-content>
 
-                    <mat-card-content *ngIf="showInstructionForSubscribers && isForInstitutes && !isParcelAvailable"
+                    <mat-card-content *ngIf="showInstructionForSubscribers && isForInstitutes"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
                         <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Добрый день,
                             {{clientFirstName}}!</p>
-                        <p *ngIf="clientFirstName == null || ''" style="font-family: 'Times New Roman', Times, serif;">
+                        <p *ngIf="clientFirstName == null || clientFirstName == '' || clientFirstName == 'Волонтер'"
+                            style="font-family: 'Times New Roman', Times, serif;">
                             Добрый день!</p>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Спасибо за вашу заявку!<br />
+                            Открытки просим вас отправить в ближайшие дни.<br />
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором.<br />
+                            Не отправляйте подарки, сувениры или гостинцы.
+                        </p>
+
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
+                            Получателем указать интернат. На конверте рекомендуем указать название праздника. Например,
+                            '8 марта'.
+                            Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
+                            ценные, первого класса), но нам такой вариант совершенно не подходит,
+                            так как такие отправления с 99% вероятностью вернутся обратно.<br />
+                        </p>
 
                         <!--                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Сроки доставки простых писем и бандеролей, к сожалению, в настоящее время предсказать
@@ -664,7 +681,7 @@
                             Вы нас очень выручаете!!!<br />
                             Открытки нужно отправить в ближайшие дни.<br />
                             Обращаю ваше внимание, что списки поздравляемых идут без фамилий.
-                        </p>-->
+                        </p>
 
 
                         <p style="font-family: 'Times New Roman', Times, serif;">
@@ -681,7 +698,7 @@
                             нам такой вариант совершенно не подходит, так как такие
                             отправления с 99% вероятностью вернутся обратно.<br />
                         </p>
-                        <a href="https://disk.yandex.ru/i/pIc9B0o9HKXGrQ">Ссылка на полную инструкцию</a>
+                        <a href="https://disk.yandex.ru/i/pIc9B0o9HKXGrQ">Ссылка на полную инструкцию</a>-->
                         <br /> <br />
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
@@ -691,7 +708,7 @@
                     </mat-card-content>
 
 
-                    <mat-card-content *ngIf="showInstruction && isForInstitutes && !isParcelAvailable"
+                    <!-- <mat-card-content *ngIf="showInstruction && isForInstitutes && !isParcelAvailable"
                         style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
 
                         <p *ngIf="clientFirstName" style="font-family: 'Times New Roman', Times, serif;">Здравствуйте,
@@ -740,7 +757,7 @@
                             один раз к указанному празднику. Письма писать не нужно!
                         </p>
 
-                    </mat-card-content>
+                    </mat-card-content> -->
 
                     <br />
                     <mat-card-content *ngFor="let lineItem of lineItems">
@@ -748,33 +765,33 @@
                         <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
                             {{lineItem.address}}</p>
                         <p style="font-style: italic; margin: 0; font-family: 'Times New Roman', Times, serif;"
-                            *ngIf="lineItem.infoComment && !isForInstitutes || isParcelAvailable">
+                            *ngIf="lineItem.infoComment">
                             {{lineItem.infoComment}}
                         </p>
                         <p style="color: red; font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;"
                             *ngIf="lineItem.adminComment">
                             {{lineItem.adminComment}}</p>
-                        <p *ngIf="isForInstitutes && !isParcelAvailable"
+                       <!--  <p *ngIf="isForInstitutes && !isParcelAvailable"
                             style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
                             {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.</p>
-                        <section *ngIf="!isForInstitutes || isParcelAvailable">
+                        <section *ngIf="!isForInstitutes || isParcelAvailable"> -->
                             <div *ngFor="let celebrator of lineItem.celebrators"
                                 style="font-family: 'Times New Roman', Times, serif;">
 
                                 <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                             {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                                 <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-                                <!--  {{celebrator.lastName}} -->
+                                 {{celebrator.lastName}}
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
-                                <!--    <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span> -->
+                            <!--     <span *ngIf="celebrator.yearBirthday > 0 ">- {{celebrator.yearBirthday}} г.р.</span> -->
                                 {{celebrator.comment1}}
-                                <!--   {{celebrator.linkPhoto}} 
-                                <span style="font-weight: bold; color: rgb(175, 19, 175); ">
+                                {{celebrator.linkPhoto}} 
+                              <!--     <span style="font-weight: bold; color: rgb(175, 19, 175); ">
                                     {{celebrator.specialComment}}
                                 </span>-->
                             </div>
-                        </section>
+                       <!--  </section> -->
                         <br />
 
                     </mat-card-content>
@@ -783,10 +800,10 @@
 
                         <p
                             style="font-family: 'Times New Roman', Times, serif; font-size: 1em; line-height: 1.5em; width: 100%;">
-                            Многократно благодарим вас! <br />
+                            Многократное вам огромное спасибо! <br />
                             _________________________________________________<br />
-                            Помогите поздравить с Новым годом одиноких пожилых людей, <a
-                                href="https://ng.starikam.org/2026">starikam.org</a>.
+                            Помогите купить специальные кресла и ванны-тележки, <a
+                                href="https://starikam.org/campaign/bezopasnyj-dush-i-vanna-s-penoj/">starikam.org</a>.
                         </p>
 
 
@@ -799,7 +816,7 @@
                         <h3
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                             Отправляйте письма правильно!</h3>
-                        <ul *ngIf="!isForInstitutes || isParcelAvailable">
+                        <ul>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
                                 (НЕ заказными).
@@ -810,9 +827,10 @@
                                 или отдельную почтовую открытку без конверта.
                             </li>
 
-                            <li *ngIf="isParcelAvailable" style="font-family: 'Times New Roman', Times, serif;">
+                            <li *ngIf="isForInstitutes"  style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
-                                бандеролью. Получателем указать интернат.
+                                бандеролью. Получателем указать интернат. На конверте рекомендуем указать название
+                                праздника. Например, "8 марта".
                             </li>
 
                             <!--                             <li style="font-family: 'Times New Roman', Times, serif;">
@@ -825,7 +843,7 @@
                             </li>
                         </ul>
 
-                        <ul *ngIf="isForInstitutes && !isParcelAvailable">
+                <!--         <ul *ngIf="isForInstitutes && !isParcelAvailable">
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Открытки отправляйте Почтой России только ПРОСТЫМИ бандеролями (от 100 г до 5 кг) или
                                 ПРОСТЫМИ письмами (до 100 г).
@@ -840,12 +858,12 @@
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 На конверте/пакете укажите название праздника/праздников. (Например, "8 марта").
                             </li>
-                        </ul>
+                        </ul> -->
 
                         <h3
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                             Как писать поздравления?</h3>
-                        <ul *ngIf="!isForInstitutes || isParcelAvailable">
+                        <ul>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Используйте обращение на "Вы" и по имени-отчеству (если отчество
                                 указано).
@@ -861,13 +879,13 @@
                                 обратный адрес (кроме случаев, когда мы просим этого не делать)*.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Адрес и ИО получателя на конверте или почтовой открытке укажите обязательно в правом
+                                Адрес и данные получателя на конверте или почтовой открытке укажите обязательно в правом
                                 нижнем
                                 углу.
                             </li>
                         </ul>
 
-                        <ul *ngIf="isForInstitutes && !isParcelAvailable">
+                        <!-- <ul *ngIf="isForInstitutes && !isParcelAvailable">
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Начните ваше поздравление с приветствия: "Добрый день! Поздравляю Вас..." или
                                 "Добрый день! Поздравляю Вас...".
@@ -889,7 +907,7 @@
                                 Подпишитесь своим именем, укажите город и добавьте пару слов о себе.
                             </li>
 
-                        </ul>
+                        </ul> -->
 
                         <h3
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
@@ -899,17 +917,16 @@
                                 Не желайте семейного уюта, любви близких, финансового благополучия и
                                 т.п.
                             </li>
-                            <li *ngIf="!isForInstitutes || isParcelAvailable"
-                                style="font-family: 'Times New Roman', Times, serif;">
+                            <li style="font-family: 'Times New Roman', Times, serif;">
                                 Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы
                                 на 200%, что вам начнут звонить и писать в любое время.
                             </li>
-                            <li *ngIf="isForInstitutes && !isParcelAvailable"
+                           <!--  <li *ngIf="isForInstitutes && !isParcelAvailable"
                                 style="font-family: 'Times New Roman', Times, serif;">
                                 Нигде в открытке (или на конверте, если каждая открытка в конверте) не указывайте ваш
                                 телефон, если не готовы на 200%, что вам начнут звонить и писать в любое время.
-                            </li>
-                            <li *ngIf="!isForInstitutes || isParcelAvailable"
+                            </li> -->
+                            <li
                                 style="font-family: 'Times New Roman', Times, serif;">
                                 Если написано, что поздравления нужно отправлять без указания обратного адреса, не
                                 давайте
@@ -947,14 +964,14 @@
                                 Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить
                                 праздник других людей.
                             </li>
-                            <li *ngIf="!isForInstitutes && !isParcelAvailable"
+                            <li *ngIf="!isForInstitutes"
                                 style="font-family: 'Times New Roman', Times, serif;">
                                 Не отправляйте посылки, бандероли, заказные/ценные письма, письма
                                 первого класса и прочие регистрируемые отправления, так как возможны
                                 проблемы с получением подобной корреспонденции и ваше отправление
                                 может вернуться.
                             </li>
-                            <li *ngIf="isParcelAvailable" style="font-family: 'Times New Roman', Times, serif;">
+                            <!-- <li *ngIf="isParcelAvailable" style="font-family: 'Times New Roman', Times, serif;">
                                 Не отправляйте посылки, заказные/ценные письма/бандероли, письма
                                 первого класса и прочие регистрируемые отправления, так как возможны
                                 проблемы с получением подобной корреспонденции и ваше отправление
@@ -967,23 +984,30 @@
                                 первого класса и прочие регистрируемые отправления, так как возможны
                                 проблемы с получением подобной корреспонденции и ваше отправление
                                 может вернуться.
+                            </li> -->
+                            <li  *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                Не отправляйте посылки, заказные/ценные бандероли, заказные/ценные письма, письма и
+                                бандероли
+                                первого класса и прочие регистрируемые отправления, так как возможны
+                                проблемы с получением подобной корреспонденции и ваше отправление
+                                может вернуться.
                             </li>
-                            <li style="font-family: 'Times New Roman', Times, serif;">
+                            <!-- <li style="font-family: 'Times New Roman', Times, serif;">
                                 По указанным адресам нужно отправить открытки только один раз: не нужно поздравлять
                                 людей со всеми праздниками или писать им письма!
-                            </li>
+                            </li> -->
                         </ul>
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                            Помогите поздравить с Новым годом одиноких пожилых людей,
-                            <a href="https://ng.starikam.org/2026">starikam.org</a>
+                            Помогите купить специальные кресла и ванны-тележки,
+                            <a href="https://starikam.org/campaign/bezopasnyj-dush-i-vanna-s-penoj/">starikam.org</a>
                         </p>
                         <hr />
                         <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                            От всего сердца благодарим вас за помощь! <br />
+                            Безмерно благодарим вас за отзывчивость и участие! <br />
                             Будут вопросы — обращайтесь!
                         </p>
                         <br />
-                        <p *ngIf="!isForInstitutes || isParcelAvailable"
+                        <p
                             style="font-family: 'Times New Roman', Times, serif; font-style: italic;">* - Мы просим
                             отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ)
                             и

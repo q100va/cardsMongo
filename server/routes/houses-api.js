@@ -99,7 +99,7 @@ router.post("/", checkAuth, async (req, res) => {
         },
         veterans: {
           veteran: 0,
-          child: 0,          
+          child: 0,
           amount: 0,
           time: 0,
           veteranPlus0: 0,
@@ -113,7 +113,7 @@ router.post("/", checkAuth, async (req, res) => {
           childPlus3: 0,
           veteranPlus: 0,
           childPlus: 0,
-          
+
         }
       }
 
@@ -227,10 +227,13 @@ router.post("/email", checkAuth, async (req, res) => {
   }
 }); */
 
-router.get("/lists/onlyActive", checkAuth, async (req, res) => { 
+router.get("/lists/onlyActive", checkAuth, async (req, res) => {
   try {
-     console.log("houses/lists/onlyActive");
-    let houses = await House.find({ isActive: true, isDisabled: false });     
+    console.log("houses/lists/onlyActive");
+
+
+
+    let houses = await House.find({ isActive: true, isDisabled: false });
     const findAllResponse = new BaseResponse(200, "Query successful", houses);
     res.json(findAllResponse.toObject());
 
@@ -242,11 +245,11 @@ router.get("/lists/onlyActive", checkAuth, async (req, res) => {
   }
 });
 
-router.get("/lists/all", checkAuth, async (req, res) => { 
+router.get("/lists/all", checkAuth, async (req, res) => {
   try {
-     console.log("houses/lists/all");
-    let houses = await House.find({ isDisabled: false  });  
-     
+    console.log("houses/lists/all");
+    let houses = await House.find({ isDisabled: false });
+
     const findAllResponse = new BaseResponse(200, "Query successful", houses);
     res.json(findAllResponse.toObject());
 
@@ -262,96 +265,100 @@ router.get("/lists/all", checkAuth, async (req, res) => {
 router.get("/find/active", checkAuth, async (req, res) => {
   console.log("houses/find/active");
   try {
-     let houses = await House.find({ isActive: true }).sort({ dateLastUpdate: -1, _id: 1 });
+
+
+
+    let houses = await House.find({ isActive: true, isDisabled: false }).sort({ dateLastUpdate: -1, _id: 1 });
     // console.log(houses);
 
-/*     for (let house of houses) {
+    /* for (let house of houses) {
+  
+        let amount23 = await Senior.aggregate([
+          { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" } },
+          { $group: { _id: null, count: { $sum: 1 } } }
+        ]);
+  
+        let amount8 = await Senior.aggregate([
+          { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" } },
+          { $group: { _id: null, count: { $sum: 1 } } }
+        ]);
+  
+        amount23 = amount23[0]?.count ? amount23[0]?.count : 0;
+        amount8 = amount8[0]?.count ? amount8[0]?.count : 0;
+  
+  
+        let find = await House.findOne({ nursingHome: house.nursingHome });
+        console.log(find.nursingHome);
+        let update = await House.updateOne(
+          { nursingHome: house.nursingHome },
+          {
+            $set: {
+              "statistic.spring.time": 0,
+              "statistic.spring.plus0": 0,
+              "statistic.spring.plus1": 0,
+              "statistic.spring.plus2": 0,
+              "statistic.spring.plus3": 0,
+              "statistic.spring.plus4": 0,
+              "statistic.spring.specialMen": 0,
+              "statistic.spring.specialWomen": 0,
+              "statistic.spring.oldMen": 0,
+              "statistic.spring.oldWomen": 0,
+              "statistic.spring.yangMen": 0,
+              "statistic.spring.yangWomen": 0,
+              "statistic.spring.amount": amount23 + amount8,
+              "statistic.spring.amount23": amount23,
+              "statistic.spring.amount8": amount8,
+              "statistic.spring.specialMenPlus": 0,
+              "statistic.spring.specialWomenPlus": 0,
+              "statistic.spring.oldMenPlus":0,
+              "statistic.spring.oldWomenPlus": 0,
+              "statistic.spring.yangMenPlus": 0,
+              "statistic.spring.yangWomenPlus": 0,
+            }
+          });
+       // console.log(update);
+      } */
 
-      let amount23 = await Senior.aggregate([
-        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" } },
-        { $group: { _id: null, count: { $sum: 1 } } }
-      ]);
 
-      let amount8 = await Senior.aggregate([
-        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" } },
-        { $group: { _id: null, count: { $sum: 1 } } }
-      ]);
-
-      amount23 = amount23[0]?.count ? amount23[0]?.count : 0;
-      amount8 = amount8[0]?.count ? amount8[0]?.count : 0;
-
-
-      let find = await House.findOne({ nursingHome: house.nursingHome });
-      console.log(find.nursingHome);
-      let update = await House.updateOne(
-        { nursingHome: house.nursingHome },
-        {
-          $set: {
-            "statistic.spring.time": 0,
-            "statistic.spring.plus0": 0,
-            "statistic.spring.plus1": 0,
-            "statistic.spring.plus2": 0,
-            "statistic.spring.plus3": 0,
-            "statistic.spring.plus4": 0,
-            "statistic.spring.specialMen": 0,
-            "statistic.spring.specialWomen": 0,
-            "statistic.spring.oldMen": 0,
-            "statistic.spring.oldWomen": 0,
-            "statistic.spring.yangMen": 0,
-            "statistic.spring.yangWomen": 0,
-            "statistic.spring.amount": amount23 + amount8,
-            "statistic.spring.amount23": amount23,
-            "statistic.spring.amount8": amount8,
-            "statistic.spring.specialMenPlus": 0,
-            "statistic.spring.specialWomenPlus": 0,
-            "statistic.spring.oldMenPlus":0,
-            "statistic.spring.oldWomenPlus": 0,
-            "statistic.spring.yangMenPlus": 0,
-            "statistic.spring.yangWomenPlus": 0,
-          }
-        });
-     // console.log(update);
-    } */
-
-/*     let houses = await House.find({ isActive: true }, { nursingHome: 1, _id: 0 });
-
-    for (let house of houses) {
-
-      let amount = await Senior.aggregate([
-        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
-        { $group: { _id: null, count: { $sum: 1 } } }
-      ]);
-      console.log(house.nursingHome);
-      console.log(amount[0]?.count);
-
-      let veteran = await Senior.aggregate([
-        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, veteran: { $ne: "" } } },
-        { $group: { _id: null, count: { $sum: 1 } } }
-      ]);
-
-      console.log(veteran[0]?.count);
-
-      let child = await Senior.aggregate([
-        { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, child: { $ne: "" } } },
-        { $group: { _id: null, count: { $sum: 1 } } }
-      ]);
-      console.log(child[0]?.count);
-
-      let find = await House.findOne({ nursingHome: house.nursingHome });
-      console.log(find.nursingHome);
-      let update = await House.updateOne(
-        { nursingHome: house.nursingHome },
-        {
-          $set: {
-            "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
-            "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
-            "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
-            "statistic.veterans.veteranPlus0": 0, //veteran[0]?.count ? veteran[0].count : 
-            "statistic.veterans.childPlus0":  0, //child[0]?.count ? child[0].count :
-          }
-        });
-      console.log(update);
-    } */
+    /*     let houses = await House.find({ isActive: true }, { nursingHome: 1, _id: 0 });
+    
+        for (let house of houses) {
+    
+          let amount = await Senior.aggregate([
+            { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
+            { $group: { _id: null, count: { $sum: 1 } } }
+          ]);
+          console.log(house.nursingHome);
+          console.log(amount[0]?.count);
+    
+          let veteran = await Senior.aggregate([
+            { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, veteran: { $ne: "" } } },
+            { $group: { _id: null, count: { $sum: 1 } } }
+          ]);
+    
+          console.log(veteran[0]?.count);
+    
+          let child = await Senior.aggregate([
+            { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, child: { $ne: "" } } },
+            { $group: { _id: null, count: { $sum: 1 } } }
+          ]);
+          console.log(child[0]?.count);
+    
+          let find = await House.findOne({ nursingHome: house.nursingHome });
+          console.log(find.nursingHome);
+          let update = await House.updateOne(
+            { nursingHome: house.nursingHome },
+            {
+              $set: {
+                "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
+                "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
+                "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
+                "statistic.veterans.veteranPlus0": 0, //veteran[0]?.count ? veteran[0].count : 
+                "statistic.veterans.childPlus0":  0, //child[0]?.count ? child[0].count :
+              }
+            });
+          console.log(update);
+        } */
 
 
 

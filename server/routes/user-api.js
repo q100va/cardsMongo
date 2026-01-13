@@ -112,7 +112,7 @@ router.put("/:id", checkAuth, async (req, res) => {
   try {
 
     // console.log(req.body.password);
-    // let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
+   let hashedPassword = bcrypt.hashSync(req.body.password, saltRounds);
     User.findOne({ _id: req.params.id }, async function (err, user) {
       if (err) {
         console.log(err);
@@ -129,7 +129,7 @@ router.put("/:id", checkAuth, async (req, res) => {
             address: req.body.address,
             email: req.body.email,
             role: req.body.role,
-            //password: hashedPassword,
+           password: hashedPassword,
           }
         })
         const createUserResponse = new BaseResponse(200, "Query successful", true);
