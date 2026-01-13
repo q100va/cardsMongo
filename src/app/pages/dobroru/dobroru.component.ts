@@ -64,7 +64,7 @@ export class DobroruComponent implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "noReleased";
+  addressFilter: string = "noSpecial";
   genderFilter: string = "any";
   showIndexes: false;
   showInstruction: false;
