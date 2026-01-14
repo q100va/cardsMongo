@@ -3266,16 +3266,16 @@ async function fillOrderForInstitutes(
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, });
     }
     if (filter.region && !filter.spareRegions && filter.addressFilter == 'noSpecial') {
-        filter.region = [filter.region];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
+        let filterRegion = [filter.region];
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filterRegion } });
 
     }
     if (filter.region && filter.spareRegions && filter.addressFilter == 'noSpecial') {
         let spareRegions = await Region.findOne({ name: filter.region });
         console.log("spareRegions");
         console.log(spareRegions);
-        filter.region = [filter.region, ...spareRegions.spareRegions];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
+        let filterRegion = [filter.region, ...spareRegions.spareRegions];
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filterRegion } });
     }
 
     /*     const specialHouses = await House.find(
@@ -3307,16 +3307,16 @@ async function fillOrderForInstitutes(
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, });
     }
     if (filter.region && !filter.spareRegions && filter.addressFilter == 'onlySpecial') {
-        filter.region = [filter.region];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, region: { $in: filter.region } });
+        let filterRegion = [filter.region];
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, region: { $in: filterRegion } });
 
     }
     if (filter.region && filter.spareRegions && filter.addressFilter == 'onlySpecial') {
         let spareRegions = await Region.findOne({ name: filter.region });
         console.log("spareRegions");
         console.log(spareRegions);
-        filter.region = [filter.region, ...spareRegions.spareRegions];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, region: { $in: filter.region } });
+        let filterRegion = [filter.region, ...spareRegions.spareRegions];
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, region: { $in: filterRegion } });
     }
 
 
