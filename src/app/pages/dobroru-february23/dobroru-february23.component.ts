@@ -142,87 +142,6 @@ export class DobroruFebruary23Component implements OnInit {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
         this.regions = res["data"]["regions"];
-
-        /*      this.regions = [
-        "АМУРСКАЯ",
-      // "ВЛАДИМИРСКАЯ",
-       // "ВОЛОГОДСКАЯ",
-       "БУРЯТИЯ",
-      "ЗАБАЙКАЛЬСКИЙ",
-       // "ИВАНОВСКАЯ",
-      //  "КАЛМЫКИЯ",
-      //  "КЕМЕРОВСКАЯ",
-    //  "КОСТРОМСКАЯ",
-    "КРАСНОДАРСКИЙ",
-      // "КУРГАНСКАЯ",
-        "РОСТОВСКАЯ",
-        "МОРДОВИЯ",
-        "МУРМАНСКАЯ",
-        "ОМСКАЯ",
-        "ПЕНЗЕНСКАЯ",
-        "ПСКОВСКАЯ",
-        "СТАВРОПОЛЬСКИЙ",
-       "ТОМСКАЯ",
-        "ТВЕРСКАЯ",
-       //"УЛЬЯНОВСКАЯ",
-        //"ЧУВАШСКАЯ",
-      
-      ];  */
-        /*         this.regions = [
-            "АЛТАЙСКИЙ",
-            "АМУРСКАЯ",
-            "АРХАНГЕЛЬСКАЯ",
-            "БАШКОРТОСТАН",
-            "БЕЛГОРОДСКАЯ",
-            "БРЯНСКАЯ",
-            "ВЛАДИМИРСКАЯ",
-            "ВОЛГОГРАДСКАЯ",
-            "ВОЛОГОДСКАЯ",
-            "ВОРОНЕЖСКАЯ",
-            "ЗАБАЙКАЛЬСКИЙ",
-            "ИВАНОВСКАЯ",
-            "ИРКУТСКАЯ",
-            "КАЛУЖСКАЯ",
-            "КОСТРОМСКАЯ",
-            "КРАСНОДАРСКИЙ",
-            "КРАСНОЯРСКИЙ",
-            "КРЫМ",
-            "КУРСКАЯ",
-            "ЛЕНИНГРАДСКАЯ",
-            "МАГАДАНСКАЯ",
-            "МАРИЙ_ЭЛ",
-            "МОРДОВИЯ",
-            "МОСКОВСКАЯ",
-            "МУРМАНСКАЯ",
-            "НИЖЕГОРОДСКАЯ",
-            "НОВГОРОДСКАЯ",
-            "НОВОСИБИРСКАЯ",
-            "ПЕНЗЕНСКАЯ",
-            "ПЕРМСКИЙ",
-            "ПРИМОРСКИЙ",
-            "ПСКОВСКАЯ",
-            "РОСТОВСКАЯ",
-            "РЯЗАНСКАЯ",
-            "САМАРСКАЯ",
-            "САРАТОВСКАЯ",
-            "САХАЛИНСКАЯ",
-            "СВЕРДЛОВСКАЯ",
-            "СЕВЕРНАЯ_ОСЕТИЯ",
-            "СМОЛЕНСКАЯ",
-            "ТАМБОВСКАЯ",
-            "ТАТАРСТАН",
-            "ТВЕРСКАЯ",
-            "ТУЛЬСКАЯ",
-            "ТЮМЕНСКАЯ",
-            "УДМУРТСКАЯ",
-            "УЛЬЯНОВСКАЯ",
-            "ХАКАСИЯ",
-            "ХАНТЫ-МАНСИЙСКИЙ",
-            "ЧЕЛЯБИНСКАЯ",
-            "ЧУВАШСКАЯ",
-            "ЯРОСЛАВСКАЯ",
-          ]; */
-        // this.activeRegions = res["data"]["regions"];
       },
       (err) => {
         console.log(err);
@@ -868,12 +787,22 @@ export class DobroruFebruary23Component implements OnInit {
                   this.fillInstitutesOrder(result.seniorsIds, [
                     "ПОРЕЧЬЕ-РЫБНОЕ",
                     "САВИНСКИЙ",
+                    "ШИПУНОВО_БОА",
+                    "ИРКУТСК_ЯРОСЛАВСКОГО",
+                    "РУССКАЯ_ГВОЗДЕВКА",
+                    "ЧУРИЛОВО",
+                    "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
                   ]);
                 } else {
                   //console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
                   this.fillOrder(result.seniorsIds, [
                     "ПОРЕЧЬЕ-РЫБНОЕ",
                     "САВИНСКИЙ",
+                    "ШИПУНОВО_БОА",
+                    "ИРКУТСК_ЯРОСЛАВСКОГО",
+                    "РУССКАЯ_ГВОЗДЕВКА",
+                    "ЧУРИЛОВО",
+                    "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
                   ]);
                 }
               }, //result.houses
@@ -1095,14 +1024,14 @@ export class DobroruFebruary23Component implements OnInit {
             //console.log(res);
             this.lineItems = result;
             this.isForInstitutes = true;
-           let i = 0;
+            let i = 0;
             for (let lineItem of this.lineItems) {
-            /*   lineItem.Female = 0;
+              /*   lineItem.Female = 0;
               lineItem.Male = 0; */
               for (let celebrator of lineItem.celebrators) {
                 celebrator.index = i + 1;
                 i++;
-              /*   if (celebrator.gender == "Female") lineItem.Female++;
+                /*   if (celebrator.gender == "Female") lineItem.Female++;
                 if (celebrator.gender == "Male") lineItem.Male++; */
               }
             }

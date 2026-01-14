@@ -25,12 +25,11 @@ import { CreateClientDialogComponent } from "src/app/shared/create-client-dialog
 import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog/update-client-dialog.component";
 
 @Component({
-  selector: 'app-dobroru-march8',
-  templateUrl: './dobroru-march8.component.html',
-  styleUrls: ['./dobroru-march8.component.css']
+  selector: "app-dobroru-march8",
+  templateUrl: "./dobroru-march8.component.html",
+  styleUrls: ["./dobroru-march8.component.css"],
 })
 export class DobroruMarch8Component implements OnInit {
-
   order: Order;
   userName: string;
   form: FormGroup;
@@ -143,87 +142,6 @@ export class DobroruMarch8Component implements OnInit {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
         this.regions = res["data"]["regions"];
-
-        /*      this.regions = [
-        "АМУРСКАЯ",
-      // "ВЛАДИМИРСКАЯ",
-       // "ВОЛОГОДСКАЯ",
-       "БУРЯТИЯ",
-      "ЗАБАЙКАЛЬСКИЙ",
-       // "ИВАНОВСКАЯ",
-      //  "КАЛМЫКИЯ",
-      //  "КЕМЕРОВСКАЯ",
-    //  "КОСТРОМСКАЯ",
-    "КРАСНОДАРСКИЙ",
-      // "КУРГАНСКАЯ",
-        "РОСТОВСКАЯ",
-        "МОРДОВИЯ",
-        "МУРМАНСКАЯ",
-        "ОМСКАЯ",
-        "ПЕНЗЕНСКАЯ",
-        "ПСКОВСКАЯ",
-        "СТАВРОПОЛЬСКИЙ",
-       "ТОМСКАЯ",
-        "ТВЕРСКАЯ",
-       //"УЛЬЯНОВСКАЯ",
-        //"ЧУВАШСКАЯ",
-      
-      ];  */
-        /*         this.regions = [
-            "АЛТАЙСКИЙ",
-            "АМУРСКАЯ",
-            "АРХАНГЕЛЬСКАЯ",
-            "БАШКОРТОСТАН",
-            "БЕЛГОРОДСКАЯ",
-            "БРЯНСКАЯ",
-            "ВЛАДИМИРСКАЯ",
-            "ВОЛГОГРАДСКАЯ",
-            "ВОЛОГОДСКАЯ",
-            "ВОРОНЕЖСКАЯ",
-            "ЗАБАЙКАЛЬСКИЙ",
-            "ИВАНОВСКАЯ",
-            "ИРКУТСКАЯ",
-            "КАЛУЖСКАЯ",
-            "КОСТРОМСКАЯ",
-            "КРАСНОДАРСКИЙ",
-            "КРАСНОЯРСКИЙ",
-            "КРЫМ",
-            "КУРСКАЯ",
-            "ЛЕНИНГРАДСКАЯ",
-            "МАГАДАНСКАЯ",
-            "МАРИЙ_ЭЛ",
-            "МОРДОВИЯ",
-            "МОСКОВСКАЯ",
-            "МУРМАНСКАЯ",
-            "НИЖЕГОРОДСКАЯ",
-            "НОВГОРОДСКАЯ",
-            "НОВОСИБИРСКАЯ",
-            "ПЕНЗЕНСКАЯ",
-            "ПЕРМСКИЙ",
-            "ПРИМОРСКИЙ",
-            "ПСКОВСКАЯ",
-            "РОСТОВСКАЯ",
-            "РЯЗАНСКАЯ",
-            "САМАРСКАЯ",
-            "САРАТОВСКАЯ",
-            "САХАЛИНСКАЯ",
-            "СВЕРДЛОВСКАЯ",
-            "СЕВЕРНАЯ_ОСЕТИЯ",
-            "СМОЛЕНСКАЯ",
-            "ТАМБОВСКАЯ",
-            "ТАТАРСТАН",
-            "ТВЕРСКАЯ",
-            "ТУЛЬСКАЯ",
-            "ТЮМЕНСКАЯ",
-            "УДМУРТСКАЯ",
-            "УЛЬЯНОВСКАЯ",
-            "ХАКАСИЯ",
-            "ХАНТЫ-МАНСИЙСКИЙ",
-            "ЧЕЛЯБИНСКАЯ",
-            "ЧУВАШСКАЯ",
-            "ЯРОСЛАВСКАЯ",
-          ]; */
-        // this.activeRegions = res["data"]["regions"];
       },
       (err) => {
         console.log(err);
@@ -818,10 +736,32 @@ export class DobroruMarch8Component implements OnInit {
         if (!result) {
           if (this.selectedInstitutes.length > 0) {
             // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-            this.fillInstitutesOrder([], ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+            this.fillInstitutesOrder(
+              [],
+              [
+                "ПОРЕЧЬЕ-РЫБНОЕ",
+                "САВИНСКИЙ",
+                "ШИПУНОВО_БОА",
+                "ИРКУТСК_ЯРОСЛАВСКОГО",
+                "РУССКАЯ_ГВОЗДЕВКА",
+                "ЧУРИЛОВО",
+                "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
+              ]
+            );
           } else {
             //console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-            this.fillOrder([], ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+            this.fillOrder(
+              [],
+              [
+                "ПОРЕЧЬЕ-РЫБНОЕ",
+                "САВИНСКИЙ",
+                "ШИПУНОВО_БОА",
+                "ИРКУТСК_ЯРОСЛАВСКОГО",
+                "РУССКАЯ_ГВОЗДЕВКА",
+                "ЧУРИЛОВО",
+                "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
+              ]
+            );
           }
         } else {
           let usernameList = "";
@@ -844,10 +784,26 @@ export class DobroruMarch8Component implements OnInit {
               accept: () => {
                 if (this.selectedInstitutes.length > 0) {
                   // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-                  this.fillInstitutesOrder(result.seniorsIds, ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+                  this.fillInstitutesOrder(result.seniorsIds, [
+                    "ПОРЕЧЬЕ-РЫБНОЕ",
+                    "САВИНСКИЙ",
+                    "ШИПУНОВО_БОА",
+                    "ИРКУТСК_ЯРОСЛАВСКОГО",
+                    "РУССКАЯ_ГВОЗДЕВКА",
+                    "ЧУРИЛОВО",
+                    "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
+                  ]);
                 } else {
                   //console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-                  this.fillOrder(result.seniorsIds, ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+                  this.fillOrder(result.seniorsIds, [
+                    "ПОРЕЧЬЕ-РЫБНОЕ",
+                    "САВИНСКИЙ",
+                    "ШИПУНОВО_БОА",
+                    "ИРКУТСК_ЯРОСЛАВСКОГО",
+                    "РУССКАЯ_ГВОЗДЕВКА",
+                    "ЧУРИЛОВО",
+                    "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
+                  ]);
                 }
               }, //result.houses
               reject: () => (this.clicked = false),
@@ -927,7 +883,7 @@ export class DobroruMarch8Component implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "noSpecial",
+        addressFilter: "noReleased",
         genderFilter: "Female",
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
@@ -953,8 +909,8 @@ export class DobroruMarch8Component implements OnInit {
     console.log(newOrder.dateOfOrder);
     //console.log("newOrder");
     //console.log(newOrder);
-   // restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"];
-  
+    // restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"];
+
     /* restrictedHouses.push("ЖУКОВКА");
     restrictedHouses.push("СОСНОВКА");
     restrictedHouses.push("БИЙСК");
@@ -963,11 +919,10 @@ export class DobroruMarch8Component implements OnInit {
     restrictedHouses.push("ПЕРВОМАЙСКИЙ_СОТРУДНИКИ"); */
 
     console.log("restrictedHouses1");
-    console.log(restrictedHouses); 
-   
+    console.log(restrictedHouses);
 
     this.orderService
-      .createOrderSpring(newOrder, prohibitedId, restrictedHouses)
+      .createOrderSpring(newOrder, prohibitedId, restrictedHouses, true)
       .subscribe(
         async (res) => {
           this.spinner = false;
@@ -1027,7 +982,7 @@ export class DobroruMarch8Component implements OnInit {
       dateOfOrder: new Date(),
       filter: {
         //addressFilter: this.addressFilter,
-        addressFilter: "noSpecial",
+        addressFilter: this.addressFilter,
         genderFilter: "Female",
         year1: null,
         year2: null,
@@ -1055,7 +1010,7 @@ export class DobroruMarch8Component implements OnInit {
     //console.log(newOrder);
 
     this.orderService
-    .createInstitutesOrder(newOrder, prohibitedId, restrictedHouses)
+      .createInstitutesOrderDobroru(newOrder, prohibitedId, restrictedHouses)
       .subscribe(
         async (res) => {
           this.spinner = false;
@@ -1071,13 +1026,13 @@ export class DobroruMarch8Component implements OnInit {
             this.isForInstitutes = true;
             let i = 0;
             for (let lineItem of this.lineItems) {
-              lineItem.Female = 0;
-              lineItem.Male = 0;
+              /*   lineItem.Female = 0;
+              lineItem.Male = 0; */
               for (let celebrator of lineItem.celebrators) {
                 celebrator.index = i + 1;
                 i++;
-                if (celebrator.gender == "Female") lineItem.Female++;
-                if (celebrator.gender == "Male") lineItem.Male++;
+                /*   if (celebrator.gender == "Female") lineItem.Female++;
+                if (celebrator.gender == "Male") lineItem.Male++; */
               }
             }
 
