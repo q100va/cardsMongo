@@ -15,13 +15,6 @@
                 <mat-header-cell *matHeaderCellDef> ДР декабря 2025 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount1 }} </mat-cell>
             </ng-container>
-
-   <!--          <ng-container matColumnDef="holiday2">
-                <mat-header-cell *matHeaderCellDef> 8 марта 2026</mat-header-cell>
-                <mat-cell *matCellDef="let item"> {{ item.amount2}} </mat-cell>
-            </ng-container>
- -->
-
             <ng-container matColumnDef="holiday3">
                 <mat-header-cell *matHeaderCellDef> ДР января 2026 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount3 }} </mat-cell>
@@ -30,11 +23,22 @@
                 <mat-header-cell *matHeaderCellDef> ДР февраля 2026 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount4}} </mat-cell>
             </ng-container>
-              <ng-container matColumnDef="holiday7">
+            <ng-container matColumnDef="holiday8">
+                <mat-header-cell *matHeaderCellDef> 23 февраля 2026</mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount8}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="holiday2">
+                <mat-header-cell *matHeaderCellDef> 8 марта 2026</mat-header-cell>
+                <mat-cell *matCellDef="let item"> {{ item.amount2}} </mat-cell>
+            </ng-container>
+
+
+
+            <!--         <ng-container matColumnDef="holiday7">
                 <mat-header-cell *matHeaderCellDef> Новый год 2026 (без учета Навигаторов) <br /> с открытками от Навигаторов - все поздравлены</mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount7}} </mat-cell>
             </ng-container>
-<!--             <ng-container matColumnDef="holiday5">
+            <ng-container matColumnDef="holiday5">
                 <mat-header-cell *matHeaderCellDef> Пасха 2025</mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount5}} </mat-cell>
             </ng-container>

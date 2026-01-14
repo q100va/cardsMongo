@@ -243,9 +243,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения декабря 2025",
                   "Дни рождения января 2026",
                   "Дни рождения февраля 2026",
-                  // "23 февраля 2026",
-                  // "8 марта 2026",
-                  "Пасха 2025", "9 мая 2025"
+                  "23 февраля 2026",
+                  "8 марта 2026",
+                  // "Пасха 2025", "9 мая 2025"
 
                   /*             "Именины февраля 2025",
                               "Именины марта 2025" */
@@ -260,9 +260,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения декабря 2025",
                   "Дни рождения января 2026",
                   "Дни рождения февраля 2026",
-                  /*         "23 февраля 2026",
-                          "8 марта 2026", */
-                  "Пасха 2025", "9 мая 2025"
+                  "23 февраля 2026",
+                  "8 марта 2026",
+                  //"Пасха 2025", "9 мая 2025"
                   /*         "Именины февраля 2025",
                           "Именины марта 2025" */
                 ]
@@ -297,9 +297,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения декабря 2025",
                   "Дни рождения января 2026",
                   "Дни рождения февраля 2026",
-                  /*       "23 февраля 2026",
-                        "8 марта 2026", */
-                  "Пасха 2025", "9 мая 2025"
+                  "23 февраля 2026",
+                  "8 марта 2026",
+                  // "Пасха 2025", "9 мая 2025"
                   /*       "Именины февраля 2025",
                         "Именины марта 2025" */
                 ]
@@ -313,9 +313,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения декабря 2025",
                   "Дни рождения января 2026",
                   "Дни рождения февраля 2026",
-                  /*     "23 февраля 2026",
-                      "8 марта 2026", */
-                  "Пасха 2025", "9 мая 2025"
+                  "23 февраля 2026",
+                  "8 марта 2026",
+                  // "Пасха 2025", "9 мая 2025"
                   /*         "Именины февраля 2025",
                           "Именины марта 2025" */
                 ]
@@ -464,9 +464,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения декабря 2025",
                     "Дни рождения января 2026",
                     "Дни рождения февраля 2026",
-                    /*    "23 февраля 2026",
-                       "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "23 февраля 2026",
+                    "8 марта 2026",
+                    //"Пасха 2025", "9 мая 2025"
                   ]
                 }
               },
@@ -477,9 +477,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения декабря 2025",
                     "Дни рождения января 2026",
                     "Дни рождения февраля 2026",
-                    /*   "23 февраля 2026",
-                      "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "23 февраля 2026",
+                    "8 марта 2026",
+                    //"Пасха 2025", "9 мая 2025"
                   ]
                 }
               }
@@ -507,9 +507,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения декабря 2025",
                     "Дни рождения января 2026",
                     "Дни рождения февраля 2026",
-                    /*   "23 февраля 2026",
-                      "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "23 февраля 2026",
+                    "8 марта 2026",
+                    //"Пасха 2025", "9 мая 2025"
                   ]
                 }
               },
@@ -520,9 +520,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения декабря 2025",
                     "Дни рождения января 2026",
                     "Дни рождения февраля 2026",
-                    /*     "23 февраля 2026",
-                        "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "23 февраля 2026",
+                    "8 марта 2026",
+                    //"Пасха 2025", "9 мая 2025"
                   ]
                 }
               }
@@ -2871,7 +2871,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-     // filter.dateOfSignedConsent = null;
+      // filter.dateOfSignedConsent = null;
     };
 
     if (newOrder.filter.date1 || newOrder.filter.date2) {
@@ -4091,8 +4091,8 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
 
     }
 
-/*     proportion.oneRegion = 3;
-    proportion.oneHouse = 1; */
+    /*     proportion.oneRegion = 3;
+        proportion.oneHouse = 1; */
 
   }
 
@@ -4252,7 +4252,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
     if ((newOrder.institutes.length > 0 && newOrder.filter.onlyWithConcent) || newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-    //  filter.dateOfSignedConsent = null; //РУЧНАЯ
+      //  filter.dateOfSignedConsent = null; //РУЧНАЯ
       //filter.lastName = "Чернов";
     };
 
@@ -5247,7 +5247,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-    //  filter.dateOfSignedConsent = null;
+      //  filter.dateOfSignedConsent = null;
     };
 
     seniorsData = await fillOrderSpring(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter, newOrder.holiday);
@@ -8265,7 +8265,7 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
     if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
     } else {
-     // filter.dateOfSignedConsent = null;
+      // filter.dateOfSignedConsent = null;
     };
 
     console.log("veterans2");

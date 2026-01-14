@@ -74,7 +74,7 @@
                                 {{celebrator.lastName}}
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
-                                 {{order.holiday == 'Новый год 2026' ? celebrator.yearBirthday : ''}}
+                                <!--  {{order.holiday == 'Новый год 2026' ? celebrator.yearBirthday : ''}} -->
                                 {{(order.holiday == 'Дни рождения декабря 2025' || order.holiday == 'Дни рождения января 2026' || order.holiday == 'Дни рождения февраля 2026') ? celebrator.fullDayBirthday : ''}} 
                                 {{(order.holiday == 'Дни рождения декабря 2025' ||  order.holiday == 'Дни рождения января 2026' || order.holiday == 'Дни рождения июня 2024') ?  (celebrator.specialComment ?
                             celebrator.specialComment : "")  : ''}}

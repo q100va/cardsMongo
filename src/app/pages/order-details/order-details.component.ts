@@ -40,17 +40,17 @@ export class OrderDetailsComponent implements OnInit {
     "Дни рождения декабря 2025",
     "Дни рождения февраля 2026",
     "Дни рождения января 2026",
-/*     "Именины марта 2025",
+    /*"Именины марта 2025",
     "Именины марта 2025",
     "Именины февраля 2025", 
-    "8 марта 2026"
+    "Новый год 2026",*/
+    "8 марта 2026",
     "23 февраля 2026",
-    "Пасха 2025",
-"9 мая 2025",*/
-    "Новый год 2026",
-     /*"День учителя и дошкольного работника 2024",
-     "День семьи 2024",    
-     */
+    /*"Пасха 2025",
+      "9 мая 2025",    
+      "День учителя и дошкольного работника 2024",
+      "День семьи 2024",    
+    */
   ];
   constructor(
     private router: Router,
@@ -86,7 +86,7 @@ export class OrderDetailsComponent implements OnInit {
   findOrder(res) {
     console.log(res["data"]);
     this.order = res["data"];
-/*     let index = 0;
+    /*     let index = 0;
     for (let lineItem of this.order.lineItems) {  
       for (let celebrator of lineItem.celebrators) {
         celebrator.index = index + 1;
