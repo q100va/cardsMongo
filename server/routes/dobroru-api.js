@@ -151,8 +151,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     let period;
     if (newOrder.holiday == "Дни рождения января 2026") {
         period = {
-            "date1": 11,
-            "date2": 15,
+            "date1": 26,
+            "date2": 31,
             "isActive": true,
             "key": 0,
             "maxPlus": 7, //PLUSES1
@@ -173,8 +173,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     }
     if (newOrder.holiday == "Дни рождения февраля 2026") {
         period = {
-            "date1": 1,
-            "date2": 5,
+            "date1": 11,
+            "date2": 15,
             "isActive": true,
             "key": 0,
             "maxPlus": 7, //PLUSES1
@@ -189,10 +189,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         if (newOrder.amount > 50) {
             let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
             if (!newOrder.filter.maxNoAddress) {
-                oldWomenAmount = Math.round(newOrder.amount * 0.3);
+                oldWomenAmount = Math.round(newOrder.amount * 0.2);
                 oldMenAmount = Math.round(newOrder.amount * 0.2);
                 specialWomenAmount = Math.round(newOrder.amount * 0.1);
-                specialMenAmount = Math.round(newOrder.amount * 0.1);
+                specialMenAmount = Math.round(newOrder.amount * 0.2);
                 yangWomenAmount = Math.round(newOrder.amount * 0.1);
                 yangMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - specialWomenAmount - yangWomenAmount - specialMenAmount;
 
@@ -233,7 +233,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
             let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
             if (!newOrder.filter.maxNoAddress) {
-                oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
+                oldWomenAmount = Math.round(newOrder.amount * 0.3) ? Math.round(newOrder.amount * 0.3) : 1;
                 oldMenAmount = Math.round(newOrder.amount * 0.2);
                 yangWomenAmount = Math.round(newOrder.amount * 0.1);
                 yangMenAmount = Math.round(newOrder.amount * 0.1);
@@ -296,7 +296,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         if (!newOrder.filter.maxNoAddress) {
             oldWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.5);
             oldMenAmount = Math.round(newOrder.filter.maleAmount * 0.5);
-            specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.2);
+            specialWomenAmount = Math.round(newOrder.filter.femaleAmount * 0.1);
             specialMenAmount = Math.round(newOrder.filter.maleAmount * 0.2);
             yangWomenAmount = newOrder.filter.femaleAmount - oldWomenAmount - specialWomenAmount;
             yangMenAmount = newOrder.filter.maleAmount - oldMenAmount - specialMenAmount;
@@ -780,10 +780,10 @@ async function collectSeniors(data, orderFilter, holiday) {
         if (data.filter.addressFilter != 'onlySpecial') {
             if (data.filter.region && data.filter.addressFilter != 'forKids') {
                 searchOrders = {
-                    oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen", "specialWomen", "specialMen"],
-                    oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen", "specialMen", "specialWomen"],
-                    yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen", "specialMen", "specialWomen"],
-                    yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen", "specialMen", "specialWomen"],
+                    oldWomen: ["oldWomen", "yangWomen", "oldMen", "yangMen"],//, "specialWomen", "specialMen"
+                    oldMen: ["oldMen", "yangMen", "oldWomen", "yangWomen"],//, "specialMen", "specialWomen"
+                    yangWomen: ["yangWomen", "oldWomen", "oldMen", "yangMen"],//, "specialMen", "specialWomen"
+                    yangMen: ["yangMen", "yangWomen", "oldMen", "oldWomen"],//, "specialMen", "specialWomen"
                     specialWomen: ["specialWomen", "specialMen", "yangWomen", "yangMen", "oldWomen", "oldMen"],
                     specialMen: ["specialMen", "specialWomen", "yangMen", "yangWomen", "oldMen", "oldWomen"],
                 }
