@@ -4756,10 +4756,18 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
       await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
     }
 
-    console.log("req.body.restrictedHouses");
-    console.log(req.body.restrictedHouses);
 
-    finalResult = await createOrderSpring(newOrder, req.body.prohibitedId, req.body.restrictedHouses);
+    let notForSchools = [];
+    if (req.body.userName == 'eberdnikova'){
+      notForSchools = House.find({
+        isForSchools: false
+      });
+    }
+
+    let restrictedHouses = [...notForSchools, ...req.body.restrictedHouses];
+    console.log("restrictedHouses");
+    console.log(restrictedHouses);
+    finalResult = await createOrderSpring(newOrder, req.body.prohibitedId, restrictedHouses);
     let text = !finalResult.success ? finalResult.result : "Query Successful";
 
     const newListResponse = new BaseResponse(200, text, finalResult);
@@ -4769,9 +4777,9 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
     let text = 'Обратитесь к администратору. Заявка не сформирована.';
     if (!finalResult) {
       let answer;
-      if (newOrder.holiday == "23 февраля 2026" || newOrder.holiday == "8 марта 2026") { answer = await deleteErrorPlusSpring(false, req.body.userName) };
-      if (newOrder.holiday == "Пасха 2025") { answer = await deleteErrorPlusEaster(false, req.body.userName) };
-      if (newOrder.holiday == "9 мая 2025") { answer = await deleteErrorPlusVeterans(false, req.body.userName) };
+      if (req.body.holiday == "23 февраля 2026" || req.body.holiday == "8 марта 2026") { answer = await deleteErrorPlusSpring(false, req.body.userName) };
+      if (req.body.holiday == "Пасха 2025") { answer = await deleteErrorPlusEaster(false, req.body.userName) };
+      if (req.body.holiday == "9 мая 2025") { answer = await deleteErrorPlusVeterans(false, req.body.userName) };
       console.log("answer");
       console.log(answer);
       if (!answer) {

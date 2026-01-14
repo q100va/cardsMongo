@@ -895,29 +895,29 @@ async function collectSeniors(data, orderFilter, holiday) {
                 data.counter++;
                 // console.log("data.proportion.oneHouse");
                 // console.log(data.proportion.oneHouse);
-               /*  if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
-                if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
-          
-                if (data.filter.nursingHome || data.filter.region) {
-                    data.proportion.oneHouse = null;
-                    data.proportion.oneRegion = null;
-                }
-
-                if (data.proportion.oneHouse) {
-                    if (data.houses[result["nursingHome"]] >= data.proportion["oneHouse"]) {
-                        data.restrictedHouses.push(result["nursingHome"]);
-                    }
-                }
-                if (data.celebratorsAmount == 15 || data.celebratorsAmount == 30) {
-                    data.restrictedHouses = [];
-                    console.log(data.celebratorsAmount);
-
-                }
-                if (data.proportion.oneRegion) {
-                    if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
-                        data.restrictedRegions.push(result["region"]);
-                    }
-                } */
+                /*  if (data.proportion.oneHouse) data.houses[result["nursingHome"]] = (!data.houses[result["nursingHome"]]) ? 1 : data.houses[result["nursingHome"]] + 1;
+                 if (data.proportion.oneRegion) data.regions[result["region"]] = (!data.regions[result["region"]]) ? 1 : data.regions[result["region"]] + 1;
+           
+                 if (data.filter.nursingHome || data.filter.region) {
+                     data.proportion.oneHouse = null;
+                     data.proportion.oneRegion = null;
+                 }
+ 
+                 if (data.proportion.oneHouse) {
+                     if (data.houses[result["nursingHome"]] >= data.proportion["oneHouse"]) {
+                         data.restrictedHouses.push(result["nursingHome"]);
+                     }
+                 }
+                 if (data.celebratorsAmount == 15 || data.celebratorsAmount == 30) {
+                     data.restrictedHouses = [];
+                     console.log(data.celebratorsAmount);
+ 
+                 }
+                 if (data.proportion.oneRegion) {
+                     if (data.regions[result["region"]] == data.proportion["oneRegion"]) {
+                         data.restrictedRegions.push(result["region"]);
+                     }
+                 } */
 
             } else {
                 break outer1;
@@ -949,10 +949,10 @@ async function searchSenior(
         data.maxPlus,
         data.filter */
 
-//TODO: выбирать из БД за исключением некоторых
+    //TODO: выбирать из БД за исключением некоторых
 
-let usingHouses = await House.find({isReleased: false, isActive: true, isDisabled: false, isForSchool: true});
-usingHouses = usingHouses.map(h=>h.nursingHome);
+    let usingHouses = await House.find({ isReleased: false, isActive: true, isDisabled: false, isForSchool: true });
+    usingHouses = usingHouses.map(h => h.nursingHome);
     let usingHousesSmaller = [
         "ВЕЛИКИЕ_ЛУКИ",
         "СТАРОБАИШЕВО",
@@ -1107,7 +1107,7 @@ usingHouses = usingHouses.map(h=>h.nursingHome);
         "ИЛОВКА",
         "ИСИЛЬКУЛЬ",
         "ПАВЛОВСК",
-      //  "РАДУЖНЫЙ"
+        //  "РАДУЖНЫЙ"
 
     ];
 
@@ -1238,17 +1238,17 @@ usingHouses = usingHouses.map(h=>h.nursingHome);
         data,
         holiday,
         usingHouses
-       // usingHousesSmaller
+        // usingHousesSmaller
     );
 
-/*     if (!result) {
-        result = await searchSeniorHelper(
-            kind,
-            data,
-            holiday,
-            usingHousesLarger
-        );
-    } */
+    /*     if (!result) {
+            result = await searchSeniorHelper(
+                kind,
+                data,
+                holiday,
+                usingHousesLarger
+            );
+        } */
     return result;
 
 }
@@ -1329,7 +1329,7 @@ async function searchSeniorHelper(
     //console.log(maxPlus);
 
     let filter = Object.assign(standardFilter, data.filter);
-     console.log("FILTER");
+    console.log("FILTER");
     console.log(filter);
 
     let celebrator;
@@ -2553,7 +2553,7 @@ async function createOrderNewYear(newOrder, prohibitedId, restrictedHouses) {
                   } */
             if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
         }
-     //   newOrder.filter.dateOfSignedConsent = null;
+        //   newOrder.filter.dateOfSignedConsent = null;
         seniorsData = await fillOrderNewYear(proportion, order_id, filter, prohibitedId, restrictedHouses, newOrder.filter);
 
     }
@@ -2664,12 +2664,12 @@ async function fillOrderNewYear(proportion, order_id, filter, prohibitedId, rest
             data.maxPlus = 1;
 
             data = await collectSeniorsNewYear(data, orderFilter);
-          
-                        if (data.counter < proportion[category]) {
-                            data.maxPlus = 2;
-            
-                            data = await collectSeniorsNewYear(data, orderFilter);
-                        } 
+
+            if (data.counter < proportion[category]) {
+                data.maxPlus = 2;
+
+                data = await collectSeniorsNewYear(data, orderFilter);
+            }
 
             /*
               if (data.counter < proportion[category]) {
@@ -3070,8 +3070,12 @@ router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
         if (index == -1) {
             await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
         }
+        let notForSchools =  House.find({
+                isForSchools: false
+              });
+         
 
-        let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "ЖУКОВКА", ...req.body.restrictedHouses] //, "ЧИКОЛА", "АРМАВИР"
+        let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "ЖУКОВКА", ...req.body.restrictedHouses, ...notForSchools] //, "ЧИКОЛА", "АРМАВИР"
 
         /*    let doneHouses = await checkDoubleOrder({ isDisabled: false, holiday: req.body.holiday, clientId: req.body.clientId });
         
@@ -3146,7 +3150,7 @@ async function createOrderForInstitutes(newOrder, prohibitedId, restrictedHouses
     console.log("newOrder.filter");
     console.log(newOrder.filter);
 
-  //  newOrder.filter.dateOfSignedConsent = null;
+    //  newOrder.filter.dateOfSignedConsent = null;
     let order = await Order.create(emptyOrder);
     let order_id = order._id.toString();
 
@@ -3272,7 +3276,15 @@ async function fillOrderForInstitutes(
         activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, noAddress: false, region: { $in: filter.region } });
     }
 
-    const specialHouses = ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'СЫЗРАНЬ_ПОЖАРСКОГО', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ',
+    /*     const specialHouses = await House.find(
+            {
+                isReleased: false,
+                isActive: true,
+                nursingHome: { $nin: restrictedHouses },
+                noAddress: true,
+                isForSchool: true
+            }); */
+    /* ['БЕГИЧЕВСКИЙ', 'ТОВАРКОВСКИЙ_ДИПИ', 'СЫЗРАНЬ_КИРОВОГРАДСКАЯ', 'СЫЗРАНЬ_ПОЖАРСКОГО', 'КИМРЫ', 'САМОЛЮБОВО', 'БАКШЕЕВО', 'БЕЛОГОРСК', 'АЛАКУРТТИ',
         'ВЫСОКОЕ',
         'ЯСТРЕБОВО',
         'ЗАРЕЧНЫЙ',
@@ -3286,15 +3298,15 @@ async function fillOrderForInstitutes(
         'ОКТЯБРЬСКИЙ_КОМСОМОЛЬСКАЯ',
         'ГРАЙВОРОН',
         'ТИНСКОЙ', 'КРАСНАЯ_ГЛИНКА', 'БОРИСОВКА', 'ГАТЧИНА', 'МАМОНТОВО', 'ТИНСКОЙ', "КИМРЫ", "САМОЛЮБОВО", "НОВОЧЕРКАССК", "ПЯТИМОРСК", "ТОМАРОВКА", "САЛЬСК", "ЧЕРНОГОЛОВКА", "СТАРАЯ_КУПАВНА"
-    ];//'ЛЕТКА',  'ЧЕРЕМУХОВКА','БОГУЧАР', 'НИКОЛО-ВАРВАРИНКА' 'ОБОЯНЬ',  
+    ]; *///'ЛЕТКА',  'ЧЕРЕМУХОВКА','БОГУЧАР', 'НИКОЛО-ВАРВАРИНКА' 'ОБОЯНЬ',  
 
 
     if (!filter.region && filter.addressFilter == 'onlySpecial') {
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, });
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, });
     }
     if (filter.region && !filter.spareRegions && filter.addressFilter == 'onlySpecial') {
         filter.region = [filter.region];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, region: { $in: filter.region } });
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, region: { $in: filter.region } });
 
     }
     if (filter.region && filter.spareRegions && filter.addressFilter == 'onlySpecial') {
@@ -3302,7 +3314,7 @@ async function fillOrderForInstitutes(
         console.log("spareRegions");
         console.log(spareRegions);
         filter.region = [filter.region, ...spareRegions.spareRegions];
-        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $in: specialHouses }, noAddress: true, region: { $in: filter.region } });
+        activeHouse = await House.find({ isReleased: false, isActive: true, nursingHome: { $nin: restrictedHouses }, isForSchool: true, noAddress: true, region: { $in: filter.region } });
     }
 
 
@@ -3421,6 +3433,33 @@ async function fillOrderForInstitutes(
         if (holiday == "Новый год 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
             count = await NewYear.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
+                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+            }).countDocuments();
+        }
+        if (holiday == "23 февраля 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
+            count = await February23.find({
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
+                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+            }).countDocuments();
+        }
+
+        if (holiday == "23 февраля 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
+            count = await February23.find({
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
+                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+            }).countDocuments();
+        }
+
+        if (holiday == "8 марта 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
+            count = await March8.find({
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
+                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+            }).countDocuments();
+        }
+
+        if (holiday == "8 марта 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
+            count = await March8.find({
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
@@ -3679,21 +3718,74 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                 // secondTime: true
             }).limit(amount);
         }
+    }
+
+    if (holiday == "23 февраля 2026") {
+        if (!region) {
+            seniorsData = await February23.find({
+                //forInstitute: 0,
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 1 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //finished: false,   
+                //onlyForInstitute: true,
+                //secondTime: true
+            }).limit(amount);
+        }
+        if (region) {
+            seniorsData = await February23.find({
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 1 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //onlyForInstitute: true, 
+                // forInstitute: 0,
+                //finished: false,
+                // secondTime: true
+            }).limit(amount);
+        }
+    }
+    if (holiday == "8 марта 2026") {
+        if (!region) {
+            seniorsData = await March8.find({
+                //forInstitute: 0,
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 1 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //finished: false,   
+                //onlyForInstitute: true,
+                //secondTime: true
+            }).limit(amount);
+        }
+        if (region) {
+            seniorsData = await March8.find({
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 1 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //onlyForInstitute: true, 
+                // forInstitute: 0,
+                //finished: false,
+                // secondTime: true
+            }).limit(amount);
+        }
+    }
 
 
-        console.log("seniorsData");
-        console.log(nursingHome);
-        console.log(seniorsData.length);
+    console.log("seniorsData");
+    console.log(nursingHome);
+    console.log(seniorsData.length);
 
 
-        for (let senior of seniorsData) {
-  /*       if (contact == "@tterros") {
-          await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1, forNavigators: 1 } }, { upsert: false }); 
-        } else*/ {
-                await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1 } }, { upsert: false });
-            }
+    for (let senior of seniorsData) {
+        /*       if (contact == "@tterros") {
+                await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1, forNavigators: 1 } }, { upsert: false }); 
+              } else*/
 
-
+        if (holiday == "Новый год 2026") {
+            await NewYear.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1 } }, { upsert: false });
             senior = await NewYear.findOne({ _id: senior._id });
             let newP = senior.plusAmount;
             let p = newP - 1;
@@ -3710,25 +3802,56 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                         ["statistic.newYear.forInstitute"]: 1,
                     }
                 }
-
             );
-            /*       if (contact == "@tterros") {
-                    await House.updateOne(
-                      {
-                        nursingHome: senior.nursingHome
-                      },
-                      {
-                        $inc: {
-                          ["statistic.newYear.forNavigators"]: 1          
-                        }
-                      }
-              
-                    );
-                  } */
-
-
         }
+
+
+        if (holiday == "23 февраля 2026") {
+            await February23.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1 } }, { upsert: false });
+            senior = await February23.findOne({ _id: senior._id });
+            let newP = senior.plusAmount;
+            let p = newP - 1;
+            let c = senior.category;
+            await House.updateOne(
+                {
+                    nursingHome: senior.nursingHome
+                },
+                {
+                    $inc: {
+                        ["statistic.spring.plus" + p]: -1,
+                        ["statistic.spring.plus" + newP]: 1,
+                        ["statistic.spring." + c + "Plus"]: 1,
+                        ["statistic.spring.forInstitute"]: 1,
+                    }
+                }
+            );
+        }
+        if (holiday == "8 марта 2026") {
+            await March8.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1, forInstitute: 1 } }, { upsert: false });
+            senior = await March8.findOne({ _id: senior._id });
+            let newP = senior.plusAmount;
+            let p = newP - 1;
+            let c = senior.category;
+            await House.updateOne(
+                {
+                    nursingHome: senior.nursingHome
+                },
+                {
+                    $inc: {
+                        ["statistic.spring.plus" + p]: -1,
+                        ["statistic.spring.plus" + newP]: 1,
+                        ["statistic.spring." + c + "Plus"]: 1,
+                        ["statistic.spring.forInstitute"]: 1,
+                    }
+                }
+            );
+        }
+
+
+
+
     }
+
 
 
     if (holiday == "Дни рождения февраля 2026") {
@@ -3784,6 +3907,8 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
     }
 
+
+
     await Order.updateOne({ _id: order_id }, { $push: { temporaryLineItems: seniorsData } }, { upsert: false });
 
     return seniorsData;
@@ -3814,48 +3939,48 @@ router.get("/forNavigators", checkAuth, async (req, res) => {
                                      'МЕНЗЕЛИНСК'
                  
                                      'ИЛОВКА', */
-                    /*                     'ЛАКИНСК',
-                                        'ВОЛГОГРАД_СТРОИТЕЛЬНАЯ',
-                                        'ЛИПОВКА',
-                                        'БОРИСОГЛЕБСК',
-                                        'ЕМВА',
-                                        'МЕДВЕДОВСКАЯ',
-                                        'ЩИГРЫ',
-                                        'ПЕКТУБАЕВО',
-                                        'БОЛЬШОЙ_КАРЛЫГАН',
-                                        'АЛЕШЕНКА',
-                                        'БОР_КОММУНИСТИЧЕСКАЯ',
-                                        'ВЕЛИКИЙ_НОВГОРОД_БЕРЕГОВАЯ',
-                                        'БОЛОТНОЕ',
-                                        'НОВОСИБИРСК_ПОРЯДКОВЫЙ',
-                                        'НОВОУЛЬЯНОВСК',
-                                        'БЕЛОЕ_ОЗЕРО',
-                                        'БОЯДЫ',
-                                        'ВИШЕНКИ',
-                                        'ДУГИНО',
-                                        'ИЗДЕШКОВО',
-                                        'ЕРШИЧИ',
-                                        'ВАРАКСИНО',
-                                        'ВОРГА',
-                                        'ДРЮЦК',
-                                        'СУФЛЯНОВО',
-                                        'СЕЛЕЗНИ',
-                                        'ЦЕНТРАЛЬНАЯ_УСАДЬБА',
-                                        'НИКОЛЬСКОЕ',
-                                        'СОБИНКА',
-                                        'ВОЛОГДА',
-                                        'РУБЦОВО',
-                                        'ЯНИКОЙ', 
-                                        'РАДУЖНЫЙ'
-
-                ]
-            },*/
+            /*                     'ЛАКИНСК',
+                                'ВОЛГОГРАД_СТРОИТЕЛЬНАЯ',
+                                'ЛИПОВКА',
+                                'БОРИСОГЛЕБСК',
+                                'ЕМВА',
+                                'МЕДВЕДОВСКАЯ',
+                                'ЩИГРЫ',
+                                'ПЕКТУБАЕВО',
+                                'БОЛЬШОЙ_КАРЛЫГАН',
+                                'АЛЕШЕНКА',
+                                'БОР_КОММУНИСТИЧЕСКАЯ',
+                                'ВЕЛИКИЙ_НОВГОРОД_БЕРЕГОВАЯ',
+                                'БОЛОТНОЕ',
+                                'НОВОСИБИРСК_ПОРЯДКОВЫЙ',
+                                'НОВОУЛЬЯНОВСК',
+                                'БЕЛОЕ_ОЗЕРО',
+                                'БОЯДЫ',
+                                'ВИШЕНКИ',
+                                'ДУГИНО',
+                                'ИЗДЕШКОВО',
+                                'ЕРШИЧИ',
+                                'ВАРАКСИНО',
+                                'ВОРГА',
+                                'ДРЮЦК',
+                                'СУФЛЯНОВО',
+                                'СЕЛЕЗНИ',
+                                'ЦЕНТРАЛЬНАЯ_УСАДЬБА',
+                                'НИКОЛЬСКОЕ',
+                                'СОБИНКА',
+                                'ВОЛОГДА',
+                                'РУБЦОВО',
+                                'ЯНИКОЙ', 
+                                'РАДУЖНЫЙ'
+ 
+        ]
+    },*/
             isActive: true,
             isReleased: false,
             isDisabled: false,
-              "statistic.newYear.plus0": { $ne: 0 },
-           // "statistic.newYear.plus1": 0 ,
-             noAddress: false
+            "statistic.newYear.plus0": { $ne: 0 },
+            // "statistic.newYear.plus1": 0 ,
+            noAddress: false
         });
         houses.forEach(async (h) => {
             const count = await Senior.countDocuments(

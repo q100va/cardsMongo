@@ -149,13 +149,10 @@ export class OrderService {
     return this.http.get("/api/lists/get/active/");
   }
 
-  checkDoubleOrder(
-    holiday: string,
-    clientId: string
-  ): Observable<any> {
+  checkDoubleOrder(holiday: string, clientId: string): Observable<any> {
     return this.http.post("/api/orders/check-double/", {
       holiday: holiday,
-      clientId: clientId
+      clientId: clientId,
     });
   }
 
@@ -163,9 +160,11 @@ export class OrderService {
     return this.http.get("/api/clients/find-contacts/" + contactType);
   }
 
-  
-
-  createOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createOrder(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     return this.http.post("/api/orders/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -186,12 +185,15 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
 
-  createInstitutesOrder(newOrder: Order, prohibitedId, restrictedHouses): Observable<any> {
-
+  createInstitutesOrder(
+    newOrder: Order,
+    prohibitedId,
+    restrictedHouses
+  ): Observable<any> {
     console.log(" api/orders/forInstitutes");
     return this.http.post("/api/orders/forInstitutes/" + newOrder.amount, {
       userName: newOrder.userName,
@@ -216,8 +218,11 @@ export class OrderService {
       restrictedHouses: restrictedHouses,
     });
   }
-  createInstitutesOrderDobroru(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
-
+  createInstitutesOrderDobroru(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     console.log(" api/dobroru/forInstitutes");
     return this.http.post("/api/dobroru/forInstitutes/" + newOrder.amount, {
       userName: newOrder.userName,
@@ -239,11 +244,15 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
 
-  createDobroruOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createDobroruOrder(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     return this.http.post("/api/dobroru/birthday/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -264,11 +273,15 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
 
-  createDobroruNewYearOrder(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createDobroruNewYearOrder(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     console.log(newOrder.filter);
     return this.http.post("/api/dobroru/new-year/" + newOrder.amount, {
       userName: newOrder.userName,
@@ -290,11 +303,15 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
 
-  createOrderNewYear(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createOrderNewYear(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     return this.http.post("/api/orders/new-year/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -315,11 +332,15 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
 
-  createOrderEaster(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createOrderEaster(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     return this.http.post("/api/orders/easter/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -340,13 +361,18 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
 
-  createOrderSpring(newOrder: Order, prohibitedId, restrictedHouses): Observable<any> {
+  createOrderSpring(
+    newOrder: Order,
+    prohibitedId,
+    restrictedHouses,
+    forSchool = false
+  ): Observable<any> {
     console.log("restrictedHouses");
-    console.log(restrictedHouses);    
+    console.log(restrictedHouses);
     return this.http.post("/api/orders/spring/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -367,7 +393,8 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
+      forSchool: forSchool,
     });
   }
 
@@ -390,7 +417,7 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
-      filter: newOrder.filter,   
+      filter: newOrder.filter,
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
@@ -414,7 +441,7 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
-      filter: newOrder.filter,   
+      filter: newOrder.filter,
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
@@ -438,7 +465,7 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
-      filter: newOrder.filter,   
+      filter: newOrder.filter,
       temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
@@ -462,8 +489,8 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
-      filter: newOrder.filter,   
-     // temporaryLineItems: newOrder.temporaryLineItems,
+      filter: newOrder.filter,
+      // temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
 
@@ -486,8 +513,8 @@ export class OrderService {
       comment: newOrder.comment,
       orderDate: newOrder.orderDate,
       dateOfOrder: newOrder.dateOfOrder,
-      filter: newOrder.filter,   
-     // temporaryLineItems: newOrder.temporaryLineItems,
+      filter: newOrder.filter,
+      // temporaryLineItems: newOrder.temporaryLineItems,
     });
   }
 
@@ -518,7 +545,7 @@ export class OrderService {
     return this.http.get("/api/orders/get/nursingHomes/");
   }
 
-    forNavigators(): Observable<any> {
+  forNavigators(): Observable<any> {
     return this.http.get("/api/dobroru/forNavigators");
   }
 
@@ -550,7 +577,11 @@ export class OrderService {
     return this.http.get("/api/orders/restore-pluses/" + holiday);
   }
 
-  createOrderVeterans(newOrder: Order, prohibitedId: [], restrictedHouses: []): Observable<any> {
+  createOrderVeterans(
+    newOrder: Order,
+    prohibitedId: [],
+    restrictedHouses: []
+  ): Observable<any> {
     return this.http.post("/api/orders/veterans/" + newOrder.amount, {
       userName: newOrder.userName,
       clientId: newOrder.clientId,
@@ -571,8 +602,7 @@ export class OrderService {
       dateOfOrder: newOrder.dateOfOrder,
       filter: newOrder.filter,
       prohibitedId: prohibitedId,
-      restrictedHouses: restrictedHouses
+      restrictedHouses: restrictedHouses,
     });
   }
-
 }

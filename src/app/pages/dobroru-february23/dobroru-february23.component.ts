@@ -61,7 +61,7 @@ export class DobroruFebruary23Component implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "any";
+  addressFilter: string = "noSpecial";
   genderFilter: string = "any";
   showIndexes: false;
   showInstruction: false;
@@ -817,10 +817,32 @@ export class DobroruFebruary23Component implements OnInit {
         if (!result) {
           if (this.selectedInstitutes.length > 0) {
             // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-            this.fillInstitutesOrder([], ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+            this.fillInstitutesOrder(
+              [],
+              [
+                "ПОРЕЧЬЕ-РЫБНОЕ",
+                "САВИНСКИЙ",
+                "ШИПУНОВО_БОА",
+                "ИРКУТСК_ЯРОСЛАВСКОГО",
+                "РУССКАЯ_ГВОЗДЕВКА",
+                "ЧУРИЛОВО",
+                "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
+              ]
+            );
           } else {
             //console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-            this.fillOrder([], ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+            this.fillOrder(
+              [],
+              [
+                "ПОРЕЧЬЕ-РЫБНОЕ",
+                "САВИНСКИЙ",
+                "ШИПУНОВО_БОА",
+                "ИРКУТСК_ЯРОСЛАВСКОГО",
+                "РУССКАЯ_ГВОЗДЕВКА",
+                "ЧУРИЛОВО",
+                "САНКТ-ПЕТЕРБУРГ_КОЛЛОНТАЙ",
+              ]
+            );
           }
         } else {
           let usernameList = "";
@@ -843,10 +865,16 @@ export class DobroruFebruary23Component implements OnInit {
               accept: () => {
                 if (this.selectedInstitutes.length > 0) {
                   // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-                  this.fillInstitutesOrder(result.seniorsIds, ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+                  this.fillInstitutesOrder(result.seniorsIds, [
+                    "ПОРЕЧЬЕ-РЫБНОЕ",
+                    "САВИНСКИЙ",
+                  ]);
                 } else {
                   //console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-                  this.fillOrder(result.seniorsIds, ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+                  this.fillOrder(result.seniorsIds, [
+                    "ПОРЕЧЬЕ-РЫБНОЕ",
+                    "САВИНСКИЙ",
+                  ]);
                 }
               }, //result.houses
               reject: () => (this.clicked = false),
@@ -926,7 +954,7 @@ export class DobroruFebruary23Component implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "noSpecial",
+        addressFilter: "noReleased",
         genderFilter: "Male",
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
@@ -952,8 +980,8 @@ export class DobroruFebruary23Component implements OnInit {
     console.log(newOrder.dateOfOrder);
     //console.log("newOrder");
     //console.log(newOrder);
-   // restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"];
-  
+    // restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"];
+
     /* restrictedHouses.push("ЖУКОВКА");
     restrictedHouses.push("СОСНОВКА");
     restrictedHouses.push("БИЙСК");
@@ -962,11 +990,10 @@ export class DobroruFebruary23Component implements OnInit {
     restrictedHouses.push("ПЕРВОМАЙСКИЙ_СОТРУДНИКИ"); */
 
     console.log("restrictedHouses1");
-    console.log(restrictedHouses); 
-   
+    console.log(restrictedHouses);
 
     this.orderService
-      .createOrderSpring(newOrder, prohibitedId, restrictedHouses)
+      .createOrderSpring(newOrder, prohibitedId, restrictedHouses, true)
       .subscribe(
         async (res) => {
           this.spinner = false;
@@ -1026,7 +1053,7 @@ export class DobroruFebruary23Component implements OnInit {
       dateOfOrder: new Date(),
       filter: {
         //addressFilter: this.addressFilter,
-        addressFilter: "noSpecial",
+        addressFilter: this.addressFilter,
         genderFilter: "Male",
         year1: null,
         year2: null,
@@ -1054,7 +1081,7 @@ export class DobroruFebruary23Component implements OnInit {
     //console.log(newOrder);
 
     this.orderService
-    .createInstitutesOrder(newOrder, prohibitedId, restrictedHouses)
+      .createInstitutesOrderDobroru(newOrder, prohibitedId, restrictedHouses)
       .subscribe(
         async (res) => {
           this.spinner = false;
@@ -1068,15 +1095,15 @@ export class DobroruFebruary23Component implements OnInit {
             //console.log(res);
             this.lineItems = result;
             this.isForInstitutes = true;
-            let i = 0;
+           let i = 0;
             for (let lineItem of this.lineItems) {
-              lineItem.Female = 0;
-              lineItem.Male = 0;
+            /*   lineItem.Female = 0;
+              lineItem.Male = 0; */
               for (let celebrator of lineItem.celebrators) {
                 celebrator.index = i + 1;
                 i++;
-                if (celebrator.gender == "Female") lineItem.Female++;
-                if (celebrator.gender == "Male") lineItem.Male++;
+              /*   if (celebrator.gender == "Female") lineItem.Female++;
+                if (celebrator.gender == "Male") lineItem.Male++; */
               }
             }
 

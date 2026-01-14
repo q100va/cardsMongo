@@ -268,7 +268,7 @@ router.get("/find/active", checkAuth, async (req, res) => {
 
 
 
-    let houses = await House.find({ isActive: true, isDisabled: false }).sort({ dateLastUpdate: -1, _id: 1 });
+    let houses = await House.find({ isActive: true, isDisabled: false }).sort({"statistic.spring.amount": 1,  _id: 1 });//dateLastUpdate: -1,
     // console.log(houses);
 
     /* for (let house of houses) {
