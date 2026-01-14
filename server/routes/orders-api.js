@@ -4726,8 +4726,9 @@ async function generateLineItemsNewYear(nursingHomes, order_id) {
 router.post("/spring/:amount", checkAuth, async (req, res) => {
   let finalResult;
   try {
+    req.body.userName = 'eberdnikova';
     let newOrder = {
-      userName: req.body.userName,
+      userName: 'okskust',//req.body.userName,
       holiday: req.body.holiday,
       source: req.body.source,
       amount: req.body.amount,
@@ -4758,11 +4759,16 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
 
 
     let notForSchools = [];
-    if (req.body.userName == 'eberdnikova'){
-      notForSchools = House.find({
-        isForSchools: false
+    if (req.body.userName == 'eberdnikova') {
+      notForSchools = await House.find({
+        isForSchool: false
       });
+      notForSchools = notForSchools.map(h => h.nursingHome);
+
     }
+
+    console.log("notForSchools");
+    console.log(notForSchools);
 
     let restrictedHouses = [...notForSchools, ...req.body.restrictedHouses];
     console.log("restrictedHouses");

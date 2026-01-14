@@ -61,7 +61,7 @@ export class DobroruMarch8Component implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "any";
+  addressFilter: string = "noSpecial";
   genderFilter: string = "any";
   showIndexes: false;
   showInstruction: false;

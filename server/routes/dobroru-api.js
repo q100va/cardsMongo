@@ -3070,10 +3070,12 @@ router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
         if (index == -1) {
             await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
         }
-        let notForSchools =  House.find({
-                isForSchools: false
+        let notForSchools =  await House.find({
+                isForSchool: false
               });
-         
+         notForSchools = notForSchools.map(h=>h.nursingHome);
+         console.log("notForSchools");
+        console.log(notForSchools);
 
         let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "ЖУКОВКА", ...req.body.restrictedHouses, ...notForSchools] //, "ЧИКОЛА", "АРМАВИР"
 
