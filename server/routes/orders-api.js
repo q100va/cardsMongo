@@ -4725,10 +4725,9 @@ async function generateLineItemsNewYear(nursingHomes, order_id) {
 
 router.post("/spring/:amount", checkAuth, async (req, res) => {
   let finalResult;
-  try {
-    req.body.userName = 'eberdnikova';
+  try {    
     let newOrder = {
-      userName: 'okskust',//req.body.userName,
+      userName: req.body.userName,
       holiday: req.body.holiday,
       source: req.body.source,
       amount: req.body.amount,
