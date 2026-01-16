@@ -298,7 +298,7 @@ const routes: Routes = [
       {
         path: "lists/admin-spring",
         component: AdminSpringComponent,
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [DobroruGuard],//AuthGuard, RoleGuard
       },
       {
         path: "lists/admin-easter",
