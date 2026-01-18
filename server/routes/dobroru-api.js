@@ -151,8 +151,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     let period;
     if (newOrder.holiday == "Дни рождения февраля 2026") {
         period = {
-            "date1": 11,
-            "date2": 15,
+            "date1": 16,
+            "date2": 20,
             "isActive": true,
             "key": 0,
             "maxPlus": 7, //PLUSES1
@@ -233,7 +233,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
             let oldWomenAmount, oldMenAmount, specialWomenAmount, specialMenAmount, yangWomenAmount, yangMenAmount;
             if (!newOrder.filter.maxNoAddress) {
-                oldWomenAmount = Math.round(newOrder.amount * 0.3) ? Math.round(newOrder.amount * 0.3) : 1;
+                oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
                 oldMenAmount = Math.round(newOrder.amount * 0.2);
                 yangWomenAmount = Math.round(newOrder.amount * 0.1);
                 yangMenAmount = Math.round(newOrder.amount * 0.1);
@@ -267,6 +267,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         }
 
 
+     console.log("PROPORTION");
+            console.log(proportion);
 
         // proportion = await Proportion.findOne({ amount: newOrder.amount });789
         if (!proportion) {
