@@ -3393,12 +3393,12 @@ async function searchSenior(
   }
   if (holiday == "Дни рождения февраля 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen") {
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 3;
     }
     if (standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 2;
+      maxPlusAmount = data.maxPlus + 3;
     }
-    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
+    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" || standardFilter.category == "specialWomen") {//
       maxPlusAmount = data.maxPlus + 1;
     }
 
