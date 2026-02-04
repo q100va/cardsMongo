@@ -5644,9 +5644,9 @@ async function searchSeniorSpring(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  //let maxPlusAmount = 3; 
+  let maxPlusAmount = 2; 
 
-  let maxPlusAmount = data.maxPlus;
+  //let maxPlusAmount = data.maxPlus;
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);

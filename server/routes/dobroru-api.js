@@ -3456,14 +3456,14 @@ async function fillOrderForInstitutes(
 
         if (holiday == "8 марта 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
             count = await March8.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
 
         if (holiday == "8 марта 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
             count = await March8.find({
-                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
                 // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
             }).countDocuments();
         }
@@ -3756,7 +3756,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                 //forInstitute: 0,
                 nursingHome: nursingHome,
                 absent: false,
-                plusAmount: { $lt: 1 },
+                plusAmount: { $lt: 2 },
                 _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
                 //finished: false,   
                 //onlyForInstitute: true,
@@ -3767,7 +3767,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
             seniorsData = await March8.find({
                 nursingHome: nursingHome,
                 absent: false,
-                plusAmount: { $lt: 1 },
+                plusAmount: { $lt: 2 },
                 _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
                 //onlyForInstitute: true, 
                 // forInstitute: 0,
@@ -3979,14 +3979,16 @@ router.get("/forNavigators", checkAuth, async (req, res) => {
  
         ]
     },*/
-            isActive: true,
+            isActive: false,//true,
             isReleased: false,
             isDisabled: false,
-            "statistic.newYear.plus0": { $ne: 0 },
+           // isForSchool: true,
+            //"statistic.newYear.plus0": { $ne: 0 },
             // "statistic.newYear.plus1": 0 ,
-            noAddress: false
+            noAddress: false,
+              dateLastUpdate: { $gt: new Date("2024-8-31"), } 
         });
-        houses.forEach(async (h) => {
+       /*  houses.forEach(async (h) => {
             const count = await Senior.countDocuments(
                 {
                     nursingHome: h.nursingHome,
@@ -3997,7 +3999,33 @@ router.get("/forNavigators", checkAuth, async (req, res) => {
                 }
             );
             console.log(`${h.region} + ${h.nursingHome} + ${h.address} + ${h.adminComment ? 'ПНИ' : ''} + ${count}`);
+        }); */
+
+         houses.forEach(async (h) => {
+            const countM = await Senior.countDocuments(
+                {
+                    nursingHome: h.nursingHome,
+                    isRestricted: false,
+                    isReleased: false,
+                    dateExit: null,
+                    isDisabled: false,
+                    gender: 'Male'
+                }
+            );
+            const countF = await Senior.countDocuments(
+                {
+                    nursingHome: h.nursingHome,
+                    isRestricted: false,
+                    isReleased: false,
+                    dateExit: null,
+                    isDisabled: false,
+                    gender: 'Female'
+                }
+            );
+            console.log(`${h.region} + ${h.nursingHome} + ${h.address} + ${countM} + ${countF}`);
         });
+
+
         const newListResponse = new BaseResponse(200, true);
         res.json(newListResponse.toObject());
     } catch (e) {
