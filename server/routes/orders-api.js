@@ -2610,6 +2610,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
           //yangWomenAmount = 0;
           yangMenAmount = 0;
         }
+          if (newOrder.amount == 4 || newOrder.amount == 3 ) {
+          oldMenAmount = 1;
+          //yangMenAmount = 1;
+        }
 
         // specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount;
 
