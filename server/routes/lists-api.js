@@ -5969,11 +5969,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-11-30"), $lt: new Date("2026-01-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-12-31"), $lt: new Date("2026-02-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-11-30"), $lt: new Date("2026-01-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2025-12-31"), $lt: new Date("2026-02-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
