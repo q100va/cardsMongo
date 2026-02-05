@@ -10,6 +10,7 @@ const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const Senior = require("../models/senior");
 const House = require("../models/house");
+const Region = require("../models/region");
 const Month = require("../models/month");
 const List = require("../models/list");
 const ListNext = require("../models/list-next");
@@ -519,36 +520,36 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
         if (newSenior.dateOfSignedConsent != oldList[index].dateOfSignedConsent && !newSenior.dateOfSignedConsent) {
           newSenior.dateOfSignedConsent = oldList[index].dateOfSignedConsent;
         }
-   /*   if (house.nursingHome == "ПОБЕДА" || house.nursingHome == "РОСТОВ-НА-ДОНУ") {
-          let comment1 = newSenior.comment1.replace(/\(/g, '');
-          comment1 = comment1.replace(/\)/g, '');
-          if (!oldList[index].comment1.includes(comment1)) {
-            await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
-          }
-        }   
-        if (house.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА" || house.nursingHome == "ВОЛГОГРАД_КРИВОРОЖСКАЯ") {
-          if (oldList[index].yearBirthday != newSenior.yearBirthday && newSenior.yearBirthday == 0) {
-            newSenior.yearBirthday = oldList[index].yearBirthday;
-          }
-        }
-        if ( house.nursingHome == "ИСАКОГОРКА") {//СЛАВГОРОД УЛАН-УДЭ_ЛЕСНАЯ
-          //console.log("УЛАН-УДЭ_ЛЕСНАЯ");house.nursingHome == "ИСАКОГОРКА" ||
-
-          // if (oldList[index].yearBirthday != newSenior.yearBirthday && oldList[index].yearBirthday == 0) {
-          oldList[index].yearBirthday = newSenior.yearBirthday;
-          await Senior.updateOne({ _id: oldList[index]._id }, { $set: { yearBirthday: newSenior.yearBirthday } });
-          //  }
-          //   if (oldList[index].monthBirthday != newSenior.monthBirthday && oldList[index].monthBirthday == 0) {
-          oldList[index].monthBirthday = newSenior.monthBirthday;
-          await Senior.updateOne({ _id: oldList[index]._id }, { $set: { monthBirthday: newSenior.monthBirthday } });
-          // }
-          //  if (oldList[index].dateBirthday != newSenior.dateBirthday && oldList[index].dateBirthday == 0) {
-          oldList[index].dateBirthday = newSenior.dateBirthday;
-          await Senior.updateOne({ _id: oldList[index]._id }, { $set: { dateBirthday: newSenior.dateBirthday } });
-          //   }
-          oldList[index].comment1 = newSenior.comment1;
-          await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
-        } */
+        /*   if (house.nursingHome == "ПОБЕДА" || house.nursingHome == "РОСТОВ-НА-ДОНУ") {
+               let comment1 = newSenior.comment1.replace(/\(/g, '');
+               comment1 = comment1.replace(/\)/g, '');
+               if (!oldList[index].comment1.includes(comment1)) {
+                 await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
+               }
+             }   
+             if (house.nursingHome == "ТАРХАНСКАЯ_ПОТЬМА" || house.nursingHome == "ВОЛГОГРАД_КРИВОРОЖСКАЯ") {
+               if (oldList[index].yearBirthday != newSenior.yearBirthday && newSenior.yearBirthday == 0) {
+                 newSenior.yearBirthday = oldList[index].yearBirthday;
+               }
+             }
+             if ( house.nursingHome == "ИСАКОГОРКА") {//СЛАВГОРОД УЛАН-УДЭ_ЛЕСНАЯ
+               //console.log("УЛАН-УДЭ_ЛЕСНАЯ");house.nursingHome == "ИСАКОГОРКА" ||
+     
+               // if (oldList[index].yearBirthday != newSenior.yearBirthday && oldList[index].yearBirthday == 0) {
+               oldList[index].yearBirthday = newSenior.yearBirthday;
+               await Senior.updateOne({ _id: oldList[index]._id }, { $set: { yearBirthday: newSenior.yearBirthday } });
+               //  }
+               //   if (oldList[index].monthBirthday != newSenior.monthBirthday && oldList[index].monthBirthday == 0) {
+               oldList[index].monthBirthday = newSenior.monthBirthday;
+               await Senior.updateOne({ _id: oldList[index]._id }, { $set: { monthBirthday: newSenior.monthBirthday } });
+               // }
+               //  if (oldList[index].dateBirthday != newSenior.dateBirthday && oldList[index].dateBirthday == 0) {
+               oldList[index].dateBirthday = newSenior.dateBirthday;
+               await Senior.updateOne({ _id: oldList[index]._id }, { $set: { dateBirthday: newSenior.dateBirthday } });
+               //   }
+               oldList[index].comment1 = newSenior.comment1;
+               await Senior.updateOne({ _id: oldList[index]._id }, { $set: { comment1: newSenior.comment1 } });
+             } */
 
 
         //replace all ё on е
@@ -688,7 +689,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
           //  newSenior.isReleased != oldList[index].isReleased ||
           //senior.dateEnter = house.dateLastUpdate;
           //newSenior.dateExit != oldList[index].dateExit ||
-          (newSenior.comment1 != oldList[index].comment1 ) ||//&& house.nursingHome != "ПОБЕДА"
+          (newSenior.comment1 != oldList[index].comment1) ||//&& house.nursingHome != "ПОБЕДА"
           newSenior.comment2 != oldList[index].comment2 ||
           //newSenior.veteran != oldList[index].veteran ||
           //newSenior.child != oldList[index].child ||
@@ -850,7 +851,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
       //let resAbsent = await Senior.updateOne({ _id: senior._id }, { $set: { isRestricted: true } }, { upsert: false });
       console.log("resAbsent");
       console.log(resAbsent);
-      if (senior.monthBirthday == month || senior.monthBirthday == month + 1  || senior.monthBirthday == month - 1) {//month + 1 
+      if (senior.monthBirthday == month || senior.monthBirthday == month + 1 || senior.monthBirthday == month - 1) {//month + 1 
         let foundSenior;
         if (senior.monthBirthday == month) {
           foundSenior = await List.findOne({ fullData: (senior.nursingHome + senior.lastName + senior.firstName + senior.patronymic + senior.dateBirthday + senior.monthBirthday + senior.yearBirthday) });
@@ -957,7 +958,7 @@ router.put("/update-lists/", checkAuth, async (req, res) => {
     for (let celebrator of arrived) {
       if (celebrator.monthBirthday == month || celebrator.monthBirthday == month + 1 || celebrator.monthBirthday == month - 1) {// 12
         let cloneSpecialComment;
-        if ( celebrator.monthBirthday == 12) {//month celebrator.monthBirthday == month ||
+        if (celebrator.monthBirthday == 12) {//month celebrator.monthBirthday == month ||
           cloneSpecialComment = await specialComment(
             2026 - celebrator["yearBirthday"]
           );
@@ -1341,6 +1342,93 @@ async function checkDoubles(array) {
 
 }
 
+router.post("/get/seniors-list/", checkAuth, async (req, res) => {
+  try {
+    console.log("req.body");
+    console.log(req.body);
+    const params = { isDisabled: false, dateExit: null, isRestricted: false, isReleased: false };
+    if (req.body.nursingHome) { params.nursingHome = req.body.nursingHome }
+    else {
+      let homes = [];
+      if (req.body.spare) {
+        const mainRegion = await Region.findOne({ name: req.body.region });
+        console.log("mainRegion");
+        console.log(mainRegion);
+        homes = await House.find({ region: { $in: [req.body.region, ...mainRegion.spareRegions] }, isActive: true, isReleased: false, isForSchool: true, isDisabled: false })
+        params.nursingHome = { $in: homes.map(h => h.nursingHome) }
+      } else {
+        homes = await House.find({ region: req.body.region, isActive: true, isReleased: false, isForSchool: true, isDisabled: false });
+        params.nursingHome = { $in: homes.map(h => h.nursingHome) }
+      }
+    }
+    console.log("params");
+    console.log(params);
+
+    const seniors = await Senior.find(params);
+
+    seniors.sort(
+      (prev, next) => {
+        if (prev.monthBirthday < next.monthBirthday) return -1;
+        if (prev.monthBirthday > next.monthBirthday) return 1;
+      });
+    // console.log("seniors");
+    //  console.log(seniors);
+
+    const lineItems = await generateLineItems(seniors);
+    // console.log("lineItems");
+    // console.log(lineItems);
+    const readSeniorsResponse = new BaseResponse(200, "Query Successful", { lineItems });
+    res.json(readSeniorsResponse.toObject());
+
+  } catch (e) {
+    const readSeniorCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(readSeniorCatchErrorResponse.toObject());
+  }
+});
+
+async function generateLineItems(temporaryLineItems) {
+
+  const nursingHomes = await House.find({
+    isActive: true, isReleased: false, isForSchool: true
+  });
+  console.log('nursingHomes');
+  console.log(nursingHomes.map(h => h.nursingHome));
+  let lineItems = [];
+
+  for (let person of temporaryLineItems) {
+    let index = -1;
+    if (lineItems.length > 0) {
+      index = lineItems.findIndex(
+        (item) => item.nursingHome == person.nursingHome
+      );
+    }
+    if (index > -1) {
+      lineItems[index].celebrators.push(person);
+    } else {
+
+      console.log('person.nursingHome');
+      console.log(person.nursingHome);
+      let foundHouse = nursingHomes.find(
+        (item) => item.nursingHome == person.nursingHome
+      );
+      //  console.log('foundHouse');
+      //  console.log(foundHouse);
+      lineItems.push({
+        region: foundHouse.region,
+        nursingHome: foundHouse.nursingHome,
+        address: foundHouse.address,
+        infoComment: foundHouse.infoComment,
+        adminComment: foundHouse.adminComment,
+        noAddress: foundHouse.noAddress,
+        celebrators: [person],
+      });
+    }
+  }
+
+  console.log("lineItems");
+  console.log(lineItems);
+  return lineItems;
+}
 
 
 

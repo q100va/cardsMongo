@@ -21,6 +21,11 @@ export class SeniorsService {
     return this.http.get("/api/seniors");
   }
 
+    getSeniorsList(region: string, spare: boolean, nursingHome: string | null): Observable<any> {
+    return this.http.post("/api/seniors/get/seniors-list", {region, spare, nursingHome});
+  }
+
+
   findSeniorsFromOneHome(nursingHome): Observable<any> {
     return this.http.get("/api/seniors/one-home/" + nursingHome);
   }

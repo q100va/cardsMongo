@@ -1,0 +1,122 @@
+<br />
+<br />
+<div fxLayout="column">
+    <mat-card>
+        <mat-card-title>Жители интернатов</mat-card-title>
+        <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+        <p-toast position="center"></p-toast>
+        <br /><br />
+
+        <mat-card-actions>
+
+            <h4>Регион</h4>
+            <mat-form-field appearance="fill" style="padding-right: 20px;">
+
+                <mat-select [formControl]="form.controls['region']" (selectionChange)="onChangeRegion()">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let region of regions" [value]="region.name">
+                        {{ region.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-checkbox [disabled]="!showChoiceSpareRegions" [formControl]="form.controls['spareRegions']"
+                (change)="onSpareRegionsChange()">включая
+                ближайшие регионы</mat-checkbox>
+
+            <br />
+            <br />
+
+            <h4>Интернат</h4>
+            <mat-form-field appearance="fill">
+
+                <mat-select [formControl]="form.controls['nursingHome']">
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let nursingHome of activeNursingHomes" [value]="nursingHome.nursingHome">
+                        {{ nursingHome.nursingHome }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <br />
+            <br />
+            <button class="submit" (click)="generateList()" mat-raised-button>Сформировать список</button>
+
+        </mat-card-actions>
+
+        <br />
+
+        <span *ngIf="lineItems.length > 0">
+            <mat-slide-toggle [(ngModel)]="showIndexes">пронумеровать</mat-slide-toggle>
+        </span>
+        <br /><br />
+        <span *ngIf="lineItems.length > 0">
+            <mat-slide-toggle [(ngModel)]="showDOB">показать дату рождения</mat-slide-toggle>
+        </span>
+        <br /><br />
+        <span *ngIf="lineItems.length > 0">
+            <mat-slide-toggle [(ngModel)]="onlyFemale">только женщины</mat-slide-toggle>
+        </span>
+        <br /><br /><br />
+        <p *ngIf="!onlyFemale">
+            <mat-card-content *ngFor="let lineItem of lineItems">
+
+                <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
+                    {{lineItem.address}}</p>
+                <p style="font-style: italic; margin: 0; font-family: 'Times New Roman', Times, serif;"
+                    *ngIf="lineItem.infoComment">
+                    {{lineItem.infoComment}}
+                </p>
+                <p style="color: red; font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;"
+                    *ngIf="lineItem.adminComment">
+                    {{lineItem.adminComment}}</p>
+
+                <div *ngFor="let celebrator of lineItem.celebrators"
+                    style="font-family: 'Times New Roman', Times, serif;">
+
+                    <span *ngIf="showIndexes">{{celebrator.index}}. </span>
+                    {{celebrator.lastName}}
+                    {{celebrator.firstName}}
+                    {{celebrator.patronymic}}
+                    <span *ngIf="showDOB">
+                        {{celebrator.dateBirthday}}.{{celebrator.monthBirthday}}.{{celebrator.yearBirthday ?
+                        celebrator.yearBirthday : '????' }} </span>
+                    {{celebrator.comment1}}
+                         </div>
+                <br />
+            </mat-card-content>
+        </p>
+        <p *ngIf="onlyFemale">
+            <mat-card-content *ngFor="let lineItem of femaleItems">
+
+                <p style="font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;">
+                    {{lineItem.address}}</p>
+                <p style="font-style: italic; margin: 0; font-family: 'Times New Roman', Times, serif;"
+                    *ngIf="lineItem.infoComment">
+                    {{lineItem.infoComment}}
+                </p>
+                <p style="color: red; font-weight: bold; margin: 0; font-family: 'Times New Roman', Times, serif;"
+                    *ngIf="lineItem.adminComment">
+                    {{lineItem.adminComment}}</p>
+
+                <div *ngFor="let celebrator of lineItem.celebrators"
+                    style="font-family: 'Times New Roman', Times, serif;">
+
+                    <span *ngIf="showIndexes">{{celebrator.index}}. </span>
+                    {{celebrator.lastName}}
+                    {{celebrator.firstName}}
+                    {{celebrator.patronymic}}
+                    <span *ngIf="showDOB">
+                        {{celebrator.dateBirthday}}.{{celebrator.monthBirthday}}.{{celebrator.yearBirthday ?
+                        celebrator.yearBirthday : '????' }} </span>
+                    {{celebrator.comment1}}
+                  
+                </div>
+                <br />
+            </mat-card-content>
+        </p>
+
+
+
+    </mat-card>
+</div>

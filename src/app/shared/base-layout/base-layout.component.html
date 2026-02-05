@@ -119,6 +119,10 @@
               <mat-icon color="primary">house</mat-icon>
               <span>Интернаты</span>
             </button>
+             <button *ngIf="isAdmin  || isManager || isDobroru" mat-menu-item routerLink="/lists/just-in-case">
+              <mat-icon color="primary">warning</mat-icon>
+              <span>Экстренные списки</span>
+            </button>
             <button mat-menu-item routerLink="/reports">
               <mat-icon color="primary">summarize</mat-icon>
               <span>Статистика и отчеты</span>

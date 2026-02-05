@@ -68,6 +68,7 @@ import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.co
 import { ReportsComponent } from "./pages/reports/reports.component";
 import { DobroruMay9Component } from "./pages/dobroru-may9/dobroru-may9.component";
 import { DobroruGuard } from "./shared/dobro.guard";
+import { JustInCaseComponent } from "./pages/just-in-case/just-in-case.component";
 const routes: Routes = [
   {
     path: "",
@@ -213,6 +214,11 @@ const routes: Routes = [
       {
         path: "orders/dobroru/may9",
         component: DobroruMay9Component,
+        canActivate: [AuthGuard],
+      },
+         {
+        path: "lists/just-in-case",
+        component: JustInCaseComponent,
         canActivate: [AuthGuard],
       },
       {

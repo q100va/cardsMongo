@@ -8,6 +8,7 @@ const express = require("express");
 const BaseResponse = require("../models/base-response");
 const router = express.Router();
 const House = require("../models/house");
+const Region = require("../models/region");
 const NewYear = require("../models/new-year");
 const checkAuth = require("../middleware/check-auth");
 const Senior = require("../models/senior");
@@ -662,6 +663,69 @@ router.post("/add-many/", checkAuth, async (req, res) => {
     console.log(error);
     const createHouseCatchErrorResponse = new BaseResponse(500, "Internal server error", error.message);
     res.status(500).send(createHouseCatchErrorResponse.toObject());
+  }
+});
+
+
+router.get("/get/nursing-homes-list/", checkAuth, async (req, res) => {
+    console.log("router.get(/nursing-homes-list/");
+  try {
+   
+    House.find({
+      isActive: true, isReleased: false, isForSchool: true, isDisabled: false
+    }, async function (err, nursingHomes) {
+      if (err) {
+        console.log("err");
+        console.log(err);
+        const readRegionsMongodbErrorResponse = new BaseResponse(
+          500,
+          "Internal server error",
+          err
+        );
+        res.status(500).send(readRegionsMongodbErrorResponse.toObject());
+      } else {
+       // console.log("nursingHomes");
+        // console.log(nursingHomes);
+        nursingHomes.sort(
+          (prev, next) => {
+            if (prev.nursingHome < next.nursingHome) return -1;
+            if (prev.nursingHome > next.nursingHome) return 1;
+          });
+
+        let setRegions = new Set();
+
+        for (let house of nursingHomes) {
+          setRegions.add(house.region);
+        }
+        setRegions.add("ЕВРОПЕЙСКАЯ");
+        let regions = Array.from(setRegions);
+
+        let fullRegions = await Region.find({name: {$in: regions}}).sort({name: 1,  _id: 1 });
+ 
+
+         console.log("fullRegions");
+         console.log(fullRegions);
+
+        const readRegionsResponse = new BaseResponse(
+          200,
+          "Query successful",
+          {
+            nursingHomes: nursingHomes,
+            regions: fullRegions
+          }
+        );
+        res.json(readRegionsResponse.toObject());
+      }
+    });
+  } catch (e) {
+    console.log("ERROR");
+    console.log(e);
+    const readRegionsCatchErrorResponse = new BaseResponse(
+      500,
+      "Internal server error",
+      e
+    );
+    res.status(500).send(readRegionsCatchErrorResponse.toObject());
   }
 });
 

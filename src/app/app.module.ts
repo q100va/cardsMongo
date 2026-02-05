@@ -114,6 +114,7 @@ import { DobroruFebruary23Component } from "./pages/dobroru-february23/dobroru-f
 import { DobroruMarch8Component } from "./pages/dobroru-march8/dobroru-march8.component";
 import { ReportsComponent } from './pages/reports/reports.component';
 import { DobroruMay9Component } from './pages/dobroru-may9/dobroru-may9.component';
+import { JustInCaseComponent } from './pages/just-in-case/just-in-case.component';
 
 @NgModule({
   declarations: [
@@ -177,6 +178,7 @@ import { DobroruMay9Component } from './pages/dobroru-may9/dobroru-may9.componen
     DobroruMarch8Component,
     ReportsComponent,
     DobroruMay9Component,
+    JustInCaseComponent,
 
   ],
   imports: [

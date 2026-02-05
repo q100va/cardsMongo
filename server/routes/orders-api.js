@@ -1624,6 +1624,8 @@ router.get("/get/nursingHomes/", checkAuth, async (req, res) => {
 });
 
 
+
+
 /////////////////////////////////////////////////
 
 
@@ -4725,7 +4727,7 @@ async function generateLineItemsNewYear(nursingHomes, order_id) {
 
 router.post("/spring/:amount", checkAuth, async (req, res) => {
   let finalResult;
-  try {    
+  try {
     let newOrder = {
       userName: req.body.userName,
       holiday: req.body.holiday,
@@ -5644,7 +5646,7 @@ async function searchSeniorSpring(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 2; 
+  let maxPlusAmount = 2;
 
   //let maxPlusAmount = data.maxPlus;
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;

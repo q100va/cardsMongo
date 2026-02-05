@@ -84,5 +84,9 @@ findHousesEmail(startDate: Date, endDate: Date): Observable<any> {
   return this.http.post("/api/houses/email", {startDate:startDate, endDate : endDate});
 }
 
+  getNursingHomesList(): Observable<any> {
+    return this.http.get("/api/houses/get/nursing-homes-list/");
+  }
+
 
 }
