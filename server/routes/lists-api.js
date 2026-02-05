@@ -216,7 +216,7 @@ async function findAllMonthCelebrators(month) {
       fullDayBirthday: cloneFullDayBirthday,
       oldest: cloneOldest,
       category: cloneCategory,
-      holyday: month == 2 ? 'Дни рождения февраля 2026' : 'Дни рождения марта 2026',
+      holyday: month == 3 ? 'Дни рождения марта 2026' : 'Дни рождения апреля 2026',
       fullData: celebrator.nursingHome +
         celebrator.lastName +
         celebrator.firstName +
@@ -243,9 +243,9 @@ async function findAllMonthCelebrators(month) {
 
   const options = { ordered: false };
   let finalList;
-  if (month == 1) { finalList = await ListBefore.insertMany(newList, options); }
-  if (month == 2) { finalList = await List.insertMany(newList, options); }
-  if (month == 3) { finalList = await ListNext.insertMany(newList, options); }
+  if (month == 2) { finalList = await ListBefore.insertMany(newList, options); }
+  if (month == 3) { finalList = await List.insertMany(newList, options); }
+  if (month == 4) { finalList = await ListNext.insertMany(newList, options); }
 
   //console.log(finalList);
 
@@ -936,9 +936,9 @@ async function createCloneCelebrator(celebrator) {
     }
   }
   let holiday;
-  if (celebrator.monthBirthday == 1) { holiday = 'Дни рождения января 2026' };
   if (celebrator.monthBirthday == 2) { holiday = 'Дни рождения февраля 2026' };
   if (celebrator.monthBirthday == 3) { holiday = 'Дни рождения марта 2026' };
+  if (celebrator.monthBirthday == 4) { holiday = 'Дни рождения апреля 2026' };
 
   let cloneCelebrator = {
     seniorId: celebrator._id,
@@ -2171,7 +2171,7 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 
 async function checkAllHBFullness(house) {
   const Model = List;
-  const month = 2;
+  const month = 3;
   const nursingHome = await House.findOne({ isActive: true, nursingHome: house, dateLastUpdate: { $gt: new Date("2025-08-31") } });// noAddress: false
   if (!nursingHome) {
     // await Model.updateMany({ nursingHome: house }, { $set: { absent: true } });
@@ -2267,7 +2267,7 @@ router.get("/holiday/special-list", checkAuth, async (req, res) => {
     console.log("notActiveHousesNames");
     console.log(notActiveHousesNames);
     // let ordersM = await Order.find({ contact: { $in: ["@tterros", "@tterros_2", "@kseniyaefi_3", "@kseniyaefi_2", "@kseniyaefi"] }, isDisabled: false, holiday: ["8 марта 2026", "23 февраля 2026"] });
-    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения марта 2026"] });
+    let ordersM = await Order.find({ contact: { $in: ["l.filchukova@starikam.org"] }, isDisabled: false, holiday: ["Дни рождения апреля 2026"] });
     let lineItemsM = [];
     for (let order of ordersM) {
       for (let item of order.lineItems) {
@@ -3419,7 +3419,7 @@ async function countHB() {
     [
       {
         $match:
-          { holiday: "Дни рождения января 2026", isDisabled: false, isOverdue: false, isReturned: false }
+          { holiday: "Дни рождения февраля 2026", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3427,7 +3427,7 @@ async function countHB() {
     ]
   );
 
-  let orders = await Order.find({ holiday: "Дни рождения января 2026", isDisabled: false, isOverdue: false, isReturned: false });
+  let orders = await Order.find({ holiday: "Дни рождения февраля 2026", isDisabled: false, isOverdue: false, isReturned: false });
   let celebrators = new Set();
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
@@ -3735,7 +3735,7 @@ async function countVolonteers() {
   let setClients = new Set();
   let setInstitutes = new Set();
   let setSchools = new Set();
-  let ordersBirthday = await Order.find({ holiday: "Дни рождения января 2026", isDisabled: false, isOverdue: false, isReturned: false, });
+  let ordersBirthday = await Order.find({ holiday: "Дни рождения февраля 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersNameDay = await Order.find({ holiday: "Именины ноября 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersNY = await Order.find({ holiday: "Новый год 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
@@ -3780,13 +3780,13 @@ async function countVolonteers() {
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения января 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения января 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения февраля 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения февраля 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
   
    */
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения января 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения января 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения февраля 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
+  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения февраля 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
 
 
   for (let order of ordersInstitutes) {
@@ -3871,7 +3871,7 @@ async function findUncertain() {
 
   let list = [];
   let listOfUncertain = [];
-  let orders = await Order.find({ holiday: "Дни рождения января 2026", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
+  let orders = await Order.find({ holiday: "Дни рождения февраля 2026", isDisabled: false, isAccepted: false, isReturned: false, isOverdue: false });   //.project({ _id: 0, email: 1, contact: 1,  });
   for (let order of orders) {
     for (let lineItem of order.lineItems) {
       for (let celebrator of lineItem.celebrators) {
@@ -5500,253 +5500,253 @@ router.get("/statistic", checkAuth, async (req, res) => {
     let statistic = [
       {
         name: "ВСЕГО ПОЗДРАВЛЯЕМЫХ",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: '-', //8 марта 2026        
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         //   amount5: '-', //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "из них жители ПНИ",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //   amount5: 0, //Пасха 2025          
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
        // amount2: '-', //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         //   amount5: '-', //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 4 и более раз",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
        // amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 3 раза",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 3 раза",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         // amount5: 0, //Пасха 2025
         //amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 2 раза",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 2 раза",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         // amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "ПОЗДРАВЛЕНО 1 раз",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 1 раз",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         // amount5: 0, //Пасха 2025
         // amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "НЕ ПОЗДРАВЛЕНО ни разу",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ не поздравлено ни разу",
-        amount1: 0, //ДР января 2026
+        amount1: 0, //ДР февраля 2026
         amount2: 0, //8 марта 2026
         amount8: 0, // 23 февраля 2026
-        amount3: 0, //ДР февраля 2026
-        amount4: 0, //ДР марта 2026
+        amount3: 0, //ДР марта 2026
+        amount4: 0, //ДР апреля 2026
         //  amount5: 0, //Пасха 2025
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
-        amount1: '-', //ДР января 2026
+        amount1: '-', //ДР февраля 2026
         // amount2: -, //8 марта 2026
-        amount3: '-', //ДР февраля 2026
-        amount4: '-', //ДР марта 2026
+        amount3: '-', //ДР марта 2026
+        amount4: '-', //ДР апреля 2026
         amount5: '-', //Пасха 2025
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
@@ -5837,7 +5837,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
     dateOfOrder: { $gt: new Date("2024-12-31"), $lt: new Date("2026-01-01") },
     userName:"eberdnikova"
     /*     $or: [{ "holiday": 'Дни рождения апреля 2025' },
-        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения января 2026' },
+        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения февраля 2026' },
         { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },] */
   });
  // let celebrators = [];
@@ -5907,7 +5907,7 @@ async function quarta() {
     isDisabled: false, isOverdue: false, isReturned: false,
     dateOfOrder: { $gt: new Date("2024-12-31"), $lt: new Date("2026-01-01") },
     /*     $or: [{ "holiday": 'Дни рождения апреля 2025' },
-        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения января 2026' },
+        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения февраля 2026' },
         { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },] */
   });
   let celebrators = [];

@@ -59,7 +59,7 @@
             </p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения января 2026'">Дни рождения ноября</h3>
+                *ngIf="order.holiday == 'Дни рождения февраля 2026'">Дни рождения ноября</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Пасха 2025'">НОВЫЙ ГОД</h3>
 
@@ -86,7 +86,7 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения января 2026'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="order.holiday == 'Дни рождения февраля 2026'">{{celebrator.fullDayBirthday}}</span>
                     <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2025'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
@@ -219,7 +219,7 @@
             <p>Здравствуйте, {{order.clientFirstName}}!</p>
 
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
-                *ngIf="order.holiday == 'Дни рождения января 2026'">Дни рождения ноября</h3>
+                *ngIf="order.holiday == 'Дни рождения февраля 2026'">Дни рождения ноября</h3>
             <h3 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;"
                 *ngIf="order.holiday == 'Пасха 2025'">НОВЫЙ ГОД (просим вас отправить открытки не ранее середины
                 февраля)</h3>
@@ -238,7 +238,7 @@
                     {{celebrator.lastName}}
                     {{celebrator.firstName}}
                     {{celebrator.patronymic}}
-                    <span *ngIf="order.holiday == 'Дни рождения января 2026'">{{celebrator.fullDayBirthday}}</span>
+                    <span *ngIf="order.holiday == 'Дни рождения февраля 2026'">{{celebrator.fullDayBirthday}}</span>
                     <span *ngIf="celebrator.yearBirthday > 0 && order.holiday == 'Пасха 2025'">-
                         {{celebrator.yearBirthday}} г.р.</span>
                     {{celebrator.comment1}}
