@@ -2495,8 +2495,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения марта 2026") {
     period = {
-      "date1": 26,
-      "date2": 29,
+      "date1": 6,
+      "date2": 10,
       "isActive": true,
       "key": 0,
       "maxPlus": 2, //PLUSES1
@@ -2525,7 +2525,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   if (newOrder.holiday == "Дни рождения февраля 2026") {
     period = {
       "date1": 26,
-      "date2": 31,
+      "date2": 29,
       "isActive": true,
       "key": 0,
       "maxPlus": 2,//PLUSES1
@@ -2535,8 +2535,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   }
   if (newOrder.holiday == "Дни рождения апреля 2026") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 1,
+      "date2": 5,
       "isActive": true,
       "key": 0,
       "maxPlus": 2,  //PLUSES1
