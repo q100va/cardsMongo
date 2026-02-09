@@ -29,7 +29,7 @@
                    <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button>  -->
           <!--  <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
 
-          <!--   <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/easter" mat-button>Пасха</button>-->
+          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/easter" mat-button>Пасха</button>
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/february-23" mat-button>23 февраля</button>
           <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/march-8" mat-button>8
@@ -71,11 +71,11 @@
               <mat-icon color="primary">list</mat-icon>
               <span>Списки 23 и 8</span>
             </button>
-            <!--        <button *ngIf="isAdmin" mat-menu-item (click)="redirectToEasterLists()">
+            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToEasterLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки Пасха</span>
             </button>
-            <button *ngIf="isAdmin" mat-menu-item (click)="redirectToVeteransLists()">
+            <!-- <button *ngIf="isAdmin" mat-menu-item (click)="redirectToVeteransLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки 9 мая</span>
             </button> -->
@@ -119,7 +119,7 @@
               <mat-icon color="primary">house</mat-icon>
               <span>Интернаты</span>
             </button>
-             <button *ngIf="isAdmin  || isManager || isDobroru" mat-menu-item routerLink="/lists/just-in-case">
+            <button *ngIf="isAdmin  || isManager || isDobroru" mat-menu-item routerLink="/lists/just-in-case">
               <mat-icon color="primary">warning</mat-icon>
               <span>Экстренные списки</span>
             </button>

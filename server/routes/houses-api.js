@@ -269,12 +269,12 @@ router.get("/find/active", checkAuth, async (req, res) => {
 
 
 
-    let houses = await House.find({ isActive: true, isDisabled: false }).sort({"statistic.spring.amount": 1,  _id: 1 });//dateLastUpdate: -1,
+    let houses = await House.find({ isActive: true, isDisabled: false }).sort({"statistic.easter.amount": 1,  _id: 1 });//dateLastUpdate: -1,
     // console.log(houses);
 
-    /* for (let house of houses) {
+//    for (let house of houses) {
   
-        let amount23 = await Senior.aggregate([
+        /* let amount23 = await Senior.aggregate([
           { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" } },
           { $group: { _id: null, count: { $sum: 1 } } }
         ]);
@@ -287,37 +287,40 @@ router.get("/find/active", checkAuth, async (req, res) => {
         amount23 = amount23[0]?.count ? amount23[0]?.count : 0;
         amount8 = amount8[0]?.count ? amount8[0]?.count : 0;
   
-  
+  */
+
+    /*     let amount = await Senior.aggregate([
+          { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false } },
+          { $group: { _id: null, count: { $sum: 1 } } }
+        ]);
+
         let find = await House.findOne({ nursingHome: house.nursingHome });
         console.log(find.nursingHome);
         let update = await House.updateOne(
           { nursingHome: house.nursingHome },
           {
             $set: {
-              "statistic.spring.time": 0,
-              "statistic.spring.plus0": 0,
-              "statistic.spring.plus1": 0,
-              "statistic.spring.plus2": 0,
-              "statistic.spring.plus3": 0,
-              "statistic.spring.plus4": 0,
-              "statistic.spring.specialMen": 0,
-              "statistic.spring.specialWomen": 0,
-              "statistic.spring.oldMen": 0,
-              "statistic.spring.oldWomen": 0,
-              "statistic.spring.yangMen": 0,
-              "statistic.spring.yangWomen": 0,
-              "statistic.spring.amount": amount23 + amount8,
-              "statistic.spring.amount23": amount23,
-              "statistic.spring.amount8": amount8,
-              "statistic.spring.specialMenPlus": 0,
-              "statistic.spring.specialWomenPlus": 0,
-              "statistic.spring.oldMenPlus":0,
-              "statistic.spring.oldWomenPlus": 0,
-              "statistic.spring.yangMenPlus": 0,
-              "statistic.spring.yangWomenPlus": 0,
+              "statistic.easter.time": 0,
+              "statistic.easter.plus0": 0,
+              "statistic.easter.plus1": 0,
+              "statistic.easter.plus2": 0,
+              "statistic.easter.plus3": 0,
+              "statistic.easter.plus4": 0,
+              "statistic.easter.specialMen": 0,
+              "statistic.easter.specialWomen": 0,
+              "statistic.easter.oldMen": 0,
+              "statistic.easter.oldWomen": 0,
+              "statistic.easter.yangMen": 0,
+              "statistic.easter.yangWomen": 0,
+              "statistic.easter.amount": amount[0]?.count,
+              "statistic.easter.specialMenPlus": 0,
+              "statistic.easter.specialWomenPlus": 0,
+              "statistic.easter.oldMenPlus":0,
+              "statistic.easter.oldWomenPlus": 0,
+              "statistic.easter.yangMenPlus": 0,
+              "statistic.easter.yangWomenPlus": 0,
             }
-          });
-       // console.log(update);
+          }); 
       } */
 
 

@@ -3376,7 +3376,7 @@ async function reportSources() {
         {
           $match:
             //{ holiday: "Дни рождения " + month + " 2024", isDisabled: false, isOverdue: false, isReturned: false, source: source }
-            { holiday: "Пасха 2025", isDisabled: false, isOverdue: false, isReturned: false, source: source, }          //   contactType: "telegram"
+            { holiday: "Пасха 2026", isDisabled: false, isOverdue: false, isReturned: false, source: source, }          //   contactType: "telegram"
 
           // { holiday: "Дни рождения " + month + " 2024", isDisabled: false, isOverdue: false, isReturned: false, source: "subscription", contactType: "vKontakte" }
         },
@@ -3391,7 +3391,7 @@ async function reportSources() {
         {
           $match:
             //{ holiday: "Дни рождения " + month + " 2024", isDisabled: false, isOverdue: false, isReturned: false, source: source }
-            { holiday: "Пасха 2025", isDisabled: false, isOverdue: false, isReturned: false, source: source, } //contactType: "telegram"
+            { holiday: "Пасха 2026", isDisabled: false, isOverdue: false, isReturned: false, source: source, } //contactType: "telegram"
           // { holiday: "Дни рождения " + month + " 2024", isDisabled: false, isOverdue: false, isReturned: false, source: "subscription", contactType: "vKontakte" }
         },
         {
@@ -3630,7 +3630,7 @@ async function countEaster() {
   let plusesAmount = await Order.aggregate(
     [
       {
-        $match: { holiday: "Пасха 2025", isDisabled: false, isOverdue: false, isReturned: false }
+        $match: { holiday: "Пасха 2026", isDisabled: false, isOverdue: false, isReturned: false }
       },
       {
         $group: { _id: null, sum_val: { $sum: "$amount" } }
@@ -3741,7 +3741,7 @@ async function countVolonteers() {
   //let ordersSeniorDay = await Order.find({ holiday: "День пожилого человека 2024", isDisabled: false, isOverdue: false, isReturned: false, });
   //let ordersFebruary23 = await Order.find({ holiday: "23 февраля 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   let ordersMarch8 = await Order.find({ holiday: "8 марта 2026", isDisabled: false, isOverdue: false, isReturned: false, });
-  // let ordersEaster = await Order.find({ holiday: "Пасха 2025", isDisabled: false, isOverdue: false, isReturned: false, });
+  // let ordersEaster = await Order.find({ holiday: "Пасха 2026", isDisabled: false, isOverdue: false, isReturned: false, });
   // let ordersMay9 = await Order.find({ holiday: "9 мая 2025", isDisabled: false, isOverdue: false, isReturned: false, });
 
   for (let order of ordersBirthday) {
@@ -3780,13 +3780,13 @@ async function countVolonteers() {
   console.log("поздравляющих");
   console.log(setClients.size);
 
-  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения февраля 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения февраля 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  /*   let ordersInstitutes = await Order.find({ holiday: { $in: ["Дни рождения февраля 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2026", "9 мая 2025"
+    let ordersSchools = await Order.find({ holiday: { $in: ["Дни рождения февраля 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2026", "9 мая 2025"
   
    */
 
-  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения февраля 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2025", "9 мая 2025"
-  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения февраля 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2025", "9 мая 2025"
+  let ordersInstitutes = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения февраля 2026"] }, institutes: { $ne: [] }, isDisabled: false, isOverdue: false, isReturned: false, });//, "Пасха 2026", "9 мая 2025"
+  let ordersSchools = await Order.find({ holiday: { $in: ["8 марта 2026", "Дни рождения февраля 2026"] }, "institutes.category": "образовательное учреждение", isDisabled: false, isOverdue: false, isReturned: false, });   //.project({ _id: 0, email: 1, contact: 1,  }); , "institutes.category": "образовательное учреждение", institutes: { $ne: [] }, dateOfOrder: { $gt: new Date('2023-12-31'), $lt: new Date('2024-02-01') }, "Пасха 2026", "9 мая 2025"
 
 
   for (let order of ordersInstitutes) {
@@ -4316,8 +4316,8 @@ router.post("/easter/create", checkAuth, async (req, res) => {
   try {
     const houses = req.body.list;
     console.log("0- inside Create list API");
-    // let result = await findAllEasterCelebrators(houses);
-    let result = await countAmount();
+     let result = await findAllEasterCelebrators(houses);
+   // let result = await countAmount();
 
     console.log("4-inside Create list API " + result);
     //const newList = newList1.slice();
@@ -4548,7 +4548,7 @@ async function createCloneEasterCelebrator(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: 'Пасха 2025',
+    holyday: 'Пасха 2026',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +
@@ -4956,7 +4956,7 @@ async function createCloneCelebratorEaster(celebrator) {
     fullDayBirthday: cloneFullDayBirthday,
     oldest: cloneOldest,
     category: cloneCategory,
-    holyday: 'Пасха 2025',
+    holyday: 'Пасха 2026',
     fullData: celebrator.nursingHome +
       celebrator.lastName +
       celebrator.firstName +
@@ -5505,7 +5505,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //  amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5515,7 +5515,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: '-', //8 марта 2026        
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        //   amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5526,7 +5526,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //   amount5: 0, //Пасха 2025          
+        amount5: 0, //Пасха 2026          
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5537,7 +5537,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        //   amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5548,7 +5548,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //  amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5558,7 +5558,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
        // amount7: '-', //Новый год 2026
       },
@@ -5569,7 +5569,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        // amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         // amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5579,7 +5579,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5590,7 +5590,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        // amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         // amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5600,7 +5600,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5611,7 +5611,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        // amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5621,7 +5621,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5632,7 +5632,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //  amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5642,7 +5642,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5653,7 +5653,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        // amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5663,7 +5663,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5674,7 +5674,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //  amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5684,7 +5684,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5695,7 +5695,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        // amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         // amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5705,7 +5705,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5716,7 +5716,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //  amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5726,7 +5726,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5737,7 +5737,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount8: 0, // 23 февраля 2026
         amount3: 0, //ДР марта 2026
         amount4: 0, //ДР апреля 2026
-        //  amount5: 0, //Пасха 2025
+        amount5: 0, //Пасха 2026
         //  amount6: 0, //9 мая 2025
         //amount7: 0, //Новый год 2026
       },
@@ -5747,7 +5747,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         // amount2: -, //8 марта 2026
         amount3: '-', //ДР марта 2026
         amount4: '-', //ДР апреля 2026
-        amount5: '-', //Пасха 2025
+        amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2025
         //amount7: '-', //Новый год 2026
       },
@@ -5757,7 +5757,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
     const holidays = [ListBefore, March8, List, ListNext, Easter, May9, NewYear, February23];//
 
     for (let i = 0; i < holidays.length; i++) {
-      if (i != 6 && i != 4 && i != 5) { //1 - March8, 4 - Easter, 5 - May9
+      if (i != 6 && i != 5 ) { //1 - March8, 4 - Easter, 5 - May9&& i != 4
         statistic[0]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false });
         statistic[2]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true });
         statistic[4]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: { $gte: 4 } });
@@ -5838,7 +5838,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
     userName:"eberdnikova"
     /*     $or: [{ "holiday": 'Дни рождения апреля 2025' },
         { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения февраля 2026' },
-        { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },] */
+        { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2026' },] */
   });
  // let celebrators = [];
   let participators = [];
@@ -5908,7 +5908,7 @@ async function quarta() {
     dateOfOrder: { $gt: new Date("2024-12-31"), $lt: new Date("2026-01-01") },
     /*     $or: [{ "holiday": 'Дни рождения апреля 2025' },
         { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения февраля 2026' },
-        { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2025' },] */
+        { "holiday": '9 мая 2025' }, { "holiday": 'Пасха 2026' },] */
   });
   let celebrators = [];
   let participators = [];

@@ -245,7 +245,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2026",
                   "23 февраля 2026",
                   "8 марта 2026",
-                  // "Пасха 2025", "9 мая 2025"
+                  // "Пасха 2026", "9 мая 2025"
 
                   /*             "Именины февраля 2025",
                               "Именины марта 2025" */
@@ -262,7 +262,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2026",
                   "23 февраля 2026",
                   "8 марта 2026",
-                  //"Пасха 2025", "9 мая 2025"
+                  //"Пасха 2026", "9 мая 2025"
                   /*         "Именины февраля 2025",
                           "Именины марта 2025" */
                 ]
@@ -299,7 +299,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2026",
                   "23 февраля 2026",
                   "8 марта 2026",
-                  // "Пасха 2025", "9 мая 2025"
+                  // "Пасха 2026", "9 мая 2025"
                   /*       "Именины февраля 2025",
                         "Именины марта 2025" */
                 ]
@@ -315,7 +315,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
                   "Дни рождения апреля 2026",
                   "23 февраля 2026",
                   "8 марта 2026",
-                  // "Пасха 2025", "9 мая 2025"
+                  // "Пасха 2026", "9 мая 2025"
                   /*         "Именины февраля 2025",
                           "Именины марта 2025" */
                 ]
@@ -466,7 +466,7 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
-                    //"Пасха 2025", "9 мая 2025"
+                    //"Пасха 2026", "9 мая 2025"
                   ]
                 }
               },
@@ -479,7 +479,7 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
-                    //"Пасха 2025", "9 мая 2025"
+                    //"Пасха 2026", "9 мая 2025"
                   ]
                 }
               }
@@ -509,7 +509,7 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
-                    //"Пасха 2025", "9 мая 2025"
+                    //"Пасха 2026", "9 мая 2025"
                   ]
                 }
               },
@@ -522,7 +522,7 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
-                    //"Пасха 2025", "9 мая 2025"
+                    //"Пасха 2026", "9 мая 2025"
                   ]
                 }
               }
@@ -595,7 +595,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     /*    "23 февраля 2026",
                        "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "Пасха 2026", "9 мая 2025"
                     /*       "Именины февраля 2025",
                           "Именины марта 2025" */
                   ]
@@ -611,7 +611,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     /*             "23 февраля 2026",
                                 "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "Пасха 2026", "9 мая 2025"
                     /*           "Именины февраля 2025",
                               "Именины марта 2025" */
                   ]
@@ -645,7 +645,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                       "Дни рождения апреля 2026",
                       /*       "23 февраля 2026",
                             "8 марта 2026", */
-                      "Пасха 2025", "9 мая 2025"
+                      "Пасха 2026", "9 мая 2025"
                       /*            "Именины февраля 2025",
                                  "Именины марта 2025" */
                     ]
@@ -661,7 +661,7 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                       "Дни рождения апреля 2026",
                       /*     "23 февраля 2026",
                           "8 марта 2026", */
-                      "Пасха 2025", "9 мая 2025"
+                      "Пасха 2026", "9 мая 2025"
                       /*             "Именины февраля 2025",
                                   "Именины марта 2025" */
                     ]
@@ -750,7 +750,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     /*   "23 февраля 2026",
                       "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "Пасха 2026", "9 мая 2025"
                     /*           "Именины февраля 2025",
                               "Именины марта 2025" */
                   ]
@@ -766,7 +766,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                     "Дни рождения апреля 2026",
                     /*   "23 февраля 2026",
                       "8 марта 2026", */
-                    "Пасха 2025", "9 мая 2025"
+                    "Пасха 2026", "9 мая 2025"
                     /*         "Именины февраля 2025",
                             "Именины марта 2025" */
                   ]
@@ -800,7 +800,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                       "Дни рождения апреля 2026",
                       /*    "23 февраля 2026",
                          "8 марта 2026", */
-                      "Пасха 2025", "9 мая 2025"
+                      "Пасха 2026", "9 мая 2025"
                       /*          "Именины февраля 2025",
                                "Именины марта 2025" */
                     ]
@@ -816,7 +816,7 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                       "Дни рождения апреля 2026",
                       /*   "23 февраля 2026",
                         "8 марта 2026", */
-                      "Пасха 2025", "9 мая 2025"
+                      "Пасха 2026", "9 мая 2025"
                       /*               "Именины февраля 2025",
                                     "Именины марта 2025" */
                     ]
@@ -1070,7 +1070,7 @@ async function deletePluses(deletedOrder, full) {
                         }
                       }
                     } else {
-                      if (deletedOrder.holiday == "Пасха 2025") {
+                      if (deletedOrder.holiday == "Пасха 2026") {
                         for (let lineItem of deletedLineItems) {
                           for (let person of lineItem.celebrators) {
 
@@ -1473,7 +1473,7 @@ async function restorePluses(updatedOrder) {
                         }
                       }
                     } else {
-                      if (updatedOrder.holiday == "Пасха 2025") {
+                      if (updatedOrder.holiday == "Пасха 2026") {
                         for (let lineItem of updatedOrder.lineItems) {
                           for (let person of lineItem.celebrators) {
                             console.log("person");
@@ -4789,7 +4789,7 @@ router.post("/spring/:amount", checkAuth, async (req, res) => {
     if (!finalResult) {
       let answer;
       if (req.body.holiday == "23 февраля 2026" || req.body.holiday == "8 марта 2026") { answer = await deleteErrorPlusSpring(false, req.body.userName) };
-      if (req.body.holiday == "Пасха 2025") { answer = await deleteErrorPlusEaster(false, req.body.userName) };
+      if (req.body.holiday == "Пасха 2026") { answer = await deleteErrorPlusEaster(false, req.body.userName) };
       if (req.body.holiday == "9 мая 2025") { answer = await deleteErrorPlusVeterans(false, req.body.userName) };
       console.log("answer");
       console.log(answer);
@@ -4947,7 +4947,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
         yangMenAmount = Math.round(newOrder.amount * 0.1);
         specialWomenAmount = Math.round(newOrder.amount * 0.1);
         specialMenAmount = newOrder.amount - oldWomenAmount - oldMenAmount - yangMenAmount - yangWomenAmount - specialWomenAmount;
-        if (newOrder.holiday != "Пасха 2025") {
+        if (newOrder.holiday != "Пасха 2026") {
           if (newOrder.amount == 4) {
             oldWomenAmount = 1;
             oldMenAmount = 1;
@@ -4998,7 +4998,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
           }
         }
 
-        if (newOrder.holiday == "Пасха 2025") {
+        if (newOrder.holiday == "Пасха 2026") {
           oldWomenAmount = Math.round(newOrder.amount * 0.2) > 0 ? Math.round(newOrder.amount * 0.2) : 1;
           oldMenAmount = Math.round(newOrder.amount * 0.2);
           yangWomenAmount = Math.round(newOrder.amount * 0.1);
@@ -5276,7 +5276,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
   if (seniorsData.celebratorsAmount < newOrder.amount) {
 
     if (newOrder.holiday == "23 февраля 2026" || newOrder.holiday == "8 марта 2026") { await deleteErrorPlusSpring(order_id); };
-    if (newOrder.holiday == "Пасха 2025") { await deleteErrorPlusEaster(order_id) };
+    if (newOrder.holiday == "Пасха 2026") { await deleteErrorPlusEaster(order_id) };
     if (newOrder.holiday == "9 мая 2025") { await deleteErrorPlusVeterans(order_id) };
 
 
@@ -5298,7 +5298,7 @@ async function createOrderSpring(newOrder, prohibitedId, restrictedHouses) {
 
     // console.log("resultLineItems222");
     if (newOrder.holiday == "23 февраля 2026" || newOrder.holiday == "8 марта 2026") { await deleteErrorPlusSpring(order_id); };
-    if (newOrder.holiday == "Пасха 2025") { await deleteErrorPlusEaster(order_id) };
+    if (newOrder.holiday == "Пасха 2026") { await deleteErrorPlusEaster(order_id) };
     if (newOrder.holiday == "9 мая 2025") { await deleteErrorPlusVeterans(order_id) };
 
     return {
@@ -5520,7 +5520,7 @@ async function collectSeniorsSpring(data, orderFilter) {
 
           );
         }
-        if (data.holiday == "Пасха 2025") {
+        if (data.holiday == "Пасха 2026") {
           await Easter.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
 
           let senior = await Easter.findOne({ _id: result.celebrator_id });
@@ -5695,7 +5695,7 @@ async function searchSeniorSpring(
       celebrator = await March8.findOne(filter);
     }
 
-    if (data.holiday == "Пасха 2025") {
+    if (data.holiday == "Пасха 2026") {
       celebrator = await Easter.findOne(filter);
     }
 
@@ -6649,7 +6649,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
       const celebratorsEaster = await Easter.find({ absent: false });
       for (let celebrator of celebratorsEaster) {
         console.log(celebrator.seniorId);
-        let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Пасха 2025" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators.seniorId": celebrator.seniorId, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Пасха 2026" }).countDocuments();
         await Easter.updateOne({ seniorId: celebrator.seniorId }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await Easter.findOne({ seniorId: celebrator.seniorId });
 
@@ -9088,14 +9088,14 @@ async function fillOrderForInstitutes(
     }
 
     if (filter.onlyWithConcent) {
-      if (holiday == "Пасха 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+      if (holiday == "Пасха 2026" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await Easter.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
 
-      if (holiday == "Пасха 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+      if (holiday == "Пасха 2026" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await Easter.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, dateOfSignedConsent: { $ne: null }//forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
@@ -9103,14 +9103,14 @@ async function fillOrderForInstitutes(
       }
 
     } else {
-      if (holiday == "Пасха 2025" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
+      if (holiday == "Пасха 2026" && !filter.region && filter.minNumberOfHouses) { //&& filter.addressFilter == "noSpecial"
         count = await Easter.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true, 
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
         }).countDocuments();
       }
 
-      if (holiday == "Пасха 2025" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
+      if (holiday == "Пасха 2026" && filter.region && filter.minNumberOfHouses) {// && filter.addressFilter == "noSpecial"
         count = await Easter.find({
           nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 1 }, _id: { $nin: prohibitedId }, //forInstitute: 0, finished: falseonlyForInstitute: true
           // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
@@ -9473,7 +9473,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if ((holiday == "23 февраля 2026" || holiday == "8 марта 2026" || holiday == "Пасха 2025" || holiday == "9 мая 2025") && (filter.noNames || filter.minNumberOfHouses)) {
+  if ((holiday == "23 февраля 2026" || holiday == "8 марта 2026" || holiday == "Пасха 2026" || holiday == "9 мая 2025") && (filter.noNames || filter.minNumberOfHouses)) {
 
     /*          if (filter.noNames) {
               if (!region) {
@@ -9526,7 +9526,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
           // forInstitute: 0,onlyForInstitute: true, finished: false,
         }).limit(amount);
       }
-      if (holiday == "Пасха 2025") {
+      if (holiday == "Пасха 2026") {
         seniorsData = await Easter.find({
           dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
@@ -9591,7 +9591,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         }).limit(amount);
       }
 
-      if (holiday == "Пасха 2025") {
+      if (holiday == "Пасха 2026") {
         seniorsData = await Easter.find({
           //dateOfSignedConsent: { $ne: null },
           nursingHome: nursingHome,
@@ -9646,7 +9646,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         await March8.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         senior = await March8.findOne({ _id: senior._id });
       }
-      if (holiday == "Пасха 2025") {
+      if (holiday == "Пасха 2026") {
         await Easter.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         senior = await Easter.findOne({ _id: senior._id });
       }
@@ -9659,7 +9659,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         let newP = senior.plusAmount;
         let p = newP - 1;
         let c = senior.category;
-        let h = (holiday == "Пасха 2025") ? "easter" : "spring";
+        let h = (holiday == "Пасха 2026") ? "easter" : "spring";
 
         await House.updateOne(
           {
