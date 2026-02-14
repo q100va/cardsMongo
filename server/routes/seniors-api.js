@@ -417,9 +417,9 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
     let months = req.body.months;
     let oldList;
     if (months.length > 0) {
-      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, monthBirthday: { $in: months }, }); //, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, monthBirthday: { $in: months }, dateExit: null, }); // , ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
     } else {
-      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null, }); //, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, }); //,dateExit: null, ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
     }
 
     newList.sort(
@@ -485,6 +485,7 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
 
       } else {
         index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic + newSenior.dateBirthday + newSenior.monthBirthday + newSenior.yearBirthday));
+
       }
       // let index = oldList.findIndex(item => (item.lastName + item.firstName + item.patronymic) == (newSenior.lastName + newSenior.firstName + newSenior.patronymic));
       // console.log("index");
@@ -494,6 +495,9 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
         key++;
         arrived.push(newSenior);
       } else {
+        if (oldList[index].dateExit !== null) {
+          await Senior.updateOne({ _id: oldList[index]._id }, { $set: { dateExit: null } });
+        }
         // await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment1: newSenior.comment1}});
         /*        await Senior.updateOne({_id: oldList[index]._id}, {$set: {comment1: newSenior.comment1,
                 dateBirthday: newSenior.dateBirthday,
@@ -709,6 +713,18 @@ router.put("/compare-lists/", checkAuth, async (req, res) => {
       }
 
     }
+
+    if (months.length > 0) {
+      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, monthBirthday: { $in: months }, dateExit: null, }); // , ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+    } else {
+      oldList = await Senior.find({ nursingHome: req.body.house, isDisabled: false, dateExit: null,}); // ,monthBirthday: 3,  monthBirthday : {$in: [2,3,4]}, comment1: "(ПСУ)",  monthBirthday:{$gt:3} , }
+    }
+    oldList.sort(
+      (prev, next) => {
+        if (prev.lastName < next.lastName) return -1;
+        if (prev.lastName > next.lastName) return 1;
+      }
+    );
 
     for (let oldSenior of oldList) {
       if (newList.findIndex(item => (item.lastName + item.firstName + item.patronymic + item.dateBirthday + item.monthBirthday + item.yearBirthday) == (oldSenior.lastName + oldSenior.firstName + oldSenior.patronymic + oldSenior.dateBirthday + oldSenior.monthBirthday + oldSenior.yearBirthday)) == -1) {

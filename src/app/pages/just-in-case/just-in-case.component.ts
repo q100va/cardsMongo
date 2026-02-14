@@ -132,7 +132,7 @@ export class JustInCaseComponent implements OnInit {
           for (let lineItem of this.femaleItems) {
             let i = 0;
             for (let celebrator of lineItem.celebrators) {
-              celebrator.index = i + 1;
+              celebrator.indexFemale = i + 1;
               i++;
             }
           }
