@@ -364,18 +364,18 @@
                         <mat-card-content *ngFor="let lineItem of lineItems">
 
                             <p style="font-weight: bold; margin: 0;">{{lineItem.address}}</p>
-<!--                             <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment && !isForInstitutes">
+                            <!--                             <p style="font-style: italic; margin: 0;" *ngIf="lineItem.infoComment && !isForInstitutes">
                                 {{lineItem.infoComment}}
                             </p>
                             <p style="color: red; font-weight: bold; margin: 0;"
                                 *ngIf="lineItem.adminComment && !isForInstitutes">
                                 {{lineItem.adminComment}}</p> -->
-                                
-                             <p style="font-weight: bold; margin: 0;">
+
+                            <p style="font-weight: bold; margin: 0;">
                                 {{lineItem.celebrators.length}} откр.: {{lineItem.Female}} жен. + {{lineItem.Male}} муж.
                             </p>
 
-<!--                             <section *ngIf="!isForInstitutes">
+                            <!--                             <section *ngIf="!isForInstitutes">
                                 <div *ngFor="let celebrator of lineItem.celebrators">                         
                                     <span *ngIf="showIndexes">{{celebrator.index}}. </span>
                                     {{celebrator.lastName}}
@@ -396,7 +396,7 @@
                             <h3
                                 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                                 Отправляйте письма правильно!</h3>
-<!--                             <ul *ngIf="!isForInstitutes">
+                            <!--                             <ul *ngIf="!isForInstitutes">
                                 <li style="font-family: 'Times New Roman', Times, serif;">
                                     Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
                                     (НЕ заказными).
@@ -433,7 +433,7 @@
                             <h3
                                 style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                                 Как писать поздравления?</h3>
-<!--                             <ul *ngIf="!isForInstitutes">
+                            <!--                             <ul *ngIf="!isForInstitutes">
                                 <li style="font-family: 'Times New Roman', Times, serif;">
                                     Используйте обращение на "Вы" и по имени-отчеству (если отчество
                                     указано).
@@ -465,7 +465,7 @@
                                 <li style="font-family: 'Times New Roman', Times, serif;">
                                     Обязательно используйте обращение на "Вы".
 
-                                </li>                       
+                                </li>
                                 <li style="font-family: 'Times New Roman', Times, serif;">
                                     Пишите поздравления от себя лично (не от организации, не от школы, не
                                     от фонда).
@@ -532,7 +532,7 @@
                                     Не отправляйте подарки, сувениры и гостинцы, чтобы не омрачить
                                     праздник других людей.
                                 </li>
-<!--                                 <li *ngIf="!isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                                <!--                                 <li *ngIf="!isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
                                     Не отправляйте посылки, бандероли, заказные/ценные письма, письма
                                     первого класса и прочие регистрируемые отправления, так как возможны
                                     проблемы с получением подобной корреспонденции и ваше отправление
@@ -553,19 +553,18 @@
                                     праздниками или писать им письма!
                                 </li>
                             </ul>
-                            <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
-                                Сайт БФ 'Старость в радость'.
-                                Сделайте
-                                пожертвование на
-                                <a href="https://starikam.org/">starikam.org</a>
-                            </p>
+
                             <hr />
                             <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
                                 От всего сердца благодарим вас за помощь! <br />
                                 Будут вопросы — обращайтесь!
+                            </p> <br />
+                            <p style="font-weight: bold; font-family: 'Times New Roman', Times, serif;">
+                                Сайт БФ 'Старость в радость'                              
+                                <a href="https://starikam.org/">starikam.org</a>
                             </p>
                             <br />
-<!--                             <p *ngIf="!isForInstitutes" style=" font-family: 'Times New Roman' , Times, serif;
+                            <!--                             <p *ngIf="!isForInstitutes" style=" font-family: 'Times New Roman' , Times, serif;
                                 font-style: italic;">* - Мы
                                 просим
                                 отправлять без указания обратного адреса поздравления в психоневрологические
