@@ -2170,9 +2170,9 @@ router.post("/birthday/check-fullness", checkAuth, async (req, res) => {
 });
 
 async function checkAllHBFullness(house) {
-  const Model = List;
-  const month = 3;
-  const nursingHome = await House.findOne({ isActive: true, nursingHome: house, dateLastUpdate: { $gt: new Date("2025-08-31") } });// noAddress: false
+  const Model = ListNext;
+  const month = 4;
+  const nursingHome = await House.findOne({ isActive: true, nursingHome: house, });// noAddress: false//dateLastUpdate: { $gt: new Date("2025-08-31") } 
   if (!nursingHome) {
     // await Model.updateMany({ nursingHome: house }, { $set: { absent: true } });
     return '-1';
