@@ -139,7 +139,7 @@ export class OrderComponent implements OnInit {
     public dialog: MatDialog,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
-    private roleService: RoleService
+    private roleService: RoleService,
   ) {
     this.userName = this.cookieService.get("session_user");
     this.roleService
@@ -151,11 +151,11 @@ export class OrderComponent implements OnInit {
       });
     this.iconRegistry.addSvgIconLiteral(
       "google",
-      this.sanitizer.bypassSecurityTrustHtml(ICON_GOOGLE)
+      this.sanitizer.bypassSecurityTrustHtml(ICON_GOOGLE),
     );
     this.iconRegistry.addSvgIconLiteral(
       "yandex",
-      this.sanitizer.bypassSecurityTrustHtml(ICON_YANDEX)
+      this.sanitizer.bypassSecurityTrustHtml(ICON_YANDEX),
     );
   }
 
@@ -178,7 +178,7 @@ export class OrderComponent implements OnInit {
       (err) => {
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
-      }
+      },
     );
     this.orderService.getNursingHomes().subscribe(
       async (res) => {
@@ -189,7 +189,7 @@ export class OrderComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     this.form = this.fb.group({
@@ -234,7 +234,7 @@ export class OrderComponent implements OnInit {
   }
   private addCheckboxes() {
     this.clientInstitutes.forEach(() =>
-      this.institutes.push(new FormControl(false))
+      this.institutes.push(new FormControl(false)),
     );
   }
 
@@ -265,7 +265,7 @@ export class OrderComponent implements OnInit {
           this.options = [];
           for (let client of res.data["contacts"]) {
             this.options.push(
-              client[this.form.controls.contactType.value].toLowerCase()
+              client[this.form.controls.contactType.value].toLowerCase(),
             );
           }
           // console.log("this.options");
@@ -280,7 +280,7 @@ export class OrderComponent implements OnInit {
         (err) => {
           this.errorMessage = err.error.msg + " " + err.message;
           console.log(err);
-        }
+        },
       );
   }
 
@@ -317,7 +317,7 @@ export class OrderComponent implements OnInit {
             let index = this.fullOptions.findIndex(
               (item) =>
                 item[this.form.controls.contactType.value].toLowerCase() ==
-                this.form.controls.contact.value.toLowerCase()
+                this.form.controls.contact.value.toLowerCase(),
             );
             this.clientService
               .findClientById(this.fullOptions[index]._id)
@@ -337,7 +337,7 @@ export class OrderComponent implements OnInit {
                 (err) => {
                   this.errorMessage = err.error.msg + " " + err.message;
                   console.log(err);
-                }
+                },
               );
             this.selectedInstitutes = [];
             this.showFilter = true;
@@ -383,7 +383,7 @@ export class OrderComponent implements OnInit {
               console.log("this.client[this.form.controls.contactType.value]");
               console.log(this.client[this.form.controls.contactType.value]);
               this.form.controls.contact.setValue(
-                this.client[this.form.controls.contactType.value]
+                this.client[this.form.controls.contactType.value],
               );
               console.log("this.form.controls.contact.value");
               console.log(this.form.controls.contact.value);
@@ -417,7 +417,7 @@ export class OrderComponent implements OnInit {
               disableClose: true,
               width: "fit-content",
             });
-          }
+          },
         );
       } else {
         let doubleId = result.doubleId;
@@ -441,7 +441,7 @@ export class OrderComponent implements OnInit {
           console.log("this.client[this.form.controls.contactType.value]");
           console.log(this.client[this.form.controls.contactType.value]);
           this.form.controls.contact.setValue(
-            this.client[this.form.controls.contactType.value]
+            this.client[this.form.controls.contactType.value],
           );
           console.log("this.form.controls.contact.value");
           console.log(this.form.controls.contact.value);
@@ -466,7 +466,7 @@ export class OrderComponent implements OnInit {
         this.client._id,
         this.form.controls.nameOfInstitute.value,
         this.form.controls.categoryOfInstitute.value,
-        this.userName
+        this.userName,
       )
       .subscribe(
         async (res) => {
@@ -480,7 +480,7 @@ export class OrderComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-        }
+        },
       );
   }
 
@@ -539,8 +539,8 @@ export class OrderComponent implements OnInit {
       this.useProportion = true;
     } else {
       this.useProportion = false;
-      this.form.controls.femaleAmount.setValue(null),
-        this.form.controls.maleAmount.setValue(null);
+      (this.form.controls.femaleAmount.setValue(null),
+        this.form.controls.maleAmount.setValue(null));
     }
   }
 
@@ -577,12 +577,12 @@ export class OrderComponent implements OnInit {
       this.activeNursingHomes = this.nursingHomes;
     } else {
       this.activeNursingHomes = this.nursingHomes.filter(
-        (item) => item.region == this.form.controls.region.value
+        (item) => item.region == this.form.controls.region.value,
       );
 
       if (this.form.controls.nursingHome.value) {
         let activeNursingHome = this.nursingHomes.filter(
-          (item) => item.nursingHome == this.form.controls.nursingHome.value
+          (item) => item.nursingHome == this.form.controls.nursingHome.value,
         );
         if (this.form.controls.region.value != activeNursingHome[0].region) {
           this.form.controls.nursingHome.setValue(null);
@@ -722,7 +722,7 @@ export class OrderComponent implements OnInit {
       (err) => {
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
-      }
+      },
     );
   }
   //
@@ -980,7 +980,7 @@ export class OrderComponent implements OnInit {
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
         this.clicked = false;
-      }
+      },
     );
   }
 
@@ -1074,7 +1074,7 @@ export class OrderComponent implements OnInit {
           this.clicked = false;
           this.errorMessage = err.error.msg + " " + err.message;
           console.log(err);
-        }
+        },
       );
   }
 
@@ -1128,7 +1128,7 @@ export class OrderComponent implements OnInit {
 
     this.holidayTitle = this.holiday;
 
-   /*  if (this.holiday == "Дни рождения февраля 2026") {
+    /*  if (this.holiday == "Дни рождения февраля 2026") {
       this.holidayTitle = "Дни рождения 26-30 ноября 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
@@ -1305,7 +1305,7 @@ export class OrderComponent implements OnInit {
           this.clicked = false;
           this.errorMessage = err.error.msg + " " + err.message;
           console.log(err);
-        }
+        },
       );
   }
 
@@ -1326,13 +1326,13 @@ export class OrderComponent implements OnInit {
       if (this.onlyWithConcent) {
         topForSubscribers =
           "Спасибо за вашу заявку!\n\n" +
-          /*           "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
-          "Открытки нужно отправить примерно за месяц до праздника или дня рождения.\n\n";
+          "Обращаем ваше внимание, что c 1 марта 2026 г. 'Почта России' поднимает цены на пересылку.\n" +
+          "Открытки просим вас отправить примерно за месяц до праздника или дня рождения.\n\n";
       } else {
         topForSubscribers =
           "Спасибо за вашу заявку!\n\n" +
-          /*         "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
-          "Открытки нужно отправить примерно за месяц до праздника или дня рождения.\n\n";
+          "Обращаем ваше внимание, что c 1 марта 2026 г. 'Почта России' поднимает цены на пересылку.\n" +
+          "Открытки просим вас отправить примерно за месяц до праздника или дня рождения.\n\n";
       } /* \n" +
           "Обращаю ваше внимание, что списки поздравляемых идут без фамилий и без точных дат (теперь мы получаем только такие данные).\n" +
           "Не переживайте:\n" +
@@ -1351,7 +1351,7 @@ export class OrderComponent implements OnInit {
         "Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные, ценные, первого класса), но нам такой вариант совершенно не подходит, так как такие отправления с 99% вероятностью вернутся обратно.\n" +
         "Ссылка на полную инструкцию: https://disk.yandex.ru/i/pIc9B0o9HKXGrQ \n\n"; */
       topForSubscribers =
-        /*      "Просим вас учитывать, что почтовые тарифы повышены с 10 февраля 2025 г.\n" + */
+        "Обращаем ваше внимание, что c 1 марта 2026 г. 'Почта России' поднимает цены на пересылку.\n" +
         "Рассчитывайте, что срок доставки будет примерно 30 дней.\n" +
         "Обязательно сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в переписку без предварительного согласования с координатором.\n" +
         "Не отправляйте подарки, сувениры или гостинцы.\n" +
@@ -1379,7 +1379,7 @@ export class OrderComponent implements OnInit {
       top =
         "Пожалуйста, подтвердите получение этого письма, ответив на него!\n\n" +
         "Мы получили вашу заявку и очень рады вашему участию!\n\n" +
-       /*  "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны.\n\n" + */
+        /*  "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ИО или несколько ИО). Фамилии в списках не указаны.\n\n" + */
         "Высылаю вам адреса для поздравления жителей домов престарелых (сначала идет адрес, потом - ФИО или несколько ФИО).\n\n" +
         (this.isForInstitutes ? this.holiday : this.holidayTitle) +
         "\n" +
@@ -1388,12 +1388,12 @@ export class OrderComponent implements OnInit {
     }
 
     if (!this.isForInstitutes) {
-    /*   if (this.onlyWithConcent) { */
+      /*   if (this.onlyWithConcent) { */
+      bottom =
+        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Обращаем ваше внимание, что c 1 марта 2026 г. 'Почта России' поднимает цены на пересылку.\n  – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет примерно 30 дней.\n\n";
+      /*   } else {
         bottom =
-          "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет примерно 30 дней.\n\n";
-    /*   } else {
-        bottom =
-          "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет примерно 30 дней. Для определения сроков отправки ориентируйтесь на даты, указанные в заголовке.\n\n";
+          "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Обращаем ваше внимание, что c 1 марта 2026 г. 'Почта России' поднимает цены на пересылку.\n  – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Рассчитывайте, что срок доставки будет примерно 30 дней. Для определения сроков отправки ориентируйтесь на даты, указанные в заголовке.\n\n";
       } */
       bottom =
         bottom +
@@ -1406,7 +1406,7 @@ export class OrderComponent implements OnInit {
         "* - Мы просим отправлять без указания обратного адреса поздравления в психоневрологические интернаты (ПНИ) и специальные интернаты по настоятельной просьбе администрации этих учреждений, чтобы их жители не потревожили поздравляющих ответными письмами. Если в вашем списке есть такой адрес, то под ним обязательно идет соответствующий комментарий: (администрация настоятельно просит не указывать ваш личный адрес на отправлениях в этот интернат, в графе откуда укажите адрес вашего почтового отделения, в графе от кого – Волонтер и ваше имя). Если такого комментария нет, то можете указать свой личный адрес.";
     } else {
       bottom =
-        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью. Получателем указать интернат.\n – Рассчитывайте, что срок доставки будет примерно 30 дней.\n\n" +
+        "Отправляйте письма правильно!\n – Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками (НЕ заказными).\n – Обращаем ваше внимание, что c 1 марта 2026 г. 'Почта России' поднимает цены на пересылку.\n  – Каждому адресату отправляйте отдельную открытку в отдельном конверте или отдельную почтовую открытку без конверта.\n – Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью. Получателем указать интернат.\n – Рассчитывайте, что срок доставки будет примерно 30 дней.\n\n" +
         "Как писать поздравления?\n – Используйте обращение на 'Вы' и по имени-отчеству (если отчество указано).\n – Пишите поздравления от себя лично (не от организации, не от школы, не от фонда).\n – Подпишитесь своим именем, укажите город и добавьте пару слов о себе.\n – По возможности укажите ваш обратный адрес (кроме случаев, когда мы просим этого не делать)*.\n – Адрес и данные получателя на конверте или почтовой открытке укажите обязательно в правом нижнем углу.\n\n" +
         "Что писать не надо.\n – Не желайте семейного уюта, любви близких, финансового благополучия и т.п.\n – Нигде не указывайте ваш телефон (даже, если есть такое поле на конверте), если не готовы на 200%, что вам начнут звонить и писать в любое время.\n – Если написано, что поздравления нужно отправлять без указания обратного адреса, не давайте свой обратный адрес и любые другие контакты*.\n\n" +
         "Получили ответ?\n – Если получили ответ от жителя интерната, обязательно сообщите об этом нам.\n – Не вступайте в переписку с ответившим до того, как это будет согласовано с координатором.\n – Если ваша открытка вернулась, также сообщите нам.\n\n" +
