@@ -274,7 +274,7 @@
                                                     </tr>
                                                     <tr><!-- *ngIf="showFilter" -->
                                                         <td>
-                                                            <div class="example-container" *ngIf='!hideAll'>
+                                                            <!--                                                             <div class="example-container" *ngIf='!hideAll'>
                                                                 <mat-form-field style="width: 39%;"
                                                                     *ngIf="showMaxOneHouse" class="example-user-input"
                                                                     appearance="fill">
@@ -296,7 +296,7 @@
                                                             <mat-error class="error"
                                                                 *ngIf="form.controls.maxOneHouse.hasError('min') || form.controls.maxNoAddress.hasError('min') ">
                                                                 Введите валидные данные (min 1)!
-                                                            </mat-error>
+                                                            </mat-error> -->
 
                                                             <!--    <mat-checkbox *ngIf="!form.controls.noNames.value"
                                                                 [disabled]="showFilter"
@@ -568,7 +568,8 @@
                             Некоторые интернаты сообщают, что корреспонденция опаздывает на 2-3 недели,а где-то больше,
                             чем на месяц.<br /> -->
                             Огромное вам спасибо за отклик!<br />
-                            Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на пересылку.<br />
+                            Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на
+                            пересылку.<br />
                             Открытки нужно отправить минимум за месяц до праздника.<br />
 
                         </p>
@@ -588,15 +589,13 @@
                             доставляют.<br />
                         </p> -->
 
-                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
+             <!--            <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
                             *ngIf="!isParcelAvailable">
                             Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
                                 переписку без предварительного согласования</strong> с координатором.<br />
                             Не отправляйте подарки, сувениры, гостинцы, регистрируемые письма, бандероли, посылки.
-                        </p>
-
-                        <p *ngIf="isParcelAvailable"
-                            style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                        </p> -->
+                        <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
                                 переписку без предварительного согласования</strong> с координатором.<br />
                             Не отправляйте подарки, сувениры или гостинцы.<br />
@@ -606,6 +605,18 @@
                             ценные, первого класса), но нам такой вариант совершенно не подходит,
                             так как такие отправления с 99% вероятностью вернутся обратно.
                         </p>
+
+                        <!--                       <p *ngIf="isParcelAvailable"
+                            style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором.<br />
+                            Не отправляйте подарки, сувениры или гостинцы.<br />
+                            Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ бандеролью.
+                            Получателем указать интернат.
+                            Часто работники почты уговаривают отправителей на регистрируемые отправления (заказные,
+                            ценные, первого класса), но нам такой вариант совершенно не подходит,
+                            так как такие отправления с 99% вероятностью вернутся обратно.
+                        </p> -->
 
                         <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
                             {{ holiday }}
@@ -658,12 +669,12 @@
                             Если какие-то адреса вам не подходят, обязательно возвращайте -
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
-                            чтобы я могла их передать другому поздравляющему.<br />
-                            С 9 мая мы поздравляем всех жителей интернатов.
+                            чтобы я могла их передать другому поздравляющему.<!-- <br />
+                            С 9 мая мы поздравляем всех жителей интернатов. -->
                         </p>
                         <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
                         text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
-                            Сначала идет адрес, потом - ИО или несколько ИО. Фамилии в списках не указаны.
+                            Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
 
                         <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;; font-weight:bold; text-decoration: underline;
@@ -791,22 +802,27 @@
                                 <!--   <mat-icon font-size="1px">brightness_1</mat-icon> 
                             {{lineItems.indexOf(lineItem)*2 + lineItem.celebrators.indexOf(celebrator)+1}}<span>. </span>-->
                                 <span *ngIf="showIndexes">{{celebrator.index}}. </span>
-                                <span *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent"> {{celebrator.lastName}}
-                                </span>
+                                <!-- <span *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent"> {{celebrator.lastName}}
+                                </span> -->
+                                {{celebrator.lastName}}
                                 {{celebrator.firstName}}
                                 {{celebrator.patronymic}}
                                 <span
                                     *ngIf="celebrator.yearBirthday > 0 && onlyWithConcent && celebrator.dateOfSignedConsent">-
                                     {{celebrator.yearBirthday}} г.р.</span>
                                 {{celebrator.comment1}}
-                                <span *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">
-                                    {{celebrator.linkPhoto}} </span>
-                                <span *ngIf="form.controls.source.value == 'subscription'">
+                                <!-- <span *ngIf="onlyWithConcent && celebrator.dateOfSignedConsent">
+                                    {{celebrator.linkPhoto}} </span> -->
+                                {{celebrator.linkPhoto}}
+                                <!-- <span *ngIf="form.controls.source.value == 'subscription'">
                                     -
                                     {{celebrator.veteran}}
                                     {{celebrator.child}}
 
-                                </span>
+                                </span> -->
+                                -
+                                {{celebrator.veteran}}
+                                {{celebrator.child}}
 
                                 <!--     onlyWithConcent && celebrator.dateOfSignedConsent &&  -->
                             </div>
@@ -838,20 +854,25 @@
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
                                 (НЕ заказными).
-                            </li>
-                              <li style="font-family: 'Times New Roman', Times, serif;">
-                                Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на пересылку.
-                            </li>
-
+                            </li> 
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Каждому адресату отправляйте отдельную открытку в отдельном конверте
                                 или отдельную почтовую открытку без конверта.
                             </li>
-
-                            <li *ngIf="isParcelAvailable" style="font-family: 'Times New Roman', Times, serif;">
+                            <li style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
                                 бандеролью. Получателем указать интернат.
                             </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на пересылку.
+                            </li>
+
+                           
+
+                            <!--  <li *ngIf="isParcelAvailable" style="font-family: 'Times New Roman', Times, serif;">
+                                Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
+                                бандеролью. Получателем указать интернат.
+                            </li> -->
 
                             <!--                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Планируйте отправить открытки в ноябре - начале декабря. Укажите, пожалуйста, на

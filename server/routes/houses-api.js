@@ -269,25 +269,25 @@ router.get("/find/active", checkAuth, async (req, res) => {
 
 
 
-    let houses = await House.find({ isActive: true, isDisabled: false }).sort({"statistic.easter.amount": 1,  _id: 1 });//dateLastUpdate: -1,
+    //  let houses = await House.find({ isActive: true, isDisabled: false }).sort({"statistic.easter.amount": 1,  _id: 1 });//dateLastUpdate: -1,
     // console.log(houses);
 
-//    for (let house of houses) {
-  
-        /* let amount23 = await Senior.aggregate([
-          { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" } },
-          { $group: { _id: null, count: { $sum: 1 } } }
-        ]);
-  
-        let amount8 = await Senior.aggregate([
-          { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" } },
-          { $group: { _id: null, count: { $sum: 1 } } }
-        ]);
-  
-        amount23 = amount23[0]?.count ? amount23[0]?.count : 0;
-        amount8 = amount8[0]?.count ? amount8[0]?.count : 0;
-  
-  */
+    //    for (let house of houses) {
+
+    /* let amount23 = await Senior.aggregate([
+      { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Male" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+ 
+    let amount8 = await Senior.aggregate([
+      { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, gender: "Female" } },
+      { $group: { _id: null, count: { $sum: 1 } } }
+    ]);
+ 
+    amount23 = amount23[0]?.count ? amount23[0]?.count : 0;
+    amount8 = amount8[0]?.count ? amount8[0]?.count : 0;
+ 
+*/
 
     /*     let amount = await Senior.aggregate([
           { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false } },
@@ -322,47 +322,54 @@ router.get("/find/active", checkAuth, async (req, res) => {
             }
           }); 
       } */
+    let houses = [];
 
+/*    houses = await House.find({ isActive: true }, { nursingHome: 1, _id: 0 });
 
-    /*     let houses = await House.find({ isActive: true }, { nursingHome: 1, _id: 0 });
-    
-        for (let house of houses) {
-    
-          let amount = await Senior.aggregate([
-            { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
-            { $group: { _id: null, count: { $sum: 1 } } }
-          ]);
-          console.log(house.nursingHome);
-          console.log(amount[0]?.count);
-    
-          let veteran = await Senior.aggregate([
-            { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, veteran: { $ne: "" } } },
-            { $group: { _id: null, count: { $sum: 1 } } }
-          ]);
-    
-          console.log(veteran[0]?.count);
-    
-          let child = await Senior.aggregate([
-            { $match: { nursingHome: house.nursingHome, dateExit: null, isRestricted: false, child: { $ne: "" } } },
-            { $group: { _id: null, count: { $sum: 1 } } }
-          ]);
-          console.log(child[0]?.count);
-    
-          let find = await House.findOne({ nursingHome: house.nursingHome });
-          console.log(find.nursingHome);
-          let update = await House.updateOne(
-            { nursingHome: house.nursingHome },
-            {
-              $set: {
-                "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
-                "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
-                "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
-                "statistic.veterans.veteranPlus0": 0, //veteran[0]?.count ? veteran[0].count : 
-                "statistic.veterans.childPlus0":  0, //child[0]?.count ? child[0].count :
-              }
-            });
-          console.log(update);
-        } */
+    for (let house of houses) {
+
+      let amount = await Senior.aggregate([
+        { $match: { nursingHome: house.nursingHome, dateExit: null, isDisabled: false, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      console.log(house.nursingHome);
+      console.log(amount[0]?.count);
+
+      let veteran = await Senior.aggregate([
+        { $match: { nursingHome: house.nursingHome, dateExit: null, isDisabled: false, isRestricted: false, veteran: { $ne: "" } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+
+      console.log(veteran[0]?.count);
+
+      let child = await Senior.aggregate([
+        { $match: { nursingHome: house.nursingHome, dateExit: null, isDisabled: false, isRestricted: false, child: { $ne: "" } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      console.log(child[0]?.count);
+
+      let find = await House.findOne({ nursingHome: house.nursingHome });
+      console.log(find.nursingHome);
+      let update = await House.updateOne(
+        { nursingHome: house.nursingHome },
+        {
+          $set: {
+            "statistic.veterans.time": 1,
+            "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
+            "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
+            "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
+            "statistic.veterans.veteranPlus0": 0, //veteran[0]?.count ? veteran[0].count : 
+            "statistic.veterans.childPlus0": 0, //child[0]?.count ? child[0].count :
+            "statistic.veterans.veteranPlus1": 0,
+            "statistic.veterans.childPlus1": 0,
+            "statistic.veterans.veteranPlus2": 0,
+            "statistic.veterans.childPlus2": 0,
+             "statistic.veterans.veteranPlus": 0,
+            "statistic.veterans.childPlus": 0,
+          }
+        });
+      console.log(update);
+    }  */
 
 
 
@@ -506,6 +513,7 @@ router.get("/find/active", checkAuth, async (req, res) => {
     
         }*/
 
+    houses = await House.find({ isActive: true, isDisabled: false }).sort({ "statistic.veterans.amount": 1, _id: 1 });//dateLastUpdate: -1,
     const findAllResponse = new BaseResponse(200, "Query successful", houses);
     res.json(findAllResponse.toObject());
 
@@ -671,9 +679,9 @@ router.post("/add-many/", checkAuth, async (req, res) => {
 
 
 router.get("/get/nursing-homes-list/", checkAuth, async (req, res) => {
-    console.log("router.get(/nursing-homes-list/");
+  console.log("router.get(/nursing-homes-list/");
   try {
-   
+
     House.find({
       isActive: true, isReleased: false, isForSchool: true, isDisabled: false
     }, async function (err, nursingHomes) {
@@ -687,7 +695,7 @@ router.get("/get/nursing-homes-list/", checkAuth, async (req, res) => {
         );
         res.status(500).send(readRegionsMongodbErrorResponse.toObject());
       } else {
-       // console.log("nursingHomes");
+        // console.log("nursingHomes");
         // console.log(nursingHomes);
         nursingHomes.sort(
           (prev, next) => {
@@ -703,11 +711,11 @@ router.get("/get/nursing-homes-list/", checkAuth, async (req, res) => {
         setRegions.add("ЕВРОПЕЙСКАЯ");
         let regions = Array.from(setRegions);
 
-        let fullRegions = await Region.find({name: {$in: regions}}).sort({name: 1,  _id: 1 });
- 
+        let fullRegions = await Region.find({ name: { $in: regions } }).sort({ name: 1, _id: 1 });
 
-         console.log("fullRegions");
-         console.log(fullRegions);
+
+        console.log("fullRegions");
+        console.log(fullRegions);
 
         const readRegionsResponse = new BaseResponse(
           200,

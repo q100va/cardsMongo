@@ -41,13 +41,18 @@ export class AdminVeteransComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private resultDialog: MatDialog,
-    private listService: ListService
+    private listService: ListService,
   ) {
     console.log("constructor");
     this.housesService.findActiveHouses().subscribe(
       (res) => {
         this.houses = res["data"];
         this.houses = this.houses.filter(
+          (item) =>
+            item.statistic.veterans.amount > 0 /* &&
+          item.statistic.veterans.childPlus0 != item.statistic.veterans.child */
+        );
+        /*       this.houses = this.houses.filter(
           (item) =>
           item.statistic.veterans.amount >  
          
@@ -57,9 +62,9 @@ export class AdminVeteransComponent implements OnInit {
             item.statistic.veterans.childPlus2 &&
             item.isReleased != true &&
             item.noAddress != true
-        ); //item.statistic.veterans.veteranPlus1 + 
+        ); */ //item.statistic.veterans.veteranPlus1 +
 
-/*         this.houses = this.houses.filter(
+        /*         this.houses = this.houses.filter(
           (item) =>
             item.statistic.veterans.amount >
               item.statistic.veterans.veteranPlus1 +
@@ -75,7 +80,7 @@ export class AdminVeteransComponent implements OnInit {
       (err) => {
         console.log(err);
       },
-      () => {}
+      () => {},
     );
   }
 
@@ -105,9 +110,9 @@ export class AdminVeteransComponent implements OnInit {
         (err) => {
           console.log(err);
           alert(
-            "Произошла ошибка, обратитесь к администратору! " + err.message
+            "Произошла ошибка, обратитесь к администратору! " + err.message,
           );
-        }
+        },
       );
     }
   }
