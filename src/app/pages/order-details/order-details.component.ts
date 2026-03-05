@@ -37,18 +37,18 @@ export class OrderDetailsComponent implements OnInit {
   isNotLate = false;
   isNotOnlyOne = true;
   openHolidays = [
-    "Дни рождения февраля 2026",
-    "Дни рождения апреля 2026",
     "Дни рождения марта 2026",
+    "Дни рождения мая 2026",
+    "Дни рождения апреля 2026",
     /*"Именины марта 2025",
     "Именины марта 2025",
     "Именины февраля 2025", 
     "Новый год 2026",*/
     "8 марта 2026",
     "23 февраля 2026",
-    /*"Пасха 2026",
-      "9 мая 2026",    
-      "День учителя и дошкольного работника 2024",
+    "Пасха 2026",
+    "9 мая 2026",
+    /* "День учителя и дошкольного работника 2024",
       "День семьи 2024",    
     */
   ];
@@ -60,7 +60,7 @@ export class OrderDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private cookieService: CookieService,
     private confirmationService: ConfirmationService,
-    private roleService: RoleService
+    private roleService: RoleService,
   ) {
     this.orderId = this.route.snapshot.paramMap.get("id");
     console.log(this.orderId);
@@ -79,7 +79,7 @@ export class OrderDetailsComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
   }
 
@@ -147,7 +147,7 @@ export class OrderDetailsComponent implements OnInit {
         !this.order.isOverdue +
         !this.order.isReturned +
         this.isNotOnlyOne +
-        this.isNotLate
+        this.isNotLate,
     );
 
     console.log(this.order.institutes.length > 0);
@@ -176,7 +176,7 @@ export class OrderDetailsComponent implements OnInit {
             },
             (err) => {
               console.log(err);
-            }
+            },
           );
       },
     });

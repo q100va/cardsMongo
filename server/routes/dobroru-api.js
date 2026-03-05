@@ -117,13 +117,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
                     seniors_ids.push(person.celebrator_id);
                 }
 
-                if (holiday == "Дни рождения апреля 2026") {
+                if (holiday == "Дни рождения мая 2026") {
                     await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения марта 2026") {
+                if (holiday == "Дни рождения апреля 2026") {
                     await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения февраля 2026") {
+                if (holiday == "Дни рождения марта 2026") {
                     await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
                 }
 
@@ -149,6 +149,17 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
     //let period = await Period.findOne({ key:0 });
     let period;
+    if (newOrder.holiday == "Дни рождения апреля 2026") {
+        period = {
+            "date1": 6,
+            "date2": 10,
+            "isActive": true,
+            "key": 0,
+            "maxPlus": 7, //PLUSES1
+            "secondTime": false,
+            "scoredPluses": 2
+        }
+    }
     if (newOrder.holiday == "Дни рождения марта 2026") {
         period = {
             "date1": 26,
@@ -160,18 +171,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             "scoredPluses": 2
         }
     }
-    if (newOrder.holiday == "Дни рождения февраля 2026") {
-        period = {
-            "date1": 26,
-            "date2": 29,
-            "isActive": true,
-            "key": 0,
-            "maxPlus": 7, //PLUSES1
-            "secondTime": false,
-            "scoredPluses": 2
-        }
-    }
-    if (newOrder.holiday == "Дни рождения апреля 2026") {
+    if (newOrder.holiday == "Дни рождения мая 2026") {
         period = {
             "date1": 1,
             "date2": 5,
@@ -730,27 +730,6 @@ async function fillOrder(proportion, period, order_id, filter, prohibitedId, res
             data.maxPlus = period.maxPlus;
 
             data = await collectSeniors(data, orderFilter, holiday);
-            /* 
-                        if (data.counter < proportion[category]) {
-                            //if (orderFilter.date2 > orderFilter.date1 + 5) { }
-                            if (period.key == 5) {
-                                data.maxPlus = period.maxPlus + 1;
-                                data.date1 = period.date1;
-                                data.date2 = period.date2;
-                            } else {
-                                if (proportion.amount < 31) {
-                                    data.maxPlus = period.maxPlus;
-                                    data.date1 = period.date2 + 1;
-                                    data.date2 = period.date2 + 1;
-                                } else {
-                                    data.maxPlus = period.key == 4 ? period.maxPlus + 1 : period.maxPlus;
-                                    data.date1 = period.date1 + 5;
-                                    data.date2 = period.date2 + 5;
-                                }
-                            }
-                            data = await collectSeniors(data, orderFilter, holiday);
-                        } */
-
             if (data.counter < proportion[category]) {
 
                 return data;
@@ -881,13 +860,13 @@ async function collectSeniors(data, orderFilter, holiday) {
             if (result) {
                 //console.log(result);
                 await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-                if (holiday == "Дни рождения апреля 2026") {
+                if (holiday == "Дни рождения мая 2026") {
                     await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения марта 2026") {
+                if (holiday == "Дни рождения апреля 2026") {
                     await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
-                if (holiday == "Дни рождения февраля 2026") {
+                if (holiday == "Дни рождения марта 2026") {
                     await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
                 }
 
@@ -1356,13 +1335,13 @@ async function searchSeniorHelper(
         //console.log("filter CHECK");
         //console.log(filter);
 
-        if (holiday == "Дни рождения апреля 2026") {
+        if (holiday == "Дни рождения мая 2026") {
             celebrator = await ListNext.findOne(filter);
         }
-        if (holiday == "Дни рождения марта 2026") {
+        if (holiday == "Дни рождения апреля 2026") {
             celebrator = await List.findOne(filter);
         }
-        if (holiday == "Дни рождения февраля 2026") {
+        if (holiday == "Дни рождения марта 2026") {
             celebrator = await ListBefore.findOne(filter);
         }
 
@@ -3393,7 +3372,7 @@ async function fillOrderForInstitutes(
         //console.log(house.nursingHome);
 
 
-        if (holiday == "Дни рождения марта 2026") {
+        if (holiday == "Дни рождения апреля 2026") {
             count = await List.find({
                 nursingHome: house.nursingHome,
                 //gender: "Female",
@@ -3401,14 +3380,14 @@ async function fillOrderForInstitutes(
             }).countDocuments();
         }
 
-        if (holiday == "Дни рождения апреля 2026") {
+        if (holiday == "Дни рождения мая 2026") {
             count = await ListNext.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 7 }, _id: { $nin: prohibitedId }
             }).countDocuments();
         }
 
 
-        if (holiday == "Дни рождения февраля 2026") {
+        if (holiday == "Дни рождения марта 2026") {
             count = await ListBefore.find({
                 nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 7 }, _id: { $nin: prohibitedId }
             }).countDocuments();
@@ -3858,7 +3837,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
 
 
-    if (holiday == "Дни рождения апреля 2026") {
+    if (holiday == "Дни рождения мая 2026") {
 
         seniorsData = await ListNext.find({
             nursingHome: nursingHome,
@@ -3878,7 +3857,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
 
 
-    if (holiday == "Дни рождения марта 2026") {
+    if (holiday == "Дни рождения апреля 2026") {
 
         seniorsData = await List.find({
             //gender: "Female", 
@@ -3896,7 +3875,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
         }
     }
 
-    if (holiday == "Дни рождения февраля 2026") {
+    if (holiday == "Дни рождения марта 2026") {
 
         seniorsData = await ListBefore.find({
             nursingHome: nursingHome,

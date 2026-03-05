@@ -12,21 +12,21 @@
             </ng-container>
 
             <ng-container matColumnDef="holiday1">
-                <mat-header-cell *matHeaderCellDef> ДР февраля 2026 </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> ДР марта 2026 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount1 }} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="holiday3">
-                <mat-header-cell *matHeaderCellDef> ДР марта 2026 </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> ДР апреля 2026 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount3 }} </mat-cell>
             </ng-container>
             <ng-container matColumnDef="holiday4">
-                <mat-header-cell *matHeaderCellDef> ДР апреля 2026 </mat-header-cell>
+                <mat-header-cell *matHeaderCellDef> ДР мая 2026 </mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount4}} </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="holiday8">
+<!--             <ng-container matColumnDef="holiday8">
                 <mat-header-cell *matHeaderCellDef> 23 февраля 2026</mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount8}} </mat-cell>
-            </ng-container>
+            </ng-container> -->
             <ng-container matColumnDef="holiday2">
                 <mat-header-cell *matHeaderCellDef> 8 марта 2026</mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount2}} </mat-cell>
@@ -42,11 +42,11 @@
                 <mat-header-cell *matHeaderCellDef> Пасха 2026</mat-header-cell>
                 <mat-cell *matCellDef="let item"> {{ item.amount5}} </mat-cell>
             </ng-container>
-    <!--         <ng-container matColumnDef="holiday6">
-                <mat-header-cell *matHeaderCellDef> 9 мая 2026 - примерные данные, вкл. Навигаторов</mat-header-cell>
+        <ng-container matColumnDef="holiday6">
+                <mat-header-cell *matHeaderCellDef> 9 мая 2026 </mat-header-cell><!-- - примерные данные, вкл. Навигаторов -->
                 <mat-cell *matCellDef="let item"> {{ item.amount6}} </mat-cell>              
             </ng-container>
- -->
+
 
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
