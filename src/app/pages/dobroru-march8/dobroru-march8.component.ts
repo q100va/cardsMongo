@@ -536,8 +536,8 @@ export class DobroruMarch8Component implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.addressFilter = "any";
-    this.genderFilter = "any";
+    this.addressFilter = "noSpecial";
+    this.genderFilter = "Female";
 
     this.clicked = false;
     this.useProportion = false;

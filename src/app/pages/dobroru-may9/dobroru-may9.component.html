@@ -158,6 +158,27 @@
                                                 </div>
 
                                             </td>
+                                             <td width="25%">
+                                                <div *ngIf='!showFilter'>
+                                                    <label id="example-radio-group-label">Пропорции</label>
+                                                    <mat-radio-group class="example-radio-group"
+                                                        [(ngModel)]="addressFilter"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <mat-radio-button class="example-radio-button"
+                                                            [value]="'noSpecial'" default>
+                                                            только ДИПИ
+                                                        </mat-radio-button>
+                                                        <mat-radio-button class="example-radio-button"
+                                                            [value]="'onlySpecial'">
+                                                            только ПНИ
+                                                        </mat-radio-button>
+                                                        <mat-radio-button class="example-radio-button" [value]="'both'">
+                                                            50/50
+                                                        </mat-radio-button>
+                                                    </mat-radio-group>
+                                                </div>
+
+                                            </td>
                                             <td>
 
                                                 <table class="example-full-width" cellspacing="0">
@@ -631,9 +652,9 @@
                             {{celebrator.patronymic}}
                             <!--   {{celebrator.fullDayBirthday}} -->
                             {{celebrator.comment1}}
-                            -
+                           <!--  -
                             {{celebrator.veteran}}
-                            {{celebrator.child}}
+                            {{celebrator.child}} -->
                             <!--   {{celebrator.linkPhoto}} 
                             <span style="font-weight: bold; color: rgb(175, 19, 175); "> {{celebrator.specialComment}}
                             </span>-->

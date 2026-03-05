@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 import {
   FormArray,
   FormBuilder,
@@ -25,12 +25,11 @@ import { CreateClientDialogComponent } from "src/app/shared/create-client-dialog
 import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog/update-client-dialog.component";
 
 @Component({
-  selector: 'app-dobroru-may9',
-  templateUrl: './dobroru-may9.component.html',
-  styleUrls: ['./dobroru-may9.component.css']
+  selector: "app-dobroru-may9",
+  templateUrl: "./dobroru-may9.component.html",
+  styleUrls: ["./dobroru-may9.component.css"],
 })
 export class DobroruMay9Component implements OnInit {
-
   order: Order;
   userName: string;
   form: FormGroup;
@@ -62,8 +61,9 @@ export class DobroruMay9Component implements OnInit {
   useProportion: Boolean = false;
   showMaxNoAddress: Boolean = true;
   showMaxOneHouse: Boolean = true;
-  addressFilter: string = "any";
+  //addressFilter: string = "any";
   genderFilter: string = "any";
+  addressFilter: string = "noSpecial";
   showIndexes: false;
   showInstruction: false;
   regions = [];
@@ -112,7 +112,7 @@ export class DobroruMay9Component implements OnInit {
     private cookieService: CookieService,
     private clipboard: Clipboard,
     private fb: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {
     this.userName = this.cookieService.get("session_user");
   }
@@ -136,98 +136,17 @@ export class DobroruMay9Component implements OnInit {
       (err) => {
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
-      }
+      },
     );
     this.orderService.getNursingHomes().subscribe(
       async (res) => {
         this.nursingHomes = res["data"]["nursingHomes"];
         this.activeNursingHomes = res["data"]["nursingHomes"];
         this.regions = res["data"]["regions"];
-
-        /*      this.regions = [
-        "АМУРСКАЯ",
-      // "ВЛАДИМИРСКАЯ",
-       // "ВОЛОГОДСКАЯ",
-       "БУРЯТИЯ",
-      "ЗАБАЙКАЛЬСКИЙ",
-       // "ИВАНОВСКАЯ",
-      //  "КАЛМЫКИЯ",
-      //  "КЕМЕРОВСКАЯ",
-    //  "КОСТРОМСКАЯ",
-    "КРАСНОДАРСКИЙ",
-      // "КУРГАНСКАЯ",
-        "РОСТОВСКАЯ",
-        "МОРДОВИЯ",
-        "МУРМАНСКАЯ",
-        "ОМСКАЯ",
-        "ПЕНЗЕНСКАЯ",
-        "ПСКОВСКАЯ",
-        "СТАВРОПОЛЬСКИЙ",
-       "ТОМСКАЯ",
-        "ТВЕРСКАЯ",
-       //"УЛЬЯНОВСКАЯ",
-        //"ЧУВАШСКАЯ",
-      
-      ];  */
-        /*         this.regions = [
-            "АЛТАЙСКИЙ",
-            "АМУРСКАЯ",
-            "АРХАНГЕЛЬСКАЯ",
-            "БАШКОРТОСТАН",
-            "БЕЛГОРОДСКАЯ",
-            "БРЯНСКАЯ",
-            "ВЛАДИМИРСКАЯ",
-            "ВОЛГОГРАДСКАЯ",
-            "ВОЛОГОДСКАЯ",
-            "ВОРОНЕЖСКАЯ",
-            "ЗАБАЙКАЛЬСКИЙ",
-            "ИВАНОВСКАЯ",
-            "ИРКУТСКАЯ",
-            "КАЛУЖСКАЯ",
-            "КОСТРОМСКАЯ",
-            "КРАСНОДАРСКИЙ",
-            "КРАСНОЯРСКИЙ",
-            "КРЫМ",
-            "КУРСКАЯ",
-            "ЛЕНИНГРАДСКАЯ",
-            "МАГАДАНСКАЯ",
-            "МАРИЙ_ЭЛ",
-            "МОРДОВИЯ",
-            "МОСКОВСКАЯ",
-            "МУРМАНСКАЯ",
-            "НИЖЕГОРОДСКАЯ",
-            "НОВГОРОДСКАЯ",
-            "НОВОСИБИРСКАЯ",
-            "ПЕНЗЕНСКАЯ",
-            "ПЕРМСКИЙ",
-            "ПРИМОРСКИЙ",
-            "ПСКОВСКАЯ",
-            "РОСТОВСКАЯ",
-            "РЯЗАНСКАЯ",
-            "САМАРСКАЯ",
-            "САРАТОВСКАЯ",
-            "САХАЛИНСКАЯ",
-            "СВЕРДЛОВСКАЯ",
-            "СЕВЕРНАЯ_ОСЕТИЯ",
-            "СМОЛЕНСКАЯ",
-            "ТАМБОВСКАЯ",
-            "ТАТАРСТАН",
-            "ТВЕРСКАЯ",
-            "ТУЛЬСКАЯ",
-            "ТЮМЕНСКАЯ",
-            "УДМУРТСКАЯ",
-            "УЛЬЯНОВСКАЯ",
-            "ХАКАСИЯ",
-            "ХАНТЫ-МАНСИЙСКИЙ",
-            "ЧЕЛЯБИНСКАЯ",
-            "ЧУВАШСКАЯ",
-            "ЯРОСЛАВСКАЯ",
-          ]; */
-        // this.activeRegions = res["data"]["regions"];
       },
       (err) => {
         console.log(err);
-      }
+      },
     );
 
     this.form = this.fb.group({
@@ -271,7 +190,7 @@ export class DobroruMay9Component implements OnInit {
   }
   private addCheckboxes() {
     this.clientInstitutes.forEach(() =>
-      this.institutes.push(new FormControl(false))
+      this.institutes.push(new FormControl(false)),
     );
   }
 
@@ -301,7 +220,7 @@ export class DobroruMay9Component implements OnInit {
           this.options = [];
           for (let client of res.data["contacts"]) {
             this.options.push(
-              client[this.form.controls.contactType.value].toLowerCase()
+              client[this.form.controls.contactType.value].toLowerCase(),
             );
           }
           // console.log("this.options");
@@ -316,7 +235,7 @@ export class DobroruMay9Component implements OnInit {
         (err) => {
           this.errorMessage = err.error.msg + " " + err.message;
           console.log(err);
-        }
+        },
       );
   }
 
@@ -352,7 +271,7 @@ export class DobroruMay9Component implements OnInit {
           let index = this.fullOptions.findIndex(
             (item) =>
               item[this.form.controls.contactType.value].toLowerCase() ==
-              this.form.controls.contact.value.toLowerCase()
+              this.form.controls.contact.value.toLowerCase(),
           );
           this.clientService
             .findClientById(this.fullOptions[index]._id)
@@ -372,7 +291,7 @@ export class DobroruMay9Component implements OnInit {
               (err) => {
                 this.errorMessage = err.error.msg + " " + err.message;
                 console.log(err);
-              }
+              },
             );
           this.selectedInstitutes = [];
           this.showFilter = true;
@@ -418,7 +337,7 @@ export class DobroruMay9Component implements OnInit {
               console.log("this.client[this.form.controls.contactType.value]");
               console.log(this.client[this.form.controls.contactType.value]);
               this.form.controls.contact.setValue(
-                this.client[this.form.controls.contactType.value]
+                this.client[this.form.controls.contactType.value],
               );
               console.log("this.form.controls.contact.value");
               console.log(this.form.controls.contact.value);
@@ -451,7 +370,7 @@ export class DobroruMay9Component implements OnInit {
               disableClose: true,
               width: "fit-content",
             });
-          }
+          },
         );
       } else {
         let doubleId = result.doubleId;
@@ -475,7 +394,7 @@ export class DobroruMay9Component implements OnInit {
           console.log("this.client[this.form.controls.contactType.value]");
           console.log(this.client[this.form.controls.contactType.value]);
           this.form.controls.contact.setValue(
-            this.client[this.form.controls.contactType.value]
+            this.client[this.form.controls.contactType.value],
           );
           console.log("this.form.controls.contact.value");
           console.log(this.form.controls.contact.value);
@@ -500,7 +419,7 @@ export class DobroruMay9Component implements OnInit {
         this.client._id,
         this.form.controls.nameOfInstitute.value,
         this.form.controls.categoryOfInstitute.value,
-        this.userName
+        this.userName,
       )
       .subscribe(
         async (res) => {
@@ -514,7 +433,7 @@ export class DobroruMay9Component implements OnInit {
         },
         (err) => {
           console.log(err);
-        }
+        },
       );
   }
 
@@ -535,8 +454,8 @@ export class DobroruMay9Component implements OnInit {
       this.useProportion = true;
     } else {
       this.useProportion = false;
-      this.form.controls.femaleAmount.setValue(null),
-        this.form.controls.maleAmount.setValue(null);
+      (this.form.controls.femaleAmount.setValue(null),
+        this.form.controls.maleAmount.setValue(null));
     }
   }
 
@@ -575,13 +494,13 @@ export class DobroruMay9Component implements OnInit {
       this.activeNursingHomes = this.nursingHomes;
     } else {
       this.activeNursingHomes = this.nursingHomes.filter(
-        (item) => item.region == this.form.controls.region.value
+        (item) => item.region == this.form.controls.region.value,
       );
       this.showChoiceSpareRegions = true;
 
       if (this.form.controls.nursingHome.value) {
         let activeNursingHome = this.nursingHomes.filter(
-          (item) => item.nursingHome == this.form.controls.nursingHome.value
+          (item) => item.nursingHome == this.form.controls.nursingHome.value,
         );
         if (this.form.controls.region.value != activeNursingHome[0].region) {
           this.form.controls.nursingHome.setValue(null);
@@ -618,7 +537,7 @@ export class DobroruMay9Component implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.addressFilter = "any";
+    this.addressFilter = "noSpecial";
     this.genderFilter = "any";
 
     this.clicked = false;
@@ -660,7 +579,7 @@ export class DobroruMay9Component implements OnInit {
       (err) => {
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
-      }
+      },
     );
   }
 
@@ -844,10 +763,16 @@ export class DobroruMay9Component implements OnInit {
               accept: () => {
                 if (this.selectedInstitutes.length > 0) {
                   // console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-                  this.fillInstitutesOrder(result.seniorsIds, ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+                  this.fillInstitutesOrder(result.seniorsIds, [
+                    "ПОРЕЧЬЕ-РЫБНОЕ",
+                    "САВИНСКИЙ",
+                  ]);
                 } else {
                   //console.log("this.selectedInstitutes.length:" + this.selectedInstitutes.length);
-                  this.fillOrder(result.seniorsIds, ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"]);
+                  this.fillOrder(result.seniorsIds, [
+                    "ПОРЕЧЬЕ-РЫБНОЕ",
+                    "САВИНСКИЙ",
+                  ]);
                 }
               }, //result.houses
               reject: () => (this.clicked = false),
@@ -881,7 +806,7 @@ export class DobroruMay9Component implements OnInit {
         this.errorMessage = err.error.msg + " " + err.message;
         console.log(err);
         this.clicked = false;
-      }
+      },
     );
   }
 
@@ -927,7 +852,7 @@ export class DobroruMay9Component implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        addressFilter: "noSpecial",
+        addressFilter: "nonoReleased",
         genderFilter: this.genderFilter,
         year1: this.form.controls.year1.value,
         year2: this.form.controls.year2.value,
@@ -953,8 +878,8 @@ export class DobroruMay9Component implements OnInit {
     console.log(newOrder.dateOfOrder);
     //console.log("newOrder");
     //console.log(newOrder);
-   // restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"];
-  
+    // restrictedHouses = ["ПОРЕЧЬЕ-РЫБНОЕ", "САВИНСКИЙ"];
+
     /* restrictedHouses.push("ЖУКОВКА");
     restrictedHouses.push("СОСНОВКА");
     restrictedHouses.push("БИЙСК");
@@ -963,8 +888,7 @@ export class DobroruMay9Component implements OnInit {
     restrictedHouses.push("ПЕРВОМАЙСКИЙ_СОТРУДНИКИ"); */
 
     console.log("restrictedHouses1");
-    console.log(restrictedHouses); 
-   
+    console.log(restrictedHouses);
 
     this.orderService
       .createOrderSpring(newOrder, prohibitedId, restrictedHouses)
@@ -1001,7 +925,7 @@ export class DobroruMay9Component implements OnInit {
           this.clicked = false;
           this.errorMessage = err.error.msg + " " + err.message;
           console.log(err);
-        }
+        },
       );
   }
 
@@ -1026,8 +950,8 @@ export class DobroruMay9Component implements OnInit {
       orderDate: this.orderDate,
       dateOfOrder: new Date(),
       filter: {
-        //addressFilter: this.addressFilter,
-        addressFilter: "noSpecial",
+        addressFilter: this.addressFilter,
+       // addressFilter: "noSpecial",
         genderFilter: "Female",
         year1: null,
         year2: null,
@@ -1055,7 +979,7 @@ export class DobroruMay9Component implements OnInit {
     //console.log(newOrder);
 
     this.orderService
-    .createInstitutesOrder(newOrder, prohibitedId, restrictedHouses)
+      .createInstitutesOrderDobroru(newOrder, prohibitedId, restrictedHouses)
       .subscribe(
         async (res) => {
           this.spinner = false;
@@ -1069,7 +993,7 @@ export class DobroruMay9Component implements OnInit {
             //console.log(res);
             this.lineItems = result;
             this.isForInstitutes = true;
-            let i = 0;
+            /*         let i = 0;
             for (let lineItem of this.lineItems) {
               lineItem.Female = 0;
               lineItem.Male = 0;
@@ -1079,7 +1003,7 @@ export class DobroruMay9Component implements OnInit {
                 if (celebrator.gender == "Female") lineItem.Female++;
                 if (celebrator.gender == "Male") lineItem.Male++;
               }
-            }
+            } */
 
             this.canSave = true;
             this.successMessage =
@@ -1093,7 +1017,7 @@ export class DobroruMay9Component implements OnInit {
           this.clicked = false;
           this.errorMessage = err.error.msg + " " + err.message;
           console.log(err);
-        }
+        },
       );
   }
 
@@ -1192,4 +1116,3 @@ export class DobroruMay9Component implements OnInit {
     console.log(successful);
   }
 }
-

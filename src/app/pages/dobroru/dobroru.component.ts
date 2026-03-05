@@ -600,7 +600,7 @@ export class DobroruComponent implements OnInit {
     this.lineItems = [];
     this.canSave = false;
     this.form.reset();
-    this.addressFilter = "noReleased";
+    this.addressFilter = "noSpecial";
     this.genderFilter = "any";
 
     this.clicked = false;

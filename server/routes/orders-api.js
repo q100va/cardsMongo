@@ -5391,28 +5391,28 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
 
       data = await collectSeniorsSpring(data, orderFilter);
 
-      /*   if (data.counter < proportion[category]) {
+       if (data.counter < proportion[category]) {
         data.maxPlus = 2;
  
-        data = await collectSeniorsNewYear(data, orderFilter);
+        data = await collectSeniorsSpring(data, orderFilter);
       }
  
      if (data.counter < proportion[category]) {
         data.maxPlus = 3;
  
-        data = await collectSeniorsNewYear(data, orderFilter);
+        data = await collectSeniorsSpring(data, orderFilter);
       }  
 
-
+ /* 
       if (data.counter < proportion[category]) {
         data.maxPlus = 4;
  
-        data = await collectSeniorsNewYear(data, orderFilter);
+        data = await collectSeniorsSpring(data, orderFilter);
       }  
    if (data.counter < proportion[category]) {
         data.maxPlus = 5;
  
-        data = await collectSeniorsNewYear(data, orderFilter);
+        data = await collectSeniorsSpring(data, orderFilter);
       }    */
       if (data.counter < proportion[category]) {
         return data;
@@ -5566,24 +5566,23 @@ async function collectSeniorsSpring(data, orderFilter) {
           await May9.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
 
 
-          //TODO: May9 statistic
-          /*           let senior = await May9.findOne({ _id: result.celebrator_id });
-                    let newP = senior.plusAmount;
-                    let p = newP - 1;
-                    let c = senior.category;
-                    await House.updateOne(
-                      {
-                        nursingHome: senior.nursingHome
-                      },
-                      {
-                        $inc: {
-                          ["statistic.easter.plus" + p]: -1,
-                          ["statistic.easter.plus" + newP]: 1,
-                          ["statistic.easter." + c + "Plus"]: 1,
-                        }
-                      }
-          
-                    ); */
+          let senior = await May9.findOne({ _id: result.celebrator_id });
+          let newP = senior.plusAmount;
+          let p = newP - 1;
+          let c = senior.category;
+          await House.updateOne(
+            {
+              nursingHome: senior.nursingHome
+            },
+            {
+              $inc: {
+                ["statistic.easter.plus" + p]: -1,
+                ["statistic.easter.plus" + newP]: 1,
+                ["statistic.easter." + c + "Plus"]: 1,
+              }
+            }
+
+          );
         }
 
         data.celebratorsAmount++;
@@ -5646,7 +5645,7 @@ async function searchSeniorSpring(
     //dateBirthday: { $gte: data.date1, $lte: data.date2 },
     absent: { $ne: true }
   };
-  if (data.holiday == "9 мая 2026") standardFilter.yearBirthday = { $gt: 0, $lte: 1945 };
+  //if (data.holiday == "9 мая 2026") standardFilter.yearBirthday = { $gt: 0, $lte: 1945 };
 
 
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions };

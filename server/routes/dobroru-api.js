@@ -267,8 +267,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         }
 
 
-     console.log("PROPORTION");
-            console.log(proportion);
+        console.log("PROPORTION");
+        console.log(proportion);
 
         // proportion = await Proportion.findOne({ amount: newOrder.amount });789
         if (!proportion) {
@@ -3051,11 +3051,11 @@ router.post("/forInstitutes/:amount", checkAuth, async (req, res) => {
         if (index == -1) {
             await Client.updateOne({ _id: newOrder.clientId }, { $push: { coordinators: newOrder.userName } });
         }
-        let notForSchools =  await House.find({
-                isForSchool: false
-              });
-         notForSchools = notForSchools.map(h=>h.nursingHome);
-         console.log("notForSchools");
+        let notForSchools = await House.find({
+            isForSchool: false
+        });
+        notForSchools = notForSchools.map(h => h.nursingHome);
+        console.log("notForSchools");
         console.log(notForSchools);
 
         let restrictedHouses = ["ПЕРВОМАЙСКИЙ_СОТРУДНИКИ", "ПОРЕЧЬЕ-РЫБНОЕ", "КАШИРСКОЕ", "ВОРОНЕЖ_ДНЕПРОВСКИЙ", "ЖУКОВКА", ...req.body.restrictedHouses, ...notForSchools] //, "ЧИКОЛА", "АРМАВИР"
@@ -3448,6 +3448,21 @@ async function fillOrderForInstitutes(
         }
 
 
+        if (holiday == "9 мая 2026" && !filter.region) { //&& filter.addressFilter == "noSpecial"
+            count = await May9.find({
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true, 
+                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+            }).countDocuments();
+        }
+
+        if (holiday == "9 мая 2026" && filter.region) {// && filter.addressFilter == "noSpecial"
+            count = await May9.find({
+                nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 3 }, _id: { $nin: prohibitedId }//, secondTime: trueforInstitute: 0, finished: falseonlyForInstitute: true
+                // nursingHome: house.nursingHome, absent: false, plusAmount: { $lt: 2 } // ИСПРАВИТЬ 
+            }).countDocuments();
+        }
+
+
         console.log("house.nursingHome");
         console.log(house.nursingHome);
 
@@ -3755,6 +3770,32 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
             }).limit(amount);
         }
     }
+    if (holiday == "9 мая 2026") {
+        if (!region) {
+            seniorsData = await May9.find({
+                //forInstitute: 0,
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 2 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //finished: false,   
+                //onlyForInstitute: true,
+                //secondTime: true
+            }).limit(amount);
+        }
+        if (region) {
+            seniorsData = await May9.find({
+                nursingHome: nursingHome,
+                absent: false,
+                plusAmount: { $lt: 3 },
+                _id: { $nin: prohibitedId }, // ИСПРАВИТЬ
+                //onlyForInstitute: true, 
+                // forInstitute: 0,
+                //finished: false,
+                // secondTime: true
+            }).limit(amount);
+        }
+    }
 
 
     console.log("seniorsData");
@@ -3827,6 +3868,27 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
                         ["statistic.spring.forInstitute"]: 1,
                     }
                 }
+            );
+        }
+
+        if (holiday == "9 мая 2026") {
+            await May9.updateOne({ _id: senior._id }, { $inc: { plusAmount: 1 } }, { upsert: false });
+            senior = await May9.findOne({ _id: senior._id });
+            let newP = senior.plusAmount;
+            let p = newP - 1;
+            let c = senior.veteran ? "veteranPlus" : "childPlus";
+            await House.updateOne(
+                {
+                    nursingHome: senior.nursingHome
+                },
+                {
+                    $inc: {
+                        ["statistic.veterans." + c + p]: -1,
+                        ["statistic.veterans." + c + newP]: 1,
+                        ["statistic.veterans." + c]: 1,
+                    }
+                }
+
             );
         }
 
@@ -3961,26 +4023,26 @@ router.get("/forNavigators", checkAuth, async (req, res) => {
             isActive: false,//true,
             isReleased: false,
             isDisabled: false,
-           // isForSchool: true,
+            // isForSchool: true,
             //"statistic.newYear.plus0": { $ne: 0 },
             // "statistic.newYear.plus1": 0 ,
             noAddress: false,
-              dateLastUpdate: { $gt: new Date("2024-8-31"), } 
+            dateLastUpdate: { $gt: new Date("2024-8-31"), }
         });
-       /*  houses.forEach(async (h) => {
-            const count = await Senior.countDocuments(
-                {
-                    nursingHome: h.nursingHome,
-                    isRestricted: false,
-                    isReleased: false,
-                    dateExit: null,
-                    isDisabled: false
-                }
-            );
-            console.log(`${h.region} + ${h.nursingHome} + ${h.address} + ${h.adminComment ? 'ПНИ' : ''} + ${count}`);
-        }); */
+        /*  houses.forEach(async (h) => {
+             const count = await Senior.countDocuments(
+                 {
+                     nursingHome: h.nursingHome,
+                     isRestricted: false,
+                     isReleased: false,
+                     dateExit: null,
+                     isDisabled: false
+                 }
+             );
+             console.log(`${h.region} + ${h.nursingHome} + ${h.address} + ${h.adminComment ? 'ПНИ' : ''} + ${count}`);
+         }); */
 
-         houses.forEach(async (h) => {
+        houses.forEach(async (h) => {
             const countM = await Senior.countDocuments(
                 {
                     nursingHome: h.nursingHome,
