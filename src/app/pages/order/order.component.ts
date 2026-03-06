@@ -355,7 +355,7 @@ export class OrderComponent implements OnInit {
         this.isForInstitutes = false;
         this.lineItems = [];
       }
-    }, 200);
+    }, 600);
   }
 
   openCreateClientDialog(): void {
