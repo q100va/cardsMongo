@@ -589,7 +589,7 @@
                             доставляют.<br />
                         </p> -->
 
-             <!--            <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
+                        <!--            <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;"
                             *ngIf="!isParcelAvailable">
                             Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
                                 переписку без предварительного согласования</strong> с координатором.<br />
@@ -661,17 +661,24 @@
                             встречаются
                             люди, которых к престарелым совсем не относятся. Это инвалиды, которые
                             проживают в домах престарелых. Иногда сразу после детдомов. -->
-                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
-                            {{ holiday }}
-                        </h2>
 
-                        <p style="font-style: italic; font-family: 'Times New Roman', Times, serif;">
+                        <p
+                            style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 0.9em; line-height: 1.2m;">
+                            Отправляйте только <strong>ПРОСТЫЕ</strong> письма или бандероли. НЕ отправляйте подарки или
+                            гостинцы.<br />
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором (эти адреса только
+                            для разового поздравления с одним праздником).
+                        </p>
+
+
+                        <!--    <p style="font-style: italic; font-family: 'Times New Roman', Times, serif;">
                             Если какие-то адреса вам не подходят, обязательно возвращайте -
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
-                            чтобы я могла их передать другому поздравляющему.<!-- <br />
+                            чтобы я могла их передать другому поздравляющему.
+                        </p> --><!-- <br />
                             С 9 мая мы поздравляем всех жителей интернатов. -->
-                        </p>
                         <p *ngIf="!onlyWithConcent" style="font-family: 'Times New Roman', Times, serif; font-weight:bold; text-decoration: underline;
                         text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ФИО или несколько ФИО.
@@ -681,6 +688,11 @@
                         text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
+                        <br />
+                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                            {{ holiday }}
+                        </h2>
+
 
                     </mat-card-content>
 
@@ -851,10 +863,10 @@
                             style="font-family: 'Times New Roman', Times, serif; font-weight: bold; color: rgb(31, 86, 168)">
                             Отправляйте письма правильно!</h3>
                         <ul *ngIf="!isForInstitutes || isParcelAvailable">
-                            <li style="font-family: 'Times New Roman', Times, serif;">
+                            <!--       <li style="font-family: 'Times New Roman', Times, serif;">
                                 Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
                                 (НЕ заказными).
-                            </li> 
+                            </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Каждому адресату отправляйте отдельную открытку в отдельном конверте
                                 или отдельную почтовую открытку без конверта.
@@ -865,9 +877,30 @@
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
                                 Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на пересылку.
+                            </li> -->
+
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Постарайтесь отправить открытки в ближайшие дни.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
+                                (НЕ заказными).
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Желательно каждому адресату отправить отдельную открытку в отдельном конверте
+                                или отдельную почтовую открытку без конверта.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
+                                бандеролью. Получателем указать интернат. На конверте рекомендуем указать название
+                                праздника. Например, "9 мая".
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на
+                                пересылку.
                             </li>
 
-                           
+
 
                             <!--  <li *ngIf="isParcelAvailable" style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ

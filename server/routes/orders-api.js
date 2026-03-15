@@ -5391,29 +5391,29 @@ async function fillOrderSpring(proportion, order_id, filter, prohibitedId, restr
 
       data = await collectSeniorsSpring(data, orderFilter);
 
-       if (data.counter < proportion[category]) {
+      if (data.counter < proportion[category]) {
         data.maxPlus = 2;
- 
+
         data = await collectSeniorsSpring(data, orderFilter);
       }
- 
-     if (data.counter < proportion[category]) {
-        data.maxPlus = 3;
- 
-        data = await collectSeniorsSpring(data, orderFilter);
-      }  
 
- /* 
       if (data.counter < proportion[category]) {
-        data.maxPlus = 4;
- 
+        data.maxPlus = 3;
+
         data = await collectSeniorsSpring(data, orderFilter);
-      }  
-   if (data.counter < proportion[category]) {
-        data.maxPlus = 5;
- 
-        data = await collectSeniorsSpring(data, orderFilter);
-      }    */
+      }
+
+      /* 
+           if (data.counter < proportion[category]) {
+             data.maxPlus = 4;
+      
+             data = await collectSeniorsSpring(data, orderFilter);
+           }  
+        if (data.counter < proportion[category]) {
+             data.maxPlus = 5;
+      
+             data = await collectSeniorsSpring(data, orderFilter);
+           }    */
       if (data.counter < proportion[category]) {
         return data;
       }
@@ -5894,12 +5894,14 @@ async function createOrderMay9(newOrder) {
     "amount": newOrder.amount,
     "veterans": veterans,
     "children": children,
-    "oneHouse": Math.round(newOrder.amount * 0.3) > 0 ? Math.round(newOrder.amount * 0.3) : 1
+    "oneHouse": newOrder.amount < 5 ? newOrder.amount :
+      newOrder.amount > 20 ? Math.round(newOrder.amount * 0.3) :
+        Math.round(newOrder.amount * 0.5)
   }
   // if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
 
   // if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined; //hata
-  if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture) proportion.oneHouse = undefined;
+  if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined;
   console.log("newOrder.filter.region");
   console.log(newOrder.filter.region);
 
@@ -8063,6 +8065,7 @@ async function generateLineItemsEaster(nursingHomes, order_id) {
 ////////////VETERANS ORDER////////////////////////////////////////
 
 router.post("/veterans/:amount", checkAuth, async (req, res) => {
+      console.log("VETERANS");
   let finalResult;
   try {
     let newOrder = {
@@ -8198,12 +8201,14 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
     "amount": newOrder.amount,
     "veterans": veterans,
     "children": children,
-    "oneHouse": Math.round(newOrder.amount * 0.1) > 0 ? Math.round(newOrder.amount * 0.1) : 1
+    "oneHouse": newOrder.amount < 5 ? newOrder.amount :
+      newOrder.amount > 20 ? Math.round(newOrder.amount * 0.3) :
+        Math.round(newOrder.amount * 0.5)
   }
   // if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
 
   // if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture || newOrder.filter.region) proportion.oneHouse = undefined; //hata
-  if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture) proportion.oneHouse = undefined;
+  if (newOrder.filter.nursingHome || newOrder.filter.onlyWithPicture) proportion.oneHouse = newOrder.amount;
 
   if (newOrder.filter.maxOneHouse) {
     proportion.oneHouse = newOrder.filter.maxOneHouse;

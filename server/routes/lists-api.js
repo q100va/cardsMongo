@@ -3296,7 +3296,7 @@ async function reportListOfHouses() {
             ]
           }
         }); */
-    const listOfHouses = await House.find({ isActive: true, region: region.name, dateLastUpdate: { $gt: new Date("2024-08-31"), $lt: new Date("2024-11-01") } });
+    const listOfHouses = await House.find({ isActive: true, region: region.name});
     //const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
@@ -3328,8 +3328,9 @@ async function reportListOfHouses() {
       // house = await House.findOne({nursingHome: house});
       /*  console.log('house');
         console.log(house);*/
-      const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false }).count();
-      console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.dateLastUpdateClone + " + " + house.address + " + " + house.notes);
+      const amountOfSeniors = await Senior.find({ nursingHome: house.nursingHome, dateExit: null, isRestricted: false, isDisabled: false }).countDocuments();
+      //console.log(house.region + " + " + house.nursingHome + " + " + amountOfSeniors + " + " + house.dateLastUpdateClone + " + " + house.address + " + " + house.notes);
+      console.log(house.region + " + " + house.nursingHome + " + " + house.address + " + " + amountOfSeniors);
 
       /*             const amountOfMen = await February23.find({ nursingHome: house.nursingHome, absent: false, plusAmount: 0, noAddress: false }).count();
                   const amountOfWomen = await March8.find({ nursingHome: house.nursingHome, absent: false, plusAmount: 0, noAddress: false }).count(); */
@@ -4316,8 +4317,8 @@ router.post("/easter/create", checkAuth, async (req, res) => {
   try {
     const houses = req.body.list;
     console.log("0- inside Create list API");
-     let result = await findAllEasterCelebrators(houses);
-   // let result = await countAmount();
+    let result = await findAllEasterCelebrators(houses);
+    // let result = await countAmount();
 
     console.log("4-inside Create list API " + result);
     //const newList = newList1.slice();
@@ -5081,17 +5082,17 @@ async function findAllVeteransCelebrators(houses) {
 
     namesOfUpdatedNursingHome.push(home.nursingHome);
   }
-  
+
   let listVeteran = await Senior.find(
     {
-      isDisabled: false, dateExit: null,  isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, veteran: { $ne: "" }
+      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, veteran: { $ne: "" }
     }
   );
 
   // let listChild =[];
   let listChild = await Senior.find(
     {
-      isDisabled: false, dateExit: null,  isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, child: { $ne: "" }
+      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, child: { $ne: "" }
     }
   );
 
@@ -5135,39 +5136,39 @@ async function findAllVeteransCelebrators(houses) {
 
   //console.log("cloneCelebrator");
   //console.log(cloneCelebrator);
-/*   for (let house of namesOfUpdatedNursingHome) {
-    let amount = await Senior.aggregate([
-      { $match: { nursingHome: house, dateExit: null, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
-      { $group: { _id: null, count: { $sum: 1 } } }
-    ]);
-    console.log(house);
-    console.log(amount[0]?.count);
-
-    let veteran = await Senior.aggregate([
-      { $match: { nursingHome: house, dateExit: null, isRestricted: false, veteran: { $ne: "" } } },
-      { $group: { _id: null, count: { $sum: 1 } } }
-    ]);
-
-    console.log(veteran[0]?.count);
-
-    let child = await Senior.aggregate([
-      { $match: { nursingHome: house, dateExit: null, isRestricted: false, child: { $ne: "" } } },
-      { $group: { _id: null, count: { $sum: 1 } } }
-    ]);
-    console.log(child[0]?.count);
-
-    let find = await House.findOne({ nursingHome: house });
-    console.log(find.nursingHome);
-    let update = await House.updateOne(
-      { nursingHome: house },
-      {
-        $set: {
-          "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
-          "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
-          "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
-        }
-      });
-  } */
+  /*   for (let house of namesOfUpdatedNursingHome) {
+      let amount = await Senior.aggregate([
+        { $match: { nursingHome: house, dateExit: null, isRestricted: false, yearBirthday: { $gt: 0, $lt: 1946 } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      console.log(house);
+      console.log(amount[0]?.count);
+  
+      let veteran = await Senior.aggregate([
+        { $match: { nursingHome: house, dateExit: null, isRestricted: false, veteran: { $ne: "" } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+  
+      console.log(veteran[0]?.count);
+  
+      let child = await Senior.aggregate([
+        { $match: { nursingHome: house, dateExit: null, isRestricted: false, child: { $ne: "" } } },
+        { $group: { _id: null, count: { $sum: 1 } } }
+      ]);
+      console.log(child[0]?.count);
+  
+      let find = await House.findOne({ nursingHome: house });
+      console.log(find.nursingHome);
+      let update = await House.updateOne(
+        { nursingHome: house },
+        {
+          $set: {
+            "statistic.veterans.amount": amount[0]?.count ? amount[0].count : 0,
+            "statistic.veterans.veteran": veteran[0]?.count ? veteran[0].count : 0,
+            "statistic.veterans.child": child[0]?.count ? child[0].count : 0,
+          }
+        });
+    } */
 
   // newList = newList1.slice();
 
@@ -5500,8 +5501,8 @@ async function restoreVeteransStatistic(activeHouse) {
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
     // await seniorsVolunteers();
-   // await quarta();
-   // await year_eberdnikova();
+    // await quarta();
+    // await year_eberdnikova();
 
     let statistic = [
       {
@@ -5539,7 +5540,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
       {
         name: "в т.ч. ветеранов и детей войны из ПНИ",
         amount1: '-', //ДР марта 2026
-       // amount2: '-', //8 марта 2026
+        // amount2: '-', //8 марта 2026
         //   amount8: 0, // 23 февраля 2026
         amount3: '-', //ДР апреля 2026
         amount4: '-', //ДР мая 2026
@@ -5566,7 +5567,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
         amount4: '-', //ДР мая 2026
         amount5: '-', //Пасха 2026
         amount6: 0, //9 мая 2026
-       // amount7: '-', //Новый год 2026
+        // amount7: '-', //Новый год 2026
       },
       {
         name: "из них жителей ПНИ поздравлено 4 и более раз",
@@ -5778,20 +5779,20 @@ router.get("/statistic", checkAuth, async (req, res) => {
         statistic[22]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true, plusAmount: 0 });
       }
     }
-   
-        statistic[1]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], });
-        statistic[3]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true });
-        statistic[5]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: { $gte: 4 } });
-        statistic[7]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: { $gte: 4 } });
-        statistic[9]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 3 });
-        statistic[11]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 3 });
-        statistic[13]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 2 });
-        statistic[15]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 2 });
-        statistic[17]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 1 });
-        statistic[19]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 1 });
-        statistic[21]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 0 });
-        statistic[23]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 0 });
- 
+
+    statistic[1]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], });
+    statistic[3]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true });
+    statistic[5]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: { $gte: 4 } });
+    statistic[7]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: { $gte: 4 } });
+    statistic[9]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 3 });
+    statistic[11]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 3 });
+    statistic[13]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 2 });
+    statistic[15]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 2 });
+    statistic[17]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 1 });
+    statistic[19]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 1 });
+    statistic[21]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], plusAmount: 0 });
+    statistic[23]['amount6'] = await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: true, plusAmount: 0 });
+
 
 
     /*     statistic[2].amount2 = 10667;
@@ -5804,19 +5805,19 @@ router.get("/statistic", checkAuth, async (req, res) => {
 
     //Навигаторы взяли 30000+1500+2500= 34000
 
-/* 
-         statistic[20].amount6 = statistic[20].amount6 - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
-        statistic[21].amount6 = statistic[21].amount6 - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
-        statistic[16]['amount6'] = statistic[16]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
-        statistic[17]['amount6'] = statistic[17]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
-        statistic[12]['amount6'] = statistic[12]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 });
-        statistic[13]['amount6'] = statistic[13]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 });
-        statistic[8]['amount6'] = statistic[8]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 });
-        statistic[9]['amount6'] = statistic[9]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 });
-        statistic[4]['amount6'] = statistic[4]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 });
-        statistic[5]['amount6'] = statistic[5]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 });
-     */
-   
+    /* 
+             statistic[20].amount6 = statistic[20].amount6 - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
+            statistic[21].amount6 = statistic[21].amount6 - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
+            statistic[16]['amount6'] = statistic[16]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 0 });
+            statistic[17]['amount6'] = statistic[17]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 0 });
+            statistic[12]['amount6'] = statistic[12]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 1 });
+            statistic[13]['amount6'] = statistic[13]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 1 });
+            statistic[8]['amount6'] = statistic[8]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 2 });
+            statistic[9]['amount6'] = statistic[9]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 2 });
+            statistic[4]['amount6'] = statistic[4]['amount6'] - await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, noAddress: false, plusAmount: 3 });
+            statistic[5]['amount6'] = statistic[5]['amount6'] - await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 4 }) + await May9.countDocuments({ absent: false, $or: [{ child: { $ne: "" } }, { veteran: { $ne: "" } }], noAddress: false, plusAmount: 3 });
+         */
+
     console.log('statistic');
     console.log(statistic);
 
@@ -5837,61 +5838,61 @@ router.get("/statistic", checkAuth, async (req, res) => {
   let orders = await Order.find({ isDisabled: false, "li" });
 } */
 
-  async function year_eberdnikova() {
-    let orders = await Order.find({
+async function year_eberdnikova() {
+  let orders = await Order.find({
     isDisabled: false, //isOverdue: false, isReturned: false,
     dateOfOrder: { $gt: new Date("2024-12-31"), $lt: new Date("2026-01-01") },
-    userName:"eberdnikova"
+    userName: "eberdnikova"
     /*     $or: [{ "holiday": 'Дни рождения мая 2025' },
         { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения марта 2026' },
         { "holiday": '9 мая 2026' }, { "holiday": 'Пасха 2026' },] */
   });
- // let celebrators = [];
+  // let celebrators = [];
   let participators = [];
- // let regions = [];
-//  let houses = [];
+  // let regions = [];
+  //  let houses = [];
   //let amount = 0;
   let amountOfOrders = orders.length;
   let amountOfSchoolsOrders = 0;
   let institutes = [];
   let schools = [];
-   let count = orders.length;
+  let count = orders.length;
   for (let order of orders) {
     participators.push(order.clientId);
     if (order.institutes.length) {
       amountOfSchoolsOrders++;
-   /*     for (let inst of order.institutes) {
-        institutes.push(inst._id);
-
-       if (inst.category == 'образовательное учреждение') {
-          schools.push(inst._id);          
-        } 
-
-      }*/
-    }
-/*     for (let item of order.lineItems) {
-      for (let celebrator of item.celebrators) {
-        celebrators.push(celebrator.lastName + celebrator.firstName + celebrator.patronymic + celebrator.nursingHome + celebrator.fullDayBirthday);
-        houses.push(celebrator.nursingHome);
-        regions.push(celebrator.region);
-
-      }
-    }
-    amount = amount + order.amount; */
+      /*     for (let inst of order.institutes) {
+           institutes.push(inst._id);
    
+          if (inst.category == 'образовательное учреждение') {
+             schools.push(inst._id);          
+           } 
+   
+         }*/
+    }
+    /*     for (let item of order.lineItems) {
+          for (let celebrator of item.celebrators) {
+            celebrators.push(celebrator.lastName + celebrator.firstName + celebrator.patronymic + celebrator.nursingHome + celebrator.fullDayBirthday);
+            houses.push(celebrator.nursingHome);
+            regions.push(celebrator.region);
+    
+          }
+        }
+        amount = amount + order.amount; */
+
     console.log(count--);
   }
 
-/*   let c = new Set(celebrators);
-  let h = new Set(houses);
-  let r = new Set(regions); */
+  /*   let c = new Set(celebrators);
+    let h = new Set(houses);
+    let r = new Set(regions); */
   let p = new Set(participators);
   let i = new Set(institutes);
   let s = new Set(schools);
-/*   console.log("amount");
-  console.log(amount);
-  console.log("celebrators");
-  console.log(c.size); */
+  /*   console.log("amount");
+    console.log(amount);
+    console.log("celebrators");
+    console.log(c.size); */
   console.log("amountOfOrders");
   console.log(amountOfOrders);
   console.log("participators");
@@ -5900,13 +5901,13 @@ router.get("/statistic", checkAuth, async (req, res) => {
   console.log(i.size);
   console.log("schools");
   console.log(s.size);
-/*   console.log("regions");
-  console.log(r);
-  console.log(r.size);
-  console.log("houses");
-  console.log(h.size); */
+  /*   console.log("regions");
+    console.log(r);
+    console.log(r.size);
+    console.log("houses");
+    console.log(h.size); */
 
-  }
+}
 
 async function quarta() {
   let orders = await Order.find({
@@ -5923,7 +5924,7 @@ async function quarta() {
   let amount = 0;
   let institutes = [];
   let schools = [];
-   let count = orders.length;
+  let count = orders.length;
   for (let order of orders) {
     participators.push(order.clientId);
     if (order.institutes.length) {
@@ -5941,7 +5942,7 @@ async function quarta() {
       }
     }
     amount = amount + order.amount;
-   
+
     console.log(count--);
   }
 

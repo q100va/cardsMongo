@@ -649,7 +649,7 @@
 
                         <p style="font-family: 'Times New Roman', Times, serif; font-style: italic;">
                             Спасибо за вашу заявку!<br />
-                            Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' поднимает цены на
+                            Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на
                             пересылку.<br />
                             Открытки просим вас отправить примерно за месяц до праздника или дня рождения.
                             <!--  <span *ngIf="!onlyWithConcent"> Для определения сроков отправки ориентируйтесь на даты,
@@ -701,20 +701,27 @@
                         <p *ngIf="onlyWithConcent" style="font-family: 'Times New Roman', Times, serif;">
                             Высылаю вам адреса для поздравления жителей домов престарелых (сначала
                             идет адрес, потом - ФИО или несколько ФИО).
-                        </p>
- -->
+                        </p> -->
 
-                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
-                            {{isForInstitutes ? holiday : holidayTitle }}
-                        </h2>
 
-                        <p
+                        <!--                         <p
                             style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 0.9em; line-height: 1.2m;">
                             Если какие-то адреса вам не подходят, обязательно возвращайте -
                             заменю.<br />
                             Если вы не сможете отправить открытки, сообщите мне, как можно скорее,
                             чтобы я могла их передать другому поздравляющему.
+                        </p> -->
+
+                        <p
+                            style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 0.9em; line-height: 1.2m;">
+                            Отправляйте только <strong>ПРОСТЫЕ</strong> письма или бандероли. НЕ отправляйте подарки или
+                            гостинцы.<br />
+                            Обязательно <strong>сообщите нам, если кто-то из поздравляемых вам ответит: не вступайте в
+                                переписку без предварительного согласования</strong> с координатором (эти адреса только
+                            для разового поздравления с одним праздником).
                         </p>
+
+
                         <!-- <br />
                             Обращаю ваше внимание, что по полученным адресам нужно отправить открытки и только открытки
                             один раз к указанному празднику. Письма писать не нужно!<br />
@@ -735,7 +742,10 @@
                             text-decoration-color: rgb(31, 86, 168); color: rgb(31, 86, 168);">
                             Сначала идет адрес, потом - ФИО или несколько ФИО.
                         </p>
-
+                        <br />
+                        <h2 style="font-family: 'Times New Roman', Times, serif; font-weight: bold;">
+                            {{isForInstitutes ? holiday : holidayTitle }}
+                        </h2>
                     </mat-card-content>
 
                     <mat-card-content *ngIf="showInstructionForSubscribers && isForInstitutes"
@@ -903,30 +913,33 @@
                             Отправляйте письма правильно!</h3>
                         <ul>
                             <li style="font-family: 'Times New Roman', Times, serif;">
+                                Постарайтесь отправить открытки в ближайшие дни.
+                            </li>
+                            <li style="font-family: 'Times New Roman', Times, serif;">
                                 Открытки отправляйте Почтой России только ПРОСТЫМИ письмами/открытками
                                 (НЕ заказными).
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;">
-                                Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' поднимает цены на
-                                пересылку.
-                            </li>
-                            <li style="font-family: 'Times New Roman', Times, serif;">
-                                Каждому адресату отправляйте отдельную открытку в отдельном конверте
+                                Желательно каждому адресату отправить отдельную открытку в отдельном конверте
                                 или отдельную почтовую открытку без конверта.
                             </li>
-                            <li *ngIf="isForInstitutes" style="font-family: 'Times New Roman', Times, serif;">
+                            <li style="font-family: 'Times New Roman', Times, serif;">
                                 Если вам удобнее, то в один интернат можно отправить все открытки одной ПРОСТОЙ
                                 бандеролью. Получателем указать интернат. На конверте рекомендуем указать название
-                                праздника. Например, "Дни рождения марта".
+                                праздника. Например, "Дни рождения мая".
                             </li>
-                            <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="isForInstitutes">
+                            <li style="font-family: 'Times New Roman', Times, serif;">
+                                Обращаем ваше внимание, что c 10 марта 2026 г. 'Почта России' подняла цены на
+                                пересылку.
+                            </li>
+                            <!--       <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="isForInstitutes">
                                 Рассчитывайте, что срок доставки будет примерно 30 дней.
                             </li>
                             <li style="font-family: 'Times New Roman', Times, serif;" *ngIf="!isForInstitutes">
-                                Рассчитывайте, что срок доставки будет примерно 30 дней. <!-- <span
+                                Рассчитывайте, что срок доставки будет примерно 30 дней. 
+                            </li> --><!-- <span
                                     *ngIf="!onlyWithConcent">Для определения сроков отправки
                                     ориентируйтесь на даты, указанные в заголовке.</span> -->
-                            </li>
                         </ul>
 
                         <!--                         <ul *ngIf="isForInstitutes">
