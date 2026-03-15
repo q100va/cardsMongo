@@ -2519,7 +2519,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 15,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2, //PLUSES1
+      "maxPlus": 3, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -3419,10 +3419,10 @@ async function searchSenior(
   }
   if (holiday == "Дни рождения апреля 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen") {
-      maxPlusAmount = data.maxPlus + 3;
+      maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 3;
+      maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" || standardFilter.category == "specialWomen") {//
       maxPlusAmount = data.maxPlus + 1;
