@@ -3421,11 +3421,11 @@ async function searchSenior(
     }
   }
   if (holiday == "Дни рождения апреля 2026") {
-    if (standardFilter.oldest || standardFilter.category == "oldWomen") {
-      maxPlusAmount = data.maxPlus + 1;
+    if ( standardFilter.category == "oldWomen") {//standardFilter.oldest ||
+      maxPlusAmount = data.maxPlus + 2;
     }
     if (standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 1;
+      maxPlusAmount = data.maxPlus + 2;
     }
     if (standardFilter.category == "oldMen" ) {//|| standardFilter.category == "yangMen" || standardFilter.category == "specialWomen"
       maxPlusAmount = data.maxPlus + 1;
