@@ -2515,11 +2515,11 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения апреля 2026") {
     period = {
-      "date1": 11,
-      "date2": 15,
+      "date1": 16,
+      "date2": 20,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3, //PLUSES1
+      "maxPlus": 1, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2609,7 +2609,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         "yangMen": yangMenAmount,
         "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
       }
-      if (newOrder.filter.nursingHome) proportion.oneHouse = undefined;
+      if (newOrder.filter.nursingHome || newOrder.filter.region) proportion.oneHouse = undefined;
     } else {
 
       /*       let oldWomenAmount = Math.round(newOrder.amount * 0.2) ? Math.round(newOrder.amount * 0.2) : 1;
@@ -2660,7 +2660,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-        "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
+       // "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
+         "oneHouse": newOrder.amount < 5 ? newOrder.amount :
+      newOrder.amount > 20 ? Math.round(newOrder.amount * 0.3) :
+        Math.round(newOrder.amount * 0.5)
       }
     }
 
@@ -3424,7 +3427,7 @@ async function searchSenior(
     if (standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 1;
     }
-    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" || standardFilter.category == "specialWomen") {//
+    if (standardFilter.category == "oldMen" ) {//|| standardFilter.category == "yangMen" || standardFilter.category == "specialWomen"
       maxPlusAmount = data.maxPlus + 1;
     }
 

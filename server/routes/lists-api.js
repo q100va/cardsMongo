@@ -3296,7 +3296,7 @@ async function reportListOfHouses() {
             ]
           }
         }); */
-    const listOfHouses = await House.find({ isActive: true, region: region.name});
+    const listOfHouses = await House.find({ isActive: true, region: region.name });
     //const listOfHouses = await House.find({ isActive: false, region: region.name, noAddress: false });
     //console.log("listOfHouses ");
     // console.log(listOfHouses);
@@ -5327,7 +5327,7 @@ async function findAllVeteransDoubles(house) {
 router.post("/veterans/check-fullness", checkAuth, async (req, res) => {
   try {
 
-    console.log("0- check NY fullness " + req.body.nursingHome);
+    //console.log("0- check NY fullness " + req.body.nursingHome);
 
     /*    let housesSet = new Set();
        const celebratorsMay9 = await May9.find({ absent: false });
@@ -5338,11 +5338,11 @@ router.post("/veterans/check-fullness", checkAuth, async (req, res) => {
 
     let houses = await House.find({ isDisabled: false, isActive: true, isReleased: false });
 
-    // let houses = ["РЖЕВ"];
+    //let houses = [{ nursingHome: "ЗЕРНОГРАД_МИРА" }];
 
     for (let house of houses) {
-      await checkAllVeteransFullness(house.nursingHome);
-      //await restoreVeteransStatistic(house);
+      // await checkAllVeteransFullness(house.nursingHome);
+      await restoreVeteransStatistic(house.nursingHome);
     }
 
     const newListResponse = new BaseResponse(200, "Query Successful", true);
@@ -5441,7 +5441,13 @@ async function restoreVeteransStatistic(activeHouse) {
       { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: i, veteran: { $ne: "" } } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.['veteranPlus' + i]": plus[0]?.count ? plus[0].count : 0 } });
+    const field = `statistic.veterans.veteranPlus${i}`;
+
+    await House.updateOne(
+      { _id: house._id },
+      { $set: { [field]: plus.length ? plus[0].count : 0 } }
+    );
+    //await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.['veteranPlus' + i]": (plus.length ? plus[0].count : 0) } });
 
   }
 
@@ -5450,8 +5456,16 @@ async function restoreVeteransStatistic(activeHouse) {
       { $match: { nursingHome: house.nursingHome, absent: false, plusAmount: i, child: { $ne: "" } } },
       { $group: { _id: null, count: { $sum: 1 } } }
     ]);
-    await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.['childPlus' + i]": plus[0]?.count ? plus[0].count : 0 } });
+    const field = `statistic.veterans.childPlus${i}`;
+
+    await House.updateOne(
+      { _id: house._id },
+      { $set: { [field]: plus.length ? plus[0].count : 0 } }
+    );
+    //await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.['childPlus' + i]": (plus.length ? plus[0].count : 0) } });
+    //console.log('childPlus' + i, plus);
   }
+
 
   let veteranPlus = await May9.aggregate([
     { $match: { nursingHome: house.nursingHome, absent: false, veteran: { $ne: "" } } },
@@ -5470,7 +5484,7 @@ async function restoreVeteransStatistic(activeHouse) {
     { $match: { nursingHome: house.nursingHome, absent: false } },
     { $group: { _id: null, count: { $sum: 1 } } }
   ]);
-  await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.amount": amount[0].count } });
+  if (amount?.length) await House.updateOne({ _id: house._id }, { $set: { "statistic.veterans.amount": amount[0].count } });
 
   console.log("amount 9May");
   console.log(amount);
