@@ -3427,8 +3427,8 @@ async function searchSenior(
     if (standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 2;
     }
-    if (standardFilter.category == "oldMen" ) {//|| standardFilter.category == "yangMen" || standardFilter.category == "specialWomen"
-      maxPlusAmount = data.maxPlus + 1;
+    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" ) {//|| standardFilter.category == "specialWomen"
+      maxPlusAmount = data.maxPlus + 2;
     }
 
     if (filter.dateOfSignedConsent == { '$ne': null }) {
