@@ -5575,7 +5575,7 @@ async function collectSeniorsSpring(data, orderFilter) {
 
           );
         }
-
+//TODO:
         if (data.holiday == "9 мая 2026") {
           await May9.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
 
@@ -5683,9 +5683,9 @@ async function searchSeniorSpring(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 2;
+  //let maxPlusAmount = 2;
 
-  //let maxPlusAmount = data.maxPlus;
+  let maxPlusAmount = data.maxPlus;
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
@@ -8546,14 +8546,14 @@ async function searchSeniorVeterans(
   let celebrator;
   //CHANGE!!!
   // let maxPlusAmount = 3;  
-  let maxPlusAmount = 1; //PLUSES1
-  if (kind == 'veterans') { maxPlusAmount = 1; }
-  if (filter.dateOfSignedConsent && filter.dateOfSignedConsent['$ne'] == null) {
+  //let maxPlusAmount = 1; //PLUSES1
+ // if (kind == 'veterans') { maxPlusAmount = 1; }
+/*   if (filter.dateOfSignedConsent && filter.dateOfSignedConsent['$ne'] == null) {
     maxPlusAmount = 2;
-  }
+  } */
 
 
-  //let maxPlusAmount = data.maxPlus;  
+  let maxPlusAmount = data.maxPlus;  
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
