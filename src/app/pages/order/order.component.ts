@@ -285,6 +285,82 @@ export class OrderComponent implements OnInit {
       );
   }
 
+    checkContactTimeOut() {
+      setTimeout(() => {
+        //console.log("this.previousClient");
+        //console.log(this.previousClient);
+        //console.log("checkContact");
+        // console.log(this.form.controls.contact.value);
+        //console.log(this.options);
+        /*       console.log(
+          this.options.includes(this.form.controls.contact.value.toLowerCase())
+        ); */
+  
+        if (this.form.controls.contact.value) {
+          if (
+            !this.options.includes(this.form.controls.contact.value.toLowerCase())
+          ) {
+            this.client = undefined;
+            this.previousClient = this.form.controls.contact.value.toLowerCase();
+            this.institutes.clear();
+            this.confirmationService.confirm({
+              message:
+                "Поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.)",
+              accept: () => {
+                this.openCreateClientDialog();
+              },
+            });
+          } else {
+            if (
+              this.previousClient !=
+              this.form.controls.contact.value.toLowerCase()
+            ) {
+              let index = this.fullOptions.findIndex(
+                (item) =>
+                  item[this.form.controls.contactType.value].toLowerCase() ==
+                  this.form.controls.contact.value.toLowerCase(),
+              );
+              this.clientService
+                .findClientById(this.fullOptions[index]._id)
+                .subscribe(
+                  async (res) => {
+                    this.previousClient =
+                      this.form.controls.contact.value.toLowerCase();
+                    console.log("res.data");
+                    console.log(res.data);
+                    this.client = res.data;
+                    this.clientInstitutes = this.client.institutes;
+                    console.log("clientInstitutes");
+                    console.log(this.clientInstitutes);
+                    this.institutes.clear();
+                    this.addCheckboxes();
+                  },
+                  (err) => {
+                    this.errorMessage = err.error.msg + " " + err.message;
+                    console.log(err);
+                  },
+                );
+              this.selectedInstitutes = [];
+              this.showFilter = true;
+              this.isForInstitutes = false;
+              this.lineItems = [];
+            }
+          }
+        } else {
+          this.client = undefined;
+          this.clientInstitutes = [];
+          this.previousClient = "";
+          this.institutes.clear();
+          this.selectedInstitutes = [];
+          this.showFilter = true;
+          this.isForInstitutes = false;
+          this.lineItems = [];
+        }
+      }, 200);
+    }
+
+
+/* 
   checkContactTimeOut() {
     setTimeout(async () => {
       //console.log("this.previousClient");
@@ -292,9 +368,7 @@ export class OrderComponent implements OnInit {
       //console.log("checkContact");
       // console.log(this.form.controls.contact.value);
       //console.log(this.options);
-      /*       console.log(
-        this.options.includes(this.form.controls.contact.value.toLowerCase())
-      ); */
+
 
       if (this.form.controls.contact.value) {
         console.log("this.options-1");
@@ -349,7 +423,7 @@ export class OrderComponent implements OnInit {
         this.lineItems = [];
       }
     }, 600);
-  }
+  } */
 
   clientFound() {
     if (this.previousClient != this.form.controls.contact.value.toLowerCase()) {
