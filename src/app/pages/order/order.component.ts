@@ -33,6 +33,7 @@ import { UpdateClientDialogComponent } from "src/app/shared/update-client-dialog
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatIconRegistry } from "@angular/material/icon";
 import { RoleService } from "src/app/services/roles.service";
+import * as e from "express";
 
 const ICON_GOOGLE = `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 48 48">
 <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
@@ -253,7 +254,7 @@ export class OrderComponent implements OnInit {
   get institutes() {
     return this.form.get("institutes") as FormArray;
   }
-  getContacts(afterCreation) {
+  async getContacts(afterCreation) {
     this.orderService
       .getContacts(this.form.controls.contactType.value)
       .subscribe(
@@ -268,8 +269,8 @@ export class OrderComponent implements OnInit {
               client[this.form.controls.contactType.value].toLowerCase(),
             );
           }
-          // console.log("this.options");
-          // console.log(this.options);
+          console.log("this.options");
+          console.log(this.options);
           if (!afterCreation) {
             this.form.controls.contact.setValue("");
             this.client = undefined;
@@ -285,7 +286,7 @@ export class OrderComponent implements OnInit {
   }
 
   checkContactTimeOut() {
-    setTimeout(() => {
+    setTimeout(async () => {
       //console.log("this.previousClient");
       //console.log(this.previousClient);
       //console.log("checkContact");
@@ -296,54 +297,46 @@ export class OrderComponent implements OnInit {
       ); */
 
       if (this.form.controls.contact.value) {
+        console.log("this.options-1");
+        console.log(
+          this.options.includes(this.form.controls.contact.value.toLowerCase()),
+        );
+        console.log(this.options.length);
         if (
           !this.options.includes(this.form.controls.contact.value.toLowerCase())
         ) {
-          this.client = undefined;
-          this.previousClient = this.form.controls.contact.value.toLowerCase();
-          this.institutes.clear();
-          this.confirmationService.confirm({
-            message:
-              "Поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.)",
-            accept: () => {
-              this.openCreateClientDialog();
-            },
-          });
-        } else {
-          if (
-            this.previousClient !=
-            this.form.controls.contact.value.toLowerCase()
-          ) {
-            let index = this.fullOptions.findIndex(
-              (item) =>
-                item[this.form.controls.contactType.value].toLowerCase() ==
+          await this.getContacts(true);
+
+          setTimeout(() => {
+            console.log("this.options-2");
+            console.log(
+              this.options.includes(
                 this.form.controls.contact.value.toLowerCase(),
+              ),
             );
-            this.clientService
-              .findClientById(this.fullOptions[index]._id)
-              .subscribe(
-                async (res) => {
-                  this.previousClient =
-                    this.form.controls.contact.value.toLowerCase();
-                  console.log("res.data");
-                  console.log(res.data);
-                  this.client = res.data;
-                  this.clientInstitutes = this.client.institutes;
-                  console.log("clientInstitutes");
-                  console.log(this.clientInstitutes);
-                  this.institutes.clear();
-                  this.addCheckboxes();
+            console.log(this.options.length);
+            if (
+              !this.options.includes(
+                this.form.controls.contact.value.toLowerCase(),
+              )
+            ) {
+              this.client = undefined;
+              this.previousClient =
+                this.form.controls.contact.value.toLowerCase();
+              this.institutes.clear();
+              this.confirmationService.confirm({
+                message:
+                  "Поздравляющего с указанным контактом не найдено. Вы хотите созадать для него карточку? (Если нет, проверьте, правильно ли введены данные или произведите поиск по другому типу.)",
+                accept: () => {
+                  this.openCreateClientDialog();
                 },
-                (err) => {
-                  this.errorMessage = err.error.msg + " " + err.message;
-                  console.log(err);
-                },
-              );
-            this.selectedInstitutes = [];
-            this.showFilter = true;
-            this.isForInstitutes = false;
-            this.lineItems = [];
-          }
+              });
+            } else {
+              this.clientFound();
+            }
+          }, 6000);
+        } else {
+          this.clientFound();
         }
       } else {
         this.client = undefined;
@@ -356,6 +349,37 @@ export class OrderComponent implements OnInit {
         this.lineItems = [];
       }
     }, 600);
+  }
+
+  clientFound() {
+    if (this.previousClient != this.form.controls.contact.value.toLowerCase()) {
+      let index = this.fullOptions.findIndex(
+        (item) =>
+          item[this.form.controls.contactType.value].toLowerCase() ==
+          this.form.controls.contact.value.toLowerCase(),
+      );
+      this.clientService.findClientById(this.fullOptions[index]._id).subscribe(
+        async (res) => {
+          this.previousClient = this.form.controls.contact.value.toLowerCase();
+          console.log("res.data");
+          console.log(res.data);
+          this.client = res.data;
+          this.clientInstitutes = this.client.institutes;
+          console.log("clientInstitutes");
+          console.log(this.clientInstitutes);
+          this.institutes.clear();
+          this.addCheckboxes();
+        },
+        (err) => {
+          this.errorMessage = err.error.msg + " " + err.message;
+          console.log(err);
+        },
+      );
+      this.selectedInstitutes = [];
+      this.showFilter = true;
+      this.isForInstitutes = false;
+      this.lineItems = [];
+    }
   }
 
   openCreateClientDialog(): void {

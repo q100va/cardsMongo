@@ -64,6 +64,10 @@ export class ClientService {
     return this.http.get("/api/clients/" + _id);
   }
 
+  getClientId(client): Observable<any> {
+    return this.http.post("/api/clients/getClientId", client);
+  }
+
   /*   findClientByClientName(clientName: string): Observable<any> {
     return this.http.get("/api/clients/client/" + clientName);
   }

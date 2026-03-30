@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import readXlsxFile from "read-excel-file";
 import { orders } from "server/models/orders-list.js";
+import { ClientService } from "src/app/services/client.service";
 import { OrderService } from "src/app/services/order.service";
 import { LineItem } from "src/app/shared/interfaces/line-item.interface";
 import { Order } from "src/app/shared/interfaces/order.interface";
@@ -23,7 +24,10 @@ export class InstaOrdersComponent implements OnInit {
   isFirst: Boolean = true;
   file: File;
 
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    private clientService: ClientService,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -51,159 +55,226 @@ export class InstaOrdersComponent implements OnInit {
 
     console.log(orders);
 
-   if (orders.length == 0) alert("list is empty");
+    if (orders.length == 0) alert("list is empty");
   }
 
-
   start(index: number) {
- 
+    const client = {
+      firstName: orders[index].clientFirstName
+        ? orders[index].clientFirstName
+        : null,
+      patronymic: orders[index].clientPatronymic
+        ? orders[index].clientPatronymic
+        : null,
+      lastName: orders[index].clientLastName
+        ? orders[index].clientLastName
+        : null,
+      institutes: [],
+      email: orders[index].contact,
+      phoneNumber: null,
+      whatsApp: null,
+      telegram: null,
+      vKontakte: null,
+      instagram: null,
+      facebook: null,
+      otherContact: null,
+      country: null,
+      region: orders[index].clientRegion ? orders[index].clientRegion : null,
+      city: null,
+      comments: null,
+      correspondents: [],
+      coordinators: ["okskust"],
+      publishers: [],
+      isRestricted: false,
+      causeOfRestriction: null,
+      preventiveAction: null,
+      //holiday: orders[index].holiday,
+    };
 
+    this.clientService.getClientId(client).subscribe(
+      //this.orderService.createOrderNewYear(newOrder).subscribe(
+      async (res) => {
+        const clientId = res["data"];
+        if (!clientId) {
+          if (orders[index].contact == orders[index + 1].contact) {
+            this.index += 2;
+            this.start(this.index);
+          } else {
+            this.index++;
+            this.start(this.index);
+          }
+        }
+        this.createOrder(index, clientId);
+      },
+      (err) => {
+        alert(err.error.msg + " " + err.message);
+        console.log(err);
+      },
+    );
+  }
+
+  createOrder(index: number, clientId: string) {
+    console.log("clientId", clientId);
     let newOrder: Order = {
-      userName: orders[index].userName,
+      userName: "okskust", //orders[index].userName,
       holiday: orders[index].holiday,
-      clientFirstName: orders[index].clientFirstName ? orders[index].clientFirstName : null,
-      clientPatronymic: orders[index].clientPatronymic ? orders[index].clientPatronymic : null,
-      clientLastName: orders[index].clientLastName ? orders[index].clientLastName : null,
-      email: orders[index].email,
-      contactType: orders[index].contactType,
+      clientId: clientId,
+      clientFirstName: orders[index].clientFirstName
+        ? orders[index].clientFirstName
+        : null,
+      clientPatronymic: orders[index].clientPatronymic
+        ? orders[index].clientPatronymic
+        : null,
+      clientLastName: orders[index].clientLastName
+        ? orders[index].clientLastName
+        : null,
+      // email: orders[index].email,
+      contactType: "email", //orders[index].contactType,
       contact: orders[index].contact,
       institute: orders[index].institute ? orders[index].institute : null,
       amount: +orders[index].amount,
-      isAccepted: orders[index].isAccepted == 'true' ? true : false,
+      isAccepted: false, //orders[index].isAccepted == 'true' ? true : false,
       comment: orders[index].comment ? orders[index].comment : null,
       orderDate: this.orderDate,
       filter: {
-        addressFilter: orders[index].addressFilter ? orders[index].addressFilter : "any",
-        genderFilter: orders[index].genderFilter ? orders[index].genderFilter : "any",
+        addressFilter: orders[index].addressFilter
+          ? orders[index].addressFilter
+          : "any",
+        genderFilter: orders[index].genderFilter
+          ? orders[index].genderFilter
+          : "any",
         year1: orders[index].year1 ? +orders[index].year1 : null,
         year2: orders[index].year2 ? +orders[index].year2 : null,
         date1: orders[index].date1 ? +orders[index].date1 : null,
         date2: orders[index].date2 ? +orders[index].date2 : null,
         region: orders[index].region ? orders[index].region : null,
-        nursingHome: orders[index].nursingHome ? orders[index].nursingHome : null,
-        onlyWithPicture: orders[index].onlyWithPicture ? true : false,
+        nursingHome: orders[index].nursingHome
+          ? orders[index].nursingHome
+          : null,
+        onlyWithPicture: false,
       },
     };
 
     console.log("newOrder");
     console.log(newOrder);
 
-    if (newOrder.holiday == "Дни рождения марта 2026")
-    {this.orderService.createOrder(newOrder, [], []).subscribe(
-      //this.orderService.createOrderNewYear(newOrder).subscribe(
-      async (res) => {
-        let result = res["data"]["result"];
-        if (typeof result == "string") {
-          alert(result);
-          console.log(res);
-        } else {
-          //alert(res.msg);
-          console.log(res);
-          this.orderService.findOrderById(res["data"]["order_id"]).subscribe(
-            (res) => {
-              console.log(res["data"]);
-              this.order = res["data"];
-              this.needAccepting = !this.order.isAccepted
-                ? "Требует подтверждения"
-                : "Не требует подтверждения";
-
-              this.fullName =
-                (this.order.clientLastName ? this.order.clientLastName : "") +
-                " " +
-                (this.order.clientFirstName ? this.order.clientFirstName : "") +
-                " " +
-                (this.order.clientPatronymic
-                  ? this.order.clientPatronymic
-                  : "") +
-                (this.order.institute ? this.order.institute : "");
-              this.contact =
-                (this.order.email ? this.order.email : "") +
-                " " +
-                (this.order.contactType ? this.order.contactType : "") +
-                " " +
-                (this.order.contact ? this.order.contact : "");
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-          this.lineItems = result;
-          this.isShowOrder = true;
-          this.index++;
-          if (this.index < orders.length) {
-            this.isNext = true;
-            this.isFirst = false;
+    if (newOrder.holiday == "Дни рождения мая 2026") {
+      this.orderService.createOrder(newOrder, [], []).subscribe(
+        //this.orderService.createOrderNewYear(newOrder).subscribe(
+        async (res) => {
+          let result = res["data"]["result"];
+          if (typeof result == "string") {
+            alert(result);
+            console.log(res);
           } else {
-            this.isNext = false;
-          }
-        }
-      },
-      (err) => {
-        alert(err.error.msg + " " + err.message);
-        console.log(err);
-      }
-    );}
+            //alert(res.msg);
+            console.log(res);
+            this.orderService.findOrderById(res["data"]["order_id"]).subscribe(
+              (res) => {
+                console.log(res["data"]);
+                this.order = res["data"];
+                this.needAccepting = !this.order.isAccepted
+                  ? "Требует подтверждения"
+                  : "Не требует подтверждения";
 
-
- if (newOrder.holiday == "Пасха 2026")
- {this.orderService.createOrderNewYear(newOrder, [], []).subscribe(
-      async (res) => {
-        let result = res["data"]["result"];
-        if (typeof result == "string") {
-          alert(result);
-          console.log(res);
-        } else {
-          //alert(res.msg);
-          console.log(res);
-          this.orderService.findOrderById(res["data"]["order_id"]).subscribe(
-            (res) => {
-              console.log(res["data"]);
-              this.order = res["data"];
-              this.needAccepting = !this.order.isAccepted
-                ? "Требует подтверждения"
-                : "Не требует подтверждения";
-
-              this.fullName =
-                (this.order.clientLastName ? this.order.clientLastName : "") +
-                " " +
-                (this.order.clientFirstName ? this.order.clientFirstName : "") +
-                " " +
-                (this.order.clientPatronymic
-                  ? this.order.clientPatronymic
-                  : "") +
-                (this.order.institute ? this.order.institute : "");
-              this.contact =
-                (this.order.email ? this.order.email : "") +
-                " " +
-                (this.order.contactType ? this.order.contactType : "") +
-                " " +
-                (this.order.contact ? this.order.contact : "");
-            },
-            (err) => {
-              console.log(err);
+                this.fullName =
+                  (this.order.clientLastName ? this.order.clientLastName : "") +
+                  " " +
+                  (this.order.clientFirstName
+                    ? this.order.clientFirstName
+                    : "") +
+                  " " +
+                  (this.order.clientPatronymic
+                    ? this.order.clientPatronymic
+                    : "") +
+                  (this.order.institute ? this.order.institute : "");
+                this.contact =
+                  (this.order.email ? this.order.email : "") +
+                  " " +
+                  (this.order.contactType ? this.order.contactType : "") +
+                  " " +
+                  (this.order.contact ? this.order.contact : "");
+              },
+              (err) => {
+                console.log(err);
+              },
+            );
+            this.lineItems = result;
+            this.isShowOrder = true;
+            this.index++;
+            if (this.index < orders.length) {
+              this.isNext = true;
+              this.isFirst = false;
+            } else {
+              this.isNext = false;
             }
-          );
-          this.lineItems = result;
-          this.isShowOrder = true;
-          this.index++;
-          if (this.index < orders.length) {
-            this.isNext = true;
-            this.isFirst = false;
-          } else {
-            this.isNext = false;
           }
-        }
-      },
-      (err) => {
-        alert(err.error.msg + " " + err.message);
-        console.log(err);
-      }
-    );
-}
+        },
+        (err) => {
+          alert(err.error.msg + " " + err.message);
+          console.log(err);
+        },
+      );
+    }
 
+    if (newOrder.holiday == "9 мая 2026") {
+      this.orderService.createOrderVeterans(newOrder, [], []).subscribe(
+        async (res) => {
+          let result = res["data"]["result"];
+          if (typeof result == "string") {
+            alert(result);
+            console.log(res);
+          } else {
+            //alert(res.msg);
+            console.log(res);
+            this.orderService.findOrderById(res["data"]["order_id"]).subscribe(
+              (res) => {
+                console.log(res["data"]);
+                this.order = res["data"];
+                this.needAccepting = !this.order.isAccepted
+                  ? "Требует подтверждения"
+                  : "Не требует подтверждения";
+
+                this.fullName =
+                  (this.order.clientLastName ? this.order.clientLastName : "") +
+                  " " +
+                  (this.order.clientFirstName
+                    ? this.order.clientFirstName
+                    : "") +
+                  " " +
+                  (this.order.clientPatronymic
+                    ? this.order.clientPatronymic
+                    : "") +
+                  (this.order.institute ? this.order.institute : "");
+                this.contact =
+                  (this.order.email ? this.order.email : "") +
+                  " " +
+                  (this.order.contactType ? this.order.contactType : "") +
+                  " " +
+                  (this.order.contact ? this.order.contact : "");
+              },
+              (err) => {
+                console.log(err);
+              },
+            );
+            this.lineItems = result;
+            this.isShowOrder = true;
+            this.index++;
+            if (this.index < orders.length) {
+              this.isNext = true;
+              this.isFirst = false;
+            } else {
+              this.isNext = false;
+            }
+          }
+        },
+        (err) => {
+          alert(err.error.msg + " " + err.message);
+          console.log(err);
+        },
+      );
+    }
   }
-
-  
 
   next() {}
 }

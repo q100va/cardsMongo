@@ -27,9 +27,10 @@ export class OrderService {
   findAllOrdersByUserId(
     userName: string,
     pageSize: number,
-    currentPage: number
+    currentPage: number,
+    valueToSearch: string,
   ): Observable<any> {
-    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}&valueToSearch=${valueToSearch}`;
     console.log("queryParams");
     console.log(queryParams);
     return this.http.get("/api/orders/find/" + userName + queryParams);
@@ -38,9 +39,10 @@ export class OrderService {
   findNotConfirmedOrdersByUserId(
     userName: string,
     pageSize: number,
-    currentPage: number
+    currentPage: number,
+    valueToSearch: string,
   ): Observable<any> {
-    const queryParams = `?pagesize=${pageSize}&page=${currentPage}`;
+    const queryParams = `?pagesize=${pageSize}&page=${currentPage}&valueToSearch=${valueToSearch}`;
     return this.http.get(
       "/api/orders/findNotConfirmed/" + userName + queryParams
     );

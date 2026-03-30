@@ -220,14 +220,23 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
-        console.log("req.params.userName");
-        console.log(req.params.userName); */
+       */ console.log("req.query.valueToSearch");
+        console.log(req.query.valueToSearch); 
+
+    const and = {
+      isDisabled: false,
+      userName: req.params.userName,
+      //contact: "vyrodovaalexandra@yandex.ru"
+    };
+    if (req.query.valueToSearch) { and.contact = req.query.valueToSearch }
     const length = await Order.countDocuments({
       $and: [
-        {
-          isDisabled: false,
-          userName: req.params.userName,
-        },
+        /*  {
+           isDisabled: false,
+           userName: req.params.userName,
+           contact: "vyrodovaalexandra@yandex.ru"
+         } */
+        and,
         {
           $or: [
             {
@@ -279,10 +288,12 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
 
     await Order.find({
       $and: [
-        {
+        /* {
           isDisabled: false,
           userName: req.params.userName,
-        },
+          contact: "vyrodovaalexandra@yandex.ru"
+        } */
+       and,
         {
           $or: [
             {
@@ -2555,8 +2566,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   }
   if (newOrder.holiday == "Дни рождения мая 2026") {
     period = {
-      "date1": 1,
-      "date2": 5,
+      "date1": 6,
+      "date2": 10,
       "isActive": true,
       "key": 0,
       "maxPlus": 2,  //PLUSES1
@@ -2660,10 +2671,10 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
         "specialMen": specialMenAmount,
         "yangWomen": yangWomenAmount,
         "yangMen": yangMenAmount,
-       // "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
-         "oneHouse": newOrder.amount < 5 ? newOrder.amount :
-      newOrder.amount > 20 ? Math.round(newOrder.amount * 0.3) :
-        Math.round(newOrder.amount * 0.5)
+        // "oneHouse": newOrder.filter.maxOneHouse ? newOrder.filter.maxOneHouse : Math.round(newOrder.amount * 0.3)
+        "oneHouse": newOrder.amount < 5 ? newOrder.amount :
+          newOrder.amount > 20 ? Math.round(newOrder.amount * 0.3) :
+            Math.round(newOrder.amount * 0.5)
       }
     }
 
@@ -3421,13 +3432,13 @@ async function searchSenior(
     }
   }
   if (holiday == "Дни рождения апреля 2026") {
-    if ( standardFilter.category == "oldWomen") {//standardFilter.oldest ||
+    if (standardFilter.category == "oldWomen") {//standardFilter.oldest ||
       maxPlusAmount = data.maxPlus + 1;
     }
     if (standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 1;
     }
-    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen" ) {//|| standardFilter.category == "specialWomen"
+    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
       maxPlusAmount = data.maxPlus + 1;
     }
 
@@ -8068,7 +8079,7 @@ async function generateLineItemsEaster(nursingHomes, order_id) {
 ////////////VETERANS ORDER////////////////////////////////////////
 
 router.post("/veterans/:amount", checkAuth, async (req, res) => {
-      console.log("VETERANS");
+  console.log("VETERANS");
   let finalResult;
   try {
     let newOrder = {
@@ -8388,12 +8399,12 @@ async function fillOrderVeterans(proportion, order_id, filter, prohibitedId, res
       console.log("veterans3");
       data = await collectSeniorsVeterans(data, orderFilter);
 
-      /*       if (data.counter < proportion[category]) {
+           if (data.counter < proportion[category]) {
               data.maxPlus = 2;
       
               data = await collectSeniorsVeterans(data);
             }
-      
+        /*
             if (data.counter < proportion[category]) {
               data.maxPlus = 3;
       

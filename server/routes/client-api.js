@@ -12,6 +12,7 @@ const router = express.Router();
 const saltRounds = 10;
 const Order = require("../models/order");
 const checkAuth = require("../middleware/check-auth");
+//const checkDoubleOrder = require("./orders-api.js");
 
 ///check doubles
 
@@ -240,6 +241,149 @@ router.post("/", checkAuth, async (req, res) => {
   }
 });
 
+async function checkDoubleOrder(conditions) {
+  let result = {};
+  let orders = await Order.find(conditions);
+  let usernames = [];
+  let seniorsIds = [];
+  let houses = [];
+  let amount = 0;
+  if (orders.length > 0) {
+    for (let order of orders) {
+      usernames.push(order.userName);
+      amount += order.amount;
+      console.log("order._id");
+      console.log(order._id);
+      for (let lineItem of order.lineItems) {
+        houses.push(lineItem.nursingHome);
+        for (let celebrator of lineItem.celebrators) {
+          seniorsIds.push(celebrator._id);
+
+        }
+      }
+    }
+    let h = new Set(houses);
+    let u = new Set(usernames);
+    result.users = Array.from(u);
+    result.houses = Array.from(h);
+    result.seniorsIds = seniorsIds;
+    result.amount = amount;
+  } else { result = null; }
+
+  console.log("result checkDoubleOrder");
+  // console.log(order);
+  console.log(result);
+
+
+  return result;
+}
+
+router.post("/getClientId", checkAuth, async (req, res) => {
+  try {
+
+    let client = await Client.findOne({ email: req.body.email });
+    // console.log('CLIENT_ID', client._id);
+    if (client) {
+      let conditions = {
+        isDisabled: false,
+        holiday: { $in: ["Дни рождения апреля 2026", "Дни рождения мая 2026", "9 мая 2026"] },//req.body.holiday,
+        clientId: client._id,
+        userName: {$nin: ["okskust"]}
+
+        //isReturned: false
+      };
+
+      let result = await checkDoubleOrder(conditions);
+      console.log("result inside");
+      console.log(result);
+      if (result) {
+        const readRegionsResponse = new BaseResponse(200, "Query successful", false);
+        console.log("result response");
+        console.log(readRegionsResponse);
+        res.json(readRegionsResponse.toObject());
+      } else {
+        const createClientResponse = new BaseResponse(200, "Query Successful", client._id);
+        res.json(createClientResponse.toObject());
+      }
+    } else {
+
+      //client object
+      let newClient = {
+        firstName: req.body.firstName,
+        patronymic: req.body.patronymic,
+        lastName: req.body.lastName,
+        institutes: req.body.institutes,
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        whatsApp: req.body.whatsApp,
+        telegram: req.body.telegram,
+        vKontakte: req.body.vKontakte,
+        instagram: req.body.instagram,
+        facebook: req.body.facebook,
+        otherContact: req.body.otherContact,
+        country: req.body.country,
+        region: req.body.region,
+        city: req.body.city,
+        nameDayCelebration: req.body.nameDayCelebration,
+        comments: req.body.comments,
+        correspondents: req.body.correspondents,
+        coordinators: req.body.coordinators,
+        publishers: req.body.publishers,
+        isRestricted: req.body.isRestricted,
+        causeOfRestriction: req.body.causeOfRestriction,
+        preventiveAction: req.body.preventiveAction,
+      };
+
+      let searchString = [];
+      for (let key in newClient) {
+        if (
+          key == "firstName" ||
+          key == "patronymic" ||
+          key == "lastName" ||
+          key == "email" ||
+          key == "phoneNumber" ||
+          key == "whatsApp" ||
+          key == "telegram" ||
+          key == "vKontakte" ||
+          key == "instagram" ||
+          key == "facebook" ||
+          key == "otherContact" ||
+          key == "country" ||
+          key == "city" ||
+          key == "region"
+        ) {
+          if (newClient[key]) { searchString.push(newClient[key]); }
+        }
+        if (key == "institutes") {
+          for (let institute of newClient.institutes) {
+            searchString.push(institute.name);
+          }
+        }
+      }
+
+      newClient.searchString = searchString;
+
+      //console.log(req.body);
+
+      Client.create(newClient, function (err, client) {
+        if (err) {
+          console.log(err);
+          const createClientMongodbErrorResponse = new BaseResponse(500, "Internal Server Error", err);
+          res.status(500).send(createClientMongodbErrorResponse.toObject());
+        } else {
+          console.log(client);
+          const createClientResponse = new BaseResponse(200, "Query Successful", client._id);
+          res.json(createClientResponse.toObject());
+        }
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    const createClientCatchErrorResponse = new BaseResponse(500, "Internal Server Error", e.message);
+    res.status(500).send(createClientCatchErrorResponse.toObject());
+  }
+});
+
 /**
  * API to find client by clientname (OK)
  */
@@ -439,12 +583,12 @@ router.get("/find/:userName", checkAuth, async (req, res) => {
   try {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
-     const length = await Client.countDocuments({ coordinators:  req.params.userName, isDisabled: false }); 
+    const length = await Client.countDocuments({ coordinators: req.params.userName, isDisabled: false });
 
     //const length = await Client.countDocuments({ isDisabled: false, institutes: { $ne: [] }, coordinators: "okskust" });
-   Client.find({ coordinators: req.params.userName, isDisabled: false }, function (err, clients) { 
+    Client.find({ coordinators: req.params.userName, isDisabled: false }, function (err, clients) {
 
-    //Client.find({ isDisabled: false, institutes: { $ne: [] }, coordinators: { $all: ["okskust"] } }, function (err, clients) {    //CANCEL!!!!
+      //Client.find({ isDisabled: false, institutes: { $ne: [] }, coordinators: { $all: ["okskust"] } }, function (err, clients) {    //CANCEL!!!!
       if (err) {
         console.log(err);
         const readUserMongodbErrorResponse = new BaseResponse(
@@ -720,8 +864,8 @@ router.get("/find-contacts/:contactType", checkAuth, async (req, res) => {
   try {
     console.log("/find-contacts/:contactType/:contact");
     let contacts = await Client.find({ isDisabled: false, [req.params.contactType]: { $ne: null } }, { [req.params.contactType]: 1, _id: 1 });
-   // console.log("contacts");
-  //  console.log(contacts);
+    // console.log("contacts");
+    //  console.log(contacts);
 
     const findAllListsResponse = new BaseResponse("200", "Query successful", { contacts: contacts });
     res.json(findAllListsResponse.toObject());
@@ -1277,19 +1421,19 @@ router.get("/add-search-array", checkAuth, async (req, res) => {
 
 router.get("/restore/coordinators", checkAuth, async (req, res) => {
   try {
-/*     let clients = await Client.find({ isDisabled: false });
-    for (let client of clients) {
-      let coordinators = [];
-      let orders = await Order.find({ clientId: client._id });
-      for (let order of orders) {
-        if (!coordinators.includes(order.userName)) {
-          coordinators.push(order.userName);
+    /*     let clients = await Client.find({ isDisabled: false });
+        for (let client of clients) {
+          let coordinators = [];
+          let orders = await Order.find({ clientId: client._id });
+          for (let order of orders) {
+            if (!coordinators.includes(order.userName)) {
+              coordinators.push(order.userName);
+            }
+          }
+          await Client.updateOne({ _id: client._id }, { $set: { coordinators: coordinators } });
+          console.log(coordinators);
         }
-      }
-      await Client.updateOne({ _id: client._id }, { $set: { coordinators: coordinators } });
-      console.log(coordinators);
-    }
- */
+     */
     let orders = await Order.find({ userName: "eberdnikova" });
     for (let order of orders) {
       let client = await Client.findOne({ _id: order.clientId });
@@ -1582,7 +1726,7 @@ router.post("/check-all-clients/:index", checkAuth, async (req, res) => {
     if (client.firstName && !client.patronymic && client.lastName) {
       let oldClient = await Client.findOne(
         {
-          firstName: client.firstName,  
+          firstName: client.firstName,
           lastName: client.lastName,
           _id: { $nin: alreadyChecked }
         }

@@ -33,6 +33,7 @@ export class OrderListComponent implements AfterViewInit {
   currentPage = 1;
   pageSize = 10;
   pageSizeOptions = [10, 15, 20];
+  valueToSearch: string = "";
 
   constructor(
     private dialog: MatDialog,
@@ -40,7 +41,7 @@ export class OrderListComponent implements AfterViewInit {
     private confirmationService: ConfirmationService,
     private cookieService: CookieService,
     private messageService: MessageService,
-    private resultDialog: MatDialog
+    private resultDialog: MatDialog,
   ) {
     this.userName = this.cookieService.get("session_user");
     //this.userName = "Ludikmila";
@@ -79,7 +80,8 @@ export class OrderListComponent implements AfterViewInit {
       .findNotConfirmedOrdersByUserId(
         this.userName,
         this.pageSize,
-        this.currentPage
+        this.currentPage,
+        this.valueToSearch,
       )
       .subscribe(
         (res) => {
@@ -100,7 +102,7 @@ export class OrderListComponent implements AfterViewInit {
         (err) => {
           alert(err);
         },
-        () => {}
+        () => {},
       );
   }
 
@@ -114,7 +116,12 @@ export class OrderListComponent implements AfterViewInit {
     // this.isShowAll = !this.isShowAll;
     if (this.isShowAll) {
       this.orderService
-        .findAllOrdersByUserId(this.userName, this.pageSize, this.currentPage)
+        .findAllOrdersByUserId(
+          this.userName,
+          this.pageSize,
+          this.currentPage,
+          this.valueToSearch,
+        )
         .subscribe(
           (res) => {
             this.orders = res["data"]["orders"];
@@ -132,14 +139,15 @@ export class OrderListComponent implements AfterViewInit {
             console.log(err);
             alert(err.message);
           },
-          () => {}
+          () => {},
         );
     } else {
       this.orderService
         .findNotConfirmedOrdersByUserId(
           this.userName,
           this.pageSize,
-          this.currentPage
+          this.currentPage,
+          this.valueToSearch,
         )
         .subscribe(
           (res) => {
@@ -152,7 +160,7 @@ export class OrderListComponent implements AfterViewInit {
           (err) => {
             alert(err);
           },
-          () => {}
+          () => {},
         );
     }
   }
@@ -205,7 +213,7 @@ export class OrderListComponent implements AfterViewInit {
         isShowAll,
         this.userName,
         this.pageSize,
-        this.currentPage
+        this.currentPage,
       )
       .subscribe(
         (res) => {
@@ -220,7 +228,7 @@ export class OrderListComponent implements AfterViewInit {
           alert(err);
           this.waiting = false;
         },
-        () => {}
+        () => {},
       );
   }
 
@@ -232,7 +240,7 @@ export class OrderListComponent implements AfterViewInit {
         isShowAll,
         this.userName,
         this.pageSize,
-        this.currentPage
+        this.currentPage,
       )
       .subscribe(
         (res) => {
@@ -247,7 +255,7 @@ export class OrderListComponent implements AfterViewInit {
           alert(err);
           this.waiting = false;
         },
-        () => {}
+        () => {},
       );
   }
 
@@ -259,7 +267,7 @@ export class OrderListComponent implements AfterViewInit {
         isShowAll,
         this.userName,
         this.pageSize,
-        this.currentPage
+        this.currentPage,
       )
       .subscribe(
         (res) => {
@@ -274,7 +282,7 @@ export class OrderListComponent implements AfterViewInit {
           alert(err);
           this.waiting = false;
         },
-        () => {}
+        () => {},
       );
   }
 
@@ -292,7 +300,7 @@ export class OrderListComponent implements AfterViewInit {
               this.userName,
               "isOverdue",
               this.pageSize,
-              this.currentPage
+              this.currentPage,
             )
             .subscribe(
               (res) => {
@@ -308,10 +316,10 @@ export class OrderListComponent implements AfterViewInit {
                 console.log(err);
                 alert(
                   "Произошла ошибка. Сообщите администратору и обновите страницу. " +
-                    err
+                    err,
                 );
                 this.waiting = false;
-              }
+              },
             );
         },
         reject: () => (this.waiting = false),
@@ -324,7 +332,7 @@ export class OrderListComponent implements AfterViewInit {
           this.userName,
           "isOverdue",
           this.pageSize,
-          this.currentPage
+          this.currentPage,
         )
         .subscribe(
           (res) => {
@@ -339,10 +347,10 @@ export class OrderListComponent implements AfterViewInit {
             console.log(err);
             alert(
               "Произошла ошибка. Сообщите администратору и обновите страницу. " +
-                err
+                err,
             );
             this.waiting = false;
-          }
+          },
         );
     }
   }
@@ -356,7 +364,7 @@ export class OrderListComponent implements AfterViewInit {
         this.userName,
         "isReturned",
         this.pageSize,
-        this.currentPage
+        this.currentPage,
       )
       .subscribe(
         (res) => {
@@ -371,10 +379,10 @@ export class OrderListComponent implements AfterViewInit {
           console.log(err);
           alert(
             "Произошла ошибка. Сообщите администратору и обновите страницу. " +
-              err
+              err,
           );
           this.waiting = false;
-        }
+        },
       );
   }
 
@@ -390,7 +398,7 @@ export class OrderListComponent implements AfterViewInit {
             this.userName,
             "isDisabled",
             this.pageSize,
-            this.currentPage
+            this.currentPage,
           )
           .subscribe(
             (res) => {
@@ -405,7 +413,7 @@ export class OrderListComponent implements AfterViewInit {
               console.log(err);
               alert(
                 "Произошла ошибка. Сообщите администратору и обновите страницу. " +
-                  err
+                  err,
               );
               this.waiting = false;
             },
@@ -417,11 +425,65 @@ export class OrderListComponent implements AfterViewInit {
                 disableClose: true,
                 width: "fit-content",
               });
-            }
+            },
           );
       },
       reject: () => (this.waiting = false),
     });
+  }
+
+  searchClient() {
+    console.log("this.valueToSearch");
+    console.log(this.valueToSearch);
+    if (this.isShowAll) {
+      this.orderService
+        .findAllOrdersByUserId(
+          this.userName,
+          this.pageSize,
+          this.currentPage,
+          this.valueToSearch,
+        )
+        .subscribe(
+          (res) => {
+            this.orders = res["data"]["orders"];
+            this.length = res["data"]["length"];
+
+            //this.orders.reverse();
+            this.dataSource = new MatTableDataSource(this.orders);
+            //this.dataSource.paginator = this.paginator;
+
+            // console.log("this.orders[this.length-1].dateOfOrder");
+            // console.log(typeof this.orders[0].dateOfOrder);
+            //console.log(this.orders[0].dateOfOrder.toDateString());
+          },
+          (err) => {
+            console.log(err);
+            alert(err.message);
+          },
+          () => {},
+        );
+    } else {
+      this.orderService
+        .findNotConfirmedOrdersByUserId(
+          this.userName,
+          this.pageSize,
+          this.currentPage,
+          this.valueToSearch,
+        )
+        .subscribe(
+          (res) => {
+            this.orders = res["data"]["orders"];
+            this.length = res["data"]["length"];
+            // this.orders.reverse();
+            this.dataSource = new MatTableDataSource(this.orders);
+            // this.dataSource.paginator = this.paginator;
+          },
+          (err) => {
+            alert(err);
+          },
+          () => {},
+        );
+    }
   }
 
   //Delete order
