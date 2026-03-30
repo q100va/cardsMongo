@@ -221,7 +221,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
     const currentPage = +req.query.page;
     /*     let orders = await Order.find({ userName: req.params.userName, isAccepted: false, isDisabled: false });
        */ console.log("req.query.valueToSearch");
-        console.log(req.query.valueToSearch); 
+    console.log(req.query.valueToSearch);
 
     const and = {
       isDisabled: false,
@@ -293,7 +293,7 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
           userName: req.params.userName,
           contact: "vyrodovaalexandra@yandex.ru"
         } */
-       and,
+        and,
         {
           $or: [
             {
@@ -5575,7 +5575,7 @@ async function collectSeniorsSpring(data, orderFilter) {
 
           );
         }
-//TODO:
+        //TODO:
         if (data.holiday == "9 мая 2026") {
           await May9.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
 
@@ -8209,12 +8209,18 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 
   let veterans = Math.round(newOrder.amount * 0.1) > 0 ? Math.round(newOrder.amount * 0.1) : 1;
   //veterans = 8;  //ВЕТЕРАНЫ
-  let children = newOrder.amount - veterans;
+  let children = newOrder.amount == 1 || newOrder.amount == 2 ? 0 :
+    newOrder.amount == 3 || newOrder.amount == 4 ? 1 :
+      Math.round(newOrder.amount / 3 - veterans);
+  let others = newOrder.amount == 1 ? 0 :
+    newOrder.amount == 2 || newOrder.amount == 3 ? 1 :
+      newOrder.amount - veterans - children;
 
   proportion = {
     "amount": newOrder.amount,
     "veterans": veterans,
     "children": children,
+    "others": others,
     "oneHouse": newOrder.amount < 5 ? newOrder.amount :
       newOrder.amount > 20 ? Math.round(newOrder.amount * 0.3) :
         Math.round(newOrder.amount * 0.5)
@@ -8305,20 +8311,20 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.filter.nursingHome) filter.nursingHome = newOrder.filter.nursingHome;
     if (newOrder.filter.genderFilter == 'Male') filter.gender = 'Male';
     if (newOrder.filter.genderFilter == 'Female') filter.gender = 'Female';
-    if (newOrder.filter.year1 || newOrder.filter.year2) {
-      if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
-      if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 1945, $gte: newOrder.filter.year1 };
-      if (newOrder.filter.year1 > 1943) {
-        proportion.children = proportion.children + proportion.veterans;
-        proportion.veterans = 0;
-      }
-      if (newOrder.filter.year1 < 1928) {
-        proportion.veterans = proportion.children + proportion.veterans;
-        proportion.children = 0;
-      }
-
-      if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
-    }
+    /*     if (newOrder.filter.year1 || newOrder.filter.year2) {
+          if (!newOrder.filter.year1) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: 1900 };
+          if (!newOrder.filter.year2) filter.yearBirthday = { $lte: 1945, $gte: newOrder.filter.year1 };
+          if (newOrder.filter.year1 > 1943) {
+            proportion.children = proportion.children + proportion.veterans;
+            proportion.veterans = 0;
+          }
+          if (newOrder.filter.year1 < 1928) {
+            proportion.veterans = proportion.children + proportion.veterans;
+            proportion.children = 0;
+          }
+    
+          if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
+        } */
 
     if (/* newOrder.institutes.length > 0 &&  */newOrder.filter.onlyWithConcent) {
       filter.dateOfSignedConsent = { $ne: null };
@@ -8369,7 +8375,7 @@ async function createOrderVeterans(newOrder, prohibitedId, restrictedHouses) {
 // create a list of seniors for the order
 
 async function fillOrderVeterans(proportion, order_id, filter, prohibitedId, restrictedHouses, orderFilter) {
-  const categories = ["veterans", "children"];
+  const categories = ["veterans", "children", "others"];
 
   let data = {
     houses: {},
@@ -8399,12 +8405,12 @@ async function fillOrderVeterans(proportion, order_id, filter, prohibitedId, res
       console.log("veterans3");
       data = await collectSeniorsVeterans(data, orderFilter);
 
-           if (data.counter < proportion[category]) {
-              data.maxPlus = 2;
+      /*    if (data.counter < proportion[category]) {
+          data.maxPlus = 2;
+  
+          data = await collectSeniorsVeterans(data);
+        }
       
-              data = await collectSeniorsVeterans(data);
-            }
-        /*
             if (data.counter < proportion[category]) {
               data.maxPlus = 3;
       
@@ -8429,7 +8435,8 @@ async function collectSeniorsVeterans(data) {
 
   const searchOrders = {
     veterans: ["veterans", "children"],//"children"
-    children: ["children", "veterans"],//
+    children: ["children", "others", "veterans"],//
+    others: ["others", "veterans", "children",]
   };
   //console.log("data.category");
   //console.log(data.category);
@@ -8525,7 +8532,12 @@ async function searchSeniorVeterans(
     absent: { $ne: true }
   };
   if (data.proportion.oneRegion) standardFilter.region = { $nin: data.restrictedRegions }; //CHANGE
-  if (kind == 'veterans') { standardFilter.veteran = { $ne: "" }; } else { standardFilter.child = { $ne: "" }; }
+  if (kind == 'veterans') { standardFilter.veteran = { $ne: "" }; }
+  if (kind == 'children') { standardFilter.child = { $ne: "" }; }
+  if (kind == 'others') {
+    standardFilter.veteran = "";
+    standardFilter.child = "";
+  }
   //if (kind == 'oldest') { standardFilter.oldest = true; } else { standardFilter.category = kind; }
   /*  if (data.proportion.amount > 12 || data.proportion.amount < 5 || data.category == "specialOnly") { 
         standardFilter.isReleased = false;    
@@ -8547,13 +8559,15 @@ async function searchSeniorVeterans(
   //CHANGE!!!
   // let maxPlusAmount = 3;  
   //let maxPlusAmount = 1; //PLUSES1
- // if (kind == 'veterans') { maxPlusAmount = 1; }
-/*   if (filter.dateOfSignedConsent && filter.dateOfSignedConsent['$ne'] == null) {
-    maxPlusAmount = 2;
-  } */
+  // if (kind == 'veterans') { maxPlusAmount = 1; }
+  /*   if (filter.dateOfSignedConsent && filter.dateOfSignedConsent['$ne'] == null) {
+      maxPlusAmount = 2;
+    } */
 
 
-  let maxPlusAmount = data.maxPlus;  
+  let maxPlusAmount = data.maxPlus;
+  if (kind == 'veterans') { maxPlusAmount = 3; }
+  if (kind == 'children') { maxPlusAmount = 2; }
   //let maxPlusAmount = standardFilter.oldest ? 2 : data.maxPlus;
   //console.log("maxPlusAmount");
   //console.log(maxPlusAmount);
