@@ -36,7 +36,7 @@ export class DobroruComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения апреля 2026";
+  holiday: string = "Дни рождения мая 2026";
   lineItems = [];
   types: Array<string> = [
     "email",
