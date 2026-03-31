@@ -5581,22 +5581,44 @@ async function collectSeniorsSpring(data, orderFilter) {
 
 
           let senior = await May9.findOne({ _id: result.celebrator_id });
-          let newP = senior.plusAmount;
+/*           let newP = senior.plusAmount;
           let p = newP - 1;
-          let c = senior.category;
+          let c = senior.category; */
+
+
+
+          let p = senior.plusAmount;
+          let newP = p - 1;
+          let c = senior.veteran ? "veteranPlus" : "childPlus";
+
+
           await House.updateOne(
             {
               nursingHome: senior.nursingHome
             },
             {
               $inc: {
-                ["statistic.easter.plus" + p]: -1,
-                ["statistic.easter.plus" + newP]: 1,
-                ["statistic.easter." + c + "Plus"]: 1,
+                ["statistic.veterans." + c + p]: -1,
+                ["statistic.veterans." + c + newP]: 1,
+                ["statistic.veterans." + c]: 1,
               }
             }
 
           );
+
+          /*           await House.updateOne(
+                      {
+                        nursingHome: senior.nursingHome
+                      },
+                      {
+                        $inc: {
+                          ["statistic.easter.plus" + p]: -1,
+                          ["statistic.easter.plus" + newP]: 1,
+                          ["statistic.easter." + c + "Plus"]: 1,
+                        }
+                      }
+          
+                    ); */
         }
 
         data.celebratorsAmount++;

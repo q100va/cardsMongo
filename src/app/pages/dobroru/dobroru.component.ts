@@ -610,7 +610,7 @@ export class DobroruComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
 
-    this.holiday = "Дни рождения апреля 2026";
+    this.holiday = "Дни рождения мая 2026";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
