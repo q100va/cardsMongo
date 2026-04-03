@@ -5085,22 +5085,26 @@ async function findAllVeteransCelebrators(houses) {
 
   let listVeteran = await Senior.find(
     {
-      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, veteran: { $ne: "" }
+      isDisabled: false, dateExit: null, isRestricted: false,
+      nursingHome: { $in: namesOfUpdatedNursingHome }, veteran: { $ne: "" }
     }
   );
 
   // let listChild =[];
   let listChild = await Senior.find(
     {
-      isDisabled: false, dateExit: null, isRestricted: false, nursingHome: { $in: namesOfUpdatedNursingHome }, child: { $ne: "" }
+      isDisabled: false, dateExit: null, isRestricted: false,
+      nursingHome: { $in: namesOfUpdatedNursingHome }, child: { $ne: "" }
     }
   );
 
-  let listOthers = [];/* await Senior.find(
+  let listOthers = await Senior.find(
     {
-      isDisabled: false, dateExit: null, isRestricted: false, noAddress: false, nursingHome: { $in: namesOfUpdatedNursingHome }, child: "", veteran: "", dateOfSignedConsent: null
+      isDisabled: false, dateExit: null, isRestricted: false, noAddress: false,
+      nursingHome: { $in: namesOfUpdatedNursingHome },
+      child: "", veteran: ""
     }
-  ); */
+  );
 
   let list = listVeteran.concat(listChild);
   list = list.concat(listOthers);
@@ -5990,11 +5994,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-01-31"), $lt: new Date("2026-03-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-02-28"), $lt: new Date("2026-04-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-01-31"), $lt: new Date("2026-03-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-02-28"), $lt: new Date("2026-04-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
