@@ -2526,8 +2526,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   let period;
   if (newOrder.holiday == "Дни рождения апреля 2026") {
     period = {
-      "date1": 16,
-      "date2": 20,
+      "date1": 26,
+      "date2": 30,
       "isActive": true,
       "key": 0,
       "maxPlus": 3, //PLUSES1
@@ -2566,8 +2566,8 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   }
   if (newOrder.holiday == "Дни рождения мая 2026") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 1,
+      "date2": 5,
       "isActive": true,
       "key": 0,
       "maxPlus": 2,  //PLUSES1
@@ -3427,7 +3427,7 @@ async function searchSenior(
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 1;
     }
-    if (standardFilter.category == "oldMen" || standardFilter.category == "yangMen") {//|| standardFilter.category == "specialWomen"
+    if (standardFilter.category == "oldMen" ) {//|| standardFilter.category == "specialWomen"|| standardFilter.category == "yangMen"
       maxPlusAmount = data.maxPlus + 1;
     }
   }
