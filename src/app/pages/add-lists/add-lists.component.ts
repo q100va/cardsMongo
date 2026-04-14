@@ -142,7 +142,7 @@ export class AddListsComponent implements OnInit {
   constructor(
     private seniorsService: SeniorsService,
     private houseService: HousesService,
-    private listService: ListService
+    private listService: ListService,
   ) {}
 
   displayedColumns = [
@@ -219,7 +219,7 @@ export class AddListsComponent implements OnInit {
       let index: number;
       while (index != -1) {
         index = list.findIndex(
-          (item) => !item.lastName && !item.firstName && !item.patronymic
+          (item) => !item.lastName && !item.firstName && !item.patronymic,
         );
         if (index != -1) list.splice(index, 1);
       }
@@ -247,18 +247,23 @@ export class AddListsComponent implements OnInit {
 
         if (!senior.patronymic) {
           senior.comment1 = "(отчество не указано)";
-          if (
-            senior.lastName.endsWith("ов") ||
-            senior.lastName.endsWith("ев") ||
-            senior.lastName.endsWith("ин")
-          ) {
-            senior.gender = "Male";
-          } else if (
-            senior.lastName.endsWith("ова") ||
-            senior.lastName.endsWith("ева") ||
-            senior.lastName.endsWith("ина")
-          ) {
-            senior.gender = "Female";
+          if (senior.lastName) {
+            if (
+              senior.lastName.endsWith("ов") ||
+              senior.lastName.endsWith("ев") ||
+              senior.lastName.endsWith("ин")
+            ) {
+              senior.gender = "Male";
+            } else if (
+              senior.lastName.endsWith("ова") ||
+              senior.lastName.endsWith("ева") ||
+              senior.lastName.endsWith("ина")
+            ) {
+              senior.gender = "Female";
+            } else {
+              senior.gender = "Male";
+              //alert('Необходимо уточнить пол: ' + senior.lastName + ' ' + senior.firstName);
+            }
           } else {
             senior.gender = "Male";
             //alert('Необходимо уточнить пол: ' + senior.lastName + ' ' + senior.firstName);
@@ -279,7 +284,6 @@ export class AddListsComponent implements OnInit {
           senior.gender = "Male";
           //alert('Необходимо уточнить пол: ' + senior.lastName + ' ' + senior.firstName + ' ' + senior.patronymic);
         }
-
       }
     }
     console.log("this.arrayOfLists");
@@ -333,10 +337,10 @@ export class AddListsComponent implements OnInit {
         (err) => {
           console.log(err);
           alert(
-            "Произошла ошибка, обратитесь к администратору! " + err.message
+            "Произошла ошибка, обратитесь к администратору! " + err.message,
           );
           //stop = true;
-        }
+        },
       );
   }
 
@@ -344,25 +348,25 @@ export class AddListsComponent implements OnInit {
     let difference = {
       key: movedFromAbsentsKey,
       old: this.resultOfCompare.absents.find(
-        (item) => item.key == movedFromAbsentsKey
+        (item) => item.key == movedFromAbsentsKey,
       ),
       new: this.resultOfCompare.arrived.find(
-        (item) => item.key == movedFromArrivedKey
+        (item) => item.key == movedFromArrivedKey,
       ),
     };
     this.resultOfCompare.changed.push(difference);
     this.duplicateChanged.push(difference);
     this.resultOfCompare.absents.splice(
       this.resultOfCompare.absents.findIndex(
-        (item) => item.key == movedFromAbsentsKey
+        (item) => item.key == movedFromAbsentsKey,
       ),
-      1
+      1,
     );
     this.resultOfCompare.arrived.splice(
       this.resultOfCompare.arrived.findIndex(
-        (item) => item.key == movedFromArrivedKey
+        (item) => item.key == movedFromArrivedKey,
       ),
-      1
+      1,
     );
 
     this.accepted.push({
@@ -393,21 +397,21 @@ export class AddListsComponent implements OnInit {
 
     console.log("this.accepted");
     console.log(this.accepted);
-    this.movedFromAbsents=undefined;
-    this.movedFromArrived=undefined;
+    this.movedFromAbsents = undefined;
+    this.movedFromArrived = undefined;
   }
 
   moveToChangedFromDoubtful(movedFromDoubtful) {
     const changed = this.resultOfCompare.doubtful.find(
-      (item) => item.key == movedFromDoubtful
+      (item) => item.key == movedFromDoubtful,
     );
     this.resultOfCompare.changed.push(changed);
     this.duplicateChanged.push(changed);
     this.resultOfCompare.doubtful.splice(
       this.resultOfCompare.doubtful.findIndex(
-        (item) => item.key == movedFromDoubtful
+        (item) => item.key == movedFromDoubtful,
       ),
-      1
+      1,
     );
 
     this.accepted.push({
@@ -445,18 +449,18 @@ export class AddListsComponent implements OnInit {
     console.log(movedFromDoubtful);
     console.log("movedFromDoubtful");
     const absent = this.resultOfCompare.doubtful.find(
-      (item) => item.key == movedFromDoubtful
+      (item) => item.key == movedFromDoubtful,
     );
     this.resultOfCompare.absents.push(absent.old);
     const arrived = this.resultOfCompare.doubtful.find(
-      (item) => item.key == movedFromDoubtful
+      (item) => item.key == movedFromDoubtful,
     );
     this.resultOfCompare.arrived.push(arrived.new);
     this.resultOfCompare.doubtful.splice(
       this.resultOfCompare.doubtful.findIndex(
-        (item) => item.key == movedFromDoubtful
+        (item) => item.key == movedFromDoubtful,
       ),
-      1
+      1,
     );
     this.movedFromDoubtful = undefined;
   }
@@ -512,7 +516,7 @@ export class AddListsComponent implements OnInit {
     this.allAccepted.push(cloneAccepted);
     this.resultOfCompare.changed.splice(
       this.resultOfCompare.changed.findIndex((item) => item.key == key),
-      1
+      1,
     );
     console.log("cloneAccepted.id");
     console.log(cloneAccepted.id);
@@ -553,15 +557,15 @@ export class AddListsComponent implements OnInit {
     this.waiting = true;
     this.resultOfCompare.accepted = this.allAccepted;
 
-     this.seniorsService
+    this.seniorsService
       .applyChanges(
         this.resultOfCompare,
         this.dateOfList,
-        this.arrayOfLists[this.index][0].nursingHome
+        this.arrayOfLists[this.index][0].nursingHome,
       )
       .subscribe(
         async (res) => {
-          alert(res.data);  
+          alert(res.data);
           this.index++;
           this.waiting = false;
           if (this.index == this.arrayOfLists.length) {
@@ -572,24 +576,24 @@ export class AddListsComponent implements OnInit {
             if (this.arrayOfLists[this.index][0]?.nursingHome) {
               this.compareLists(
                 this.arrayOfLists[this.index],
-                this.arrayOfLists[this.index][0].nursingHome
+                this.arrayOfLists[this.index][0].nursingHome,
               );
             } else {
               alert(
-                "Невозможно продолжить обновление! Возможно загруженный файл содержит строки без названия интерната."
+                "Невозможно продолжить обновление! Возможно загруженный файл содержит строки без названия интерната.",
               );
             }
           }
-     },
+        },
         (err) => {
           this.waiting = false;
           console.log(err);
           alert(
-            "Произошла ошибка, обратитесь к администратору! " + err.message
+            "Произошла ошибка, обратитесь к администратору! " + err.message,
           );
           //stop = true;
-        }
-      ); 
+        },
+      );
   }
 
   showEmail(startDate: Date, endDate: Date) {
@@ -610,7 +614,7 @@ export class AddListsComponent implements OnInit {
         console.log(err);
         alert("Произошла ошибка, обратитесь к администратору! " + err.message);
         //stop = true;
-      }
+      },
     );
   }
 
@@ -667,7 +671,7 @@ export class AddListsComponent implements OnInit {
         console.log(err);
         alert("Произошла ошибка, обратитесь к администратору! " + err.message);
         //stop = true;
-      }
+      },
     );
   }
 }
