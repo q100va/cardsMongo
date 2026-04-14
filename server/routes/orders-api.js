@@ -249,9 +249,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   //"Новый год 2026",
-                  "Дни рождения марта 2026",
                   "Дни рождения апреля 2026",
                   "Дни рождения мая 2026",
+                  "Дни рождения июня 2026",
                   "23 февраля 2026",
                   "8 марта 2026",
                   "9 мая 2026", "Пасха 2026",
@@ -267,9 +267,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   // "Новый год 2026",
-                  "Дни рождения марта 2026",
                   "Дни рождения апреля 2026",
                   "Дни рождения мая 2026",
+                  "Дни рождения июня 2026",
                   "23 февраля 2026",
                   "8 марта 2026", "9 мая 2026", "Пасха 2026",
                   //
@@ -306,9 +306,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   //"Новый год 2026",
-                  "Дни рождения марта 2026",
                   "Дни рождения апреля 2026",
                   "Дни рождения мая 2026",
+                  "Дни рождения июня 2026",
                   "23 февраля 2026",
                   "8 марта 2026", "9 мая 2026", "Пасха 2026",
                   // " 
@@ -322,9 +322,9 @@ router.get("/findNotConfirmed/:userName", checkAuth, async (req, res) => {
               holiday: {
                 $in: [
                   //"Новый год 2026",
-                  "Дни рождения марта 2026",
                   "Дни рождения апреля 2026",
                   "Дни рождения мая 2026",
+                  "Дни рождения июня 2026",
                   "23 февраля 2026",
                   "8 марта 2026",
                   "Пасха 2026", "9 мая 2026"
@@ -473,9 +473,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -486,9 +486,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -516,9 +516,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isOverdue: true,
                 holiday: {
                   $in: [
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -529,9 +529,9 @@ router.patch("/confirm/:id", checkAuth, async (req, res) => {
                 isReturned: true,
                 holiday: {
                   $in: [
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -602,9 +602,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     // "Новый год 2026",
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -618,9 +618,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     // "Новый год 2026",
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -652,9 +652,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       //   "Новый год 2026",
-                      "Дни рождения марта 2026",
                       "Дни рождения апреля 2026",
                       "Дни рождения мая 2026",
+                      "Дни рождения июня 2026",
                       "23 февраля 2026",
                       "8 марта 2026",
                       "Пасха 2026", "9 мая 2026"
@@ -668,9 +668,9 @@ router.patch("/unconfirmed/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       //   "Новый год 2026",
-                      "Дни рождения марта 2026",
                       "Дни рождения апреля 2026",
                       "Дни рождения мая 2026",
+                      "Дни рождения июня 2026",
                       "23 февраля 2026",
                       "8 марта 2026",
                       "Пасха 2026", "9 мая 2026"
@@ -757,9 +757,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     // "Новый год 2026",
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -773,9 +773,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     // "Новый год 2026",
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     "23 февраля 2026",
                     "8 марта 2026",
                     "Пасха 2026", "9 мая 2026"
@@ -807,9 +807,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       // "Новый год 2026",
-                      "Дни рождения марта 2026",
                       "Дни рождения апреля 2026",
                       "Дни рождения мая 2026",
+                      "Дни рождения июня 2026",
                       "23 февраля 2026",
                       "8 марта 2026",
                       "Пасха 2026", "9 мая 2026"
@@ -823,9 +823,9 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       // "Новый год 2026",
-                      "Дни рождения марта 2026",
                       "Дни рождения апреля 2026",
                       "Дни рождения мая 2026",
+                      "Дни рождения июня 2026",
                       "23 февраля 2026",
                       "8 марта 2026",
                       "Пасха 2026", "9 мая 2026"
@@ -861,37 +861,37 @@ router.patch("/change-status/:id", checkAuth, async (req, res) => {
 async function deletePluses(deletedOrder, full) {
   let deletedLineItems = full ? deletedOrder.lineItems : [deletedOrder.deleted[deletedOrder.deleted.length - 1]];
 
-  if (deletedOrder.holiday == "Дни рождения апреля 2026" || deletedOrder.holiday == "Дни рождения мая 2026" || deletedOrder.holiday == "Дни рождения марта 2026") {
+  if (deletedOrder.holiday == "Дни рождения мая 2026" || deletedOrder.holiday == "Дни рождения июня 2026" || deletedOrder.holiday == "Дни рождения апреля 2026") {
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
     const month = await Month.findOne({ isActive: true });
     let monthNumber = month.number;
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (deletedOrder.holiday == "Дни рождения мая 2026") {
+    if (deletedOrder.holiday == "Дни рождения июня 2026") {
       monthNumber = monthNumber + 1;
     }
-    if (deletedOrder.holiday == "Дни рождения марта 2026") {
+    if (deletedOrder.holiday == "Дни рождения апреля 2026") {
       monthNumber = monthNumber - 1;
     }
     for (let lineItem of deletedLineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == monthNumber) {
 
-          if (deletedOrder.holiday == "Дни рождения мая 2026") {
+          if (deletedOrder.holiday == "Дни рождения июня 2026") {
             await ListNext.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListNext.findOne({ _id: person._id });
           }
-          if (deletedOrder.holiday == "Дни рождения апреля 2026") {
+          if (deletedOrder.holiday == "Дни рождения мая 2026") {
             await List.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await List.findOne({ _id: person._id });
           }
-          if (deletedOrder.holiday == "Дни рождения марта 2026") {
+          if (deletedOrder.holiday == "Дни рождения апреля 2026") {
             await ListBefore.updateOne({ _id: person._id }, { $inc: { plusAmount: -1 } }, { upsert: false });
             celebrator = await ListBefore.findOne({ _id: person._id });
           }
 
-          /*           if (deletedOrder.holiday == "Дни рождения апреля 2026") {
+          /*           if (deletedOrder.holiday == "Дни рождения мая 2026") {
                       period = await Period.findOne({ date1: { $lte: celebrator.dateBirthday }, date2: { $gte: celebrator.dateBirthday } });
                       activePeriod = await Period.findOne({ isActive: true });
                       if (celebrator.plusAmount < period.scoredPluses && period.scoredPluses > 2) {
@@ -1190,9 +1190,9 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     //  "Новый год 2026",
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     /*         "Именины февраля 2025",
                             "Именины марта 2025" */
                   ]
@@ -1203,9 +1203,9 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                 holiday: {
                   $in: [
                     // "Новый год 2026",
-                    "Дни рождения марта 2026",
                     "Дни рождения апреля 2026",
                     "Дни рождения мая 2026",
+                    "Дни рождения июня 2026",
                     /*        "Именины февраля 2025",
                            "Именины марта 2025" */
                   ]
@@ -1234,8 +1234,8 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2026",
-                      "Дни рождения апреля 2026",
                       "Дни рождения мая 2026",
+                      "Дни рождения июня 2026",
                       "Именины февраля 2025",
                       "Именины марта 2025"
                     ]
@@ -1246,8 +1246,8 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
                   holiday: {
                     $in: [
                       "Новый год 2026",
-                      "Дни рождения апреля 2026",
                       "Дни рождения мая 2026",
+                      "Дни рождения июня 2026",
                       "Именины февраля 2025",
                       "Именины марта 2025"
                     ]
@@ -1278,7 +1278,7 @@ router.patch("/restore/:id", checkAuth, async (req, res) => {
 });
 
 async function restorePluses(updatedOrder) {
-  if (updatedOrder.holiday == "Дни рождения апреля 2026" || updatedOrder.holiday == "Дни рождения мая 2026" || updatedOrder.holiday == "Дни рождения марта 2026") {
+  if (updatedOrder.holiday == "Дни рождения мая 2026" || updatedOrder.holiday == "Дни рождения июня 2026" || updatedOrder.holiday == "Дни рождения апреля 2026") {
 
 
     //удалить плюсы, если они в текущем месяце. откорректировать scoredPluses в периоде, если надо, и активный период.
@@ -1287,20 +1287,20 @@ async function restorePluses(updatedOrder) {
     const today = new Date();
     const inTwoWeeks = new Date();
     let period, activePeriod, celebrator;
-    if (updatedOrder.holiday == "Дни рождения мая 2026") {
+    if (updatedOrder.holiday == "Дни рождения июня 2026") {
       monthNumber = monthNumber + 1;
     }
 
     for (let lineItem of updatedOrder.lineItems) {
       for (let person of lineItem.celebrators) {
         if (person.monthBirthday == month.number) {
-          if (updatedOrder.holiday == "Дни рождения мая 2026") {
+          if (updatedOrder.holiday == "Дни рождения июня 2026") {
             await ListNext.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения апреля 2026") {
+          if (updatedOrder.holiday == "Дни рождения мая 2026") {
             await List.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
-          if (updatedOrder.holiday == "Дни рождения марта 2026") {
+          if (updatedOrder.holiday == "Дни рождения апреля 2026") {
             await ListBefore.updateOne({ _id: person.celebrator_id }, { $inc: { plusAmount: +1 } }, { upsert: false });
           }
 
@@ -2493,13 +2493,13 @@ async function deleteErrorPlus(order_id, holiday, ...userName) {
           seniors_ids.push(person.celebrator_id);
         }
 
-        if (holiday == "Дни рождения мая 2026") {
+        if (holiday == "Дни рождения июня 2026") {
           await ListNext.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения апреля 2026") {
+        if (holiday == "Дни рождения мая 2026") {
           await List.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения марта 2026") {
+        if (holiday == "Дни рождения апреля 2026") {
           await ListBefore.updateMany({ _id: { $in: seniors_ids } }, { $inc: { plusAmount: - 1 } }, { upsert: false });
         }
 
@@ -2524,13 +2524,13 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
 
   //let period = await Period.findOne({ key:0 });
   let period;
-  if (newOrder.holiday == "Дни рождения апреля 2026") {
+  if (newOrder.holiday == "Дни рождения мая 2026") {
     period = {
-      "date1": 26,
-      "date2": 30,
+      "date1": 11,
+      "date2": 15,
       "isActive": true,
       "key": 0,
-      "maxPlus": 3, //PLUSES1
+      "maxPlus": 2, //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2553,21 +2553,21 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
   }
 
 
-  if (newOrder.holiday == "Дни рождения марта 2026") {
+  if (newOrder.holiday == "Дни рождения апреля 2026") {
     period = {
       "date1": 26,
-      "date2": 31,
+      "date2": 30,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2,//PLUSES1
+      "maxPlus": 3,//PLUSES1
       "secondTime": true,
       "scoredPluses": 2
     }
   }
-  if (newOrder.holiday == "Дни рождения мая 2026") {
+  if (newOrder.holiday == "Дни рождения июня 2026") {
     period = {
-      "date1": 6,
-      "date2": 10,
+      "date1": 1,
+      "date2": 5,
       "isActive": true,
       "key": 0,
       "maxPlus": 2,  //PLUSES1
@@ -3170,7 +3170,7 @@ async function fillOrder(housesForInstitutes, proportion, period, order_id, filt
 //set restrictions for searching
 
 async function collectSeniors(housesForInstitutes, data, orderFilter, holiday) {
-  if (holiday == "Дни рождения мая 2026") {
+  if (holiday == "Дни рождения июня 2026") {
     console.log('test1');
   }
   console.log('holiday1');
@@ -3288,13 +3288,13 @@ async function collectSeniors(housesForInstitutes, data, orderFilter, holiday) {
       if (result) {
         //console.log(result);
         await Order.updateOne({ _id: data.order_id }, { $push: { temporaryLineItems: result } }, { upsert: false });
-        if (holiday == "Дни рождения мая 2026") {
+        if (holiday == "Дни рождения июня 2026") {
           await ListNext.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения апреля 2026") {
+        if (holiday == "Дни рождения мая 2026") {
           await List.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
-        if (holiday == "Дни рождения марта 2026") {
+        if (holiday == "Дни рождения апреля 2026") {
           await ListBefore.updateOne({ _id: result.celebrator_id }, { $inc: { plusAmount: 1 } }, { upsert: false });
         }
 
@@ -3423,7 +3423,7 @@ async function searchSenior(
   //let maxPlusAmount = 3;  
   //let maxPlusAmount = 3; 
   let maxPlusAmount = data.maxPlus; //PLUSES1
-  if (holiday == "Дни рождения мая 2026") {
+  if (holiday == "Дни рождения июня 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 1;
     }
@@ -3431,7 +3431,7 @@ async function searchSenior(
       maxPlusAmount = data.maxPlus + 1;
     }
   }
-  if (holiday == "Дни рождения апреля 2026") {
+  if (holiday == "Дни рождения мая 2026") {
     if (standardFilter.category == "oldWomen") {//standardFilter.oldest ||
       maxPlusAmount = data.maxPlus + 1;
     }
@@ -3450,7 +3450,7 @@ async function searchSenior(
           maxPlusAmount = 4;
         } */
   }
-  if (holiday == "Дни рождения марта 2026") {
+  if (holiday == "Дни рождения апреля 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 1;
     }
@@ -3477,13 +3477,13 @@ async function searchSenior(
     /*   console.log("filter");
       console.log(filter); */
 
-    if (holiday == "Дни рождения мая 2026") {
+    if (holiday == "Дни рождения июня 2026") {
       celebrator = await ListNext.findOne(filter);
     }
-    if (holiday == "Дни рождения апреля 2026") {
+    if (holiday == "Дни рождения мая 2026") {
       celebrator = await List.findOne(filter);
     }
-    if (holiday == "Дни рождения марта 2026") {
+    if (holiday == "Дни рождения апреля 2026") {
       celebrator = await ListBefore.findOne(filter);
     }
 
@@ -6640,7 +6640,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "birthday") {
       const celebratorsHB = await List.find({ absent: false, nursingHome: "КРАСНАЯ_ДУБРАВА_ДЕТИ" });// 
       for (let celebrator of celebratorsHB) {
-        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения апреля 2026" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения мая 2026" }).countDocuments();
         await List.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await List.findOne({ _id: celebrator._id });
 
@@ -6653,7 +6653,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "birthdayBefore") {
       const celebratorsHB = await ListBefore.find({ absent: false });
       for (let celebrator of celebratorsHB) {
-        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения марта 2026" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения апреля 2026" }).countDocuments();
         await ListBefore.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await ListBefore.findOne({ _id: celebrator._id });
 
@@ -6666,7 +6666,7 @@ router.get("/restore-pluses/:holiday", checkAuth, async (req, res) => {
     if (req.params.holiday == "birthdayBefore") {
       const celebratorsHB = await ListNext.find({ absent: false });
       for (let celebrator of celebratorsHB) {
-        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения мая 2026" }).countDocuments();
+        let plusAmount = await Order.find({ "lineItems.celebrators._id": celebrator._id, isDisabled: false, isOverdue: false, isReturned: false, holiday: "Дни рождения июня 2026" }).countDocuments();
         await ListNext.updateOne({ _id: celebrator._id }, { $set: { plusAmount: plusAmount } });
         let updatedCelebrator = await ListNext.findOne({ _id: celebrator._id });
 
@@ -8960,7 +8960,7 @@ async function fillOrderForInstitutes(
     //console.log(house.nursingHome);
 
 
-    if (holiday == "Дни рождения апреля 2026") {
+    if (holiday == "Дни рождения мая 2026") {
       if (filter.onlyWithConcent) {
         count = await List.find({
           nursingHome: house.nursingHome,
@@ -8978,7 +8978,7 @@ async function fillOrderForInstitutes(
 
     }
 
-    if (holiday == "Дни рождения мая 2026") {
+    if (holiday == "Дни рождения июня 2026") {
       console.log("count = await ListNext.find");
       if (filter.onlyWithConcent) {
         count = await ListNext.find({
@@ -8996,7 +8996,7 @@ async function fillOrderForInstitutes(
     }
 
 
-    if (holiday == "Дни рождения марта 2026") {
+    if (holiday == "Дни рождения апреля 2026") {
       if (filter.onlyWithConcent) {
         count = await ListBefore.find({
           nursingHome: house.nursingHome,
@@ -9770,7 +9770,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
 
 
 
-  if (holiday == "Дни рождения мая 2026") {
+  if (holiday == "Дни рождения июня 2026") {
     if (filter.onlyWithConcent) {
       seniorsData = await ListNext.find({
         nursingHome: nursingHome,
@@ -9799,7 +9799,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
   }
 
 
-  if (holiday == "Дни рождения апреля 2026") {
+  if (holiday == "Дни рождения мая 2026") {
     if (filter.onlyWithConcent) {
       seniorsData = await List.find({
         nursingHome: nursingHome,
@@ -9826,7 +9826,7 @@ async function collectSeniorsForInstitution(order_id, holiday, amount, nursingHo
     }
   }
 
-  if (holiday == "Дни рождения марта 2026") {
+  if (holiday == "Дни рождения апреля 2026") {
     if (filter.onlyWithConcent) {
       seniorsData = await ListBefore.find({
         nursingHome: nursingHome,

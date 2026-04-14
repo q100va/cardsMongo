@@ -286,7 +286,7 @@ router.post("/getClientId", checkAuth, async (req, res) => {
     if (client) {
       let conditions = {
         isDisabled: false,
-        holiday: { $in: ["Дни рождения апреля 2026", "Дни рождения мая 2026", "9 мая 2026"] },//req.body.holiday,
+        holiday: { $in: ["Дни рождения мая 2026", "Дни рождения июня 2026", "9 мая 2026"] },//req.body.holiday,
         clientId: client._id,
         userName: {$nin: ["okskust"]}
 

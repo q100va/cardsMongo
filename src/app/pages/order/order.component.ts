@@ -55,7 +55,7 @@ export class OrderComponent implements OnInit {
   order: Order;
   userName: string;
   form: FormGroup;
-  holiday: string = "Дни рождения апреля 2026";
+  holiday: string = "Дни рождения мая 2026";
   lineItems = [];
   types: Array<string> = [
     "email",
@@ -608,10 +608,10 @@ export class OrderComponent implements OnInit {
     this.isBeforeMonth = false;
     console.log("click");
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения апреля 2026";
+      this.holiday = "Дни рождения мая 2026";
     }
     if (this.isNextMonth) {
-      this.holiday = "Дни рождения мая 2026";
+      this.holiday = "Дни рождения июня 2026";
     }
   }
 
@@ -625,10 +625,10 @@ export class OrderComponent implements OnInit {
     }
     this.isNextMonth = false;
     if (this.isMainMonth) {
-      this.holiday = "Дни рождения апреля 2026";
+      this.holiday = "Дни рождения мая 2026";
     }
     if (this.isBeforeMonth) {
-      this.holiday = "Дни рождения марта 2026";
+      this.holiday = "Дни рождения апреля 2026";
     }
   }
 
@@ -788,7 +788,7 @@ export class OrderComponent implements OnInit {
     this.showIndexes = false;
     this.showInstruction = false;
     this.showInstructionForSubscribers = false;
-    this.holiday = "Дни рождения апреля 2026";
+    this.holiday = "Дни рождения мая 2026";
     this.isMainMonth = true;
     this.isNextMonth = false;
     this.isBeforeMonth = false;
@@ -1226,7 +1226,7 @@ export class OrderComponent implements OnInit {
 
     this.holidayTitle = this.holiday;
 
-    /*  if (this.holiday == "Дни рождения марта 2026") {
+    /*  if (this.holiday == "Дни рождения апреля 2026") {
       this.holidayTitle = "Дни рождения 26-30 ноября 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
@@ -1267,7 +1267,7 @@ export class OrderComponent implements OnInit {
       }
     }
 
-    if (this.holiday == "Дни рождения апреля 2026") {
+    if (this.holiday == "Дни рождения мая 2026") {
       this.holidayTitle = "Дни рождения 21-25 декабря 2025";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
@@ -1308,7 +1308,7 @@ export class OrderComponent implements OnInit {
       }
     }
 
-    if (this.holiday == "Дни рождения мая 2026") {
+    if (this.holiday == "Дни рождения июня 2026") {
       this.holidayTitle = "Дни рождения 1-5 января 2026";
       if (this.form.controls.date1.value && this.form.controls.date2.value) {
         this.holidayTitle =
