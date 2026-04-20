@@ -5519,7 +5519,7 @@ async function restoreVeteransStatistic(activeHouse) {
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
     // await seniorsVolunteers();
-    //await quarta();
+    await quarta();
     // await year_eberdnikova();
 
     let statistic = [
@@ -5930,7 +5930,7 @@ async function year_eberdnikova() {
 async function quarta() {
   let orders = await Order.find({
     isDisabled: false, isOverdue: false, isReturned: false,
-    dateOfOrder: { $gt: new Date("2025-12-31"), $lt: new Date("2026-04-01") },
+    dateOfOrder: { $gt: new Date("2026-02-28"), $lt: new Date("2026-04-01") },
     /*     $or: [{ "holiday": 'Дни рождения мая 2025' },
         { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения апреля 2026' },
         { "holiday": '9 мая 2026' }, { "holiday": 'Пасха 2026' },] */

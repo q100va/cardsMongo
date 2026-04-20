@@ -163,7 +163,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
     if (newOrder.holiday == "Дни рождения апреля 2026") {
         period = {
             "date1": 26,
-            "date2": 31,
+            "date2": 30,
             "isActive": true,
             "key": 0,
             "maxPlus": 7, //PLUSES1
