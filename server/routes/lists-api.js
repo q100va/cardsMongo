@@ -5519,7 +5519,7 @@ async function restoreVeteransStatistic(activeHouse) {
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
     // await seniorsVolunteers();
-    await quarta();
+    //await quarta();
     // await year_eberdnikova();
 
     let statistic = [
