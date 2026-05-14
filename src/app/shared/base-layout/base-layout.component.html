@@ -26,8 +26,8 @@
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/teacher-day" mat-button>День учителя</button>  -->
 
 
-          <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button>
-          <!--  <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
+        <!--   <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/may9" mat-button>9 мая</button>
+           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/family-day" mat-button>День семьи</button>  -->
 
          <!-- <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/easter" mat-button>Пасха</button>
           <button *ngIf="!isDobroru" class="navbar-link" routerLink="/orders/march-8" mat-button>8 марта</button>
@@ -35,9 +35,9 @@
           <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/march-8" mat-button>8
             МАРТА</button> -->
           <!--  <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/february-23"
-            mat-button>23 ФЕВРАЛЯ</button>-->
+            mat-button>23 ФЕВРАЛЯ</button>
           <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/may9" mat-button>9
-            МАЯ</button>
+            МАЯ</button>-->
           <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/happy-birthday"
             mat-button>ДНИ РОЖДЕНИЯ</button>
           <!--    <button *ngIf="isDobroru || isAdmin" class="navbar-link" routerLink="/orders/dobroru/new-year" mat-button>НОВЫЙ ГОД</button>
@@ -74,11 +74,11 @@
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToEasterLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки Пасха</span>
-            </button>-->
+            </button>
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToVeteransLists()">
               <mat-icon color="primary">list</mat-icon>
               <span>Списки 9 мая</span>
-            </button>
+            </button>-->
             <button *ngIf="isAdmin" mat-menu-item (click)="redirectToCheck()">
               <mat-icon color="primary">bug_report</mat-icon>
               <span>Проверка списка</span>
