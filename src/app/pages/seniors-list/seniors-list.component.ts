@@ -67,7 +67,7 @@ export class SeniorsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderService.getNursingHomes().subscribe(
-      async (res) => {
+      (res) => {
         this.nursingHomes = res["data"]["nursingHomes"];
       },
       (err) => {
