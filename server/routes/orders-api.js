@@ -173,7 +173,14 @@ router.get("/find/:userName", checkAuth, async (req, res) => {
     const pageSize = +req.query.pagesize;
     const currentPage = +req.query.page;
     const length = await Order.countDocuments({ userName: req.params.userName, isDisabled: false });
-    Order.find({ userName: req.params.userName, isDisabled: false }, function (err, orders) {
+    console.log("req.query.valueToSearch");
+    console.log(req.query.valueToSearch);
+    const params = {
+      userName: req.params.userName, isDisabled: false
+    };
+    if (req.query.valueToSearch) params.contact = req.query.valueToSearch;
+
+    Order.find(params, function (err, orders) {
       if (err) {
         console.log(err);
         const readUserMongodbErrorResponse = new BaseResponse(
@@ -2894,7 +2901,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
-//filter.isReleased = false;
+    //filter.isReleased = false;
     let housesForInstitutes = [];
     /*     if (newOrder.institutes.length > 0) {
           let activeHouse = await House.find({ isReleased: false, isActive: true });
@@ -3427,7 +3434,7 @@ async function searchSenior(
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
       maxPlusAmount = data.maxPlus + 2;
     }
-    if (standardFilter.category == "oldMen" ) {//|| standardFilter.category == "specialWomen"|| standardFilter.category == "yangMen"
+    if (standardFilter.category == "oldMen") {//|| standardFilter.category == "specialWomen"|| standardFilter.category == "yangMen"
       maxPlusAmount = data.maxPlus + 2;
     }
   }
@@ -5581,9 +5588,9 @@ async function collectSeniorsSpring(data, orderFilter) {
 
 
           let senior = await May9.findOne({ _id: result.celebrator_id });
-/*           let newP = senior.plusAmount;
-          let p = newP - 1;
-          let c = senior.category; */
+          /*           let newP = senior.plusAmount;
+                    let p = newP - 1;
+                    let c = senior.category; */
 
 
 

@@ -222,6 +222,7 @@ export class OrderListComponent implements AfterViewInit {
           // this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
           //this.dataSource.paginator = this.paginator;
+          this.valueToSearch = "";
           this.waiting = false;
         },
         (err) => {
@@ -249,6 +250,7 @@ export class OrderListComponent implements AfterViewInit {
           // this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
           //this.dataSource.paginator = this.paginator;
+          this.valueToSearch = "";
           this.waiting = false;
         },
         (err) => {
@@ -276,6 +278,7 @@ export class OrderListComponent implements AfterViewInit {
           // this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
           //this.dataSource.paginator = this.paginator;
+          this.valueToSearch = "";
           this.waiting = false;
         },
         (err) => {
@@ -309,6 +312,7 @@ export class OrderListComponent implements AfterViewInit {
                 console.log(this.orders);
                 //this.orders.reverse();
                 this.dataSource = new MatTableDataSource(this.orders);
+                this.valueToSearch = "";
                 // this.dataSource.paginator = this.paginator;
                 this.waiting = false;
               },
@@ -373,6 +377,7 @@ export class OrderListComponent implements AfterViewInit {
           //this.orders.reverse();
           this.dataSource = new MatTableDataSource(this.orders);
           //this.dataSource.paginator = this.paginator;
+          this.valueToSearch = "";
           this.waiting = false;
         },
         (err) => {
@@ -407,6 +412,7 @@ export class OrderListComponent implements AfterViewInit {
               // this.orders.reverse();
               this.dataSource = new MatTableDataSource(this.orders);
               //this.dataSource.paginator = this.paginator;
+              this.valueToSearch = "";
               this.waiting = false;
             },
             (err) => {
@@ -435,7 +441,36 @@ export class OrderListComponent implements AfterViewInit {
   searchClient() {
     console.log("this.valueToSearch");
     console.log(this.valueToSearch);
-    if (this.isShowAll) {
+
+    this.paginator.firstPage();
+    /*     this.currentPage = 1; */
+    const pageData = { pageIndex: 0, pageSize: this.pageSize, length:0 };
+
+    this.onChangedPage(pageData);
+
+    //this.isShowAll = true;
+    /*  this.orderService
+      .findAllOrdersByUserId(
+        this.userName,
+        this.pageSize,
+        this.currentPage,
+        this.valueToSearch,
+      )
+      .subscribe(
+        (res) => {
+          this.orders = res["data"]["orders"];
+          this.length = res["data"]["length"];
+
+          this.dataSource = new MatTableDataSource(this.orders);
+        },
+        (err) => {
+          console.log(err);
+          alert(err.message);
+        },
+        () => {},
+      ); */
+
+  /*   if (this.isShowAll) {
       this.orderService
         .findAllOrdersByUserId(
           this.userName,
@@ -448,13 +483,7 @@ export class OrderListComponent implements AfterViewInit {
             this.orders = res["data"]["orders"];
             this.length = res["data"]["length"];
 
-            //this.orders.reverse();
             this.dataSource = new MatTableDataSource(this.orders);
-            //this.dataSource.paginator = this.paginator;
-
-            // console.log("this.orders[this.length-1].dateOfOrder");
-            // console.log(typeof this.orders[0].dateOfOrder);
-            //console.log(this.orders[0].dateOfOrder.toDateString());
           },
           (err) => {
             console.log(err);
@@ -483,7 +512,7 @@ export class OrderListComponent implements AfterViewInit {
           },
           () => {},
         );
-    }
+    } */
   }
 
   //Delete order
