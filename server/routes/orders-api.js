@@ -2570,7 +2570,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
       "date2": 10,
       "isActive": true,
       "key": 0,
-      "maxPlus": 2,  //PLUSES1
+      "maxPlus": 3,  //PLUSES1
       "secondTime": false,
       "scoredPluses": 2
     }
@@ -2894,7 +2894,7 @@ async function createOrder(newOrder, prohibitedId, restrictedHouses) {
             } */
       if (newOrder.filter.year1 && newOrder.filter.year2) filter.yearBirthday = { $lte: newOrder.filter.year2, $gte: newOrder.filter.year1 };
     }
-
+//filter.isReleased = false;
     let housesForInstitutes = [];
     /*     if (newOrder.institutes.length > 0) {
           let activeHouse = await House.find({ isReleased: false, isActive: true });
@@ -3425,10 +3425,10 @@ async function searchSenior(
   let maxPlusAmount = data.maxPlus; //PLUSES1
   if (holiday == "Дни рождения июля 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 1;
+      maxPlusAmount = data.maxPlus + 2;
     }
     if (standardFilter.category == "oldMen" ) {//|| standardFilter.category == "specialWomen"|| standardFilter.category == "yangMen"
-      maxPlusAmount = data.maxPlus + 1;
+      maxPlusAmount = data.maxPlus + 2;
     }
   }
   if (holiday == "Дни рождения июня 2026") {
