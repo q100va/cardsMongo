@@ -3432,7 +3432,7 @@ async function searchSenior(
   let maxPlusAmount = data.maxPlus; //PLUSES1
   if (holiday == "Дни рождения июля 2026") {
     if (standardFilter.oldest || standardFilter.category == "oldWomen" || standardFilter.category == "yangWomen") {
-      maxPlusAmount = data.maxPlus + 3;
+      maxPlusAmount = data.maxPlus + 2;
     }
     if (standardFilter.category == "oldMen") {//|| standardFilter.category == "specialWomen"|| standardFilter.category == "yangMen"
       maxPlusAmount = data.maxPlus + 2;
