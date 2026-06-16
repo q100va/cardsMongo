@@ -77,7 +77,7 @@
         <ng-container matColumnDef="edit">
           <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
           <mat-cell *matCellDef="let house">
-            <mat-icon
+            <mat-icon *ngIf="!isDobroru"
               class="icon-cursor"
               routerLink="/houses/update/{{ house._id }}"
               color="accent"
@@ -89,7 +89,7 @@
         <ng-container matColumnDef="delete">
           <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
           <mat-cell *matCellDef="let house">
-            <button mat-icon-button (click)="deleteHouse(house._id)">
+            <button  [disabled]="isDobroru" mat-icon-button (click)="deleteHouse(house._id)">
               <mat-icon color="primary">delete</mat-icon>
             </button>
           </mat-cell>
@@ -101,7 +101,7 @@
     <!-- Add button to create new house in the mat-card-subtitle below -->
 
     <mat-card-subtitle>
-      <button mat-stroked-button color="primary" routerLink="/houses/create/new">
+      <button [disabled]="isDobroru" mat-stroked-button color="primary" routerLink="/houses/create/new">
         Новый интернат
       </button>
     </mat-card-subtitle> 

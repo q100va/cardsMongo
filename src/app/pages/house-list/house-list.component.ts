@@ -12,6 +12,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ConfirmationService } from "primeng/api";
 import { MessageService } from "primeng/api";
 import { MatTableDataSource } from "@angular/material/table";
+import { CookieService } from "ngx-cookie-service";
 
 @Component({
   selector: "app-house-list",
@@ -21,77 +22,104 @@ import { MatTableDataSource } from "@angular/material/table";
 export class HouseListComponent implements OnInit {
   house = [];
   onlyActive = true;
- 
-  displayedColumns = [ "region", "nursingHome", "statistic.newYear.amount", "address", "dateLastUpdate", "nameContact", "contact", "notes", "noAddress", "isReleased", "edit", "delete"];//"isActive",
-     dynamicSort(properties) {
-      return function(a, b) {
-          for (let i = 0; i < properties.length; i++) {
-              let prop = properties[i];
-              if (a[prop] < b[prop]) return -1;
-              if (a[prop] > b[prop]) return 1;
-          }
-          return 0;
+  isAdmin: boolean = false;
+  isManager: boolean;
+  isDobroru: boolean;
+
+  displayedColumns = [
+    "region",
+    "nursingHome",
+    "statistic.newYear.amount",
+    "address",
+    "dateLastUpdate",
+    "nameContact",
+    "contact",
+    "notes",
+    "noAddress",
+    "isReleased",
+    "edit",
+    "delete",
+  ]; //"isActive",
+  dynamicSort(properties) {
+    return function (a, b) {
+      for (let i = 0; i < properties.length; i++) {
+        let prop = properties[i];
+        if (a[prop] < b[prop]) return -1;
+        if (a[prop] > b[prop]) return 1;
       }
+      return 0;
+    };
   }
   constructor(
     private dialog: MatDialog,
     private housesService: HousesService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cookieService: CookieService,
   ) {
+    const userRole = this.cookieService.get("session_role");
 
+    /*         this.roleService
+      .findUserRole(this.cookieService.get("session_user"))
+      .subscribe((res) => {
+        const userRole = res["data"]; */
+    this.isAdmin = userRole == "admin";
+    this.isManager = userRole == "manager";
+    this.isDobroru = userRole == "dobroru";
 
     this.housesService.findAllHouses(this.onlyActive).subscribe(
       (res) => {
         this.house = res["data"];
-       // this.house = this.house.filter(item => item.isActive == true);
-       // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
-       this.house = this.house.sort(this.dynamicSort(["region", "nursingHome"]));
-        for (let house of  this.house) {
-         
+        // this.house = this.house.filter(item => item.isActive == true);
+        // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
+        this.house = this.house.sort(
+          this.dynamicSort(["region", "nursingHome"]),
+        );
+        for (let house of this.house) {
           if (new Date(house.dateLastUpdate) < new Date("2025-09-01")) {
-     /*        console.log(new Date(house.dateLastUpdate));
+            /*        console.log(new Date(house.dateLastUpdate));
             console.log(new Date("2024-09-01")); */
             house.color = "red";
           } else {
             house.color = "black";
           }
-
         }
         console.log(this.house);
       },
-      (err) => {  console.log(err);},
-      () => {}
+      (err) => {
+        console.log(err);
+      },
+      () => {},
     );
   }
 
-//644526, Омская обл., Омский р-н, п. 2. Андреевский, ул. Центральная, д. 2. 8, Пушкинский ДИ (психоневрологический)
+  //644526, Омская обл., Омский р-н, п. 2. Андреевский, ул. Центральная, д. 2. 8, Пушкинский ДИ (психоневрологический)
 
   ngOnInit(): void {}
 
-  onToggleChange(event){
-     console.log(event);
-        this.housesService.findAllHouses(event.checked).subscribe(
+  onToggleChange(event) {
+    console.log(event);
+    this.housesService.findAllHouses(event.checked).subscribe(
       (res) => {
         this.house = res["data"];
-       // this.house = this.house.filter(item => item.isActive == true);
-       // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
-       this.house = this.house.sort(this.dynamicSort(["region", "nursingHome"]));
-        for (let house of  this.house) {
-         
+        // this.house = this.house.filter(item => item.isActive == true);
+        // this.house = this.house.sort((prev, next) => prev.region > next.region ? 1 : -1 );
+        this.house = this.house.sort(
+          this.dynamicSort(["region", "nursingHome"]),
+        );
+        for (let house of this.house) {
           if (new Date(house.dateLastUpdate) < new Date("2025-09-01")) {
-/*             console.log(new Date(house.dateLastUpdate));
+            /*             console.log(new Date(house.dateLastUpdate));
             console.log(new Date("2024-09-01")); */
             house.color = "red";
           } else {
             house.color = "black";
           }
-
         }
         console.log(this.house);
       },
       (err) => {},
-      () => {}
+      () => {},
     );
   }
 
@@ -112,7 +140,7 @@ export class HouseListComponent implements OnInit {
                   this.house = res["data"];
                 },
                 (err) => {},
-                () => {}
+                () => {},
               );
             },
             (err) => {
@@ -121,8 +149,12 @@ export class HouseListComponent implements OnInit {
             () => {
               //this.house = this.house.filter((q) => q._id !== qId);
               console.log(this.house);
-              this.messageService.add({ severity: "warn", summary: "bcrs", detail: "Запись удалена." });
-            }
+              this.messageService.add({
+                severity: "warn",
+                summary: "bcrs",
+                detail: "Запись удалена.",
+              });
+            },
           );
         }
       },

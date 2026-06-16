@@ -88,7 +88,7 @@ const routes: Routes = [
       {
         path: "houses",
         component: HouseListComponent,
-        canActivate: [AuthGuard, ManagerGuard],//, RoleGuard
+        canActivate: [AuthGuard],//, RoleGuard, ManagerGuard
       },
       {
         path: "houses/create/new",
