@@ -5519,7 +5519,8 @@ async function restoreVeteransStatistic(activeHouse) {
 router.get("/statistic", checkAuth, async (req, res) => {
   try {
     // await seniorsVolunteers();
-    //await quarta();
+    await quarta();
+    await quarta_dobroru();
     // await year_eberdnikova();
 
     let statistic = [
@@ -5782,7 +5783,7 @@ router.get("/statistic", checkAuth, async (req, res) => {
     const holidays = [ListBefore, March8, List, ListNext, Easter, May9, NewYear, February23];//
 
     for (let i = 0; i < holidays.length; i++) {
-      if (i==0 || i==2 || i==3) { //1 - March8, 4 - Easter, 5 - May9 &&  i != 5 || i==5
+      if (i == 0 || i == 2 || i == 3) { //1 - March8, 4 - Easter, 5 - May9 &&  i != 5 || i==5
         statistic[0]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false });
         statistic[2]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, noAddress: true });
         statistic[4]['amount' + (i + 1)] = await holidays[i].countDocuments({ absent: false, plusAmount: { $gte: 4 } });
@@ -5927,10 +5928,112 @@ async function year_eberdnikova() {
 
 }
 
+async function quarta_dobroru() {
+  let orders = await Order.find({
+    isDisabled: false, //isOverdue: false, isReturned: false,
+    dateOfOrder: { $gt: new Date("2026-3-31"), $lt: new Date("2026-07-01") },
+    userName: "eberdnikova"
+    /*     $or: [{ "holiday": 'Дни рождения мая 2025' },
+        { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения июня 2026' },
+        { "holiday": '9 мая 2026' }, { "holiday": 'Пасха 2026' },] */
+  });
+  // let celebrators = [];
+  let participators = [];
+  // let regions = [];
+  //  let houses = [];
+  let amount = 0;
+  let amountOfOrders = orders.length;
+  //let amountOfSchoolsOrders = 0;
+  let amountOfDobroruOrders = 0;
+  let institutes = [];
+  //let schools = [];
+  let count = orders.length;
+  let clientIds = [];
+  for (let order of orders) {
+    participators.push(order.clientId);
+    if (order.source === 'dobroru') amountOfDobroruOrders++;
+    if (order.institutes.length) {
+      //amountOfSchoolsOrders++;
+      clientIds.push(order.clientId);
+      for (let inst of order.institutes) {
+        institutes.push(inst._id);
+
+
+
+        /*  if (inst.category == 'образовательное учреждение') {
+            schools.push(inst._id);          
+          } */
+
+      }
+    }
+    /*     for (let item of order.lineItems) {
+          for (let celebrator of item.celebrators) {
+            celebrators.push(celebrator.lastName + celebrator.firstName + celebrator.patronymic + celebrator.nursingHome + celebrator.fullDayBirthday);
+            houses.push(celebrator.nursingHome);
+            regions.push(celebrator.region);
+    
+          }
+        }*/
+    amount = amount + order.amount;
+
+    // console.log(count--);
+  }
+
+  // let ids = orders.map(o=>o.id);
+
+  console.log("clientIds");
+  console.log(new Set(clientIds));
+
+  let newers = await Client.find({
+    //_id: {$in: clientIds},
+    dateCreated: { $gt: new Date("2026-3-31"), $lt: new Date("2026-07-01") },
+    isDisabled: false,
+    institutes: { $ne: [] }, "institutes.category": "образовательное учреждение",
+    coordinators: ['eberdnikova'],
+    //"institutes._id": { $in: institutes },
+    //creator: "eberdnikova"
+
+  })
+
+  console.log("newers");
+  console.log(newers);
+
+  /*   let c = new Set(celebrators);
+    let h = new Set(houses);
+    let r = new Set(regions); */
+  let p = new Set(participators);
+  let i = new Set(institutes);
+  /*   let s = new Set(schools);
+
+    console.log("celebrators");
+    console.log(c.size); */
+  console.log("amountOfOrders");
+  console.log(amountOfOrders);
+  console.log("amountOfDobroruOrders");
+  console.log(amountOfDobroruOrders);
+  console.log("amount");
+  console.log(amount);
+
+  console.log("participators");
+  console.log(p.size);
+  console.log("institutes");
+  console.log(i.size);
+  console.log("newers");
+  console.log(newers.length);
+  /*  console.log("schools");
+    console.log(s.size);
+       console.log("regions");
+      console.log(r);
+      console.log(r.size);
+      console.log("houses");
+      console.log(h.size); */
+
+}
+
 async function quarta() {
   let orders = await Order.find({
     isDisabled: false, isOverdue: false, isReturned: false,
-    dateOfOrder: { $gt: new Date("2026-02-28"), $lt: new Date("2026-04-01") },
+    dateOfOrder: { $gt: new Date("2026-03-31"), $lt: new Date("2026-07-01") },
     /*     $or: [{ "holiday": 'Дни рождения мая 2025' },
         { "holiday": 'Дни рождения мая 2025' }, { "holiday": 'Дни рождения июня 2026' },
         { "holiday": '9 мая 2026' }, { "holiday": 'Пасха 2026' },] */
@@ -5961,7 +6064,7 @@ async function quarta() {
     }
     amount = amount + order.amount;
 
-    console.log(count--);
+    // console.log(count--);
   }
 
   let c = new Set(celebrators);
@@ -5994,11 +6097,11 @@ async function quarta() {
 router.get("/report/:userName", checkAuth, async (req, res) => {
   try {
     const userName = req.params.userName;
-    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-04-30"), $lt: new Date("2026-06-01") } });
+    let orderAmount = await Order.countDocuments({ userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-05-31"), $lt: new Date("2026-07-01") } });
     let celebratorsAmount = await Order.aggregate(
       [
         {
-          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-04-30"), $lt: new Date("2026-06-01") } }
+          $match: { userName: userName, isDisabled: false, dateOfOrder: { $gt: new Date("2026-05-31"), $lt: new Date("2026-07-01") } }
         },
         {
           $group: { _id: null, sum_val: { $sum: "$amount" } }
